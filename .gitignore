@@ -1,0 +1,11 @@
+*.upx
+*.bak
+*.bkp
+*.tmp
+*.temp
+*.log
+*.scc
+*.old
+*.err*
+*.ppx_*
+
