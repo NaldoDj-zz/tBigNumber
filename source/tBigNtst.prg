@@ -299,7 +299,7 @@ Static Function tBigNTst()
         otBigW       := cW
         __ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
         __ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
-        For n := 1 To 10
+        For n := 1 To nN_TEST
             ASSIGN cN    := hb_ntos(n)
             __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
             __ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigW%=cW):ExactValue())
@@ -369,7 +369,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 
-    For n := 1 To 1000
+    For n := 1 To nN_TEST
         ASSIGN cN        := hb_ntos(n)
         ASSIGN aPFact    := otBigN:SetValue(cN):PFactors()
         For x := 1 To Len( aPFact )
@@ -422,7 +422,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For n := 1 To ( nN_TEST * 2 )
+    For n := 1 To nN_TEST
         __ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
         __ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
         __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
@@ -467,7 +467,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 0 TO 99999 STEP 99
+    For x := 0 TO nN_TEST * 99 STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
         ASSIGN cHex := otBigN:SetValue(cN):D2H("16"):Int()
@@ -496,7 +496,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
 
-    For x := 0 TO 99999 STEP 99
+    For x := 0 TO nN_TEST * 99 STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
         ASSIGN cHex := otBigN:SetValue(cN):D2H("32"):Int()
@@ -747,7 +747,7 @@ Static Function tBigNTst()
     ASSIGN w := 1
     otBigW:SetValue(o1)
 
-    For x := 1 TO 50
+    For x := 1 TO nN_TEST
         ASSIGN cN   := hb_ntos(w)
         ASSIGN w    *= 3.555
         ASSIGN z    := Len(cN)
@@ -785,7 +785,7 @@ Static Function tBigNTst()
 
     For n := 0 TO nN_TEST
         ASSIGN cN := hb_ntos(n)
-        For x := 0 TO nN_TEST
+        For x := 0 TO Int( nN_TEST / 2 )
             ASSIGN cX := hb_ntos(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 #IFNDEF __PROTHEUS__
@@ -898,7 +898,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 999999999999999 - 999 TO 999999999999999 + 999 STEP 99
+    For x := ( ( nN_TEST * 999 ) - 999 ) TO ( ( nN_TEST * 999 ) + 999 ) STEP 99
         ASSIGN n  := x
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
@@ -1214,13 +1214,37 @@ Static Function tBigNTst()
     otBigN:nthRootAcc(nAccRoot)
     otBigW:SetDecimals(nSetDec)
     otBigW:nthRootAcc(nAccRoot)
+	
+	__ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    ASSIGN n := 0
+    While ( n <= nN_TEST )
+        ASSIGN cN     := hb_ntos(n++)
+        #IFDEF __PROTHEUS__
+			otBigN:SetValue(cN)
+			__ConOut(fhLog,cN+':tBigNumber():Factoring('+cN+')',"RESULT: "+otBigN:Factoring(cN):ExactValue())
+		#ELSE
+			otBigN := cN
+			__ConOut(fhLog,cN+':tBigNumber():Factoring('+cN+')',"RESULT: "+otBigN:Factoring:ExactValue())
+		#ENDIF
+    End While
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
+
+    __ConOut(fhLog,"")
+
+*    __tbnSleep()
     
     __ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
     
     __ConOut(fhLog,"")
 
-    n := 0
-    While ( n <= 300 )
+    ASSIGN n := 0
+    While ( n <= nN_TEST )
         IF ( n < 3 )
             ASSIGN n += 1
         Else

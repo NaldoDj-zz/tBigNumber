@@ -227,6 +227,7 @@ CLASS tBigNumber
 	Method FI()
 	
 	Method PFactors()
+	Method Factorial()	//TODO: Otimizar
 
 #IFNDEF __PROTHEUS__
 
@@ -3681,7 +3682,7 @@ Return(oT)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 19/03/2013
 	Descricao   : Fatores Primos
-	Sintaxe     : tBigNumber():PFactors -> aPFactors
+	Sintaxe     : tBigNumber():PFactors() -> aPFactors
 */
 Method PFactors() CLASS tBigNumber
 	
@@ -3727,7 +3728,29 @@ Method PFactors() CLASS tBigNumber
 		EndIF
 	End While
 
-Return(aPFactors)                                    
+Return(aPFactors)
+
+/*
+	Method		: Factorial 
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 19/03/2013
+	Descricao   : Fatorial de Numeros Inteiros
+	Sintaxe     : tBigNumber():Factorial() -> oF
+	TODO        : Otimizar. 
+				  Referencias: http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
+						       http://www.luschny.de/math/factorial/index.html 
+*/
+Method Factorial()
+	Local oN := self:Clone():Int(.T.,.F.)
+	Local oF := oN:Clone()
+    IF oN:eq(__o0)
+		oF:SetValue(__o1)
+	EndIF	
+    While oN:gt(__o1)
+		oN:SetValue(oN:Sub(__o1))
+		oF:SetValue(oF:Mult(oN))
+	End While	
+Return(oF)                                
 
 /*
 	Funcao		: eMult
