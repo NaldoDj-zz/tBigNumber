@@ -1224,10 +1224,10 @@ Static Function tBigNTst()
         ASSIGN cN     := hb_ntos(n++)
         #IFDEF __PROTHEUS__
 			otBigN:SetValue(cN)
-			__ConOut(fhLog,cN+':tBigNumber():Factoring('+cN+')',"RESULT: "+otBigN:Factoring(cN):ExactValue())
+			__ConOut(fhLog,cN+':tBigNumber():Factorial()('+cN+')',"RESULT: "+otBigN:Factoring(cN):ExactValue())
 		#ELSE
 			otBigN := cN
-			__ConOut(fhLog,cN+':tBigNumber():Factoring('+cN+')',"RESULT: "+otBigN:Factoring:ExactValue())
+			__ConOut(fhLog,cN+':tBigNumber():Factorial()('+cN+')',"RESULT: "+otBigN:Factoring:ExactValue())
 		#ENDIF
     End While
 
