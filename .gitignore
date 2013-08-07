@@ -9,3 +9,6 @@
 *.err*
 *.ppx_*
 
+/lib/wce/mingwarm/.hbmk
+/lib/win/mingw/.hbmk
+/lib/win/mingw64/.hbmk
