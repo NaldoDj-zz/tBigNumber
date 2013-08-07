@@ -303,14 +303,14 @@ Static Function tBigNTst()
             ASSIGN cN    := hb_ntos(n)
             __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
             __ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigW%=cW):ExactValue())
-            __ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())             
-            __ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())
+            __ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigW^=cN):ExactValue())
+ 			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())             
+ 			__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())
             __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
             __ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigW-=cN):ExactValue())
             __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
             __ConOut(fhLog,"otBigW*="+cN ,"RESULT: "+(otBigW*=cN):ExactValue())
             __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
-            __ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigW^=cN):ExactValue())
             __ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())        
             __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
             __ConOut(fhLog,"otBigW--"    ,"RESULT: "+(otBigW--):ExactValue())
@@ -356,7 +356,7 @@ Static Function tBigNTst()
             otBigN := cW
             __ConOut(fhLog,"otBigN:="+cW ,"RESULT: "+otBigN:ExactValue())
             __ConOut(fhLog,"otBigN=="+cW ,"RESULT: "+cValToChar(otBigN==cW))
-            __ConOut(fhLog,"otBigW^=otBigN"   ,"RESULT: "+(otBigW^=otBigN):ExactValue())
+            __ConOut(fhLog,"otBigN^=otBigN"   ,"RESULT: "+(otBigW^=otBigN):ExactValue())
             __ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
             __ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
             __ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
@@ -367,8 +367,14 @@ Static Function tBigNTst()
     __ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
 #ENDIF
 
+    __ConOut(fhLog,"")
+
+*    __tbnSleep()
+
     __ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 
+    __ConOut(fhLog,"")
+	
     For n := 1 To nN_TEST
         ASSIGN cN        := hb_ntos(n)
         ASSIGN aPFact    := otBigN:SetValue(cN):PFactors()
@@ -778,6 +784,29 @@ Static Function tBigNTst()
 *    __tbnSleep()
 
     __ConOut(fhLog,"")
+
+	__ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    ASSIGN n := 0
+    While ( n <= nN_TEST )
+        ASSIGN cN     := hb_ntos(n++)
+        #IFDEF __PROTHEUS__
+			otBigN:SetValue(cN)
+		#ELSE
+			otBigN := cN
+		#ENDIF
+		__ConOut(fhLog,cN+':tBigNumber():Factorial('+cN+')',"RESULT: "+otBigN:Factorial(cN):ExactValue())
+    End While
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
+
+    __ConOut(fhLog,"")
+
+*    __tbnSleep()
 
     __ConOut(fhLog," BEGIN ------------ DIV Teste 0 -------------- ")
     
@@ -1214,31 +1243,7 @@ Static Function tBigNTst()
     otBigN:nthRootAcc(nAccRoot)
     otBigW:SetDecimals(nSetDec)
     otBigW:nthRootAcc(nAccRoot)
-	
-	__ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
-    
-    __ConOut(fhLog,"")
-
-    ASSIGN n := 0
-    While ( n <= nN_TEST )
-        ASSIGN cN     := hb_ntos(n++)
-        #IFDEF __PROTHEUS__
-			otBigN:SetValue(cN)
-			__ConOut(fhLog,cN+':tBigNumber():Factorial()('+cN+')',"RESULT: "+otBigN:Factoring(cN):ExactValue())
-		#ELSE
-			otBigN := cN
-			__ConOut(fhLog,cN+':tBigNumber():Factorial()('+cN+')',"RESULT: "+otBigN:Factoring:ExactValue())
-		#ENDIF
-    End While
-
-    __ConOut(fhLog,"")
-
-    __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
-
-    __ConOut(fhLog,"")
-
-*    __tbnSleep()
-    
+   
     __ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
     
     __ConOut(fhLog,"")
