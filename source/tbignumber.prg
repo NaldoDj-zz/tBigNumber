@@ -2595,15 +2595,15 @@ Return(othRoot)
 
 			Local cNR
 		
-			Local oThB    := tBigNumber():New(cRootB)
-			Local oThE    := tbigNumber():New(cRootE)
+			Local oTh_B   := tBigNumber():New(cRootB)
+			Local oTh_E   := tbigNumber():New(cRootE)
 			Local oThExit := tbigNumber():New(cFExit)
 
 			__nthRootAcc   := nthRootAcc
 			__nSetDecimals := nSetDecimals
 
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]")
-				cNR := nthRoot(oThB,oThE,oThExit,nSetDecimals):GetValue()
+				cNR := nthRoot(oTh_B,oTh_E,oThExit,nSetDecimals):GetValue()
 				PutGlbValue(cID,cNR)
 			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT]["+cNR+"]")
 
