@@ -174,6 +174,8 @@ Static Function tBigNTst()
     Local lMR        AS LOGICAL
     Local lPn        AS LOGICAL
     Local laLog      AS LOGICAL
+	
+	Local nISQRT	 AS NUMBER
 
 #IFDEF __HARBOUR__
 
@@ -213,6 +215,8 @@ Static Function tBigNTst()
     ASSIGN fhLog := fCreate(cLog,FC_NORMAL)
     fClose(fhLog)
     ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
+	
+	ASSIGN nISQRT := Int(SQRT(nN_TEST))
 
 #IFDEF __HARBOUR__
     SetColor( "w+/n" )
@@ -292,80 +296,80 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
     
-#IFNDEF __PROTHEUS__
-    __ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
-    For w := 0 To 10
-        ASSIGN cW    := hb_ntos(w)
-        otBigW       := cW
-        __ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
-        __ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
-        For n := 1 To nN_TEST
-            ASSIGN cN    := hb_ntos(n)
-            __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
-            __ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigW%=cW):ExactValue())
-            __ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigW^=cN):ExactValue())
- 			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())             
- 			__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())
-            __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
-            __ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigW-=cN):ExactValue())
-            __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
-            __ConOut(fhLog,"otBigW*="+cN ,"RESULT: "+(otBigW*=cN):ExactValue())
-            __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
-            __ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())        
-            __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
-            __ConOut(fhLog,"otBigW--"    ,"RESULT: "+(otBigW--):ExactValue())
-            __ConOut(fhLog,"--otBigW"    ,"RESULT: "+(--otBigW):ExactValue())
-            __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
-            __ConOut(fhLog,"otBigW>"+cN  ,"RESULT: "+cValToChar(otBigW>cN))
-            __ConOut(fhLog,"otBigW<"+cN  ,"RESULT: "+cValToChar(otBigW<cN))
-            __ConOut(fhLog,"otBigW>="+cN ,"RESULT: "+cValToChar(otBigW>=cN))
-            __ConOut(fhLog,"otBigW<="+cN ,"RESULT: "+cValToChar(otBigW<=cN))
-            __ConOut(fhLog,"otBigW!="+cN ,"RESULT: "+cValToChar(otBigW!=cN))
-            __ConOut(fhLog,"otBigW#"+cN  ,"RESULT: "+cValToChar(otBigW#cN))
-            __ConOut(fhLog,"otBigW<>"+cN ,"RESULT: "+cValToChar(otBigW<>cN))
-            __ConOut(fhLog,"otBigW+"+cN  ,"RESULT: "+(otBigW+cN):ExactValue())
-            __ConOut(fhLog,"otBigW-"+cN  ,"RESULT: "+(otBigW-cN):ExactValue())
-            __ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigW*cN):ExactValue())
-            __ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigW/cN):ExactValue())
-            __ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigW%cN):ExactValue())
-            __ConOut(fhLog,__cSep)
-            otBigN := otBigW
-            __ConOut(fhLog,"otBigN:=otBigW"   ,"RESULT: "+otBigN:ExactValue())
-            __ConOut(fhLog,"otBigN"           ,"RESULT: "+otBigW:ExactValue())
-            __ConOut(fhLog,"otBigW"           ,"RESULT: "+otBigW:ExactValue())
-            __ConOut(fhLog,"otBigW==otBigN"   ,"RESULT: "+cValToChar(otBigW==otBigN))
-            __ConOut(fhLog,"otBigW>otBigN"    ,"RESULT: "+cValToChar(otBigW>otBigN))
-            __ConOut(fhLog,"otBigW<otBigN"    ,"RESULT: "+cValToChar(otBigW<otBigN))
-            __ConOut(fhLog,"otBigW>=otBigN"   ,"RESULT: "+cValToChar(otBigW>=otBigN))
-            __ConOut(fhLog,"otBigW<=otBigN"   ,"RESULT: "+cValToChar(otBigW<=otBigN))
-            __ConOut(fhLog,"otBigW!=otBigN"   ,"RESULT: "+cValToChar(otBigW!=otBigN))
-            __ConOut(fhLog,"otBigW#otBigN"    ,"RESULT: "+cValToChar(otBigW#otBigN))
-            __ConOut(fhLog,"otBigW<>otBigN"   ,"RESULT: "+cValToChar(otBigW<>otBigN))
-            __ConOut(fhLog,"otBigW+otBigN"    ,"RESULT: "+(otBigW+otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW-otBigN"    ,"RESULT: "+(otBigW-otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW*otBigN"    ,"RESULT: "+(otBigW*otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW/otBigN"    ,"RESULT: "+(otBigW/otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW%otBigN"    ,"RESULT: "+(otBigW%otBigN):ExactValue())    
-            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())             
-            __ConOut(fhLog,"otBigW+=otBigN++" ,"RESULT: "+(otBigW+=otBigN++):ExactValue())
-            __ConOut(fhLog,"otBigW+=++otBigN" ,"RESULT: "+(otBigW+=++otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW-=otBigN"   ,"RESULT: "+(otBigW-=otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW*=otBigN"   ,"RESULT: "+(otBigW*=otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
-            otBigN := cW
-            __ConOut(fhLog,"otBigN:="+cW ,"RESULT: "+otBigN:ExactValue())
-            __ConOut(fhLog,"otBigN=="+cW ,"RESULT: "+cValToChar(otBigN==cW))
-            __ConOut(fhLog,"otBigN^=otBigN"   ,"RESULT: "+(otBigW^=otBigN):ExactValue())
-            __ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
-            __ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
-            __ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
-            __ConOut(fhLog,__cSep)
-        Next n
-        __ConOut(fhLog,__cSep)
-    Next w
-    __ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
-#ENDIF
+	#IFNDEF __PROTHEUS__
+		__ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
+		For w := 0 To 5
+			ASSIGN cW    := hb_ntos(w)
+			otBigW       := cW
+			__ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
+			__ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
+			For n := 1 To nISQRT
+				ASSIGN cN    := hb_ntos(n)
+				__ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
+				__ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigW%=cW):ExactValue())
+				__ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigW^=cN):ExactValue())
+				__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigW+=cN):ExactValue())             
+				__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())
+				__ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
+				__ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigW-=cN):ExactValue())
+				__ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
+				__ConOut(fhLog,"otBigW*="+cN ,"RESULT: "+(otBigW*=cN):ExactValue())
+				__ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigW+=cW):ExactValue())
+				__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigW++):ExactValue())        
+				__ConOut(fhLog,"++otBigW"    ,"RESULT: "+(++otBigW):ExactValue())
+				__ConOut(fhLog,"otBigW--"    ,"RESULT: "+(otBigW--):ExactValue())
+				__ConOut(fhLog,"--otBigW"    ,"RESULT: "+(--otBigW):ExactValue())
+				__ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
+				__ConOut(fhLog,"otBigW>"+cN  ,"RESULT: "+cValToChar(otBigW>cN))
+				__ConOut(fhLog,"otBigW<"+cN  ,"RESULT: "+cValToChar(otBigW<cN))
+				__ConOut(fhLog,"otBigW>="+cN ,"RESULT: "+cValToChar(otBigW>=cN))
+				__ConOut(fhLog,"otBigW<="+cN ,"RESULT: "+cValToChar(otBigW<=cN))
+				__ConOut(fhLog,"otBigW!="+cN ,"RESULT: "+cValToChar(otBigW!=cN))
+				__ConOut(fhLog,"otBigW#"+cN  ,"RESULT: "+cValToChar(otBigW#cN))
+				__ConOut(fhLog,"otBigW<>"+cN ,"RESULT: "+cValToChar(otBigW<>cN))
+				__ConOut(fhLog,"otBigW+"+cN  ,"RESULT: "+(otBigW+cN):ExactValue())
+				__ConOut(fhLog,"otBigW-"+cN  ,"RESULT: "+(otBigW-cN):ExactValue())
+				__ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigW*cN):ExactValue())
+				__ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigW/cN):ExactValue())
+				__ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigW%cN):ExactValue())
+				__ConOut(fhLog,__cSep)
+				otBigN := otBigW
+				__ConOut(fhLog,"otBigN:=otBigW"   ,"RESULT: "+otBigN:ExactValue())
+				__ConOut(fhLog,"otBigN"           ,"RESULT: "+otBigW:ExactValue())
+				__ConOut(fhLog,"otBigW"           ,"RESULT: "+otBigW:ExactValue())
+				__ConOut(fhLog,"otBigW==otBigN"   ,"RESULT: "+cValToChar(otBigW==otBigN))
+				__ConOut(fhLog,"otBigW>otBigN"    ,"RESULT: "+cValToChar(otBigW>otBigN))
+				__ConOut(fhLog,"otBigW<otBigN"    ,"RESULT: "+cValToChar(otBigW<otBigN))
+				__ConOut(fhLog,"otBigW>=otBigN"   ,"RESULT: "+cValToChar(otBigW>=otBigN))
+				__ConOut(fhLog,"otBigW<=otBigN"   ,"RESULT: "+cValToChar(otBigW<=otBigN))
+				__ConOut(fhLog,"otBigW!=otBigN"   ,"RESULT: "+cValToChar(otBigW!=otBigN))
+				__ConOut(fhLog,"otBigW#otBigN"    ,"RESULT: "+cValToChar(otBigW#otBigN))
+				__ConOut(fhLog,"otBigW<>otBigN"   ,"RESULT: "+cValToChar(otBigW<>otBigN))
+				__ConOut(fhLog,"otBigW+otBigN"    ,"RESULT: "+(otBigW+otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW-otBigN"    ,"RESULT: "+(otBigW-otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW*otBigN"    ,"RESULT: "+(otBigW*otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW/otBigN"    ,"RESULT: "+(otBigW/otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW%otBigN"    ,"RESULT: "+(otBigW%otBigN):ExactValue())    
+				__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())             
+				__ConOut(fhLog,"otBigW+=otBigN++" ,"RESULT: "+(otBigW+=otBigN++):ExactValue())
+				__ConOut(fhLog,"otBigW+=++otBigN" ,"RESULT: "+(otBigW+=++otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW-=otBigN"   ,"RESULT: "+(otBigW-=otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW*=otBigN"   ,"RESULT: "+(otBigW*=otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigW+=otBigN):ExactValue())
+				otBigN := cW
+				__ConOut(fhLog,"otBigN:="+cW ,"RESULT: "+otBigN:ExactValue())
+				__ConOut(fhLog,"otBigN=="+cW ,"RESULT: "+cValToChar(otBigN==cW))
+				__ConOut(fhLog,"otBigN^=otBigN"   ,"RESULT: "+(otBigW^=otBigN):ExactValue())
+				__ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
+				__ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
+				__ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
+				__ConOut(fhLog,__cSep)
+			Next n
+			__ConOut(fhLog,__cSep)
+		Next w
+		__ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
+	#ENDIF
 
     __ConOut(fhLog,"")
 
@@ -421,25 +425,6 @@ Static Function tBigNTst()
     __ConOut(fhLog," ------------ Teste Prime 1 -------------- END ")
 
 *    __tbnSleep()
-    
-    __ConOut(fhLog,"")
-
-    __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
-    
-    __ConOut(fhLog,"")
-
-    For n := 1 To nN_TEST
-        __ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
-        __ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
-        __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
-        __ConOut(fhLog,__cSep)
-    Next n
-    
-    __ConOut(fhLog,"")
-
-    __ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -473,7 +458,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 0 TO nN_TEST * 99 STEP 99
+    For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
         ASSIGN cHex := otBigN:SetValue(cN):D2H("16"):Int()
@@ -502,7 +487,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
 
-    For x := 0 TO nN_TEST * 99 STEP 99
+    For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
         ASSIGN cHex := otBigN:SetValue(cN):D2H("32"):Int()
@@ -814,7 +799,7 @@ Static Function tBigNTst()
 
     For n := 0 TO nN_TEST
         ASSIGN cN := hb_ntos(n)
-        For x := 0 TO Int( nN_TEST / 2 )
+        For x := 0 TO nISQRT
             ASSIGN cX := hb_ntos(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 #IFNDEF __PROTHEUS__
@@ -927,7 +912,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := ( ( nN_TEST * 999 ) - 999 ) TO ( ( nN_TEST * 999 ) + 999 ) STEP 99
+    For x := ( ( nISQRT * 999 ) - 999 ) TO ( ( nISQRT * 999 ) + 999 ) STEP 99
         ASSIGN n  := x
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
@@ -955,8 +940,13 @@ Static Function tBigNTst()
         ASSIGN n     := x
         ASSIGN cN    := hb_ntos(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
-        otBigN:SetValue(cN)
+#IFNDEF __PROTHEUS__ 
+		otBigN :=  cN 
+        otBigN := otBigN:SQRT()
+#ELSE
+		otBigN:SetValue(cN)
         otBigN:SetValue(otBigN:SQRT())
+#ENDIF		
         ASSIGN cW    := otBigN:GetValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:Rnd(nACC_SET):GetValue()
@@ -982,11 +972,15 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-    For x := 0 TO (nN_TEST / 2)
+    For x := 0 TO nISQRT
         ASSIGN n  := x
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,'Exp('+cN+')',"RESULT: " + hb_ntos(Exp(n)))
-        otBigN:SetValue(cN)
+#IFNDEF __PROTHEUS__ 
+	otBigN := cN
+#ELSE
+	otBigN:SetValue(cN)
+#ENDIF	
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:Exp():ExactValue())
         __ConOut(fhLog,__cSep)
     Next x
@@ -1005,15 +999,20 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := IF(.NOT.(IsHb()) , 1 , 0) TO nN_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+    For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
         ASSIGN cN := hb_ntos(x)
-        For w := -nN_TEST To 0
+        For w := -nISQRT To 0
             ASSIGN cW   := hb_ntos(w)
             ASSIGN n    := x
             ASSIGN n    := (n^w)
             __ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
+#IFNDEF __PROTHEUS__
+            otBigN := cN
+#ELSE
             otBigN:SetValue(cN)
+#ENDIF
             ASSIGN cN   := otBigN:ExactValue()
+
 #IFNDEF __PROTHEUS__
             otBigN ^= cW
 #ELSE
@@ -1039,20 +1038,24 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 0 TO nN_TEST STEP 5
+    For x := 0 TO nISQRT STEP 5
         ASSIGN cN := hb_ntos(x)
-        For w := 0 To nN_TEST STEP 5
+        For w := 0 To nISQRT STEP 5
             ASSIGN cW   := hb_ntos(w+.5)
             ASSIGN n    := x
             ASSIGN n    := (n^(w+.5))
             __ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
-            otBigN:SetValue(cN)
+			#IFNDEF __PROTHEUS__
+				otBigN := cN
+			#ELSE
+				otBigN:SetValue(cN)
+			#ENDIF
             ASSIGN cN   := otBigN:ExactValue()
-#IFNDEF __PROTHEUS__
-            otBigN ^= cW
-#ELSE
-            otBigN:SetValue(otBigN:Pow(cW))
-#ENDIF
+			#IFNDEF __PROTHEUS__
+				otBigN ^= cW
+			#ELSE
+				otBigN:SetValue(otBigN:Pow(cW))
+			#ENDIF
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
             __ConOut(fhLog,__cSep)
         Next w
@@ -1192,7 +1195,7 @@ Static Function tBigNTst()
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
         __ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():GetValue()) 
         __ConOut(fhLog,__cSep)
-        For n := 0 TO INT( MAX( nN_TEST , 5 ) / 5 )
+        For n := 0 TO INT( MAX( nISQRT , 5 ) / 5 )
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cX    := otBigW:SetValue(cW):Log(cN):GetValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")'  ,"RESULT: "+cX)
@@ -1249,7 +1252,7 @@ Static Function tBigNTst()
     __ConOut(fhLog,"")
 
     ASSIGN n := 0
-    While ( n <= nN_TEST )
+    While ( n <= nISQRT )
         IF ( n < 3 )
             ASSIGN n += 1
         Else
@@ -1272,6 +1275,25 @@ Static Function tBigNTst()
 *    __tbnSleep()
     
     __ConOut(fhLog,"")
+	
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    For n := 1 To nISQRT
+        __ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
+        __ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
+        __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
+        __ConOut(fhLog,__cSep)
+    Next n
+    
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
+
+*    __tbnSleep()
 
     __ConOut(fhLog,__cSep)
     __ConOut(fhLog,"")

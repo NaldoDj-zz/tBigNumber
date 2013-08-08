@@ -63,6 +63,10 @@ THREAD Static __pwoNR
 THREAD Static __pwoNT
 THREAD Static __pwoGCD
 
+THREAD Static __oeDivN
+THREAD Static __oeDivD
+THREAD Static __oeDivR
+
 THREAD Static __oSysSQRT
 
 THREAD Static __lsthdSet
@@ -75,7 +79,7 @@ THREAD Static __lsthdSet
 	#DEFINE MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
 #ENDIF	
 
-#DEFINE NTHROOT_EXIT		10
+#DEFINE NTHROOT_EXIT		5
 #DEFINE MAX_SYS_SQRT		"9999999999999999"
 
 /*
@@ -352,6 +356,10 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__pwoNR	 := tBigNumber():New()
 		__pwoNT	 := tBigNumber():New()	
 		__pwoGCD := tBigNumber():New()
+		
+		__oeDivN := tBigNumber():New()
+		__oeDivD := tBigNumber():New()
+		__oeDivR := tBigNumber():New()
 
 		__oSysSQRT := tBigNumber():New()
 
@@ -3834,68 +3842,64 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 
 	Local oPe
 	Local oPd
-
-	Local oN		:= tBigNumber():New(cN)
-	Local oD		:= tBigNumber():New(cD)
-	Local oRDiv		:= tBigNumber():New()
-
-	Local oNR
     
 	Local nBkpAcc	:= __nSetDecimals
 
-	DEFAULT nAcc	:= __nSetDecimals
 	__nSetDecimals	:= nAcc
+	
+	__oeDivN:SetValue(cN)
+	__oeDivD:SetValue(cD)
+	__oeDivR:SetValue(__o0)
 
 	oPe	:= __o1:Clone()
-	oPd	:= oD:Clone()
+	oPd	:= __oeDivD:Clone()
 
 	While .T.
 		++nI
 		aAdd(aE,{oPe:Clone(),oPd:Clone(),.F.})
 		oPe:SetValue(oPe:Add(oPe))
 		oPd:SetValue(oPd:Add(oPd))
-		IF oPd:gt(oN)
+		IF oPd:gt(__oeDivN)
 			EXIT
 		EndIF
 	End While
 
 	While nI>0
-		oRDiv:SetValue(oRDiv:Add(aE[nI][2]))
-		IF oRDiv:lte(oN)
+		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2]))
+		IF __oeDivR:lte(__oeDivN)
 			aE[nI][3] := .T.
-			IF oRDiv:eq(oN)
+			IF __oeDivR:eq(__oeDivN)
 				EXIT
 			EndIF	
 		Else
-			oRDiv:SetValue(oRDiv:Sub(aE[nI][2]))
+			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2]))
 		EndIF
 		--nI
 	End While
 
-	oRDiv:SetValue(oN:Sub(oRDiv))
-
-	oNR	:= tBigNumber():New()
+	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR))
+	cRDiv := __oeDivR:ExactValue(.T.)
+	__oeDivR:SetValue(__o0)
+	
 	For nI := 1 To Len(aE)
 		IF aE[nI][3]
-			oNR:SetValue(oNR:Add(aE[nI][1]))
+			__oeDivR:SetValue(__oeDivR:Add(aE[nI][1]))
 		EndIF
 	Next nI
 
-	cRDiv	:= oRDiv:ExactValue(.T.)
-	oNR:SetValue(oNR,NIL,cRDiv)
-	DEFAULT lFloat := .T.
+	__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
 	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
-		cRDiv		:= SubStr(cRDiv,1,Len(cRDiv) -1)
-		oNR:SetValue(oNR,NIL,cRDiv)
+		cRDiv := SubStr(cRDiv,1,Len(cRDiv) -1)
+		__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
 		IF Empty(cRDiv)
-			cRDiv	  := "0"	
-			oNR:SetValue(oNR,NIL,cRDiv)
+			cRDiv := "0"	
+			__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
 		EndIF
 	EndIF
 
 	__nSetDecimals := nBkpAcc
 
-Return(oNR)
+Return(__oeDivR:Clone())
 
 /*
 	Funcao		: nthRoot
@@ -3911,8 +3915,8 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
  	Local nthE		:= 0
 
 	Local nAT
-	Local nExit
-	Local lExit
+	Local nExit		:= 0
+	Local lExit		:= .F.
 	
 	Local oT1		:= tBigNumber():New()
 	Local oT2		:= tBigNumber():New()
@@ -3951,12 +3955,6 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
 		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,__nthRootAcc)
 		othRootT:SetValue(othRoot)
-		IF ++nthE>NTHROOT_EXIT
-			nthE := 1
-		EndIF
-		__anthExit[nthE] := oAccNo:Clone()
-		nExit	:= 0
-		lExit	:= .F.
 		For nAT := 1 TO NTHROOT_EXIT
 			IF oAccNo:eq(__anthExit[nAT])
 				lExit	:= ++nExit>1
@@ -3968,6 +3966,11 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 		IF lExit
 			EXIT
 		EndIF
+		nExit := 0
+		IF ++nthE>NTHROOT_EXIT
+			nthE := 1
+		EndIF
+		__anthExit[nthE] := oAccNo:Clone()
 	End While
 	
 	aFill(__anthExit,"0")
