@@ -3748,7 +3748,7 @@ Return(aPFactors)
 				  Referencias: http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
 						       http://www.luschny.de/math/factorial/index.html 
 */
-Method Factorial()
+Method Factorial() CLASS tBigNumber 
 	Local oN := self:Clone():Int(.T.,.F.)
 	Local oF := oN:Clone()
     IF oN:eq(__o0)
