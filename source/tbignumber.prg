@@ -4116,8 +4116,8 @@ Return(x)
 
 		Local c
 		
-		Local a	:= Invert(cN1,n)
-		Local b	:= Invert(cN2,n)
+		Local a	:= tBigNInvert(cN1,n)
+		Local b	:= tBigNInvert(cN2,n)
 		Local y	:= n+n
 	
 		Local i := 1
@@ -4427,8 +4427,8 @@ Return(x)
 	*/
 	Static Function Mult(cN1,cN2,n,nBase)
 
-		Local a	:= Invert(cN1,n)
-		Local b	:= Invert(cN2,n)
+		Local a	:= tBigNInvert(cN1,n)
+		Local b	:= tBigNInvert(cN2,n)
 
 		Local y	:= n+n
 		Local c	:= aFill(aSize(__aZMult,y),0)
@@ -4628,8 +4628,8 @@ Return(x)
 
 		Local c
 
-		Local a	:= Invert(cN1,n)
-		Local b	:= Invert(cN2,n)
+		Local a	:= tBigNInvert(cN1,n)
+		Local b	:= tBigNInvert(cN2,n)
 
 		Local y	:= n+n
 
@@ -4762,26 +4762,41 @@ Return(x)
 #ENDIF
 
 /*
-	Funcao		: Invert
+	Funcao		: tBigNInvert
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Inverte o Numero
-	Sintaxe     : Invert(c,n) -> s
+	Sintaxe     : tBigNInvert(c,n) -> s
 */
-Static Function Invert(c,n)
-
-	Local s := ""
-	Local y	:= n
-
-	While y>0
-	#IFDEF __PROTHEUS__
-		s += SubStr(c,y--,1)
-	#ELSE
-		s += c[y--]
-	#ENDIF
-	End While
-
-Return(s)
+#IFDEF __PROTHEUS__
+	Static Function tBigNInvert(c,n)
+		Local s := ""
+		Local y	:= n
+		While y>0
+		#IFDEF __PROTHEUS__
+			s += SubStr(c,y--,1)
+		#ELSE
+			s += c[y--]
+		#ENDIF
+		End While
+	Return(s)
+#ELSE
+	Static Function tBigNInvert(c,n)
+		SYMBOL_UNUSED(n)
+	Return(__tBigNInvert(c))
+	#pragma BEGINDUMP
+		#include "hbapi.h"
+		#include "hbapiitm.h"
+		//Ref.: Descend.c => Harbour Descend() function
+		HB_FUNC( __TBIGNINVERT ){
+			PHB_ITEM pItem = hb_param( 1, HB_IT_STRING );
+			HB_SIZE nLen = hb_itemGetCLen( pItem );
+			char * szBuffer = ( char * ) hb_xgrab( nLen + 1 );
+			hb_strDescend( szBuffer, hb_itemGetCPtr( pItem ), nLen );
+			hb_retclen_buffer( szBuffer, nLen );
+		}
+	#pragma ENDDUMP
+#ENDIF
 
 /*
 	Funcao		: MathO
