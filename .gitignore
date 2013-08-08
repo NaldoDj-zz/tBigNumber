@@ -12,3 +12,5 @@
 /lib/wce/mingwarm/.hbmk
 /lib/win/mingw/.hbmk
 /lib/win/mingw64/.hbmk
+/mk/tbigN_log
+/mk/*.ini
