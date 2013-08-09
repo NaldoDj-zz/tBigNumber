@@ -32,8 +32,8 @@
         #else
             #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
                         => ;
-                        hb_Default(@<uVar1>,<uVal1>);
-                        [; hb_Default(@<uVarN>,<uValN>) ]
+                        iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
+                        [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
         #endif
 
         #IFNDEF CRLF
