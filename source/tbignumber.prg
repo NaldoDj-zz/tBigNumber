@@ -4781,19 +4781,20 @@ Return(x)
 		End While
 	Return(s)
 #ELSE
-	Static Function tBigNInvert(c,n)
-		SYMBOL_UNUSED(n)
-	Return(__tBigNInvert(c))
 	#pragma BEGINDUMP
 		#include "hbapi.h"
 		#include "hbapiitm.h"
-		//Ref.: Descend.c => Harbour Descend() function
-		HB_FUNC( __TBIGNINVERT ){
-			PHB_ITEM pItem = hb_param( 1, HB_IT_STRING );
-			HB_SIZE nLen = hb_itemGetCLen( pItem );
-			char * szBuffer = ( char * ) hb_xgrab( nLen + 1 );
-			hb_strDescend( szBuffer, hb_itemGetCPtr( pItem ), nLen );
-			hb_retclen_buffer( szBuffer, nLen );
+		HB_FUNC( TBIGNINVERT ){
+			PHB_ITEM pItem = hb_param(1,HB_IT_STRING);
+			HB_SIZE s = (HB_SIZE)hb_parnint(2);
+			HB_SIZE f = s;
+			HB_SIZE t = 0;
+			char * szStringTo = ( char * ) hb_xgrab(s+1);
+			const char * szStringFrom = hb_itemGetCPtr(pItem);
+			for(;f;){
+				szStringTo[t++]=szStringFrom[--f];
+			}
+			hb_retclen_buffer(szStringTo,s);
 		}
 	#pragma ENDDUMP
 #ENDIF
