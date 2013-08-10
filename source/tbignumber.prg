@@ -4202,7 +4202,7 @@ Return(x)
 			l++
 		End While
 		
-	Return(dbGetcN(c,k))
+	Return(dbGetcN(c,y))
 
 	/*
 		Funcao		: aNumber
@@ -4480,7 +4480,7 @@ Return(x)
 			l++
 		End While
 
-	Return(aGetcN(c,k))
+	Return(aGetcN(c,y))
 
 	/*
 		Funcao		: aGetcN
@@ -4697,97 +4697,169 @@ Return(x)
 		Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
 		Obs.		: Mais rapida, usa a multiplicacao nativa
 	*/
-	Static Function Mult(cN1,cN2,n,nBase)
+	#IFDEF __PROTHEUS__
+		Static Function Mult(cN1,cN2,n,nBase)
 
-		Local c
+			Local c
 
-		Local a	:= tBigNInvert(cN1,n)
-		Local b	:= tBigNInvert(cN2,n)
+			Local a	:= tBigNInvert(cN1,n)
+			Local b	:= tBigNInvert(cN2,n)
 
-		Local y	:= n+n
+			Local y	:= n+n
 
-		Local i := 1
-		Local k := 1
-		Local l := 2
-		
-		Local s
-		Local j
-		
-		Local v	:= 0
-		Local v1
-		
-		While y>__nstcZ0
-			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-			__nstcZ0+=__nstcZ0
-		End While
-		
-		c	:= SubStr(__cstcZ0,1,y)
+			Local i := 1
+			Local k := 1
+			Local l := 2
 			
-		While i<=n
-			s := 1
-			j := i
-			While s<=i
-			#IFDEF __PROTHEUS__
-				v += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
-			#ELSE
-				v += Val(a[s++])*Val(b[j--])
-			#ENDIF
+			Local s
+			Local j
+			
+			Local v	:= 0
+			Local v1
+			
+			While y>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
 			End While
-			IF v>=nBase
-				v1	:= Int(v/nBase)
-				v	-= v1*nBase
-			Else
-				v1	:= 0	
-			EndIF
-			#IFDEF __PROTHEUS__
-				c := Stuff(c,k,1,hb_ntos(v))
-				c := Stuff(c,k+1,1,hb_ntos(v1)) 
-			#ELSE
-				c[k]   := hb_ntos(v)
-				c[k+1] := hb_ntos(v1)
-			#ENDIF
-			v := v1
-			k++
-			i++
-		End While
-		
-		#IFDEF __PROTHEUS__
-			v := Val(SubStr(c,k,1))
-		#ELSE
-			v := Val(c[k])
-		#ENDIF	
-	
-		While l<=n
-			s := n
-			j := l
-			While s>=l
-			#IFDEF __PROTHEUS__
-				v += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
-			#ELSE
-				v += Val(a[s--])*Val(b[j++])	
-			#ENDIF
+			
+			c	:= SubStr(__cstcZ0,1,y)
+				
+			While i<=n
+				s := 1
+				j := i
+				While s<=i
+				#IFDEF __PROTHEUS__
+					v += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+				#ELSE
+					v += Val(a[s++])*Val(b[j--])
+				#ENDIF
+				End While
+				IF v>=nBase
+					v1	:= Int(v/nBase)
+					v	-= v1*nBase
+				Else
+					v1	:= 0	
+				EndIF
+				#IFDEF __PROTHEUS__
+					c := Stuff(c,k,1,hb_ntos(v))
+					c := Stuff(c,k+1,1,hb_ntos(v1)) 
+				#ELSE
+					c[k]   := hb_ntos(v)
+					c[k+1] := hb_ntos(v1)
+				#ENDIF
+				v := v1
+				k++
+				i++
 			End While
-			IF v>=nBase
-				v1	:= Int(v/nBase)
-				v	-= v1*nBase
-			Else
-				v1	:= 0	
-			EndIF
-			#IFDEF __PROTHEUS__
-				c := Stuff(c,k,1,hb_ntos(v))
-				c := Stuff(c,k+1,1,hb_ntos(v1)) 
-			#ELSE
-				c[k]   := hb_ntos(v)
-				c[k+1] := hb_ntos(v1)
-			#ENDIF
-			v := v1
-			IF ++k>=y
-				EXIT
-			EndIF
-			l++
-		End While
 
-	Return(cGetcN(c,k))
+			While l<=n
+				s := n
+				j := l
+				While s>=l
+				#IFDEF __PROTHEUS__
+					v += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
+				#ELSE
+					v += Val(a[s--])*Val(b[j++])	
+				#ENDIF
+				End While
+				IF v>=nBase
+					v1	:= Int(v/nBase)
+					v	-= v1*nBase
+				Else
+					v1	:= 0	
+				EndIF
+				#IFDEF __PROTHEUS__
+					c := Stuff(c,k,1,hb_ntos(v))
+					c := Stuff(c,k+1,1,hb_ntos(v1)) 
+				#ELSE
+					c[k]   := hb_ntos(v)
+					c[k+1] := hb_ntos(v1)
+				#ENDIF
+				v := v1
+				IF ++k>=y
+					EXIT
+				EndIF
+				l++
+			End While
+
+		Return(cGetcN(c,y))
+	#ELSE
+		Static Function Mult(cN1,cN2,n,nB)
+			Local c
+			Local a	:= tBigNInvert(cN1,n)
+			Local b	:= tBigNInvert(cN2,n)
+			c := tBigNMult(a,b,n,nB)
+		Return(cGetcN(c,Len(c)))			
+		#pragma BEGINDUMP
+			#include "hbapi.h"
+			#include "hbapiitm.h"
+			HB_FUNC( TBIGNMULT ){
+				
+				const char * a = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+				const char * b = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+				
+				HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+				HB_SIZE y  = n+n;
+				
+				HB_ISIZ nB = hb_parns(4);
+            								
+				char * c = ( char * ) hb_xgrab(y+1);
+
+				HB_SIZE i = 0;
+				HB_SIZE k = 0;
+				HB_SIZE l = 1;
+				
+				HB_SIZE s;
+				HB_SIZE j;
+				
+				int v = 0;
+				int v1;
+
+				n-=1;
+				
+				while (i<=n){
+					s = 0;
+					j = i;
+					while (s<=i){
+						v += hb_strVal(&a[s++],(HB_SIZE)1)*hb_strVal(&b[j--],(HB_SIZE)1);
+					}
+					if (v>=nB){
+						v1 = v/nB;
+						v -= v1*nB;
+					}else{
+						v1 = 0;
+					}
+					c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
+					c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+					v = v1;
+					k++;
+					i++;
+				}
+			
+				while (l<=n){
+					s = n;
+					j = l;
+					while (s>=l){
+						v += hb_strVal(&a[s--],(HB_SIZE)1)*hb_strVal(&b[j++],(HB_SIZE)1);
+					}
+					if (v>=nB){
+						v1 = v/nB;
+						v -= v1*nB;
+					}else{
+						v1 = 0;	
+					}
+					c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
+					c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+					v = v1;
+					if (++k>=y){
+						break;
+					}
+					l++;
+				}		
+				hb_retclen_buffer(c,y);
+			}
+		#pragma ENDDUMP
+	#ENDIF
 
 	/*
 		Funcao		: cGetcN
