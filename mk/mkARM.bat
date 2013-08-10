@@ -13,18 +13,18 @@ SET cygwin_PATH=c:\cygwin\
     SET PATH=%PATH%;%cygwin_PATH%bin\
     SET PATH=%PATH%;%cygwin_PATH%usr\bin\
     
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_mt.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_dyn_obj.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_mt_dyn_obj.hbp    
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_array.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_array_mt.hbp    
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_array_dyn_obj.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_array_mt_dyn_obj.hbp    
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_dbfile.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_dbfile_mt.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_dbfile_dyn_obj.hbp
-    %HB_PATH%bin\hbmk2.exe -cpp -compr=yes -comp=mingwarm ..\hbp\tBigNtst_dbfile_mt_dyn_obj.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_mt.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_dyn_obj.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_mt_dyn_obj.hbp    
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_array.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_array_mt.hbp    
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_array_dyn_obj.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_array_mt_dyn_obj.hbp    
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_dbfile.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_dbfile_mt.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_dbfile_dyn_obj.hbp
+    %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingwarm ..\hbp\tBigNtst_dbfile_mt_dyn_obj.hbp
 
 SET cygwin_PATH=%_cygwin_PATH%
 SET HB_PATH=%_HB_PATH%
