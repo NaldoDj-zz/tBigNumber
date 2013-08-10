@@ -4196,8 +4196,7 @@ Return(x)
 				EndIF
 				(c)->(dbUnLock())
 			EndIF
-			k++
-			IF k>=y
+			IF ++k>=y
 				EXIT
 			EndIF
 			l++
@@ -4475,8 +4474,7 @@ Return(x)
 				c[x]	:= Int(c[k]/nBase)
 				c[k]	-= c[x]*nBase
 			EndIF
-			k++
-			IF k>=y
+			IF ++k>=y
 				EXIT
 			EndIF
 			l++
@@ -4525,48 +4523,86 @@ Return(x)
 		Descricao   : Adicao
 		Sintaxe     : Add(a,b,n,nBase) -> cNR
 	*/
-	Static Function Add(a,b,n,nBase)
+	#IFDEF __PROTHEUS__
+		Static Function Add(a,b,n,nBase)
 
-		Local c
+			Local c
 
-		Local y	:= n+1
-		Local k := 1
-	
-		Local v := 0
-		Local v1
+			Local y	:= n+1
+			Local k := 1
 		
-		While y>__nstcZ0
-			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-			__nstcZ0+=__nstcZ0
-		End While
-		
-		c := SubStr(__cstcZ0,1,y)
+			Local v := 0
+			Local v1
+			
+			While y>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
+			End While
+			
+			c := SubStr(__cstcZ0,1,y)
 
-		While n>0
-			#IFDEF __PROTHEUS__
-				v += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
-			#ELSE
-				v += Val(a[n])+Val(b[n])
-			#ENDIF
-			IF v>=nBase
-				v  -= nBase
-				v1 := 1
-			Else
-				v1 := 0
-			EndIF
-			#IFDEF __PROTHEUS__
-				c := Stuff(c,k,1,hb_ntos(v))
-				c := Stuff(c,k+1,1,hb_ntos(v1)) 
-			#ELSE
-				c[k]   := hb_ntos(v)
-				c[k+1] := hb_ntos(v1)
-			#ENDIF
-			v := v1
-			++k
-			--n
-		End While
+			While n>0
+				#IFDEF __PROTHEUS__
+					v += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
+				#ELSE
+					v += Val(a[n])+Val(b[n])
+				#ENDIF
+				IF v>=nBase
+					v  -= nBase
+					v1 := 1
+				Else
+					v1 := 0
+				EndIF
+				#IFDEF __PROTHEUS__
+					c := Stuff(c,k,1,hb_ntos(v))
+					c := Stuff(c,k+1,1,hb_ntos(v1)) 
+				#ELSE
+					c[k]   := hb_ntos(v)
+					c[k+1] := hb_ntos(v1)
+				#ENDIF
+				v := v1
+				++k
+				--n
+			End While
 
-	Return(cGetcN(c,y))
+		Return(cGetcN(c,y))
+	#ELSE
+		Static Function Add(a,b,n,nB)
+			Local c := tBigNAdd(a,b,n,nB)
+		Return(cGetcN(c,n+1))
+		#pragma BEGINDUMP
+			#include "hbapi.h"
+			#include "hbapiitm.h"
+			HB_FUNC( TBIGNADD ){	
+				const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+				const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+				HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+				HB_SIZE y  = n+1;
+				HB_ISIZ nB = hb_parns(4);
+				char * c = ( char * ) hb_xgrab(y+1);
+				HB_SIZE k = 0;
+				int v = 0;
+				int v1;
+				a += n-1;
+				b += n-1;
+				while (n--){
+					v += hb_strVal((char*)a--,(HB_SIZE)1)+hb_strVal((char*)b--,(HB_SIZE)1);
+					if ( v>=nB ){
+						v  -= nB;
+						v1 = 1;
+					}	
+					else{
+						v1 = 0;
+					}
+					c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
+					c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+					v = v1;
+					++k;
+				}
+				hb_retclen_buffer(c,y);
+			}
+		#pragma ENDDUMP
+	#ENDIF
 	
 	/*
 		Funcao		: Sub
@@ -4575,47 +4611,84 @@ Return(x)
 		Descricao   : Subtracao
 		Sintaxe     : Sub(a,b,n,nBase) -> cNR
 	*/
-	Static Function Sub(a,b,n,nBase)
+	#IFDEF __PROTHEUS__
+		Static Function Sub(a,b,n,nBase)
 
-		Local c
+			Local c
 
-		Local y := n
-		Local k := 1
+			Local y := n
+			Local k := 1
+			
+			Local v := 0
+			Local v1
+			
+			While y>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
+			End While
+			
+			c := SubStr(__cstcZ0,1,y)
 		
-		Local v := 0
-		Local v1
-		
-		While y>__nstcZ0
-			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-			__nstcZ0+=__nstcZ0
-		End While
-		
-		c := SubStr(__cstcZ0,1,y)
-	
-		While n>0
-			#IFDEF __PROTHEUS__
-				v += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
-			#ELSE
-				v += Val(a[n])-Val(b[n])
-			#ENDIF
-			IF v<0
-				v  += nBase
-				v1 := -1
-			Else
-				v1 := 0
-			EndIF
-			#IFDEF __PROTHEUS__
-				c := Stuff(c,k,1,hb_ntos(v)) 
-			#ELSE
-				c[k] := hb_ntos(v)
-			#ENDIF
-			v := v1
-			++k
-			--n
-		End While
+			While n>0
+				#IFDEF __PROTHEUS__
+					v += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
+				#ELSE
+					v += Val(a[n])-Val(b[n])
+				#ENDIF
+				IF v<0
+					v  += nBase
+					v1 := -1
+				Else
+					v1 := 0
+				EndIF
+				#IFDEF __PROTHEUS__
+					c := Stuff(c,k,1,hb_ntos(v)) 
+				#ELSE
+					c[k] := hb_ntos(v)
+				#ENDIF
+				v := v1
+				++k
+				--n
+			End While
 
-	Return(cGetcN(c,y))
-	
+		Return(cGetcN(c,y))
+	#ELSE
+		Static Function Sub(a,b,n,nB)
+			Local c := tBigNSub(a,b,n,nB)
+		Return(cGetcN(c,n))
+		#pragma BEGINDUMP
+			#include "hbapi.h"
+			#include "hbapiitm.h"
+			HB_FUNC( TBIGNSUB ){	
+				const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+				const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+				HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+				HB_SIZE y  = n;
+				HB_ISIZ nB = hb_parns(4);
+				char * c = ( char * ) hb_xgrab(y+1);
+				HB_SIZE k = 0;
+				int v = 0;
+				int v1;
+				a += n-1;
+				b += n-1;
+				while (n--){
+					v += hb_strVal((char*)a--,(HB_SIZE)1)-hb_strVal((char*)b--,(HB_SIZE)1);
+					if ( v<0 ){
+						v  += nB;
+						v1 = -1;
+					}	
+					else{
+						v1 = 0;
+					}
+					c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
+					c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+					v = v1;
+					++k;
+				}
+				hb_retclen_buffer(c,y);
+			}
+		#pragma ENDDUMP
+	#ENDIF
 	/*
 		Funcao		: Mult
 		Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4708,8 +4781,7 @@ Return(x)
 				c[k+1] := hb_ntos(v1)
 			#ENDIF
 			v := v1
-			k++
-			IF k>=y
+			IF ++k>=y
 				EXIT
 			EndIF
 			l++
