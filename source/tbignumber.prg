@@ -26,7 +26,6 @@ Static __lstbNSet
 	Static __nThdID
 #ENDIF
 
-THREAD Static __anthExit
 THREAD Static __nthRootAcc
 THREAD Static __nSetDecimals
 
@@ -362,8 +361,6 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__oeDivR := tBigNumber():New()
 
 		__oSysSQRT := tBigNumber():New()
-
-		__anthExit := aFill(Array(NTHROOT_EXIT),"0")
 	
 		__lsthdSet := .T.
 	
@@ -3911,12 +3908,6 @@ Return(__oeDivR:Clone())
 	Ref.:		: http://www.swap.com.br/blog/?p=570 em 10/02/2013
 */
 Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
-
- 	Local nthE		:= 0
-
-	Local nAT
-	Local nExit		:= 0
-	Local lExit		:= .F.
 	
 	Local oT1		:= tBigNumber():New()
 	Local oT2		:= tBigNumber():New()
@@ -3955,25 +3946,7 @@ Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
 		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,__nthRootAcc)
 		othRootT:SetValue(othRoot)
-		For nAT := 1 TO NTHROOT_EXIT
-			IF oAccNo:eq(__anthExit[nAT])
-				lExit	:= ++nExit>1
-				IF lExit
-					EXIT
-				EndIF
-			EndIF
-		Next nAT
-		IF lExit
-			EXIT
-		EndIF
-		nExit := 0
-		IF ++nthE>NTHROOT_EXIT
-			nthE := 1
-		EndIF
-		__anthExit[nthE] := oAccNo:Clone()
 	End While
-	
-	aFill(__anthExit,"0")
 
 	__nSetDecimals := nBkpAcc
 
