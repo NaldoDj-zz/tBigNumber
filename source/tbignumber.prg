@@ -3906,6 +3906,7 @@ Return(__oeDivR:Clone())
 	Sintaxe     : nthRoot(oRootB,oRootE,oAccTo,nAcc) -> othRoot
 	Obs.		: othRoot = ((1/oRootE)*(((oRootE-1)*othRootT)+(oRootB/(othRootT**(oRootE-1)))))
 	Ref.:		: http://www.swap.com.br/blog/?p=570 em 10/02/2013
+	            : http://rosettacode.org/wiki/Nth_root
 */
 Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
 	
