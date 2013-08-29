@@ -2210,7 +2210,6 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 	Local nZS
 	Local nPFs
-	Local nAcc		:= __nSetDecimals
 
 	Local oRootB
 	Local oRootD
@@ -2268,7 +2267,6 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		cFExit := "0."+SubStr(__cstcZ0,1,nZS)+"1"
 			
 		oFExit := tBigNumber():New()
-
 		oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
 
 		IF oRootB:Dec(.T.):gt(__o0)
@@ -2334,7 +2332,9 @@ Method nthRoot(uBigN) CLASS tBigNumber
 						othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
 					Else
 						oRootT:SetValue(aIPF[nPF][1])
-						othRoot:SetValue(othRoot:Mult(nthRoot(oRootT,oRootE,oFExit,nAcc):Pow(aIPF[nPF][2])))
+						oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+						oRootT:SetValue(oRootT:Pow(aIPF[nPF][2]))
+						othRoot:SetValue(othRoot:Mult(oRootT))
 					EndIF	
 				Next nPF
 				IF .NOT.(Empty(aDPF))
@@ -2346,7 +2346,9 @@ Method nthRoot(uBigN) CLASS tBigNumber
 								othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
 							Else
 								oRootT:SetValue(aDPF[nPF][1])
-								othRootD:SetValue(othRootD:Mult(nthRoot(oRootT,oRootE,oFExit,nAcc):Pow(aDPF[nPF][2])))
+								oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+								oRootT:SetValue(oRootT:Pow(aDPF[nPF][2]))
+								othRootD:SetValue(othRootD:Mult(oRootT))
 							EndIF
 						Next nPF
 						IF othRootD:gt(__o0)
@@ -2358,7 +2360,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit,nAcc))
+		othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit))
 
 	END SEQUENCE
 
@@ -2621,18 +2623,12 @@ Return(othRoot)
 */
 Method SQRT() CLASS tBigNumber
 
-	Local oSQRT
-
-	Local nSetDec
-
-	oSQRT := self:Clone()
+	Local oSQRT := self:Clone()	
 	
 	BEGIN SEQUENCE
 
-		IF oSQRT:lte(self:SysSQRT())
-			nSetDec := Set(_SET_DECIMALS,__nSetDecimals)
-			oSQRT:SetValue(__sqrt(hb_ntos(Val(oSQRT:GetValue()))))
-			Set(_SET_DECIMALS,nSetDec)
+		IF oSQRT:lte(oSQRT:SysSQRT())
+			oSQRT:SetValue(__SQRT(hb_ntos(Val(oSQRT:GetValue()))))
 			BREAK
 		EndIF
 
@@ -2641,7 +2637,7 @@ Method SQRT() CLASS tBigNumber
 			BREAK
 		EndIF
 
-		oSQRT:SetValue(oSQRT:nthRoot(__o2))
+		oSQRT:SetValue(__SQRT(oSQRT))
 
 	END SEQUENCE
 
@@ -2678,7 +2674,6 @@ Return(__oSysSQRT)
 */
 Method Log(uBigNB) CLASS tBigNumber
 
-	Local o2  := __o2:Clone()
 	Local oS  := tBigNumber():New()
 	Local oT  := tBigNumber():New()
 	Local oI  := __o1:Clone()
@@ -2686,11 +2681,7 @@ Method Log(uBigNB) CLASS tBigNumber
 	Local oY  := tBigNumber():New()
 	Local oLT := tBigNumber():New()
 
-	Local oBigNR
-
 	Local lflag := .F.
-	
-	Local uSysSQRT := self:SysSQRT(MAX_SYS_SQRT)
 
 	DEFAULT uBigNB := self:e()
 
@@ -2708,8 +2699,9 @@ Method Log(uBigNB) CLASS tBigNumber
 
 	oS:SetValue(oS:Add(oY))
 	oY:SetValue(__o0)
-	oT:SetValue(oT:Sqrt())
-	oI:SetValue(oI:Div(o2))
+*	oT:SetValue(oT:Sqrt())
+	oT:SetValue(__SQRT(oT))
+	oI:SetValue(oI:Div(__o2))
     
 	While oT:gt(__o1)
 
@@ -2721,11 +2713,12 @@ Method Log(uBigNB) CLASS tBigNumber
 		oS:SetValue(oS:Add(oY))
 		oY:SetValue(__o0)
 		oLT:SetValue(oT)
-		oT:SetValue(oT:Sqrt())
+*		oT:SetValue(oT:Sqrt())
+		oT:SetValue(__SQRT(oT))
 		IF oT:eq(oLT)
         	oT:SetValue(__o0)	
 		EndIF 
-		oI:SetValue(oI:Div(o2))
+		oI:SetValue(oI:Div(__o2))
 
 	End While
 
@@ -2733,11 +2726,7 @@ Method Log(uBigNB) CLASS tBigNumber
 		oS:SetValue(oS:Mult("-1"))
 	EndIF	
 
-	oBigNR := oS:Clone()
-
-	self:SysSQRT(uSysSQRT)
-
-Return(oBigNR)
+Return(oS)
 
 /*
 	Method		: Log2
@@ -2779,7 +2768,7 @@ Return(self:Log(__o1:Exp()))
 	Sintaxe     : tBigNumber():aLog(Log(uBigNB) -> oBigNR
 */
 Method aLog(uBigNB) CLASS tBigNumber
-	Local oaLog	:= tBigNumber():New(uBigNB)
+	Local oaLog  := tBigNumber():New(uBigNB)
 Return(oaLog:Pow(self))
 
 /*
@@ -3903,80 +3892,124 @@ Return(__oeDivR:Clone())
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 10/02/2013
 	Descricao   : Metodo Newton-Raphson
-	Sintaxe     : nthRoot(oRootB,oRootE,oAccTo,nAcc) -> othRoot
-	Obs.		: othRoot = ((1/oRootE)*(((oRootE-1)*othRootT)+(oRootB/(othRootT**(oRootE-1)))))
-	Ref.:		: http://www.swap.com.br/blog/?p=570 em 10/02/2013
-	            : http://rosettacode.org/wiki/Nth_root
+	Sintaxe     : nthRoot(oRootB,oRootE,oAcc) -> othRoot
 */
-Static Function nthRoot(oRootB,oRootE,oAccTo,nAcc)
-	
-	Local oT1		:= tBigNumber():New()
-	Local oT2		:= tBigNumber():New()
-	Local oT3		:= tBigNumber():New()
-                                                          	
-	Local oAccNo 	:= tBigNumber():New()
-	Local o1divE	:= tBigNumber():New()
-	Local oESub1	:= tBigNumber():New()
+Static Function nthRoot(oRootB,oRootE,oAcc)   
+Return(__Pow(oRootB,__o1:Div(oRootE),oAcc))
 
-	Local othRoot	:= tBigNumber():New()
-	Local othRootT	:= tBigNumber():New()
-	      	
-	Local nBkpAcc	:= __nSetDecimals
+/*
+	Funcao		: __Pow
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 10/02/2013
+	Descricao   : Metodo Newton-Raphson
+	Sintaxe     : __Pow(base,exp,EPS) -> oPow
+	Ref.        : http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function 
+	            : http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
+*/
+Static Function __Pow(base,expR,EPS)
 
-	DEFAULT nAcc	:= __nSetDecimals
-	__nSetDecimals	:= nAcc
+    Local acc
+    Local sqr
+    Local tmp
 
-	oAccNo:SetValue(oAccTo:Add(__o1))
-	o1divE:SetValue(__o1:Div(oRootE))
-	oESub1:SetValue(oRootE:Sub(__o1))
+   	Local low
+   	Local mid
+   	Local lst
+    Local high
+    
+    Local exp := expR:Clone()
 
-	IF oRootE:eq(__o2)
-		othRootT:SetValue(__sqrt(oRootB))
-	Else
-		othRootT:SetValue(oRootB:Div(oRootE))
-	EndIF	
+	if base:eq(__o1) .or. exp:eq(__o0)
+		return(__o1:Clone())
+	elseif base:eq(__o0)
+		return(__o0:Clone())
+	elseif exp:lt(__o0)
+		acc := __pow(base,exp:Abs(.T.),EPS)
+		return(__o1:Div(acc))
+	elseif exp:Mod(__o2):eq(__o0)
+ 		acc := __pow(base,exp:Div(__o2),EPS)
+    	return(acc:Mult(acc))
+	elseif exp:Dec(.T.):gt(__o0) .and. exp:Int(.T.):gt(__o0)
+		acc := base:Pow(expR)
+		return(acc)
+	elseif exp:gte(__o1)
+    	acc := base:Mult(__pow(base,exp:Sub(__o1),EPS))
+    	return(acc)
+    else
+    	low  := tBigNumber():New()
+    	high := __o1:Clone()
+    	sqr  := __SQRT(base)
+    	acc  := sqr:Clone()    
+    	mid  := high:Div(__o2)
+    	tmp	 := mid:Sub(exp):Abs(.T.)
+    	lst  := __o0:Clone()	
+    	while tmp:gt(EPS)
+    		sqr:SetValue(__SQRT(sqr))
+			if mid:lte(exp)
+				low:SetValue(mid)
+				acc:SetValue(acc:Mult(sqr))
+    	  	else
+    	  		high:SetValue(mid)
+    	  		acc:SetValue(__o1:Div(sqr))
+    	  	endif
+    	  	mid:SetValue(low:Add(high):Div(__o2))
+    	  	tmp:SetValue(mid:Sub(exp):Abs(.T.))
+    	  	if tmp:eq(lst)
+    	  		exit
+    	  	endif
+    	  	lst:SetValue(tmp)
+		end while
+	endif
 
-	While oAccNo:gt(oAccTo)
-		oT1:SetValue(oRootB:Div(othRootT:Pow(oESub1)))
-		oT2:SetValue(oESub1:Mult(othRootT))
-		oT3:SetValue(oT1:Add(oT2))
-		othRoot:SetValue(o1divE:Mult(oT3))
-		IF othRootT:eq(__o0)
-			EXIT
-		EndIF
-		oT1:SetValue(othRoot:Sub(othRootT):Abs(.T.))
-		oAccNo:SetValue(oT1:Div(othRoot:Abs(.T.)),NIL,NIL,NIL,__nthRootAcc)
-		othRootT:SetValue(othRoot)
-	End While
+return(acc)
 
-	__nSetDecimals := nBkpAcc
-
-Return(othRoot)  
-
-Static Function __sqrt(p,n)
-	Local x
-	Local i
+/*
+	Funcao		: __SQRT
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 10/02/2013
+	Descricao   : Metodo Newton-Raphson
+	Sintaxe     : __SQRT(p) -> oSQRT
+*/
+Static Function __SQRT(p)
+	Local l
+	Local r
 	Local t
-	DEFAULT n	:= 1
-	p 			:= tBigNumber():New(p)
-	IF p:lte(MAX_SYS_SQRT)
+	Local s
+	Local n
+	Local eps
+	Local q := tBigNumber():New(p)
+	IF q:lte(q:SysSQRT())
 		#IFDEF __HARBOUR__
 			#IFDEF __HB_Q_SQRT__
-				x := tBigNumber():New(hb_ntos(HB_Q_SQRT(Val(p:GetValue()),n)))
+				r := tBigNumber():New(hb_ntos(HB_Q_SQRT(Val(q:GetValue()),n)))
 			#ELSE
-				x := tBigNumber():New(hb_ntos(SQRT(Val(p:GetValue()))))
+				r := tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
 			#ENDIF
 		#ELSE
-			x := tBigNumber():New(hb_ntos(SQRT(Val(p:GetValue()))))
+			r := tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
 		#ENDIF	
 	Else
-		t := __o2:Clone()
-		x := p:Div(t)
-		for i := 1 To n
-			x:SetValue(x:pow(t):Add(p):Div(t:Mult(x)))
-		next i
+		n := __nthRootAcc-1
+		While n>__nstcZ0
+			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+			__nstcZ0+=__nstcZ0
+		End While
+		s   := "0."+SubStr(__cstcZ0,1,n)+"1"
+		eps := tBigNumber():New()
+		eps:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
+		r := q:Div(__o2)
+		t := r:Pow(__o2):Sub(q):Abs(.T.)
+		l := tBigNumber():New()
+		while t:gt(eps)
+			r:SetValue(r:pow(__o2):Add(q):Div(__o2:Mult(r)))
+			t:SetValue(r:Pow(__o2):Sub(q):Abs(.T.))
+			if t:eq(l)
+				exit
+			endif
+			l:SetValue(t)
+		end while
 	EndIF
-Return(x)
+Return(r)
 
 #IFDEF TBN_DBFILE
 
