@@ -788,7 +788,7 @@ Static Function tBigNTst()
 		#ELSE
 			otBigN := cN
 		#ENDIF
-		__ConOut(fhLog,cN+':tBigNumber():Factorial('+cN+')',"RESULT: "+otBigN:Factorial(cN):ExactValue())
+		__ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
     End While
 
     __ConOut(fhLog,"")
