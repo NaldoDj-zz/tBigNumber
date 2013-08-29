@@ -438,9 +438,9 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO INT( nN_TEST / 2 )
         ASSIGN cX := hb_ntos(x)
-        For n := nN_TEST To 1 Step -1
+        For n := nISQRT To 1 Step -1
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):GetValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
