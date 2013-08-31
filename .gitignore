@@ -14,3 +14,4 @@
 /lib/win/mingw64/.hbmk
 /mk/tbigN_log
 /mk/*.ini
+/source/hb_q_rsqrt.c
