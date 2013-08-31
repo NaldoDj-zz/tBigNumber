@@ -293,12 +293,6 @@ Static Function tBigNTst()
     ASSIGN oPrime := tPrime():New() 
 
     __ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
-
-
-    otBigN:SetValue("1.5")
-    __ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
-    __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())  
-    __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())    
     
     __ConOut(fhLog,"")
     
@@ -1072,8 +1066,25 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," ------------ Teste Pow 1 -------------- END ")
     
+*    __tbnSleep()
+
     __ConOut(fhLog,"")
 
+    __ConOut(fhLog," BEGIN ------------ Teste Pow 2 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+	    otBigN:SetValue("1.5")
+    __ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
+    __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())  
+    __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())    
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste Pow 2 -------------- END ")
+    
+*    __tbnSleep()
+	
     __ConOut(fhLog,"")
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)

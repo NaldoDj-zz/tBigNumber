@@ -103,7 +103,6 @@ THREAD Static __lsthdSet
 *		/D__ADDMT__
 *		/D__SUBTMT__
 *		/D__MULTMT__
-*		/D__HB_Q_SQRT__
 *	#ENDIF
 */
 
@@ -3943,7 +3942,7 @@ Static Function __Pow(base,expR,EPS)
     	mid  := high:Div(__o2)
     	tmp	 := mid:Sub(exp):Abs(.T.)
     	lst  := __o0:Clone()	
-    	while tmp:gt(EPS)
+    	while tmp:gte(EPS)
     		sqr:SetValue(__SQRT(sqr))
 			if mid:lte(exp)
 				low:SetValue(mid)
@@ -3967,7 +3966,7 @@ return(acc)
 	Funcao		: __SQRT
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 10/02/2013
-	Descricao   : Metodo Newton-Raphson
+	Descricao   : SQRT
 	Sintaxe     : __SQRT(p) -> oSQRT
 */
 Static Function __SQRT(p)
@@ -3976,18 +3975,10 @@ Static Function __SQRT(p)
 	Local t
 	Local s
 	Local n
-	Local eps
+	Local EPS
 	Local q := tBigNumber():New(p)
 	IF q:lte(q:SysSQRT())
-		#IFDEF __HARBOUR__
-			#IFDEF __HB_Q_SQRT__
-				r := tBigNumber():New(hb_ntos(HB_Q_SQRT(Val(q:GetValue()),n)))
-			#ELSE
-				r := tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
-			#ENDIF
-		#ELSE
-			r := tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
-		#ENDIF	
+		r := tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
 	Else
 		n := __nthRootAcc-1
 		While n>__nstcZ0
@@ -3995,12 +3986,12 @@ Static Function __SQRT(p)
 			__nstcZ0+=__nstcZ0
 		End While
 		s   := "0."+SubStr(__cstcZ0,1,n)+"1"
-		eps := tBigNumber():New()
-		eps:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
+		EPS := tBigNumber():New()
+		EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
 		r := q:Div(__o2)
 		t := r:Pow(__o2):Sub(q):Abs(.T.)
 		l := tBigNumber():New()
-		while t:gt(eps)
+		while t:gte(EPS)
 			r:SetValue(r:pow(__o2):Add(q):Div(__o2:Mult(r)))
 			t:SetValue(r:Pow(__o2):Sub(q):Abs(.T.))
 			if t:eq(l)
@@ -5000,7 +4991,4 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 	Return(__hbeTthD())
 	Static Function __PITthD()
 	Return(__hbPITthD())
-	#IFDEF __HB_Q_SQRT__
-		#include "hb_q_rsqrt.c"
-	#ENDIF
 #ENDIF
