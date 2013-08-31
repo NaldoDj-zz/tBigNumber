@@ -1746,7 +1746,7 @@
 		Local cTcGetDb		AS CHARACTER
 		Local cTcSrvType	AS CHARACTER	VALUE Upper( AllTrim( TcSrvType() ) )
 		
-		Local lDroped		AS LOGICAL		VALUE .T.
+		Local lDropped		AS LOGICAL		VALUE .T.
 		Local lAS400		AS LOGICAL		VALUE ( cTcSrvType == "AS/400" )
 
 		Local nBag			AS NUMBER
@@ -1766,15 +1766,15 @@
 					Else
 						ASSIGN cQuery := ( "Drop Index " + aOrdBag[nBag][3] )
 					EndIF
-		       		ASSIGN lDroped := ( TcSqlExec( cQuery ) == 0 )
+		       		ASSIGN lDropped := ( TcSqlExec( cQuery ) == 0 )
 		    	Else
-		    		ASSIGN lDroped := MsErase( cTable , aOrdBag[nBag][3] , "TOPCONN" )
+		    		ASSIGN lDropped := MsErase( cTable , aOrdBag[nBag][3] , "TOPCONN" )
 		    	EndIF
 		    EndIF
 		Next nBag
 
 		TcRefresh( cTable )
 
-	Return( lDroped )
+	Return( lDropped )
 
 #ENDIF
