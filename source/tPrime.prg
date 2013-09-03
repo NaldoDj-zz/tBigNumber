@@ -20,7 +20,10 @@ THREAD Static __aNPLRead
 	Descricao	: Instancia um novo objeto do tipo tPrime
 	Sintaxe		: tPrime():New() -> self
 	Obs.		: Obter os Numeros Primos a Partir das Tabelas de Numeros Primos 
-				  fornecidas por primes.utm.edu (http://primes.utm.edu/lists/small/millions/)	
+				  fornecidas por primes.utm.edu (http://primes.utm.edu/lists/small/millions/)
+	TODO        : Implementar primesieve
+	              http://sweet.ua.pt/tos/software/prime_sieve.html#p
+                  https://code.google.com/p/primesieve/
 */
 CLASS tPrime
 

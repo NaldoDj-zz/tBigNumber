@@ -303,7 +303,7 @@ Static Function tBigNTst()
 			otBigW       := cW
 			__ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
 			__ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
-			For n := 1 To nISQRT
+			For n := 1 To nISQRT Step (nISQRT/2)
 				ASSIGN cN    := hb_ntos(n)
 				__ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
 				__ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigW%=cW):ExactValue())
@@ -379,7 +379,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
 	
-    For n := 1 To nN_TEST
+    For n := 1 To nN_TEST STEP nISQRT
         ASSIGN cN        := hb_ntos(n)
         ASSIGN aPFact    := otBigN:SetValue(cN):PFactors()
         For x := 1 To Len( aPFact )
@@ -432,9 +432,9 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 1 TO INT( nN_TEST / 2 )
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cX := hb_ntos(x)
-        For n := nISQRT To 1 Step -1
+        For n := nN_TEST To 1 Step -nISQRT
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):GetValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
@@ -524,7 +524,7 @@ Static Function tBigNTst()
     otBigN:SetValue(o1)
 #ENDIF    
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN    := hb_ntos(n)
         ASSIGN n    += 9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -556,7 +556,7 @@ Static Function tBigNTst()
     ASSIGN n     := Val(cN)
     otBigN:SetValue(cN)
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    += 9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -584,7 +584,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    += -9999.9999999999
         __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -612,7 +612,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    -=9999.9999999999
         __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -638,7 +638,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         ASSIGN n  -= 9999.9999999999
         __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -664,7 +664,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         ASSIGN n  -= -9999.9999999999
         __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: " + hb_ntos(n))
@@ -696,7 +696,7 @@ Static Function tBigNTst()
     otBigN:SetValue(o1)
     otBigW:SetValue(o1)
     
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN z    := Len(cN)
         While ((SubStr(cN,-1) == "0") .and. (z>1))
@@ -738,7 +738,7 @@ Static Function tBigNTst()
     ASSIGN w := 1
     otBigW:SetValue(o1)
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(w)
         ASSIGN w    *= 3.555
         ASSIGN z    := Len(cN)
@@ -776,13 +776,14 @@ Static Function tBigNTst()
 
     ASSIGN n := 0
     While ( n <= nN_TEST )
-        ASSIGN cN     := hb_ntos(n++)
+        ASSIGN cN     := hb_ntos(n)
         #IFDEF __PROTHEUS__
 			otBigN:SetValue(cN)
 		#ELSE
 			otBigN := cN
 		#ENDIF
 		__ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
+		n += nISQRT
     End While
 
     __ConOut(fhLog,"")
@@ -797,9 +798,9 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For n := 0 TO nN_TEST
+    For n := 0 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
-        For x := 0 TO nISQRT
+        For x := 0 TO nISQRT Step nISQRT
             ASSIGN cX := hb_ntos(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 #IFNDEF __PROTHEUS__
@@ -833,7 +834,7 @@ Static Function tBigNTst()
     ASSIGN cN := hb_ntos(n)
     otBigN:SetValue(cN)
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cW   := hb_ntos(n)
         ASSIGN n    /= 1.5
         __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
@@ -862,7 +863,7 @@ Static Function tBigNTst()
     __ConOut(fhLog,"")
 
     otBigN:SetValue(o1)
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(x)
         otBigN:SetValue(cN)
         __ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
@@ -888,7 +889,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For n := 1 To nN_TEST
+    For n := 1 To nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
         __ConOut(fhLog,__cSep)
@@ -936,7 +937,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := 1 TO nN_TEST
+    For x := 1 TO nN_TEST Step nISQRT
         ASSIGN n     := x
         ASSIGN cN    := hb_ntos(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
@@ -999,7 +1000,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+    For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
         ASSIGN cN := hb_ntos(x)
         For w := -nISQRT To 0
             ASSIGN cW   := hb_ntos(w)
@@ -1221,7 +1222,7 @@ Static Function tBigNTst()
 
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
-    For w := 0 TO nN_TEST
+    For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW := hb_ntos(w)
         otBigW:SetValue(cW)
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
@@ -1255,7 +1256,7 @@ Static Function tBigNTst()
     
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
     
-    For w := 0 TO nN_TEST
+    For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW    := hb_ntos(w)
         ASSIGN cX    := otBigW:SetValue(cW):Ln():GetValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
