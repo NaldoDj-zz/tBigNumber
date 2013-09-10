@@ -1087,6 +1087,8 @@ Static Function tBigNTst()
 *    __tbnSleep()
 	
     __ConOut(fhLog,"")
+	
+	otBigN:SysSQRT(999999999999999)
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)
     nAccLog     := otBigN:SetDecimals(nACC_ALOG)
@@ -1275,7 +1277,8 @@ Static Function tBigNTst()
 
 *    __tbnSleep()
     
-    otBigN:SetDecimals(nSetDec)
+    otBigN:SysSQRT(0)
+	otBigN:SetDecimals(nSetDec)
     otBigN:nthRootAcc(nAccRoot)
     otBigW:SetDecimals(nSetDec)
     otBigW:nthRootAcc(nAccRoot)

@@ -4,8 +4,8 @@ rem ============================================================================
 SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
 SET _cygwin_PATH=%cygwin_PATH%
-SET HB_PATH=c:\hb30\
-SET cygwin_PATH=c:\cygwin\
+SET HB_PATH=c:\hb32\
+SET cygwin_PATH=c:\cygwin64\
     SET CYGWIN=nodosfilewarning
     SET PATH=%PATH%;%HB_PATH%bin\
     SET PATH=%PATH%;%HB_PATH%comp\mingwarm\bin\
