@@ -1092,7 +1092,7 @@ Static Function tBigNTst()
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)
     nAccLog     := otBigN:SetDecimals(nACC_ALOG)
-    laLog       := ( nAccLog >= 500 )
+    laLog       := ( .f. .and. nAccLog >= 500 )
     otBigW:SetDecimals(nACC_ALOG)
     nAccRoot    := otBigN:nthRootAcc(nACC_ALOG-1)
     otBigW:nthRootAcc(nACC_ALOG-1)

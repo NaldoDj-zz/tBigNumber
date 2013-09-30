@@ -4,6 +4,7 @@ rem ============================================================================
 SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
 SET HB_PATH=c:\hb32\
+SET PATH=%HB_PATH%
 
     %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingw ..\hbp\tBigNtst.hbp
     %HB_PATH%bin\hbmk2.exe -cpp -compr=max -comp=mingw ..\hbp\tBigNtst_array.hbp
