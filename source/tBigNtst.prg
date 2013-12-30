@@ -188,7 +188,7 @@ Static Function tBigNTst()
     MEMVAR __CRLF
     MEMVAR __cSep
 
-    MEMVAR __nProgress
+    MEMVAR __oProgress
     MEMVAR __nMaxRow
     MEMVAR __nMaxCol
     MEMVAR __nCol
@@ -196,7 +196,7 @@ Static Function tBigNTst()
     
     Private __cSep := Replicate("-",MaxCol())
 
-    Private __nProgress := 0
+    Private __oProgress := tSProgress():New()
     Private __nMaxRow   := MaxRow()
     Private __nMaxCol   := MaxCol()
     Private __nCol      := ((__nMaxCol+1)/2)
@@ -1409,7 +1409,7 @@ Static Procedure __ConOut(fhLog,e,d)
     MEMVAR __CRLF
     MEMVAR __cSep
 
-    MEMVAR __nProgress
+    MEMVAR __oProgress
     MEMVAR __nMaxRow
     MEMVAR __nMaxCol
     MEMVAR __nCol
@@ -1435,7 +1435,7 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
-    Progress(@__nProgress,2,@__nCol)
+    Progress(@__oProgress,2,@__nCol)
     DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
@@ -1484,25 +1484,9 @@ Return(lHarbour)
             s := ""
            ENDSWITCH
     Return(s)
-    PROCEDURE Progress(nProgress,nDrow,nDcol)
-        IF nProgress > 3 .OR. nProgress < 0
-            nProgress := 0
-        ENDIF
+    PROCEDURE Progress(__oProgress,nDrow,nDcol)
         DispOutAt( nDrow, nDcol, "[ ]" )
-        DO CASE
-        CASE nProgress == 0
-            DispOutAt( nDrow, nDcol+1, "-" )
-        CASE nProgress == 1
-            DispOutAt( nDrow, nDcol+1, "\" )
-        CASE nProgress == 2
-            DispOutAt( nDrow, nDcol+1, "|" )
-        CASE nProgress == 3
-            DispOutAt( nDrow, nDcol+1, "/" )
-        ENDCASE
-        nProgress++
-        IF nProgress == 4
-        nProgress := 0
-        ENDIF
+        DispOutAt( nDrow, nDcol+1, __oProgress:Eval() )
     RETURN
     Function BuildScreen(fhLog)
         CLEAR SCREEN

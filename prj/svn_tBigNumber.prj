@@ -16,7 +16,7 @@ Group svn_tBigNumber
       FoldersCount=2
       Folder Fontes
          VSSPath=Fontes
-         FilesCount=6
+         FilesCount=7
          File \svn\totvs-advpl-naldodj\tBigNumber\source\__pteTthD.prg
              Type=T
          End
@@ -33,6 +33,9 @@ Group svn_tBigNumber
              Type=T
          End
          File \svn\totvs-advpl-naldodj\tBigNumber\source\tPrime.prg
+             Type=T
+         End
+         File \svn\totvs-advpl-naldodj\tBigNumber\source\tSProgress.prg
              Type=T
          End
       End

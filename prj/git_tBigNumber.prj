@@ -32,7 +32,7 @@ Group git_tBigNumber
       End
       Folder Fontes
          VSSPath=Nova Pasta2
-         FilesCount=6
+         FilesCount=7
          File \GitHub\tBigNumber\source\__pteTthD.prg
              Type=T
          End
@@ -49,6 +49,9 @@ Group git_tBigNumber
              Type=T
          End
          File \GitHub\tBigNumber\source\tPrime.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\source\tSProgress.prg
              Type=T
          End
       End
