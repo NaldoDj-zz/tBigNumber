@@ -19,7 +19,6 @@ CLASS tSProgress
 	CLASSDATA aProgress		HIDDEN
 	CLASSDATA nMax			HIDDEN
 	CLASSDATA nProgress     HIDDEN
-	CLASSDATA cClassName	HIDDEN
 
 	METHOD New(cProgress,cToken)  CONSTRUCTOR
 	METHOD ClassName()
@@ -27,20 +26,28 @@ CLASS tSProgress
 	METHOD Progress()
 	METHOD Increment(cAlign)
 	METHOD Decrement(cAlign)
+	METHOD SetProgress(cProgress,cToken)
 
 ENDCLASS
 
 METHOD New(cProgress,cToken) CLASS tSProgress
+Return(self:SetProgress(@cProgress,@cToken))
+
+METHOD SetProgress(cProgress,cToken) CLASS tSProgress
+	Local lMacro		:= (SubStr(cProgress,1,1)=="&")
 	DEFAULT cProgress	:= "-;\;|;/"
 	DEFAULT cToken		:= ";"	
-	self:cClassName		:= "TSPROGEESS"
+	IF (lMacro)
+		cProgress		:= SubStr(cProgress,2)
+		cProgress		:= &(cProgress)
+	EndIF
 	self:aProgress		:= _StrToKArr(@cProgress,@cToken)
 	self:nMax			:= Len(self:aProgress)
 	self:nProgress		:= 0
 Return(self)
 
 METHOD ClassName() CLASS tSProgress
-Return( ::cClassName )
+Return("TSPROGEESS")
 
 METHOD Eval(cMethod,uPar01) CLASS tSProgress
 	Local cEval
