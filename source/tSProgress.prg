@@ -15,10 +15,19 @@
 	Sintaxe     : tSProgress():New(cProgress,cToken) -> self
 */
 CLASS tSProgress
+
+#IFNDEF __PROTHEUS__	
+	PROTECTED:
+#ENDIF	
 	
-	CLASSDATA aProgress		HIDDEN
-	CLASSDATA nMax			HIDDEN
-	CLASSDATA nProgress     HIDDEN
+	DATA aProgress	AS ARRAY INIT Array(0)
+	
+	DATA nMax		AS NUMERIC INIT 0
+	DATA nProgress	AS NUMERIC INIT 0
+	
+#IFNDEF __PROTHEUS__
+	EXPORTED:
+#ENDIF
 
 	METHOD New(cProgress,cToken)  CONSTRUCTOR
 	METHOD ClassName()
@@ -31,12 +40,14 @@ CLASS tSProgress
 ENDCLASS
 
 METHOD New(cProgress,cToken) CLASS tSProgress
-Return(self:SetProgress(@cProgress,@cToken))
+	self:SetProgress(@cProgress,@cToken)
+Return(self)
 
 METHOD SetProgress(cProgress,cToken) CLASS tSProgress
-	Local lMacro		:= (SubStr(cProgress,1,1)=="&")
+	Local lMacro
 	DEFAULT cProgress	:= "-;\;|;/"
 	DEFAULT cToken		:= ";"	
+	lMacro := (SubStr(cProgress,1,1)=="&")
 	IF (lMacro)
 		cProgress		:= SubStr(cProgress,2)
 		cProgress		:= &(cProgress)

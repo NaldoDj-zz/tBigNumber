@@ -6,6 +6,8 @@
 ../source/tfread.prg
 ../source/tprime.prg
 ../source/tSProgress.prg
+../source/tTimeCalc.prg
+../source/tRemaining.prg
 ../source/__hbeTthD.prg
 ../source/__hbPITthD.prg
 
