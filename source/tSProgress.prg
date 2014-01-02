@@ -3,7 +3,7 @@
 	#include "protheus.ch"
 #ELSE
 	#IFDEF __HARBOUR__
-		#include "hbclass.ch"
+		#include "hbClass.ch"
 	#ENDIF
 #ENDIF
 #include "tBigNumber.ch"
@@ -14,7 +14,7 @@
 	Descricao   : Instancia um novo objeto do tipo tSProgress
 	Sintaxe     : tSProgress():New(cProgress,cToken) -> self
 */
-CLASS tSProgress
+Class tSProgress
 
 #IFNDEF __PROTHEUS__	
 	PROTECTED:
@@ -29,21 +29,21 @@ CLASS tSProgress
 	EXPORTED:
 #ENDIF
 
-	METHOD New(cProgress,cToken)  CONSTRUCTOR
-	METHOD ClassName()
-	METHOD Eval(cMethod,uPar01)
-	METHOD Progress()
-	METHOD Increment(cAlign)
-	METHOD Decrement(cAlign)
-	METHOD SetProgress(cProgress,cToken)
+	Method New(cProgress,cToken)  CONSTRUCTOR
+	Method ClassName()
+	Method Eval(cMethod,uPar01)
+	Method Progress()
+	Method Increment(cAlign)
+	Method Decrement(cAlign)
+	Method SetProgress(cProgress,cToken)
 
-ENDCLASS
+EndClass
 
-METHOD New(cProgress,cToken) CLASS tSProgress
+Method New(cProgress,cToken) Class tSProgress
 	self:SetProgress(@cProgress,@cToken)
 Return(self)
 
-METHOD SetProgress(cProgress,cToken) CLASS tSProgress
+Method SetProgress(cProgress,cToken) Class tSProgress
 	Local lMacro
 	DEFAULT cProgress	:= "-;\;|;/"
 	DEFAULT cToken		:= ";"	
@@ -57,10 +57,10 @@ METHOD SetProgress(cProgress,cToken) CLASS tSProgress
 	self:nProgress		:= 0
 Return(self)
 
-METHOD ClassName() CLASS tSProgress
+Method ClassName() Class tSProgress
 Return("TSPROGEESS")
 
-METHOD Eval(cMethod,uPar01) CLASS tSProgress
+Method Eval(cMethod,uPar01) Class tSProgress
 	Local cEval
 	DEFAULT cMethod := "PROGRESS"
 	DO CASE
@@ -75,10 +75,10 @@ METHOD Eval(cMethod,uPar01) CLASS tSProgress
 	ENDCASE
 Return(cEval)
 
-METHOD Progress() CLASS tSProgress
+Method Progress() Class tSProgress
 Return(self:aProgress[IF(++self:nProgress>self:nMax,self:nProgress:=1,self:nProgress)])
 
-METHOD Increment(cAlign) CLASS tSProgress
+Method Increment(cAlign) Class tSProgress
 	Local cPADFunc  := "PAD"
 	Local cProgress := ""
 	Local nProgress
@@ -92,7 +92,7 @@ METHOD Increment(cAlign) CLASS tSProgress
 	cPADFunc += cAlign
 Return(&cPADFunc.(cProgress,self:nMax))
 
-METHOD Decrement(cAlign) CLASS tSProgress
+Method Decrement(cAlign) Class tSProgress
 	Local cPADFunc  := "PAD"
 	Local cProgress := ""
 	Local nProgress

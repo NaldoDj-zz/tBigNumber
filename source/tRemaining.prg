@@ -3,11 +3,11 @@
 	#include "protheus.ch"
 #ELSE
 	#IFDEF __HARBOUR__
-		#include "hbclass.ch"
+		#include "hbClass.ch"
 	#ENDIF
 #ENDIF
 #include "tBigNumber.ch"
-CLASS tRemaining FROM tTimeCalc
+Class tRemaining FROM tTimeCalc
 
 #IFNDEF __PROTHEUS__	
 	PROTECTED:
@@ -30,31 +30,31 @@ CLASS tRemaining FROM tTimeCalc
 	EXPORTED:
 #ENDIF	
 
-	METHOD New(nTotal) CONSTRUCTOR
-	METHOD ClassName()
+	Method New(nTotal) CONSTRUCTOR
+	Method ClassName()
 
-	METHOD SetRemaining(nTotal)
+	Method SetRemaining(nTotal)
 
-	METHOD Calcule()
-	METHOD RemainingTime()
-	METHOD CalcEndTime()
+	Method Calcule()
+	Method RemainingTime()
+	Method CalcEndTime()
 	
-	METHOD GetcMediumTime()
-	METHOD GetcEndTime()
-	METHOD GetcStartTime()
-	METHOD GetcTimeDiff()
-	METHOD GetcTRemaining()
-	METHOD GetdEndTime()
-	METHOD GetdIncTime()
-	METHOD GetdStartTime()
-	METHOD GetnIncTime()
-	METHOD GetnProgress()
-	METHOD GetnSRemaining()
-	METHOD GetnTotal()
+	Method GetcMediumTime()
+	Method GetcEndTime()
+	Method GetcStartTime()
+	Method GetcTimeDiff()
+	Method GetcTRemaining()
+	Method GetdEndTime()
+	Method GetdIncTime()
+	Method GetdStartTime()
+	Method GetnIncTime()
+	Method GetnProgress()
+	Method GetnSRemaining()
+	Method GetnTotal()
 	
-ENDCLASS
+EndClass
 
-METHOD New(nTotal) CLASS tRemaining
+Method New(nTotal) Class tRemaining
 #IFDEF __PROTHEUS__
 	_Super:New()
 #ELSE
@@ -63,10 +63,10 @@ METHOD New(nTotal) CLASS tRemaining
 	self:SetRemaining(@nTotal)
 Return(self)
 
-METHOD ClassName() CLASS tRemaining
+Method ClassName() Class tRemaining
 Return("TREMAINING")
 
-METHOD SetRemaining(nTotal) CLASS tRemaining
+Method SetRemaining(nTotal) Class tRemaining
 	DEFAULT nTotal 		:= 0
 	self:cMediumTime	:= "00:00:00"	
 	self:cEndTime		:= "00:00:00"
@@ -82,7 +82,7 @@ METHOD SetRemaining(nTotal) CLASS tRemaining
 	self:nTotal			:= nTotal
 Return(self)
 
-METHOD Calcule() CLASS tRemaining
+Method Calcule() Class tRemaining
 	Local aEndTime
 	self:RemainingTime()
 	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,++self:nProgress,.T.)
@@ -93,7 +93,7 @@ METHOD Calcule() CLASS tRemaining
 	self:dEndTime			:= aEndTime[2]
 Return(self)
 
-METHOD RemainingTime() CLASS tRemaining
+Method RemainingTime() Class tRemaining
 
 	Local cTime		:= Time()
 	Local dDate		:= Date()
@@ -118,42 +118,42 @@ METHOD RemainingTime() CLASS tRemaining
 
 Return(self)
 
-METHOD CalcEndTime() CLASS tRemaining
+Method CalcEndTime() Class tRemaining
 	Local nTimeEnd := (((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
 Return(self:SecsToTime(nTimeEnd))
 
-METHOD GetcMediumTime() CLASS tRemaining
+Method GetcMediumTime() Class tRemaining
 Return(self:cMediumTime)
 
-METHOD GetcEndTime() CLASS tRemaining
+Method GetcEndTime() Class tRemaining
 Return(self:cEndTime)
 
-METHOD GetcStartTime() CLASS tRemaining
+Method GetcStartTime() Class tRemaining
 Return(self:cStartTime)
 
-METHOD GetcTimeDiff() CLASS tRemaining
+Method GetcTimeDiff() Class tRemaining
 Return(self:cTimeDiff)
 
-METHOD GetcTRemaining() CLASS tRemaining
+Method GetcTRemaining() Class tRemaining
 Return(self:cTRemaining)
 
-METHOD GetdEndTime() CLASS tRemaining
+Method GetdEndTime() Class tRemaining
 Return(self:dEndTime)
 
-METHOD GetdIncTime() CLASS tRemaining
+Method GetdIncTime() Class tRemaining
 Return(self:dIncTime)
 
-METHOD GetdStartTime() CLASS tRemaining
+Method GetdStartTime() Class tRemaining
 Return(self:dStartTime)
 
-METHOD GetnIncTime() CLASS tRemaining
+Method GetnIncTime() Class tRemaining
 Return(self:nIncTime)
 
-METHOD GetnProgress() CLASS tRemaining
+Method GetnProgress() Class tRemaining
 Return(self:nProgress)
 
-METHOD GetnSRemaining() CLASS tRemaining
+Method GetnSRemaining() Class tRemaining
 Return(self:nSRemaining)
 
-METHOD GetnTotal() CLASS tRemaining
+Method GetnTotal() Class tRemaining
 Return(self:nTotal)

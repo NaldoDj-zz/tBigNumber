@@ -3,38 +3,38 @@
 	#include "protheus.ch"
 #ELSE
 	#IFDEF __HARBOUR__
-		#include "hbclass.ch"
+		#include "hbClass.ch"
 	#ENDIF
 #ENDIF
 #include "tBigNumber.ch"
-CLASS tTimeCalc
+Class tTimeCalc
 #IFNDEF __PROTHEUS__
 	EXPORTED:
 #ENDIF	
-	METHOD New() CONSTRUCTOR
-	METHOD ClassName()	
-	METHOD HMSToTime(nHours,nMinuts,nSeconds)
-	METHOD SecsToHMS(nSecsToHMS,nHours,nMinuts,nSeconds,cRet)
-	METHOD SecsToTime(nSecs)
-	METHOD TimeToSecs(cTime)
-	METHOD SecsToHrs(nSeconds)
-	METHOD HrsToSecs(nHours)
-	METHOD SecsToMin(nSeconds)
-	METHOD MinToSecs(nMinuts)
-	METHOD IncTime(cTime,nIncHours,nIncMinuts,nIncSeconds)
-	METHOD DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds)
-	METHOD Time2NextDay(cTime,dDate)
-	METHOD ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet)
-	METHOD MediumTime(cTime,nDividendo,lMiliSecs)
-ENDCLASS
+	Method New() CONSTRUCTOR
+	Method ClassName()	
+	Method HMSToTime(nHours,nMinuts,nSeconds)
+	Method SecsToHMS(nSecsToHMS,nHours,nMinuts,nSeconds,cRet)
+	Method SecsToTime(nSecs)
+	Method TimeToSecs(cTime)
+	Method SecsToHrs(nSeconds)
+	Method HrsToSecs(nHours)
+	Method SecsToMin(nSeconds)
+	Method MinToSecs(nMinuts)
+	Method IncTime(cTime,nIncHours,nIncMinuts,nIncSeconds)
+	Method DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds)
+	Method Time2NextDay(cTime,dDate)
+	Method ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet)
+	Method MediumTime(cTime,nDividendo,lMiliSecs)
+EndClass
 
-METHOD New() CLASS tTimeCalc
+Method New() Class tTimeCalc
 Return(self)
 
-METHOD ClassName() CLASS tTimeCalc
+Method ClassName() Class tTimeCalc
 Return("TTIMECALC")
 
-METHOD HMSToTime(nHours,nMinuts,nSeconds) CLASS tTimeCalc
+Method HMSToTime(nHours,nMinuts,nSeconds) Class tTimeCalc
 
 	Local cTime
 	
@@ -51,7 +51,7 @@ METHOD HMSToTime(nHours,nMinuts,nSeconds) CLASS tTimeCalc
 
 Return(cTime)
 
-METHOD SecsToHMS(nSecsToHMS,nHours,nMinuts,nSeconds,cRet) CLASS tTimeCalc
+Method SecsToHMS(nSecsToHMS,nHours,nMinuts,nSeconds,cRet) Class tTimeCalc
 
 	Local nRet	:= 0
 	
@@ -75,14 +75,14 @@ METHOD SecsToHMS(nSecsToHMS,nHours,nMinuts,nSeconds,cRet) CLASS tTimeCalc
 
 Return(nRet)
 
-METHOD SecsToTime(nSecs) CLASS tTimeCalc
+Method SecsToTime(nSecs) Class tTimeCalc
 	Local nHours
 	Local nMinuts
 	Local nSeconds
 	self:SecsToHMS(nSecs,@nHours,@nMinuts,@nSeconds)
 Return(self:HMSToTime(nHours,nMinuts,nSeconds))
 
-METHOD TimeToSecs(cTime) CLASS tTimeCalc
+Method TimeToSecs(cTime) Class tTimeCalc
 
 	Local nHours
 	Local nMinuts
@@ -97,26 +97,26 @@ METHOD TimeToSecs(cTime) CLASS tTimeCalc
 
 Return(nSeconds)
 
-METHOD SecsToHrs(nSeconds) CLASS tTimeCalc
+Method SecsToHrs(nSeconds) Class tTimeCalc
 	Local nHours
 	nHours	:= (nSeconds/3600)
 	nHours	:= Int(nHours)
 Return(nHours)
 
-METHOD HrsToSecs(nHours) CLASS tTimeCalc
+Method HrsToSecs(nHours) Class tTimeCalc
 Return((nHours*3600))
 
-METHOD SecsToMin(nSeconds) CLASS tTimeCalc
+Method SecsToMin(nSeconds) Class tTimeCalc
 	Local nMinuts
 	nMinuts		:= (nSeconds/60)
 	nMinuts		:= Int(nMinuts)
 	nMinuts		:= Mod(nMinuts,60)
 Return(nMinuts)
 
-METHOD MinToSecs(nMinuts) CLASS tTimeCalc
+Method MinToSecs(nMinuts) Class tTimeCalc
 Return((nMinuts*60))
 
-METHOD IncTime(cTime,nIncHours,nIncMinuts,nIncSeconds) CLASS tTimeCalc
+Method IncTime(cTime,nIncHours,nIncMinuts,nIncSeconds) Class tTimeCalc
 
 	Local nSeconds
 	Local nMinuts
@@ -135,7 +135,7 @@ METHOD IncTime(cTime,nIncHours,nIncMinuts,nIncSeconds) CLASS tTimeCalc
 	
 Return(self:SecsToTime(nSeconds))
 
-METHOD DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds) CLASS tTimeCalc
+Method DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds) Class tTimeCalc
 
 	Local nSeconds
 	Local nMinuts
@@ -154,14 +154,14 @@ METHOD DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds) CLASS tTimeCalc
 	
 Return(self:SecsToTime(nSeconds))
 
-METHOD Time2NextDay(cTime,dDate) CLASS tTimeCalc
+Method Time2NextDay(cTime,dDate) Class tTimeCalc
 	While (Val(cTime)>=24)
 		cTime := self:DecTime(cTime,24)
 		++dDate
 	End While
 Return({cTime,dDate})
 
-METHOD ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet) CLASS tTimeCalc
+Method ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet) Class tTimeCalc
 
 	Local nRet		:= 0
 	
@@ -199,7 +199,7 @@ METHOD ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet) CLASS tTimeCalc
 
 Return(nRet)
 
-METHOD MediumTime(cTime,nDividendo,lMiliSecs) CLASS tTimeCalc
+Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 
 	Local cMediumTime	:= "00:00:00"
 	
