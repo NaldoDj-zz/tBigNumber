@@ -289,8 +289,8 @@ Static Function tBigNTst()
     #endif
 
 	#IFDEF __HARBOUR__
-		__ConOut(fhLog,"FINAL1      : " , "["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
-		__ConOut(fhLog,"FINAL2      : " , "["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
+		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
+		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
 	#ENDIF
 	
     __ConOut(fhLog,__cSep)	//14
@@ -810,18 +810,18 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(nN_TEST)
-	__oRTime2:SetRemaining(nN_TEST)
-    ASSIGN n := 0
-    While ( n <= nN_TEST )
-        ASSIGN cN     := hb_ntos(n)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
+	ASSIGN n := 0
+    While ( n <= nN_TEST )		
+		ASSIGN cN  := hb_ntos(n)
         #IFDEF __PROTHEUS__
 			otBigN:SetValue(cN)
 		#ELSE
 			otBigN := cN
 		#ENDIF
 		__ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
-		n += nISQRT
+		ASSIGN n += nISQRT
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
     End While
@@ -1179,10 +1179,19 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-	otBigN:SetValue("1.5")
-    __ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
-    __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())  
-    __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())    
+	__oRTime1:SetRemaining(2)
+	For n := 1 To 2
+		__oRTime2:SetRemaining(n)
+		IF ( n == 1 )
+			otBigN:SetValue("1.5")
+			__ConOut(fhLog,"otBigN","RESULT: "+otBigN:GetValue())
+			__ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):GetValue())
+		Else
+			__ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):GetValue())
+		EndIF
+		__oRTime2:Calcule()
+		__oRTime1:Calcule()		
+	Next n
 
     __ConOut(fhLog,"")
 
@@ -1191,6 +1200,9 @@ Static Function tBigNTst()
 *    __tbnSleep()
 	
     __ConOut(fhLog,"")
+	
+	__oRTime1:SetRemaining()
+	__oRTime2:SetRemaining()
 	
 	otBigN:SysSQRT(999999999999999)
     
@@ -1214,6 +1226,9 @@ Static Function tBigNTst()
         otBigW:SetValue(otBigW:Pow(cX))
         __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log2():GetValue()
@@ -1222,6 +1237,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:aLog2():GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log10():GetValue()
@@ -1230,7 +1248,9 @@ Static Function tBigNTst()
    		otBigW:SetValue(cX) 
         __ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:aLog10():GetValue())
     EndIF
-    __ConOut(fhLog,"")
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
 
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o1):GetValue()
@@ -1239,6 +1259,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:aLog(o1):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o2):GetValue()
@@ -1247,6 +1270,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:aLog(o2):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o3):GetValue()
@@ -1254,6 +1280,9 @@ Static Function tBigNTst()
     IF ( laLog )
         __ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(o3):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o4):GetValue()
@@ -1262,6 +1291,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:aLog(o4):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o5):GetValue()
@@ -1270,6 +1302,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:aLog(o5):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o6):GetValue()
@@ -1278,6 +1313,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:aLog(o6):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o7):GetValue()
@@ -1286,6 +1324,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:aLog(o7):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o8):GetValue()
@@ -1294,6 +1335,9 @@ Static Function tBigNTst()
     	otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:aLog(o8):GetValue())
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o9):GetValue()
@@ -1302,6 +1346,9 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:aLog(o9):GetValue())     
     EndIF
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
+
     __ConOut(fhLog,"")
     
     ASSIGN cX    := otBigW:SetValue("1215"):Log(o10):GetValue()
@@ -1310,7 +1357,8 @@ Static Function tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):GetValue())
     EndIF
-    __ConOut(fhLog,"")
+	__oRTime2:Calcule()
+	__oRTime1:Calcule()
 
     __ConOut(fhLog,"")
 
@@ -1560,12 +1608,12 @@ Static Procedure __ConOut(fhLog,e,d)
     Progress(2,@__nCol)
 	@ 12, 0 CLEAR TO 12,__nMaxCol
 	@ 13, 0 CLEAR TO 13,__nMaxCol
-	DispOutAt(12,0,"FINAL1      :  ["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
-	DispOutAt(13,0,"FINAL2      :  ["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
+	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
+	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
     DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
-        __nRow := __NROWAT
+        ASSIGN __nRow := __NROWAT
     EndIF
     DispOutAt(__nRow,0,p,'w+/n')
 #ELSE    
@@ -1594,31 +1642,34 @@ Return(lHarbour)
     Static Function cValToChar(e)
         Local s AS UNDEFINED
         SWITCH ValType(e) 
-           CASE "C"
-               s := e
-               EXIT
-           CASE "D"
-            s := Dtoc(e)
+        CASE "C"
+            ASSIGN s := e
             EXIT
+        CASE "D"
+            ASSIGN s := Dtoc(e)
+            EXIT
+		CASE "T"
+			ASSIGN s := HB_TTOC(e)
+			EXIT
         CASE "N"
-               s := Str(e)
-               EXIT
-           CASE "L"
-               s := IF(e,".T.",".F.")    
-               EXIT
+            ASSIGN s := Str(e)
+            EXIT
+        CASE "L"
+            ASSIGN s := IF(e,".T.",".F.")    
+            EXIT
         OTHERWISE       
-            s := ""
-           ENDSWITCH
+            ASSIGN s := ""
+        ENDSWITCH
     Return(s)
-    PROCEDURE Progress(nDrow,nDcol)
+    Static Procedure Progress(nDrow,nDcol)
         MEMVAR __oProgress
 		DispOutAt( nDrow, nDcol, "[ ]" )
         DispOutAt( nDrow, nDcol+1, __oProgress:Eval() )
-    RETURN
-    Function BuildScreen(fhLog)
+    Return
+    Static Function BuildScreen(fhLog)
         CLEAR SCREEN
         __ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",maxcol()+1))
-   Return( NIL )
+    Return( NIL )
 #ELSE
     Static Function tBigNGC(lGC)
     Return(StaticCall(TBIGNUMBER,tBigNGC,lGC))

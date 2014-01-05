@@ -9,7 +9,7 @@ Static __o1
 Static __o2
 Static __o5
 Static __o10
-Static __o16
+Static __o20
 Static __cstcZ0
 Static __nstcZ0
 Static __cstcN9
@@ -379,7 +379,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__o2  := tBigNumber():New("2",nBase)
 		__o5  := tBigNumber():New("5",nBase)
 		__o10 := tBigNumber():New("10",nBase)
-		__o16 := tBigNumber():New("16",nBase)		
+		__o20 := tBigNumber():New("20",nBase)		
 		#IFDEF __PROTHEUS__
 			DEFAULT __cEnvSrv := GetEnvServer()
 		#ENDIF
@@ -3689,22 +3689,17 @@ Method Factorial() CLASS tBigNumber
     IF oN:eq(__o0)
 		Return(__o1)
 	EndIF
-Return(Refact(__o1,oN))
-//http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
+Return(recFact(__o1,oN))
+
 /*
-static BigInt recfact(long start, long n) {
-    long i;
-    if (n <= 16) { 
-        BigInt r = new BigInt(start);
-        for (i = start + 1; i < start + n; i++) r *= i;
-        return r;
-    }
-    i = n / 2;
-    return recfact(start, i) * recfact(start + i, n - i);
-}
-static BigInt factorial(long n) { return recfact(1, n); }
+	Function	: recFact 
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 04/01/2014
+	Descricao   : Fatorial de Numeros Inteiros
+	Sintaxe     : recFact(oS,oN)
+	Referencias : http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
 */
-Static Function Refact(oS,oN)
+Static Function recFact(oS,oN)
 #IFDEF __HARBOUR__
 	Local aThreads
 	Local aResults
@@ -3714,7 +3709,7 @@ Static Function Refact(oS,oN)
 	Local oSN
 	Local oSI
 	Local oNI
-	IF oN:lte(__o16)
+	IF oN:lte(__o20)
 		oR:SetValue(oS)
 		oI  := oS:Clone()
 		oI:SetValue(oI:Add(__o1))
@@ -3735,14 +3730,14 @@ Static Function Refact(oS,oN)
 #IFDEF __HARBOUR__
 	aThreads := Array(2)
 	aResults := Array(2)
-	aThreads[1]	:= hb_threadStart(@Refact(),oS,oI)
+	aThreads[1]	:= hb_threadStart(@recFact(),oS,oI)
 	hb_threadJoin(aThreads[1],@aResults[1])				
-	aThreads[2]	:= hb_threadStart(@Refact(),oSI,oNI)
+	aThreads[2]	:= hb_threadStart(@recFact(),oSI,oNI)
 	hb_threadJoin(aThreads[2],@aResults[2])						
 	hb_threadWaitForAll(aThreads)	
 Return(aResults[1]:Mult(aResults[2]))
 #ELSE	
-Return(Refact(oS,oI):Mult(Refact(oSI,oN)))
+Return(recFact(oS,oI):Mult(recFact(oSI,oN)))
 #ENDIF
 
 /*
