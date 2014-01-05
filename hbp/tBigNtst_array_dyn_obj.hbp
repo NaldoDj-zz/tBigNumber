@@ -2,6 +2,8 @@
 #/D__ALT_D__
 #-b
 
+-mt
+
 /DTBN_ARRAY
 /D__TBN_DYN_OBJ_SET__
 

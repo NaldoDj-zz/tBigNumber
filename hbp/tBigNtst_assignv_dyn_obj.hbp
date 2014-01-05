@@ -2,6 +2,8 @@
 #/D__ALT_D__
 #-b
 
+-mt
+
 /D__TBN_DYN_OBJ_SET__
 
 ../source/tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
