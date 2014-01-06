@@ -227,7 +227,7 @@ Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 				.and.;
 				(nMiliSecs>0);
 			)
-			cMediumTime += (":"+StrZero(nMiliSecs,02))
+			cMediumTime += (":"+StrZero(nMiliSecs,03))
 		EndIF
 	
 	EndIF
