@@ -289,8 +289,8 @@ Static Function tBigNTst()
     #endif
 
 	#IFDEF __HARBOUR__
-		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
-		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
+		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
+		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
 	#ENDIF
 	
     __ConOut(fhLog,__cSep)	//14
@@ -1608,8 +1608,8 @@ Static Procedure __ConOut(fhLog,e,d)
     Progress(2,@__nCol)
 	@ 12, 0 CLEAR TO 12,__nMaxCol
 	@ 13, 0 CLEAR TO 13,__nMaxCol
-	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
-	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
+	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
+	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
     DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol

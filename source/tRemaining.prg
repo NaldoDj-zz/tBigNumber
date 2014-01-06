@@ -19,8 +19,8 @@ Class tRemaining FROM tTimeCalc
 	DATA cTimeDiff  	AS CHARACTER INIT "00:00:00" HIDDEN
 	DATA cTRemaining  	AS CHARACTER INIT "00:00:00" HIDDEN
 	DATA dEndTime		AS DATE      INIT Ctod("//") HIDDEN
-	DATA dIncTime		AS DATE      INIT Ctod("//") HIDDEN
 	DATA dStartTime		AS DATE      INIT Ctod("//") HIDDEN
+	DATA nCount			AS NUMERIC   INIT 0			 HIDDEN
 	DATA nIncTime		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nProgress		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nSRemaining	AS NUMERIC   INIT 0			 HIDDEN
@@ -45,8 +45,8 @@ Class tRemaining FROM tTimeCalc
 	Method GetcTimeDiff()
 	Method GetcTRemaining()
 	Method GetdEndTime()
-	Method GetdIncTime()
 	Method GetdStartTime()
+	Method GetnCount()
 	Method GetnIncTime()
 	Method GetnProgress()
 	Method GetnSRemaining()
@@ -74,8 +74,8 @@ Method SetRemaining(nTotal) Class tRemaining
 	self:cTimeDiff		:= "00:00:00"
 	self:cTRemaining	:= "00:00:00"
 	self:dEndTime		:= CToD("//")
-	self:dIncTime		:= Date()
 	self:dStartTime		:= Date()
+	self:nCount			:= 0
 	self:nIncTime		:= 0
 	self:nProgress		:= 0
 	self:nSRemaining	:= 0
@@ -84,6 +84,7 @@ Return(self)
 
 Method Calcule() Class tRemaining
 	Local aEndTime
+	self:nCount++
 	self:RemainingTime()
 	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,++self:nProgress,.T.)
 	self:cEndTime			:= self:CalcEndTime()
@@ -102,10 +103,7 @@ Method RemainingTime() Class tRemaining
 	Local nMinInc
 	Local nSecInc
 
-	IF .NOT.(self:dIncTime==dDate)
-		self:dIncTime := dDate
-		++self:nIncTime
-	EndIF
+	self:nIncTime  := abs(dDate-self:dStartTime)
 
 	IF (self:nIncTime>0)
 	    self:ExtractTime(self:cStartTime,@nHrsInc,@nMinInc,@nSecInc)
@@ -140,11 +138,11 @@ Return(self:cTRemaining)
 Method GetdEndTime() Class tRemaining
 Return(self:dEndTime)
 
-Method GetdIncTime() Class tRemaining
-Return(self:dIncTime)
-
 Method GetdStartTime() Class tRemaining
 Return(self:dStartTime)
+
+Method GetnCount() Class tRemaining
+Return(self:nCount)
 
 Method GetnIncTime() Class tRemaining
 Return(self:nIncTime)
