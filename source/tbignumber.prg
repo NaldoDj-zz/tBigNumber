@@ -1,4 +1,10 @@
 #include "tBigNumber.ch"
+#IFDEF __HARBOUR__
+	#pragma BEGINDUMP
+		#include "hbapi.h"
+		#include "hbapiitm.h"
+	#pragma ENDDUMP
+#ENDIF	
 
 #IFDEF __PROTHEUS__
 	Static __cEnvSrv
@@ -4564,8 +4570,6 @@ Return(r)
 				Local c := tBigNAdd(a,b,n,nB)
 			Return(cGetcN(c,n+1))
 			#pragma BEGINDUMP
-				#include "hbapi.h"
-				#include "hbapiitm.h"
 				HB_FUNC( TBIGNADD ){	
 					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
@@ -4650,8 +4654,6 @@ Return(r)
 				Local c := tBigNSub(a,b,n,nB)
 			Return(cGetcN(c,n))
 			#pragma BEGINDUMP
-				#include "hbapi.h"
-				#include "hbapiitm.h"
 				HB_FUNC( TBIGNSUB ){	
 					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
@@ -4784,8 +4786,6 @@ Return(r)
 				c := tBigNMult(a,b,n,nB)
 			Return(cGetcN(c,Len(c)))			
 			#pragma BEGINDUMP
-				#include "hbapi.h"
-				#include "hbapiitm.h"
 				HB_FUNC( TBIGNMULT ){
 					
 					const char * a = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
@@ -4922,8 +4922,6 @@ Return(r)
 	Return(s)
 #ELSE
 	#pragma BEGINDUMP
-		#include "hbapi.h"
-		#include "hbapiitm.h"
 		HB_FUNC( TBIGNINVERT ){
 			PHB_ITEM pItem = hb_param(1,HB_IT_STRING);
 			HB_SIZE s = (HB_SIZE)hb_parnint(2);

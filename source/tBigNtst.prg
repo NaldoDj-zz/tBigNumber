@@ -309,7 +309,7 @@ Static Function tBigNTst()
     
 	#IFNDEF __PROTHEUS__
 		__ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
-		__oRTime1:SetRemaining(5)
+		__oRTime1:SetRemaining(5+1)
 		For w := 0 To 5
 			ASSIGN cW    := hb_ntos(w)
 			otBigW       := cW
@@ -394,7 +394,7 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
 	
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
 	For n := 1 To nN_TEST STEP nISQRT
         ASSIGN cN        := hb_ntos(n)
         ASSIGN aPFact    := otBigN:SetValue(cN):PFactors()
@@ -455,8 +455,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining((nISQRT*99)/99)
-	__oRTime2:SetRemaining((nISQRT*99)/99)
+    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+	__oRTime2:SetRemaining(((nISQRT*99)/99)+1)
 	For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
@@ -488,8 +488,8 @@ Static Function tBigNTst()
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining((nISQRT*99)/99)
-	__oRTime2:SetRemaining((nISQRT*99)/99)
+    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+	__oRTime2:SetRemaining(((nISQRT*99)/99)+1)
     For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
         ASSIGN cN   := hb_ntos(n)
@@ -528,8 +528,8 @@ Static Function tBigNTst()
 #ELSE
     otBigN:SetValue(o1)
 #ENDIF    
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN    := hb_ntos(n)
         ASSIGN n    += 9999.9999999999
@@ -564,8 +564,8 @@ Static Function tBigNTst()
     ASSIGN n     := Val(cN)
     otBigN:SetValue(cN)
     
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    += 9999.9999999999
@@ -596,8 +596,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    += -9999.9999999999
@@ -628,8 +628,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN n    -=9999.9999999999
@@ -658,8 +658,8 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
     
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         ASSIGN n  -= 9999.9999999999
@@ -688,8 +688,8 @@ Static Function tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
 
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         ASSIGN n  -= -9999.9999999999
@@ -724,8 +724,8 @@ Static Function tBigNTst()
     otBigN:SetValue(o1)
     otBigW:SetValue(o1)
     
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
         ASSIGN z    := Len(cN)
@@ -770,8 +770,8 @@ Static Function tBigNTst()
     ASSIGN w := 1
     otBigW:SetValue(o1)
 
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(w)
         ASSIGN w    *= 3.555
@@ -810,8 +810,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
-    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	ASSIGN n := 0
     While ( n <= nN_TEST )		
 		ASSIGN cN  := hb_ntos(n)
@@ -838,10 +838,10 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cX := hb_ntos(x)
-		__oRTime2:SetRemaining(nN_TEST)
+		__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
         For n := nN_TEST To 1 Step -nISQRT
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):GetValue()
@@ -866,10 +866,10 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	For n := 0 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
-		__oRTime2:SetRemaining(nN_TEST/nISQRT)
+		__oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
         For x := 0 TO nISQRT Step nISQRT
             ASSIGN cX := hb_ntos(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
@@ -906,8 +906,8 @@ Static Function tBigNTst()
     ASSIGN cN := hb_ntos(n)
     otBigN:SetValue(cN)
 
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cW   := hb_ntos(n)
         ASSIGN n    /= 1.5
@@ -939,8 +939,8 @@ Static Function tBigNTst()
     __ConOut(fhLog,"")
 
     otBigN:SetValue(o1)
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(x)
         otBigN:SetValue(cN)
@@ -969,8 +969,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For n := 1 To nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
@@ -1025,8 +1025,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(nN_TEST/nISQRT)
-    __oRTime2:SetRemaining(nN_TEST/nISQRT)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN n     := x
         ASSIGN cN    := hb_ntos(n)
@@ -1065,8 +1065,8 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(nISQRT)
-	__oRTime2:SetRemaining(nISQRT)
+	__oRTime1:SetRemaining(nISQRT+1)
+	__oRTime2:SetRemaining(nISQRT+1)
     For x := 0 TO nISQRT
         ASSIGN n  := x
         ASSIGN cN := hb_ntos(n)
@@ -1096,7 +1096,7 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
         ASSIGN cN := hb_ntos(x)
         __oRTime2:SetRemaining(nISQRT)
@@ -1139,10 +1139,10 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(nISQRT/5)
+    __oRTime1:SetRemaining((nISQRT/5)+1)
 	For x := 0 TO nISQRT STEP 5
         ASSIGN cN := hb_ntos(x)
-		__oRTime2:SetRemaining(nISQRT/5)
+		__oRTime2:SetRemaining((nISQRT/5)+1)
         For w := 0 To nISQRT STEP 5
             ASSIGN cW   := hb_ntos(w+.5)
             ASSIGN n    := x
@@ -1376,14 +1376,14 @@ Static Function tBigNTst()
 
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW := hb_ntos(w)
         otBigW:SetValue(cW)
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
         __ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():GetValue()) 
         __ConOut(fhLog,__cSep)
-        __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5))
+        __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5)+1)
 		For n := 0 TO INT(MAX(nISQRT,5)/5)
             ASSIGN cN    := hb_ntos(n)
             ASSIGN cX    := otBigW:SetValue(cW):Log(cN):GetValue()
@@ -1414,8 +1414,8 @@ Static Function tBigNTst()
     
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
     
-    __oRTime1:SetRemaining(nN_TEST/nISQRT)
-	__oRTime2:SetRemaining(nN_TEST/nISQRT)
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW    := hb_ntos(w)
         ASSIGN cX    := otBigW:SetValue(cW):Ln():GetValue()
@@ -1448,8 +1448,8 @@ Static Function tBigNTst()
     __ConOut(fhLog,"")
 
     ASSIGN n := 0
-	__oRTime1:SetRemaining(nISQRT)
-	__oRTime2:SetRemaining(nISQRT)
+	__oRTime1:SetRemaining((nISQRT/2)+1)
+	__oRTime2:SetRemaining((nISQRT/2)+1)
     While ( n <= nISQRT )
         IF ( n < 3 )
             ASSIGN n += 1
