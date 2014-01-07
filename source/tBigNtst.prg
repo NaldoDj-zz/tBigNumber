@@ -1490,7 +1490,7 @@ Static Function tBigNTst()
         __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
         __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime2:Calcule()
+		__oRTime1:Calcule()
     Next n
     
     __ConOut(fhLog,"")
