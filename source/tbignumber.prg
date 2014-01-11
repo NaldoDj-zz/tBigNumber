@@ -3706,15 +3706,18 @@ Return(recFact(__o1,oN))
 	Referencias : http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
 */
 Static Function recFact(oS,oN)
+
 #IFDEF __HARBOUR__
 	Local aThreads
 	Local aResults
 #ENDIF
+
 	Local oI
 	Local oR	:= tBigNumber():New()
 	Local oSN
 	Local oSI
 	Local oNI
+
 	IF oN:lte(__o20)
 		oR:SetValue(oS)
 		oI  := oS:Clone()
@@ -3727,23 +3730,32 @@ Static Function recFact(oS,oN)
 		End While
 		Return(oR)
 	EndIF
+
 	oI  := oN:Clone()
 	oI:SetValue(oI:Div(__o2):Int(.T.,.F.))
+
 	oSI := oS:Clone()
 	oSI:SetValue(oSI:Add(oI))
+
 	oNI := oN:Clone()
 	oNI:SetValue(oNI:Sub(oI))
+
 #IFDEF __HARBOUR__
+
 	aThreads := Array(2)
 	aResults := Array(2)
+
 	aThreads[1]	:= hb_threadStart(@recFact(),oS,oI)
 	hb_threadJoin(aThreads[1],@aResults[1])				
+
 	aThreads[2]	:= hb_threadStart(@recFact(),oSI,oNI)
 	hb_threadJoin(aThreads[2],@aResults[2])						
+	
 	hb_threadWaitForAll(aThreads)	
+
 Return(aResults[1]:Mult(aResults[2]))
 #ELSE	
-Return(recFact(oS,oI):Mult(recFact(oSI,oN)))
+Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 #ENDIF
 
 /*
@@ -4567,16 +4579,17 @@ Return(r)
 			Return(cGetcN(c,y))
 		#ELSE
 			Static Function Add(a,b,n,nB)
-				Local c := tBigNAdd(a,b,n,nB)
-			Return(cGetcN(c,n+1))
+				Local y := n+1
+				Local c := tBigNAdd(a,b,n,y,nB)
+			Return(cGetcN(c,y))
 			#pragma BEGINDUMP
 				HB_FUNC( TBIGNADD ){	
 					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
-					HB_SIZE y  = n+1;
-					HB_ISIZ nB = hb_parns(4);
-					char * c = ( char * ) hb_xgrab(y+1);
+					HB_SIZE y  = (HB_SIZE)hb_parnint(4);;
+					HB_ISIZ nB = hb_parns(5);
+					char * c = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
 					int v = 0;
 					int v1;
@@ -4591,8 +4604,8 @@ Return(r)
 						else{
 							v1 = 0;
 						}
-						c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
-						c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+						c[k]   = "0123456789"[v%nB];
+						c[k+1] = "0123456789"[v1%nB];
 						v = v1;
 						++k;
 					}
@@ -4660,7 +4673,7 @@ Return(r)
 					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
 					HB_SIZE y  = n;
 					HB_ISIZ nB = hb_parns(4);
-					char * c = ( char * ) hb_xgrab(y+1);
+					char * c = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
 					int v = 0;
 					int v1;
@@ -4675,8 +4688,8 @@ Return(r)
 						else{
 							v1 = 0;
 						}
-						c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
-						c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+						c[k]   = "0123456789"[v%nB];
+						c[k+1] = "0123456789"[v1%nB];
 						v = v1;
 						++k;
 					}
@@ -4783,8 +4796,9 @@ Return(r)
 				Local c
 				Local a	:= tBigNInvert(cN1,n)
 				Local b	:= tBigNInvert(cN2,n)
-				c := tBigNMult(a,b,n,nB)
-			Return(cGetcN(c,Len(c)))			
+				Local y := n+n
+				c := tBigNMult(a,b,n,y,nB)
+			Return(cGetcN(c,y))			
 			#pragma BEGINDUMP
 				HB_FUNC( TBIGNMULT ){
 					
@@ -4792,11 +4806,11 @@ Return(r)
 					const char * b = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 					
 					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
-					HB_SIZE y  = n+n;
+					HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 					
-					HB_ISIZ nB = hb_parns(4);
+					HB_ISIZ nB = hb_parns(5);
 												
-					char * c = ( char * ) hb_xgrab(y+1);
+					char * c = (char*)hb_xgrab(y+1);
 
 					HB_SIZE i = 0;
 					HB_SIZE k = 0;
@@ -4822,8 +4836,8 @@ Return(r)
 						}else{
 							v1 = 0;
 						}
-						c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
-						c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+						c[k]   = "0123456789"[v%nB];
+						c[k+1] = "0123456789"[v1%nB];
 						v = v1;
 						k++;
 						i++;
@@ -4841,8 +4855,8 @@ Return(r)
 						}else{
 							v1 = 0;	
 						}
-						c[k]   = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v%nB];
-						c[k+1] = "0123456789ABCEFGHIJKLMNOPQRSTUV"[v1%nB];
+						c[k]   = "0123456789"[v%nB];
+						c[k+1] = "0123456789"[v1%nB];
 						v = v1;
 						if (++k>=y){
 							break;
@@ -4927,7 +4941,7 @@ Return(r)
 			HB_SIZE s = (HB_SIZE)hb_parnint(2);
 			HB_SIZE f = s;
 			HB_SIZE t = 0;
-			char * szStringTo = ( char * ) hb_xgrab(s+1);
+			char * szStringTo = (char*)hb_xgrab(s+1);
 			const char * szStringFrom = hb_itemGetCPtr(pItem);
 			for(;f;){
 				szStringTo[t++]=szStringFrom[--f];
