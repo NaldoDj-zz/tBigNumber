@@ -20,10 +20,10 @@ Class tSProgress
 	PROTECTED:
 #ENDIF	
 	
-	DATA aProgress	AS ARRAY INIT Array(0)
+	DATA aProgress	AS ARRAY INIT Array(0) HIDDEN
 	
-	DATA nMax		AS NUMERIC INIT 0
-	DATA nProgress	AS NUMERIC INIT 0
+	DATA nMax		AS NUMERIC INIT 0      HIDDEN
+	DATA nProgress	AS NUMERIC INIT 0      HIDDEN
 	
 #IFNDEF __PROTHEUS__
 	EXPORTED:
@@ -37,7 +37,15 @@ Class tSProgress
 	Method Decrement(cAlign)
 	Method SetProgress(cProgress,cToken)
 
+	Method GetnMax()
+	Method GetnProgress()
+
 EndClass
+
+#IFDEF __PROTHEUS__
+	User Function tSProgress(cProgress,cToken)
+	Return(tSProgress():New(@cProgress,@cToken))
+#ENDIF
 
 Method New(cProgress,cToken) Class tSProgress
 	self:SetProgress(@cProgress,@cToken)
@@ -105,6 +113,12 @@ Method Decrement(cAlign) Class tSProgress
 	DEFAULT cAlign := "L" //L,C,R
 	cPADFunc += cAlign
 Return(&cPADFunc.(cProgress,self:nMax))
+
+Method GetnMax() Class tSProgress
+Return(self:nMax)
+
+Method GetnProgress() Class tSProgress
+Return(self:nProgress)
 
 Static Function _StrToKArr(cStr,cToken)
 	Local cDToken
