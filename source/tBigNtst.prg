@@ -1247,8 +1247,8 @@ Static Function tBigNTst()
 	
     __ConOut(fhLog,"")
 	
-	__oRTime1:SetRemaining()
-	__oRTime2:SetRemaining()
+	__oRTime1:SetRemaining(13)
+	__oRTime2:SetRemaining(13)
 	
 *	otBigN:SysSQRT(999999999999999)
     otBigN:SysSQRT(0)
