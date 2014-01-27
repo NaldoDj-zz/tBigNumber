@@ -7,6 +7,8 @@
 #DEFINE __SLEEP            "0"
 #DEFINE N_TEST            "10"
 
+#DEFINE __SETDEC__		  8
+
 #IFDEF __PROTHEUS__
     #xcommand ? <e> => ConOut(<e>)
 #ENDIF    
@@ -238,7 +240,7 @@ Static Function tBigNTst()
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
     
-    Set(_SET_DECIMALS,8)
+    Set(_SET_DECIMALS,__SETDEC__)
 
     __ConOut(fhLog,__cSep)   						//1
 
@@ -791,6 +793,12 @@ Static Function tBigNTst()
         otBigW:SetValue(otBigW:Mult("3.555"))
 #ENDIF
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+otBigW:ExactValue())
+		ASSIGN cW    := otBigW:Rnd(nACC_SET):GetValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:NoRnd(__SETDEC__):GetValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:Rnd(__SETDEC__):GetValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
@@ -844,9 +852,9 @@ Static Function tBigNTst()
 		__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
         For n := nN_TEST To 1 Step -nISQRT
             ASSIGN cN    := hb_ntos(n)
-            ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):GetValue()
+            ASSIGN cW    := otBigN:SetValue(cX):GCD(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
-            ASSIGN cW    := otBigN:LCM(cN):GetValue()
+            ASSIGN cW    := otBigN:LCM(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():LCM('+cN+')',"RESULT: "+cW)
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
@@ -875,11 +883,19 @@ Static Function tBigNTst()
             __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
 #IFNDEF __PROTHEUS__
             otBigN := cN
-            __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+(otBigN/cX):ExactValue())
+            otBigW := (otBigN/cX) 
+			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigW:ExactValue())
 #ELSE
             otBigN:SetValue(cN)
-            __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigN:Div(cX):ExactValue())
-#ENDIF            
+			otBigW:SetValue(otBigN:Div(cX))
+            __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigW:ExactValue())
+#ENDIF
+			ASSIGN cW    := otBigW:Rnd(nACC_SET):GetValue()
+			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
+			ASSIGN cW    := otBigW:NoRnd(__SETDEC__):GetValue()
+			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
+			ASSIGN cW    := otBigW:Rnd(__SETDEC__):GetValue()
+			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)			
             __ConOut(fhLog,__cSep)
 			__oRTime1:Calcule()
 		Next x
@@ -1005,7 +1021,13 @@ Static Function tBigNTst()
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
         otBigN:SetValue(cN)
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigN:SQRT():GetValue())
-        __ConOut(fhLog,__cSep)
+        ASSIGN cW    := otBigN:Rnd(nACC_SET):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:NoRnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:Rnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW) 
+	    __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
     Next x
@@ -1042,6 +1064,10 @@ Static Function tBigNTst()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:Rnd(nACC_SET):GetValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:NoRnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:Rnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)		
         __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
@@ -1077,6 +1103,12 @@ Static Function tBigNTst()
 	otBigN:SetValue(cN)
 #ENDIF	
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:Exp():ExactValue())
+        ASSIGN cW    := otBigN:Rnd(nACC_SET):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:NoRnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
+        ASSIGN cW    := otBigN:Rnd(__SETDEC__):GetValue()
+        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)		
         __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
@@ -1118,6 +1150,12 @@ Static Function tBigNTst()
             otBigN:SetValue(otBigN:Pow(cW))
 #ENDIF            
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
+            ASSIGN cX    := otBigN:Rnd(nACC_SET):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
+            ASSIGN cX    := otBigN:NoRnd(__SETDEC__):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
+            ASSIGN cX    := otBigN:Rnd(__SETDEC__):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
         Next w
@@ -1160,6 +1198,12 @@ Static Function tBigNTst()
 				otBigN:SetValue(otBigN:Pow(cW))
 			#ENDIF
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
+		    ASSIGN cX    := otBigN:Rnd(nACC_SET):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
+            ASSIGN cX    := otBigN:NoRnd(__SETDEC__):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
+            ASSIGN cX    := otBigN:Rnd(__SETDEC__):GetValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)	
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
         Next w
@@ -1204,7 +1248,8 @@ Static Function tBigNTst()
 	__oRTime1:SetRemaining()
 	__oRTime2:SetRemaining()
 	
-	otBigN:SysSQRT(999999999999999)
+*	otBigN:SysSQRT(999999999999999)
+    otBigN:SysSQRT(0)
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)
     nAccLog     := otBigN:SetDecimals(nACC_ALOG)

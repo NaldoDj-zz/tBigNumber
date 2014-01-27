@@ -2123,25 +2123,21 @@ Method LCM(uBigN) CLASS tBigNumber
 	
 	Local oLCM	:= __o1:Clone()
 
-	BEGIN SEQUENCE
-
-		While .T.
-			While oN1:Mod(oNI):eq(__o0) .or. oN2:Mod(oNI):eq(__o0)
-				oLCM:SetValue(oLCM:Mult(oNI))
-				IF oN1:Mod(oNI):eq(__o0)
-					oN1:SetValue(oN1:Div(oNI,.F.))
-				EndIF
-				IF oN2:Mod(oNI):eq(__o0)
-					oN2:SetValue(oN2:Div(oNI,.F.))
-				EndIF
-			End While
-			IF oN1:eq(__o1) .and. oN2:eq(__o1)
-				BREAK
+	While .T.
+		While oN1:Mod(oNI):eq(__o0) .or. oN2:Mod(oNI):eq(__o0)
+			oLCM:SetValue(oLCM:Mult(oNI))
+			IF oN1:Mod(oNI):eq(__o0)
+				oN1:SetValue(oN1:Div(oNI,.F.))
 			EndIF
-			oNI:SetValue(oNI:Add(__o1))		
+			IF oN2:Mod(oNI):eq(__o0)
+				oN2:SetValue(oN2:Div(oNI,.F.))
+			EndIF
 		End While
-
-	END SEQUENCE
+		IF oN1:eq(__o1) .and. oN2:eq(__o1)
+			EXIT
+		EndIF
+		oNI:SetValue(oNI:Add(__o1))		
+	End While
 
 Return(oLCM)
 
@@ -2789,40 +2785,33 @@ Return(MathO(uBigN1,cOperator,uBigN2,.T.))
 Method Rnd(nAcc) CLASS tBigNumber
 
 	Local oRnd := self:Clone()
-	Local oDec := tBigNumber():New(oRnd:cDec)
 
 	Local cAdd
-	Local oAcc
+	Local cAcc
 
-	DEFAULT nAcc := Min(oRnd:nDec,__nSetDecimals)
+	DEFAULT nAcc := Max((Min(oRnd:nDec,__nSetDecimals)-1),0)
 
-	IF .NOT.(oDec:eq(__o0))
-		oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc+1,1))
-		IF oAcc:gte(__o5)
-			oDec:SetValue(__o10)
+	IF .NOT.(oRnd:eq(__o0))
+		cAcc := SubStr(oRnd:cDec,nAcc+1,1)
+		IF cAcc>="5"
 			cAdd := "0."
 			While nAcc>__nstcZ0
 				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 				__nstcZ0+=__nstcZ0
 			End While
-			cAdd += SubStr(__cstcZ0,1,nAcc)
-			cAdd += oDec:Sub(oAcc):cInt
-		Else
-			oAcc := tBigNumber():New(SubStr(oDec:ExactValue(),nAcc,1))
-			IF oAcc:gte(__o5)
-				oDec:SetValue(__o10)
+			cAdd += SubStr(__cstcZ0,1,nAcc)+"5"
+		/*Else
+			cAcc := SubStr(oRnd:cDec,nAcc,1)
+			IF cAcc>="5"
 				cAdd := "0."
 				While nAcc>__nstcZ0
 					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 					__nstcZ0+=__nstcZ0
 				End While
-				cAdd += SubStr(__cstcZ0,1,nAcc-1)
-				cAdd += oDec:Sub(oAcc):cInt
-			Else
-				cAdd := "0"
-			EndIF	
+				cAdd += SubStr(__cstcZ0,1,nAcc-1)+"5"
+			EndIF*/	
 		EndIF
-		IF .NOT.(cAdd=="0")
+		IF .NOT.(cAdd==NIL)
 			oRnd:SetValue(oRnd:Add(cAdd))
 		EndIF
 		oRnd:SetValue(oRnd:cInt+"."+SubStr(oRnd:cDec,1,nAcc),NIL,oRnd:cRDiv)
@@ -2850,13 +2839,12 @@ Return(Self:Truncate(nAcc))
 Method Truncate(nAcc) CLASS tBigNumber
 
 	Local oTrc	:= self:Clone()
-	Local oDec	:= tBigNumber():New(oTrc:cDec)
+	Local cDec	:= oTrc:cDec
 
-	DEFAULT nAcc := Min(oTrc:nDec,__nSetDecimals)
-
-	IF .NOT.(oDec:eq(__o0))
-		oDec:SetValue(SubStr(oDec:ExactValue(),1,nAcc))
-		oTrc:SetValue(oTrc:cInt+"."+oDec:cInt)
+	IF .NOT.(__o0:eq(cDec))
+		DEFAULT nAcc := Min(oTrc:nDec,__nSetDecimals)
+		cDec         := SubStr(cDec,1,nAcc)
+		oTrc:SetValue(oTrc:cInt+"."+cDec)
 	EndIF
 
 Return(oTrc)
