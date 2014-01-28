@@ -2634,11 +2634,19 @@ Method Log(uBigNB) CLASS tBigNumber
 	Local oLT := tBigNumber():New()
 
 	Local lflag := .F.
+	
+	IF oX:eq(__o0)
+		Return(__o0:Clone())
+	EndIF
 
 	DEFAULT uBigNB := self:e()
 
 	oT:SetValue(uBigNB)
 
+	IF oT:eq(__o1)
+		Return(__o0:Clone())
+	EndIF
+	
 	IF __o0:lt(oT) .and. oT:lt(__o1)
 	 	lflag := .NOT.(lflag)
 	 	oT:SetValue(__o1:Div(oT))
