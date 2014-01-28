@@ -1421,15 +1421,23 @@ Static Function tBigNTst()
     
     __ConOut(fhLog,"")
 
-    //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
+    //Quer comparar o resultado:http://www.gyplclan.com/pt/logar_pt.html
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW := hb_ntos(w)
         otBigW:SetValue(cW)
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
-        __ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+otBigW:SetValue(cW):Log():ExactValue()) 
-        __ConOut(fhLog,__cSep)
+        ASSIGN cX := otBigW:SetValue(cW):Log():ExactValue()
+		__ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+cX) 
+ 		otBigN:SetValue(cX)
+		ASSIGN cX    := otBigN:Rnd(nACC_SET):ExactValue()
+        __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
+        ASSIGN cX    := otBigN:NoRnd(__SETDEC__):ExactValue()
+        __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
+        ASSIGN cX    := otBigN:Rnd(__SETDEC__):ExactValue()
+		__ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
+		__ConOut(fhLog,__cSep)
         __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5)+1)
 		For n := 0 TO INT(MAX(nISQRT,5)/5)
             ASSIGN cN    := hb_ntos(n)
