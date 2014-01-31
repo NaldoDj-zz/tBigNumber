@@ -1102,7 +1102,8 @@ Static Function tBigNTst()
 #ELSE
 	otBigN:SetValue(cN)
 #ENDIF	
-        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:Exp():ExactValue())
+        otBigN:SetValue(otBigN:Exp():ExactValue())
+		__ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:ExactValue())
         ASSIGN cW    := otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:NoRnd(__SETDEC__):ExactValue()
