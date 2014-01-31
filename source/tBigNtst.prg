@@ -1666,11 +1666,15 @@ Static Procedure __ConOut(fhLog,e,d)
 	Local lMRow AS LOGICAL
     
     Local p     AS CHARACTER
-
+   
     Local nATd  AS NUMBER
     
     Local x     AS UNDEFINED
     Local y     AS UNDEFINED
+    
+    Static __cAnim := "RCLC"
+    Static __nAnim := 0
+   	Static __PDRLC
 
 #IFDEF __HARBOUR__
 
@@ -1708,12 +1712,20 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
-	DispOutAt(2,__nCol+1,__oProgress:Eval(),'g+/n')
+	DispOutAt(2,__nCol+1,__oProgress:Eval(),'r+/n')
 	@ 12, 0 CLEAR TO 12,__nMaxCol
 	@ 13, 0 CLEAR TO 13,__nMaxCol
 	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
 	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
-	DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS),'g+/n')
+	IF (cC_OOPROGRESS=="SHUTTLE")
+		IF (__ooProgress:GetnProgress()==(__ooProgress:GetnMax()))
+			IF ((++__nAnim)>4)
+				ASSIGN __nAnim := 1
+			EndIF
+			ASSIGN __PDRLC := __cAnim[__nAnim]
+		EndIF
+	EndIF
+	DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS,__PDRLC),'r+/n')
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol

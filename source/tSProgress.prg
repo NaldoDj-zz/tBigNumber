@@ -32,7 +32,9 @@ Class tSProgress
 #ENDIF
 
 	Method New(cProgress,cToken)  CONSTRUCTOR
+
 	Method ClassName()
+
 	Method SetProgress(cProgress,cToken)
 
 	Method Eval(cMethod,uPar01)
