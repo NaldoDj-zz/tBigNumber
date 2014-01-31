@@ -2,8 +2,8 @@
 #include "paramtypex.ch"
 
 #DEFINE ACC_SET          "100"
-#DEFINE ROOT_ACC_SET      "35"
-#DEFINE ACC_ALOG       ACC_SET
+#DEFINE ROOT_ACC_SET      "99"
+#DEFINE ACC_ALOG          "99"
 #DEFINE __SLEEP            "0"
 #DEFINE N_TEST          "1000"
 #DEFINE L_ALOG			   "0"
@@ -1268,7 +1268,7 @@ Static Procedure tBigNTst()
 			__ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:Rnd():ExactValue())
 		Else
 			__ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:SetValue(otBigN:nthroot("0.5")):ExactValue())
-			__ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:Rnd():ExactValue())
+			__ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:Rnd(2):ExactValue())
 		EndIF
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()		
