@@ -2,10 +2,12 @@
 #include "paramtypex.ch"
 
 #DEFINE ACC_SET          "100"
-#DEFINE ROOT_ACC_SET      "99"
+#DEFINE ROOT_ACC_SET      "35"
 #DEFINE ACC_ALOG       ACC_SET
 #DEFINE __SLEEP            "0"
-#DEFINE N_TEST            "10"
+#DEFINE N_TEST          "1000"
+#DEFINE L_ALOG			   "0"
+#DEFINE C_OOPROGRESS "SHUTTLE"
 
 #DEFINE __SETDEC__		  8
 
@@ -16,18 +18,19 @@
 #IFDEF __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
-#DEFINE __NROWAT    17
 Function Main()
     Local cIni    := "tbigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
     Local cKey
     Local aSect
     Local cSection
-    MEMVAR  nACC_SET
-    MEMVAR  nROOT_ACC_SET
-    MEMVAR  nACC_ALOG
-    MEMVAR  __nSLEEP
-    MEMVAR  nN_TEST
+    MEMVAR nACC_SET
+    MEMVAR nROOT_ACC_SET
+    MEMVAR nACC_ALOG
+    MEMVAR __nSLEEP
+    MEMVAR nN_TEST
+	MEMVAR lL_ALOG
+	MEMVAR cC_OOPROGRESS
     #IFDEF __HARBOUR__
         #IFDEF __ALT_D__    // Compile with -b
            AltD(1)          // Enables the debugger. Press F5 to go.
@@ -39,13 +42,17 @@ Function Main()
     Private nACC_ALOG
     Private __nSLEEP
     Private nN_TEST
-    IF .NOT.(File(cIni) ) .or. Empty( hIni )
+	Private lL_ALOG
+	Private cC_OOPROGRESS
+    IF .NOT.(File(cIni) ) .or. Empty(hIni)
         hIni["GENERAL"] := hb_Hash() 
         hIni["GENERAL"]["ACC_SET"]        := ACC_SET
         hIni["GENERAL"]["ROOT_ACC_SET"]   := ROOT_ACC_SET
         hIni["GENERAL"]["ACC_ALOG"]       := ACC_ALOG
         hIni["GENERAL"]["__SLEEP"]        := __SLEEP
         hIni["GENERAL"]["N_TEST"]         := N_TEST
+		hIni["GENERAL"]["L_ALOG"]         := L_ALOG
+		hIni["GENERAL"]["C_OOPROGRESS"]   := C_OOPROGRESS
         hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
@@ -67,7 +74,13 @@ Function Main()
                     CASE "N_TEST"
                         nN_TEST         := Val(aSect[cKey])
                         EXIT
-                ENDSWITCH
+					CASE "L_ALOG"
+						lL_ALOG			:= (aSect[cKey]=="1")
+						EXIT
+					CASE "C_OOPROGRESS"	
+						cC_OOPROGRESS   := Upper(AllTrim(aSect[cKey]))
+						EXIT
+				ENDSWITCH
             NEXT cKey
         NEXT cSection
     EndIF
@@ -75,10 +88,12 @@ Function Main()
     nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
     nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
     nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
+	cC_OOPROGRESS   := IF(Empty(cC_OOPROGRESS),Upper(AllTrim(C_OOPROGRESS)),cC_OOPROGRESS)
 	__SetCentury("ON")
 	SET DATE TO BRITISH 
 Return(tBigNTst())
-Static Function tBigNTst()
+Static Procedure tBigNTst()
 #ELSE
 #xtranslate ExeName() => ProcName()
 User Function tBigNTst()
@@ -89,6 +104,8 @@ User Function tBigNTst()
     Private nACC_ALOG
     Private __nSLEEP
     Private nN_TEST
+	Private lL_ALOG
+	Private cC_OOPROGRESS
     IF FindFunction("U_TFINI") //NDJLIB020.PRG    
         otFIni := U_TFINI(cIni)
         IF .NOT.File(cIni)
@@ -98,21 +115,27 @@ User Function tBigNTst()
             otFIni:AddNewProperty("GENERAL","ACC_ALOG",ACC_ALOG)
             otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
             otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
-            otFIni:SaveAs(cIni)
+            otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
+			otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)			
+			otFIni:SaveAs(cIni)
         Else
             nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
             nROOT_ACC_SET   := Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
             nACC_ALOG       := Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
             __nSLEEP        := Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
             nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
-        EndIF
+			lL_ALOG			:= (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
+			cC_OOPROGRESS   := Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS)))
+		EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
     nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
     nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
     nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
+	cC_OOPROGRESS   := IF(Empty(cC_OOPROGRESS),Upper(AllTrim(C_OOPROGRESS)),cC_OOPROGRESS)
 Return(tBigNTst())
-Static Function tBigNTst()
+Static Procedure tBigNTst()
 #ENDIF    
 
 #IFDEF __HARBOUR__
@@ -120,7 +143,7 @@ Static Function tBigNTst()
     Local nsElapsed
 #ENDIF
 
-    Local dStartDate AS DATE       VALUE Date()
+    Local dStartDate AS DATE      VALUE Date()
     Local dEndDate    
     Local cStartTime AS CHARACTER VALUE Time()
     Local cEndTime   AS CHARACTER
@@ -183,32 +206,39 @@ Static Function tBigNTst()
 
 #IFDEF __HARBOUR__
 
-    MEMVAR  nACC_SET
-    MEMVAR  nROOT_ACC_SET
-    MEMVAR  nACC_ALOG
-    MEMVAR  __nSLEEP
-    MEMVAR  nN_TEST
+    MEMVAR nACC_SET
+    MEMVAR nROOT_ACC_SET
+    MEMVAR nACC_ALOG
+    MEMVAR __nSLEEP
+    MEMVAR nN_TEST
+	MEMVAR lL_ALOG
     
     MEMVAR __CRLF
     MEMVAR __cSep
 
-    MEMVAR __oProgress
+	MEMVAR __ooProgress
+	MEMVAR __oProgress
     MEMVAR __oRTime1
 	MEMVAR __oRTime2
 	MEMVAR __nMaxRow
     MEMVAR __nMaxCol
     MEMVAR __nCol
     MEMVAR __nRow
-    
-    Private __cSep AS CHARACTER VALUE Replicate("-",MaxCol())
+    MEMVAR __noProgress
+	
+    Private __ooProgress AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
+	Private __oProgress  AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
+	Private __nMaxRow    AS NUMBER VALUE MaxRow()
+    Private __nMaxCol    AS NUMBER VALUE MaxCol()
+    Private __nCol       AS NUMBER VALUE ((__nMaxCol+1)/2)
+    Private __nRow       AS NUMBER VALUE 0
+	Private __noProgress AS NUMBER VALUE (((__nMaxCol+1)/3)-(__nCol/6))
+	
+	Private __cSep AS CHARACTER VALUE Replicate("_",__nMaxCol)
+   
+	__ooProgress:SetProgress(Replicate(Chr(7)+";",__nCol-1))
 
-    Private __oProgress AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
-	Private __nMaxRow   AS NUMBER VALUE MaxRow()
-    Private __nMaxCol   AS NUMBER VALUE MaxCol()
-    Private __nCol      AS NUMBER VALUE ((__nMaxCol+1)/2)
-    Private __nRow      AS NUMBER VALUE 0
-    
-    MakeDir(cFld)
+	MakeDir(cFld)
     
 #ELSE
 
@@ -227,8 +257,8 @@ Static Function tBigNTst()
 	ASSIGN nISQRT := Int(SQRT(nN_TEST))
 
 #IFDEF __HARBOUR__
-    SetColor( "w+/n" )
-    SetCursor( SC_NONE )
+    SetColor("w+/n")
+    SetCursor(SC_NONE)
     BuildScreen(fhLog)
 #ENDIF
     
@@ -243,7 +273,10 @@ Static Function tBigNTst()
     Set(_SET_DECIMALS,__SETDEC__)
 
     __ConOut(fhLog,__cSep)   						//1
-
+	#IFDEF __HARBOUR__
+		DispOutAt(2,__nCol,"[ ]")
+	#ENDIF	
+	
     __ConOut(fhLog,"START ") 						//2
     __ConOut(fhLog,"DATE        : " , dStartDate)	//3
     __ConOut(fhLog,"TIME        : " , cStartTime)	//4
@@ -293,13 +326,14 @@ Static Function tBigNTst()
 	#IFDEF __HARBOUR__
 		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
 		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
+		__ConOut(fhLog,"")	//14	
+		__ConOut(fhLog,"")								  //15
+		DispOutAt(15,__noProgress,"["+Space(__nCol)+"]",'w+/n') //15
 	#ENDIF
 	
-    __ConOut(fhLog,__cSep)	//14
-    __ConOut(fhLog,"")		//15
-    __ConOut(fhLog,__cSep)	//16
-
-    __ConOut(fhLog,"")		//17
+    __ConOut(fhLog,"")	//16
+	
+	#DEFINE __NROWAT    17
 
     __ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
 
@@ -1256,7 +1290,7 @@ Static Function tBigNTst()
     
     nSetDec     := otBigN:SetDecimals(nACC_ALOG)
     nAccLog     := otBigN:SetDecimals(nACC_ALOG)
-    laLog       := ( .f. .and. nAccLog >= 500 )
+    laLog       := lL_ALOG
     otBigW:SetDecimals(nACC_ALOG)
     nAccRoot    := otBigN:nthRootAcc(nACC_ALOG-1)
     otBigW:nthRootAcc(nACC_ALOG-1)
@@ -1598,6 +1632,7 @@ Static Function tBigNTst()
     __ConOut(fhLog,"ACC_ALOG    :",nACC_ALOG)
     __ConOut(fhLog,"__SLEEP     :",__nSLEEP)
     __ConOut(fhLog,"N_TEST      :",nN_TEST)
+	__ConOut(fhLog,"L_ALOG      :",lL_ALOG)
     
     __ConOut(fhLog,__cSep)
     
@@ -1610,7 +1645,7 @@ Static Function tBigNTst()
     CLS
 #ENDIF    
     
-Return(NIL)
+Return
 
 /*
 Static Procedure __tbnSleep(nSleep)
@@ -1626,21 +1661,26 @@ Return
 
 Static Procedure __ConOut(fhLog,e,d)
 
-    Local ld   AS LOGICAL
+    Local ld    AS LOGICAL
+	Local lSep  AS LOGICAL
+	Local lMRow AS LOGICAL
     
-    Local p    AS CHARACTER
+    Local p     AS CHARACTER
 
-    Local nATd AS NUMBER
+    Local nATd  AS NUMBER
     
-    Local x    AS UNDEFINED
-    Local y    AS UNDEFINED
+    Local x     AS UNDEFINED
+    Local y     AS UNDEFINED
 
 #IFDEF __HARBOUR__
 
     MEMVAR __CRLF
     MEMVAR __cSep
 
-    MEMVAR __oProgress
+    MEMVAR cC_OOPROGRESS
+	MEMVAR __noProgress
+	MEMVAR __ooProgress
+	MEMVAR __oProgress
     MEMVAR __oRTime1
 	MEMVAR __oRTime2
     MEMVAR __nMaxRow
@@ -1668,17 +1708,20 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
-    Progress(2,@__nCol)
+	DispOutAt(2,__nCol+1,__oProgress:Eval(),'g+/n')
 	@ 12, 0 CLEAR TO 12,__nMaxCol
 	@ 13, 0 CLEAR TO 13,__nMaxCol
 	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
 	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
-    DEFAULT __nRow := 0
+	DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS),'g+/n')
+	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
         ASSIGN __nRow := __NROWAT
     EndIF
-    DispOutAt(__nRow,0,p,'w+/n')
+	ASSIGN lSep  := (p==__cSep)
+	ASSIGN lMRow := (__nRow>=__NROWAT)
+	DispOutAt(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,'w+/n',IF(lSep.AND.lMRow,'c+/n','w+/n')))
 #ELSE    
     ? p
 #ENDIF    
@@ -1724,15 +1767,11 @@ Return(lHarbour)
             ASSIGN s := ""
         ENDSWITCH
     Return(s)
-    Static Procedure Progress(nDrow,nDcol)
-        MEMVAR __oProgress
-		DispOutAt( nDrow, nDcol, "[ ]" )
-        DispOutAt( nDrow, nDcol+1, __oProgress:Eval() )
+    Static Procedure BuildScreen(fhLog)
+        MEMVAR __nMaxCol
+		CLEAR SCREEN
+        __ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol+1))
     Return
-    Static Function BuildScreen(fhLog)
-        CLEAR SCREEN
-        __ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",maxcol()+1))
-    Return( NIL )
 #ELSE
     Static Function tBigNGC(lGC)
     Return(StaticCall(TBIGNUMBER,tBigNGC,lGC))

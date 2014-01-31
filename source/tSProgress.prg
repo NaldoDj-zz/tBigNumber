@@ -25,17 +25,21 @@ Class tSProgress
 	DATA nMax		AS NUMERIC INIT 0      HIDDEN
 	DATA nProgress	AS NUMERIC INIT 0      HIDDEN
 	
+	DATA lShuttle  AS LOGICAL INIT .F.    HIDDEN
+	
 #IFNDEF __PROTHEUS__
 	EXPORTED:
 #ENDIF
 
 	Method New(cProgress,cToken)  CONSTRUCTOR
 	Method ClassName()
+	Method SetProgress(cProgress,cToken)
+
 	Method Eval(cMethod,uPar01)
 	Method Progress()
 	Method Increment(cAlign)
 	Method Decrement(cAlign)
-	Method SetProgress(cProgress,cToken)
+	Method Shuttle(cAlign)
 
 	Method GetnMax()
 	Method GetnProgress()
@@ -51,6 +55,9 @@ Method New(cProgress,cToken) Class tSProgress
 	self:SetProgress(@cProgress,@cToken)
 Return(self)
 
+Method ClassName() Class tSProgress
+Return("TSPROGRESS")
+
 Method SetProgress(cProgress,cToken) Class tSProgress
 	Local lMacro
 	DEFAULT cProgress	:= "-;\;|;/"
@@ -65,9 +72,6 @@ Method SetProgress(cProgress,cToken) Class tSProgress
 	self:nProgress		:= 0
 Return(self)
 
-Method ClassName() Class tSProgress
-Return("TSPROGEESS")
-
 Method Eval(cMethod,uPar01) Class tSProgress
 	Local cEval
 	DEFAULT cMethod := "PROGRESS"
@@ -78,6 +82,8 @@ Method Eval(cMethod,uPar01) Class tSProgress
 		cEval := self:Increment(@uPar01)
 	CASE (cMethod=="DECREMENT")
 		cEval := self:Decrement(@uPar01)
+	CASE (cMethod=="SHUTTLE")	
+		cEval := self:Shuttle(@uPar01)
 	OTHERWISE
 		cEval := self:Progress()	
 	ENDCASE
@@ -113,6 +119,20 @@ Method Decrement(cAlign) Class tSProgress
 	DEFAULT cAlign := "L" //L,C,R
 	cPADFunc += cAlign
 Return(&cPADFunc.(cProgress,self:nMax))
+
+Method Shuttle(cAlign) Class tSProgress
+	Local cEval
+	IF (.NOT.(self:lShuttle).and.(self:nProgress==self:nMax))
+		self:lShuttle := .T.
+	ElseIF (self:lShuttle.and.(self:nProgress==self:nMax))
+		self:lShuttle := .F.
+	EndIF	
+	IF (self:lShuttle)
+		cEval := "DECREMENT" 
+	Else
+		cEval := "INCREMENT"
+	EndIF
+Return(self:Eval(cEval,@cAlign))	
 
 Method GetnMax() Class tSProgress
 Return(self:nMax)
