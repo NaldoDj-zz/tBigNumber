@@ -1173,7 +1173,7 @@ Return(__adoNR)
 					
 					#IFDEF __HARBOUR__
 					
-						hb_threadWaitForAll(aThreads)
+						hb_threadWait(aThreads)
 
 					#ELSE //__PROTHEUS__
 
@@ -1667,7 +1667,7 @@ Method Pow(uBigN) CLASS tBigNumber
 						aThreads[2]	:= hb_threadStart(@ThPowDiv(),__pwoB,__pwoGCD)
 						hb_threadJoin(aThreads[2],@aResults[2])
 						
-						hb_threadWaitForAll(aThreads)
+						hb_threadWait(aThreads)
 						
 						__pwoA:SetValue(aResults[1])
 						__pwoB:SetValue(aResults[2])
@@ -1827,7 +1827,7 @@ Return(__pwoNR)
 						hb_threadJoin(aThreads[nID],@aResults[nID])
       				Next nID
 					
-					hb_threadWaitForAll(aThreads)
+					hb_threadWait(aThreads)
       				
       				For nID := 1 To nIDs
 						aNR[nID][4]	:= .T.
@@ -2244,7 +2244,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 					aThreads[2]	:= hb_threadStart(@ThPFactors(),oRootD)
 					hb_threadJoin(aThreads[2],@aResults[2])
 					
-					hb_threadWaitForAll(aThreads)
+					hb_threadWait(aThreads)
 					
 					aIPF := aResults[1]
 					aDPF := aResults[2]
@@ -2424,7 +2424,7 @@ Return(othRoot)
 
 		#IFDEF __HARBOUR__
 
-			hb_threadWaitForAll(aThreads)
+			hb_threadWait(aThreads)
       				
       		For nID := 1 To nIDs
 				IF aNR[nID][4]
@@ -3747,7 +3747,7 @@ Static Function recFact(oS,oN)
 	aThreads[2]	:= hb_threadStart(@recFact(),oSI,oNI)
 	hb_threadJoin(aThreads[2],@aResults[2])						
 	
-	hb_threadWaitForAll(aThreads)	
+	hb_threadWait(aThreads)	
 
 Return(aResults[1]:Mult(aResults[2]))
 #ELSE	

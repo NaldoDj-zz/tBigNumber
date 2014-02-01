@@ -4,7 +4,7 @@
 #DEFINE ACC_SET          "100"
 #DEFINE ROOT_ACC_SET      "99"
 #DEFINE ACC_ALOG          "99"
-#DEFINE __SLEEP            "0"
+#DEFINE __SLEEP         "0.15"
 #DEFINE N_TEST          "1000"
 #DEFINE L_ALOG			   "0"
 #DEFINE C_OOPROGRESS "SHUTTLE"
@@ -18,6 +18,7 @@
 #IFDEF __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
+#include "hbthread.ch"
 Function Main()
     Local cIni    := "tbigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
@@ -87,11 +88,16 @@ Function Main()
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
     nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
     nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
-    nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+    __nSLEEP		:= IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
+	nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	cC_OOPROGRESS   := IF(Empty(cC_OOPROGRESS),Upper(AllTrim(C_OOPROGRESS)),cC_OOPROGRESS)
 	__SetCentury("ON")
-	SET DATE TO BRITISH 
+	SET DATE TO BRITISH
+	__nSLEEP 		:= Min(__nSLEEP,10)
+	IF ((__nSLEEP)>10)
+		__nSLEEP /= 10
+	EndIF
 Return(tBigNTst())
 Static Procedure tBigNTst()
 #ELSE
@@ -131,9 +137,14 @@ User Function tBigNTst()
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
     nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
     nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
-    nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+    __nSLEEP		:= IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
+	nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	cC_OOPROGRESS   := IF(Empty(cC_OOPROGRESS),Upper(AllTrim(C_OOPROGRESS)),cC_OOPROGRESS)
+	__nSLEEP 		:= Max(__nSLEEP,10)
+	IF ((__nSLEEP)<10)
+		__nSLEEP *= 10
+	EndIF
 Return(tBigNTst())
 Static Procedure tBigNTst()
 #ENDIF    
@@ -177,8 +188,9 @@ Static Procedure tBigNTst()
                                     } 
 
 #IFDEF __HARBOUR__
-    Local cFld      AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
+	Local cFld      AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
     Local cLog      AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+    LOCAL ptthProg
 #ELSE
     Local cLog      AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 #ENDIF
@@ -212,12 +224,11 @@ Static Procedure tBigNTst()
     MEMVAR __nSLEEP
     MEMVAR nN_TEST
 	MEMVAR lL_ALOG
+	MEMVAR cC_OOPROGRESS
     
     MEMVAR __CRLF
     MEMVAR __cSep
 
-	MEMVAR __ooProgress
-	MEMVAR __oProgress
     MEMVAR __oRTime1
 	MEMVAR __oRTime2
 	MEMVAR __nMaxRow
@@ -226,18 +237,18 @@ Static Procedure tBigNTst()
     MEMVAR __nRow
     MEMVAR __noProgress
 	
-    Private __ooProgress AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
-	Private __oProgress  AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
-	Private __nMaxRow    AS NUMBER VALUE MaxRow()
+	MEMVAR lKillProgress
+	
+ 	Private __nMaxRow    AS NUMBER VALUE MaxRow()
     Private __nMaxCol    AS NUMBER VALUE MaxCol()
     Private __nCol       AS NUMBER VALUE ((__nMaxCol+1)/2)
     Private __nRow       AS NUMBER VALUE 0
 	Private __noProgress AS NUMBER VALUE (((__nMaxCol+1)/3)-(__nCol/6))
 	
 	Private __cSep AS CHARACTER VALUE Replicate("_",__nMaxCol)
-   
-	__ooProgress:SetProgress(Replicate(Chr(7)+";",__nCol-1))
-
+	
+	Private lKillProgress := .F.
+ 
 	MakeDir(cFld)
     
 #ELSE
@@ -335,6 +346,12 @@ Static Procedure tBigNTst()
 	
 	#DEFINE __NROWAT    17
 
+	#IFDEF __HARBOUR__
+		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
+										       HB_THREAD_MEMVARS_COPY),;
+				           @Progress(),__nCol,cC_OOPROGRESS,__noProgress)
+	#ENDIF	
+	
     __ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
 
     ASSIGN oPrime := tPrime():New() 
@@ -424,8 +441,6 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
 
     __ConOut(fhLog,"")
@@ -457,8 +472,6 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste Prime 1 -------------- ")
@@ -482,8 +495,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste Prime 1 -------------- END ")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -516,8 +527,6 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste HEX32 0 -------------- ")
@@ -548,8 +557,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste HEX32 0 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -588,8 +595,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ ADD Teste 2 -------------- ")
@@ -624,8 +629,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ ADD Teste 3 -------------- ")
@@ -655,8 +658,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ ADD Teste 3 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
     
@@ -688,8 +689,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
@@ -718,8 +717,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
@@ -748,8 +745,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ MULT Teste 1 -------------- ")
@@ -794,8 +789,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ MULT Teste 1 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -844,8 +837,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
 	__ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
@@ -871,8 +862,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
-
-	*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -901,8 +890,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste GCD/LCM 0 -------------- END ")
 
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog," BEGIN ------------ DIV Teste 0 -------------- ")
     
@@ -934,7 +921,6 @@ Static Procedure tBigNTst()
 			__oRTime1:Calcule()
 		Next x
 		__oRTime1:Calcule()
-    *    __tbnSleep()
     Next n    
 
     __ConOut(fhLog,"")
@@ -942,8 +928,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ DIV Teste 0 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -980,8 +964,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ DIV Teste 2 -------------- ")
@@ -1012,8 +994,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog," BEGIN ------------ Teste FI 0 -------------- ")
     //http://www.javascripter.net/math/calculators/eulertotientfunction.htm
     
@@ -1032,8 +1012,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste FI 0 -------------- END ")
-
-*    __tbnSleep()
 
 *    otBigN:SysSQRT(999999999999999)
     otBigN:SysSQRT(0)
@@ -1117,8 +1095,6 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste Exp 0 -------------- ")
@@ -1154,8 +1130,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste Exp 0 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -1195,7 +1169,6 @@ Static Procedure tBigNTst()
 			__oRTime2:Calcule()
         Next w
 		__oRTime1:Calcule()
-    *    __tbnSleep()
     Next x
 
     __ConOut(fhLog,"")
@@ -1203,8 +1176,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste Pow 0 -------------- END ")
     
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -1243,15 +1214,12 @@ Static Procedure tBigNTst()
 			__oRTime2:Calcule()
         Next w
 		__oRTime1:Calcule()
-    *    __tbnSleep()
     Next x
 
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste Pow 1 -------------- END ")
     
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste Pow 2 -------------- ")
@@ -1277,9 +1245,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste Pow 2 -------------- END ")
-    
-*    __tbnSleep()
-	
+
     __ConOut(fhLog,"")
 	
 	__oRTime1:SetRemaining(13)
@@ -1448,8 +1414,6 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste LOG 1 -------------- ")
@@ -1492,7 +1456,6 @@ Static Procedure tBigNTst()
 			__oRTime2:Calcule()
         Next n
 		__oRTime1:Calcule()
-    *    __tbnSleep()
     Next w
 
     __ConOut(fhLog,"")
@@ -1500,8 +1463,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste LOG 1 -------------- END ")
 
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,"")
 
@@ -1521,7 +1482,6 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():ExactValue())
         EndIF
         __ConOut(fhLog,__cSep)
-    *    __tbnSleep()
 		__oRTime2:Calcule()
 		__oRTime1:Calcule()
     Next w
@@ -1531,9 +1491,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog," ------------ Teste LN 1 -------------- END ")
 
     __ConOut(fhLog,"")
-
-*    __tbnSleep()
-    
+  
     otBigN:SysSQRT(0)
 	otBigN:SetDecimals(nSetDec)
     otBigN:nthRootAcc(nAccRoot)
@@ -1569,8 +1527,6 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 
-*    __tbnSleep()
-    
     __ConOut(fhLog,"")
 	
     __ConOut(fhLog,"")
@@ -1593,8 +1549,6 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
-
-*    __tbnSleep()
 
     __ConOut(fhLog,__cSep)
     __ConOut(fhLog,"")
@@ -1620,9 +1574,13 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"ELAPSED :" , ElapTime(cStartTime,cEndTime) )
 #ELSE    
     #IFDEF __HARBOUR__
-        nsElapsed    := (HB_DATETIME()-tsBegin)
+		nsElapsed     := (HB_DATETIME()-tsBegin)
         __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
-    #ENDIF
+		lKillProgress := .T.
+        hb_ThreadJoin(ptthProg)
+		hb_threadQuitRequest(ptthProg)
+		hb_ThreadWait(ptthProg)
+	#ENDIF
 #ENDIF
 
     __ConOut(fhLog,__cSep)
@@ -1647,9 +1605,11 @@ Static Procedure tBigNTst()
     
 Return
 
-/*
 Static Procedure __tbnSleep(nSleep)
-    PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
+	#IFDEF __HARBOUR__
+		MEMVAR __nSLEEP
+	#ENDIF		
+	PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
     #IFDEF __PROTHEUS__
         Sleep(nSleep*1000)
     #ELSE
@@ -1657,7 +1617,6 @@ Static Procedure __tbnSleep(nSleep)
         *hb_gcAll()
     #ENDIF    
 Return
-*/
 
 Static Procedure __ConOut(fhLog,e,d)
 
@@ -1671,10 +1630,6 @@ Static Procedure __ConOut(fhLog,e,d)
     
     Local x     AS UNDEFINED
     Local y     AS UNDEFINED
-    
-    Static __cAnim := "RCLC"
-    Static __nAnim := 0
-   	Static __PDRLC
 
 #IFDEF __HARBOUR__
 
@@ -1683,8 +1638,6 @@ Static Procedure __ConOut(fhLog,e,d)
 
     MEMVAR cC_OOPROGRESS
 	MEMVAR __noProgress
-	MEMVAR __ooProgress
-	MEMVAR __oProgress
     MEMVAR __oRTime1
 	MEMVAR __oRTime2
     MEMVAR __nMaxRow
@@ -1712,20 +1665,10 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
-	DispOutAt(2,__nCol+1,__oProgress:Eval(),'r+/n')
 	@ 12, 0 CLEAR TO 12,__nMaxCol
 	@ 13, 0 CLEAR TO 13,__nMaxCol
 	DispOutAt(12,0,"FINAL1      :  ["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]",'w+/n')
 	DispOutAt(13,0,"FINAL2      :  ["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]",'w+/n')
-	IF (cC_OOPROGRESS=="SHUTTLE")
-		IF (__ooProgress:GetnProgress()==(__ooProgress:GetnMax()))
-			IF ((++__nAnim)>4)
-				ASSIGN __nAnim := 1
-			EndIF
-			ASSIGN __PDRLC := __cAnim[__nAnim]
-		EndIF
-	EndIF
-	DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS,__PDRLC),'r+/n')
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
@@ -1779,11 +1722,33 @@ Return(lHarbour)
             ASSIGN s := ""
         ENDSWITCH
     Return(s)
-    Static Procedure BuildScreen(fhLog)
+    Static Procedure Progress(__nCol,cC_OOPROGRESS,__noProgress,__nSLEEP)
+	    Local __cAnim      AS CHARACTER VALUE "RCLC"
+		Local __cPDRLC     AS CHARACTER VALUE "C"
+		Local __nAnim      AS NUMBER    VALUE    0
+		Local __ooProgress AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New()
+		Local __oProgress  AS OBJECT CLASS "TSPROGRESS" VALUE tSProgress():New() 
+		MEMVAR lKillProgress
+		__ooProgress:SetProgress(Replicate(Chr(7)+";",__nCol-1))
+		While .NOT.(lKillProgress)
+			DispOutAt(2,__nCol+1,__oProgress:Eval(),'r+/n')
+			IF (cC_OOPROGRESS=="SHUTTLE")
+				IF (__ooProgress:GetnProgress()==(__ooProgress:GetnMax()))
+					IF ((++__nAnim)>4)
+						ASSIGN __nAnim := 1
+					EndIF
+					ASSIGN __cPDRLC := __cAnim[__nAnim]
+				EndIF
+			EndIF
+			DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS,__cPDRLC),'r+/n')
+			__tbnSleep(__nSLEEP)
+		End While
+	Return
+	Static Procedure BuildScreen(fhLog)
         MEMVAR __nMaxCol
 		CLEAR SCREEN
         __ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol+1))
-    Return
+	Return
 #ELSE
     Static Function tBigNGC(lGC)
     Return(StaticCall(TBIGNUMBER,tBigNGC,lGC))
