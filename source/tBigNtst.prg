@@ -283,24 +283,24 @@ Static Procedure tBigNTst()
     
     Set(_SET_DECIMALS,__SETDEC__)
 
-    __ConOut(fhLog,__cSep)   						//1
+    __ConOut(fhLog,__cSep)   						//2
 	#IFDEF __HARBOUR__
 		DispOutAt(2,__nCol,"[ ]")
 	#ENDIF	
 	
-    __ConOut(fhLog,"START ") 						//2
-    __ConOut(fhLog,"DATE        : " , dStartDate)	//3
-    __ConOut(fhLog,"TIME        : " , cStartTime)	//4
+    __ConOut(fhLog,"START ") 						//3
+    __ConOut(fhLog,"DATE        : " , dStartDate)	//4
+    __ConOut(fhLog,"TIME        : " , cStartTime)	//5
 
     #IFDEF __HARBOUR__
-        __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))	//5
+        __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))	//6
     #ENDIF
 
     #IFDEF TBN_DBFILE
         #IFNDEF TBN_MEMIO
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")	//6
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")	//7
         #ELSE
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")//6
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")//7
         #ENDIF    
     #ELSE
         #IFDEF TBN_ARRAY
@@ -343,6 +343,8 @@ Static Procedure tBigNTst()
 	#ENDIF
 	
     __ConOut(fhLog,"")	//16
+	
+	__ConOut(fhLog,"")	//17
 	
 	#DEFINE __NROWAT    17
 
@@ -1740,6 +1742,7 @@ Return(lHarbour)
 					ASSIGN __cPDRLC := __cAnim[__nAnim]
 				EndIF
 			EndIF
+			DispOutAt(06,15,HB_TTOC(HB_DATETIME()),'r+/n')
 			DispOutAt(15,__noProgress+1,__ooProgress:Eval(cC_OOPROGRESS,__cPDRLC),'r+/n')
 			__tbnSleep(__nSLEEP)
 		End While
