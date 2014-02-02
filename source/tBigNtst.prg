@@ -1725,7 +1725,7 @@ Return(lHarbour)
 		Local cSAnim2	 AS CHARACTER					VALUE Replicate("-;\;|;/;",nCol*2)
 		Local cSAnim3	 AS CHARACTER					VALUE Replicate((Chr(8)+";"),nCol-1)
 		Local nAnim      AS NUMBER
-		Local nCAnim     AS NUMBER						VALUE 1
+		Local nSAnim     AS NUMBER						VALUE 1
 		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
 		Local nMax		 AS NUMBER
 		Local nChange	 AS NUMBER
@@ -1744,14 +1744,14 @@ Return(lHarbour)
 					ASSIGN nChange := 0
 					IF (++nAnim>nLenP)
 						ASSIGN nAnim := 1
-						IF (nCAnim==1)
-							ASSIGN nCAnim := 2
+						IF (nSAnim==1)
+							ASSIGN nSAnim := 2
 							oProgress2:SetProgress(cSAnim2)
-						ElseIF (nCAnim==2)
-							ASSIGN nCAnim := 3
+						ElseIF (nSAnim==2)
+							ASSIGN nSAnim := 3
 							oProgress2:SetProgress(cSAnim3)
 						Else
-							ASSIGN nCAnim := 1
+							ASSIGN nSAnim := 1
 							oProgress2:SetProgress(cSAnim1)
 						EndIF
 					EndIF
