@@ -1638,13 +1638,10 @@ Static Procedure __ConOut(fhLog,e,d)
     MEMVAR __CRLF
     MEMVAR __cSep
 
-    MEMVAR aC_OOPROGRESS
-	MEMVAR __noProgress
     MEMVAR __oRTime1
 	MEMVAR __oRTime2
     MEMVAR __nMaxRow
     MEMVAR __nMaxCol
-    MEMVAR __nCol
     MEMVAR __nRow
 
 #ENDIF
@@ -1723,27 +1720,45 @@ Return(lHarbour)
         ENDSWITCH
     Return(s)
     Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol)
-	    Local cAnim      AS CHARACTER                 VALUE aProgress2[1]
+	    Local cAnim      AS CHARACTER					VALUE aProgress2[1]
+		Local cSAnim1	 AS CHARACTER					VALUE Replicate((Chr(7)+";"),nCol-1)
+		Local cSAnim2	 AS CHARACTER					VALUE Replicate("-;\;|;/;",nCol*2)
+		Local cSAnim3	 AS CHARACTER					VALUE Replicate((Chr(8)+";"),nCol-1)
 		Local nAnim      AS NUMBER
-		Local nLenP		 AS NUMBER VALUE Len(aProgress2)
+		Local nCAnim     AS NUMBER						VALUE 1
+		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
 		Local nMax		 AS NUMBER
 		Local nChange	 AS NUMBER
-		Local oProgress1 AS OBJECT CLASS "TSPROGRESS" VALUE tsProgress():New()
-		Local oProgress2 AS OBJECT CLASS "TSPROGRESS" VALUE tsProgress():New()
+		Local oProgress1 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
+		Local oProgress2 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		MEMVAR lKillProgress
-		oProgress2:SetProgress(Replicate(Chr(7)+";",nCol-1))
+		ASSIGN cSAnim2 := SubStr(cSAnim2,1,(nCol*2)-1)
+		IF (SubStr(cSAnim2,-1)==";")
+			ASSIGN cSAnim2 := SubStr(cSAnim2,1,Len(cSAnim2)-1)
+		EndIF
+		oProgress2:SetProgress(cSAnim1)
 		While .NOT.(lKillProgress)
 			DispOutAt(2,nCol+1,oProgress1:Eval(),"r+/n")
 			IF (oProgress2:GetnProgress()>=oProgress2:GetnMax()).or.(oProgress2:GetnProgress()<=0)
-				IF (++nChange==2)
-					nChange := 0
+				IF .NOT.("SHUTTLE"$cAnim).or.(("SHUTTLE"$cAnim).and.(++nChange==2))
+					ASSIGN nChange := 0
 					IF (++nAnim>nLenP)
-						nAnim := 1
+						ASSIGN nAnim := 1
+						IF (nCAnim==1)
+							ASSIGN nCAnim := 2
+							oProgress2:SetProgress(cSAnim2)
+						ElseIF (nCAnim==2)
+							ASSIGN nCAnim := 3
+							oProgress2:SetProgress(cSAnim3)
+						Else
+							ASSIGN nCAnim := 1
+							oProgress2:SetProgress(cSAnim1)
+						EndIF
 					EndIF
-					cAnim := aProgress2[nAnim]
+					ASSIGN cAnim := aProgress2[nAnim]
 				EndIF
 			EndIF
-			nMax := Max(nMax,Len(cAnim))
+			ASSIGN nMax := Max(nMax,Len(cAnim))
 			DispOutAt(06,15,HB_TTOC(HB_DATETIME()),"r+/n")
 			DispOutAt(15,0,PADR(cAnim,nMax),"r+/n")
 			DispOutAt(15,nProgress2+1,oProgress2:Eval(cAnim),"r+/n")
