@@ -1664,7 +1664,9 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
+	@ 12, 15 CLEAR TO 12,__nMaxCol
 	DispOutAt(12,15,"["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
+	@ 13, 15 CLEAR TO 13,__nMaxCol
 	DispOutAt(13,15,"["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
