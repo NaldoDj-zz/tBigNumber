@@ -1888,15 +1888,6 @@ Return(lHarbour)
 				lCScreen := .F.
 				@ 15, 0 CLEAR TO 15,nMaxCol
 			EndIF
-						
-			/*
-			nSizeP		:= (nProgress2+oProgress2:GetnMax()+1)
-			DispOutAt(15,0,PADR(cProgress,nMaxP),"r+/n")
-			DispOutAt(15,nProgress2,"[","w+/n")
-			DispOutAt(15,nProgress2+1,oProgress2:Eval(cProgress),"r+/n")
-			DispOutAt(15,nSizeP,"]","w+/n")
-			DispOutAt(15,(nMaxCol-nMaxP),PADL(cProgress,nMaxP),"r+/n")
-			*/
 
 			ASSIGN cStuff := PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
 			ASSIGN nAT    := (AT("] [",cStuff)+3)
