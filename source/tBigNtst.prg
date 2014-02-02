@@ -362,7 +362,7 @@ Static Procedure tBigNTst()
 
 	#IFDEF __HARBOUR__
 		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
-										         HB_THREAD_MEMVARS_COPY),;
+										       HB_THREAD_INHERIT_MEMVARS),;
 		@Progress(),__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND)
 	#ENDIF	
 	
@@ -1591,7 +1591,6 @@ Static Procedure tBigNTst()
 		nsElapsed     := (HB_DATETIME()-tsBegin)
         __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
 		lKillProgress := .T.
-        hb_ThreadJoin(ptthProg)
 		hb_threadQuitRequest(ptthProg)
 		hb_ThreadWait(ptthProg)
 	#ENDIF
@@ -1739,15 +1738,19 @@ Return(lHarbour)
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
 	    Local aSAnim     AS ARRAY						VALUE Array(11)
 	    
+		Local cAT        AS CHARACTER
+		Local cStuff     AS CHARACTER
 	    Local cProgress  AS CHARACTER
 		
 		Local lChange	 AS LOGICAL
 		Local lCScreen	 AS LOGICAL						VALUE .T.
 
-		Local nSAnim     AS NUMBER
+		Local nAT        AS NUMBER
+		Local nQT        AS NUMBER 
 		Local nLenA		 AS NUMBER						VALUE Len(aSAnim)
 		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
 		Local nMaxP		 AS NUMBER
+		Local nSAnim     AS NUMBER
 		Local nSizeP     AS NUMBER						VALUE (nProgress2*2)
 		Local nSizeP2    AS NUMBER						VALUE (nSizeP*2)
 		Local nSizeP3    AS NUMBER						VALUE (nSizeP*3)
@@ -1895,7 +1898,13 @@ Return(lHarbour)
 			DispOutAt(15,(nMaxCol-nMaxP),PADL(cProgress,nMaxP),"r+/n")
 			*/
 
-			DispOutAt(15,0,PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol),"r+/n")
+			ASSIGN cStuff := PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
+			ASSIGN nAT    := (AT("] [",cStuff)+3)
+			ASSIGN nQT    := (AT("] [",SubSTr(cStuff,nAT))-2)
+			ASSIGN cAT    := SubStr(cStuff,nAT,nQT+1)
+			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
+			DispOutAt(15,0,cStuff,"w+/n")
+			DispOutAt(15,nAT-1,cAT,"r+/n")
 			
 			__tbnSleep(nSLEEP)
 	
