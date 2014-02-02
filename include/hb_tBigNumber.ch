@@ -5,6 +5,7 @@
     #IFDEF __HARBOUR__
         #INCLUDE "common.ch"
         #INCLUDE "hbclass.ch"
+        #INCLUDE "hbthread.ch"
 *        #INCLUDE "hbCompat.ch"
         #IFDEF TBN_DBFILE
             #IFNDEF TBN_MEMIO

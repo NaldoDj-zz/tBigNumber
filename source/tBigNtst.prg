@@ -4,10 +4,11 @@
 #DEFINE ACC_SET          "100"
 #DEFINE ROOT_ACC_SET      "99"
 #DEFINE ACC_ALOG          "99"
-#DEFINE __SLEEP         "0.15"
+#DEFINE __SLEEP         "0.09"
 #DEFINE N_TEST          "1000"
 #DEFINE L_ALOG			   "0"
-#DEFINE C_OOPROGRESS    "INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION"
+#DEFINE C_OOPROGRESS    "INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
+#DEFINE L_OOPROGRAND       "0"
 
 #DEFINE __SETDEC__		  8
 
@@ -18,7 +19,6 @@
 #IFDEF __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
-#include "hbthread.ch"
 Function Main()
     Local cIni    := "tbigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
@@ -32,6 +32,7 @@ Function Main()
     MEMVAR nN_TEST
 	MEMVAR lL_ALOG
 	MEMVAR aC_OOPROGRESS
+	MEMVAR lL_OOPROGRAND
     #IFDEF __HARBOUR__
         #IFDEF __ALT_D__    // Compile with -b
            AltD(1)          // Enables the debugger. Press F5 to go.
@@ -45,6 +46,7 @@ Function Main()
     Private nN_TEST
 	Private lL_ALOG
 	Private aC_OOPROGRESS
+	Private lL_OOPROGRAND
     IF .NOT.(File(cIni) ) .or. Empty(hIni)
         hIni["GENERAL"] := hb_Hash() 
         hIni["GENERAL"]["ACC_SET"]        := ACC_SET
@@ -54,6 +56,7 @@ Function Main()
         hIni["GENERAL"]["N_TEST"]         := N_TEST
 		hIni["GENERAL"]["L_ALOG"]         := L_ALOG
 		hIni["GENERAL"]["C_OOPROGRESS"]   := C_OOPROGRESS
+		hIni["GENERAL"]["L_OOPROGRAND"]   := L_OOPROGRAND
         hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
@@ -81,6 +84,9 @@ Function Main()
 					CASE "C_OOPROGRESS"	
 						aC_OOPROGRESS   := hb_ATokens(Upper(AllTrim(aSect[cKey])),",")
 						EXIT
+					CASE "L_OOPROGRAND"
+						lL_OOPROGRAND	:= (aSect[cKey]=="1")
+						EXIT
 				ENDSWITCH
             NEXT cKey
         NEXT cSection
@@ -92,6 +98,7 @@ Function Main()
 	nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_ATokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+	lL_OOPROGRAND	:= IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
 	__SetCentury("ON")
 	SET DATE TO BRITISH
 	__nSLEEP 		:= Min(__nSLEEP,10)
@@ -112,6 +119,7 @@ User Function tBigNTst()
     Private nN_TEST
 	Private lL_ALOG
 	Private aC_OOPROGRESS
+	Private lL_OOPROGRAND
     IF FindFunction("U_TFINI") //NDJLIB020.PRG    
         otFIni := U_TFINI(cIni)
         IF .NOT.File(cIni)
@@ -122,7 +130,8 @@ User Function tBigNTst()
             otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
             otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
             otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
-			otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)			
+			otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
+			otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)			
 			otFIni:SaveAs(cIni)
         Else
             nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -132,6 +141,7 @@ User Function tBigNTst()
             nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
 			lL_ALOG			:= (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
 			aC_OOPROGRESS   := StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
+			lL_OOPROGRAND	:= (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_ALOG)=="1")
 		EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
@@ -141,6 +151,7 @@ User Function tBigNTst()
 	nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+	lL_OOPROGRAND	:= IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
 	__nSLEEP 		:= Max(__nSLEEP,10)
 	IF ((__nSLEEP)<10)
 		__nSLEEP *= 10
@@ -225,6 +236,7 @@ Static Procedure tBigNTst()
     MEMVAR nN_TEST
 	MEMVAR lL_ALOG
 	MEMVAR aC_OOPROGRESS
+	MEMVAR lL_OOPROGRAND
     
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -351,7 +363,7 @@ Static Procedure tBigNTst()
 	#IFDEF __HARBOUR__
 		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
 										         HB_THREAD_MEMVARS_COPY),;
-		 @Progress(),__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol)
+		@Progress(),__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND)
 	#ENDIF	
 	
     __ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
@@ -1721,52 +1733,126 @@ Return(lHarbour)
             ASSIGN s := ""
         ENDSWITCH
     Return(s)
-    Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol)
-	    Local cAnim      AS CHARACTER					VALUE aProgress2[1]
-		Local cSAnim1	 AS CHARACTER					VALUE Replicate((Chr(7)+";"),nCol-1)
-		Local cSAnim2	 AS CHARACTER					VALUE Replicate("-;\;|;/;",nCol*2)
-		Local cSAnim3	 AS CHARACTER					VALUE Replicate((Chr(8)+";"),nCol-1)
-		Local nAnim      AS NUMBER
-		Local nSAnim     AS NUMBER						VALUE 1
+    Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom)
+	    
+	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
+	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
+	    Local aSAnim     AS ARRAY						VALUE Array(11)
+	    
+	    Local cProgress  AS CHARACTER
+		
+		Local lChange	 AS LOGICAL
+		
+		Local nSAnim     AS NUMBER
+		Local nLenA		 AS NUMBER						VALUE Len(aSAnim)
 		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
 		Local nMax		 AS NUMBER
 		Local nChange	 AS NUMBER
+		Local nProgress  AS NUMBER
+		
 		Local oProgress1 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		Local oProgress2 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
+		
 		MEMVAR lKillProgress
-		ASSIGN cSAnim2 := SubStr(cSAnim2,1,(nCol*2)-1)
-		IF (SubStr(cSAnim2,-1)==";")
-			ASSIGN cSAnim2 := SubStr(cSAnim2,1,Len(cSAnim2)-1)
+		
+		aSAnim[01] := Replicate((Chr(7)+";"),nCol-1)
+		aSAnim[02] := Replicate("-;\;|;/;",nCol*2)
+		aSAnim[03] := Replicate((Chr(8)+";"),nCol-1)
+		aSAnim[04] := Replicate("*;",nCol-1)
+		aSAnim[05] := Replicate(".;",nCol-1)
+		aSAnim[06] := Replicate(":);",nCol-1)
+		aSAnim[07] := Replicate(">;",nCol-1)
+		aSAnim[08] := Replicate("B;L;A;C;K;T;D;N;;",nCol*2)
+		aSAnim[09] := Replicate("T;B;I;G;N;U;M;B;E;R;;",nCol*2)
+		aSAnim[10] := Replicate("H;A;R;B;O;U;R;;",nCol*2)
+		aSAnim[11] := Replicate("N;A;L;D;O;;D;J;;",nCol*2)
+		
+		ASSIGN aSAnim[02] := SubStr(aSAnim[02],1,(nCol*2)-1)		
+		IF (SubStr(aSAnim[02],-1)==";")
+			ASSIGN aSAnim[02] := SubStr(aSAnim[02],1,Len(aSAnim[02])-1)
 		EndIF
-		oProgress2:SetProgress(cSAnim1)
+		
+		ASSIGN aSAnim[08] := SubStr(aSAnim[08],1,(nCol*2)-4)
+		IF (SubStr(aSAnim[08],-1)==";")
+			ASSIGN aSAnim[08] := SubStr(aSAnim[08],1,Len(aSAnim[08])-1)
+		EndIF
+		
+		ASSIGN aSAnim[09] := SubStr(aSAnim[09],1,(nCol*2)-4)
+		IF (SubStr(aSAnim[09],-1)==";")
+			ASSIGN aSAnim[09] := SubStr(aSAnim[09],1,Len(aSAnim[09])-1)
+		EndIF
+		
+		ASSIGN aSAnim[10] := SubStr(aSAnim[10],1,(nCol*2)-5)
+		IF (SubStr(aSAnim[10],-1)==";")
+			ASSIGN aSAnim[10] := SubStr(aSAnim[10],1,Len(aSAnim[10])-1)
+		EndIF
+		
+		ASSIGN aSAnim[11] := SubStr(aSAnim[11],1,(nCol*2)-8)
+		IF (SubStr(aSAnim[11],-1)==";")
+			ASSIGN aSAnim[11] := SubStr(aSAnim[11],1,Len(aSAnim[11])-1)
+		EndIF
+		
+		IF (lRandom)
+			nSAnim		:= abs(HB_RandomInt(1,nLenA))
+			aAdd(aRdnAn,nSAnim)	
+		    nProgress	:= abs(HB_RandomInt(1,nLenP))
+	    	aAdd(aRdnPG,nProgress)
+		Else
+			nSAnim		:= 1
+			nProgress	:= 1
+		EndIF
+		oProgress2:SetProgress(aSAnim[nSAnim])
+	    cProgress := aProgress2[nProgress]
+		
 		While .NOT.(lKillProgress)
+			
 			DispOutAt(2,nCol+1,oProgress1:Eval(),"r+/n")
+			
 			IF (oProgress2:GetnProgress()>=oProgress2:GetnMax()).or.(oProgress2:GetnProgress()<=0)
-				IF .NOT.("SHUTTLE"$cAnim).or.(("SHUTTLE"$cAnim).and.(++nChange==2))
-					ASSIGN nChange := 0
-					IF (++nAnim>nLenP)
-						ASSIGN nAnim := 1
-						IF (nSAnim==1)
-							ASSIGN nSAnim := 2
-							oProgress2:SetProgress(cSAnim2)
-						ElseIF (nSAnim==2)
-							ASSIGN nSAnim := 3
-							oProgress2:SetProgress(cSAnim3)
-						Else
-							ASSIGN nSAnim := 1
-							oProgress2:SetProgress(cSAnim1)
-						EndIF
+				lChange := (.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
+				IF (lChange)
+					IF ("SHUTTLE"$cProgress)
+						ASSIGN nChange := 0
 					EndIF
-					ASSIGN cAnim := aProgress2[nAnim]
+					IF (lRandom)
+						IF (Len(aRdnAn)==nLenA)
+							aSize(aRdnAn,0)
+						EndIF
+						While (aScan(aRdnAn,{|r|r==(nSAnim:=abs(HB_RandomInt(1,nLenA)))})>0)
+							__tbnSleep(nSLEEP)
+						End While
+						aAdd(aRdnAn,nSAnim)
+						IF (Len(aRdnPG)==nLenP)
+							aSize(aRdnPG,0)
+						EndIF
+						oProgress2:SetProgress(aSAnim[nSAnim])
+						While (aScan(aRdnPG,{|r|r==(nProgress:=abs(HB_RandomInt(1,nLenP)))})>0)
+							__tbnSleep(nSLEEP)
+						End While
+						aAdd(aRdnPG,nProgress)					
+					Else
+						IF (++nSAnim>nLenA)
+							nSAnim 		:= 1
+						EndIF
+						IF (++nProgress>nLenP)
+							nProgress	:= 1
+							oProgress2:SetProgress(aSAnim[nSAnim])
+						EndIF
+					EndIF	
+					ASSIGN cProgress   := aProgress2[nProgress]
 				EndIF
 			EndIF
-			ASSIGN nMax := Max(nMax,Len(cAnim))
+	
+			ASSIGN nMax := Max(nMax,Len(cProgress))
 			DispOutAt(06,15,HB_TTOC(HB_DATETIME()),"r+/n")
-			DispOutAt(15,0,PADR(cAnim,nMax),"r+/n")
-			DispOutAt(15,nProgress2+1,oProgress2:Eval(cAnim),"r+/n")
-			DispOutAt(15,(nMaxCol-nMax),PADL(cAnim,nMax),"r+/n")
+			DispOutAt(15,0,PADR(cProgress,nMax),"r+/n")
+			DispOutAt(15,nProgress2+1,oProgress2:Eval(cProgress),"r+/n")
+			DispOutAt(15,(nMaxCol-nMax),PADL(cProgress,nMax),"r+/n")
+			
 			__tbnSleep(nSLEEP)
+	
 		End While
+	
 	Return
 	Static Procedure BuildScreen(fhLog)
         MEMVAR __nMaxCol

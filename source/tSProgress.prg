@@ -25,7 +25,7 @@ Class tSProgress
 	DATA nMax		AS NUMERIC INIT 0      HIDDEN
 	DATA nProgress	AS NUMERIC INIT 0      HIDDEN
 	
-	DATA lShuttle  AS LOGICAL INIT .F.     HIDDEN
+	DATA lShuttle   AS LOGICAL INIT .F.    HIDDEN
 	
 #IFNDEF __PROTHEUS__
 	EXPORTED:
@@ -46,6 +46,7 @@ Class tSProgress
 	Method Dispersion(cAlign)
 	Method Disjunction(cAlign)
 	Method Union(cAlign)
+	Method Occult(cAlign)
 	
 	Method GetnMax()
 	Method GetnProgress()
@@ -99,6 +100,8 @@ Method Eval(cMethod,cAlign) Class tSProgress
 		cEval := self:Disjunction(@cAlign)	
 	CASE (cMethod=="UNION")
 		cEval := self:Union(@cAlign)	
+	CASE (cMethod=="OCCULT")
+		cEval := self:Occult(@cAlign)	
 	OTHERWISE
 		cEval := self:Progress()	
 	ENDCASE
@@ -108,20 +111,25 @@ Method Progress() Class tSProgress
 Return(self:aProgress[IF(++self:nProgress>self:nMax,self:nProgress:=1,self:nProgress)])
 
 Method Increment(cAlign) Class tSProgress
-	Local cPADFunc  := "PAD"
-	Local cProgress := ""
+	Local cPADFunc  	:= "PAD"
+	Local cProgress 	:= ""
 	Local nProgress
-	DEFAULT cAlign  := "R" //L,C,R
+	Local nsProgress
+	DEFAULT cAlign  	:= "R" //L,C,R
 	IF Empty(cAlign)
 		cAlign := "R"
-	EndIF
-	IF (cAlign=="C")
-		++self:nProgress
 	EndIF
 	IF (++self:nProgress>self:nMax)
 		self:nProgress := 1
 	EndIF
-	For nProgress := 1 To self:nProgress
+	nsProgress := self:nProgress
+	IF (cAlign=="C")
+		++nsProgress
+		IF (nsProgress>self:nMax)
+			nsProgress := 1
+		EndIF
+	EndIF
+	For nProgress := 1 To nsProgress
 		cProgress += self:aProgress[nProgress]
 	Next nProgress
 	cPADFunc += cAlign
@@ -130,32 +138,37 @@ Return(&cPADFunc.(cProgress,self:nMax))
 Method Decrement(cAlign) Class tSProgress
 	Local cPADFunc  := "PAD"
 	Local cProgress := ""
-	Local nProgress
+	Local nProgress 
+	Local nsProgress
 	DEFAULT cAlign  := "L" //L,C,R
 	IF Empty(cAlign)
 		cAlign := "L"
 	EndIF
+	IF (++self:nProgress>self:nMax)
+		self:nProgress := 1
+	EndIF
+	nsProgress := Max((self:nMax-self:nProgress),1)
 	IF (cAlign=="C")
-		--self:nProgress
+		--nsProgress
+		IF (nsProgress<=0)
+			nsProgress := self:nMax
+		EndIF
 	EndIF
-	IF (--self:nProgress<=0)
-		self:nProgress := self:nMax
-	EndIF
-	For nProgress := self:nMax To self:nProgress STEP (-1)
-		cProgress += self:aProgress[nProgress]
+	For nProgress := self:nMax To nsProgress STEP (-1)
+		cProgress += self:aProgress[(self:nMax-nProgress)+1]
 	Next nProgress
 	cPADFunc += cAlign
 Return(&cPADFunc.(cProgress,self:nMax))
 
 Method Shuttle(cAlign) Class tSProgress
 	Local cEval
-	IF (.NOT.(self:lShuttle).and.(self:nProgress==self:nMax))
+	IF (.NOT.(self:lShuttle).and.(self:nProgress>=self:nMax))
 		self:lShuttle := .T.
-	ElseIF (self:lShuttle.and.(self:nProgress==self:nMax))
+	ElseIF (self:lShuttle.and.(self:nProgress>=self:nMax))
 		self:lShuttle := .F.
 	EndIF
 	IF (self:lShuttle)
-		cEval  := "DECREMENT"
+		cEval  := "DECREMENT" 
 		cAlign := "L"
 	Else
 		cEval  := "INCREMENT"
@@ -191,15 +204,26 @@ Method Junction(cAlign) Class tSProgress
 Return(&cPADFunc.(cProgress,self:nMax))
 
 Method Dispersion(cAlign) Class tSProgress
-	Local cEval := "DECREMENT"
-	cAlign      := "C"
-Return(self:Eval(cEval,@cAlign))
+	Local cEval
+	DEFAULT cAlign  := "R" //L,C,R
+	IF Empty(cAlign)
+		cAlign := "R"
+	EndIF
+	IF (cAlign=="R")
+		cEval := "INCREMENT"
+	Else
+		cEval := "DECREMENT"
+	EndIF	
+Return(self:Eval(cEval,"C"))
 
 Method Disjunction(cAlign) Class tSProgress
 	Local cPADFunc  := "PAD"
 	Local cProgress	:= ""
 	Local nAT
-	cAlign := "C"
+	DEFAULT cAlign  := "C" //L,C,R
+	IF Empty(cAlign)
+		cAlign := "C"
+	EndIF
 	IF (++self:nProgress>self:nMax)
 		self:nProgress := 1
 	EndIF
@@ -217,7 +241,10 @@ Method Union(cAlign) Class tSProgress
 	Local cProgress	:= ""
 	Local nAT
 	Local nQT
-	cAlign := "C"
+	DEFAULT cAlign  := "C" //L,C,R
+	IF Empty(cAlign)
+		cAlign := "C"
+	EndIF
 	IF (++self:nProgress>self:nMax)
 		self:nProgress := 1
 	EndIF
@@ -232,6 +259,31 @@ Method Union(cAlign) Class tSProgress
 		cProgress := Stuff(cProgress,nAT,nQT,"")
 	EndIF
 	cPADFunc  += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+Method Occult(cAlign) Class tSProgress
+	Local cPADFunc  := "PAD"
+	Local cProgress := ""
+	Local nProgress 
+	Local nsProgress
+	DEFAULT cAlign  := "L" //L,C,R
+	IF Empty(cAlign)
+		cAlign := "L"
+	EndIF
+	IF (++self:nProgress>self:nMax)
+		self:nProgress := 1
+	EndIF
+	nsProgress := self:nProgress
+	IF (cAlign=="C")
+		++nsProgress
+		IF (nsProgress>self:nMax)
+			nsProgress := 1
+		EndIF
+	EndIF
+	For nProgress := self:nMax To nsProgress STEP (-1)
+		cProgress += self:aProgress[(self:nMax-nProgress)+1]
+	Next nProgress
+	cPADFunc += cAlign
 Return(&cPADFunc.(cProgress,self:nMax))
 
 Method GetnMax() Class tSProgress
