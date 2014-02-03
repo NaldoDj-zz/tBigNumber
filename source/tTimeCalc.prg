@@ -216,7 +216,7 @@ Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 		nMediumTime	:= Int(nSeconds)
 	
 		nMiliSecs	:= (nSeconds-nMediumTime)
-		nMiliSecs	*= 100
+		nMiliSecs	*= 1000
 		nMiliSecs	:= Int(nMiliSecs)
 	
 		cMediumTime	:= self:SecsToTime(nMediumTime)
@@ -227,7 +227,7 @@ Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 				.and.;
 				(nMiliSecs>0);
 			)
-			cMediumTime += (":"+StrZero(nMiliSecs,03))
+			cMediumTime += (":"+StrZero(nMiliSecs,IF(nMiliSecs>999,4,3)))
 		EndIF
 	
 	EndIF

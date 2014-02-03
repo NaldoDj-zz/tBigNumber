@@ -25,19 +25,21 @@ Class tRemaining FROM tTimeCalc
 	DATA nProgress		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nSRemaining	AS NUMERIC   INIT 0			 HIDDEN
 	DATA nTotal			AS NUMERIC   INIT 0			 HIDDEN
+
+	Method RemainingTime()
+	Method CalcEndTime()
 	
 #IFNDEF __PROTHEUS__
 	EXPORTED:
 #ENDIF	
 
 	Method New(nTotal) CONSTRUCTOR
+	
 	Method ClassName()
 
 	Method SetRemaining(nTotal)
 
-	Method Calcule()
-	Method RemainingTime()
-	Method CalcEndTime()
+	Method Calcule(lIncProgress)
 	
 	Method GetcMediumTime()
 	Method GetcEndTime()
@@ -82,11 +84,12 @@ Method SetRemaining(nTotal) Class tRemaining
 	self:nTotal			:= nTotal
 Return(self)
 
-Method Calcule() Class tRemaining
+Method Calcule(lIncProgress) Class tRemaining
 	Local aEndTime
 	self:nCount++
 	self:RemainingTime()
-	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,++self:nProgress,.T.)
+	DEFAULT lIncProgress	:= .T.
+	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,IF(lIncProgress,++self:nProgress,self:nProgress),.T.)
 	self:cEndTime			:= self:CalcEndTime()
 	self:cEndTime			:= self:IncTime(Time(),NIL,NIL,self:TimeToSecs(self:cEndTime))
 	aEndTime				:= self:Time2NextDay(self:cEndTime,Date())
@@ -117,7 +120,13 @@ Method RemainingTime() Class tRemaining
 Return(self)
 
 Method CalcEndTime() Class tRemaining
-	Local nTimeEnd := (((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
+	Local nTimeEnd
+	IF self:nTotal<self:nProgress
+		nTimeEnd       := self:nTotal
+		self:nTotal    := self:nProgress
+		self:nProgress := nTimeEnd
+	EndIF
+	nTimeEnd := (((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
 Return(self:SecsToTime(nTimeEnd))
 
 Method GetcMediumTime() Class tRemaining

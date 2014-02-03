@@ -30,7 +30,6 @@ Static __lstbNSet
 
 #IFDEF TBN_DBFILE
 	THREAD Static __aFiles
-	Static __nThdID
 #ENDIF
 
 THREAD Static __nthRootAcc
@@ -95,21 +94,15 @@ THREAD Static __lsthdSet
 *		/DTBN_ARRAY
 *		/DTBN_DBFILE 
 *		/D__TBN_DYN_OBJ_SET__ 
-*		/D__POWMT__
-*		/D__ROOTMT__
 *		/D__ADDMT__
 *		/D__SUBTMT__
-*		/D__MULTMT__
 *	#ELSE //__HARBOUR__
 *		/DTBN_ARRAY
 *		/DTBN_DBFILE 
 *		/DTBN_MEMIO 
 *		/D__TBN_DYN_OBJ_SET__ 
-*		/D__POWMT__ 
-*		/D__ROOTMT__
 *		/D__ADDMT__
 *		/D__SUBTMT__
-*		/D__MULTMT__
 *	#ENDIF
 */
 
@@ -152,9 +145,7 @@ CLASS tBigNumber
 
 #IFNDEF __PROTHEUS__
 	#IFDEF TBN_DBFILE
-		#IFNDEF TBN_MEMIO
-			DESTRUCTOR tBigNGC
-		#ENDIF	
+		DESTRUCTOR tBigNGC
 	#ENDIF	
 #ENDIF	
 
@@ -325,8 +316,11 @@ Method New(uBigN,nBase) CLASS tBigNumber
 			__aZSub	 := Array(0)
 			__aZMult := Array(0)
 		#ENDIF    
+
 		#IFDEF TBN_DBFILE
-			__aFiles := Array(0)
+			IF (__aFiles==NIL)
+				__aFiles := Array(0)
+			EndIF
 		#ENDIF
 
 		__eqoN1 := tBigNumber():New()
@@ -389,13 +383,6 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		#IFDEF __PROTHEUS__
 			DEFAULT __cEnvSrv := GetEnvServer()
 		#ENDIF
-		#IFDEF TBN_DBFILE
-			#IFDEF __PROTHEUS__
-				__nThdID := ThreadID()
-			#ELSE
-				__nThdID := hb_ThreadID()
-			#ENDIF	
-		#ENDIF
 		__lstbNSet := .T.
 	EndIF
 
@@ -407,32 +394,21 @@ Return(self)
 	Data        : 03/03/2013
 	Descricao   : DESTRUCTOR
 */
-#IFDEF __PROTHEUS__
-STATIC PROCEDURE tBigNGC(lGC)
-#ELSE
 #IFDEF TBN_DBFILE
-	#IFNDEF TBN_MEMIO
-		METHOD tBigNGC() CLASS tBigNumber		
-		Return(tBigNGC())
-	#ENDIF
-#ENDIF
-PROCEDURE tBigNGC(lGC)
-#ENDIF
-	#IFDEF TBN_DBFILE
-		Local nFile
-		Local nFiles
-		#IFDEF __PROTHEUS__
-			DEFAULT lGC	:= .NOT.(__nThdID==ThreadID())
-		#ELSE
-			DEFAULT lGC	:= .NOT.(__nThdID==hb_ThreadID())
-		#ENDIF
-		IF lGC
+	#IFDEF __HARBOUR__
+		Procedure tBigNGC() CLASS tBigNumber
+	#ELSE
+		Static Procedure tBigNGC()
+	#ENDIF	
+			Local nFile
+			Local nFiles
+			DEFAULT __aFiles := Array(0)
 			nFiles	:= Len(__aFiles)
 			For nFile := 1 To nFiles
 				IF Select(__aFiles[nFile][1])>0
 					(__aFiles[nFile][1])->(dbCloseArea())
 				EndIF			
-				#IFDEF __PROTHEUS__
+				#IFDEF __PROTEUS__
 					MsErase(__aFiles[nFile][2],NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))
 				#ELSE
 					#IFDEF TBN_MEMIO
@@ -440,15 +416,12 @@ PROCEDURE tBigNGC(lGC)
 					#ELSE
 						fErase(__aFiles[nFile][2])
 					#ENDIF
-				#ENDIF
+				#ENDIF	
 			Next nFile
 			aSize(__aFiles,0)
-		ENDIF
-	#ELSE
-		SYMBOL_UNUSED( lGC )
-	#ENDIF
-Return
-
+		Return
+#ENDIF	
+	
 /*
 	Method		: Clone
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1269,7 +1242,7 @@ Return(__adoNR)
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC]["+cN1+"+"+cN2+"]")
 				PutGlbValue(cID,Add(cN1,cN2,nSize,nBase))
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END]["+cN1+"+"+cN2+"]")
-			tBigNGC(.T.)
+			tBigNGC()
 		Return(.T.)
 	#ELSE
 		Static Function ThAdd(cN1,cN2,nSize,nBase)
@@ -1598,13 +1571,6 @@ Method Pow(uBigN) CLASS tBigNumber
 	
 	Local nZS
 
-#IFDEF __HARBOUR__
-	#IFDEF __POWMT__
-	Local aThreads
-	Local aResults
-	#ENDIF
-#ENDIF		
-
 	lPoWN	:= __pwoNP:SetValue(uBigN):lt(__o0)
 
 	BEGIN SEQUENCE
@@ -1655,31 +1621,8 @@ Method Pow(uBigN) CLASS tBigNumber
 
 			IF __pwoB:SetValue(cPowB):gt(__o1)
 				__pwoGCD:SetValue(__pwoA:GCD(__pwoB))
-				#IFDEF __HARBOUR__
-					#IFDEF __POWMT__
-
-						aThreads := Array(2)
-						aResults := Array(2)
-						
-						aThreads[1]	:= hb_threadStart(@ThPowDiv(),__pwoA,__pwoGCD)
-						hb_threadJoin(aThreads[1],@aResults[1])
-					
-						aThreads[2]	:= hb_threadStart(@ThPowDiv(),__pwoB,__pwoGCD)
-						hb_threadJoin(aThreads[2],@aResults[2])
-						
-						hb_threadWait(aThreads)
-						
-						__pwoA:SetValue(aResults[1])
-						__pwoB:SetValue(aResults[2])
-						
-					#ELSE
-						__pwoA:SetValue(__pwoA:Div(__pwoGCD))
-						__pwoB:SetValue(__pwoB:Div(__pwoGCD))
-					#ENDIF
-				#ELSE
-					__pwoA:SetValue(__pwoA:Div(__pwoGCD))
-					__pwoB:SetValue(__pwoB:Div(__pwoGCD))
-				#ENDIF
+				__pwoA:SetValue(__pwoA:Div(__pwoGCD))
+				__pwoB:SetValue(__pwoB:Div(__pwoGCD))
 			EndIF
 
 			__pwoA:Normalize(@__pwoB)
@@ -1688,24 +1631,13 @@ Method Pow(uBigN) CLASS tBigNumber
 
 		EndIF
 
-		BEGIN SEQUENCE
+		__pwoNT:SetValue(__o0)
+		__pwoNP:SetValue(__pwoNP:Sub(__o1))
+		While __pwoNT:lt(__pwoNP)
+			__pwoNR:SetValue(__pwoNR:Mult(oSelf))
+			__pwoNT:SetValue(__pwoNT:Add(__o1))
+		End While
 
-			#IFDEF __POWMT__
-				IF __pwoNP:gt(__o10)
-					__pwoNR:SetValue(PowThread(__pwoNR,__pwoNP))
-					BREAK
-				EndIF
-			#ENDIF	
-
-			__pwoNT:SetValue(__o0)
-			__pwoNP:SetValue(__pwoNP:Sub(__o1))
-			While __pwoNT:lt(__pwoNP)
-				__pwoNR:SetValue(__pwoNR:Mult(oSelf))
-				__pwoNT:SetValue(__pwoNT:Add(__o1))
-			End While
-
-		END SEQUENCE
-	
 		IF lPowF
 			__pwoNR:SetValue(__pwoNR:nthRoot(__pwoB))
 		EndIF
@@ -1717,259 +1649,6 @@ Method Pow(uBigN) CLASS tBigNumber
 	EndIF
 
 Return(__pwoNR)
-
-#IFDEF __POWMT__
-
-	/*/
-		Funcao:		PowThread
-		Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-		Data:		25/02/2013
-		Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
-		Sintaxe:	PowThread(oN1,oN2)
-	/*/
-	Static Function PowThread(oN1,oN2)
-	
-		Local aNR
-	
-		Local oNR		:= tBigNumber():New()
-	
-		Local oNO		:= __o1:Clone()
-	
-		Local oN5		:= __o5:Clone()
-		Local oM10		:= __o10:Clone()
-
-		Local oQ10		:= tBigNumber():New()
-		Local oQTh		:= tBigNumber():New()
-
-		Local oCN1		:= tBigNumber():New(oN1)
-		Local oCN2		:= tBigNumber():New(oN2)
-
-	#IFDEF __HARBOUR__
-		Local aThreads
-		Local aResults
-	#ELSE //__PROTHEUS__
-		Local cGlbV
-		Local cThread	:= hb_ntos(ThreadID())
-	#ENDIF	
-	
-		Local lM10		:= .F.
-		Local lExit		:= .F.
-		
-	#IFDEF __PROTHEUS__
-		Local nNR
-	#ENDIF
-		Local nID
-		Local nIDs
-	
-		BEGIN SEQUENCE
-	
-			IF oCN2:lt(oM10)
-				oNR:SetValue(oN1:Pow(oN2))
-				BREAK
-			EndIF
-	        
-			lM10		:= oCN2:eq(oM10)
-			
-			IF .NOT.(lM10)
-				lM10	:= oCN2:Mod(oM10):eq(__o0)
-			EndIF	
-	
-			oQ10:SetValue(oCN2:Div(oM10):Int(.T.))
-			oCN2:SetValue(oCN2:Sub(oQ10:Mult(oM10)))
-
-			oNR:SetValue(oCN1)
-	
-			aNR	:= Array(0)
-
-			While oQ10:gt(__o0)
-	
-				oQTh:SetValue(oN5:Min(oQ10))
-				oQ10:SetValue(oQ10:Sub(oQTh))
-	
-				#IFDEF __PROTHEUS__
-					lExit	:= lExit .or. KillApp()
-					IF lExit
-						EXIT
-					EndIF
-				#ENDIF	
-	
-				While oQTh:gt(__o0)
-					
-					oQTh:SetValue(oQTh:Sub(oNO))
-	
-					aAdd(aNR,Array(5))
-
-					nID	:= Len(aNR)
-	
-					aNR[nID][4]	:= .F.
-
-		        	#IFDEF __HARBOUR__
-			        	aNR[nID][1]	:= oCN1
-		        		aNR[nID][2]	:= oM10
-					#ELSE //__PROTHEUS__
-			        	aNR[nID][1]	:= oCN1:GetValue()
-		        		aNR[nID][2]	:= oM10:GetValue()
-			        	aNR[nID][3]	:= ("__POW__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
-			        	PutGlbValue(aNR[nID][3],"")
-			        	StartJob("U_POWJOB",__cEnvSrv,.F.,aNR[nID][1],aNR[nID][2],aNR[nID][3],__nSetDecimals,__nthRootAcc)
-			        #ENDIF //__HARBOUR__
-
-				End While
-	
-				nIDs := nID
-
-				#IFDEF __HARBOUR__
-
-					aThreads := Array(nIDs)
-				    aResults := Array(nIDs)
-      				For nID := 1 To nIDs
-         				aThreads[nID] := hb_threadStart(@PowJob(),aNR[nID][1],aNR[nID][2],__nSetDecimals,__nthRootAcc)
-						hb_threadJoin(aThreads[nID],@aResults[nID])
-      				Next nID
-					
-					hb_threadWait(aThreads)
-      				
-      				For nID := 1 To nIDs
-						aNR[nID][4]	:= .T.
-						aNR[nID][5]	:= aResults[nID]
-      				Next nID
-
-				#ELSE //__PROTHEUS__
-
-					While .NOT.(lExit)
-					
-						lExit	:= lExit .or. KillApp()
-						IF lExit
-							EXIT
-						EndIF
-
-						nNR		:= 0
-		
-						For nID := 1 To nIDs
-		
-							IF .NOT.(aNR[nID][4])
-			
-								cGlbV	:= GetGlbValue(aNR[nID][3])
-								
-								IF .NOT.(cGlbV=="")
-				
-									aNR[nID][4]	:= .T.
-									aNR[nID][5]	:= cGlbV
-			
-									cGlbV	:= NIL
-			
-									ClearGlbValue(aNR[nID][3])
-			
-									lExit	:= ++nNR==nIDs
-			                                                                      	
-									IF lExit
-										EXIT
-									EndIF
-			
-								EndIF
-			
-							Else
-			
-								lExit := ++nNR==nIDs
-			
-								IF lExit
-									EXIT
-								EndIF
-						
-							EndIF
-			
-						Next nID	
-			
-						IF lExit
-							EXIT
-						EndIF
-
-					End While
-
-				#ENDIF	//__HARBOUR__
-	
-				For nID := 1 To nIDs
-					oNR:SetValue(oNR:Mult(aNR[nID][5]))
-				Next nID
-				
-				aSize(aNR,0)
-	
-			End While
-	
-			aNR		:= NIL
-
-			IF lM10
-				oNR:SetValue(oNR:Div(oCN1))
-				BREAK
-			EndIF
-
-			While oCN2:gt(oNO)
-				oCN2:SetValue(oCN2:Sub(oNO))
-				oNR:SetValue(oNR:Mult(oCN1))
-			End While
-
-		END SEQUENCE
-	
-	Return(oNR)
-
-	#IFDEF __HARBOUR__
-
-		/*/
-			Funcao:		PowJob
-			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-			Data:		25/02/2013
-			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
-			Sintaxe:	hb_threadStart(@PowJob(),oN1,oN2,nSetDecimals,nthRootAcc)
-		/*/
-		Static Function PowJob(oN1,oN2,nSetDecimals,nthRootAcc)
-		
-			Local oTh1	:= tBigNumber():New(oN1)
-			Local oTh2	:= tBigNumber():New(oN2)
-			Local oThR	:= tBigNumber():New()
-
-			__nthRootAcc	:= nthRootAcc
-			__nSetDecimals	:= nSetDecimals
-
-			oThR:SetValue(oTh1:Pow(oTh2))
-
-		Return(oThR)
-
-		Static Function ThPowDiv(oX,oY)
-			Local oThX	:= tBigNumber():New(oX)
-			Local oThY	:= tBigNumber():New(oY)
-		Return(oThX:Div(oThY))
-	
-	#ELSE //__PROTHEUS__
-
-		/*/
-			Funcao:		U_PowJob
-			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-			Data:		25/02/2013
-			Descricao:	Utilizada no Metodo Pow para o Calculo da Potencia via Job
-			Sintaxe:	StartJob("U_POWJOB",cEnvironment,lWaitRun,cN1,cN2,cID,nSetDecimals,nthRootAcc)
-		/*/
-		User Function PowJob(cN1,cN2,cID,nSetDecimals,nthRootAcc)
-		
-			Local cNR
-		
-			Local oN1	:= tBigNumber():New(cN1)
-			Local oN2	:= tbigNumber():New(cN2)
-		
-			__nthRootAcc	:= nthRootAcc
-			__nSetDecimals	:= nSetDecimals
-		
-			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][CALC]["+cN1+" ^ "+cN2+"]")
-				cNR := oN1:Pow(oN2):GetValue()
-				PutGlbValue(cID,cNR)	
-			PTInternal(1,"[tBigNumber][POW][U_POWJOB]["+cID+"][RESULT]["+cNR+"]")
-			
-			tBigNGC(.T.)
-
-		Return(.T.)
-
-	#ENDIF //__HARBOUR__
-
-#ENDIF	//__POWMT__
 
 /*
 	Method		: e
@@ -2156,9 +1835,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 	Local cFExit
 
-#IFNDEF __ROOTMT__
 	Local nPF
-#ENDIF
 
 	Local nZS
 	Local nPFs
@@ -2167,15 +1844,8 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	Local oRootD
 	Local othRoot
 
-#IFNDEF __ROOTMT__
 	Local oRootT
 	Local othRootD
-#ELSE
-	#IFDEF __HARBOUR__
-	Local aThreads
-	Local aResults
-	#ENDIF
-#ENDIF
 
 	Local oRootE
 	Local oFExit
@@ -2231,38 +1901,9 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			oRootD	:= tBigNumber():New("1"+SubStr(__cstcZ0,1,nZS))
 			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
 			
-			#IFDEF __HARBOUR__
-			
-				#IFDEF __ROOTMT__
-					
-					aThreads := Array(2)
-					aResults := Array(2)
-					
-					aThreads[1]	:= hb_threadStart(@ThPFactors(),oRootB)
-					hb_threadJoin(aThreads[1],@aResults[1])
-			
-					aThreads[2]	:= hb_threadStart(@ThPFactors(),oRootD)
-					hb_threadJoin(aThreads[2],@aResults[2])
-					
-					hb_threadWait(aThreads)
-					
-					aIPF := aResults[1]
-					aDPF := aResults[2]
-				
-				#ELSE
-				
-					aIPF := oRootB:PFactors()
-					aDPF := oRootD:PFactors()
-				
-				#ENDIF //__ROOTMT__
-			
-			#ELSE //__PROTHEUS__
-			
-				aIPF := oRootB:PFactors()
-				aDPF := oRootD:PFactors()
-			
-			#ENDIF	//__HARBOUR__
-		
+			aIPF := oRootB:PFactors()
+			aDPF := oRootD:PFactors()
+
 		Else
 		
 			aIPF := oRootB:PFactors()
@@ -2273,42 +1914,38 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		nPFs := Len(aIPF)
 
 		IF nPFs>0
-			#IFDEF __ROOTMT__
-				othRoot:SetValue(RootThread(aIPF,aDPF,oRootE,oFExit))
-			#ELSE
-				othRoot:SetValue(__o1)
-				othRootD := tBigNumber():New()
-				oRootT   := tBigNumber():New()
-				For nPF := 1 To nPFs
-					IF oRootE:eq(aIPF[nPF][2])
-						othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
-					Else
-						oRootT:SetValue(aIPF[nPF][1])
-						oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
-						oRootT:SetValue(oRootT:Pow(aIPF[nPF][2]))
-						othRoot:SetValue(othRoot:Mult(oRootT))
-					EndIF	
-				Next nPF
-				IF .NOT.(Empty(aDPF))
-					nPFs := Len(aDPF)
-					IF nPFs>0
-						othRootD:SetValue(__o1)
-						For nPF := 1 To nPFs
-							IF oRootE:eq(aDPF[nPF][2])
-								othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
-							Else
-								oRootT:SetValue(aDPF[nPF][1])
-								oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
-								oRootT:SetValue(oRootT:Pow(aDPF[nPF][2]))
-								othRootD:SetValue(othRootD:Mult(oRootT))
-							EndIF
-						Next nPF
-						IF othRootD:gt(__o0)
-							othRoot:SetValue(othRoot:Div(othRootD))	
+			othRoot:SetValue(__o1)
+			othRootD := tBigNumber():New()
+			oRootT   := tBigNumber():New()
+			For nPF := 1 To nPFs
+				IF oRootE:eq(aIPF[nPF][2])
+					othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
+				Else
+					oRootT:SetValue(aIPF[nPF][1])
+					oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+					oRootT:SetValue(oRootT:Pow(aIPF[nPF][2]))
+					othRoot:SetValue(othRoot:Mult(oRootT))
+				EndIF	
+			Next nPF
+			IF .NOT.(Empty(aDPF))
+				nPFs := Len(aDPF)
+				IF nPFs>0
+					othRootD:SetValue(__o1)
+					For nPF := 1 To nPFs
+						IF oRootE:eq(aDPF[nPF][2])
+							othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
+						Else
+							oRootT:SetValue(aDPF[nPF][1])
+							oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+							oRootT:SetValue(oRootT:Pow(aDPF[nPF][2]))
+							othRootD:SetValue(othRootD:Mult(oRootT))
 						EndIF
-					EndIF	
-				EndIF
-			#ENDIF //__ROOTMT__
+					Next nPF
+					IF othRootD:gt(__o0)
+						othRoot:SetValue(othRoot:Div(othRootD))	
+					EndIF
+				EndIF	
+			EndIF
 			BREAK
 		EndIF
 
@@ -2317,254 +1954,6 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	END SEQUENCE
 
 Return(othRoot)
-
-#IFDEF __ROOTMT__
-
-	/*/
-		Funcao:		RootThread
-		Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-		Data:		20/03/2013
-		Descricao:	Utilizada no Metodo nthRoot para o Calculo da Raiz via Job
-		Sintaxe:	RootThread(aIPF,aDPF,oRootE,oAccTo)
-	/*/
-	Static Function RootThread(aIPF,aDPF,oRootE,oAccTo)
-
-	Local aNR
-
-	Local nID
-	Local nIDs
-
-	Local nIPF
-	Local nIPFs := Len(aIPF)
-
-	Local nDPF
-	Local nDPFs := Len(aDPF)
-	
-	Local othRoot
-	
-	Local othTRoot
-	Local othIRoot
-	Local othDRoot
-
-	#IFDEF __HARBOUR__
-
-		Local aThreads
-		Local aResults
-
-	#ELSE //__PROTHEUS__
-
-		Local cGlbV
-		Local cFExit  := oAccTo:GetValue()
-		Local cRootE  := oRootE:GetValue()	
-		Local cThread := hb_ntos(ThreadID())
-		
-		Local nNR
-		Local lExit   := .F.
-
-	#ENDIF	//__HARBOUR__
-
-		nIDs := (nIPFs+nDPFs)
-		aNR  := Array(nIDs,6)
-		nID  := 0
-
-		For nIPF := 1 To nIPFs
-            ++nID
-        	aNR[nID][1]	:= aIPF[nIPF][1]
-        	aNR[nID][2]	:= "I"
-	        #IFDEF __HARBOUR__
-				aNR[nID][3]	:= nID
-			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ("__ROOT__I__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
-	        #ENDIF //__HARBOUR__
-			IF oRootE:eq(aIPF[nIPF][2])
-				aNR[nID][4] := .T.
-				aNR[nID][5] := aIPF[nIPF][1]
-				aNR[nID][6] := "1"
-			Else
-				aNR[nID][4] := .F.
-				aNR[nID][6] := aIPF[nIPF][2]
-			EndIF
-		Next nIPF
-
-		For nDPF := 1 To nDPFs
-            ++nID
-        	aNR[nID][1]	:= aDPF[nDPF][1]
-        	aNR[nID][2]	:= "D"
-	        #IFDEF __HARBOUR__
-				aNR[nID][3]	:= nID
-			#ELSE //__PROTHEUS__
-		        aNR[nID][3]	:= ("__ROOT__D__"+"ThreadID__"+cThread+"__ID__"+hb_ntos(nID))
-	        #ENDIF //__HARBOUR__
-			IF oRootE:eq(aDPF[nDPF][2])
-				aNR[nID][4] := .T.
-				aNR[nID][5] := aDPF[nDPF][1]
-				aNR[nID][6] := "1"
-			Else
-				aNR[nID][4] := .F.
-				aNR[nID][6] := aDPF[nDPF][2]
-			EndIF	
-		Next nDPF
-
-		#IFDEF __HARBOUR__
-			aThreads := Array(nIDs)
-			aResults := Array(nIDs)
-		#ENDIF
-
-		For nID := 1 To nIDs
-			IF aNR[nID][4]
-				LOOP
-			EndIF
-			#IFDEF __HARBOUR__
-				aThreads[nID] := hb_threadStart(@RootJob(),aNR[nID][1],oRootE,oAccTo,__nSetDecimals,__nthRootAcc)
-				hb_threadJoin(aThreads[nID],@aResults[nID])
-			#ELSE	//__PROTHEUS__
-				StartJob("U_RootJob",__cEnvSrv,.F.,aNR[nID][1],cRootE,cFExit,__nSetDecimals,__nthRootAcc,aNR[nID][3])
-			#ENDIF
-		Next nID
-
-		#IFDEF __HARBOUR__
-
-			hb_threadWait(aThreads)
-      				
-      		For nID := 1 To nIDs
-				IF aNR[nID][4]
-					LOOP
-				EndIF
-				aNR[nID][4]	:= .T.
-				aNR[nID][5]	:= aResults[nID]
-			Next nID
-
-		#ELSE	//__PROTHEUS__
-
-			While .NOT.(lExit)
-
-				lExit := lExit .or. KillApp()
-				IF lExit
-					EXIT
-				EndIF
-
-				nNR := 0
-
-				For nID := 1 To nIDs
-
-					IF .NOT.(aNR[nID][4])
-
-						cGlbV := GetGlbValue(aNR[nID][3])
-
-						IF .NOT.(cGlbV=="")
-
-							aNR[nID][4]	:= .T.
-							aNR[nID][5]	:= cGlbV
-
-							cGlbV := NIL
-	
-							ClearGlbValue(aNR[nID][3])
-	
-							lExit := ++nNR==nIDs
-	                                                                      	
-							IF lExit
-								EXIT
-							EndIF
-
-						EndIF
-
-					Else
-
-						lExit := ++nNR==nIDs
-	
-						IF lExit
-							EXIT
-						EndIF
-				
-					EndIF
-	
-				Next nID	
-	
-				IF lExit
-					EXIT
-				EndIF
-
-			End While
-
-		#ENDIF
-
-		othTRoot := tBigNumber():New()
-		othIRoot := __o1:Clone()
-		othDRoot := __o1:Clone()
-
-		For nID := 1 To nIDs
-			othTRoot:SetValue(aNR[nID][5])
-			IF aNR[nID][2]=="I"
-				othIRoot:SetValue(othIRoot:Mult(othTRoot:Pow(aNR[nID][6])))
-			Else
-				othDRoot:SetValue(othDRoot:Mult(othTRoot:Pow(aNR[nID][6])))
-			EndIF	
-		Next nID	
-
-		othRoot := othIRoot:Div(othDRoot):Clone()
-
-	Return(othRoot)
-
-	#IFDEF __HARBOUR__
-
-		/*/
-			Funcao:		RootJob
-			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-			Data:		20/03/2013
-			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
-			Sintaxe:	hb_threadStart(@RootJob(),cRootB,oRootE,oFExit,nSetDecimals,nthRootAcc)
-		/*/
-		Static Function RootJob(cRootB,oRootE,oFExit,nSetDecimals,nthRootAcc)
-
-			Local oThB		:= tBigNumber():New(cRootB)
-			Local oThE		:= tBigNumber():New(oRootE)
-			Local oThExit	:= tBigNumber():New(oFExit)
-		
-			Local oThR		:= tBigNumber():New()
-		
-			__nthRootAcc	:= nthRootAcc
-			__nSetDecimals	:= nSetDecimals
-			
-			oThR:SetValue(nthRoot(oThB,oThE,oThExit,nSetDecimals))
-
-		Return(oThR)
-
-		Static Function ThPFactors(oNR)
-			Local oThR := tBigNumber():New(oNR)
-		Return(oThR:PFactors())
-
-	#ELSE //__PROTHEUS__
-
-		/*/
-			Funcao:		U_RootJob
-			Autor:		Marinaldo de Jesus [http://www.blacktdn.com.br]
-			Data:		20/03/2013
-			Descricao:	Utilizada no Metodo nthroot para o Calculo da Raiz via Job
-			Sintaxe:	StartJob("U_RootJob",cEnvironment,lWaitRun,cRootB,cRootE,cFExit,nSetDecimals,nthRootAcc,cID)
-		/*/
-		User Function RootJob(cRootB,cRootE,cFExit,nSetDecimals,nthRootAcc,cID)
-
-			Local cNR
-		
-			Local oTh_B   := tBigNumber():New(cRootB)
-			Local oTh_E   := tbigNumber():New(cRootE)
-			Local oThExit := tbigNumber():New(cFExit)
-
-			__nthRootAcc   := nthRootAcc
-			__nSetDecimals := nSetDecimals
-
-			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][CALC][nthRoot("+cRootB+","+cRootE+")]")
-				cNR := nthRoot(oTh_B,oTh_E,oThExit,nSetDecimals):GetValue()
-				PutGlbValue(cID,cNR)
-			PTInternal(1,"[tBigNumber][POW][U_ROOTJOB]["+cID+"][RESULT]["+cNR+"]")
-
-			tBigNGC(.T.)
-
-		Return(.T.)	
-
-	#ENDIF //__HARBOUR__
-
-#ENDIF	//__ROOTMT__
 
 /*
 	Method:		SQRT
@@ -4298,7 +3687,7 @@ Return(r)
 		IF Select(cAlias)==0
 	#IFNDEF __HARBOUR__
 			cFile := CriaTrab(aStru,.T.,GetdbExtension())
-			IF .NOT.( GetdbExtension() $ cFile )
+			IF .NOT.(GetdbExtension()$cFile)
 				cFile += GetdbExtension()
 			EndIF
 			dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
@@ -4310,6 +3699,7 @@ Return(r)
 				cFile := CriaTrab(aStru,cAlias)
 			#ENDIF	
 	#ENDIF
+			DEFAULT __aFiles := Array(0)
 			aAdd(__aFiles,{cAlias,cFile})
 		Else
 			(cAlias)->(dbRLock())

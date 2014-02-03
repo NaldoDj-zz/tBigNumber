@@ -11,6 +11,7 @@
 #DEFINE L_OOPROGRAND       "0"
 
 #DEFINE __SETDEC__		  8
+#DEFINE __NRTTST__		 31 
 
 #IFDEF __PROTHEUS__
     #xcommand ? <e> => ConOut(<e>)
@@ -249,17 +250,19 @@ Static Procedure tBigNTst()
     MEMVAR __nRow
     MEMVAR __noProgress
 	
-	MEMVAR lKillProgress
+	MEMVAR __lKillProgress
+	MEMVAR __oRTimeProc
 	
- 	Private __nMaxRow    AS NUMBER VALUE MaxRow()
-    Private __nMaxCol    AS NUMBER VALUE MaxCol()
-    Private __nCol       AS NUMBER VALUE ((__nMaxCol+1)/2)
-    Private __nRow       AS NUMBER VALUE 0
-	Private __noProgress AS NUMBER VALUE (((__nMaxCol+1)/3)-(__nCol/6))
+ 	Private __nMaxRow     AS NUMBER VALUE MaxRow()
+    Private __nMaxCol     AS NUMBER VALUE MaxCol()
+    Private __nCol        AS NUMBER VALUE Int((__nMaxCol)/2)
+    Private __nRow        AS NUMBER VALUE 0
+	Private __noProgress  AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
 	
-	Private __cSep AS CHARACTER VALUE Replicate("_",__nMaxCol)
+	Private __cSep 		  AS CHARACTER VALUE Replicate("_",__nMaxCol)
 	
-	Private lKillProgress := .F.
+	Private __lKillProgress AS LOGICAL VALUE .F.
+	Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
  
 	MakeDir(cFld)
     
@@ -295,70 +298,46 @@ Static Procedure tBigNTst()
     
     Set(_SET_DECIMALS,__SETDEC__)
 
-    __ConOut(fhLog,__cSep)   						//2
+    __ConOut(fhLog,__cSep)   						//3
 	#IFDEF __HARBOUR__
-		DispOutAt(2,__nCol,"[ ]")
+		DispOutAt(3,(__nCol-1),"[ ]")
 	#ENDIF	
 	
-    __ConOut(fhLog,"START ") 						//3
-    __ConOut(fhLog,"DATE        : " , dStartDate)	//4
-    __ConOut(fhLog,"TIME        : " , cStartTime)	//5
+    __ConOut(fhLog,"START ") 						//4
+    __ConOut(fhLog,"DATE        : " , dStartDate)	//5
+    __ConOut(fhLog,"TIME        : " , cStartTime)	//6
 
     #IFDEF __HARBOUR__
-        __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))	//6
+        __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))	//7
     #ENDIF
 
     #IFDEF TBN_DBFILE
         #IFNDEF TBN_MEMIO
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")	//7
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")	//8
         #ELSE
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")//7
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")//8
         #ENDIF    
     #ELSE
         #IFDEF TBN_ARRAY
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")	//7
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")	//8
         #ELSE
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")	//7
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")	//8
         #ENDIF
     #ENDIF    
 
-    #ifdef __POWMT__
-        __ConOut(fhLog,"POWTHREAD   : " , "True")	//8
-    #else
-        __ConOut(fhLog,"POWTHREAD   : " , "False")	//8
-    #endif
-
-    #ifdef __ROOTMT__
-        __ConOut(fhLog,"ROOTTHREAD  : " , "True")	//9
-    #else
-        __ConOut(fhLog,"ROOTTHREAD  : " , "False")	//9
-    #endif
-
-    #ifdef __SUBTMT__
-        __ConOut(fhLog,"SUBTHREAD   : " , "True")	//10
-    #else
-        __ConOut(fhLog,"SUBTHREAD   : " , "False")	//10
-    #endif
-
-    #ifdef __MULTMT__
-        __ConOut(fhLog,"MULTTHREAD  : " , "True")	//11
-    #else
-        __ConOut(fhLog,"MULTTHREAD  : " , "False")	//11
-    #endif
-
 	#IFDEF __HARBOUR__
-		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //12
-		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //13
-		__ConOut(fhLog,"")	//14	
-		__ConOut(fhLog,"")								  //15
-		DispOutAt(15,__noProgress,"["+Space(__noProgress)+"]","w+/n") //15
+		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
+		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
+		__ConOut(fhLog,"")												//11	
+		__ConOut(fhLog,"")								  				//12
+		DispOutAt(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
 	#ENDIF
 	
-    __ConOut(fhLog,"")	//16
+    __ConOut(fhLog,"")	//13
 	
-	__ConOut(fhLog,"")	//17
+	__ConOut(fhLog,"")	//14
 	
-	#DEFINE __NROWAT    17
+	#DEFINE __NROWAT    14
 
 	#IFDEF __HARBOUR__
 		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
@@ -446,11 +425,12 @@ Static Procedure tBigNTst()
 				__ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
 				__ConOut(fhLog,__cSep)
 				__oRTime2:Calcule()
+				__oRTime1:Calcule(.F.)
 			Next n
 			__oRTime1:Calcule()
 			__ConOut(fhLog,__cSep)
 		Next w
-		__ConOut(fhLog," END ------------ Teste Operator Overloading 0 -------------- ")
+		__ConOut(fhLog," ------------ Teste Operator Overloading 0 -------------- END ")
 	#ENDIF
 
     __ConOut(fhLog,"")
@@ -477,6 +457,7 @@ Static Procedure tBigNTst()
                 __ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFact[x][1])
             End While
 			__oRTime2:Calcule()	
+			__oRTime1:Calcule(.F.)
         Next x
 		__oRTime1:Calcule()		
         __ConOut(fhLog,__cSep)
@@ -894,7 +875,8 @@ Static Procedure tBigNTst()
             ASSIGN cW    := otBigN:LCM(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():LCM('+cN+')',"RESULT: "+cW)
             __ConOut(fhLog,__cSep)
-			__oRTime2:Calcule()
+			__oRTime2:Calcule() 
+			__oRTime1:Calcule(.F.)
         Next n
 		__oRTime1:Calcule()
     Next x
@@ -1102,13 +1084,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste SQRT 2 -------------- END ")
-    
-    __ConOut(fhLog,"")
-
-    __ConOut(fhLog," ------------ Teste SQRT 3 -------------- END ")
-    
-    __ConOut(fhLog,"")
-
+ 
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ Teste Exp 0 -------------- ")
@@ -1181,6 +1157,7 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__oRTime1:Calcule(.F.)
         Next w
 		__oRTime1:Calcule()
     Next x
@@ -1226,6 +1203,7 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)	
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__oRTime1:Calcule(.F.)
         Next w
 		__oRTime1:Calcule()
     Next x
@@ -1468,6 +1446,7 @@ Static Procedure tBigNTst()
             EndIF
             __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__oRTime1:Calcule(.F.)
         Next n
 		__oRTime1:Calcule()
     Next w
@@ -1590,7 +1569,7 @@ Static Procedure tBigNTst()
     #IFDEF __HARBOUR__
 		nsElapsed     := (HB_DATETIME()-tsBegin)
         __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
-		lKillProgress := .T.
+		__lKillProgress := .T.
 		hb_threadQuitRequest(ptthProg)
 		hb_ThreadWait(ptthProg)
 	#ENDIF
@@ -1609,7 +1588,14 @@ Static Procedure tBigNTst()
     
     fClose(fhLog)
 
-    tBigNGC(.T.)
+	#IFDEF __PROTHEUS__
+		#IFDEF TBN_DBFILE
+   			tBigNGC()
+    	#ENDIF
+    #ELSE
+    	otBigN := NIL
+    	hb_gcAll()
+    #ENDIF	
     
 #IFDEF __HARBOUR__
     WAIT "Press any key to end"
@@ -1654,6 +1640,8 @@ Static Procedure __ConOut(fhLog,e,d)
     MEMVAR __nMaxRow
     MEMVAR __nMaxCol
     MEMVAR __nRow
+    
+    MEMVAR __oRTimeProc
 
 #ENDIF
 
@@ -1675,10 +1663,10 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
-	@ 12, 15 CLEAR TO 12,__nMaxCol
-	DispOutAt(12,15,"["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
-	@ 13, 15 CLEAR TO 13,__nMaxCol
-	DispOutAt(13,15,"["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
+	@ 09, 15 CLEAR TO 09,__nMaxCol
+	DispOutAt(09,15,"["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
+	@ 10, 15 CLEAR TO 10,__nMaxCol
+	DispOutAt(10,15,"["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
@@ -1687,6 +1675,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	ASSIGN lSep  := (p==__cSep)
 	ASSIGN lMRow := (__nRow>=__NROWAT)
 	DispOutAt(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+	__oRTimeProc:Calcule("-------------- END"$p)
 #ELSE    
     ? p
 #ENDIF    
@@ -1739,7 +1728,9 @@ Return(lHarbour)
 	    Local aSAnim     AS ARRAY						VALUE Array(11)
 	    
 		Local cAT        AS CHARACTER
+		Local cRTime     AS CHARACTER
 		Local cStuff     AS CHARACTER
+	    Local cLRTime    AS CHARACTER
 	    Local cProgress  AS CHARACTER
 		
 		Local lChange	 AS LOGICAL
@@ -1749,7 +1740,6 @@ Return(lHarbour)
 		Local nQT        AS NUMBER 
 		Local nLenA		 AS NUMBER						VALUE Len(aSAnim)
 		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
-		Local nMaxP		 AS NUMBER
 		Local nSAnim     AS NUMBER
 		Local nSizeP     AS NUMBER						VALUE (nProgress2*2)
 		Local nSizeP2    AS NUMBER						VALUE (nSizeP*2)
@@ -1760,7 +1750,8 @@ Return(lHarbour)
 		Local oProgress1 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		Local oProgress2 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		
-		MEMVAR lKillProgress
+		MEMVAR __lKillProgress
+		MEMVAR __oRTimeProc
 		
 		aSAnim[01] := Replicate((Chr(7)+";"),nSizeP2-1)
 		ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,nSizeP2-1)
@@ -1840,9 +1831,9 @@ Return(lHarbour)
 		oProgress2:SetProgress(aSAnim[nSAnim])
 	    cProgress := aProgress2[nProgress]
 		
-		While .NOT.(lKillProgress)
+		While .NOT.(__lKillProgress)
 			
-			DispOutAt(2,nCol+1,oProgress1:Eval(),"r+/n")
+			DispOutAt(3,nCol,oProgress1:Eval(),"r+/n")
 			
 			IF (oProgress2:GetnProgress()>=oProgress2:GetnMax()).or.(oProgress2:GetnProgress()<=0)
 				lChange := (.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
@@ -1880,9 +1871,6 @@ Return(lHarbour)
 					ASSIGN cProgress   := aProgress2[nProgress]
 				EndIF
 			EndIF
-	
-			ASSIGN nMaxP := Max(nMaxP,Len(cProgress))
-			DispOutAt(06,15,HB_TTOC(HB_DATETIME()),"r+/n")
 			
 			IF (lCScreen)
 				lCScreen := .F.
@@ -1894,8 +1882,20 @@ Return(lHarbour)
 			ASSIGN nQT    := (AT("] [",SubSTr(cStuff,nAT))-2)
 			ASSIGN cAT    := SubStr(cStuff,nAT,nQT+1)
 			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
-			DispOutAt(15,0,cStuff,"w+/n")
-			DispOutAt(15,nAT-1,cAT,"r+/n")
+
+			IF (cRTime==cLRTime)
+				__oRTimeProc:Calcule(.F.)
+			EndIF	
+
+			cLRTime := cRTime
+
+			ASSIGN cRTime := "["+hb_ntos(__oRTimeProc:GetnProgress())+"/"+hb_ntos(__oRTimeProc:GetnTotal())+"]["+DtoC(__oRTimeProc:GetdEndTime())+"]["+__oRTimeProc:GetcEndTime()+"]"
+			
+			DispOutAt(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
+			DispOutAt(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
+			
+			DispOutAt(12,0,cStuff,"w+/n")
+			DispOutAt(12,nAT-1,cAT,"r+/n")
 			
 			__tbnSleep(nSLEEP)
 	
@@ -1905,9 +1905,12 @@ Return(lHarbour)
 	Static Procedure BuildScreen(fhLog)
         MEMVAR __nMaxCol
 		CLEAR SCREEN
-        __ConOut(fhLog,padc("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol+1))
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol)) //1
+        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",__nMaxCol))			//2
 	Return
 #ELSE
-    Static Function tBigNGC(lGC)
-    Return(StaticCall(TBIGNUMBER,tBigNGC,lGC))
+    #IFDEF TBN_DBFILE
+    	Static Function tBigNGC()
+    	Return(StaticCall(TBIGNUMBER,tBigNGC))
+    #ENDIF	
 #ENDIF
