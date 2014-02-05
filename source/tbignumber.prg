@@ -3660,6 +3660,10 @@ Return(r)
 			s := "0"	
 		EndIF
 	
+		IF Len(s)<n
+			s := PadL(s,n,"0")
+		EndIF
+	
 	Return(s)
 	                                    
 	Static Function dbNumber(cAlias)
@@ -3899,6 +3903,10 @@ Return(r)
 	
 		IF s==""
 			s := "0"
+		EndIF
+	
+		IF Len(s)<n
+			s := PadL(s,n,"0")
 		EndIF
 	
 	Return(s)
@@ -4275,6 +4283,11 @@ Return(r)
 			IF s==""
 				s := "0"
 			EndIF
+		
+			IF Len(s)<n
+				s := PadL(s,n,"0")
+			EndIF
+		
 		Return(s)
 		#ENDIF
 	

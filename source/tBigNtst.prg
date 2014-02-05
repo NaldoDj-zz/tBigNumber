@@ -200,9 +200,10 @@ Static Procedure tBigNTst()
                                     } 
 
 #IFDEF __HARBOUR__
-	Local cFld      AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
-    Local cLog      AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+	Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
+    Local cLog       AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
     LOCAL ptthProg
+    Local ptProgress := @Progress()
 #ELSE
     Local cLog      AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 #ENDIF
@@ -345,7 +346,7 @@ Static Procedure tBigNTst()
 	#IFDEF __HARBOUR__
 		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
 										       HB_THREAD_INHERIT_MEMVARS),;
-		@Progress(),__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND)
+		ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND)
 	#ENDIF	
 	
     __ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
@@ -1732,7 +1733,7 @@ Return(lHarbour)
 	    
 	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
-	    Local aSAnim     AS ARRAY						VALUE Array(16)
+	    Local aSAnim     AS ARRAY						VALUE Array(17)
 	    
 		Local cAT        AS CHARACTER
 		Local cRTime     AS CHARACTER
@@ -1845,7 +1846,7 @@ Return(lHarbour)
 			ASSIGN aSAnim[14] := SubStr(aSAnim[14],1,Len(aSAnim[14])-1)
 		EndIF
 	
-		ASSIGN aSAnim[15] := Replicate(Chr(223+";;"),nSizeP2-1)
+		ASSIGN aSAnim[15] := Replicate(Chr(223)+";;",nSizeP2-1)
 		ASSIGN aSAnim[15] := SubStr(aSAnim[15],1,nSizeP2-1)
 		IF (SubStr(aSAnim[15],-1)==";")
 			ASSIGN aSAnim[15] := SubStr(aSAnim[15],1,Len(aSAnim[15])-1)
@@ -1856,7 +1857,7 @@ Return(lHarbour)
 		IF (SubStr(aSAnim[16],-1)==";")
 			ASSIGN aSAnim[16] := SubStr(aSAnim[16],1,Len(aSAnim[16])-1)
 		EndIF
-		
+
 		IF (lRandom)
 			ASSIGN nSAnim		:= abs(HB_RandomInt(1,nLenA))
 			aAdd(aRdnAn,nSAnim)	
