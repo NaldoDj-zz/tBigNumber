@@ -20,7 +20,6 @@ Class tRemaining FROM tTimeCalc
 	DATA cTRemaining  	AS CHARACTER INIT "00:00:00" HIDDEN
 	DATA dEndTime		AS DATE      INIT Ctod("//") HIDDEN
 	DATA dStartTime		AS DATE      INIT Ctod("//") HIDDEN
-	DATA nCount			AS NUMERIC   INIT 0			 HIDDEN
 	DATA nIncTime		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nProgress		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nSRemaining	AS NUMERIC   INIT 0			 HIDDEN
@@ -39,7 +38,7 @@ Class tRemaining FROM tTimeCalc
 
 	Method SetRemaining(nTotal)
 
-	Method Calcule(lIncProgress)
+	Method Calcule(lProgress)
 	
 	Method GetcMediumTime()
 	Method GetcEndTime()
@@ -48,7 +47,6 @@ Class tRemaining FROM tTimeCalc
 	Method GetcTRemaining()
 	Method GetdEndTime()
 	Method GetdStartTime()
-	Method GetnCount()
 	Method GetnIncTime()
 	Method GetnProgress()
 	Method GetnSRemaining()
@@ -77,19 +75,20 @@ Method SetRemaining(nTotal) Class tRemaining
 	self:cTRemaining	:= "00:00:00"
 	self:dEndTime		:= CToD("//")
 	self:dStartTime		:= Date()
-	self:nCount			:= 0
 	self:nIncTime		:= 0
 	self:nProgress		:= 0
 	self:nSRemaining	:= 0
 	self:nTotal			:= nTotal
 Return(self)
 
-Method Calcule(lIncProgress) Class tRemaining
+Method Calcule(lProgress) Class tRemaining
 	Local aEndTime
-	self:nCount++
 	self:RemainingTime()
-	DEFAULT lIncProgress	:= .T.
-	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,IF(lIncProgress,++self:nProgress,self:nProgress),.T.)
+	DEFAULT lProgress	:= .T.
+	IF (lProgress)
+		++self:nProgress
+	EndIF
+	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,self:nProgress,.T.)
 	self:cEndTime			:= self:CalcEndTime()
 	self:cEndTime			:= self:IncTime(Time(),NIL,NIL,self:TimeToSecs(self:cEndTime))
 	aEndTime				:= self:Time2NextDay(self:cEndTime,Date())
@@ -149,9 +148,6 @@ Return(self:dEndTime)
 
 Method GetdStartTime() Class tRemaining
 Return(self:dStartTime)
-
-Method GetnCount() Class tRemaining
-Return(self:nCount)
 
 Method GetnIncTime() Class tRemaining
 Return(self:nIncTime)

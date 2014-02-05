@@ -252,23 +252,26 @@ Static Procedure tBigNTst()
 	
 	MEMVAR __lKillProgress
 	MEMVAR __oRTimeProc
+	MEMVAR __phMutex
 	
- 	Private __nMaxRow     AS NUMBER VALUE MaxRow()
-    Private __nMaxCol     AS NUMBER VALUE MaxCol()
-    Private __nCol        AS NUMBER VALUE Int((__nMaxCol)/2)
-    Private __nRow        AS NUMBER VALUE 0
-	Private __noProgress  AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
+ 	Private __nMaxRow       AS NUMBER VALUE MaxRow()
+    Private __nMaxCol       AS NUMBER VALUE MaxCol()
+    Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
+    Private __nRow          AS NUMBER VALUE 0
+	Private __noProgress    AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
 	
-	Private __cSep 		  AS CHARACTER VALUE Replicate("_",__nMaxCol)
+	Private __cSep 		    AS CHARACTER VALUE Replicate("_",__nMaxCol)
 	
 	Private __lKillProgress AS LOGICAL VALUE .F.
 	Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
+	
+	Private __phMutex := hb_mutexCreate()
  
 	MakeDir(cFld)
     
 #ELSE
 
-    Private __cSep    AS CHARACTER VALUE "---------------------------------------------------------"
+    Private __cSep          AS CHARACTER VALUE "---------------------------------------------------------"
 
 #ENDIF    
 
@@ -326,8 +329,8 @@ Static Procedure tBigNTst()
     #ENDIF    
 
 	#IFDEF __HARBOUR__
-		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
-		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
+		__ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
+		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
 		__ConOut(fhLog,"")												//11	
 		__ConOut(fhLog,"")								  				//12
 		DispOutAt(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
@@ -1642,6 +1645,7 @@ Static Procedure __ConOut(fhLog,e,d)
     MEMVAR __nRow
     
     MEMVAR __oRTimeProc
+    MEMVAR __phMutex
 
 #ENDIF
 
@@ -1664,9 +1668,9 @@ Static Procedure __ConOut(fhLog,e,d)
     
 #IFDEF __HARBOUR__
 	@ 09, 15 CLEAR TO 09,__nMaxCol
-	DispOutAt(09,15,"["+StrZero(__oRTime1:GetnCount(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
+	DispOutAt(09,15,"["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
 	@ 10, 15 CLEAR TO 10,__nMaxCol
-	DispOutAt(10,15,"["+StrZero(__oRTime2:GetnCount(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
+	DispOutAt(10,15,"["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
@@ -1675,7 +1679,10 @@ Static Procedure __ConOut(fhLog,e,d)
 	ASSIGN lSep  := (p==__cSep)
 	ASSIGN lMRow := (__nRow>=__NROWAT)
 	DispOutAt(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
-	__oRTimeProc:Calcule("-------------- END"$p)
+	IF hb_mutexLock(__phMutex)
+		__oRTimeProc:Calcule("-------------- END"$p)
+		hb_mutexUnLock(__phMutex)
+	EndIF	
 #ELSE    
     ? p
 #ENDIF    
@@ -1725,7 +1732,7 @@ Return(lHarbour)
 	    
 	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
-	    Local aSAnim     AS ARRAY						VALUE Array(11)
+	    Local aSAnim     AS ARRAY						VALUE Array(16)
 	    
 		Local cAT        AS CHARACTER
 		Local cRTime     AS CHARACTER
@@ -1740,94 +1747,123 @@ Return(lHarbour)
 		Local nQT        AS NUMBER 
 		Local nLenA		 AS NUMBER						VALUE Len(aSAnim)
 		Local nLenP		 AS NUMBER						VALUE Len(aProgress2)
-		Local nSAnim     AS NUMBER
+		Local nSAnim     AS NUMBER						VALUE 1
 		Local nSizeP     AS NUMBER						VALUE (nProgress2*2)
 		Local nSizeP2    AS NUMBER						VALUE (nSizeP*2)
 		Local nSizeP3    AS NUMBER						VALUE (nSizeP*3)
 		Local nChange	 AS NUMBER
-		Local nProgress  AS NUMBER
+		Local nProgress  AS NUMBER						VALUE 1
 		
 		Local oProgress1 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		Local oProgress2 AS OBJECT CLASS "TSPROGRESS"	VALUE tSProgress():New()
 		
 		MEMVAR __lKillProgress
 		MEMVAR __oRTimeProc
+		MEMVAR __phMutex
 		
-		aSAnim[01] := Replicate((Chr(7)+";"),nSizeP2-1)
+		ASSIGN aSAnim[01] := Replicate(Chr(7)+";",nSizeP2-1)
 		ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,nSizeP2-1)
 		IF (SubStr(aSAnim[01],-1)==";")
 			ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,Len(aSAnim[01])-1)
 		EndIF
 
-		aSAnim[02] := Replicate("-;\;|;/;",nSizeP2-1)
+		ASSIGN aSAnim[02] := Replicate("-;\;|;/;",nSizeP2-1)
 		ASSIGN aSAnim[02] := SubStr(aSAnim[02],1,nSizeP2-1)
 		IF (SubStr(aSAnim[02],-1)==";")
 			ASSIGN aSAnim[02] := SubStr(aSAnim[02],1,Len(aSAnim[02])-1)
 		EndIF
 
-		aSAnim[03] := Replicate((Chr(8)+";"),nSizeP2-1)
+		ASSIGN aSAnim[03] := Replicate(Chr(8)+";",nSizeP2-1)
 		ASSIGN aSAnim[03] := SubStr(aSAnim[03],1,nSizeP2-1)
 		IF (SubStr(aSAnim[03],-1)==";")
 			ASSIGN aSAnim[03] := SubStr(aSAnim[03],1,Len(aSAnim[03])-1)
 		EndIF
 
-		aSAnim[04] := Replicate("*;",nSizeP2-1)
+		ASSIGN aSAnim[04] := Replicate("*;",nSizeP2-1)
 		ASSIGN aSAnim[04] := SubStr(aSAnim[04],1,nSizeP2-1)
 		IF (SubStr(aSAnim[04],-1)==";")
 			ASSIGN aSAnim[04] := SubStr(aSAnim[04],1,Len(aSAnim[04])-1)
 		EndIF
 
-		aSAnim[05] := Replicate(".;",nSizeP2-1)
+		ASSIGN aSAnim[05] := Replicate(".;",nSizeP2-1)
 		ASSIGN aSAnim[05] := SubStr(aSAnim[05],1,nSizeP2-1)
 		IF (SubStr(aSAnim[05],-1)==";")
 			ASSIGN aSAnim[05] := SubStr(aSAnim[05],1,Len(aSAnim[05])-1)
 		EndIF
 
-		aSAnim[06] := Replicate(":);",nSizeP3-1)
+		ASSIGN aSAnim[06] := Replicate(":);",nSizeP3-1)
 		ASSIGN aSAnim[06] := SubStr(aSAnim[06],1,nSizeP3-1)
 		IF (SubStr(aSAnim[06],-1)==";")
 			ASSIGN aSAnim[06] := SubStr(aSAnim[06],1,Len(aSAnim[06])-1)
 		EndIF
 
-		aSAnim[07] := Replicate(">;",nSizeP2-1)
+		ASSIGN aSAnim[07] := Replicate(">;",nSizeP2-1)
 		ASSIGN aSAnim[07] := SubStr(aSAnim[07],1,nSizeP2-1)
 		IF (SubStr(aSAnim[07],-1)==";")
 			ASSIGN aSAnim[07] := SubStr(aSAnim[07],1,Len(aSAnim[07])-1)
 		EndIF
 		
-		aSAnim[08] := Replicate("B;L;A;C;K;T;D;N;;",nSizeP2-1)
+		ASSIGN aSAnim[08] := Replicate("B;L;A;C;K;T;D;N;;",nSizeP2-1)
 		ASSIGN aSAnim[08] := SubStr(aSAnim[08],1,nSizeP2-1)
 		IF (SubStr(aSAnim[08],-1)==";")
 			ASSIGN aSAnim[08] := SubStr(aSAnim[08],1,Len(aSAnim[08])-1)
 		EndIF
 
-		aSAnim[09] := Replicate("T;B;I;G;N;U;M;B;E;R;;",nSizeP2-1)
+		ASSIGN aSAnim[09] := Replicate("T;B;I;G;N;U;M;B;E;R;;",nSizeP2-1)
 		ASSIGN aSAnim[09] := SubStr(aSAnim[09],1,nSizeP2-1)
 		IF (SubStr(aSAnim[09],-1)==";")
 			ASSIGN aSAnim[09] := SubStr(aSAnim[09],1,Len(aSAnim[09])-1)
 		EndIF
 
-		aSAnim[10] := Replicate("H;A;R;B;O;U;R;;",nSizeP2-1)
+		ASSIGN aSAnim[10] := Replicate("H;A;R;B;O;U;R;;",nSizeP2-1)
 		ASSIGN aSAnim[10] := SubStr(aSAnim[10],1,nSizeP2-1)
 		IF (SubStr(aSAnim[10],-1)==";")
 			ASSIGN aSAnim[10] := SubStr(aSAnim[10],1,Len(aSAnim[10])-1)
 		EndIF
 
-		aSAnim[11] := Replicate("N;A;L;D;O;;D;J;;",nSizeP2-1)
+		ASSIGN aSAnim[11] := Replicate("N;A;L;D;O;;D;J;;",nSizeP2-1)
 		ASSIGN aSAnim[11] := SubStr(aSAnim[11],1,nSizeP2-1)
 		IF (SubStr(aSAnim[11],-1)==";")
 			ASSIGN aSAnim[11] := SubStr(aSAnim[11],1,Len(aSAnim[11])-1)
 		EndIF
+
+		ASSIGN aSAnim[12] := Replicate(Chr(175)+";",nSizeP2-1)
+		ASSIGN aSAnim[12] := SubStr(aSAnim[12],1,nSizeP2-1)
+		IF (SubStr(aSAnim[12],-1)==";")
+			ASSIGN aSAnim[12] := SubStr(aSAnim[12],1,Len(aSAnim[12])-1)
+		EndIF
+
+		ASSIGN aSAnim[13] := Replicate(Chr(254)+";",nSizeP2-1)
+		ASSIGN aSAnim[13] := SubStr(aSAnim[13],1,nSizeP2-1)
+		IF (SubStr(aSAnim[13],-1)==";")
+			ASSIGN aSAnim[13] := SubStr(aSAnim[13],1,Len(aSAnim[13])-1)
+		EndIF
+	
+		ASSIGN aSAnim[14] := Replicate(Chr(221)+";"+Chr(222)+";",nSizeP2-1)
+		ASSIGN aSAnim[14] := SubStr(aSAnim[14],1,nSizeP2-1)
+		IF (SubStr(aSAnim[14],-1)==";")
+			ASSIGN aSAnim[14] := SubStr(aSAnim[14],1,Len(aSAnim[14])-1)
+		EndIF
+	
+		ASSIGN aSAnim[15] := Replicate(Chr(223+";;"),nSizeP2-1)
+		ASSIGN aSAnim[15] := SubStr(aSAnim[15],1,nSizeP2-1)
+		IF (SubStr(aSAnim[15],-1)==";")
+			ASSIGN aSAnim[15] := SubStr(aSAnim[15],1,Len(aSAnim[15])-1)
+		EndIF
+
+		ASSIGN aSAnim[16] := Replicate(Chr(176)+";;"+Chr(177)+";;"+Chr(178)+";;",nSizeP2-1)
+		ASSIGN aSAnim[16] := SubStr(aSAnim[16],1,nSizeP2-1)
+		IF (SubStr(aSAnim[16],-1)==";")
+			ASSIGN aSAnim[16] := SubStr(aSAnim[16],1,Len(aSAnim[16])-1)
+		EndIF
 		
 		IF (lRandom)
-			nSAnim		:= abs(HB_RandomInt(1,nLenA))
+			ASSIGN nSAnim		:= abs(HB_RandomInt(1,nLenA))
 			aAdd(aRdnAn,nSAnim)	
-		    nProgress	:= abs(HB_RandomInt(1,nLenP))
+		    ASSIGN nProgress	:= abs(HB_RandomInt(1,nLenP))
 	    	aAdd(aRdnPG,nProgress)
-		Else
-			nSAnim		:= 1
-			nProgress	:= 1
 		EndIF
+		
 		oProgress2:SetProgress(aSAnim[nSAnim])
 	    cProgress := aProgress2[nProgress]
 		
@@ -1835,7 +1871,7 @@ Return(lHarbour)
 			
 			DispOutAt(3,nCol,oProgress1:Eval(),"r+/n")
 			
-			IF (oProgress2:GetnProgress()>=oProgress2:GetnMax()).or.(oProgress2:GetnProgress()<=0)
+			IF (oProgress2:GetnProgress()==oProgress2:GetnMax())
 				lChange := (.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
 				IF (lChange)
 					IF ("SHUTTLE"$cProgress)
@@ -1848,27 +1884,26 @@ Return(lHarbour)
 						While (aScan(aRdnAn,{|r|r==(nSAnim:=abs(HB_RandomInt(1,nLenA)))})>0)
 							__tbnSleep(nSLEEP)
 						End While
-						aAdd(aRdnAn,nSAnim)
+						aAdd(aRdnAn,nSAnim)						
+						oProgress2:SetProgress(aSAnim[nSAnim])						
 						IF (Len(aRdnPG)==nLenP)
 							aSize(aRdnPG,0)
 						EndIF
-						lCScreen	:= .T.
-						oProgress2:SetProgress(aSAnim[nSAnim])
 						While (aScan(aRdnPG,{|r|r==(nProgress:=abs(HB_RandomInt(1,nLenP)))})>0)
 							__tbnSleep(nSLEEP)
 						End While
-						aAdd(aRdnPG,nProgress)					
+						aAdd(aRdnPG,nProgress)
 					Else
-						IF (++nSAnim>nLenA)
-							nSAnim 		:= 1
-						EndIF
 						IF (++nProgress>nLenP)
-							nProgress	:= 1
-							lCScreen	:= .T.
+							ASSIGN nProgress	:= 1
+							IF (++nSAnim>nLenA)
+								ASSIGN nSAnim 	:= 1
+							EndIF
 							oProgress2:SetProgress(aSAnim[nSAnim])
 						EndIF
 					EndIF	
-					ASSIGN cProgress   := aProgress2[nProgress]
+					ASSIGN lCScreen		:= .T.
+					ASSIGN cProgress	:= aProgress2[nProgress]
 				EndIF
 			EndIF
 			
@@ -1884,13 +1919,23 @@ Return(lHarbour)
 			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
 
 			IF (cRTime==cLRTime)
-				__oRTimeProc:Calcule(.F.)
+				IF hb_mutexLock(__phMutex)
+					__oRTimeProc:Calcule(.F.)
+					hb_mutexUnLock(__phMutex)
+				EndIF					
 			EndIF	
 
 			cLRTime := cRTime
 
-			ASSIGN cRTime := "["+hb_ntos(__oRTimeProc:GetnProgress())+"/"+hb_ntos(__oRTimeProc:GetnTotal())+"]["+DtoC(__oRTimeProc:GetdEndTime())+"]["+__oRTimeProc:GetcEndTime()+"]"
-			
+			IF hb_mutexLock(__phMutex)
+				ASSIGN cRTime := "["+hb_ntos(__oRTimeProc:GetnProgress())
+				ASSIGN cRTime += "/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
+				ASSIGN cRTime += "["+DtoC(__oRTimeProc:GetdEndTime())+"]"
+				ASSIGN cRTime += "["+__oRTimeProc:GetcEndTime()+"]"
+				ASSIGN cRTime += "["+__oRTimeProc:GetcMediumTime()+"]"
+				hb_mutexUnLock(__phMutex)
+			EndIF
+
 			DispOutAt(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
 			DispOutAt(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
 			

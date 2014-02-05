@@ -25,18 +25,27 @@
         #xcommand DEFAULT =>
 
         /* Default parameters management */
-        #if defined( __ARCH64BIT__ ) .or. defined( __PLATFORM__WINCE )
-          #xcommand DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-                        => ;
-                        <uVar1> := iif( <uVar1> == NIL, <uVal1>, <uVar1> ) ;
-                        [; <uVarN> := iif( <uVarN> == NIL, <uValN>, <uVarN> ) ]
-        #else
-            #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
+        #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
                         => ;
                         iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
                         [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
-        #endif
+		
 
+		/*
+			TODO: Remover quando atualizar a plataforma
+		*/
+		#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+			#xtranslate hb_BPeek(<c>,<p>)          => Asc(SubStr(<c>,<p>,1))
+			#xtranslate hb_BCode(<c>)              => Asc(<c>)
+			#xtranslate hb_BChar(<n>)              => Chr(<n>)
+			#xtranslate hb_BLen(<c>)               => Len(<c>)
+			#xtranslate hb_BSubStr(<c>,<p>[,<l>])  => SubStr(<c>,<p>,<l>)
+			#xtranslate hb_BLeft(<c>,<l>)          => Left(<c>,<l>)
+			#xtranslate hb_BRight(<c>,<l>)         => Right(<c>,<l>)
+			#xtranslate hb_BStrTran(<c>,<s>[,<r>]) => StrTran(<c>,<s>,<r>)
+			#xtranslate hb_IsFunction(<c>)         => (Type(<c>+"()")=="UI")
+		#endif
+		
         #IFNDEF CRLF
             #DEFINE CRLF hb_eol()
         #ENDIF

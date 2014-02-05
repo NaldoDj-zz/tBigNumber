@@ -220,16 +220,13 @@ Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 		nMiliSecs	:= Int(nMiliSecs)
 	
 		cMediumTime	:= self:SecsToTime(nMediumTime)
+
+	EndIF
 	
-		DEFAULT lMiliSecs	:= .F.
-		IF (;
-				(lMiliSecs);
-				.and.;
-				(nMiliSecs>0);
-			)
-			cMediumTime += (":"+StrZero(nMiliSecs,IF(nMiliSecs>999,4,3)))
-		EndIF
-	
+	DEFAULT lMiliSecs		:= .T.
+	IF (lMiliSecs)
+		DEFAULT nMiliSecs	:= 0
+ 		cMediumTime += (":"+StrZero(nMiliSecs,IF(nMiliSecs>999,4,3)))
 	EndIF
 
 Return(cMediumTime)

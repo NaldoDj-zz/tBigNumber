@@ -50,15 +50,21 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 Static __cErrorLogFile
 
 Procedure ErrorSys
+#ifdef __TBNHTMLERROR__
     Local cPathErr := tbNCurrentFolder()+hb_ps()+"tbigN_err"+hb_ps()
     Local cFileErr := cPathErr+"tbNErrorLog.html"
-    SetErrorLogFile(cFileErr)
+#endif //__TBNHTMLERROR__
     ErrorBlock({|oError|DefError(oError)})
-    MakeDir(cPathErr)    
+#ifdef __TBNHTMLERROR__
+    MakeDir(cPathErr)   
+    SetErrorLogFile(cFileErr)
     #ifndef __XHARBOUR__
     	Set(_SET_HBOUTLOG,cPathErr+"tbN.Log")
     	Set(_SET_HBOUTLOGINFO,"tBigNumber")
-    #endif
+    #endif //__XHARBOUR__
+#else
+	tBNErrorSys()
+#endif //__TBNHTMLERROR__
 Return
 
 Procedure SetErrorLogFile(cFile)
@@ -132,21 +138,21 @@ Static Function ErrorMessage(oError)
     Local cMessage := (IF(oError:severity>ES_WARNING,"Error","Warning")+" ")
 
     // add subsystem name if available
-    IF ISCHARACTER(oError:subsystem)
+    IF HB_ISSTRING(oError:subsystem)
         cMessage += oError:subsystem()
     ELSE
         cMessage += "???"
     ENDIF
 
     // add subsystem's error code if available
-    IF ISNUMBER(oError:subCode)
+    IF HB_ISNUMERIC(oError:subCode)
         cMessage += "/"+hb_ntos(oError:subCode)
     ELSE
         cMessage += "/???"
     ENDIF
 
     // add error description if available
-    IF ISCHARACTER(oError:description)
+    IF HB_ISSTRING(oError:description)
         cMessage += "  "+oError:description
     ENDIF
 

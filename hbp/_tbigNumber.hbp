@@ -10,6 +10,7 @@
 ../source/tRemaining.prg
 ../source/__hbeTthD.prg
 ../source/__hbPITthD.prg
+../source/tBigNError.prg
+../source/tBigNErrorSys.prg
 
 -o../lib/${hb_plat}/${hb_comp}/${hb_name}
-

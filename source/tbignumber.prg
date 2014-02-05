@@ -3660,14 +3660,10 @@ Return(r)
 			s := "0"	
 		EndIF
 	
-		IF Len(s)<n
-			s := PadL(s,n,"0")
-		EndIF
-	
 	Return(s)
-	
+	                                    
 	Static Function dbNumber(cAlias)
-		Local aStru		:= {{"FN","N",4,0}}
+		Local aStru		:= {{"FN","N",18,0}}
 		Local cFile
 	#IFNDEF __HARBOUR__
 		Local cLDriver
@@ -3905,10 +3901,6 @@ Return(r)
 			s := "0"
 		EndIF
 	
-		IF Len(s)<n
-			s := PadL(s,n,"0")
-		EndIF
-	
 	Return(s)
 	
 	#ELSE
@@ -3966,8 +3958,7 @@ Return(r)
 		#ELSE
 			Static Function Add(a,b,n,nB)
 				Local y := n+1
-				Local c := tBigNAdd(a,b,n,y,nB)
-			Return(cGetcN(c,y))
+			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
 				HB_FUNC( TBIGNADD ){	
 					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
@@ -4050,8 +4041,7 @@ Return(r)
 			Return(cGetcN(c,y))
 		#ELSE
 			Static Function Sub(a,b,n,nB)
-				Local c := tBigNSub(a,b,n,nB)
-			Return(cGetcN(c,n))
+			Return(cGetcN(tBigNSub(a,b,n,nB),n))
 			#pragma BEGINDUMP
 				HB_FUNC( TBIGNSUB ){	
 					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
@@ -4179,12 +4169,10 @@ Return(r)
 			Return(cGetcN(c,y))
 		#ELSE
 			Static Function Mult(cN1,cN2,n,nB)
-				Local c
 				Local a	:= tBigNInvert(cN1,n)
 				Local b	:= tBigNInvert(cN2,n)
 				Local y := n+n
-				c := tBigNMult(a,b,n,y,nB)
-			Return(cGetcN(c,y))			
+			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
 				HB_FUNC( TBIGNMULT ){
 					
@@ -4262,13 +4250,11 @@ Return(r)
 			Sintaxe     : cGetcN(c,n) -> s
 		*/
 		Static Function cGetcN(c,n)
-		
 		#IFDEF __HARBOUR__
-			Local s := SubStr(tBigNInvert(c,n),-n)
+		Return(tBigNInvert(c,n))
 		#ELSE		
 			Local s	:= ""
 			Local y	:= n
-		
 			While y>=1
 			#IFDEF __PROTHEUS__
 				While y>=1 .and. SubStr(c,y,1)=="0"
@@ -4286,16 +4272,11 @@ Return(r)
 					y--
 				End While
 			End While
-		#ENDIF
 			IF s==""
 				s := "0"
 			EndIF
-		
-			IF Len(s)<n
-				s := PadL(s,n,"0")
-			EndIF
-		
 		Return(s)
+		#ENDIF
 	
 	#ENDIF
 
