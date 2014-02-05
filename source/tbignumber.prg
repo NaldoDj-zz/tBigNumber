@@ -3968,12 +3968,7 @@ Return(r)
 				Local y := n+1
 			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
-				HB_FUNC( TBIGNADD ){	
-					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
-					HB_SIZE y  = (HB_SIZE)hb_parnint(4);;
-					HB_ISIZ nB = hb_parns(5);
+				char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
 					char * c = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
 					int v = 0;
@@ -3994,7 +3989,15 @@ Return(r)
 						v = v1;
 						++k;
 					}
-					hb_retclen_buffer(c,y);
+					return c;
+				}
+				HB_FUNC( TBIGNADD ){	
+					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
+					const HB_ISIZ nB = hb_parns(5);
+					hb_retclen_buffer(__TBIGNADD(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4051,12 +4054,7 @@ Return(r)
 			Static Function Sub(a,b,n,nB)
 			Return(cGetcN(tBigNSub(a,b,n,nB),n))
 			#pragma BEGINDUMP
-				HB_FUNC( TBIGNSUB ){	
-					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
-					HB_SIZE y  = n;
-					HB_ISIZ nB = hb_parns(4);
+				char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
 					char * c = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
 					int v = 0;
@@ -4077,7 +4075,15 @@ Return(r)
 						v = v1;
 						++k;
 					}
-					hb_retclen_buffer(c,y);
+					return c;
+				}
+				HB_FUNC( TBIGNSUB ){	
+					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const HB_SIZE y  = n;
+					const HB_ISIZ nB = hb_parns(4);
+					hb_retclen_buffer(__TBIGNSUB(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4182,22 +4188,13 @@ Return(r)
 				Local y := n+n
 			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
-				HB_FUNC( TBIGNMULT ){
+				char * __TBIGNMULT (const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
 					
-					const char * a = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
-					HB_SIZE y  = (HB_SIZE)hb_parnint(4);
-					
-					HB_ISIZ nB = hb_parns(5);
-												
 					char * c = (char*)hb_xgrab(y+1);
-
+					
 					HB_SIZE i = 0;
 					HB_SIZE k = 0;
 					HB_SIZE l = 1;
-					
 					HB_SIZE s;
 					HB_SIZE j;
 					
@@ -4245,7 +4242,15 @@ Return(r)
 						}
 						l++;
 					}		
-					hb_retclen_buffer(c,y);
+					return c;
+				}
+				HB_FUNC( TBIGNMULT ){
+					const char * a = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
+					const HB_ISIZ nB = hb_parns(5);
+					hb_retclen_buffer(__TBIGNMULT(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4316,17 +4321,20 @@ Return(r)
 	Return(s)
 #ELSE
 	#pragma BEGINDUMP
-		HB_FUNC( TBIGNINVERT ){
-			PHB_ITEM pItem = hb_param(1,HB_IT_STRING);
-			HB_SIZE s = (HB_SIZE)hb_parnint(2);
+		char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
 			HB_SIZE f = s;
 			HB_SIZE t = 0;
 			char * szStringTo = (char*)hb_xgrab(s+1);
-			const char * szStringFrom = hb_itemGetCPtr(pItem);
 			for(;f;){
 				szStringTo[t++]=szStringFrom[--f];
 			}
-			hb_retclen_buffer(szStringTo,s);
+			return szStringTo;
+		}
+		HB_FUNC( TBIGNINVERT ){
+			const PHB_ITEM pItem = hb_param(1,HB_IT_STRING);
+			const HB_SIZE s = (HB_SIZE)hb_parnint(2);
+			const char * szStringFrom = hb_itemGetCPtr(pItem);
+			hb_retclen_buffer(__TBIGNINVERT(szStringFrom,s),s);
 		}
 	#pragma ENDDUMP
 #ENDIF
