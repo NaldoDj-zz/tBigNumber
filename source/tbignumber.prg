@@ -3991,7 +3991,7 @@ Return(r)
 					a += n-1;
 					b += n-1;
 					while (n--){
-						v += hb_strVal((char*)a--,(HB_SIZE)1)+hb_strVal((char*)b--,(HB_SIZE)1);
+						v += hb_strVal((char*)a--,1)+hb_strVal((char*)b--,1);
 						if ( v>=nB ){
 							v  -= nB;
 							v1 = 1;
@@ -4077,7 +4077,7 @@ Return(r)
 					a += n-1;
 					b += n-1;
 					while (n--){
-						v += hb_strVal((char*)a--,(HB_SIZE)1)-hb_strVal((char*)b--,(HB_SIZE)1);
+						v += hb_strVal((char*)a--,1)-hb_strVal((char*)b--,1);
 						if ( v<0 ){
 							v  += nB;
 							v1 = -1;
@@ -4222,7 +4222,7 @@ Return(r)
 						s = 0;
 						j = i;
 						while (s<=i){
-							v += hb_strVal(&a[s++],(HB_SIZE)1)*hb_strVal(&b[j--],(HB_SIZE)1);
+							v += hb_strVal(&a[s++],1)*hb_strVal(&b[j--],1);
 						}
 						if (v>=nB){
 							v1 = v/nB;
@@ -4241,7 +4241,7 @@ Return(r)
 						s = n;
 						j = l;
 						while (s>=l){
-							v += hb_strVal(&a[s--],(HB_SIZE)1)*hb_strVal(&b[j++],(HB_SIZE)1);
+							v += hb_strVal(&a[s--],1)*hb_strVal(&b[j++],1);
 						}
 						if (v>=nB){
 							v1 = v/nB;
