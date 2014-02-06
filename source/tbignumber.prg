@@ -2,6 +2,7 @@
 #IFDEF __HARBOUR__
 	#pragma BEGINDUMP
 		#include "hbapi.h"
+		#include "hbstack.h"
 		#include "hbapiitm.h"
 	#pragma ENDDUMP
 #ENDIF	
@@ -609,9 +610,33 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		CASE nFP==1
 		    self:cInt := "0"
 		    self:cDec := SubStr(uBigN,nFP+1)
+			nFP		  := Len(self:cDec)
+			While nFP>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
+			End While
+			IF self:cDec==SubStr(__cstcZ0,1,nFP)
+				IF self:nBase==10
+					self:cDec := "0"
+				Else
+					self:cDec := ""
+				EndIF
+			EndIF
 		OTHERWISE
 		    self:cInt := SubStr(uBigN,1,nFP-1)
 		    self:cDec := SubStr(uBigN,nFP+1)
+			nFP		  := Len(self:cDec)
+			While nFP>__nstcZ0
+				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+				__nstcZ0+=__nstcZ0
+			End While
+			IF self:cDec==SubStr(__cstcZ0,1,nFP)
+				IF self:nBase==10
+					self:cDec := "0"
+				Else
+					self:cDec := ""
+				EndIF
+			EndIF
 		ENDCASE
 		
 		IF self:nBase<>10
@@ -3164,11 +3189,6 @@ Static Function eMult(cN1,cN2,nAcc)
 	Local oN1		:= tBigNumber():New(cN1)
 
 	Local oNR
-	
-	Local nBkpAcc	:= __nSetDecimals 
-
-	DEFAULT nAcc	:= __nSetDecimals
-	__nSetDecimals	:= nAcc
 
 	oPe	:= __o1:Clone()
 	oPd := tBigNumber():New(cN2)
@@ -3179,20 +3199,20 @@ Static Function eMult(cN1,cN2,nAcc)
 		IF oPe:gte(oN1)
 			EXIT
 		EndIF
-		oPe:SetValue(oPe:Add(oPe))
-		oPd:SetValue(oPd:Add(oPd))
+		oPe:SetValue(oPe:Add(oPe,NIL,NIL,NIL,nAcc))
+		oPd:SetValue(oPd:Add(oPd,NIL,NIL,NIL,nAcc))
 	End While
 
 	ocT	:= __o0:Clone()
 	While nI>0
-		ocT:SetValue(ocT:Add(aE[nI][1]))
+		ocT:SetValue(ocT:Add(aE[nI][1],NIL,NIL,NIL,nAcc))
 		IF ocT:lte(oN1)
 			aE[nI][3] := .T. 
 			IF ocT:eq(oN1)
 				EXIT
 			EndIF	
 		Else
-			ocT:SetValue(ocT:Sub(aE[nI][1]))
+			ocT:SetValue(ocT:Sub(aE[nI][1],NIL,NIL,NIL,nAcc))
 		EndIF
 		--nI
 	End While
@@ -3200,11 +3220,9 @@ Static Function eMult(cN1,cN2,nAcc)
 	oNR	:= tBigNumber():New()
 	For nI := 1 To Len(aE) 
 		IF aE[nI][3]
-			oNR:SetValue(oNR:Add(aE[nI][2]))
+			oNR:SetValue(oNR:Add(aE[nI][2],NIL,NIL,NIL,nAcc))
 		EndIF
 	Next nI
-
-	__nSetDecimals := nBkpAcc
 
 Return(oNR)
 	
@@ -3225,62 +3243,55 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 
 	Local oPe
 	Local oPd
-    
-	Local nBkpAcc	:= __nSetDecimals
-
-	__nSetDecimals	:= nAcc
 	
-	__oeDivN:SetValue(cN)
-	__oeDivD:SetValue(cD)
-	__oeDivR:SetValue(__o0)
+	__oeDivN:SetValue(cN,NIL,NIL,NIL,nAcc)
+	__oeDivD:SetValue(cD,NIL,NIL,NIL,nAcc)
+	__oeDivR:SetValue(__o0,NIL,NIL,NIL,nAcc)
 
 	oPe	:= __o1:Clone()
 	oPd	:= __oeDivD:Clone()
 
-	While .T.
+	While oPd:lte(__oeDivN)
 		++nI
 		aAdd(aE,{oPe:Clone(),oPd:Clone(),.F.})
-		oPe:SetValue(oPe:Add(oPe))
-		oPd:SetValue(oPd:Add(oPd))
-		IF oPd:gt(__oeDivN)
-			EXIT
-		EndIF
+		oPe:SetValue(oPe:Add(oPe,NIL,NIL,NIL,nAcc))
+		oPd:SetValue(oPd:Add(oPd,NIL,NIL,NIL,nAcc))
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2]))
+		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2],NIL,NIL,NIL,nAcc))
 		IF __oeDivR:lte(__oeDivN)
 			aE[nI][3] := .T.
 			IF __oeDivR:eq(__oeDivN)
 				EXIT
-			EndIF	
+			EndIF
 		Else
-			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2]))
+			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2],NIL,NIL,NIL,nAcc))
 		EndIF
 		--nI
 	End While
 
-	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR))
+	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR,NIL,NIL,NIL,nAcc))
+	
 	cRDiv := __oeDivR:ExactValue(.T.)
-	__oeDivR:SetValue(__o0)
+	
+	__oeDivR:SetValue(__o0,NIL,NIL,NIL,nAcc)
 	
 	For nI := 1 To Len(aE)
 		IF aE[nI][3]
-			__oeDivR:SetValue(__oeDivR:Add(aE[nI][1]))
+			__oeDivR:SetValue(__oeDivR:Add(aE[nI][1],NIL,NIL,NIL,nAcc))
 		EndIF
 	Next nI
 
-	__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
+	__oeDivR:SetValue(__oeDivR,NIL,cRDiv,NIL,nAcc)
 	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
-		cRDiv := SubStr(cRDiv,1,Len(cRDiv) -1)
+		cRDiv := SubStr(cRDiv,1,Len(cRDiv)-1)
 		__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
 		IF Empty(cRDiv)
-			cRDiv := "0"	
-			__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
+			cRDiv := "0"
+			__oeDivR:SetValue(__oeDivR,NIL,cRDiv,NIL,nAcc)
 		EndIF
 	EndIF
-
-	__nSetDecimals := nBkpAcc
 
 Return(__oeDivR:Clone())
 
@@ -3968,10 +3979,10 @@ Return(r)
 				Local y := n+1
 			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
-				char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
-					char * c = (char*)hb_xgrab(y+1);
+				static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
+					char * c  = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
-					int v = 0;
+					int v     = 0;
 					int v1;
 					a += n-1;
 					b += n-1;
@@ -3992,12 +4003,12 @@ Return(r)
 					return c;
 				}
 				HB_FUNC( TBIGNADD ){	
-					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 					const HB_ISIZ nB = hb_parns(5);
-					hb_retclen_buffer(__TBIGNADD(a,b,n,y,nB),y);
+					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNADD(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4054,10 +4065,10 @@ Return(r)
 			Static Function Sub(a,b,n,nB)
 			Return(cGetcN(tBigNSub(a,b,n,nB),n))
 			#pragma BEGINDUMP
-				char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
-					char * c = (char*)hb_xgrab(y+1);
+				static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
+					char * c  = (char*)hb_xgrab(y+1);
 					HB_SIZE k = 0;
-					int v = 0;
+					int v     = 0;
 					int v1;
 					a += n-1;
 					b += n-1;
@@ -4078,12 +4089,12 @@ Return(r)
 					return c;
 				}
 				HB_FUNC( TBIGNSUB ){	
-					const char * a  = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b  = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 					const HB_SIZE y  = n;
 					const HB_ISIZ nB = hb_parns(4);
-					hb_retclen_buffer(__TBIGNSUB(a,b,n,y,nB),y);
+					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNSUB(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4188,9 +4199,9 @@ Return(r)
 				Local y := n+n
 			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
 			#pragma BEGINDUMP
-				char * __TBIGNMULT (const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
+				static char * __TBIGNMULT (const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
 					
-					char * c = (char*)hb_xgrab(y+1);
+					char * c  = (char*)hb_xgrab(y+1);
 					
 					HB_SIZE i = 0;
 					HB_SIZE k = 0;
@@ -4245,12 +4256,12 @@ Return(r)
 					return c;
 				}
 				HB_FUNC( TBIGNMULT ){
-					const char * a = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n  = (HB_SIZE)hb_parnint(3);
+					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 					const HB_ISIZ nB = hb_parns(5);
-					hb_retclen_buffer(__TBIGNMULT(a,b,n,y,nB),y);
+					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
 				}
 			#pragma ENDDUMP
 		#ENDIF
@@ -4321,9 +4332,9 @@ Return(r)
 	Return(s)
 #ELSE
 	#pragma BEGINDUMP
-		char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
-			HB_SIZE f = s;
-			HB_SIZE t = 0;
+		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
+			HB_SIZE f         = s;
+			HB_SIZE t         = 0;
 			char * szStringTo = (char*)hb_xgrab(s+1);
 			for(;f;){
 				szStringTo[t++]=szStringFrom[--f];
@@ -4331,10 +4342,10 @@ Return(r)
 			return szStringTo;
 		}
 		HB_FUNC( TBIGNINVERT ){
-			const PHB_ITEM pItem = hb_param(1,HB_IT_STRING);
-			const HB_SIZE s = (HB_SIZE)hb_parnint(2);
+			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
+			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
 			const char * szStringFrom = hb_itemGetCPtr(pItem);
-			hb_retclen_buffer(__TBIGNINVERT(szStringFrom,s),s);
+			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
 		}
 	#pragma ENDDUMP
 #ENDIF

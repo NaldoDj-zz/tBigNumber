@@ -372,8 +372,8 @@ STATIC FUNCTION LogError( oerr )
       FWriteLine( nHandle, "xHarbour version...: " + Version() )
       FWriteLine( nHandle, "xHarbour built on..: " + hb_BuildDate() ) 
 #else
-      FWriteLine( nHandle, "Harbour version...:  " + Version() )
-      FWriteLine( nHandle, "Harbour built on..:  " + hb_BuildDate() ) 
+      FWriteLine( nHandle, "Harbour version....:  " + Version() )
+      FWriteLine( nHandle, "Harbour built on...:  " + hb_BuildDate() ) 
 #endif      
       FWriteLine( nHandle, "C/C++ compiler.....: " + hb_Compiler() )
 
