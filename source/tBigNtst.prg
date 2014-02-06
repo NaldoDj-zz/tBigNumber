@@ -1733,7 +1733,7 @@ Return(lHarbour)
 	    
 	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
-	    Local aSAnim     AS ARRAY						VALUE Array(17)
+	    Local aSAnim     AS ARRAY						VALUE Array(16)
 	    
 		Local cAT        AS CHARACTER
 		Local cRTime     AS CHARACTER

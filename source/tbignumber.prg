@@ -1,11 +1,4 @@
 #include "tBigNumber.ch"
-#IFDEF __HARBOUR__
-	#pragma BEGINDUMP
-		#include "hbapi.h"
-		#include "hbstack.h"
-		#include "hbapiitm.h"
-	#pragma ENDDUMP
-#ENDIF	
 
 #IFDEF __PROTHEUS__
 	Static __cEnvSrv
@@ -3982,39 +3975,6 @@ Return(r)
 			Static Function Add(a,b,n,nB)
 				Local y := n+1
 			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
-			#pragma BEGINDUMP
-				static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
-					char * c  = (char*)hb_xgrab(y+1);
-					HB_SIZE k = 0;
-					int v     = 0;
-					int v1;
-					a += n-1;
-					b += n-1;
-					while (n--){
-						v += hb_strVal((char*)a--,1)+hb_strVal((char*)b--,1);
-						if ( v>=nB ){
-							v  -= nB;
-							v1 = 1;
-						}	
-						else{
-							v1 = 0;
-						}
-						c[k]   = "0123456789"[v%nB];
-						c[k+1] = "0123456789"[v1%nB];
-						v = v1;
-						++k;
-					}
-					return c;
-				}
-				HB_FUNC( TBIGNADD ){	
-					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
-					const HB_ISIZ nB = hb_parns(5);
-					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNADD(a,b,n,y,nB),y);
-				}
-			#pragma ENDDUMP
 		#ENDIF
 		
 		/*
@@ -4068,39 +4028,6 @@ Return(r)
 		#ELSE
 			Static Function Sub(a,b,n,nB)
 			Return(cGetcN(tBigNSub(a,b,n,nB),n))
-			#pragma BEGINDUMP
-				static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
-					char * c  = (char*)hb_xgrab(y+1);
-					HB_SIZE k = 0;
-					int v     = 0;
-					int v1;
-					a += n-1;
-					b += n-1;
-					while (n--){
-						v += hb_strVal((char*)a--,1)-hb_strVal((char*)b--,1);
-						if ( v<0 ){
-							v  += nB;
-							v1 = -1;
-						}	
-						else{
-							v1 = 0;
-						}
-						c[k]   = "0123456789"[v%nB];
-						c[k+1] = "0123456789"[v1%nB];
-						v = v1;
-						++k;
-					}
-					return c;
-				}
-				HB_FUNC( TBIGNSUB ){	
-					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-					const HB_SIZE y  = n;
-					const HB_ISIZ nB = hb_parns(4);
-					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNSUB(a,b,n,y,nB),y);
-				}
-			#pragma ENDDUMP
 		#ENDIF
 		/*
 			Funcao		: Mult
@@ -4202,72 +4129,6 @@ Return(r)
 				Local b	:= tBigNInvert(cN2,n)
 				Local y := n+n
 			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
-			#pragma BEGINDUMP
-				static char * __TBIGNMULT (const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
-					
-					char * c  = (char*)hb_xgrab(y+1);
-					
-					HB_SIZE i = 0;
-					HB_SIZE k = 0;
-					HB_SIZE l = 1;
-					HB_SIZE s;
-					HB_SIZE j;
-					
-					int v = 0;
-					int v1;
-
-					n-=1;
-					
-					while (i<=n){
-						s = 0;
-						j = i;
-						while (s<=i){
-							v += hb_strVal(&a[s++],1)*hb_strVal(&b[j--],1);
-						}
-						if (v>=nB){
-							v1 = v/nB;
-							v -= v1*nB;
-						}else{
-							v1 = 0;
-						}
-						c[k]   = "0123456789"[v%nB];
-						c[k+1] = "0123456789"[v1%nB];
-						v = v1;
-						k++;
-						i++;
-					}
-				
-					while (l<=n){
-						s = n;
-						j = l;
-						while (s>=l){
-							v += hb_strVal(&a[s--],1)*hb_strVal(&b[j++],1);
-						}
-						if (v>=nB){
-							v1 = v/nB;
-							v -= v1*nB;
-						}else{
-							v1 = 0;	
-						}
-						c[k]   = "0123456789"[v%nB];
-						c[k+1] = "0123456789"[v1%nB];
-						v = v1;
-						if (++k>=y){
-							break;
-						}
-						l++;
-					}		
-					return c;
-				}
-				HB_FUNC( TBIGNMULT ){
-					const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-					const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
-					HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-					const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
-					const HB_ISIZ nB = hb_parns(5);
-					hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
-				}
-			#pragma ENDDUMP
 		#ENDIF
 
 		/*
@@ -4334,24 +4195,6 @@ Return(r)
 		#ENDIF
 		End While
 	Return(s)
-#ELSE
-	#pragma BEGINDUMP
-		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
-			HB_SIZE f         = s;
-			HB_SIZE t         = 0;
-			char * szStringTo = (char*)hb_xgrab(s+1);
-			for(;f;){
-				szStringTo[t++]=szStringFrom[--f];
-			}
-			return szStringTo;
-		}
-		HB_FUNC( TBIGNINVERT ){
-			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
-			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
-			const char * szStringFrom = hb_itemGetCPtr(pItem);
-			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
-		}
-	#pragma ENDDUMP
 #ENDIF
 
 /*
@@ -4392,13 +4235,232 @@ Static Function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 #IFDEF __PROTHEUS__
+
 	Static Function __eTthD()
 	Return(StaticCall(__pteTthD,__eTthD))
 	Static Function __PITthD()
 	Return(StaticCall(__ptPITthD,__PITthD))
-#ELSE
+
+#ELSE //__HARBOUR__
+
 	Static Function __eTthD()
 	Return(__hbeTthD())
 	Static Function __PITthD()
 	Return(__hbPITthD())
+	
+#ENDIF //__PROTHEUS__
+
+#IFDEF __HARBOUR__
+
+	#pragma BEGINDUMP
+
+		#include <stdio.h>
+		#include <string.h>
+		#include <hbapi.h>
+		#include <hbstack.h>
+		#include <hbapiitm.h>
+
+		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
+		{
+			HB_SIZE nLen    = strlen(szText);       
+			char * szResult = (char*)hb_xgrab((nLen*nTimes)+1);
+			char * szPtr    = szResult;
+			HB_ISIZ n;
+			for(n=0;n<nTimes;++n)
+			{
+				hb_xmemcpy(szPtr,szText,nLen);
+				szPtr += nLen;
+			}
+			return szResult;
+		}
+
+		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{
+		  if( szPad == NULL )
+			  szPad = " ";
+		  const char *padding=__TBIGNReplicate(szPad,nLen); 
+		  char * pbuffer = (char*)hb_xgrab(nLen+1);
+		  int padLen = nLen-strlen(szItem);
+		  if(padLen<0) padLen=0;
+		  sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
+		  return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADL ){	  
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
+
+		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{	
+			if( szPad == NULL )
+			  szPad = " ";
+			const char *padding=__TBIGNReplicate(szPad,nLen); 
+			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			int padLen = nLen-strlen(szItem);
+			if(padLen<0) padLen=0;
+			sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
+			return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADR ){
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
+
+		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
+			HB_SIZE f         = s;
+			HB_SIZE t         = 0;
+			char * szStringTo = (char*)hb_xgrab(s+1);
+			for(;f;){
+				szStringTo[t++]=szStringFrom[--f];
+			}
+			return szStringTo;
+		}
+
+		HB_FUNC( TBIGNINVERT ){
+			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
+			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
+			const char * szStringFrom = hb_itemGetCPtr(pItem);
+			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
+		}
+
+		static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
+			char * c  = (char*)hb_xgrab(y+1);
+			HB_SIZE k = 0;
+			int v     = 0;
+			int v1;
+			a += n-1;
+			b += n-1;
+			while (n--){
+				v += hb_strVal((char*)a--,1)+hb_strVal((char*)b--,1);
+				if ( v>=nB ){
+					v  -= nB;
+					v1 = 1;
+				}	
+				else{
+					v1 = 0;
+				}
+				c[k]   = "0123456789"[v%nB];
+				c[k+1] = "0123456789"[v1%nB];
+				v = v1;
+				++k;
+			}
+			return c;
+		}
+
+		HB_FUNC( TBIGNADD ){	
+			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
+			const HB_ISIZ nB = hb_parns(5);
+			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNADD(a,b,n,y,nB),y);
+		}
+   
+		static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
+			char * c  = (char*)hb_xgrab(y+1);
+			HB_SIZE k = 0;
+			int v     = 0;
+			int v1;
+			a += n-1;
+			b += n-1;
+			while (n--){
+				v += hb_strVal((char*)a--,1)-hb_strVal((char*)b--,1);
+				if ( v<0 ){
+					v  += nB;
+					v1 = -1;
+				}	
+				else{
+					v1 = 0;
+				}
+				c[k]   = "0123456789"[v%nB];
+				c[k+1] = "0123456789"[v1%nB];
+				v = v1;
+				++k;
+			}
+			return c;
+		}
+
+		HB_FUNC( TBIGNSUB ){	
+			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y  = n;
+			const HB_ISIZ nB = hb_parns(4);
+			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNSUB(a,b,n,y,nB),y);
+		}
+
+		static char * __TBIGNMULT (const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
+			
+			char * c  = (char*)hb_xgrab(y+1);
+			
+			HB_SIZE i = 0;
+			HB_SIZE k = 0;
+			HB_SIZE l = 1;
+			HB_SIZE s;
+			HB_SIZE j;
+			
+			int v = 0;
+			int v1;
+
+			n-=1;
+			
+			while (i<=n){
+				s = 0;
+				j = i;
+				while (s<=i){
+					v += hb_strVal(&a[s++],1)*hb_strVal(&b[j--],1);
+				}
+				if (v>=nB){
+					v1 = v/nB;
+					v -= v1*nB;
+				}else{
+					v1 = 0;
+				}
+				c[k]   = "0123456789"[v%nB];
+				c[k+1] = "0123456789"[v1%nB];
+				v = v1;
+				k++;
+				i++;
+			}
+		
+			while (l<=n){
+				s = n;
+				j = l;
+				while (s>=l){
+					v += hb_strVal(&a[s--],1)*hb_strVal(&b[j++],1);
+				}
+				if (v>=nB){
+					v1 = v/nB;
+					v -= v1*nB;
+				}else{
+					v1 = 0;	
+				}
+				c[k]   = "0123456789"[v%nB];
+				c[k+1] = "0123456789"[v1%nB];
+				v = v1;
+				if (++k>=y){
+					break;
+				}
+				l++;
+			}		
+			return c;
+		}
+	
+		HB_FUNC( TBIGNMULT ){
+			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
+			const HB_ISIZ nB = hb_parns(5);
+			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
+		}
+
+	#pragma ENDDUMP
+
 #ENDIF
