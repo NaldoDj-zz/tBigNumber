@@ -610,33 +610,37 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		CASE nFP==1
 		    self:cInt := "0"
 		    self:cDec := SubStr(uBigN,nFP+1)
-			nFP		  := Len(self:cDec)
-			While nFP>__nstcZ0
-				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-				__nstcZ0+=__nstcZ0
-			End While
-			IF self:cDec==SubStr(__cstcZ0,1,nFP)
-				IF self:nBase==10
-					self:cDec := "0"
-				Else
-					self:cDec := ""
+			IF "0"==SubStr(self:cDec,1,1)
+				nFP	  := Len(self:cDec)
+				While nFP>__nstcZ0
+					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+					__nstcZ0+=__nstcZ0
+				End While
+				IF self:cDec==SubStr(__cstcZ0,1,nFP)
+					IF self:nBase==10
+						self:cDec := "0"
+					Else
+						self:cDec := ""
+					EndIF
 				EndIF
-			EndIF
+			EndIF	
 		OTHERWISE
 		    self:cInt := SubStr(uBigN,1,nFP-1)
 		    self:cDec := SubStr(uBigN,nFP+1)
-			nFP		  := Len(self:cDec)
-			While nFP>__nstcZ0
-				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-				__nstcZ0+=__nstcZ0
-			End While
-			IF self:cDec==SubStr(__cstcZ0,1,nFP)
-				IF self:nBase==10
-					self:cDec := "0"
-				Else
-					self:cDec := ""
+			IF "0"==SubStr(self:cDec,1,1)
+				nFP	  := Len(self:cDec)
+				While nFP>__nstcZ0
+					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
+					__nstcZ0+=__nstcZ0
+				End While
+				IF self:cDec==SubStr(__cstcZ0,1,nFP)
+					IF self:nBase==10
+						self:cDec := "0"
+					Else
+						self:cDec := ""
+					EndIF
 				EndIF
-			EndIF
+			EndIF	
 		ENDCASE
 		
 		IF self:nBase<>10
