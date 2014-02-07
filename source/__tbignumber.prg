@@ -3231,7 +3231,7 @@ Return(oNR)
 	Sintaxe     : eDiv(cN,cD,nAcc,lFloat) -> cNR
 */
 Static Function eDiv(cN,cD,nAcc,lFloat)
-
+/*
 	Local aE 		:= Array(0)
 	
 	Local cRDiv
@@ -3279,8 +3279,13 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 			__oeDivR:SetValue(__oeDivR:Add(aE[nI][1],NIL,NIL,NIL,nAcc))
 		EndIF
 	Next nI
-
-	__oeDivR:SetValue(__oeDivR,NIL,cRDiv,NIL,nAcc)
+*/
+	
+	Local cRDiv
+	Local __ceDivR := TBIGNeDIV(cN,cD,@cRDiv,Len(cN),Len(cN)+1,10)
+	
+	cRDiv := __oeDivR:SetValue(cRDiv,NIL,NIL,NIL,nAcc):GetValue()
+	__oeDivR:SetValue(__ceDivR,NIL,cRDiv,NIL,nAcc)
 	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
 		cRDiv := SubStr(cRDiv,1,Len(cRDiv)-1)
 		__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
@@ -4254,9 +4259,63 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 	#pragma BEGINDUMP
 
+		#include <stdio.h>
+		#include <string.h>
 		#include <hbapi.h>
 		#include <hbstack.h>
 		#include <hbapiitm.h>
+
+		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
+		{
+			HB_SIZE nLen    = strlen(szText);       
+			char * szResult = (char*)hb_xgrab((nLen*nTimes)+1);
+			char * szPtr    = szResult;
+			HB_ISIZ n;
+			for(n=0;n<nTimes;++n)
+			{
+				hb_xmemcpy(szPtr,szText,nLen);
+				szPtr += nLen;
+			}
+			return szResult;
+		}
+
+		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{
+		  if( szPad == NULL )
+			  szPad = " ";
+		  const char *padding=__TBIGNReplicate(szPad,nLen); 
+		  char * pbuffer = (char*)hb_xgrab(nLen+1);
+		  int padLen = nLen-strlen(szItem);
+		  if(padLen<0) padLen=0;
+		  sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
+		  return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADL ){	  
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
+
+		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{	
+			if( szPad == NULL )
+			  szPad = " ";
+			const char *padding=__TBIGNReplicate(szPad,nLen); 
+			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			int padLen = nLen-strlen(szItem);
+			if(padLen<0) padLen=0;
+			sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
+			return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADR ){
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
 
 		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
 			HB_SIZE f         = s;
@@ -4405,6 +4464,74 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 			const HB_ISIZ nB = hb_parns(5);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
+		}
+		
+		static char * __TBIGNeDIV(const char * cN, const char * cD, char * cRDiv , HB_SIZE n, HB_SIZE y,const HB_ISIZ nB){
+
+			PHB_ITEM paE = hb_itemNew(NULL);
+			
+			char * cPe   = __TBIGNPADL(cN,n,"0");
+			char * cPd   = __TBIGNPADL(cD,n,"0");
+			char * cRet  = __TBIGNPADL(cRDiv,n,"0");
+			
+			int nI       = 0;
+	
+			while (cPd>cN){
+				++nI;
+				PHB_ITEM pNI = hb_itemNew( paE );
+      			hb_arrayNew( pNI  , 3 );
+		        hb_arraySetC( pNI , 1 , __TBIGNPADL(cPe,n,"0") );
+         		hb_arraySetC( pNI , 2 , __TBIGNPADL(cPd,n,"0") );
+         		hb_arraySetL( pNI , 3 , HB_FALSE  );				
+				cPe = __TBIGNINVERT(__TBIGNADD(cPe,cPe,n,y,nB),y);
+				cPd = __TBIGNINVERT(__TBIGNADD(cPd,cPd,n,y,nB),y);
+				hb_xfree(pNI);
+			}
+		
+			while (nI){
+				PHB_ITEM pNI = hb_arrayGetPtr( paE, nI );
+				cRDiv = __TBIGNINVERT(__TBIGNADD(cRDiv,hb_arrayGetC(pNI,2),n,y,nB),y);
+				if (cRDiv<=cN){
+					hb_arraySetL(pNI,3,HB_TRUE);
+					if (cRDiv==cN){
+						break;
+					}	
+				} else {
+					cRDiv = __TBIGNINVERT(__TBIGNSUB(cRDiv,hb_arrayGetC(pNI,2),n,y,nB),y);
+				}
+				--nI;
+				hb_xfree(pNI);
+			}
+		
+			cRDiv = __TBIGNINVERT(__TBIGNSUB(cN,cRDiv,n,y,nB),y);
+		
+			for(HB_SIZE nI=1;nI<=hb_arrayLen(paE);nI++){
+				PHB_ITEM pNI = hb_arrayGetPtr(paE,nI);
+				if (hb_arrayGetL(pNI,3)){
+					cRet = __TBIGNINVERT(__TBIGNADD(cRet,hb_arrayGetC(pNI,1),n,y,nB),y);
+				}
+				hb_xfree(pNI);	
+			}
+
+			hb_xfree(cPe);
+			hb_xfree(cPd);
+			hb_xfree(paE);
+			
+
+			return cRet;
+					
+		}
+
+		HB_FUNC( TBIGNEDIV ){
+			const char * cN   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
+			const char * cD   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			HB_SIZE n         = (HB_SIZE)hb_parnint(4);
+			const HB_SIZE y   = (HB_SIZE)hb_parnint(5);
+			const HB_ISIZ nB  = hb_parns(6);
+			char * cRDiv      = __TBIGNPADL("0",n,"0");
+			char * cRet  	  = __TBIGNeDIV(cN,cD,&*cRDiv,n,y,nB);
+			hb_retclen_buffer(cRDiv,n);
+			hb_itemPutCLPtr(hb_stackReturnItem(),cRet,(HB_SIZE)n);
 		}
 
 	#pragma ENDDUMP
