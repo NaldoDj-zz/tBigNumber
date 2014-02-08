@@ -2,6 +2,9 @@
 
 #IFDEF __PROTHEUS__
 	Static __cEnvSrv
+#else
+	#xtranslate PADL([<prm,...>]) => __TBIGNPADL([<prm>])
+	#xtranslate PADR([<prm,...>]) => __TBIGNPADR([<prm>])
 #ENDIF
 
 Static __o0
@@ -1823,15 +1826,22 @@ Method LCM(uBigN) CLASS tBigNumber
 	Local oNI	:= __o2:Clone()
 	
 	Local oLCM	:= __o1:Clone()
+	
+	Local lM1
+	Local lM2
 
 	While .T.
-		While oN1:Mod(oNI):eq(__o0) .or. oN2:Mod(oNI):eq(__o0)
+		lM1 := oN1:Mod(oNI):eq(__o0)
+		lM2 := oN2:Mod(oNI):eq(__o0)
+		While lM1 .or. lM2
 			oLCM:SetValue(oLCM:Mult(oNI))
-			IF oN1:Mod(oNI):eq(__o0)
+			IF lM1
 				oN1:SetValue(oN1:Div(oNI,.F.))
+				lM1 := oN1:Mod(oNI):eq(__o0)
 			EndIF
-			IF oN2:Mod(oNI):eq(__o0)
+			IF lM2
 				oN2:SetValue(oN2:Div(oNI,.F.))
+				lM2 := oN2:Mod(oNI):eq(__o0)
 			EndIF
 		End While
 		IF oN1:eq(__o1) .and. oN2:eq(__o1)
@@ -4254,9 +4264,65 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 	#pragma BEGINDUMP
 
+		#include <stdio.h>
+		#include <string.h>
 		#include <hbapi.h>
 		#include <hbstack.h>
 		#include <hbapiitm.h>
+
+		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
+		{
+			HB_SIZE nLen    = strlen(szText);       
+			char * szResult = (char*)hb_xgrab((nLen*nTimes)+1);
+			char * szPtr    = szResult;
+			HB_ISIZ n;
+			for(n=0;n<nTimes;++n)
+			{
+				hb_xmemcpy(szPtr,szText,nLen);
+				szPtr += nLen;
+			}
+			return szResult;
+		}
+
+		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{
+		  if( szPad == NULL )
+			  szPad = " ";
+		  char * pbuffer = (char*)hb_xgrab(nLen+1);
+		  int padLen = nLen-strlen(szItem);
+		  if(padLen<0) padLen=0;
+		  char *padding=__TBIGNReplicate(szPad,padLen); 
+		  sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
+		  hb_xfree(padding);
+		  return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADL ){	  
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
+
+		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad)
+		{	
+			if( szPad == NULL )
+			  szPad = " ";
+			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			int padLen = nLen-strlen(szItem);
+			if(padLen<0) padLen=0;
+			char *padding=__TBIGNReplicate(szPad,nLen); 
+			sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
+			hb_xfree(padding);
+			return pbuffer;
+		}
+
+		HB_FUNC( __TBIGNPADR ){
+		  const char * szItem = hb_parc(1);
+		  HB_ISIZ nLen        = hb_parns(2);
+		  const char * szPad  = hb_parc(3);
+		  hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
+		}
 
 		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
 			HB_SIZE f         = s;

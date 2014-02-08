@@ -15,3 +15,5 @@
 /mk/tbigN_log
 /mk/*.ini
 /source/hb_q_rsqrt.c
+
+/source/__tbignumber.prg
