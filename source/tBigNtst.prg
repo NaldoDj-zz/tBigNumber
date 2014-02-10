@@ -254,7 +254,7 @@ Static Procedure tBigNTst()
 	MEMVAR __lKillProgress
 	MEMVAR __oRTimeProc
 	MEMVAR __phMutex
-	
+
  	Private __nMaxRow       AS NUMBER VALUE MaxRow()
     Private __nMaxCol       AS NUMBER VALUE MaxCol()
     Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)

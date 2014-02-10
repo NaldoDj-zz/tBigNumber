@@ -13,6 +13,8 @@ Static __o2
 Static __o5
 Static __o10
 Static __o20
+Static __oMinGCD
+Static __nMinLCM
 Static __cstcZ0
 Static __nstcZ0
 Static __cstcN9
@@ -83,6 +85,11 @@ THREAD Static __lsthdSet
 
 #DEFINE NTHROOT_EXIT		3
 #DEFINE MAX_SYS_SQRT		"9999999999999999"
+
+#DEFINE MAX_SYS_GCD			"999999999999999999"
+#DEFINE MAX_SYS_LCM			"999999999999999999"
+
+#DEFINE MAX_SYS_FI			"999999999999999999"
 
 /*
 *	Alternative Compile Options: /D
@@ -371,12 +378,14 @@ Method New(uBigN,nBase) CLASS tBigNumber
 
 	IF __lstbNSet==NIL
 		__lstbNSet := .F.
-		__o0  := tBigNumber():New("0",nBase)
-		__o1  := tBigNumber():New("1",nBase)
-		__o2  := tBigNumber():New("2",nBase)
-		__o5  := tBigNumber():New("5",nBase)
-		__o10 := tBigNumber():New("10",nBase)
-		__o20 := tBigNumber():New("20",nBase)		
+		__o0        := tBigNumber():New("0",nBase)
+		__o1        := tBigNumber():New("1",nBase)
+		__o2        := tBigNumber():New("2",nBase)
+		__o5        := tBigNumber():New("5",nBase)
+		__o10       := tBigNumber():New("10",nBase)
+		__o20       := tBigNumber():New("20",nBase)
+		__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
+		__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
 		#IFDEF __PROTHEUS__
 			DEFAULT __cEnvSrv := GetEnvServer()
 		#ENDIF
@@ -1799,17 +1808,45 @@ Method GCD(uBigN) CLASS tBigNumber
         oGCD := oX
     Else
         oGCD := oY:Clone()
-        While .T.
-        	oY:SetValue(oX:Mod(oY))
-        	IF oY:eq(__o0)
-        		EXIT
-        	EndIF
-        	oX:SetValue(oGCD)
-        	oGCD:SetValue(oY)
-        End While
-    EndIF  
+        IF oX:lte(__oMinGCD).and.oY:lte(__oMinGCD)
+			oGCD:SetValue(cGCD(Val(oX:ExactValue()),Val(oY:ExactValue())))
+        Else
+        	While .T.
+        		oY:SetValue(oX:Mod(oY))
+        		IF oY:eq(__o0)
+        			EXIT
+        		EndIF
+        		oX:SetValue(oGCD)
+        		oGCD:SetValue(oY)
+        	End While
+        EndIF
+    EndIF 
 
 Return(oGCD)
+
+Static Function cGCD(nX,nY)
+	#IFDEF __HARBOUR__
+		Local nGCD := TBIGNGDC(nX,nY)
+	#ELSE //__PROTHEUS__
+	 	Local nGCD := nX  
+	 	
+	 	nX := Max(nY,nGCD)
+	 	nY := Min(nGCD,nY)
+	
+	    IF nY==0
+	        nGCD := nX
+	    Else
+	       	nGCD := nY
+	       	While .T.
+	       		IF (nY:=(nX%nY))==0
+	       			EXIT
+	       		EndIF
+	       		nX   := nGCD
+	       		nGCD := nY
+	       	End While
+	    EndIF
+	#ENDIF //__HARBOUR__
+Return(hb_NToS(nGCD))
 
 /*
 	Method:		LCM
@@ -1821,81 +1858,126 @@ Return(oGCD)
 Method LCM(uBigN) CLASS tBigNumber
 
 #IFDEF __HARBOUR__
-	Local aThreads := Array(2)
-	Local aResults := Array(2)
+	Local aThreads
 #ENDIF
+	
+	Local oX	:= self:Clone()
+	Local oY	:= tBigNumber():New(uBigN)
 
-	Local oN1	:= self:Clone()
-	Local oN2	:= tBigNumber():New(uBigN)
-
-	Local oNI	:= __o2:Clone()
+	Local oI	:= __o2:Clone()
 	
 	Local oLCM	:= __o1:Clone()
 	
-	Local lM1
-	Local lM2
-
-	While .T.
+	Local lMX
+	Local lMY
+	
+    IF oX:nSize<=__nMinLCM.and.oY:nSize<=__nMinLCM
+		oLCM:SetValue(cLCM(Val(oX:ExactValue()),Val(oY:ExactValue())))
+    Else
 		#IFDEF __HARBOUR__
-			aThreads[1]	:= hb_threadStart(@thMod0(),oN1,oNI)
-			hb_threadJoin(aThreads[1],@aResults[1])				
-			aThreads[2]	:= hb_threadStart(@thMod0(),oN2,oNI)
-			hb_threadJoin(aThreads[2],@aResults[2])						
-			hb_threadWait(aThreads)
-			lM1 := aResults[1]
-			lM2 := aResults[2]
-		#ELSE
-			lM1 := oN1:Mod(oNI):eq(__o0)
-			lM2 := oN2:Mod(oNI):eq(__o0)
+			aThreads := Array(2,2)
 		#ENDIF	
-		While lM1 .or. lM2
-			oLCM:SetValue(oLCM:Mult(oNI))
+		While .T.
 			#IFDEF __HARBOUR__
-				IF lM1 .and. lM2
-					oN1:SetValue(oN1:Div(oNI,.F.))
-					oN2:SetValue(oN2:Div(oNI,.F.))
-					aThreads[1]	:= hb_threadStart(@thMod0(),oN1,oNI)
-					hb_threadJoin(aThreads[1],@aResults[1])				
-					aThreads[2]	:= hb_threadStart(@thMod0(),oN2,oNI)
-					hb_threadJoin(aThreads[2],@aResults[2])						
-					hb_threadWait(aThreads)
-					lM1 := aResults[1]
-					lM2 := aResults[2]
-				Else
-					IF lM1
-						oN1:SetValue(oN1:Div(oNI,.F.))
-						lM1 := oN1:Mod(oNI):eq(__o0)
-					EndIF
-					IF lM2
-						oN2:SetValue(oN2:Div(oNI,.F.))
-						lM2 := oN2:Mod(oNI):eq(__o0)
-					EndIF
-				EndIF	
+				aThreads[1][1]	:= hb_threadStart(@thMod0(),oX,oI)
+				hb_threadJoin(aThreads[1][1],@aThreads[2][1])				
+				aThreads[1][2]	:= hb_threadStart(@thMod0(),oY,oI)
+				hb_threadJoin(aThreads[1][2],@aThreads[2][2])						
+				hb_threadWait(aThreads[1])
+				lMX := aThreads[2][1]
+				lMY := aThreads[2][2]
 			#ELSE
-				IF lM1
-					oN1:SetValue(oN1:Div(oNI,.F.))
-					lM1 := oN1:Mod(oNI):eq(__o0)
-				EndIF
-				IF lM2
-					oN2:SetValue(oN2:Div(oNI,.F.))
-					lM2 := oN2:Mod(oNI):eq(__o0)
-				EndIF
+				lMX := oX:Mod(oI):eq(__o0)
+				lMY := oY:Mod(oI):eq(__o0)
 			#ENDIF	
+			While lMX .or. lMY
+				oLCM:SetValue(oLCM:Mult(oI))
+				#IFDEF __HARBOUR__
+					IF lMX .and. lMY
+						oX:SetValue(oX:Div(oI,.F.))
+						oY:SetValue(oY:Div(oI,.F.))
+						aThreads[1][1]	:= hb_threadStart(@thMod0(),oX,oI)
+						hb_threadJoin(aThreads[1][1],@aThreads[2][1])				
+						aThreads[1][2]	:= hb_threadStart(@thMod0(),oY,oI)
+						hb_threadJoin(aThreads[1][2],@aThreads[2][2])						
+						hb_threadWait(aThreads[1])
+						lMX := aThreads[2][1]
+						lMY := aThreads[2][2]
+					Else
+						IF lMX
+							oX:SetValue(oX:Div(oI,.F.))
+							lMX := oX:Mod(oI):eq(__o0)
+						EndIF
+						IF lMY
+							oY:SetValue(oY:Div(oI,.F.))
+							lMY := oY:Mod(oI):eq(__o0)
+						EndIF
+					EndIF	
+				#ELSE
+					IF lMX
+						oX:SetValue(oX:Div(oI,.F.))
+						lMX := oX:Mod(oI):eq(__o0)
+					EndIF
+					IF lMY
+						oY:SetValue(oY:Div(oI,.F.))
+						lMY := oY:Mod(oI):eq(__o0)
+					EndIF
+				#ENDIF	
+			End While
+			IF oX:eq(__o1) .and. oY:eq(__o1)
+				EXIT
+			EndIF
+			oI:SetValue(oI:Add(__o1))		
 		End While
-		IF oN1:eq(__o1) .and. oN2:eq(__o1)
-			EXIT
-		EndIF
-		oNI:SetValue(oNI:Add(__o1))		
-	End While
-
+    EndIF
+    
 Return(oLCM)
+
+Static Function cLCM(nX,nY)
+
+	#IFDEF __HARBOUR__
+	
+		Local nLCM  := TBIGNLCM(nX,nY)
+	
+	#ELSE //__PROTHEUS__
+	 	
+		Local nLCM	:= 1
+	
+		Local nI	:= 2
+	
+		Local lMX
+		Local lMY
+	
+		While .T.
+			lMX := (nX%nI)==0
+			lMY := (nY%nI)==0
+			While lMX .or. lMY
+				nLCM *= nI
+				IF lMX
+					nX  := Int(nX/nI)
+					lMX := (nX%nI)==0
+				EndIF
+				IF lMY
+					nY  := Int(nY/nI)
+					lMY := (nY%nI)==0
+				EndIF
+			End While
+			IF nX==1 .and. nY==1
+				EXIT
+			EndIF
+			++nI
+		End While
+	
+	#ENDIF //__HARBOUR__	
+	
+Return(hb_NToS(nLCM))
 
 #IFDEF __HARBOUR__
 	Static Function thMod0(oBN,oMN)
 		Local oRet := tBigNumber():New()
 		oRet:SetValue(oBN:Mod(oMN))
 	Return(oRet:eq(__o0))
-#ENDIF	
+#ENDIF //__HARBOUR__	
 
 /*
 
@@ -3171,7 +3253,6 @@ Static Function recFact(oS,oN)
 
 #IFDEF __HARBOUR__
 	Local aThreads
-	Local aResults
 #ENDIF
 
 	Local oI
@@ -3204,18 +3285,17 @@ Static Function recFact(oS,oN)
 
 #IFDEF __HARBOUR__
 
-	aThreads := Array(2)
-	aResults := Array(2)
+	aThreads := Array(2,2)
 
-	aThreads[1]	:= hb_threadStart(@recFact(),oS,oI)
-	hb_threadJoin(aThreads[1],@aResults[1])				
+	aThreads[1][1]	:= hb_threadStart(@recFact(),oS,oI)
+	hb_threadJoin(aThreads[1][1],@aThreads[2][1])				
 
-	aThreads[2]	:= hb_threadStart(@recFact(),oSI,oNI)
-	hb_threadJoin(aThreads[2],@aResults[2])						
+	aThreads[1][2]	:= hb_threadStart(@recFact(),oSI,oNI)
+	hb_threadJoin(aThreads[1][2],@aThreads[2][2])						
 	
-	hb_threadWait(aThreads)	
+	hb_threadWait(aThreads[1])	
 
-Return(aResults[1]:Mult(aResults[2]))
+Return(aThreads[2][1]:Mult(aThreads[2][2]))
 #ELSE	
 Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 #ENDIF
@@ -4315,6 +4395,13 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 		#include <hbstack.h>
 		#include <hbapiitm.h>
 
+		#ifndef MIN
+			# define MIN(x,y) ((x)<(y)?(x):(y))
+		#endif
+		#ifndef MAX
+			# define MAX(x,y) ((x)>(y)?(x):(y))
+		#endif
+		
 		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
 		{
 			HB_SIZE nLen    = strlen(szText);       
@@ -4516,6 +4603,69 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 			const HB_ISIZ nB = hb_parns(5);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
+		}
+				
+		static HB_MAXINT __TBIGNGDC(HB_MAXINT x, HB_MAXINT y){
+	 		HB_MAXINT nGCD = x;  
+		 	x = MAX(y,nGCD);
+		 	y = MIN(nGCD,y);
+		    if (y==0){
+		        nGCD = x;
+		    } else {
+		       	nGCD = y;
+		       	while (HB_TRUE){
+		       		if ((y=(x%y))==0){
+		       			break;
+		       		}
+		       		x    = nGCD;
+		       		nGCD = y;
+		       	}
+		    }
+			return nGCD;
+		}
+
+		HB_FUNC( TBIGNGDC ){
+			HB_MAXINT x = hb_parnint(1);
+			HB_MAXINT y = hb_parnint(2);
+			hb_retnint(__TBIGNGDC(x,y));
+		}
+
+		static HB_MAXINT __TBIGNLCM(HB_MAXINT x, HB_MAXINT y){
+	 		
+	 		HB_MAXINT nLCM = 1;
+			HB_MAXINT i	   = 2;
+		
+			HB_BOOL lMx;
+			HB_BOOL lMy;
+		
+			while (HB_TRUE){
+				lMx = ((x%i)==0);
+				lMy = ((y%i)==0);
+				while (lMx||lMy){
+					nLCM *= i;
+					if (lMx){
+						x   /= i;
+						lMx = ((x%i)==0);
+					}
+					if (lMy){
+						y   /= i;
+						lMy = ((y%i)==0);
+					}
+				}
+				if ((x==1)&&(y==1)){
+					break;
+				}
+				++i;
+			}
+			
+			return nLCM;
+
+		}
+
+		HB_FUNC( TBIGNLCM ){
+			HB_MAXINT x = hb_parnint(1);
+			HB_MAXINT y = hb_parnint(2);
+			hb_retnint(__TBIGNLCM(x,y));
 		}
 
 	#pragma ENDDUMP
