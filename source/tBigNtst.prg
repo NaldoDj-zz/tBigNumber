@@ -842,8 +842,8 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
-    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	ASSIGN n := 0
     While ( n <= nN_TEST )		
 		ASSIGN cN  := hb_ntos(n)

@@ -1787,27 +1787,27 @@ Return(oPITthD)
 */
 Method GCD(uBigN) CLASS tBigNumber
 
- 	Local oNX	:= tBigNumber():New(uBigN)
- 	Local oNT	:= tBigNumber():New()
- 	Local oGCD	:= self:Clone()
+	Local oX	:= self:Clone()
+ 	Local oY	:= tBigNumber():New(uBigN)
+ 	
+ 	Local oGCD  
+ 	
+ 	oX:SetValue(oY:Max(self))
+ 	oY:SetValue(oY:Min(self))
 
- 	oNT:SetValue(oGCD:Max(oNX))
- 	oNX:SetValue(oGCD:Min(oNX))
- 	oGCD:SetValue(oNT)
-
-	oGCD:SetValue(oGCD:Mod(oNX))
-	
-	oNT:SetValue(oGCD)
-	oGCD:SetValue(oNX)
-	
-	oNX:SetValue(oNT)
-
-	While oNX:ne(__o0)
-		oGCD:SetValue(oGCD:Mod(oNX))
-		oNT:SetValue(oGCD)
-		oGCD:SetValue(oNX)
-		oNX:SetValue(oNT)
-	End While
+    IF oY:eq(__o0)
+        oGCD := oX
+    Else
+        oGCD := oY:Clone()
+        While .T.
+        	oY:SetValue(oX:Mod(oY))
+        	IF oY:eq(__o0)
+        		EXIT
+        	EndIF
+        	oX:SetValue(oGCD)
+        	oGCD:SetValue(oY)
+        End While
+    EndIF  
 
 Return(oGCD)
 
@@ -1819,7 +1819,12 @@ Return(oGCD)
 	Sintaxe:	tBigNumber():LCM(uBigN) -> oLCM
 */
 Method LCM(uBigN) CLASS tBigNumber
-	
+
+#IFDEF __HARBOUR__
+	Local aThreads := Array(2)
+	Local aResults := Array(2)
+#ENDIF
+
 	Local oN1	:= self:Clone()
 	Local oN2	:= tBigNumber():New(uBigN)
 
@@ -1831,18 +1836,51 @@ Method LCM(uBigN) CLASS tBigNumber
 	Local lM2
 
 	While .T.
-		lM1 := oN1:Mod(oNI):eq(__o0)
-		lM2 := oN2:Mod(oNI):eq(__o0)
+		#IFDEF __HARBOUR__
+			aThreads[1]	:= hb_threadStart(@thMod0(),oN1,oNI)
+			hb_threadJoin(aThreads[1],@aResults[1])				
+			aThreads[2]	:= hb_threadStart(@thMod0(),oN2,oNI)
+			hb_threadJoin(aThreads[2],@aResults[2])						
+			hb_threadWait(aThreads)
+			lM1 := aResults[1]
+			lM2 := aResults[2]
+		#ELSE
+			lM1 := oN1:Mod(oNI):eq(__o0)
+			lM2 := oN2:Mod(oNI):eq(__o0)
+		#ENDIF	
 		While lM1 .or. lM2
 			oLCM:SetValue(oLCM:Mult(oNI))
-			IF lM1
-				oN1:SetValue(oN1:Div(oNI,.F.))
-				lM1 := oN1:Mod(oNI):eq(__o0)
-			EndIF
-			IF lM2
-				oN2:SetValue(oN2:Div(oNI,.F.))
-				lM2 := oN2:Mod(oNI):eq(__o0)
-			EndIF
+			#IFDEF __HARBOUR__
+				IF lM1 .and. lM2
+					oN1:SetValue(oN1:Div(oNI,.F.))
+					oN2:SetValue(oN2:Div(oNI,.F.))
+					aThreads[1]	:= hb_threadStart(@thMod0(),oN1,oNI)
+					hb_threadJoin(aThreads[1],@aResults[1])				
+					aThreads[2]	:= hb_threadStart(@thMod0(),oN2,oNI)
+					hb_threadJoin(aThreads[2],@aResults[2])						
+					hb_threadWait(aThreads)
+					lM1 := aResults[1]
+					lM2 := aResults[2]
+				Else
+					IF lM1
+						oN1:SetValue(oN1:Div(oNI,.F.))
+						lM1 := oN1:Mod(oNI):eq(__o0)
+					EndIF
+					IF lM2
+						oN2:SetValue(oN2:Div(oNI,.F.))
+						lM2 := oN2:Mod(oNI):eq(__o0)
+					EndIF
+				EndIF	
+			#ELSE
+				IF lM1
+					oN1:SetValue(oN1:Div(oNI,.F.))
+					lM1 := oN1:Mod(oNI):eq(__o0)
+				EndIF
+				IF lM2
+					oN2:SetValue(oN2:Div(oNI,.F.))
+					lM2 := oN2:Mod(oNI):eq(__o0)
+				EndIF
+			#ENDIF	
 		End While
 		IF oN1:eq(__o1) .and. oN2:eq(__o1)
 			EXIT
@@ -1851,6 +1889,13 @@ Method LCM(uBigN) CLASS tBigNumber
 	End While
 
 Return(oLCM)
+
+#IFDEF __HARBOUR__
+	Static Function thMod0(oBN,oMN)
+		Local oRet := tBigNumber():New()
+		oRet:SetValue(oBN:Mod(oMN))
+	Return(oRet:eq(__o0))
+#ENDIF	
 
 /*
 

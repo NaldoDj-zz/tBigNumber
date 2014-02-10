@@ -20,12 +20,11 @@ Class tRemaining FROM tTimeCalc
 	DATA cTRemaining  	AS CHARACTER INIT "00:00:00" HIDDEN
 	DATA dEndTime		AS DATE      INIT Ctod("//") HIDDEN
 	DATA dStartTime		AS DATE      INIT Ctod("//") HIDDEN
-	DATA nIncTime		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nProgress		AS NUMERIC   INIT 0			 HIDDEN	
 	DATA nSRemaining	AS NUMERIC   INIT 0			 HIDDEN
 	DATA nTotal			AS NUMERIC   INIT 0			 HIDDEN
 
-	Method RemainingTime()
+	Method TimeRemaining()
 	Method CalcEndTime()
 	
 #IFNDEF __PROTHEUS__
@@ -47,7 +46,6 @@ Class tRemaining FROM tTimeCalc
 	Method GetcTRemaining()
 	Method GetdEndTime()
 	Method GetdStartTime()
-	Method GetnIncTime()
 	Method GetnProgress()
 	Method GetnSRemaining()
 	Method GetnTotal()
@@ -75,7 +73,6 @@ Method SetRemaining(nTotal) Class tRemaining
 	self:cTRemaining	:= "00:00:00"
 	self:dEndTime		:= CToD("//")
 	self:dStartTime		:= Date()
-	self:nIncTime		:= 0
 	self:nProgress		:= 0
 	self:nSRemaining	:= 0
 	self:nTotal			:= nTotal
@@ -83,7 +80,7 @@ Return(self)
 
 Method Calcule(lProgress) Class tRemaining
 	Local aEndTime
-	self:RemainingTime()
+	self:TimeRemaining()
 	DEFAULT lProgress	:= .T.
 	IF (lProgress)
 		++self:nProgress
@@ -96,25 +93,30 @@ Method Calcule(lProgress) Class tRemaining
 	self:dEndTime			:= aEndTime[2]
 Return(self)
 
-Method RemainingTime() Class tRemaining
+Method TimeRemaining() Class tRemaining
 
 	Local cTime		:= Time()
+	
 	Local dDate		:= Date()
 
-	Local nHrsInc
-	Local nMinInc
-	Local nSecInc
+	Local nIncTime	:= 0
+	
+	Local nTime
+	Local nTimeDiff
+	Local nStartTime
 
-	self:nIncTime  := abs(dDate-self:dStartTime)
+	IF .NOT.(dDate==Self:dStartTime)
+		nIncTime	:= abs(dDate-self:dStartTime)
+		nIncTime	*= 24
+	EndIF	
 
-	IF (self:nIncTime>0)
-	    self:ExtractTime(self:cStartTime,@nHrsInc,@nMinInc,@nSecInc)
-		cTime := self:IncTime(self:HMSToTime((self:nIncTime*24)),nHrsInc,nMinInc,nSecInc)
-	EndIF
+	nTime				:= (self:TimeToSecs(cTime)+IF(nIncTime>0,self:HrsToSecs(nIncTime),0))
+	nStartTime			:= self:TimeToSecs(self:cStartTime)	
 
-	self:cTimeDiff		:= ElapTime(self:cStartTime,cTime)
-	self:cTRemaining	:= ElapTime(self:cTimeDiff,self:cStartTime)
-	self:nSRemaining	:= self:TimeToSecs(self:cTimeDiff)
+	nTimeDiff			:= abs(nTime-nStartTime)
+	self:cTimeDiff		:= self:SecsToTime(nTimeDiff)
+	self:cTRemaining	:= self:SecsToTime(abs(nTimeDiff-nStartTime))
+	self:nSRemaining	:= nTimeDiff
 
 Return(self)
 
@@ -148,9 +150,6 @@ Return(self:dEndTime)
 
 Method GetdStartTime() Class tRemaining
 Return(self:dStartTime)
-
-Method GetnIncTime() Class tRemaining
-Return(self:nIncTime)
 
 Method GetnProgress() Class tRemaining
 Return(self:nProgress)
