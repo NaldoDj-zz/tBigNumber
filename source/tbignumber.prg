@@ -10,7 +10,7 @@
 Static __o0
 Static __o1
 Static __o2
-Static __o5
+*Static __o5
 Static __o10
 Static __o20
 Static __oMinGCD
@@ -381,7 +381,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__o0        := tBigNumber():New("0",nBase)
 		__o1        := tBigNumber():New("1",nBase)
 		__o2        := tBigNumber():New("2",nBase)
-		__o5        := tBigNumber():New("5",nBase)
+*		__o5        := tBigNumber():New("5",nBase)
 		__o10       := tBigNumber():New("10",nBase)
 		__o20       := tBigNumber():New("20",nBase)
 		__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
@@ -1809,7 +1809,7 @@ Method GCD(uBigN) CLASS tBigNumber
     Else
         oGCD := oY:Clone()
         IF oX:lte(__oMinGCD).and.oY:lte(__oMinGCD)
-			oGCD:SetValue(cGCD(Val(oX:ExactValue()),Val(oY:ExactValue())))
+			oGCD:SetValue(cGCD(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
         Else
         	While .T.
         		oY:SetValue(oX:Mod(oY))
@@ -1871,8 +1871,8 @@ Method LCM(uBigN) CLASS tBigNumber
 	Local lMX
 	Local lMY
 	
-    IF oX:nSize<=__nMinLCM.and.oY:nSize<=__nMinLCM
-		oLCM:SetValue(cLCM(Val(oX:ExactValue()),Val(oY:ExactValue())))
+    IF oX:nInt<=__nMinLCM.and.oY:nInt<=__nMinLCM
+		oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
     Else
 		#IFDEF __HARBOUR__
 			aThreads := Array(2,2)
@@ -4605,8 +4605,8 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
 		}
 				
-		static HB_MAXINT __TBIGNGDC(HB_MAXINT x, HB_MAXINT y){
-	 		HB_MAXINT nGCD = x;  
+		static HB_MAXUINT __TBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
+	 		HB_MAXUINT nGCD = x;  
 		 	x = MAX(y,nGCD);
 		 	y = MIN(nGCD,y);
 		    if (y==0){
@@ -4625,15 +4625,15 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 		}
 
 		HB_FUNC( TBIGNGDC ){
-			HB_MAXINT x = hb_parnint(1);
-			HB_MAXINT y = hb_parnint(2);
+			HB_MAXUINT x = hb_parnint(1);
+			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNGDC(x,y));
 		}
 
-		static HB_MAXINT __TBIGNLCM(HB_MAXINT x, HB_MAXINT y){
+		static HB_MAXUINT __TBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
 	 		
-	 		HB_MAXINT nLCM = 1;
-			HB_MAXINT i	   = 2;
+	 		HB_MAXUINT nLCM = 1;
+			HB_MAXUINT i	= 2;
 		
 			HB_BOOL lMx;
 			HB_BOOL lMy;
@@ -4663,8 +4663,8 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 		}
 
 		HB_FUNC( TBIGNLCM ){
-			HB_MAXINT x = hb_parnint(1);
-			HB_MAXINT y = hb_parnint(2);
+			HB_MAXUINT x = hb_parnint(1);
+			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNLCM(x,y));
 		}
 
