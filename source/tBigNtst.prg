@@ -202,7 +202,7 @@ Static Procedure tBigNTst()
 #IFDEF __HARBOUR__
 	Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
     Local cLog       AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
-    LOCAL ptthProg
+    Local ptthProg
     Local ptProgress := @Progress()
 #ELSE
     Local cLog      AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
@@ -1635,6 +1635,8 @@ Static Procedure __ConOut(fhLog,e,d)
     Local y     AS UNDEFINED
 
 #IFDEF __HARBOUR__
+	
+	Local cDOAt AS CHARACTER
 
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -1668,22 +1670,53 @@ Static Procedure __ConOut(fhLog,e,d)
     ASSIGN p := x + IF(ld , " " + y , "")
     
 #IFDEF __HARBOUR__
+	
 	@ 09, 15 CLEAR TO 09,__nMaxCol
-	DispOutAt(09,15,"["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]","w+/n")
+	cDOAt := "["
+	cDOAt += StrZero(__oRTime1:GetnProgress(),10)
+	cDOAt += "/"
+	cDOAt += StrZero(__oRTime1:GetnTotal(),10)
+	cDOAt += "]|["
+	cDOAt += DtoC(__oRTime1:GetdEndTime())
+	cDOAt += "]["+__oRTime1:GetcEndTime()
+	cDOAt += "]|["
+	cDOAt += __oRTime1:GetcMediumTime()
+	cDOAt += "]["
+	cDOAt += hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
+	cDOAt += " %]" 
+	DispOutAt(09,15,cDOAt,"w+/n")
+
 	@ 10, 15 CLEAR TO 10,__nMaxCol
-	DispOutAt(10,15,"["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]","w+/n")
+	cDOAt := "["
+	cDOAt += StrZero(__oRTime2:GetnProgress(),10)
+	cDOAt += "/"
+	cDOAt += StrZero(__oRTime2:GetnTotal(),10)
+	cDOAt += "]|["
+	cDOAt += DtoC(__oRTime2:GetdEndTime())
+	cDOAt += "]["+__oRTime2:GetcEndTime()
+	cDOAt += "]|["
+	cDOAt += __oRTime2:GetcMediumTime()
+	cDOAt += "]["
+	cDOAt += hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
+	cDOAt += " %]" 
+	DispOutAt(10,15,cDOAt,"w+/n")
+	
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
         @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
         ASSIGN __nRow := __NROWAT
     EndIF
+
 	ASSIGN lSep  := (p==__cSep)
 	ASSIGN lMRow := (__nRow>=__NROWAT)
+
 	DispOutAt(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+
 	IF hb_mutexLock(__phMutex)
 		__oRTimeProc:Calcule("-------------- END"$p)
 		hb_mutexUnLock(__phMutex)
 	EndIF	
+
 #ELSE    
     ? p
 #ENDIF    
@@ -1934,6 +1967,7 @@ Return(lHarbour)
 				ASSIGN cRTime += "["+DtoC(__oRTimeProc:GetdEndTime())+"]"
 				ASSIGN cRTime += "["+__oRTimeProc:GetcEndTime()+"]"
 				ASSIGN cRTime += "["+__oRTimeProc:GetcMediumTime()+"]"
+				ASSIGN cRTime += "["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
 				hb_mutexUnLock(__phMutex)
 			EndIF
 

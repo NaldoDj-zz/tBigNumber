@@ -3,8 +3,8 @@
 #IFDEF __PROTHEUS__
 	Static __cEnvSrv
 #else
-	#xtranslate PADL([<prm,...>]) => __TBIGNPADL([<prm>])
-	#xtranslate PADR([<prm,...>]) => __TBIGNPADR([<prm>])
+	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
+	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
 #ENDIF
 
 Static __o0
@@ -13,6 +13,7 @@ Static __o2
 *Static __o5
 Static __o10
 Static __o20
+Static __oMinFI
 Static __oMinGCD
 Static __nMinLCM
 Static __cstcZ0
@@ -177,14 +178,14 @@ CLASS tBigNumber
 	Method Max(uBigN,lObj)
 	Method Min(uBigN,lObj)
 	
-	Method Add(uBigN)	//TODO: Implementar Adicao Binaria e Hexa
-	Method Sub(uBigN)	//TODO: Implementar Subtracao Binaria e Hexa
+	Method Add(uBigN)
+	Method Sub(uBigN)
 	
-	Method Mult(uBigN,leMult)	//TODO: Implementar Multiplicacao Binaria e Hexa	
-	Method Div(uBigN,lFloat)	//TODO: Implementar Divisao Binaria e Hexa
+	Method Mult(uBigN,leMult)
+	Method Div(uBigN,lFloat)
 
 	Method Mod(uBigN)
-	Method Pow(uBigN)	//TODO: Validar o Calculo quando expoente fracionario
+	Method Pow(uBigN)
 	
 	Method e(lForce)
 	Method Exp(lForce)
@@ -231,7 +232,7 @@ CLASS tBigNumber
 	Method FI()
 	
 	Method PFactors()
-	Method Factorial()	//TODO: Otimizar
+	Method Factorial()	//TODO: Otimizar+
 
 #IFNDEF __PROTHEUS__
 
@@ -384,6 +385,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 *		__o5        := tBigNumber():New("5",nBase)
 		__o10       := tBigNumber():New("10",nBase)
 		__o20       := tBigNumber():New("20",nBase)
+		__oMinFI	:= tBigNumber():New(MAX_SYS_FI,nBase)
 		__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
 		__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
 		#IFDEF __PROTHEUS__
@@ -1846,7 +1848,7 @@ Static Function cGCD(nX,nY)
 	       	End While
 	    EndIF
 	#ENDIF //__HARBOUR__
-Return(hb_NToS(nGCD))
+Return(hb_ntos(nGCD))
 
 /*
 	Method:		LCM
@@ -1970,7 +1972,7 @@ Static Function cLCM(nX,nY)
 	
 	#ENDIF //__HARBOUR__	
 	
-Return(hb_NToS(nLCM))
+Return(hb_ntos(nLCM))
 
 #IFDEF __HARBOUR__
 	Static Function thMod0(oBN,oMN)
@@ -3153,23 +3155,47 @@ Method FI() CLASS tBigNumber
 	Local oC	:= self:Clone()
 	Local oT	:= tBigNumber():New(oC:Int(.T.))
 
-	Local oI	:= __o2:Clone()
-	Local oN	:= oT:Clone()
-
-	While oI:Mult(oI):lte(oC)
-		IF oN:Mod(oI):eq(__o0)
-			oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
-		EndIF
-		While oN:Mod(oI):eq(__o0)
-			oN:SetValue(oN:Div(oI,.F.))
+	Local oI
+	Local oN
+	
+	IF oT:lte(__oMinFI)
+		oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
+	Else
+		oI	:= __o2:Clone()
+		oN	:= oT:Clone()
+		While oI:Mult(oI):lte(oC)
+			IF oN:Mod(oI):eq(__o0)
+				oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
+			EndIF
+			While oN:Mod(oI):eq(__o0)
+				oN:SetValue(oN:Div(oI,.F.))
+			End While
+			oI:SetValue(oI:Add(__o1))
 		End While
-		oI:SetValue(oI:Add(__o1))
-	End While
-	IF oN:gt(__o1)
-		oT:SetValue(oT:Sub(oT:Div(oN,.F.)))		
-	EndIF
-
+		IF oN:gt(__o1)
+			oT:SetValue(oT:Sub(oT:Div(oN,.F.)))		
+		EndIF
+    EndIF
+    
 Return(oT)
+#IFDEF __PROTHEUS__
+	Static Function TBIGNFI(n)
+		Local i  := 2
+		Local fi := n
+		While ((i*i)<=n)
+			IF ((n%i)==0)
+				fi -= Int(fi/i)
+			EndIF
+			While ((n%i)==0)
+				n := Int(n/i)
+			End While
+			i++
+		End While
+       	IF (n>1)
+       		fi -= Int(fi/n)
+       	EndIF
+    Return(fi)
+#ENDIF //__PROTHEUS__
 
 /*
 	Method		: PFactors
@@ -4668,6 +4694,27 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			hb_retnint(__TBIGNLCM(x,y));
 		}
 
+		static HB_MAXUINT __TBIGNFI(HB_MAXUINT n){
+			HB_MAXUINT fi = n;
+			for(HB_MAXUINT i=2;((i*i)<=n);i++){
+				if ((n%i)==0){
+					fi -= fi/i;
+				}	
+				while ((n%i)==0){
+					n /= i;
+				}	
+			} 
+       		if (n>1){
+       			fi -= fi/n;
+       		}	 
+       		return fi; 
+    	}
+    	
+		HB_FUNC( TBIGNFI ){
+			HB_MAXUINT n = hb_parnint(1);
+			hb_retnint(__TBIGNFI(n));
+		}
+		
 	#pragma ENDDUMP
 
 #ENDIF
