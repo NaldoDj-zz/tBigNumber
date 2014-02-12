@@ -137,12 +137,6 @@ CLASS tBigNumber
 	DATA nSize AS NUMERIC   INIT 0
 
 #IFNDEF __PROTHEUS__
-	PROTECTED:
-#ENDIF
-
-	Method Normalize(oBigN)
-
-#IFNDEF __PROTHEUS__
 	EXPORTED:
 #ENDIF	
 	
@@ -153,6 +147,8 @@ CLASS tBigNumber
 		DESTRUCTOR tBigNGC
 	#ENDIF	
 #ENDIF	
+
+	Method Normalize(oBigN)
 
 	Method Clone()
 	Method ClassName()
