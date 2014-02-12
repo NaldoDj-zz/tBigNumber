@@ -201,7 +201,7 @@ Return(nRet)
 
 Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 
-	Local cMediumTime	:= "00:00:00"
+	Local cMediumTime	:= "00:00:00:000"
 	
 	Local nSeconds
 	Local nMediumTime
