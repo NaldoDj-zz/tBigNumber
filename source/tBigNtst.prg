@@ -1847,7 +1847,7 @@ Static Procedure __ConOut(fhLog,e,d)
     
 #IFDEF __HARBOUR__
 	
-	@ 09, 15 CLEAR TO 09,__nMaxCol
+	@ 09,15 CLEAR TO 09,__nMaxCol
 	cDOAt := "["
 	cDOAt += StrZero(__oRTime1:GetnProgress(),10)
 	cDOAt += "/"
@@ -1862,7 +1862,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	cDOAt += " %]" 
 	DispOutAt(09,15,cDOAt,"w+/n")
 
-	@ 10, 15 CLEAR TO 10,__nMaxCol
+	@ 10,15 CLEAR TO 10,__nMaxCol
 	cDOAt := "["
 	cDOAt += StrZero(__oRTime2:GetnProgress(),10)
 	cDOAt += "/"
@@ -1879,7 +1879,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
-        @ __NROWAT, 0 CLEAR TO __nMaxRow,__nMaxCol
+        @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
         ASSIGN __nRow := __NROWAT
     EndIF
 
@@ -2191,7 +2191,7 @@ Return(lHarbour)
 			
 			IF (lCScreen)
 				ASSIGN lCScreen := .F.
-				@ 12, 0 CLEAR TO 12,nMaxCol
+				@ 12,0 CLEAR TO 12,nMaxCol
 			EndIF
 
 			ASSIGN cStuff := PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
@@ -2217,6 +2217,7 @@ Return(lHarbour)
 				hb_mutexUnLock(__phMutex)
 			EndIF
 
+			@ 07,15 CLEAR TO 07,nMaxCol
 			DispOutAt(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
 			DispOutAt(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
 			
