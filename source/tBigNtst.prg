@@ -2128,22 +2128,17 @@ Return(lHarbour)
 			ASSIGN cAT    := SubStr(cStuff,nAT,nQT+1)
 			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
 
-			IF (cRTime==cLRTime)
-				IF hb_mutexLock(__phMutex)
-					__oRTimeProc:Calcule(.F.)
-					hb_mutexUnLock(__phMutex)
-				EndIF					
-			EndIF	
-
-			cLRTime := cRTime
-
 			IF hb_mutexLock(__phMutex)
-				ASSIGN cRTime := "["+hb_ntos(__oRTimeProc:GetnProgress())
-				ASSIGN cRTime += "/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
-				ASSIGN cRTime += "["+DtoC(__oRTimeProc:GetdEndTime())+"]"
-				ASSIGN cRTime += "["+__oRTimeProc:GetcEndTime()+"]"
-				ASSIGN cRTime += "["+__oRTimeProc:GetcMediumTime()+"]"
-				ASSIGN cRTime += "["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+				IF (cRTime==cLRTime)
+					__oRTimeProc:Calcule(.F.)
+				EndIF					
+				ASSIGN cRTime  := "["+hb_ntos(__oRTimeProc:GetnProgress())
+				ASSIGN cRTime  += "/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
+				ASSIGN cRTime  += "["+DtoC(__oRTimeProc:GetdEndTime())+"]"
+				ASSIGN cRTime  += "["+__oRTimeProc:GetcEndTime()+"]"
+				ASSIGN cRTime  += "["+__oRTimeProc:GetcMediumTime()+"]"
+				ASSIGN cRTime  += "["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+				ASSIGN cLRTime := cRTime
 				hb_mutexUnLock(__phMutex)
 			EndIF
 
