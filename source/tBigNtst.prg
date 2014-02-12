@@ -1105,7 +1105,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining((((nISQRT*999)+999)-((nISQRT*999)-999))/99)
+    __oRTime1:SetRemaining(Int((((nISQRT*999)+999)-((nISQRT*999)-999))/99))
 	For x := ((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
        	__oRTime2:SetRemaining(1)
         ASSIGN n  := x
