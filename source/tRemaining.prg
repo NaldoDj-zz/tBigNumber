@@ -13,16 +13,16 @@ Class tRemaining FROM tTimeCalc
 	PROTECTED:
 #ENDIF
 	
-	DATA cMediumTime	AS CHARACTER INIT "00:00:00" HIDDEN
-	DATA cEndTime  		AS CHARACTER INIT "00:00:00" HIDDEN
-	DATA cStartTime  	AS CHARACTER INIT "00:00:00" HIDDEN
-	DATA cTimeDiff  	AS CHARACTER INIT "00:00:00" HIDDEN
-	DATA cTRemaining  	AS CHARACTER INIT "00:00:00" HIDDEN
-	DATA dEndTime		AS DATE      INIT Ctod("//") HIDDEN
-	DATA dStartTime		AS DATE      INIT Ctod("//") HIDDEN
-	DATA nProgress		AS NUMERIC   INIT 0			 HIDDEN	
-	DATA nSRemaining	AS NUMERIC   INIT 0			 HIDDEN
-	DATA nTotal			AS NUMERIC   INIT 0			 HIDDEN
+	DATA cMediumTime	AS CHARACTER INIT "00:00:00:000" HIDDEN
+	DATA cEndTime  		AS CHARACTER INIT "00:00:00" 	 HIDDEN
+	DATA cStartTime  	AS CHARACTER INIT "00:00:00"     HIDDEN
+	DATA cTimeDiff  	AS CHARACTER INIT "00:00:00"     HIDDEN
+	DATA cTRemaining  	AS CHARACTER INIT "00:00:00"     HIDDEN
+	DATA dEndTime		AS DATE      INIT Ctod("//")     HIDDEN
+	DATA dStartTime		AS DATE      INIT Ctod("//")     HIDDEN
+	DATA nProgress		AS NUMERIC   INIT 0			     HIDDEN	
+	DATA nSRemaining	AS NUMERIC   INIT 0			     HIDDEN
+	DATA nTotal			AS NUMERIC   INIT 0			     HIDDEN
 
 #IFNDEF __PROTHEUS__
 	EXPORTED:
@@ -63,7 +63,7 @@ Return("TREMAINING")
 
 Method SetRemaining(nTotal) Class tRemaining
 	DEFAULT nTotal 		:= 1
-	self:cMediumTime	:= "00:00:00"	
+	self:cMediumTime	:= "00:00:00:000"	
 	self:cEndTime		:= "00:00:00"
 	self:cStartTime		:= Time()
 	self:cTimeDiff		:= "00:00:00"
