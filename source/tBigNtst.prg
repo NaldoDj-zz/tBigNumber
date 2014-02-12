@@ -1942,7 +1942,7 @@ Return(lHarbour)
 	    
 	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
-	    Local aSAnim     AS ARRAY						VALUE Array(16)
+	    Local aSAnim     AS ARRAY						VALUE Array(28)
 	    
 		Local cAT        AS CHARACTER
 		Local cRTime     AS CHARACTER
@@ -2067,6 +2067,78 @@ Return(lHarbour)
 			ASSIGN aSAnim[16] := SubStr(aSAnim[16],1,Len(aSAnim[16])-1)
 		EndIF
 
+		ASSIGN aSAnim[17] := Replicate(Chr(7)+";;",nSizeP2-1)
+		ASSIGN aSAnim[17] := SubStr(aSAnim[17],1,nSizeP2-1)
+		IF (SubStr(aSAnim[17],-1)==";")
+			ASSIGN aSAnim[17] := SubStr(aSAnim[17],1,Len(aSAnim[17])-1)
+		EndIF
+
+		ASSIGN aSAnim[18] := Replicate("-;;\;;|;;/;;",nSizeP2-1)
+		ASSIGN aSAnim[18] := SubStr(aSAnim[18],1,nSizeP2-1)
+		IF (SubStr(aSAnim[18],-1)==";")
+			ASSIGN aSAnim[18] := SubStr(aSAnim[18],1,Len(aSAnim[18])-1)
+		EndIF
+
+		ASSIGN aSAnim[19] := Replicate(Chr(8)+";;",nSizeP2-1)
+		ASSIGN aSAnim[19] := SubStr(aSAnim[19],1,nSizeP2-1)
+		IF (SubStr(aSAnim[19],-1)==";")
+			ASSIGN aSAnim[19] := SubStr(aSAnim[19],1,Len(aSAnim[19])-1)
+		EndIF
+
+		ASSIGN aSAnim[20] := Replicate("*;;",nSizeP2-1)
+		ASSIGN aSAnim[20] := SubStr(aSAnim[20],1,nSizeP2-1)
+		IF (SubStr(aSAnim[20],-1)==";")
+			ASSIGN aSAnim[20] := SubStr(aSAnim[20],1,Len(aSAnim[20])-1)
+		EndIF
+
+		ASSIGN aSAnim[21] := Replicate(".;;",nSizeP2-1)
+		ASSIGN aSAnim[21] := SubStr(aSAnim[21],1,nSizeP2-1)
+		IF (SubStr(aSAnim[21],-1)==";")
+			ASSIGN aSAnim[21] := SubStr(aSAnim[21],1,Len(aSAnim[21])-1)
+		EndIF
+
+		ASSIGN aSAnim[22] := Replicate(":);;",nSizeP3-1)
+		ASSIGN aSAnim[22] := SubStr(aSAnim[22],1,nSizeP3-1)
+		IF (SubStr(aSAnim[22],-1)==";")
+			ASSIGN aSAnim[22] := SubStr(aSAnim[22],1,Len(aSAnim[22])-1)
+		EndIF
+
+		ASSIGN aSAnim[23] := Replicate(">;;",nSizeP2-1)
+		ASSIGN aSAnim[23] := SubStr(aSAnim[23],1,nSizeP2-1)
+		IF (SubStr(aSAnim[23],-1)==";")
+			ASSIGN aSAnim[23] := SubStr(aSAnim[23],1,Len(aSAnim[23])-1)
+		EndIF
+
+		ASSIGN aSAnim[24] := Replicate(Chr(175)+";;",nSizeP2-1)
+		ASSIGN aSAnim[24] := SubStr(aSAnim[24],1,nSizeP2-1)
+		IF (SubStr(aSAnim[24],-1)==";")
+			ASSIGN aSAnim[24] := SubStr(aSAnim[24],1,Len(aSAnim[24])-1)
+		EndIF
+
+		ASSIGN aSAnim[25] := Replicate(Chr(254)+";;",nSizeP2-1)
+		ASSIGN aSAnim[25] := SubStr(aSAnim[25],1,nSizeP2-1)
+		IF (SubStr(aSAnim[25],-1)==";")
+			ASSIGN aSAnim[25] := SubStr(aSAnim[25],1,Len(aSAnim[25])-1)
+		EndIF
+	
+		ASSIGN aSAnim[26] := Replicate(Chr(221)+";;"+Chr(222)+";;",nSizeP2-1)
+		ASSIGN aSAnim[26] := SubStr(aSAnim[26],1,nSizeP2-1)
+		IF (SubStr(aSAnim[26],-1)==";")
+			ASSIGN aSAnim[26] := SubStr(aSAnim[26],1,Len(aSAnim[26])-1)
+		EndIF
+	
+		ASSIGN aSAnim[27] := Replicate(Chr(223)+";",nSizeP2-1)
+		ASSIGN aSAnim[27] := SubStr(aSAnim[27],1,nSizeP2-1)
+		IF (SubStr(aSAnim[27],-1)==";")
+			ASSIGN aSAnim[27] := SubStr(aSAnim[27],1,Len(aSAnim[27])-1)
+		EndIF
+
+		ASSIGN aSAnim[28] := Replicate(Chr(176)+";"+Chr(177)+";"+Chr(178)+";",nSizeP2-1)
+		ASSIGN aSAnim[28] := SubStr(aSAnim[28],1,nSizeP2-1)
+		IF (SubStr(aSAnim[28],-1)==";")
+			ASSIGN aSAnim[28] := SubStr(aSAnim[28],1,Len(aSAnim[28])-1)
+		EndIF
+
 		IF (lRandom)
 			ASSIGN nSAnim		:= abs(HB_RandomInt(1,nLenA))
 			aAdd(aRdnAn,nSAnim)	
@@ -2118,8 +2190,8 @@ Return(lHarbour)
 			EndIF
 			
 			IF (lCScreen)
-				lCScreen := .F.
-				@ 15, 0 CLEAR TO 15,nMaxCol
+				ASSIGN lCScreen := .F.
+				@ 12, 0 CLEAR TO 12,nMaxCol
 			EndIF
 
 			ASSIGN cStuff := PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
@@ -2127,6 +2199,9 @@ Return(lHarbour)
 			ASSIGN nQT    := (AT("] [",SubSTr(cStuff,nAT))-2)
 			ASSIGN cAT    := SubStr(cStuff,nAT,nQT+1)
 			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
+
+			DispOutAt(12,0,cStuff,"w+/n")
+			DispOutAt(12,nAT-1,cAT,"r+/n")
 
 			IF hb_mutexLock(__phMutex)
 				IF (cRTime==cLRTime)
@@ -2144,9 +2219,6 @@ Return(lHarbour)
 
 			DispOutAt(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
 			DispOutAt(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
-			
-			DispOutAt(12,0,cStuff,"w+/n")
-			DispOutAt(12,nAT-1,cAT,"r+/n")
 			
 			__tbnSleep(nSLEEP)
 	
