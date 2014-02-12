@@ -34,7 +34,8 @@
 		/*
 			TODO: Remover quando atualizar a plataforma
 		*/
-		#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+		//#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+		#if defined(__PLATFORM__WINCE)
 			#xtranslate hb_BPeek(<c>,<p>)          => Asc(SubStr(<c>,<p>,1))
 			#xtranslate hb_BCode(<c>)              => Asc(<c>)
 			#xtranslate hb_BChar(<n>)              => Chr(<n>)

@@ -564,7 +564,8 @@ STATIC FUNCTION LogError( oerr )
 /*
 	TODO: Remover quando atualizar a plataforma
 */
-#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+//#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+#if defined(__PLATFORM__WINCE)
 	DEFAULT NFORLOOP 	:= 0
 	DEFAULT COUTSTRING	:= ""
 	DEFAULT NROWS 		:= 0
@@ -787,7 +788,8 @@ RETURN oError
 /*
 	TODO: Remover quando atualizar a plataforma
 */
-#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+//#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
+#if defined(__PLATFORM__WINCE)
 	#pragma BEGINDUMP
 		#include "../../../../../../source/hb_core/core/src/rtl/hbdef.c"
 	#pragma ENDDUMP
