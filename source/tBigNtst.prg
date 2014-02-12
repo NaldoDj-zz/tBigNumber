@@ -261,7 +261,7 @@ Static Procedure tBigNTst()
     Private __nRow          AS NUMBER VALUE 0
 	Private __noProgress    AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
 	
-	Private __cSep 		    AS CHARACTER VALUE Replicate("_",__nMaxCol)
+	Private __cSep 		    AS CHARACTER VALUE Replicate("-",__nMaxCol)
 	
 	Private __lKillProgress AS LOGICAL VALUE .F.
 	Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
@@ -427,11 +427,15 @@ Static Procedure tBigNTst()
 				__ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigW--):ExactValue())
 				__ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigW+=otBigN--):ExactValue())
 				__ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigW+=--otBigN):ExactValue())
-				__ConOut(fhLog,__cSep)
 				__oRTime2:Calcule()
+				__ConOut(fhLog,__cSep)
+				__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+				__ConOut(fhLog,__cSep)
 				__oRTime1:Calcule(.F.)
 			Next n
 			__oRTime1:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
 			__ConOut(fhLog,__cSep)
 		Next w
 		__ConOut(fhLog," ------------ Teste Operator Overloading 0 -------------- END ")
@@ -460,10 +464,15 @@ Static Procedure tBigNTst()
                 otBigW:SetValue(otBigW:Sub(o1))
                 __ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFact[x][1])
             End While
-			__oRTime2:Calcule()	
+			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())	
+			__ConOut(fhLog,__cSep)
 			__oRTime1:Calcule(.F.)
         Next x
-		__oRTime1:Calcule()		
+		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())		
         __ConOut(fhLog,__cSep)
     Next n
 
@@ -480,7 +489,7 @@ Static Procedure tBigNTst()
     oPrime:IsPReset()
     oPrime:NextPReset()
 
-    __oRTime1:SetRemaining(Len(aPrimes))
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Len(aPrimes))
 	For n := 1 To Len(aPrimes)
         ASSIGN cN := PadL( aPrimes[n] , oPrime:nSize )
@@ -488,8 +497,15 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)    
         __ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))    
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+		__ConOut(fhLog,__cSep)
+		__oRTime1:Calcule(n==1)
 	Next n    
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)	
 
     __ConOut(fhLog,"")
 
@@ -501,7 +517,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(((nISQRT*99)/99)+1)
 	For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
@@ -517,9 +533,16 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cN+':tBigNumber():B2H(16)',"RESULT: "+cHex)
         __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==0)
     Next x
-
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+    
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste HEX16 0 -------------- END ")
@@ -532,7 +555,7 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(((nISQRT*99)/99)+1)
     For x := 0 TO (nISQRT*99) STEP 99
         ASSIGN n    := x
@@ -546,10 +569,16 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         ASSIGN cHex := otBBin:SetValue(cN):B2H('32'):Int()
         __ConOut(fhLog,cN+':tBigNumber():B2H(32)',"RESULT: "+cHex)
-        __ConOut(fhLog,__cSep)
-		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+  		__oRTime2:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==0)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -570,7 +599,7 @@ Static Procedure tBigNTst()
 #ELSE
     otBigN:SetValue(o1)
 #ENDIF    
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN    := hb_ntos(n)
@@ -583,10 +612,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
     
@@ -604,7 +639,7 @@ Static Procedure tBigNTst()
     ASSIGN n     := Val(cN)
     otBigN:SetValue(cN)
     
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
@@ -617,10 +652,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    __ConOut(fhLog,__cSep)
     
     __ConOut(fhLog,"")
     
@@ -634,7 +675,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
@@ -647,10 +688,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:add("-9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
     
@@ -664,7 +711,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
@@ -677,10 +724,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -692,7 +745,7 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
     
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
@@ -705,10 +758,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -720,7 +779,7 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
@@ -733,11 +792,17 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
-
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+    
     __ConOut(fhLog,"")
     
     __ConOut(fhLog," ------------ SUB Teste 3 -------------- END ")
@@ -754,7 +819,7 @@ Static Procedure tBigNTst()
     otBigN:SetValue(o1)
     otBigW:SetValue(o1)
     
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(n)
@@ -778,10 +843,16 @@ Static Procedure tBigNTst()
         ASSIGN cN   := otBigW:ExactValue()
         otBigW:SetValue(otBigW:Mult("1.5",.T.))
         __ConOut(fhLog,cN+':tBigNumber():Mult(1.5,.T.)',"RESULT: "+otBigW:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
     
@@ -798,7 +869,7 @@ Static Procedure tBigNTst()
     ASSIGN w := 1
     otBigW:SetValue(o1)
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN   := hb_ntos(w)
@@ -825,10 +896,16 @@ Static Procedure tBigNTst()
 		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
 		ASSIGN cW    := otBigW:Rnd(__SETDEC__):ExactValue()
 		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
     
@@ -842,7 +919,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
     __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	ASSIGN n := 0
     While ( n <= nN_TEST )		
@@ -853,11 +930,18 @@ Static Procedure tBigNTst()
 			otBigN := cN
 		#ENDIF
 		__ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
-		ASSIGN n += nISQRT
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(n==1)
+		ASSIGN n += nISQRT
     End While
-	
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+    
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
@@ -878,11 +962,16 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
             ASSIGN cW    := otBigN:LCM(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():LCM('+cN+')',"RESULT: "+cW)
-            __ConOut(fhLog,__cSep)
-			__oRTime2:Calcule() 
+			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime()) 
+			__ConOut(fhLog,__cSep)
 			__oRTime1:Calcule(.F.)
         Next n
 		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
     Next x
     
     __ConOut(fhLog,"")
@@ -917,10 +1006,16 @@ Static Procedure tBigNTst()
 			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
 			ASSIGN cW    := otBigW:Rnd(__SETDEC__):ExactValue()
 			__ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)			
-            __ConOut(fhLog,__cSep)
-			__oRTime1:Calcule()
+			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+			__ConOut(fhLog,__cSep)
+			__oRTime1:Calcule(.F.)
 		Next x
 		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
     Next n    
 
     __ConOut(fhLog,"")
@@ -940,7 +1035,7 @@ Static Procedure tBigNTst()
     ASSIGN cN := hb_ntos(n)
     otBigN:SetValue(cN)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cW   := hb_ntos(n)
@@ -953,10 +1048,16 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Div("1.5"))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
     
@@ -971,7 +1072,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     otBigN:SetValue(o1)
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
     For x := 1 TO nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(x)
@@ -983,11 +1084,17 @@ Static Procedure tBigNTst()
         otBigN:SetValue(otBigN:Div(o3))
 #ENDIF        
         __ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+otBigN:ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
-
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+    
     __ConOut(fhLog,"")
     
     __ConOut(fhLog," ------------ DIV Teste 2 -------------- END ")
@@ -999,15 +1106,21 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For n := 1 To nN_TEST Step nISQRT
         ASSIGN cN := hb_ntos(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(n==1)
     Next n
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    __ConOut(fhLog,__cSep)
     
     __ConOut(fhLog,"")
 
@@ -1025,7 +1138,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining((((nISQRT*999)+999)-((nISQRT*999)-999))/99)
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining((((nISQRT*999)+999)-((nISQRT*999)-999))/99)
 	For x := ((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
         ASSIGN n  := x
@@ -1039,10 +1152,16 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:Rnd(__SETDEC__):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW) 
-	    __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(__oRTime1:GetnProgress()==0)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -1059,7 +1178,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	__oRTime1:SetRemaining(1)
     __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
 	For x := 1 TO nN_TEST Step nISQRT
         ASSIGN n     := x
@@ -1080,10 +1199,16 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:Rnd(__SETDEC__):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)		
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==1)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -1095,7 +1220,7 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
     
-	__oRTime1:SetRemaining(nISQRT+1)
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(nISQRT+1)
     For x := 0 TO nISQRT
         ASSIGN n  := x
@@ -1114,10 +1239,16 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
         ASSIGN cW    := otBigN:Rnd(__SETDEC__):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)		
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(x==0)
     Next x
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -1159,11 +1290,16 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             ASSIGN cX    := otBigN:Rnd(__SETDEC__):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
-            __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+			__ConOut(fhLog,__cSep)
 			__oRTime1:Calcule(.F.)
         Next w
 		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
     Next x
 
     __ConOut(fhLog,"")
@@ -1205,11 +1341,16 @@ Static Procedure tBigNTst()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             ASSIGN cX    := otBigN:Rnd(__SETDEC__):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)	
-            __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+			__ConOut(fhLog,__cSep)
 			__oRTime1:Calcule(.F.)
         Next w
 		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
     Next x
 
     __ConOut(fhLog,"")
@@ -1224,7 +1365,7 @@ Static Procedure tBigNTst()
 
 	__oRTime1:SetRemaining(2)
 	For n := 1 To 2
-		__oRTime2:SetRemaining(n)
+		__oRTime2:SetRemaining(1)
 		IF ( n == 1 )
 			otBigN:SetValue("1.5")
 			__ConOut(fhLog,"otBigN","RESULT: "+otBigN:ExactValue())
@@ -1235,8 +1376,15 @@ Static Procedure tBigNTst()
 			__ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:Rnd(2):ExactValue())
 		EndIF
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()		
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+		__ConOut(fhLog,__cSep)
+		__oRTime1:Calcule(n==1)
 	Next n
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -1244,7 +1392,7 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
 	
-	__oRTime1:SetRemaining(13)
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(13)
 	
 *	otBigN:SysSQRT(999999999999999)
@@ -1271,7 +1419,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1282,7 +1433,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:aLog2():ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1293,7 +1447,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:aLog10():ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
 
@@ -1304,7 +1461,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:aLog(o1):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1315,7 +1475,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:aLog(o2):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1325,7 +1488,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(o3):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1336,7 +1502,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:aLog(o4):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1347,7 +1516,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:aLog(o5):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1358,7 +1530,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:aLog(o6):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1369,7 +1544,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:aLog(o7):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1380,7 +1558,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:aLog(o8):ExactValue())
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1391,7 +1572,10 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:aLog(o9):ExactValue())     
     EndIF
 	__oRTime2:Calcule()
-	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	__oRTime1:Calcule(.F.)
 
     __ConOut(fhLog,"")
     
@@ -1402,7 +1586,13 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):ExactValue())
     EndIF
 	__oRTime2:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
 	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
 
@@ -1448,11 +1638,16 @@ Static Procedure tBigNTst()
             IF ( laLog )
                 __ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):ExactValue())
             EndIF
-            __ConOut(fhLog,__cSep)
 			__oRTime2:Calcule()
+			__ConOut(fhLog,__cSep)
+			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+			__ConOut(fhLog,__cSep)
 			__oRTime1:Calcule(.F.)
         Next n
 		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
     Next w
 
     __ConOut(fhLog,"")
@@ -1469,7 +1664,7 @@ Static Procedure tBigNTst()
     
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
     
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
 	For w := 0 TO nN_TEST Step nISQRT
         ASSIGN cW    := hb_ntos(w)
@@ -1478,11 +1673,17 @@ Static Procedure tBigNTst()
         IF ( laLog )
             __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():ExactValue())
         EndIF
-        __ConOut(fhLog,__cSep)
-		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+        __oRTime2:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(w==1)
     Next w
-
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)
+	
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," ------------ Teste LN 1 -------------- END ")
@@ -1500,7 +1701,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     ASSIGN n := 0
-	__oRTime1:SetRemaining((nISQRT/2)+1)
+	__oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining((nISQRT/2)+1)
     While ( n <= nISQRT )
         IF ( n < 3 )
@@ -1513,10 +1714,16 @@ Static Procedure tBigNTst()
         ASSIGN lMR    := IF( lPn , lPn , otBigN:SetValue(cN):millerRabin(o2) )
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
         __ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(n==2)
     End While
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
 
     __ConOut(fhLog,"")
 
@@ -1532,16 +1739,22 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(nISQRT)
+    __oRTime1:SetRemaining(1)
 	__oRTime2:SetRemaining(nISQRT)
 	For n := 1 To nISQRT
         __ConOut(fhLog,'tBigNumber():Randomize()',"RESULT: "+otBigN:Randomize():ExactValue())
         __ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
         __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
-        __ConOut(fhLog,__cSep)
 		__oRTime2:Calcule()
-		__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    	__oRTime1:Calcule(n==1)
     Next n
+	__oRTime1:Calcule()
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+    __ConOut(fhLog,__cSep)
     
     __ConOut(fhLog,"")
 
@@ -1573,13 +1786,16 @@ Static Procedure tBigNTst()
     #IFDEF __HARBOUR__
 		nsElapsed     := (HB_DATETIME()-tsBegin)
         __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
-		__lKillProgress := .T.
-		hb_threadQuitRequest(ptthProg)
-		hb_ThreadWait(ptthProg)
 	#ENDIF
 #ENDIF
 
-    __ConOut(fhLog,__cSep)
+	__ConOut(fhLog,__cSep)
+	
+	__ConOut(fhLog,__cSep)
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTimeProc:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
+    
+	__ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"ACC_SET     :",nACC_SET) 
     __ConOut(fhLog,"ROOT_ACC_SET:",nROOT_ACC_SET)
@@ -1591,20 +1807,21 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,__cSep)
     
     fClose(fhLog)
-
-	#IFDEF __PROTHEUS__
-		#IFDEF TBN_DBFILE
-   			tBigNGC()
-    	#ENDIF
-    #ELSE
-    	otBigN := NIL
-    	hb_gcAll()
-    #ENDIF	
     
-#IFDEF __HARBOUR__
+#IFDEF __PROTHEUS__
+	#IFDEF TBN_DBFILE
+   		tBigNGC()
+    #ENDIF
+#ELSE// __HARBOUR__
+	__lKillProgress := .T.
+	hb_threadQuitRequest(ptthProg)
+	CLS
+	hb_ThreadWait(ptthProg)
+   	otBigN := NIL
+   	hb_gcAll()
     WAIT "Press any key to end"
     CLS
-#ENDIF    
+#ENDIF   
     
 Return
 
