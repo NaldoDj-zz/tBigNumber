@@ -943,6 +943,7 @@ Static Procedure tBigNTst()
 			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime()) 
 			__ConOut(fhLog,__cSep)
         Next n
+        __oRTime1:Calcule()
 		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
     	__ConOut(fhLog,__cSep)
     Next x
