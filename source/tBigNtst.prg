@@ -273,12 +273,13 @@ Static Procedure tBigNTst()
 #ELSE
 
     Private __cSep          AS CHARACTER VALUE "---------------------------------------------------------"
+	Private __oRTimeProc	AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(1)
 
 #ENDIF    
 
-    Private __CRLF      AS CHARACTER VALUE CRLF
-    Private __oRTime1   AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
-	Private __oRTime2   AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
+    Private __CRLF      	AS CHARACTER VALUE CRLF
+    Private __oRTime1   	AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
+	Private __oRTime2   	AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
 	
     ASSIGN fhLog := fCreate(cLog,FC_NORMAL)
     fClose(fhLog)
@@ -1736,10 +1737,9 @@ Static Procedure tBigNTst()
     
     ASSIGN cEndTime    := Time()
     __ConOut(fhLog,"TIME    :" , cEndTime )
-    
-    __oRTimeProc:Calcule(.F.)
 
 #IFDEF __PROTHEUS__
+    __oRTimeProc:Calcule()
     __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcEndTime() )
 #ELSE    
     #IFDEF __HARBOUR__
