@@ -71,6 +71,7 @@ THREAD Static __pwoGCD
 THREAD Static __oeDivN
 THREAD Static __oeDivD
 THREAD Static __oeDivR
+THREAD Static __oeDivQ
 
 THREAD Static __oSysSQRT
 
@@ -122,7 +123,9 @@ CLASS tBigNumber
 
 #IFNDEF __PROTHEUS__
 	#IFNDEF __TBN_DYN_OBJ_SET__
-		PROTECTED:
+		#IFNDEF __ALT_D__
+			PROTECTED:
+		#ENDIF
 	#ENDIF
 #ENDIF
 	/* Keep in alphabetical order */
@@ -231,6 +234,8 @@ CLASS tBigNumber
 	Method Factorial()	//TODO: Otimizar+
 
 #IFNDEF __PROTHEUS__
+    
+*/*(*)*/OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C
 
 	OPERATOR "==" ARG uBigN INLINE (self:eq(uBigN))
 
@@ -246,24 +251,25 @@ CLASS tBigNumber
 	
 	OPERATOR "+"  ARG uBigN INLINE (self:Add(uBigN))
 	OPERATOR "++" INLINE (self:SetValue(self:Add(__o1)))
-	OPERATOR "+=" ARG uBigN INLINE (self:SetValue(self:Add(uBigN)))
+/*(*)*/OPERATOR "+=" ARG uBigN INLINE (self:SetValue(self:Add(uBigN)))
 
 	OPERATOR "-"  ARG uBigN INLINE (self:Sub(uBigN))
 	OPERATOR "--" INLINE (self:SetValue(self:Sub(__o1)))
-	OPERATOR "-=" ARG uBigN INLINE (self:SetValue(self:Sub(uBigN)))
+/*(*)*/OPERATOR "-=" ARG uBigN INLINE (self:SetValue(self:Sub(uBigN)))
 	
 	OPERATOR "*"  ARG uBigN INLINE (self:Mult(uBigN))
-	OPERATOR "*=" ARG uBigN INLINE (self:SetValue(self:Mult(uBigN)))
+/*(*)*/OPERATOR "*=" ARG uBigN INLINE (self:SetValue(self:Mult(uBigN)))
 
 	OPERATOR "/"  ARGS uBigN,lFloat INLINE (self:Div(uBigN,lFloat))
-	OPERATOR "/=" ARGS uBigN,lFloat INLINE (self:SetValue(self:Div(uBigN,lFloat)))
+/*(*)*/OPERATOR "/=" ARGS uBigN,lFloat INLINE (self:SetValue(self:Div(uBigN,lFloat)))
 	
 	OPERATOR "%"  ARG uBigN INLINE (self:Mod(uBigN))
-	OPERATOR "%=" ARG uBigN INLINE (self:SetValue(self:Mod(uBigN)))
+/*(*)*/OPERATOR "%=" ARG uBigN INLINE (self:SetValue(self:Mod(uBigN)))
 	
 	OPERATOR "^"  ARG uBigN INLINE (self:Pow(uBigN))
 	OPERATOR "**" ARG uBigN INLINE (self:Pow(uBigN))
-	OPERATOR "^=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
+/*(*)*/OPERATOR "^=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
+/*(*)*/OPERATOR "**=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
 	
 	OPERATOR ":=" ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
 	OPERATOR "="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
@@ -300,71 +306,9 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	self:nBase    := nBase
 
 	IF __lsthdSet==NIL
-	
-		__lsthdSet := .F.
-		
 		self:SetDecimals()
 		self:nthRootAcc()
-		
-		__cstcZ0 := "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-		__nstcZ0 := 150
-		
-		__cstcN9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-		__nstcN9 := 150
-		
-		#IFDEF TBN_ARRAY
-			__aZAdd	 := Array(0)
-			__aZSub	 := Array(0)
-			__aZMult := Array(0)
-		#ENDIF    
-
-		#IFDEF TBN_DBFILE
-			IF (__aFiles==NIL)
-				__aFiles := Array(0)
-			EndIF
-		#ENDIF
-
-		__eqoN1 := tBigNumber():New()
-		__eqoN2 := tBigNumber():New()
-
-		__gtoN1 := tBigNumber():New()	
-		__gtoN2 := tBigNumber():New()
-
-		__ltoN1 := tBigNumber():New()	
-		__ltoN2 := tBigNumber():New()
-
-		__adoNR := tBigNumber():New()
-		__adoN1 := tBigNumber():New()
-		__adoN2 := tBigNumber():New()
-
-		__sboNR := tBigNumber():New()
-		__sboN1 := tBigNumber():New()
-		__sboN2 := tBigNumber():New()
-
-		__mtoNR := tBigNumber():New()
-		__mtoN1 := tBigNumber():New()
-		__mtoN2 := tBigNumber():New()
-
-		__dvoNR   := tBigNumber():New()
-		__dvoN1   := tBigNumber():New()
-		__dvoN2   := tBigNumber():New()
-		__dvoRDiv := tBigNumber():New()
-
-		__pwoA	 := tBigNumber():New()
-		__pwoB	 := tBigNumber():New()
-		__pwoNP	 := tBigNumber():New()
-		__pwoNR	 := tBigNumber():New()
-		__pwoNT	 := tBigNumber():New()	
-		__pwoGCD := tBigNumber():New()
-		
-		__oeDivN := tBigNumber():New()
-		__oeDivD := tBigNumber():New()
-		__oeDivR := tBigNumber():New()
-
-		__oSysSQRT := tBigNumber():New()
-	
-		__lsthdSet := .T.
-	
+		__InitStV1(nBase)
 	EndIF
 
 	/* workaround for problem with command DEFAULT*/
@@ -374,20 +318,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	self:SetValue(uBigN,nBase)
 
 	IF __lstbNSet==NIL
-		__lstbNSet := .F.
-		__o0        := tBigNumber():New("0",nBase)
-		__o1        := tBigNumber():New("1",nBase)
-		__o2        := tBigNumber():New("2",nBase)
-*		__o5        := tBigNumber():New("5",nBase)
-		__o10       := tBigNumber():New("10",nBase)
-		__o20       := tBigNumber():New("20",nBase)
-		__oMinFI	:= tBigNumber():New(MAX_SYS_FI,nBase)
-		__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
-		__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
-		#IFDEF __PROTHEUS__
-			DEFAULT __cEnvSrv := GetEnvServer()
-		#ENDIF
-		__lstbNSet := .T.
+		__InitStV2(nBase)
 	EndIF
 
 Return(self)
@@ -434,7 +365,7 @@ Return(self)
 	Sintaxe     : tBigNumber():Clone() -> oClone
 */
 Method Clone() CLASS tBigNumber
-Return(tBigNumber():New(self))
+Return(__objClone(self)/*tBigNumber():New(self)*/)
 
 /*
 	Method		: ClassName
@@ -1494,11 +1425,11 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		DEFAULT lFloat := .T.
 
 		__dvoNR:SetValue(eDiv(cN1,cN2,nAcc,lFloat))
-	
-		__dvoRDiv:SetValue(__dvoNR:cRDiv,NIL,NIL,.F.)
-	
+
 		IF lFloat
-			
+
+			__dvoRDiv:SetValue(__dvoNR:cRDiv,NIL,NIL,.F.)
+		
 			IF __dvoRDiv:gt(__o0)
 	
 				cDec := ""
@@ -1578,8 +1509,17 @@ Return(__dvoNR)
 	Sintaxe     : tBigNumber():Mod(uBigN) -> oMod
 */
 Method Mod(uBigN) CLASS tBigNumber
-	Local oMod	 := tBigNumber():New(self:Div(uBigN,.F.))
-    oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
+	Local oMod	 := tBigNumber():New(uBigN)
+	Local cRDiv
+	IF self:lt(oMod)
+		oMod:SetValue(self)
+	ElseIF self:eq(oMod)
+		oMod:SetValue(__o0)
+	Else
+		oMod:SetValue(self:Div(oMod,.F.))
+		cRDiv := oMod:cRDiv
+    	oMod:SetValue(cRDiv,NIL,NIL,.F.)
+    EndIF	
 Return(oMod)
 
 /*
@@ -3347,36 +3287,26 @@ Static Function eMult(cN1,cN2,nAcc)
 	oPe	:= __o1:Clone()
 	oPd := tBigNumber():New(cN2)
 	
-	While .T.
+	While oPe:lte(oN1)
 		++nI
-		aAdd(aE,{oPe:Clone(),oPd:Clone(),.F.})
-		IF oPe:gte(oN1)
-			EXIT
-		EndIF
-		oPe:SetValue(oPe:Add(oPe,NIL,NIL,NIL,nAcc))
-		oPd:SetValue(oPd:Add(oPd,NIL,NIL,NIL,nAcc))
+		aAdd(aE,{oPe:Clone(),oPd:Clone()})
+		oPe:SetValue(oPe:Add(oPe),NIL,NIL,NIL,nAcc)
+		oPd:SetValue(oPd:Add(oPd),NIL,NIL,NIL,nAcc)
 	End While
 
 	ocT	:= __o0:Clone()
+	oNR	:= __o0:Clone()
 	While nI>0
-		ocT:SetValue(ocT:Add(aE[nI][1],NIL,NIL,NIL,nAcc))
-		IF ocT:lte(oN1)
-			aE[nI][3] := .T. 
-			IF ocT:eq(oN1)
-				EXIT
-			EndIF	
-		Else
-			ocT:SetValue(ocT:Sub(aE[nI][1],NIL,NIL,NIL,nAcc))
+		ocT:SetValue(ocT:Add(aE[nI][1]),NIL,NIL,NIL,nAcc)
+		oNR:SetValue(oNR:Add(aE[nI][2]),NIL,NIL,NIL,nAcc)
+		IF ocT:eq(oN1)
+			EXIT
+		ElseIF ocT:gt(oN1)
+			ocT:SetValue(ocT:Sub(aE[nI][1]),NIL,NIL,NIL,nAcc)
+			oNR:SetValue(oNR:Sub(aE[nI][2]),NIL,NIL,NIL,nAcc)
 		EndIF
 		--nI
 	End While
-
-	oNR	:= tBigNumber():New()
-	For nI := 1 To Len(aE) 
-		IF aE[nI][3]
-			oNR:SetValue(oNR:Add(aE[nI][2],NIL,NIL,NIL,nAcc))
-		EndIF
-	Next nI
 
 Return(oNR)
 	
@@ -3400,54 +3330,46 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 	
 	__oeDivN:SetValue(cN,NIL,NIL,NIL,nAcc)
 	__oeDivD:SetValue(cD,NIL,NIL,NIL,nAcc)
-	__oeDivR:SetValue(__o0,NIL,NIL,NIL,nAcc)
+	__oeDivR:SetValue(__o0,NIL,"0",NIL,nAcc)
+	__oeDivQ:SetValue(__o0,NIL,"0",NIL,nAcc)
 
 	oPe	:= __o1:Clone()
 	oPd	:= __oeDivD:Clone()
 
 	While oPd:lte(__oeDivN)
 		++nI
-		aAdd(aE,{oPe:Clone(),oPd:Clone(),.F.})
-		oPe:SetValue(oPe:Add(oPe,NIL,NIL,NIL,nAcc))
-		oPd:SetValue(oPd:Add(oPd,NIL,NIL,NIL,nAcc))
+		aAdd(aE,{oPe:Clone(),oPd:Clone()})
+		oPe:SetValue(oPe:Add(oPe),NIL,NIL,NIL,nAcc)
+		oPd:SetValue(oPd:Add(oPd),NIL,NIL,NIL,nAcc)
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2],NIL,NIL,NIL,nAcc))
-		IF __oeDivR:lte(__oeDivN)
-			aE[nI][3] := .T.
-			IF __oeDivR:eq(__oeDivN)
-				EXIT
-			EndIF
-		Else
-			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2],NIL,NIL,NIL,nAcc))
+		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2]),NIL,NIL,NIL,nAcc)
+		__oeDivQ:SetValue(__oeDivQ:Add(aE[nI][1]),NIL,"0",NIL,nAcc)
+		IF __oeDivR:eq(__oeDivN)
+			EXIT
+		ElseIF __oeDivR:gt(__oeDivN)
+			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2]),NIL,NIL,NIL,nAcc)
+			__oeDivQ:SetValue(__oeDivQ:Sub(aE[nI][1]),NIL,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
 
-	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR,NIL,NIL,NIL,nAcc))
+	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),NIL,NIL,NIL,nAcc)
 	
 	cRDiv := __oeDivR:ExactValue(.T.)
-	
-	__oeDivR:SetValue(__o0,NIL,NIL,NIL,nAcc)
-	
-	For nI := 1 To Len(aE)
-		IF aE[nI][3]
-			__oeDivR:SetValue(__oeDivR:Add(aE[nI][1],NIL,NIL,NIL,nAcc))
-		EndIF
-	Next nI
 
-	__oeDivR:SetValue(__oeDivR,NIL,cRDiv,NIL,nAcc)
+	__oeDivQ:SetValue(__oeDivQ,NIL,cRDiv,NIL,nAcc)
+	
 	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
 		cRDiv := SubStr(cRDiv,1,Len(cRDiv)-1)
-		__oeDivR:SetValue(__oeDivR,NIL,cRDiv)
 		IF Empty(cRDiv)
 			cRDiv := "0"
-			__oeDivR:SetValue(__oeDivR,NIL,cRDiv,NIL,nAcc)
 		EndIF
+		__oeDivQ:SetValue(__oeDivQ,NIL,cRDiv,NIL,nAcc)
 	EndIF
 
-Return(__oeDivR:Clone())
+Return(__oeDivQ:Clone())
 
 /*
 	Funcao		: nthRoot
@@ -4391,6 +4313,93 @@ Static Function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
 Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
+Static Procedure __InitStV1(nBase)
+
+	Local oTBigN
+
+	__lsthdSet := .F.
+
+	__cstcZ0 := "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+	__nstcZ0 := 150
+	
+	__cstcN9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+	__nstcN9 := 150
+	
+	#IFDEF TBN_ARRAY
+		__aZAdd	 := Array(0)
+		__aZSub	 := Array(0)
+		__aZMult := Array(0)
+	#ENDIF    
+
+	#IFDEF TBN_DBFILE
+		IF (__aFiles==NIL)
+			__aFiles := Array(0)
+		EndIF
+	#ENDIF
+	
+	oTBigN	:= tBigNumber():New("0",nBase)
+
+	__eqoN1 := oTBigN:Clone()
+	__eqoN2 := oTBigN:Clone()
+
+	__gtoN1 := oTBigN:Clone()
+	__gtoN2 := oTBigN:Clone()
+
+	__ltoN1 := oTBigN:Clone()
+	__ltoN2 := oTBigN:Clone()
+
+	__adoNR := oTBigN:Clone()
+	__adoN1 := oTBigN:Clone()
+	__adoN2 := oTBigN:Clone()
+
+	__sboNR := oTBigN:Clone()
+	__sboN1 := oTBigN:Clone()
+	__sboN2 := oTBigN:Clone()
+
+	__mtoNR := oTBigN:Clone()
+	__mtoN1 := oTBigN:Clone()
+	__mtoN2 := oTBigN:Clone()
+
+	__dvoNR   := oTBigN:Clone()
+	__dvoN1   := oTBigN:Clone()
+	__dvoN2   := oTBigN:Clone()
+	__dvoRDiv := oTBigN:Clone()
+
+	__pwoA	 := oTBigN:Clone()
+	__pwoB	 := oTBigN:Clone()
+	__pwoNP	 := oTBigN:Clone()
+	__pwoNR	 := oTBigN:Clone()
+	__pwoNT	 := oTBigN:Clone()
+	__pwoGCD := oTBigN:Clone()
+	
+	__oeDivN := oTBigN:Clone()
+	__oeDivD := oTBigN:Clone()
+	__oeDivR := oTBigN:Clone()
+	__oeDivQ := oTBigN:Clone()
+
+	__oSysSQRT := oTBigN:Clone()
+	
+	__lsthdSet := .T.
+
+Return
+
+Static Procedure __InitStV2(nBase)
+	__lstbNSet := .F.
+	__o0        := tBigNumber():New("0",nBase)
+	__o1        := tBigNumber():New("1",nBase)
+	__o2        := tBigNumber():New("2",nBase)
+*		__o5        := tBigNumber():New("5",nBase)
+	__o10       := tBigNumber():New("10",nBase)
+	__o20       := tBigNumber():New("20",nBase)
+	__oMinFI	:= tBigNumber():New(MAX_SYS_FI,nBase)
+	__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
+	__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
+	#IFDEF __PROTHEUS__
+		DEFAULT __cEnvSrv := GetEnvServer()
+	#ENDIF
+	__lstbNSet := .T.
+Return
+
 #IFDEF __PROTHEUS__
 
 	Static Function __eTthD()
@@ -4451,7 +4460,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 		  return pbuffer;
 		}
 
-		HB_FUNC( __TBIGNPADL ){	  
+		HB_FUNC_STATIC( __TBIGNPADL ){	  
 		  const char * szItem = hb_parc(1);
 		  HB_ISIZ nLen        = hb_parns(2);
 		  const char * szPad  = hb_parc(3);
@@ -4471,7 +4480,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return pbuffer;
 		}
 
-		HB_FUNC( __TBIGNPADR ){
+		HB_FUNC_STATIC( __TBIGNPADR ){
 		  const char * szItem = hb_parc(1);
 		  HB_ISIZ nLen        = hb_parns(2);
 		  const char * szPad  = hb_parc(3);
@@ -4488,7 +4497,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return szStringTo;
 		}
 
-		HB_FUNC( TBIGNINVERT ){
+		HB_FUNC_STATIC( TBIGNINVERT ){
 			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
 			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
 			const char * szStringFrom = hb_itemGetCPtr(pItem);
@@ -4519,7 +4528,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return c;
 		}
 
-		HB_FUNC( TBIGNADD ){	
+		HB_FUNC_STATIC( TBIGNADD ){	
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4552,7 +4561,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return c;
 		}
 
-		HB_FUNC( TBIGNSUB ){	
+		HB_FUNC_STATIC( TBIGNSUB ){	
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4618,7 +4627,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return c;
 		}
 	
-		HB_FUNC( TBIGNMULT ){
+		HB_FUNC_STATIC( TBIGNMULT ){
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4646,7 +4655,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 			return nGCD;
 		}
 
-		HB_FUNC( TBIGNGDC ){
+		HB_FUNC_STATIC( TBIGNGDC ){
 			HB_MAXUINT x = hb_parnint(1);
 			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNGDC(x,y));
@@ -4684,7 +4693,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 		}
 
-		HB_FUNC( TBIGNLCM ){
+		HB_FUNC_STATIC( TBIGNLCM ){
 			HB_MAXUINT x = hb_parnint(1);
 			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNLCM(x,y));
@@ -4706,7 +4715,7 @@ Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
        		return fi; 
     	}
     	
-		HB_FUNC( TBIGNFI ){
+		HB_FUNC_STATIC( TBIGNFI ){
 			HB_MAXUINT n = hb_parnint(1);
 			hb_retnint(__TBIGNFI(n));
 		}
