@@ -71,7 +71,9 @@ THREAD Static __pwoGCD
 THREAD Static __oeDivN
 THREAD Static __oeDivD
 THREAD Static __oeDivR
-THREAD Static __oeDivQ
+THREAD Static __oeDivQ 
+THREAD Static __oeDivDvD
+THREAD Static __oeDivDvR
 
 THREAD Static __oSysSQRT
 
@@ -3272,7 +3274,7 @@ Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 */
 Static Function eMult(cN1,cN2,nAcc)
 
-	Local aE 		:= Array(0)
+	Local aeMT 		:= Array(0)
                 	
 	Local nI		:= 0
 	
@@ -3289,7 +3291,7 @@ Static Function eMult(cN1,cN2,nAcc)
 	
 	While oPe:lte(oN1)
 		++nI
-		aAdd(aE,{oPe:Clone(),oPd:Clone()})
+		aAdd(aeMT,{oPe:Clone(),oPd:Clone()})
 		oPe:SetValue(oPe:Add(oPe),NIL,NIL,NIL,nAcc)
 		oPd:SetValue(oPd:Add(oPd),NIL,NIL,NIL,nAcc)
 	End While
@@ -3297,13 +3299,13 @@ Static Function eMult(cN1,cN2,nAcc)
 	ocT	:= __o0:Clone()
 	oNR	:= __o0:Clone()
 	While nI>0
-		ocT:SetValue(ocT:Add(aE[nI][1]),NIL,NIL,NIL,nAcc)
-		oNR:SetValue(oNR:Add(aE[nI][2]),NIL,NIL,NIL,nAcc)
+		ocT:SetValue(ocT:Add(aeMT[nI][1]),NIL,NIL,NIL,nAcc)
+		oNR:SetValue(oNR:Add(aeMT[nI][2]),NIL,NIL,NIL,nAcc)
 		IF ocT:eq(oN1)
 			EXIT
 		ElseIF ocT:gt(oN1)
-			ocT:SetValue(ocT:Sub(aE[nI][1]),NIL,NIL,NIL,nAcc)
-			oNR:SetValue(oNR:Sub(aE[nI][2]),NIL,NIL,NIL,nAcc)
+			ocT:SetValue(ocT:Sub(aeMT[nI][1]),NIL,NIL,NIL,nAcc)
+			oNR:SetValue(oNR:Sub(aeMT[nI][2]),NIL,NIL,NIL,nAcc)
 		EndIF
 		--nI
 	End While
@@ -3315,42 +3317,39 @@ Return(oNR)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-	Sintaxe     : eDiv(cN,cD,nAcc,lFloat) -> cNR
+	Sintaxe     : eDiv(cN,cD,nAcc,lFloat) -> __oeDivQ
 */
 Static Function eDiv(cN,cD,nAcc,lFloat)
 
-	Local aE 		:= Array(0)
+	Local aeDV 		:= Array(0)
 	
 	Local cRDiv
-                	
+
 	Local nI		:= 0
 
-	Local oPe
-	Local oPd
-	
 	__oeDivN:SetValue(cN,NIL,NIL,NIL,nAcc)
 	__oeDivD:SetValue(cD,NIL,NIL,NIL,nAcc)
 	__oeDivR:SetValue(__o0,NIL,"0",NIL,nAcc)
 	__oeDivQ:SetValue(__o0,NIL,"0",NIL,nAcc)
 
-	oPe	:= __o1:Clone()
-	oPd	:= __oeDivD:Clone()
+	__oeDivDvD:SetValue(__o1:Clone())
+	__oeDivDvR:SetValue(__oeDivD)
 
-	While oPd:lte(__oeDivN)
+	While __oeDivDvR:lte(__oeDivN)
 		++nI
-		aAdd(aE,{oPe:Clone(),oPd:Clone()})
-		oPe:SetValue(oPe:Add(oPe),NIL,NIL,NIL,nAcc)
-		oPd:SetValue(oPd:Add(oPd),NIL,NIL,NIL,nAcc)
+		aAdd(aeDV,{__oeDivDvD:Clone(),__oeDivDvR:Clone()})
+		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),NIL,NIL,NIL,nAcc)
+		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),NIL,NIL,NIL,nAcc)
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aE[nI][2]),NIL,NIL,NIL,nAcc)
-		__oeDivQ:SetValue(__oeDivQ:Add(aE[nI][1]),NIL,"0",NIL,nAcc)
+		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),NIL,NIL,NIL,nAcc)
+		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),NIL,"0",NIL,nAcc)
 		IF __oeDivR:eq(__oeDivN)
 			EXIT
 		ElseIF __oeDivR:gt(__oeDivN)
-			__oeDivR:SetValue(__oeDivR:Sub(aE[nI][2]),NIL,NIL,NIL,nAcc)
-			__oeDivQ:SetValue(__oeDivQ:Sub(aE[nI][1]),NIL,"0",NIL,nAcc)
+			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),NIL,NIL,NIL,nAcc)
+			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),NIL,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
@@ -4372,10 +4371,12 @@ Static Procedure __InitStV1(nBase)
 	__pwoNT	 := oTBigN:Clone()
 	__pwoGCD := oTBigN:Clone()
 	
-	__oeDivN := oTBigN:Clone()
-	__oeDivD := oTBigN:Clone()
-	__oeDivR := oTBigN:Clone()
-	__oeDivQ := oTBigN:Clone()
+	__oeDivN   := oTBigN:Clone()
+	__oeDivD   := oTBigN:Clone()
+	__oeDivR   := oTBigN:Clone()
+	__oeDivQ   := oTBigN:Clone()
+	__oeDivDvD := oTBigN:Clone()
+	__oeDivDvR := oTBigN:Clone()
 
 	__oSysSQRT := oTBigN:Clone()
 	
