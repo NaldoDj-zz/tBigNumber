@@ -1,11 +1,11 @@
 #include "tBigNumber.ch"
 
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	Static __cEnvSrv
 #else
 	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
 	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
-#ENDIF
+#endif
 
 Static __o0
 Static __o1
@@ -22,15 +22,15 @@ Static __cstcN9
 Static __nstcN9
 Static __lstbNSet
 
-#IFDEF TBN_ARRAY
+#ifdef TBN_ARRAY
 	THREAD Static __aZAdd
 	THREAD Static __aZSub
 	THREAD Static __aZMult
-#ENDIF
+#endif
 
-#IFDEF TBN_DBFILE
+#ifdef TBN_DBFILE
 	THREAD Static __aFiles
-#ENDIF
+#endif
 
 THREAD Static __nthRootAcc
 THREAD Static __nSetDecimals
@@ -79,39 +79,39 @@ THREAD Static __oSysSQRT
 
 THREAD Static __lsthdSet
 
-#DEFINE RANDOM_MAX_EXIT			5
-#DEFINE EXIT_MAX_RANDOM			50
-#IFDEF __PROTHEUS__
-	#DEFINE MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
-#ELSE
-	#DEFINE MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
-#ENDIF	
+#define RANDOM_MAX_EXIT			5
+#define EXIT_MAX_RANDOM			50
+#ifdef __PROTHEUS__
+	#define MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
+#else
+	#define MAX_LENGHT_ADD_THREAD   1000 //Achar o Melhor Valor para q seja compensador
+#endif	
 
-#DEFINE NTHROOT_EXIT		3
-#DEFINE MAX_SYS_SQRT		"9999999999999999"
+#define NTHROOT_EXIT		3
+#define MAX_SYS_SQRT		"9999999999999999"
 
-#DEFINE MAX_SYS_GCD			"999999999999999999"
-#DEFINE MAX_SYS_LCM			"999999999999999999"
+#define MAX_SYS_GCD			"999999999999999999"
+#define MAX_SYS_LCM			"999999999999999999"
 
-#DEFINE MAX_SYS_FI			"999999999999999999"
+#define MAX_SYS_FI			"999999999999999999"
 
 /*
 *	Alternative Compile Options: /D
 *
-*	#IFDEF __PROTHEUS__
+*	#ifdef __PROTHEUS__
 *		/DTBN_ARRAY
 *		/DTBN_DBFILE 
 *		/D__TBN_DYN_OBJ_SET__ 
 *		/D__ADDMT__
 *		/D__SUBTMT__
-*	#ELSE //__HARBOUR__
+*	#else //__HARBOUR__
 *		/DTBN_ARRAY
 *		/DTBN_DBFILE 
 *		/DTBN_MEMIO 
 *		/D__TBN_DYN_OBJ_SET__ 
 *		/D__ADDMT__
 *		/D__SUBTMT__
-*	#ENDIF
+*	#endif
 */
 
 /*
@@ -123,13 +123,13 @@ THREAD Static __lsthdSet
 */
 CLASS tBigNumber
 
-#IFNDEF __PROTHEUS__
-	#IFNDEF __TBN_DYN_OBJ_SET__
-		#IFNDEF __ALT_D__
+#ifndef __PROTHEUS__
+	#ifndef __TBN_DYN_OBJ_SET__
+		#ifndef __ALT_D__
 			PROTECTED:
-		#ENDIF
-	#ENDIF
-#ENDIF
+		#endif
+	#endif
+#endif
 	/* Keep in alphabetical order */
 	DATA cDec  AS CHARACTER INIT ""
 	DATA cInt  AS CHARACTER INIT ""
@@ -141,17 +141,17 @@ CLASS tBigNumber
 	DATA nInt  AS NUMERIC   INIT 0
 	DATA nSize AS NUMERIC   INIT 0
 
-#IFNDEF __PROTHEUS__
+#ifndef __PROTHEUS__
 	EXPORTED:
-#ENDIF	
+#endif	
 	
 	Method New(uBigN,nBase) CONSTRUCTOR
 
-#IFNDEF __PROTHEUS__
-	#IFDEF TBN_DBFILE
+#ifndef __PROTHEUS__
+	#ifdef TBN_DBFILE
 		DESTRUCTOR tBigNGC
-	#ENDIF	
-#ENDIF	
+	#endif	
+#endif	
 
 	Method Normalize(oBigN)
 
@@ -235,7 +235,7 @@ CLASS tBigNumber
 	Method PFactors()
 	Method Factorial()	//TODO: Otimizar+
 
-#IFNDEF __PROTHEUS__
+#ifndef __PROTHEUS__
     
 */*(*)*/OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C
 
@@ -276,7 +276,7 @@ CLASS tBigNumber
 	OPERATOR ":=" ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
 	OPERATOR "="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
 
-#ENDIF
+#endif
                     
 ENDCLASS
 
@@ -287,10 +287,10 @@ ENDCLASS
 	Descricao   : Instancia um novo Objeto tBigNumber
 	Sintaxe     : tBigNumber():New(uBigN,nBase) -> self
 */
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	User Function tBigNumber(uBigN,nBase)
 	Return(tBigNumber():New(uBigN,nBase))
-#ENDIF
+#endif
 
 /*
 	Method		: New
@@ -331,12 +331,12 @@ Return(self)
 	Data        : 03/03/2013
 	Descricao   : DESTRUCTOR
 */
-#IFDEF TBN_DBFILE
-	#IFDEF __HARBOUR__
+#ifdef TBN_DBFILE
+	#ifdef __HARBOUR__
 		Procedure tBigNGC() CLASS tBigNumber
-	#ELSE
+	#else
 		Static Procedure tBigNGC()
-	#ENDIF	
+	#endif	
 			Local nFile
 			Local nFiles
 			DEFAULT __aFiles := Array(0)
@@ -345,19 +345,19 @@ Return(self)
 				IF Select(__aFiles[nFile][1])>0
 					(__aFiles[nFile][1])->(dbCloseArea())
 				EndIF			
-				#IFDEF __PROTEUS__
+				#ifdef __PROTEUS__
 					MsErase(__aFiles[nFile][2],NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))
-				#ELSE
-					#IFDEF TBN_MEMIO
+				#else
+					#ifdef TBN_MEMIO
 						dbDrop(__aFiles[nFile][2])
-					#ELSE
+					#else
 						fErase(__aFiles[nFile][2])
-					#ENDIF
-				#ENDIF	
+					#endif
+				#endif	
 			Next nFile
 			aSize(__aFiles,0)
 		Return
-#ENDIF	
+#endif	
 	
 /*
 	Method		: Clone
@@ -438,21 +438,21 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 
 	Local nFP
 
-	#IFDEF __TBN_DYN_OBJ_SET__
+	#ifdef __TBN_DYN_OBJ_SET__
 	Local nP
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			MEMVAR This
-		#ENDIF
+		#endif
 		Private This
-	#ENDIF	
+	#endif	
 
 	IF cType=="O"
 	
 		DEFAULT cRDiv := uBigN:cRDiv
 
-		#IFDEF __TBN_DYN_OBJ_SET__
+		#ifdef __TBN_DYN_OBJ_SET__
 
-			#IFDEF __PROTHEUS__
+			#ifdef __PROTHEUS__
 	
 				This  := self
 				uBigN := ClassDataArr(uBigN)
@@ -462,13 +462,13 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 					&("This:"+uBigN[nP][1]) := uBigN[nP][2]
 				Next nP	
 		    
-		    #ELSE
+		    #else
 	
 				__objSetValueList(self,__objGetValueList(uBigN))
 	
-			#ENDIF	
+			#endif	
 			
-		#ELSE
+		#else
 
 			self:cDec  := uBigN:cDec
 			self:cInt  := uBigN:cInt
@@ -480,13 +480,13 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 			self:nInt  := uBigN:nInt
 			self:nSize := uBigN:nSize
 			
-		#ENDIF
+		#endif
 	
 	ElseIF cType=="A"
 
 		DEFAULT cRDiv := uBigN[3][2]
 		
-		#IFDEF __TBN_DYN_OBJ_SET__
+		#ifdef __TBN_DYN_OBJ_SET__
 
 			This := self
 			nFP  := Len(uBigN)
@@ -495,7 +495,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 				&("This:"+uBigN[nP][1]) := uBigN[nP][2]
 			Next nP	
 		
-		#ELSE
+		#else
 
 			self:cDec  := uBigN[1][2]
 			self:cInt  := uBigN[2][2]
@@ -507,7 +507,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 			self:nInt  := uBigN[8][2]
 			self:nSize := uBigN[9][2]
 		
-		#ENDIF
+		#endif
 	
 	ElseIF cType=="C"
 
@@ -964,21 +964,21 @@ Method Add(uBigN) CLASS tBigNumber
 	EndIF
 
 	IF lAdd
-		#IFDEF __ADDMT__
+		#ifdef __ADDMT__
 			IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
 				__adoNR:SetValue(AddThread(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			Else
 				__adoNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			EndIF
-		#ELSE
+		#else
 			__adoNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
-		#ENDIF
+		#endif
 	Else
-		#IFDEF __SUBMT__
+		#ifdef __SUBMT__
 			__adoNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
-		#ELSE
+		#else
 			__adoNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
-		#ENDIF
+		#endif
 	EndIF
 
 	cNT  := __adoNR:cInt
@@ -1000,7 +1000,7 @@ Method Add(uBigN) CLASS tBigNumber
 
 Return(__adoNR)
 
-#IFDEF __ADDMT__
+#ifdef __ADDMT__
 
 	/*/
 		Funcao:		AddThread
@@ -1019,23 +1019,23 @@ Return(__adoNR)
 
 		Local aThreads
 
-	#IFDEF __PROTHEUS__
+	#ifdef __PROTHEUS__
 		Local cGlbV
 		Local cThread := hb_ntos(ThreadID())
-	#ENDIF	
+	#endif	
 
 		Local lAdd1 := .F.
 		Local lExit := .F.
 
-	#IFDEF __PROTHEUS__
+	#ifdef __PROTHEUS__
 		Local nNR
-	#ENDIF
+	#endif
 		Local nID
-	#IFDEF __PROTHEUS__
+	#ifdef __PROTHEUS__
 		Local nIDs
 		Local n
 		Local t
-	#ENDIF		
+	#endif		
 		Local w
 		Local x
 		Local y := Mod(nSize,MAX_LENGHT_ADD_THREAD)
@@ -1082,12 +1082,12 @@ Return(__adoNR)
 
 			For x := 1 TO y
 
-				#IFDEF __PROTHEUS__
+				#ifdef __PROTHEUS__
 					lExit := KillApp()
 					IF lExit
 						EXIT
 					EndIF
-				#ENDIF	
+				#endif	
             
 				++z
 
@@ -1095,25 +1095,25 @@ Return(__adoNR)
 	
 				aNR[nID][1]	:= .F.
 
-	        	#IFDEF __HARBOUR__
+	        	#ifdef __HARBOUR__
 		        	aNR[nID][4]	:= hb_threadStart(@ThAdd(),aNR[nID][2],aNR[nID][3],Len(aNR[nID][2]),nBase)
 		        	aNR[nID][5]	:= Array(0)
 		        	hb_threadJoin(aNR[nID][4],@aNR[nID][5])
 		        	aAdd(aThreads,aNR[nID][4])
-				#ELSE //__PROTHEUS__
+				#else //__PROTHEUS__
 		        	aNR[nID][4]	:= ("__ADD__"+"ThAdd__"+cThread+"__ID__"+hb_ntos(nID))
 		        	PutGlbValue(aNR[nID][4],"")
 		        	StartJob("U_ThAdd",__cEnvSrv,.F.,aNR[nID][2],aNR[nID][3],Len(aNR[nID][2]),nBase,aNR[nID][4])
 		        	aAdd(aThreads,nID)
-		        #ENDIF //__HARBOUR__
+		        #endif //__HARBOUR__
 
 				IF z==y .or. Mod(z,5)==0
 					
-					#IFDEF __HARBOUR__
+					#ifdef __HARBOUR__
 					
 						hb_threadWait(aThreads)
 
-					#ELSE //__PROTHEUS__
+					#else //__PROTHEUS__
 
 						t    := Len(aThreads)
 						nIDs := t
@@ -1170,7 +1170,7 @@ Return(__adoNR)
 	
 						End While
 	
-					#ENDIF	//__HARBOUR__
+					#endif	//__HARBOUR__
 
 					aSize(aThreads,0)
 
@@ -1202,19 +1202,19 @@ Return(__adoNR)
 	
 	Return(cNR)
 
-	#IFDEF __PROTHEUS__
+	#ifdef __PROTHEUS__
 		User Function ThAdd(cN1,cN2,nSize,nBase,cID)
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][CALC]["+cN1+"+"+cN2+"]")
 				PutGlbValue(cID,Add(cN1,cN2,nSize,nBase))
 			PTInternal(1,"[tBigNumber][ADD][U_THADD]["+cID+"][END]["+cN1+"+"+cN2+"]")
 			tBigNGC()
 		Return(.T.)
-	#ELSE
+	#else
 		Static Function ThAdd(cN1,cN2,nSize,nBase)
 		Return(Add(cN1,cN2,nSize,nBase))
-	#ENDIF
+	#endif
 
-#ENDIF
+#endif
 
 /*
 	Method		: Sub
@@ -1270,21 +1270,21 @@ Method Sub(uBigN) CLASS tBigNumber
 	EndIF
 
 	IF lSub
-		#IFDEF __SUBMT__
+		#ifdef __SUBMT__
 			__sboNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
-		#ELSE
+		#else
 			__sboNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
-		#ENDIF
+		#endif
 	Else
-		#IFDEF __ADDMT__
+		#ifdef __ADDMT__
 			IF nSize>MAX_LENGHT_ADD_THREAD .and. Int(nSize/MAX_LENGHT_ADD_THREAD)>=2
 				__sboNR:SetValue(AddThread(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			Else
 				__sboNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
 			EndIF
-		#ELSE
+		#else
 			__sboNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)    		
-		#ENDIF
+		#endif
 	EndIF
 
 	cNT	 := __sboNR:cInt
@@ -1765,9 +1765,9 @@ Method GCD(uBigN) CLASS tBigNumber
 Return(oGCD)
 
 Static Function cGCD(nX,nY)
-	#IFDEF __HARBOUR__
+	#ifdef __HARBOUR__
 		Local nGCD := TBIGNGDC(nX,nY)
-	#ELSE //__PROTHEUS__
+	#else //__PROTHEUS__
 	 	Local nGCD := nX  
 	 	
 	 	nX := Max(nY,nGCD)
@@ -1785,7 +1785,7 @@ Static Function cGCD(nX,nY)
 	       		nGCD := nY
 	       	End While
 	    EndIF
-	#ENDIF //__HARBOUR__
+	#endif //__HARBOUR__
 Return(hb_ntos(nGCD))
 
 /*
@@ -1797,9 +1797,9 @@ Return(hb_ntos(nGCD))
 */
 Method LCM(uBigN) CLASS tBigNumber
 
-#IFDEF __HARBOUR__
+#ifdef __HARBOUR__
 	Local aThreads
-#ENDIF
+#endif
 	
 	Local oX	:= self:Clone()
 	Local oY	:= tBigNumber():New(uBigN)
@@ -1814,11 +1814,11 @@ Method LCM(uBigN) CLASS tBigNumber
     IF oX:nInt<=__nMinLCM.and.oY:nInt<=__nMinLCM
 		oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
     Else
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			aThreads := Array(2,2)
-		#ENDIF	
+		#endif	
 		While .T.
-			#IFDEF __HARBOUR__
+			#ifdef __HARBOUR__
 				aThreads[1][1]	:= hb_threadStart(@thMod0(),oX,oI)
 				hb_threadJoin(aThreads[1][1],@aThreads[2][1])				
 				aThreads[1][2]	:= hb_threadStart(@thMod0(),oY,oI)
@@ -1826,13 +1826,13 @@ Method LCM(uBigN) CLASS tBigNumber
 				hb_threadWait(aThreads[1])
 				lMX := aThreads[2][1]
 				lMY := aThreads[2][2]
-			#ELSE
+			#else
 				lMX := oX:Mod(oI):eq(__o0)
 				lMY := oY:Mod(oI):eq(__o0)
-			#ENDIF	
+			#endif	
 			While lMX .or. lMY
 				oLCM:SetValue(oLCM:Mult(oI))
-				#IFDEF __HARBOUR__
+				#ifdef __HARBOUR__
 					IF lMX .and. lMY
 						oX:SetValue(oX:Div(oI,.F.))
 						oY:SetValue(oY:Div(oI,.F.))
@@ -1853,7 +1853,7 @@ Method LCM(uBigN) CLASS tBigNumber
 							lMY := oY:Mod(oI):eq(__o0)
 						EndIF
 					EndIF	
-				#ELSE
+				#else
 					IF lMX
 						oX:SetValue(oX:Div(oI,.F.))
 						lMX := oX:Mod(oI):eq(__o0)
@@ -1862,7 +1862,7 @@ Method LCM(uBigN) CLASS tBigNumber
 						oY:SetValue(oY:Div(oI,.F.))
 						lMY := oY:Mod(oI):eq(__o0)
 					EndIF
-				#ENDIF	
+				#endif	
 			End While
 			IF oX:eq(__o1) .and. oY:eq(__o1)
 				EXIT
@@ -1875,11 +1875,11 @@ Return(oLCM)
 
 Static Function cLCM(nX,nY)
 
-	#IFDEF __HARBOUR__
+	#ifdef __HARBOUR__
 	
 		Local nLCM  := TBIGNLCM(nX,nY)
 	
-	#ELSE //__PROTHEUS__
+	#else //__PROTHEUS__
 	 	
 		Local nLCM	:= 1
 	
@@ -1908,16 +1908,16 @@ Static Function cLCM(nX,nY)
 			++nI
 		End While
 	
-	#ENDIF //__HARBOUR__	
+	#endif //__HARBOUR__	
 	
 Return(hb_ntos(nLCM))
 
-#IFDEF __HARBOUR__
+#ifdef __HARBOUR__
 	Static Function thMod0(oBN,oMN)
 		Local oRet := tBigNumber():New()
 		oRet:SetValue(oBN:Mod(oMN))
 	Return(oRet:eq(__o0))
-#ENDIF //__HARBOUR__	
+#endif //__HARBOUR__	
 
 /*
 
@@ -2764,11 +2764,11 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 
 	Local lI
 
-	#IFDEF __HARBOUR__
+	#ifdef __HARBOUR__
 		oM:SetValue("9999999999999999999999999999")
-	#ELSE //__PROTHEUS__
+	#else //__PROTHEUS__
 		oM:SetValue("999999999")
-	#ENDIF	
+	#endif	
 
 	DEFAULT uB	:= "1"
 	DEFAULT uE	:= oM:ExactValue()
@@ -2968,11 +2968,11 @@ Static Function __Random(nB,nE)
 		++nE		
 	EndIF
 
-	#IFDEF __HARBOUR__
+	#ifdef __HARBOUR__
 		nR := Abs(HB_RandomInt(nB,nE))
-	#ELSE //__PROTHEUS__
+	#else //__PROTHEUS__
 		nR := Randomize(nB,nE)		
-	#ENDIF	
+	#endif	
 
 Return(nR)
 
@@ -3116,7 +3116,7 @@ Method FI() CLASS tBigNumber
     EndIF
     
 Return(oT)
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	Static Function TBIGNFI(n)
 		Local i  := 2
 		Local fi := n
@@ -3133,7 +3133,7 @@ Return(oT)
        		fi -= Int(fi/n)
        	EndIF
     Return(fi)
-#ENDIF //__PROTHEUS__
+#endif //__PROTHEUS__
 
 /*
 	Method		: PFactors
@@ -3215,9 +3215,9 @@ Return(recFact(__o1,oN))
 */
 Static Function recFact(oS,oN)
 
-#IFDEF __HARBOUR__
+#ifdef __HARBOUR__
 	Local aThreads
-#ENDIF
+#endif
 
 	Local oI
 	Local oR	:= tBigNumber():New()
@@ -3247,7 +3247,7 @@ Static Function recFact(oS,oN)
 	oNI := oN:Clone()
 	oNI:SetValue(oNI:Sub(oI))
 
-#IFDEF __HARBOUR__
+#ifdef __HARBOUR__
 
 	aThreads := Array(2,2)
 
@@ -3260,9 +3260,9 @@ Static Function recFact(oS,oN)
 	hb_threadWait(aThreads[1])	
 
 Return(aThreads[2][1]:Mult(aThreads[2][2]))
-#ELSE	
+#else	
 Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
-#ENDIF
+#endif
 
 /*
 	Funcao		: eMult
@@ -3486,7 +3486,7 @@ Static Function __SQRT(p)
 	EndIF
 Return(r)
 
-#IFDEF TBN_DBFILE
+#ifdef TBN_DBFILE
 
 	/*
 		Funcao		: Add
@@ -3502,9 +3502,9 @@ Return(r)
 		Local y := n+1
 		Local k := 1
 
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			FIELD FN
-		#ENDIF	
+		#endif	
 		
 		While y>__nstcZ0
 			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
@@ -3516,11 +3516,11 @@ Return(r)
 		While n>0
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				#IFDEF __PROTHEUS__
+				#ifdef __PROTHEUS__
 					(c)->FN += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
-				#ELSE
+				#else
 					(c)->FN += Val(a[n])+Val(b[n])
-				#ENDIF
+				#endif
 				IF (c)->FN>=nBase
 					(c)->FN	-= nBase
 					(c)->(dbUnLock())
@@ -3551,9 +3551,9 @@ Return(r)
 		Local y := n
 		Local k := 1
 	
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			FIELD FN
-		#ENDIF
+		#endif
 		
 		While y>__nstcZ0
 			__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
@@ -3565,11 +3565,11 @@ Return(r)
 		While n>0
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
-				#IFDEF __PROTHEUS__
+				#ifdef __PROTHEUS__
 					(c)->FN += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
-				#ELSE
+				#else
 					(c)->FN += Val(a[n])-Val(b[n])
-				#ENDIF
+				#endif
 				IF (c)->FN<0
 					(c)->FN += nBase
 					(c)->(dbUnLock())
@@ -3611,9 +3611,9 @@ Return(r)
 		Local j
 		Local w
 			
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			FIELD FN
-		#ENDIF
+		#endif
 		
 		While y>__nstcZ0
 			__cstcZ0+=SubSTr(__cstcZ0,1,__nstcZ0)
@@ -3628,11 +3628,11 @@ Return(r)
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				While s<=i
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						(c)->FN += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
-					#ELSE
+					#else
 						(c)->FN += Val(a[s++])*Val(b[j--])
-					#ENDIF
+					#endif
 				End While
 				IF (c)->FN>=nBase
 					x := k+1
@@ -3658,11 +3658,11 @@ Return(r)
 			(c)->(dbGoTo(k))
 			IF (c)->(rLock())
 				While s>=l
-				#IFDEF __PROTHEUS__
+				#ifdef __PROTHEUS__
 					(c)->FN	+= Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
-				#ELSE
+				#else
 					(c)->FN	+= Val(a[s--])*Val(b[j++])	
-				#ENDIF
+				#endif
 				End While
 				IF (c)->FN>=nBase
 					x := k+1
@@ -3699,17 +3699,17 @@ Return(r)
 	
 		Local y	:= 0
 	
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			FIELD FN
-		#ENDIF	
+		#endif	
 	
 		While ++y<=n
 			(a)->(dbAppend(.T.))
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			(a)->FN	:= Val(SubStr(c,y,1))
-		#ELSE
+		#else
 			(a)->FN	:= Val(c[y])
-		#ENDIF	
+		#endif	
 			(a)->(dbUnLock())
 		End While
 	
@@ -3727,9 +3727,9 @@ Return(r)
 		Local s	:= ""
 		Local y	:= n
 	
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 			FIELD FN
-		#ENDIF	
+		#endif	
 	
 		While y>=1
 			(a)->(dbGoTo(y))
@@ -3755,56 +3755,56 @@ Return(r)
 	Static Function dbNumber(cAlias)
 		Local aStru		:= {{"FN","N",18,0}}
 		Local cFile
-	#IFNDEF __HARBOUR__
+	#ifndef __HARBOUR__
 		Local cLDriver
 		Local cRDD		:= IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS")
-	#ELSE
-		#IFNDEF TBN_MEMIO
+	#else
+		#ifndef TBN_MEMIO
 		Local cRDD		:= "DBFCDX"
-		#ENDIF
-	#ENDIF
-	#IFNDEF __HARBOUR__
+		#endif
+	#endif
+	#ifndef __HARBOUR__
 		IF .NOT.(Type("__LocalDriver")=="C")
 			Private __LocalDriver
 		EndIF
 		cLDriver		:= __LocalDriver
 		__LocalDriver	:= cRDD
-	#ENDIF
+	#endif
 		IF Select(cAlias)==0
-	#IFNDEF __HARBOUR__
+	#ifndef __HARBOUR__
 			cFile := CriaTrab(aStru,.T.,GetdbExtension())
 			IF .NOT.(GetdbExtension()$cFile)
 				cFile += GetdbExtension()
 			EndIF
 			dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
-	#ELSE
-			#IFNDEF TBN_MEMIO
+	#else
+			#ifndef TBN_MEMIO
 				cFile := CriaTrab(aStru,cRDD)
 				dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
-			#ELSE
+			#else
 				cFile := CriaTrab(aStru,cAlias)
-			#ENDIF	
-	#ENDIF
+			#endif	
+	#endif
 			DEFAULT __aFiles := Array(0)
 			aAdd(__aFiles,{cAlias,cFile})
 		Else
 			(cAlias)->(dbRLock())
-	#IFDEF __HARBOUR__		
+	#ifdef __HARBOUR__		
 			(cAlias)->(hb_dbZap())
-	#ELSE
+	#else
 			(cAlias)->(__dbZap())
-	#ENDIF		
+	#endif		
 			(cAlias)->(dbRUnLock())
 		EndIF	
-	#IFNDEF __HARBOUR__
+	#ifndef __HARBOUR__
 		IF .NOT.(Empty(cLDriver))
 			__LocalDriver := cLDriver
 		EndIF	
-	#ENDIF
+	#endif
 	Return(cAlias)
 	
-	#IFDEF __HARBOUR__
-		#IFNDEF TBN_MEMIO
+	#ifdef __HARBOUR__
+		#ifndef TBN_MEMIO
 			Static Function CriaTrab(aStru,cRDD)
 				Local cFolder	:= tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
 				Local cFile 	:= cFolder+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
@@ -3820,7 +3820,7 @@ Return(r)
 					End
 				End While	
 			Return(cFile)
-		#ELSE
+		#else
 			Static Function CriaTrab(aStru,cAlias)
 				Local cFile		:= "mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)
 				Local lSuccess	:= .F. 	
@@ -3834,12 +3834,12 @@ Return(r)
 					End
 				End While	
 			Return(cFile)
-		#ENDIF
-	#ENDIF
+		#endif
+	#endif
 
-#ELSE
+#else
 
-	#IFDEF TBN_ARRAY
+	#ifdef TBN_ARRAY
 
 	/*
 		Funcao		: Add
@@ -3855,11 +3855,11 @@ Return(r)
 		Local k := 1
 
 		While n>0
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			c[k] += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
-		#ELSE
+		#else
 			c[k] += Val(a[n])+Val(b[n])
-		#ENDIF
+		#endif
 			IF c[k]>=nBase
 				c[k+1]	+= 1
 				c[k]	-= nBase
@@ -3884,11 +3884,11 @@ Return(r)
 		Local k := 1
 	
 		While n>0
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			c[k] += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
-		#ELSE
+		#else
 			c[k] += Val(a[n])-Val(b[n])
-		#ENDIF
+		#endif
 			IF c[k]<0
 				c[k+1]	-= 1
 				c[k]	+= nBase
@@ -3927,11 +3927,11 @@ Return(r)
 			s := 1
 			j := i
 			While s<=i
-			#IFDEF __PROTHEUS__
+			#ifdef __PROTHEUS__
 				c[k] += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
-			#ELSE
+			#else
 				c[k] += Val(a[s++])*Val(b[j--])
-			#ENDIF
+			#endif
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -3946,11 +3946,11 @@ Return(r)
 			s := n
 			j := l
 			While s>=l
-			#IFDEF __PROTHEUS__
+			#ifdef __PROTHEUS__
 				c[k] += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
-			#ELSE
+			#else
 				c[k] += Val(a[s--])*Val(b[j++])	
-			#ENDIF
+			#endif
 			End While
 			IF c[k]>=nBase
 				x		:= k+1
@@ -3997,7 +3997,7 @@ Return(r)
 	
 	Return(s)
 	
-	#ELSE
+	#else
 
 		/*
 			Funcao		: Add
@@ -4006,7 +4006,7 @@ Return(r)
 			Descricao   : Adicao
 			Sintaxe     : Add(a,b,n,nBase) -> cNR
 		*/
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			Static Function Add(a,b,n,nBase)
 
 				Local c
@@ -4025,35 +4025,35 @@ Return(r)
 				c := SubStr(__cstcZ0,1,y)
 
 				While n>0
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						v += Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
-					#ELSE
+					#else
 						v += Val(a[n])+Val(b[n])
-					#ENDIF
+					#endif
 					IF v>=nBase
 						v  -= nBase
 						v1 := 1
 					Else
 						v1 := 0
 					EndIF
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						c := Stuff(c,k,1,hb_ntos(v))
 						c := Stuff(c,k+1,1,hb_ntos(v1)) 
-					#ELSE
+					#else
 						c[k]   := hb_ntos(v)
 						c[k+1] := hb_ntos(v1)
-					#ENDIF
+					#endif
 					v := v1
 					++k
 					--n
 				End While
 
 			Return(cGetcN(c,y))
-		#ELSE
+		#else
 			Static Function Add(a,b,n,nB)
 				Local y := n+1
 			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
-		#ENDIF
+		#endif
 		
 		/*
 			Funcao		: Sub
@@ -4062,7 +4062,7 @@ Return(r)
 			Descricao   : Subtracao
 			Sintaxe     : Sub(a,b,n,nBase) -> cNR
 		*/
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			Static Function Sub(a,b,n,nBase)
 
 				Local c
@@ -4081,32 +4081,32 @@ Return(r)
 				c := SubStr(__cstcZ0,1,y)
 			
 				While n>0
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						v += Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
-					#ELSE
+					#else
 						v += Val(a[n])-Val(b[n])
-					#ENDIF
+					#endif
 					IF v<0
 						v  += nBase
 						v1 := -1
 					Else
 						v1 := 0
 					EndIF
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						c := Stuff(c,k,1,hb_ntos(v)) 
-					#ELSE
+					#else
 						c[k] := hb_ntos(v)
-					#ENDIF
+					#endif
 					v := v1
 					++k
 					--n
 				End While
 
 			Return(cGetcN(c,y))
-		#ELSE
+		#else
 			Static Function Sub(a,b,n,nB)
 			Return(cGetcN(tBigNSub(a,b,n,nB),n))
-		#ENDIF
+		#endif
 		/*
 			Funcao		: Mult
 			Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4115,7 +4115,7 @@ Return(r)
 			Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
 			Obs.		: Mais rapida, usa a multiplicacao nativa
 		*/
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			Static Function Mult(cN1,cN2,n,nBase)
 
 				Local c
@@ -4146,11 +4146,11 @@ Return(r)
 					s := 1
 					j := i
 					While s<=i
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						v += Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
-					#ELSE
+					#else
 						v += Val(a[s++])*Val(b[j--])
-					#ENDIF
+					#endif
 					End While
 					IF v>=nBase
 						v1	:= Int(v/nBase)
@@ -4158,13 +4158,13 @@ Return(r)
 					Else
 						v1	:= 0	
 					EndIF
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						c := Stuff(c,k,1,hb_ntos(v))
 						c := Stuff(c,k+1,1,hb_ntos(v1)) 
-					#ELSE
+					#else
 						c[k]   := hb_ntos(v)
 						c[k+1] := hb_ntos(v1)
-					#ENDIF
+					#endif
 					v := v1
 					k++
 					i++
@@ -4174,11 +4174,11 @@ Return(r)
 					s := n
 					j := l
 					While s>=l
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						v += Val(SubSTr(a,s--,1))*Val(SubSTr(b,j++,1))
-					#ELSE
+					#else
 						v += Val(a[s--])*Val(b[j++])	
-					#ENDIF
+					#endif
 					End While
 					IF v>=nBase
 						v1	:= Int(v/nBase)
@@ -4186,13 +4186,13 @@ Return(r)
 					Else
 						v1	:= 0	
 					EndIF
-					#IFDEF __PROTHEUS__
+					#ifdef __PROTHEUS__
 						c := Stuff(c,k,1,hb_ntos(v))
 						c := Stuff(c,k+1,1,hb_ntos(v1)) 
-					#ELSE
+					#else
 						c[k]   := hb_ntos(v)
 						c[k+1] := hb_ntos(v1)
-					#ENDIF
+					#endif
 					v := v1
 					IF ++k>=y
 						EXIT
@@ -4201,13 +4201,13 @@ Return(r)
 				End While
 
 			Return(cGetcN(c,y))
-		#ELSE
+		#else
 			Static Function Mult(cN1,cN2,n,nB)
 				Local a	:= tBigNInvert(cN1,n)
 				Local b	:= tBigNInvert(cN2,n)
 				Local y := n+n
 			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
-		#ENDIF
+		#endif
 
 		/*
 			Funcao		: cGetcN
@@ -4217,25 +4217,25 @@ Return(r)
 			Sintaxe     : cGetcN(c,n) -> s
 		*/
 		Static Function cGetcN(c,n)
-		#IFDEF __HARBOUR__
+		#ifdef __HARBOUR__
 		Return(tBigNInvert(c,n))
-		#ELSE		
+		#else		
 			Local s	:= ""
 			Local y	:= n
 			While y>=1
-			#IFDEF __PROTHEUS__
+			#ifdef __PROTHEUS__
 				While y>=1 .and. SubStr(c,y,1)=="0"
-			#ELSE
+			#else
 				While y>=1 .and. c[y]=="0"
-			#ENDIF	
+			#endif	
 					y--
 				End While
 				While y>=1
-				#IFDEF __PROTHEUS__
+				#ifdef __PROTHEUS__
 					s += SubStr(c,y,1)
-				#ELSE
+				#else
 					s += c[y]
-				#ENDIF
+				#endif
 					y--
 				End While
 			End While
@@ -4248,11 +4248,11 @@ Return(r)
 			EndIF
 		
 		Return(s)
-		#ENDIF
+		#endif
 	
-	#ENDIF
+	#endif
 
-#ENDIF
+#endif
 
 /*
 	Funcao		: tBigNInvert
@@ -4261,19 +4261,19 @@ Return(r)
 	Descricao   : Inverte o Numero
 	Sintaxe     : tBigNInvert(c,n) -> s
 */
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	Static Function tBigNInvert(c,n)
 		Local s := ""
 		Local y	:= n
 		While y>0
-		#IFDEF __PROTHEUS__
+		#ifdef __PROTHEUS__
 			s += SubStr(c,y--,1)
-		#ELSE
+		#else
 			s += c[y--]
-		#ENDIF
+		#endif
 		End While
 	Return(s)
-#ENDIF
+#endif
 
 /*
 	Funcao		: MathO
@@ -4324,17 +4324,17 @@ Static Procedure __InitStV1(nBase)
 	__cstcN9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
 	__nstcN9 := 150
 	
-	#IFDEF TBN_ARRAY
+	#ifdef TBN_ARRAY
 		__aZAdd	 := Array(0)
 		__aZSub	 := Array(0)
 		__aZMult := Array(0)
-	#ENDIF    
+	#endif    
 
-	#IFDEF TBN_DBFILE
+	#ifdef TBN_DBFILE
 		IF (__aFiles==NIL)
 			__aFiles := Array(0)
 		EndIF
-	#ENDIF
+	#endif
 	
 	oTBigN	:= tBigNumber():New("0",nBase)
 
@@ -4389,55 +4389,50 @@ Static Procedure __InitStV2(nBase)
 	__o0        := tBigNumber():New("0",nBase)
 	__o1        := tBigNumber():New("1",nBase)
 	__o2        := tBigNumber():New("2",nBase)
-*		__o5        := tBigNumber():New("5",nBase)
+*	__o5        := tBigNumber():New("5",nBase)
 	__o10       := tBigNumber():New("10",nBase)
 	__o20       := tBigNumber():New("20",nBase)
 	__oMinFI	:= tBigNumber():New(MAX_SYS_FI,nBase)
 	__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
 	__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
-	#IFDEF __PROTHEUS__
+	#ifdef __PROTHEUS__
 		DEFAULT __cEnvSrv := GetEnvServer()
-	#ENDIF
+	#endif
 	__lstbNSet := .T.
 Return
 
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 
 	Static Function __eTthD()
 	Return(StaticCall(__pteTthD,__eTthD))
 	Static Function __PITthD()
 	Return(StaticCall(__ptPITthD,__PITthD))
 
-#ELSE //__HARBOUR__
+#else //__HARBOUR__
 
 	Static Function __eTthD()
 	Return(__hbeTthD())
 	Static Function __PITthD()
 	Return(__hbPITthD())
 	
-#ENDIF //__PROTHEUS__
+#endif //__PROTHEUS__
 
-#IFDEF __HARBOUR__
+#ifdef __HARBOUR__
 
 	#pragma BEGINDUMP
 
 		#include <stdio.h>
 		#include <string.h>
 		#include <hbapi.h>
+		#include <hbdefs.h>
 		#include <hbstack.h>
 		#include <hbapiitm.h>
 
-		#ifndef MIN
-			# define MIN(x,y) ((x)<(y)?(x):(y))
-		#endif
-		#ifndef MAX
-			# define MAX(x,y) ((x)>(y)?(x):(y))
-		#endif
-		
 		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
 		{
 			HB_SIZE nLen    = strlen(szText);       
-			char * szResult = (char*)hb_xgrab((nLen*nTimes)+1);
+			HB_ISIZ nRLen   = (nLen*nTimes);
+			char * szResult = (char*)hb_xgrab(nRLen+1);
 			char * szPtr    = szResult;
 			HB_ISIZ n;
 			for(n=0;n<nTimes;++n)
@@ -4510,10 +4505,10 @@ Return
 			HB_SIZE k = 0;
 			int v     = 0;
 			int v1;
-			a += n-1;
-			b += n-1;
+			int s     = n-1;
+			int j     = s;
 			while (n--){
-				v += hb_strVal((char*)a--,1)+hb_strVal((char*)b--,1);
+				v += hb_strVal(&a[s--],1)+hb_strVal(&b[j--],1);
 				if ( v>=nB ){
 					v  -= nB;
 					v1 = 1;
@@ -4543,10 +4538,10 @@ Return
 			HB_SIZE k = 0;
 			int v     = 0;
 			int v1;
-			a += n-1;
-			b += n-1;
+			int s     = n-1;
+			int j     = s;
 			while (n--){
-				v += hb_strVal((char*)a--,1)-hb_strVal((char*)b--,1);
+				v += hb_strVal(&a[s--],1)-hb_strVal(&b[j--],1);
 				if ( v<0 ){
 					v  += nB;
 					v1 = -1;
@@ -4581,7 +4576,7 @@ Return
 			HB_SIZE s;
 			HB_SIZE j;
 			
-			int v = 0;
+			int v     = 0;
 			int v1;
 
 			n-=1;
@@ -4639,8 +4634,8 @@ Return
 				
 		static HB_MAXUINT __TBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
 	 		HB_MAXUINT nGCD = x;  
-		 	x = MAX(y,nGCD);
-		 	y = MIN(nGCD,y);
+		 	x = HB_MAX(y,nGCD);
+		 	y = HB_MIN(nGCD,y);
 		    if (y==0){
 		        nGCD = x;
 		    } else {
@@ -4723,4 +4718,4 @@ Return
 		
 	#pragma ENDDUMP
 
-#ENDIF
+#endif
