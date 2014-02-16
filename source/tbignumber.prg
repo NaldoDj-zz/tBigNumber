@@ -1351,9 +1351,9 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	DEFAULT leMult := .F.
 
 	IF leMult
-		__mtoNR:SetValue(eMult(cN1,cN2),NIL,NIL,.F.)    		
+		__mtoNR:SetValue(eMult(cN1,cN2,self:nBase),NIL,NIL,.F.)    		
 	Else
-		__mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+		__mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
 	EndIF	
 
 	cNT	:= __mtoNR:cInt
@@ -1426,7 +1426,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		__dvoNR:SetValue(eDiv(cN1,cN2,nAcc,lFloat))
+		__dvoNR:SetValue(eDiv(cN1,cN2,__dvoN1:nBase,nAcc,lFloat))
 
 		IF lFloat
 
@@ -1457,7 +1457,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		    		cN2	:= __dvoN2:cInt
 		    		cN2	+= __dvoN2:cDec
 
-					__dvoRDiv:SetValue(eDiv(cN1,cN2,nAcc,lFloat))
+					__dvoRDiv:SetValue(eDiv(cN1,cN2,__dvoRDiv:nBase,nAcc,lFloat))
 
 					cDec += __dvoRDiv:ExactValue(.T.)
 					nDec := Len(cDec)
@@ -3269,10 +3269,10 @@ Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-	Sintaxe     : eMult(cN1,cN2,nAcc) -> oNR
+	Sintaxe     : eMult(cN1,cN2,nBase,nAcc) -> oNR
 	Obs.		: Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
-Static Function eMult(cN1,cN2,nAcc)
+Static Function eMult(cN1,cN2,nBase,nAcc)
 
 	Local aeMT 		:= Array(0)
                 	
@@ -3292,20 +3292,20 @@ Static Function eMult(cN1,cN2,nAcc)
 	While oPe:lte(oN1)
 		++nI
 		aAdd(aeMT,{oPe:Clone(),oPd:Clone()})
-		oPe:SetValue(oPe:Add(oPe),NIL,NIL,NIL,nAcc)
-		oPd:SetValue(oPd:Add(oPd),NIL,NIL,NIL,nAcc)
+		oPe:SetValue(oPe:Add(oPe),nBase,NIL,NIL,nAcc)
+		oPd:SetValue(oPd:Add(oPd),nBase,NIL,NIL,nAcc)
 	End While
 
 	ocT	:= __o0:Clone()
 	oNR	:= __o0:Clone()
 	While nI>0
-		ocT:SetValue(ocT:Add(aeMT[nI][1]),NIL,NIL,NIL,nAcc)
-		oNR:SetValue(oNR:Add(aeMT[nI][2]),NIL,NIL,NIL,nAcc)
+		ocT:SetValue(ocT:Add(aeMT[nI][1]),nBase,NIL,NIL,nAcc)
+		oNR:SetValue(oNR:Add(aeMT[nI][2]),nBase,NIL,NIL,nAcc)
 		IF ocT:eq(oN1)
 			EXIT
 		ElseIF ocT:gt(oN1)
-			ocT:SetValue(ocT:Sub(aeMT[nI][1]),NIL,NIL,NIL,nAcc)
-			oNR:SetValue(oNR:Sub(aeMT[nI][2]),NIL,NIL,NIL,nAcc)
+			ocT:SetValue(ocT:Sub(aeMT[nI][1]),nBase,NIL,NIL,nAcc)
+			oNR:SetValue(oNR:Sub(aeMT[nI][2]),nBase,NIL,NIL,nAcc)
 		EndIF
 		--nI
 	End While
@@ -3317,9 +3317,9 @@ Return(oNR)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-	Sintaxe     : eDiv(cN,cD,nAcc,lFloat) -> __oeDivQ
+	Sintaxe     : eDiv(cN,cD,nBase,nAcc,lFloat) -> __oeDivQ
 */
-Static Function eDiv(cN,cD,nAcc,lFloat)
+Static Function eDiv(cN,cD,nBase,nAcc,lFloat)
 
 	Local aeDV 		:= Array(0)
 	
@@ -3327,10 +3327,10 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 
 	Local nI		:= 0
 
-	__oeDivN:SetValue(cN,NIL,NIL,NIL,nAcc)
-	__oeDivD:SetValue(cD,NIL,NIL,NIL,nAcc)
-	__oeDivR:SetValue(__o0,NIL,"0",NIL,nAcc)
-	__oeDivQ:SetValue(__o0,NIL,"0",NIL,nAcc)
+	__oeDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
+	__oeDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
+	__oeDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
+	__oeDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
 
 	__oeDivDvD:SetValue(__o1:Clone())
 	__oeDivDvR:SetValue(__oeDivD)
@@ -3338,34 +3338,34 @@ Static Function eDiv(cN,cD,nAcc,lFloat)
 	While __oeDivDvR:lte(__oeDivN)
 		++nI
 		aAdd(aeDV,{__oeDivDvD:Clone(),__oeDivDvR:Clone()})
-		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),NIL,NIL,NIL,nAcc)
-		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),NIL,NIL,NIL,nAcc)
+		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),nBase,NIL,NIL,nAcc)
+		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),nBase,NIL,NIL,nAcc)
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),NIL,NIL,NIL,nAcc)
-		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),NIL,"0",NIL,nAcc)
+		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,NIL,NIL,nAcc)
+		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 		IF __oeDivR:eq(__oeDivN)
 			EXIT
 		ElseIF __oeDivR:gt(__oeDivN)
-			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),NIL,NIL,NIL,nAcc)
-			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),NIL,"0",NIL,nAcc)
+			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,NIL,NIL,nAcc)
+			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
 
-	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),NIL,NIL,NIL,nAcc)
+	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,NIL,NIL,nAcc)
 	
 	cRDiv := __oeDivR:ExactValue(.T.)
 
-	__oeDivQ:SetValue(__oeDivQ,NIL,cRDiv,NIL,nAcc)
+	__oeDivQ:SetValue(__oeDivQ,nBase,cRDiv,NIL,nAcc)
 	
 	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
 		cRDiv := SubStr(cRDiv,1,Len(cRDiv)-1)
 		IF Empty(cRDiv)
 			cRDiv := "0"
 		EndIF
-		__oeDivQ:SetValue(__oeDivQ,NIL,cRDiv,NIL,nAcc)
+		__oeDivQ:SetValue(__oeDivQ,nBase,cRDiv,NIL,nAcc)
 	EndIF
 
 Return(__oeDivQ:Clone())
