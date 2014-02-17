@@ -145,7 +145,7 @@ CLASS tBigNumber
 	EXPORTED:
 #endif	
 	
-	Method New(uBigN,nBase) CONSTRUCTOR
+	Method New(uBigN,nBase) CONSTRUCTOR /*( /!\ )*\
 
 #ifndef __PROTHEUS__
 	#ifdef TBN_DBFILE
