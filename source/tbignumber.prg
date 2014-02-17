@@ -3,8 +3,8 @@
 #ifdef __PROTHEUS__
 	Static __cEnvSrv
 #else
-*	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
-*	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
+	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
+	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
 #endif
 
 Static __o0
