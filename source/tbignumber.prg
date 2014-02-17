@@ -3,8 +3,8 @@
 #ifdef __PROTHEUS__
 	Static __cEnvSrv
 #else
-	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
-	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
+*	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
+*	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
 #endif
 
 Static __o0
@@ -145,7 +145,7 @@ CLASS tBigNumber
 	EXPORTED:
 #endif	
 	
-	Method New(uBigN,nBase) CONSTRUCTOR /*( /!\ )*\
+	Method New(uBigN,nBase) CONSTRUCTOR /*( /!\ )*/
 
 #ifndef __PROTHEUS__
 	#ifdef TBN_DBFILE
@@ -4456,7 +4456,7 @@ Return
 		  return pbuffer;
 		}
 
-		HB_FUNC_STATIC( __TBIGNPADL ){	  
+		HB_FUNC( __TBIGNPADL ){	  
 		  const char * szItem = hb_parc(1);
 		  HB_ISIZ nLen        = hb_parns(2);
 		  const char * szPad  = hb_parc(3);
@@ -4475,8 +4475,7 @@ Return
 			hb_xfree(padding);
 			return pbuffer;
 		}
-
-		HB_FUNC_STATIC( __TBIGNPADR ){
+		HB_FUNC( __TBIGNPADR ){
 		  const char * szItem = hb_parc(1);
 		  HB_ISIZ nLen        = hb_parns(2);
 		  const char * szPad  = hb_parc(3);
@@ -4493,7 +4492,7 @@ Return
 			return szStringTo;
 		}
 
-		HB_FUNC_STATIC( TBIGNINVERT ){
+		HB_FUNC( TBIGNINVERT ){
 			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
 			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
 			const char * szStringFrom = hb_itemGetCPtr(pItem);
@@ -4524,7 +4523,7 @@ Return
 			return c;
 		}
 
-		HB_FUNC_STATIC( TBIGNADD ){	
+		HB_FUNC( TBIGNADD ){	
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4557,7 +4556,7 @@ Return
 			return c;
 		}
 
-		HB_FUNC_STATIC( TBIGNSUB ){	
+		HB_FUNC( TBIGNSUB ){	
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4623,7 +4622,7 @@ Return
 			return c;
 		}
 	
-		HB_FUNC_STATIC( TBIGNMULT ){
+		HB_FUNC( TBIGNMULT ){
 			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
 			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
@@ -4651,7 +4650,7 @@ Return
 			return nGCD;
 		}
 
-		HB_FUNC_STATIC( TBIGNGDC ){
+		HB_FUNC( TBIGNGDC ){
 			HB_MAXUINT x = hb_parnint(1);
 			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNGDC(x,y));
@@ -4689,7 +4688,7 @@ Return
 
 		}
 
-		HB_FUNC_STATIC( TBIGNLCM ){
+		HB_FUNC( TBIGNLCM ){
 			HB_MAXUINT x = hb_parnint(1);
 			HB_MAXUINT y = hb_parnint(2);
 			hb_retnint(__TBIGNLCM(x,y));
@@ -4711,7 +4710,7 @@ Return
        		return fi; 
     	}
     	
-		HB_FUNC_STATIC( TBIGNFI ){
+		HB_FUNC( TBIGNFI ){
 			HB_MAXUINT n = hb_parnint(1);
 			hb_retnint(__TBIGNFI(n));
 		}
