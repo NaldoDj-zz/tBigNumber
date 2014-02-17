@@ -4475,6 +4475,7 @@ Return
 			hb_xfree(padding);
 			return pbuffer;
 		}
+	   
 		HB_FUNC( __TBIGNPADR ){
 		  const char * szItem = hb_parc(1);
 		  HB_ISIZ nLen        = hb_parns(2);
