@@ -3,8 +3,8 @@
 #ifdef __PROTHEUS__
 	Static __cEnvSrv
 #else
-	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
-	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
+*	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
+*	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
 #endif
 
 Static __o0
@@ -155,6 +155,13 @@ CLASS tBigNumber
 
 	Method Normalize(oBigN)
 
+	Method __cSig(cSig)   SETGET
+	Method __lNeg(lNeg)   SETGET
+	Method __nBase(nBase) SETGET
+	Method __nDec(nDec)   SETGET
+	Method __nInt(nInt)   SETGET 
+	Method __nSize(nSize) SETGET
+
 	Method Clone()
 	Method ClassName()
 
@@ -301,10 +308,7 @@ ENDCLASS
 */
 Method New(uBigN,nBase) CLASS tBigNumber
 	
-	/* workaround for problem with command DEFAULT*/
-	IF ValType(nBase)<>"N"
-		nBase := 10	
-	EndIF
+	DEFAULT nBase := 10	
 	self:nBase    := nBase
 
 	IF __lsthdSet==NIL
@@ -313,10 +317,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 		__InitStV1(nBase)
 	EndIF
 
-	/* workaround for problem with command DEFAULT*/
-	IF .NOT.(ValType(uBigN)$"O/C")
-		uBigN := "0"
-	EndIF
+	DEFAULT uBigN := "0"
 	self:SetValue(uBigN,nBase)
 
 	IF __lstbNSet==NIL
@@ -358,6 +359,84 @@ Return(self)
 			aSize(__aFiles,0)
 		Return
 #endif	
+
+/*
+	Method		: __cSig
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __cSig
+	Sintaxe     : tBigNumber():__cSig() -> cSig
+*/
+Method __cSig(cSig) CLASS tBigNumber
+	IF cSig!=NIL
+		self:cSig := cSig
+	ENDIF
+Return(self:cSig)
+
+/*
+	Method		: __lNeg
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __lNeg
+	Sintaxe     : tBigNumber():__lNeg() -> lNeg
+*/
+Method __lNeg(lNeg) CLASS tBigNumber
+	IF lNeg!=NIL
+		self:lNeg := lNeg
+	ENDIF
+Return(self:lNeg)
+
+/*
+	Method		: __nBase
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __nBase
+	Sintaxe     : tBigNumber():__nBase() -> nBase
+*/
+Method __nBase(nBase) CLASS tBigNumber
+	IF nBase!=NIL
+		self:nBase := nBase
+	ENDIF
+Return(self:nBase)
+
+/*
+	Method		: __nDec
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __nDec
+	Sintaxe     : tBigNumber():__nDec() -> nDec
+*/
+Method __nDec(nDec) CLASS tBigNumber
+	IF nDec!=NIL
+		self:nDec := nDec
+	ENDIF
+Return(self:nDec)
+
+/*
+	Method		: __nInt
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __nInt
+	Sintaxe     : tBigNumber():__nInt() -> nInt
+*/
+Method __nInt(nInt) CLASS tBigNumber
+	IF nInt!=NIL
+		self:nInt := nInt
+	ENDIF
+Return(self:nInt)
+
+/*
+	Method		: __nSize
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : nSize
+	Sintaxe     : tBigNumber():__nSize() -> nSize
+*/
+Method __nSize(nSize) CLASS tBigNumber
+	IF nSize!=NIL
+		self:nSize := nSize
+	ENDIF
+Return(self:nSize)
 	
 /*
 	Method		: Clone
@@ -367,7 +446,15 @@ Return(self)
 	Sintaxe     : tBigNumber():Clone() -> oClone
 */
 Method Clone() CLASS tBigNumber
-Return(__objClone(self)/*tBigNumber():New(self)*/)
+	IF .NOT.(__lsthdSet==NIL)
+	#ifdef __PROTHEUS__
+		Return(tBigNumber():New(self))
+	#else  //__HARBOUR__
+		Return(__objClone(self))
+	#endif //__PROTHEUS__
+	EndIF
+Return(tBigNumber():New(self))
+	
 
 /*
 	Method		: ClassName
@@ -1533,7 +1620,7 @@ Return(oMod)
 */
 Method Pow(uBigN) CLASS tBigNumber
 
-	Local oSelf	:= self:Clone()
+	Local oself	:= self:Clone()
 	
 	Local cM10
 	
@@ -1549,12 +1636,12 @@ Method Pow(uBigN) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF oSelf:eq(__o0) .and. __pwoNP:eq(__o0)
+		IF oself:eq(__o0) .and. __pwoNP:eq(__o0)
 			__pwoNR:SetValue(__o1)
 			BREAK
 		EndIF
 
-		IF oSelf:eq(__o0)
+		IF oself:eq(__o0)
 			__pwoNR:SetValue(__o0)
 			BREAK
 		EndIF
@@ -1564,7 +1651,7 @@ Method Pow(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		__pwoNR:SetValue(oSelf)
+		__pwoNR:SetValue(oself)
 
 		IF __pwoNR:eq(__o1)
 			__pwoNR:SetValue(__o1)
@@ -1608,7 +1695,7 @@ Method Pow(uBigN) CLASS tBigNumber
 		__pwoNT:SetValue(__o0)
 		__pwoNP:SetValue(__pwoNP:Sub(__o1))
 		While __pwoNT:lt(__pwoNP)
-			__pwoNR:SetValue(__pwoNR:Mult(oSelf))
+			__pwoNR:SetValue(__pwoNR:Mult(oself))
 			__pwoNT:SetValue(__pwoNT:Add(__o1))
 		End While
 
@@ -1651,7 +1738,7 @@ Method e(lForce) CLASS tBigNumber
 
 		IF .NOT.(lForce)
 
-			oeTthD	:= tBigNumber():New()
+			oeTthD	:= __o0:Clone()
 			oeTthD:SetValue(__eTthD())
 
 			BREAK
@@ -1714,7 +1801,7 @@ Method PI(lForce) CLASS tBigNumber
 
 		IF .NOT.(lForce)
 
-			oPITthD	:= tBigNumber():New()
+			oPITthD	:= __o0:Clone()
 			oPITthD:SetValue(__PITthD())
 
 			BREAK
@@ -1914,7 +2001,7 @@ Return(hb_ntos(nLCM))
 
 #ifdef __HARBOUR__
 	Static Function thMod0(oBN,oMN)
-		Local oRet := tBigNumber():New()
+		Local oRet := __o0:Clone()
 		oRet:SetValue(oBN:Mod(oMN))
 	Return(oRet:eq(__o0))
 #endif //__HARBOUR__	
@@ -1949,7 +2036,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	Local oRootE
 	Local oFExit
 
-	othRoot	:= tBigNumber():New()
+	othRoot	:= __o0:Clone()
 
 	BEGIN SEQUENCE
 
@@ -1987,7 +2074,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	
 		cFExit := "0."+SubStr(__cstcZ0,1,nZS)+"1"
 			
-		oFExit := tBigNumber():New()
+		oFExit := __o0:Clone()
 		oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
 
 		IF oRootB:Dec(.T.):gt(__o0)
@@ -2014,8 +2101,8 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		IF nPFs>0
 			othRoot:SetValue(__o1)
-			othRootD := tBigNumber():New()
-			oRootT   := tBigNumber():New()
+			othRootD := __o0:Clone()
+			oRootT   := __o0:Clone()
 			For nPF := 1 To nPFs
 				IF oRootE:eq(aIPF[nPF][2])
 					othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
@@ -2114,12 +2201,12 @@ Return(__oSysSQRT)
 */
 Method Log(uBigNB) CLASS tBigNumber
 
-	Local oS  := tBigNumber():New()
-	Local oT  := tBigNumber():New()
+	Local oS  := __o0:Clone()
+	Local oT  := __o0:Clone()
 	Local oI  := __o1:Clone()
 	Local oX  := self:Clone()
-	Local oY  := tBigNumber():New()
-	Local oLT := tBigNumber():New()
+	Local oY  := __o0:Clone()
+	Local oLT := __o0:Clone()
 
 	Local lflag := .F.
 	
@@ -2323,7 +2410,7 @@ Return(oRnd)
 	Sintaxe     : tBigNumber():NoRnd(nAcc) -> oBigNR
 */
 Method NoRnd(nAcc) CLASS tBigNumber
-Return(Self:Truncate(nAcc))
+Return(self:Truncate(nAcc))
 
 /*
 	Method		: Truncate
@@ -2361,24 +2448,26 @@ Method Normalize(oBigN) CLASS tBigNumber
 	Local nPadR := Max(self:nDec,oBigN:nDec)
 	Local nSize := (nPadL+nPadR)
 
-    cInt := PadL(self:cInt,nPadL,"0")
-    cDec := PadR(self:cDec,nPadR,"0")
-
-	self:cInt	:= cInt
-	self:nInt	:= nPadL
-	self:cDec	:= cDec
-	self:nDec	:= nPadR
-	self:nSize	:= nSize
-
-    cInt := PadL(oBigN:cInt,nPadL,"0")
-    cDec := PadR(oBigN:cDec,nPadR,"0")
-
-	oBigN:cInt	:= cInt
-	oBigN:nInt	:= nPadL
-	oBigN:cDec	:= cDec
-	oBigN:nDec	:= nPadR
-	oBigN:nSize	:= nSize
-
+    IF nSize>self:nSize
+	    cInt        := PadL(self:cInt,nPadL,"0")
+	    cDec        := PadR(self:cDec,nPadR,"0")
+		self:cInt	:= cInt
+		self:nInt	:= nPadL
+		self:cDec	:= cDec
+		self:nDec	:= nPadR
+		self:nSize	:= nSize
+	EndIF
+		
+    IF nSize>oBigN:nSize
+	    cInt        := PadL(oBigN:cInt,nPadL,"0")
+	    cDec        := PadR(oBigN:cDec,nPadR,"0")
+		oBigN:cInt	:= cInt
+		oBigN:nInt	:= nPadL
+		oBigN:cDec	:= cDec
+		oBigN:nDec	:= nPadR
+		oBigN:nSize	:= nSize
+	EndIF
+	
 Return(self)
 
 /*
@@ -2390,7 +2479,7 @@ Return(self)
 */
 Method D2H(cHexB) CLASS tBigNumber
 
-	Local otH	:= tBigNumber():New()
+	Local otH	:= __o0:Clone()
 	Local otN	:= tBigNumber():New(self:cInt)
 
 	Local cHexN	:= ""
@@ -2448,12 +2537,12 @@ Return(oHexN)
 */
 Method H2D() CLASS tBigNumber
 
-	Local otH  := tBigNumber():New()
-	Local otNR := tBigNumber():New()
-	Local otLN := tBigNumber():New()
-	Local otPw := tBigNumber():New()
-	Local otNI := tBigNumber():New()
-	Local otAT := tBigNumber():New()
+	Local otH  := __o0:Clone()
+	Local otNR := __o0:Clone()
+	Local otLN := __o0:Clone()
+	Local otPw := __o0:Clone()
+	Local otNI := __o0:Clone()
+	Local otAT := __o0:Clone()
 
 	Local cHexB := hb_ntos(self:nBase)
 	Local cHexC := "0123456789ABCDEFGHIJKLMNOPQRSTUV"
@@ -2748,11 +2837,11 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 
 	Local aE
 	
-	Local oB	:= tBigNumber():New()
-	Local oE	:= tBigNumber():New()
-	Local oT	:= tBigNumber():New()
-	Local oM	:= tBigNumber():New()
-	Local oR	:= tBigNumber():New()
+	Local oB	:= __o0:Clone()
+	Local oE	:= __o0:Clone()
+	Local oT	:= __o0:Clone()
+	Local oM	:= __o0:Clone()
+	Local oR	:= __o0:Clone()
 
 	Local cR    := ""
 
@@ -2990,9 +3079,9 @@ Method millerRabin(uI) CLASS tBigNumber
 
 	Local oN		:= self:Clone()
 	Local oD		:= tBigNumber():New(oN:Sub(__o1))
-	Local oS		:= tBigNumber():New()
-	Local oI		:= tBigNumber():New()
-	Local oA		:= tBigNumber():New()
+	Local oS		:= __o0:Clone()
+	Local oI		:= __o0:Clone()
+	Local oA		:= __o0:Clone()
 
 	Local lPrime	:= .T.
 
@@ -3149,8 +3238,8 @@ Method PFactors() CLASS tBigNumber
 	Local cP		:= ""
 
 	Local oN		:= self:Clone()
-	Local oP		:= tBigNumber():New()
-	Local oT		:= tBigNumber():New()
+	Local oP		:= __o0:Clone()
+	Local oT		:= __o0:Clone()
 
 	Local otP		:= tPrime():New()
 	
@@ -3220,7 +3309,7 @@ Static Function recFact(oS,oN)
 #endif
 
 	Local oI
-	Local oR	:= tBigNumber():New()
+	Local oR	:= __o0:Clone()
 	Local oSN
 	Local oSI
 	Local oNI
@@ -3291,21 +3380,21 @@ Static Function eMult(cN1,cN2,nBase,nAcc)
 	
 	While oPe:lte(oN1)
 		++nI
-		aAdd(aeMT,{oPe:Clone(),oPd:Clone()})
-		oPe:SetValue(oPe:Add(oPe),nBase,NIL,NIL,nAcc)
-		oPd:SetValue(oPd:Add(oPd),nBase,NIL,NIL,nAcc)
+		aAdd(aeMT,{oPe:Int(.F.,.F.),oPd:Int(.F.,.F.)})
+		oPe:SetValue(oPe:Add(oPe),nBase,"0",NIL,nAcc)
+		oPd:SetValue(oPd:Add(oPd),nBase,"0",NIL,nAcc)
 	End While
 
 	ocT	:= __o0:Clone()
 	oNR	:= __o0:Clone()
 	While nI>0
-		ocT:SetValue(ocT:Add(aeMT[nI][1]),nBase,NIL,NIL,nAcc)
-		oNR:SetValue(oNR:Add(aeMT[nI][2]),nBase,NIL,NIL,nAcc)
+		ocT:SetValue(ocT:Add(aeMT[nI][1]),nBase,"0",NIL,nAcc)
+		oNR:SetValue(oNR:Add(aeMT[nI][2]),nBase,"0",NIL,nAcc)
 		IF ocT:eq(oN1)
 			EXIT
 		ElseIF ocT:gt(oN1)
-			ocT:SetValue(ocT:Sub(aeMT[nI][1]),nBase,NIL,NIL,nAcc)
-			oNR:SetValue(oNR:Sub(aeMT[nI][2]),nBase,NIL,NIL,nAcc)
+			ocT:SetValue(ocT:Sub(aeMT[nI][1]),nBase,"0",NIL,nAcc)
+			oNR:SetValue(oNR:Sub(aeMT[nI][2]),nBase,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
@@ -3337,31 +3426,31 @@ Static Function eDiv(cN,cD,nBase,nAcc,lFloat)
 
 	While __oeDivDvR:lte(__oeDivN)
 		++nI
-		aAdd(aeDV,{__oeDivDvD:Clone(),__oeDivDvR:Clone()})
-		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),nBase,NIL,NIL,nAcc)
-		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),nBase,NIL,NIL,nAcc)
+		aAdd(aeDV,{__oeDivDvD:Int(.F.,.F.),__oeDivDvR:Int(.F.,.F.)})
+		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),nBase,"0",NIL,nAcc)
+		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),nBase,"0",NIL,nAcc)
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,NIL,NIL,nAcc)
+		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 		IF __oeDivR:eq(__oeDivN)
 			EXIT
 		ElseIF __oeDivR:gt(__oeDivN)
-			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,NIL,NIL,nAcc)
+			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
 
-	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,NIL,NIL,nAcc)
+	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,"0",NIL,nAcc)
 	
-	cRDiv := __oeDivR:ExactValue(.T.)
+	cRDiv := __oeDivR:Int(.F.,.F.)
 
 	__oeDivQ:SetValue(__oeDivQ,nBase,cRDiv,NIL,nAcc)
 	
-	IF .NOT.(lFloat) .and. .NOT.(cRDiv=="0") .and. SubStr(cRDiv,-1)=="0"
-		cRDiv := SubStr(cRDiv,1,Len(cRDiv)-1)
+	IF .NOT.(lFloat) .and. SubStr(cRDiv,__oeDivR:__nInt(),1)=="0"
+		cRDiv := SubStr(cRDiv,1,__oeDivR:__nInt()-1)
 		IF Empty(cRDiv)
 			cRDiv := "0"
 		EndIF
@@ -3419,7 +3508,7 @@ Static Function __Pow(base,expR,EPS)
     	acc := base:Mult(__pow(base,exp:Sub(__o1),EPS))
     	return(acc)
     else
-    	low  := tBigNumber():New()
+    	low  := __o0:Clone()
     	high := __o1:Clone()
     	sqr  := __SQRT(base)
     	acc  := sqr:Clone()    
@@ -3470,11 +3559,11 @@ Static Function __SQRT(p)
 			__nstcZ0+=__nstcZ0
 		End While
 		s   := "0."+SubStr(__cstcZ0,1,n)+"1"
-		EPS := tBigNumber():New()
+		EPS := __o0:Clone()
 		EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
 		r := q:Div(__o2)
 		t := r:Pow(__o2):Sub(q):Abs(.T.)
-		l := tBigNumber():New()
+		l := __o0:Clone()
 		while t:gte(EPS)
 			r:SetValue(r:pow(__o2):Add(q):Div(__o2:Mult(r)))
 			t:SetValue(r:Pow(__o2):Sub(q):Abs(.T.))
@@ -4284,7 +4373,7 @@ Return(r)
 */
 Static Function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
-	Local oBigNR := tBigNumber():New()
+	Local oBigNR := __o0:Clone()
 
 	Local oBigN1 := tBigNumber():New(uBigN1)
 	Local oBigN2 := tBigNumber():New(uBigN2)
@@ -4445,42 +4534,46 @@ Return
 
 		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad)
 		{
-		  if( szPad == NULL )
-			  szPad = " ";
-		  char * pbuffer = (char*)hb_xgrab(nLen+1);
-		  int padLen = nLen-strlen(szItem);
-		  if(padLen<0) padLen=0;
-		  char *padding=__TBIGNReplicate(szPad,padLen); 
-		  sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
-		  hb_xfree(padding);
-		  return pbuffer;
+			int padLen = nLen-strlen(szItem);
+			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			if((padLen)>0){
+				if(szPad==NULL){szPad=" ";}
+		  		char *padding = __TBIGNReplicate(szPad,nLen); 
+		  		sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
+				hb_xfree(padding);
+			}else{
+				memcpy(pbuffer,szItem,nLen+1);
+			}
+			return pbuffer;
 		}
 
 		HB_FUNC( __TBIGNPADL ){	  
-		  const char * szItem = hb_parc(1);
-		  HB_ISIZ nLen        = hb_parns(2);
-		  const char * szPad  = hb_parc(3);
-		  hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
+			const char * szItem = hb_parc(1);
+			HB_ISIZ nLen        = hb_parns(2);
+			const char * szPad  = hb_parc(3);
+			hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
 		}
 
 		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad)
 		{	
-			if( szPad == NULL )
-			  szPad = " ";
-			char * pbuffer = (char*)hb_xgrab(nLen+1);
 			int padLen = nLen-strlen(szItem);
-			if(padLen<0) padLen=0;
-			char *padding=__TBIGNReplicate(szPad,nLen); 
-			sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
-			hb_xfree(padding);
+			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			if((padLen)>0){
+				if(szPad==NULL){szPad=" ";}
+				char *padding = __TBIGNReplicate(szPad,nLen); 
+				sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
+				hb_xfree(padding);
+			}else{
+				memcpy(pbuffer,szItem,nLen+1);
+			}
 			return pbuffer;
 		}
 	   
 		HB_FUNC( __TBIGNPADR ){
-		  const char * szItem = hb_parc(1);
-		  HB_ISIZ nLen        = hb_parns(2);
-		  const char * szPad  = hb_parc(3);
-		  hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
+			const char * szItem = hb_parc(1);
+			HB_ISIZ nLen        = hb_parns(2);
+			const char * szPad  = hb_parc(3);
+			hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
 		}
 
 		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
@@ -4494,9 +4587,8 @@ Return
 		}
 
 		HB_FUNC( TBIGNINVERT ){
-			const PHB_ITEM pItem      = hb_param(1,HB_IT_STRING);
+			const char * szStringFrom = hb_parc(1);
 			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
-			const char * szStringFrom = hb_itemGetCPtr(pItem);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
 		}
 
@@ -4525,8 +4617,8 @@ Return
 		}
 
 		HB_FUNC( TBIGNADD ){	
-			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			const char * a   = hb_parc(1);
+			const char * b   = hb_parc(2);
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 			const HB_ISIZ nB = hb_parns(5);
@@ -4558,8 +4650,8 @@ Return
 		}
 
 		HB_FUNC( TBIGNSUB ){	
-			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			const char * a   = hb_parc(1);
+			const char * b   = hb_parc(2);
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y  = n;
 			const HB_ISIZ nB = hb_parns(4);
@@ -4624,8 +4716,8 @@ Return
 		}
 	
 		HB_FUNC( TBIGNMULT ){
-			const char * a   = hb_itemGetCPtr(hb_param(1,HB_IT_STRING));
-			const char * b   = hb_itemGetCPtr(hb_param(2,HB_IT_STRING));
+			const char * a   = hb_parc(1);
+			const char * b   = hb_parc(2);
 			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
 			const HB_ISIZ nB = hb_parns(5);
