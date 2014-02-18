@@ -131,15 +131,15 @@ CLASS tBigNumber
 	#endif
 #endif
 	/* Keep in alphabetical order */
-	DATA cDec  AS CHARACTER INIT ""
-	DATA cInt  AS CHARACTER INIT ""
-	DATA cRDiv AS CHARACTER INIT ""
+	DATA cDec  AS CHARACTER INIT "0"
+	DATA cInt  AS CHARACTER INIT "0"
+	DATA cRDiv AS CHARACTER INIT "0"
 	DATA cSig  AS CHARACTER INIT ""
 	DATA lNeg  AS LOGICAL   INIT .F. 
-	DATA nBase AS NUMERIC   INIT 0
-	DATA nDec  AS NUMERIC   INIT 0
-	DATA nInt  AS NUMERIC   INIT 0
-	DATA nSize AS NUMERIC   INIT 0
+	DATA nBase AS NUMERIC   INIT 10
+	DATA nDec  AS NUMERIC   INIT 1
+	DATA nInt  AS NUMERIC   INIT 1
+	DATA nSize AS NUMERIC   INIT 2
 
 #ifndef __PROTHEUS__
 	EXPORTED:
@@ -155,6 +155,8 @@ CLASS tBigNumber
 
 	Method Normalize(oBigN)
 
+	Method __cDec(cDec)   SETGET
+	Method __cInt(cInt)   SETGET
 	Method __cSig(cSig)   SETGET
 	Method __lNeg(lNeg)   SETGET
 	Method __nBase(nBase) SETGET
@@ -361,6 +363,52 @@ Return(self)
 #endif	
 
 /*
+	Method		: __cDec
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __cDec
+	Sintaxe     : tBigNumber():__cDec() -> cDec
+*/
+Method __cDec(cDec) CLASS tBigNumber
+	IF .NOT.(cDec==NIL)
+		self:lNeg  := SubStr(cDec,1,1)=="-"
+		IF self:lNeg
+			cDec   := SubStr(cDec,2)
+		EndIF
+		self:cDec  := cDec
+		self:nDec  := Len(cDec)
+		self:nSize := self:nInt+self:nDec
+		IF self:eq(__o0)
+			self:lNeg := .F.
+			self:cSig := ""
+		EndIF
+	ENDIF
+Return(self:cDec)
+
+/*
+	Method		: __cInt
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 17/02/2014
+	Descricao   : __cDec
+	Sintaxe     : tBigNumber():__cInt() -> cInt
+*/
+Method __cInt(cInt) CLASS tBigNumber
+	IF .NOT.(cInt==NIL)
+		self:lNeg := SubStr(cInt,1,1)=="-"
+		IF self:lNeg
+			cInt   := SubStr(cInt,2)
+		EndIF
+		self:cInt  := cInt
+		self:nInt  := Len(cInt)
+		self:nSize := self:nInt+self:nDec
+		IF self:eq(__o0)
+			self:lNeg := .F.
+			self:cSig := ""
+		EndIF
+	ENDIF
+Return(self:cInt)
+
+/*
 	Method		: __cSig
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 17/02/2014
@@ -368,8 +416,16 @@ Return(self)
 	Sintaxe     : tBigNumber():__cSig() -> cSig
 */
 Method __cSig(cSig) CLASS tBigNumber
-	IF cSig!=NIL
-		self:cSig := cSig
+	IF .NOT.(cSig==NIL)
+		self:cSig := cSig 
+		self:lNeg := (cSig=="-")
+		IF self:eq(__o0)
+			self:lNeg := .F.
+			self:cSig := ""
+		EndIF
+		IF .NOT.(self:lNeg)
+			self:cSig := ""
+		EndIF
 	ENDIF
 Return(self:cSig)
 
@@ -381,8 +437,15 @@ Return(self:cSig)
 	Sintaxe     : tBigNumber():__lNeg() -> lNeg
 */
 Method __lNeg(lNeg) CLASS tBigNumber
-	IF lNeg!=NIL
+	IF .NOT.(lNeg==NIL)
 		self:lNeg := lNeg
+		IF self:eq(__o0)
+			self:lNeg := .F.
+			self:cSig := ""
+		EndIF
+		IF lNeg
+			self:cSig := "-"	
+		EndIF
 	ENDIF
 Return(self:lNeg)
 
@@ -394,7 +457,7 @@ Return(self:lNeg)
 	Sintaxe     : tBigNumber():__nBase() -> nBase
 */
 Method __nBase(nBase) CLASS tBigNumber
-	IF nBase!=NIL
+	IF .NOT.(nBase==NIL)
 		self:nBase := nBase
 	ENDIF
 Return(self:nBase)
@@ -407,8 +470,14 @@ Return(self:nBase)
 	Sintaxe     : tBigNumber():__nDec() -> nDec
 */
 Method __nDec(nDec) CLASS tBigNumber
-	IF nDec!=NIL
-		self:nDec := nDec
+	IF .NOT.(nDec==NIL)
+		IF nDec>self:nDec
+			self:cDec := PadR(self:cDec,nDec,"0")
+		Else
+			self:cDec := SubStr(self:cDec,1,nDec)
+		EndIF
+		self:nDec  := nDec
+		self:nSize := self:nInt+self:nDec
 	ENDIF
 Return(self:nDec)
 
@@ -420,8 +489,12 @@ Return(self:nDec)
 	Sintaxe     : tBigNumber():__nInt() -> nInt
 */
 Method __nInt(nInt) CLASS tBigNumber
-	IF nInt!=NIL
-		self:nInt := nInt
+	IF .NOT.(nInt==NIL)
+		IF nInt>self:nInt
+			self:cInt  := PadL(self:cInt,nInt,"0")
+			self:nInt  := nInt
+			self:nSize := self:nInt+self:nDec
+		EndIF	
 	ENDIF
 Return(self:nInt)
 
@@ -433,11 +506,20 @@ Return(self:nInt)
 	Sintaxe     : tBigNumber():__nSize() -> nSize
 */
 Method __nSize(nSize) CLASS tBigNumber
-	IF nSize!=NIL
-		self:nSize := nSize
+	IF .NOT.(nSize==NIL)
+		IF nSize>self:nInt+self:nDec
+			IF self:nInt>self:nDec
+				self:nInt  := nSize-Self:nDec
+				self:cInt  := PadL(self:cInt,self:nInt,"0")
+			Else
+		 		self:nDec  := nSize-Self:nInt
+		 		self:cDec  := PadR(self:cDec,self:nDec,"0")
+			EndIF	
+			self:nSize     := nSize
+		EndIF
 	ENDIF
 Return(self:nSize)
-	
+
 /*
 	Method		: Clone
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -615,20 +697,12 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		DEFAULT nBase := self:nBase
 
 		self:cInt := "0"
-		IF self:nBase==10
-			self:cDec := "0"
-		Else
-			self:cDec := ""
-		EndIF
+		self:cDec := "0"
 
 		DO CASE
 		CASE nFP==0
 			self:cInt := SubStr(uBigN,1)
-			IF self:nBase==10
-				self:cDec := "0"
-			Else
-				self:cDec := ""
-			EndIF	
+			self:cDec := "0"
 		CASE nFP==1
 		    self:cInt := "0"
 		    self:cDec := SubStr(uBigN,nFP+1)
@@ -639,11 +713,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 					__nstcZ0+=__nstcZ0
 				End While
 				IF self:cDec==SubStr(__cstcZ0,1,nFP)
-					IF self:nBase==10
-						self:cDec := "0"
-					Else
-						self:cDec := ""
-					EndIF
+					self:cDec := "0"
 				EndIF
 			EndIF	
 		OTHERWISE
@@ -656,32 +726,31 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 					__nstcZ0+=__nstcZ0
 				End While
 				IF self:cDec==SubStr(__cstcZ0,1,nFP)
-					IF self:nBase==10
-						self:cDec := "0"
-					Else
-						self:cDec := ""
-					EndIF
+					self:cDec := "0"
 				EndIF
 			EndIF	
 		ENDCASE
 		
-		IF self:nBase<>10
-			IF self:cDec=="0"
-				self:cDec := ""
-			EndIF
-		EndIF
-
-		IF self:cInt=="0" .and. self:cDec=="0"
+		IF self:cInt=="0" .and. (self:cDec=="0".or.self:cDec=="")
 			self:lNeg := .F.
 			self:cSig := ""
 		EndIF
-
-	    self:nInt  := Len(self:cInt)
-	    self:nDec  := Len(self:cDec)
-	    self:nSize := self:nInt+self:nDec
-
+ 
+ 	   	self:nInt  := Len(self:cInt)
+    	self:nDec  := Len(self:cDec)
+			
 	EndIF
 
+	IF self:cInt==""
+		self:cInt := "0"
+		self:nInt := 1
+	EndIF
+
+	IF self:cDec==""
+		self:cDec := "0"
+		self:nDec := 1
+	EndIF
+ 
 	IF Empty(cRDiv)
 		cRDiv := "0"
 	EndIF
@@ -699,8 +768,12 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 	IF self:nDec>nAcc
 		self:nDec := nAcc
 		self:cDec := SubStr(self:cDec,1,self:nDec)
+		IF self:cDec==""
+			self:cDec := "0"
+			self:nDec := 1
+		EndIF
 	EndIF
-
+	
     self:nSize := (self:nInt+self:nDec)
 
 Return(self)
@@ -751,7 +824,7 @@ Method ExactValue(lAbs,lObj) CLASS tBigNumber
     uNR	 += self:cInt
     cDec := self:Dec(NIL,NIL,self:nBase==10)
 
-	IF .NOT.(Empty(cDec))
+	IF .NOT.(cDec=="")
 	    uNR	+= "."
 	    uNR	+= cDec
 	EndIF
@@ -1568,7 +1641,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 				
 				End While
 		
-				cNR	:= __dvoNR:ExactValue(.T.)
+				cNR	:= __dvoNR:__cInt()
 				cNR	+= "."
 				cNR	+= SubStr(cDec,1,nAcc)
 		
