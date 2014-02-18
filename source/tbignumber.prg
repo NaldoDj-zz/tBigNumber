@@ -446,15 +446,14 @@ Return(self:nSize)
 	Sintaxe     : tBigNumber():Clone() -> oClone
 */
 Method Clone() CLASS tBigNumber
-	IF .NOT.(__lsthdSet==NIL)
-	#ifdef __PROTHEUS__
+	IF __lsthdSet==NIL
 		Return(tBigNumber():New(self))
-	#else  //__HARBOUR__
-		Return(__objClone(self))
-	#endif //__PROTHEUS__
 	EndIF
+#ifdef __PROTHEUS__
 Return(tBigNumber():New(self))
-	
+#else  //__HARBOUR__
+Return(__objClone(self))
+#endif //__PROTHEUS__	
 
 /*
 	Method		: ClassName
@@ -1487,7 +1486,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 	Local lNeg2
 	
 	Local nAcc := __nSetDecimals
-	Local nDec 
+	Local nDec
 	
 	BEGIN SEQUENCE
 
@@ -2571,7 +2570,7 @@ Method H2D() CLASS tBigNumber
 	cInt  := otNR:cInt
 
 	cHexN := self:cDec
-	nLn   := Len(cHexN)
+	nLn   := self:nDec
 	nI    := nLn
 
 	otLN:SetValue(hb_ntos(nLn))
@@ -2679,7 +2678,7 @@ Method H2B() CLASS tBigNumber
 		nI    := 0
 		cBin  := ""
 		cHexN := self:cDec
-		nLn   := Len(cHexN)
+		nLn   := self:nDec
 		
 		While ++nI<=nLn
 			cChr := SubStr(cHexN,nI,1)
@@ -2782,7 +2781,7 @@ Method B2H(cHexB) CLASS tBigNumber
 
 		nI		:= 1
 		cBin	:= self:cDec
-		nLn		:= Len(cBin)
+		nLn		:= self:nDec
 		cHexN	:= ""
 
 		While nI<=nLn
