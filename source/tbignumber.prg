@@ -3493,7 +3493,7 @@ Static Function eDiv(cN,cD,nBase,nAcc,lFloat)
 	__oeDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
 	__oeDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
 
-	__oeDivDvD:SetValue(__o1:Clone())
+	__oeDivDvD:SetValue(__o1)
 	__oeDivDvR:SetValue(__oeDivD)
 
 	While __oeDivDvR:lte(__oeDivN)
@@ -4667,10 +4667,9 @@ Return
 			HB_SIZE k        = 0;
 			HB_MAXUINT v     = 0;
 			HB_MAXUINT v1;
-			HB_MAXUINT s     = n-1;
-			HB_MAXUINT j     = s;
+			HB_MAXUINT i     = n-1;
 			while (n--){
-				v += hb_strVal(&a[s--],1)+hb_strVal(&b[j--],1);
+				v += hb_strVal(&a[i],1)+hb_strVal(&b[i],1);
 				if ( v>=nB ){
 					v  -= nB;
 					v1 = 1;
@@ -4682,6 +4681,7 @@ Return
 				c[k+1] = "0123456789"[v1%nB];
 				v = v1;
 				++k;
+				--i;
 			}
 			return c;
 		}
@@ -4700,10 +4700,9 @@ Return
 			HB_SIZE k     = 0;
 			int v         = 0;
 			int v1;
-			HB_MAXUINT s  = n-1;
-			HB_MAXUINT j  = s;
+			HB_MAXUINT i  = n-1;
 			while (n--){
-				v += hb_strVal(&a[s--],1)-hb_strVal(&b[j--],1);
+				v += hb_strVal(&a[i],1)-hb_strVal(&b[i],1);
 				if ( v<0 ){
 					v  += nB;
 					v1 = -1;
@@ -4715,6 +4714,7 @@ Return
 				c[k+1] = "0123456789"[v1%nB];
 				v = v1;
 				++k;
+				--i;
 			}
 			return c;
 		}
