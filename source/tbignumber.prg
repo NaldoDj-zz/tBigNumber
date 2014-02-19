@@ -4589,8 +4589,7 @@ Return
 		#include <hbstack.h>
 		#include <hbapiitm.h>
 
-		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes)
-		{
+		static char * __TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
 			HB_SIZE nLen    = strlen(szText);       
 			HB_ISIZ nRLen   = (nLen*nTimes);
 			char * szResult = (char*)hb_xgrab(nRLen+1);
@@ -4604,8 +4603,7 @@ Return
 			return szResult;
 		}
 
-		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad)
-		{
+		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad){
 			int padLen = nLen-strlen(szItem);
 			char * pbuffer = (char*)hb_xgrab(nLen+1);
 			if((padLen)>0){
@@ -4623,11 +4621,11 @@ Return
 			const char * szItem = hb_parc(1);
 			HB_ISIZ nLen        = hb_parns(2);
 			const char * szPad  = hb_parc(3);
-			hb_retclen_buffer(__TBIGNPADL(szItem,nLen,szPad),(HB_SIZE)nLen);
+			char * szRet        = __TBIGNPADL(szItem,nLen,szPad);
+			hb_retclen_buffer(szRet,(HB_SIZE)nLen);
 		}
 
-		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad)
-		{	
+		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad){	
 			int padLen = nLen-strlen(szItem);
 			char * pbuffer = (char*)hb_xgrab(nLen+1);
 			if((padLen)>0){
@@ -4664,13 +4662,13 @@ Return
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
 		}
 
-		static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){	
-			char * c  = (char*)hb_xgrab(y+1);
-			HB_SIZE k = 0;
-			int v     = 0;
-			int v1;
-			int s     = n-1;
-			int j     = s;
+		static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){	
+			char * c         = (char*)hb_xgrab(y+1);
+			HB_SIZE k        = 0;
+			HB_MAXUINT v     = 0;
+			HB_MAXUINT v1;
+			HB_MAXUINT s     = n-1;
+			HB_MAXUINT j     = s;
 			while (n--){
 				v += hb_strVal(&a[s--],1)+hb_strVal(&b[j--],1);
 				if ( v>=nB ){
@@ -4689,21 +4687,21 @@ Return
 		}
 
 		HB_FUNC( TBIGNADD ){	
-			const char * a   = hb_parc(1);
-			const char * b   = hb_parc(2);
-			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
-			const HB_ISIZ nB = hb_parns(5);
+			const char * a      = hb_parc(1);
+			const char * b      = hb_parc(2);
+			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
+			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNADD(a,b,n,y,nB),y);
 		}
    
-		static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
-			char * c  = (char*)hb_xgrab(y+1);
-			HB_SIZE k = 0;
-			int v     = 0;
+		static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
+			char * c      = (char*)hb_xgrab(y+1);
+			HB_SIZE k     = 0;
+			int v         = 0;
 			int v1;
-			int s     = n-1;
-			int j     = s;
+			HB_MAXUINT s  = n-1;
+			HB_MAXUINT j  = s;
 			while (n--){
 				v += hb_strVal(&a[s--],1)-hb_strVal(&b[j--],1);
 				if ( v<0 ){
@@ -4722,26 +4720,26 @@ Return
 		}
 
 		HB_FUNC( TBIGNSUB ){	
-			const char * a   = hb_parc(1);
-			const char * b   = hb_parc(2);
-			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-			const HB_SIZE y  = n;
-			const HB_ISIZ nB = hb_parns(4);
+			const char * a      = hb_parc(1);
+			const char * b      = hb_parc(2);
+			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y     = n;
+			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNSUB(a,b,n,y,nB),y);
 		}
 
-		static char * __TBIGNMULT(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_ISIZ nB){
+		static char * __TBIGNMULT(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
 			
-			char * c  = (char*)hb_xgrab(y+1);
+			char * c     = (char*)hb_xgrab(y+1);
 			
-			HB_SIZE i = 0;
-			HB_SIZE k = 0;
-			HB_SIZE l = 1;
+			HB_SIZE i    = 0;
+			HB_SIZE k    = 0;
+			HB_SIZE l    = 1;
 			HB_SIZE s;
 			HB_SIZE j;
 			
-			int v     = 0;
-			int v1;
+			HB_MAXUINT v = 0;
+			HB_MAXUINT v1;
 
 			n-=1;
 			
@@ -4753,7 +4751,7 @@ Return
 				}
 				if (v>=nB){
 					v1 = v/nB;
-					v -= v1*nB;
+					v %= nB;
 				}else{
 					v1 = 0;
 				}
@@ -4772,7 +4770,7 @@ Return
 				}
 				if (v>=nB){
 					v1 = v/nB;
-					v -= v1*nB;
+					v %= nB;
 				}else{
 					v1 = 0;	
 				}
@@ -4788,11 +4786,11 @@ Return
 		}
 	
 		HB_FUNC( TBIGNMULT ){
-			const char * a   = hb_parc(1);
-			const char * b   = hb_parc(2);
-			HB_SIZE n        = (HB_SIZE)hb_parnint(3);
-			const HB_SIZE y  = (HB_SIZE)hb_parnint(4);
-			const HB_ISIZ nB = hb_parns(5);
+			const char * a      = hb_parc(1);
+			const char * b      = hb_parc(2);
+			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+			const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
+			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
 			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
 		}
 				
@@ -4816,8 +4814,8 @@ Return
 		}
 
 		HB_FUNC( TBIGNGDC ){
-			HB_MAXUINT x = hb_parnint(1);
-			HB_MAXUINT y = hb_parnint(2);
+			HB_MAXUINT x = (HB_MAXUINT)hb_parnint(1);
+			HB_MAXUINT y = (HB_MAXUINT)hb_parnint(2);
 			hb_retnint(__TBIGNGDC(x,y));
 		}
 
@@ -4854,8 +4852,8 @@ Return
 		}
 
 		HB_FUNC( TBIGNLCM ){
-			HB_MAXUINT x = hb_parnint(1);
-			HB_MAXUINT y = hb_parnint(2);
+			HB_MAXUINT x = (HB_MAXUINT)hb_parnint(1);
+			HB_MAXUINT y = (HB_MAXUINT)hb_parnint(2);
 			hb_retnint(__TBIGNLCM(x,y));
 		}
 
@@ -4876,7 +4874,7 @@ Return
     	}
     	
 		HB_FUNC( TBIGNFI ){
-			HB_MAXUINT n = hb_parnint(1);
+			HB_MAXUINT n = (HB_MAXUINT)hb_parnint(1);
 			hb_retnint(__TBIGNFI(n));
 		}
 		

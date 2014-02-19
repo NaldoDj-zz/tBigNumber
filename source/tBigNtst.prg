@@ -1805,7 +1805,6 @@ Static Procedure tBigNTst()
 #ELSE// __HARBOUR__
 	__lKillProgress := .T.
 	hb_threadQuitRequest(ptthProg)
-	CLS
 	hb_ThreadWait(ptthProg)
    	otBigN := NIL
    	hb_gcAll()
