@@ -2,10 +2,10 @@
 
 #ifdef __PROTHEUS__
 	Static __cEnvSrv
-#else
-*	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
-*	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
-#endif
+#else // __HARBOUR__
+	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
+	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
+#endif //__PROTHEUS__
 
 Static __o0
 Static __o1
@@ -68,12 +68,20 @@ THREAD Static __pwoNR
 THREAD Static __pwoNT
 THREAD Static __pwoGCD
 
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
 THREAD Static __oeDivN
 THREAD Static __oeDivD
+#endif //__PROTHEUS__
 THREAD Static __oeDivR
 THREAD Static __oeDivQ 
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
 THREAD Static __oeDivDvD
 THREAD Static __oeDivDvR
+#endif //__PROTHEUS__
 
 THREAD Static __oSysSQRT
 
@@ -1585,7 +1593,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
 		DEFAULT lFloat := .T.
 
-		__dvoNR:SetValue(eDiv(cN1,cN2,__dvoN1:nBase,nAcc,lFloat))
+		__dvoNR:SetValue(eDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
 
 		IF lFloat
 
@@ -1616,7 +1624,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 		    		cN2	:= __dvoN2:cInt
 		    		cN2	+= __dvoN2:cDec
 
-					__dvoRDiv:SetValue(eDiv(cN1,cN2,__dvoRDiv:nBase,nAcc,lFloat))
+	    			__dvoRDiv:SetValue(eDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
 
 					cDec += __dvoRDiv:ExactValue(.T.)
 					nDec := Len(cDec)
@@ -3478,15 +3486,26 @@ Return(oNR)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-	Sintaxe     : eDiv(cN,cD,nBase,nAcc,lFloat) -> __oeDivQ
+	Sintaxe     : eDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> __oeDivQ
 */
-Static Function eDiv(cN,cD,nBase,nAcc,lFloat)
+Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
 	Local aeDV 		:= Array(0)
-	
-	Local cRDiv
-
 	Local nI		:= 0
+#endif
+
+	Local cRDiv
+	Local cQDiv
+	
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+ 
+	SYMBOL_UNUSED( nSize )
+	SYMBOL_UNUSED( cQDiv )
 
 	__oeDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
 	__oeDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
@@ -3516,6 +3535,15 @@ Static Function eDiv(cN,cD,nBase,nAcc,lFloat)
 	End While
 
 	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,"0",NIL,nAcc)
+
+#else
+
+	cQDiv := tBIGNeDIV("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
+	
+	__oeDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
+	__oeDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
+	
+#endif
 	
 	cRDiv := __oeDivR:Int(.F.,.F.)
 
@@ -4528,12 +4556,20 @@ Static Procedure __InitStV1(nBase)
 	__pwoNT	 := oTBigN:Clone()
 	__pwoGCD := oTBigN:Clone()
 	
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
 	__oeDivN   := oTBigN:Clone()
 	__oeDivD   := oTBigN:Clone()
+#endif //__PROTHEUS__	
 	__oeDivR   := oTBigN:Clone()
 	__oeDivQ   := oTBigN:Clone()
+//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
+//      entre 32 e 64.
+#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
 	__oeDivDvD := oTBigN:Clone()
 	__oeDivDvR := oTBigN:Clone()
+#endif //__PROTHEUS__	
 
 	__oSysSQRT := oTBigN:Clone()
 	
@@ -4600,15 +4636,18 @@ Return
 		}
 
 		static char * __TBIGNPADL(const char * szItem,HB_ISIZ nLen,const char * szPad){
-			int padLen = nLen-strlen(szItem);
-			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			int itmLen = strlen(szItem);
+			int padLen = nLen-itmLen;
+			char * pbuffer;
 			if((padLen)>0){
-				if(szPad==NULL){szPad=" ";}
-		  		char *padding = __TBIGNReplicate(szPad,nLen); 
+				if(szPad==NULL){szPad="0";}
+	  			char *padding  = __TBIGNReplicate(szPad,nLen); 
+				pbuffer = (char*)hb_xgrab(nLen+1);
 		  		sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
 				hb_xfree(padding);
 			}else{
-				memcpy(pbuffer,szItem,nLen+1);
+				pbuffer = (char*)hb_xgrab(itmLen+1);
+				memcpy(pbuffer,szItem,itmLen);
 			}
 			return pbuffer;
 		}
@@ -4623,15 +4662,18 @@ Return
 		}
 
 		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad){	
-			int padLen = nLen-strlen(szItem);
-			char * pbuffer = (char*)hb_xgrab(nLen+1);
+			int itmLen = strlen(szItem);
+			int padLen = nLen-itmLen;
+			char * pbuffer;
 			if((padLen)>0){
-				if(szPad==NULL){szPad=" ";}
-				char *padding = __TBIGNReplicate(szPad,nLen); 
+				if(szPad==NULL){szPad="0";}
+				char *padding  = __TBIGNReplicate(szPad,nLen); 
+			    pbuffer = (char*)hb_xgrab(nLen+1);
 				sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
 				hb_xfree(padding);
 			}else{
-				memcpy(pbuffer,szItem,nLen+1);
+				pbuffer = (char*)hb_xgrab(itmLen+1);
+				memcpy(pbuffer,szItem,itmLen);
 			}
 			return pbuffer;
 		}
@@ -4804,6 +4846,124 @@ Return
 			hb_retclen(szRet,y);
 		    hb_xfree(szRet);
 		}
+
+		typedef struct
+		{
+			char * cDivQ;
+			char * cDivR;
+		} stBIGNeDiv, * ptBIGNeDiv;
+
+        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_ISIZ nB , HB_SIZE y, ptBIGNeDiv peDiv){
+	
+			PHB_ITEM peDVArr = hb_itemArrayNew(0);
+		
+			char * szPADL    = __TBIGNPADL("1",n,"0");
+
+			char * cDivDvD   = (char*)hb_xgrab(y);
+			memcpy(cDivDvD,szPADL,n);
+			
+			hb_xfree(szPADL);
+			
+			char * cDivDvR   = (char*)hb_xgrab(y);
+			memcpy(cDivDvR,cD,n);
+	
+			szPADL		     = __TBIGNPADL("0",n,"0");
+	
+			peDiv->cDivQ	 = (char*)hb_xgrab(y);
+			memcpy(peDiv->cDivQ,szPADL,n);
+			
+			hb_xfree(szPADL);
+
+			peDiv->cDivR     = (char*)hb_xgrab(y);
+			memcpy(peDiv->cDivR,peDiv->cDivQ,n);
+			
+			HB_MAXUINT nI    = 0;
+			
+			char * tmp;
+
+			while (strcmp(cDivDvR,cN)<=0){
+				
+				++nI;
+
+     			PHB_ITEM pNI = hb_itemArrayNew(2);
+		        
+		        hb_arraySetC(pNI,1,cDivDvD);
+		        hb_arraySetC(pNI,2,cDivDvR);
+	 			hb_arrayAddForward(peDVArr,pNI);  
+	 			
+	 			hb_itemRelease(pNI);
+    			
+    			tmp = __TBIGNADD(cDivDvD,cDivDvD,n,n,nB);
+    			memcpy(cDivDvD,tmp,n);
+    			hb_xfree(tmp);
+				
+				tmp = __TBIGNADD(cDivDvR,cDivDvR,n,n,nB);				
+				memcpy(cDivDvR,tmp,n);
+				hb_xfree(tmp);
+
+			}
+
+			while (nI){
+
+				PHB_ITEM pNI = hb_arrayGetItemPtr(peDVArr,nI);
+				
+				tmp = __TBIGNADD(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+				memcpy(peDiv->cDivR,tmp,n);
+				hb_xfree(tmp);
+				
+				tmp = __TBIGNADD(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+				memcpy(peDiv->cDivQ,tmp,n);
+				hb_xfree(tmp);
+                
+				int iCmp = strcmp(peDiv->cDivR,cN);
+
+				if (iCmp==0){
+					break;
+				} else{
+						if (iCmp==1){
+							tmp = __TBIGNSUB(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+							memcpy(peDiv->cDivR,tmp,n);
+							hb_xfree(tmp);
+							tmp = __TBIGNSUB(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+							memcpy(peDiv->cDivQ,tmp,n);
+							hb_xfree(tmp);
+					}
+				}  
+				
+				--nI;
+				
+			}
+
+			hb_itemRelease(peDVArr);
+
+			hb_xfree(cDivDvD);
+			hb_xfree(cDivDvR);
+	
+			tmp = __TBIGNSUB(cN,peDiv->cDivR,n,n,nB);
+			memcpy(peDiv->cDivR,tmp,n);
+			hb_xfree(tmp);
+				
+		}
+		
+		HB_FUNC( TBIGNEDIV ){
+			
+			const char * cN  = hb_parc(1);
+			const char * cD  = hb_parc(2);
+			HB_SIZE n        = (HB_SIZE)hb_parnint(4);
+			HB_SIZE y        = n+1;
+			const HB_ISIZ nB = (HB_MAXUINT)hb_parnint(5);
+			
+			ptBIGNeDiv peDiv = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+			
+			__TBIGNeDIV(cN,cD,n,nB,y,peDiv);
+			
+			hb_storclen(peDiv->cDivR,n,3);
+			hb_retclen(peDiv->cDivQ,n);
+
+			hb_xfree(peDiv->cDivR);
+			hb_xfree(peDiv->cDivQ);
+			hb_xfree(peDiv);
+		}
 				
 		static HB_MAXUINT __TBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
 	 		HB_MAXUINT nGCD = x;  
@@ -4891,4 +5051,4 @@ Return
 		
 	#pragma ENDDUMP
 
-#endif
+#endif // __HARBOUR__
