@@ -4212,8 +4212,7 @@ Return(r)
 			Return(cGetcN(c,y))
 		#else
 			Static Function Add(a,b,n,nB)
-				Local y := n+1
-			Return(cGetcN(tBigNAdd(a,b,n,y,nB),y))
+			Return(tBigNAdd(a,b,n,n+1,nB))
 		#endif
 		
 		/*
@@ -4266,7 +4265,7 @@ Return(r)
 			Return(cGetcN(c,y))
 		#else
 			Static Function Sub(a,b,n,nB)
-			Return(cGetcN(tBigNSub(a,b,n,nB),n))
+			Return(tBigNSub(a,b,n,nB))
 		#endif
 		/*
 			Funcao		: Mult
@@ -4366,8 +4365,7 @@ Return(r)
 			Static Function Mult(cN1,cN2,n,nB)
 				Local a	:= tBigNInvert(cN1,n)
 				Local b	:= tBigNInvert(cN2,n)
-				Local y := n+n
-			Return(cGetcN(tBigNMult(a,b,n,y,nB),y))
+			Return(tBigNMult(a,b,n,n+n,nB))
 		#endif
 
 		/*
@@ -4377,38 +4375,36 @@ Return(r)
 			Descricao   : Montar a String de Retorno
 			Sintaxe     : cGetcN(c,n) -> s
 		*/
-		Static Function cGetcN(c,n)
-		#ifdef __HARBOUR__
-		Return(tBigNInvert(c,n))
-		#else		
-			Local s	:= ""
-			Local y	:= n
-			While y>=1
-			#ifdef __PROTHEUS__
-				While y>=1 .and. SubStr(c,y,1)=="0"
-			#else
-				While y>=1 .and. c[y]=="0"
-			#endif	
-					y--
-				End While
+		#ifdef __PROTHEUS__
+			Static Function cGetcN(c,n)
+				Local s	:= ""
+				Local y	:= n
 				While y>=1
 				#ifdef __PROTHEUS__
-					s += SubStr(c,y,1)
+					While y>=1 .and. SubStr(c,y,1)=="0"
 				#else
-					s += c[y]
-				#endif
-					y--
+					While y>=1 .and. c[y]=="0"
+				#endif	
+						y--
+					End While
+					While y>=1
+					#ifdef __PROTHEUS__
+						s += SubStr(c,y,1)
+					#else
+						s += c[y]
+					#endif
+						y--
+					End While
 				End While
-			End While
-			IF s==""
-				s := "0"
-			EndIF
-		
-			IF Len(s)<n
-				s := PadL(s,n,"0")
-			EndIF
-		
-		Return(s)
+				IF s==""
+					s := "0"
+				EndIF
+			
+				IF Len(s)<n
+					s := PadL(s,n,"0")
+				EndIF
+			
+			Return(s)
 		#endif
 	
 	#endif
@@ -4622,7 +4618,8 @@ Return
 			HB_ISIZ nLen        = hb_parns(2);
 			const char * szPad  = hb_parc(3);
 			char * szRet        = __TBIGNPADL(szItem,nLen,szPad);
-			hb_retclen_buffer(szRet,(HB_SIZE)nLen);
+			hb_retclen(szRet,(HB_SIZE)nLen);
+			hb_xfree(szRet);
 		}
 
 		static char * __TBIGNPADR(const char * szItem,HB_ISIZ nLen,const char * szPad){	
@@ -4643,7 +4640,9 @@ Return
 			const char * szItem = hb_parc(1);
 			HB_ISIZ nLen        = hb_parns(2);
 			const char * szPad  = hb_parc(3);
-			hb_retclen_buffer(__TBIGNPADR(szItem,nLen,szPad),(HB_SIZE)nLen);
+			char * szRet        = __TBIGNPADR(szItem,nLen,szPad);
+			hb_retclen(szRet,(HB_SIZE)nLen);
+			hb_xfree(szRet);
 		}
 
 		static char * __TBIGNINVERT(const char * szStringFrom,const HB_SIZE s){
@@ -4659,12 +4658,14 @@ Return
 		HB_FUNC( TBIGNINVERT ){
 			const char * szStringFrom = hb_parc(1);
 			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
-			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNINVERT(szStringFrom,s),s);
+			char * szRet              = __TBIGNINVERT(szStringFrom,s);
+			hb_retclen(szRet,s);
+		    hb_xfree(szRet);
 		}
 
 		static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){	
 			char * c         = (char*)hb_xgrab(y+1);
-			HB_SIZE k        = 0;
+			HB_SIZE k        = y-1;
 			HB_MAXUINT v     = 0;
 			HB_MAXUINT v1;
 			HB_MAXUINT i     = n-1;
@@ -4678,9 +4679,9 @@ Return
 					v1 = 0;
 				}
 				c[k]   = "0123456789"[v%nB];
-				c[k+1] = "0123456789"[v1%nB];
+				c[k-1] = "0123456789"[v1%nB];
 				v = v1;
-				++k;
+				--k;
 				--i;
 			}
 			return c;
@@ -4692,12 +4693,14 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNADD(a,b,n,y,nB),y);
+			char * szRet        = __TBIGNADD(a,b,n,y,nB);
+			hb_retclen(szRet,y);
+		    hb_xfree(szRet);
 		}
    
 		static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
 			char * c      = (char*)hb_xgrab(y+1);
-			HB_SIZE k     = 0;
+			HB_SIZE k     = y-1;
 			int v         = 0;
 			int v1;
 			HB_MAXUINT i  = n-1;
@@ -4711,9 +4714,9 @@ Return
 					v1 = 0;
 				}
 				c[k]   = "0123456789"[v%nB];
-				c[k+1] = "0123456789"[v1%nB];
+				c[k-1] = "0123456789"[v1%nB];
 				v = v1;
-				++k;
+				--k;
 				--i;
 			}
 			return c;
@@ -4725,7 +4728,9 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y     = n;
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
-			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNSUB(a,b,n,y,nB),y);
+			char * szRet        = __TBIGNSUB(a,b,n,y,nB);
+			hb_retclen(szRet,y);
+		    hb_xfree(szRet);
 		}
 
 		static char * __TBIGNMULT(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
@@ -4782,7 +4787,11 @@ Return
 				}
 				l++;
 			}		
-			return c;
+			
+			char * r = __TBIGNINVERT(c,y);
+			hb_xfree(c);
+	
+			return r;
 		}
 	
 		HB_FUNC( TBIGNMULT ){
@@ -4791,7 +4800,9 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-			hb_itemPutCLPtr(hb_stackReturnItem(),__TBIGNMULT(a,b,n,y,nB),y);
+			char * szRet        = __TBIGNMULT(a,b,n,y,nB);
+			hb_retclen(szRet,y);
+		    hb_xfree(szRet);
 		}
 				
 		static HB_MAXUINT __TBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
