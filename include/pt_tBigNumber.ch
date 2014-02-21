@@ -1,10 +1,14 @@
-#IFNDEF _pt_TBigNumber_CH
+#ifndef _pt_TBigNumber_CH
 
-    #DEFINE _pt_TBigNumber_CH
+    #define _pt_TBigNumber_CH
 
-    #IFDEF __PROTHEUS__
+    #ifdef __PROTHEUS__
+    
+    	#ifndef __PTCOMPAT__
+    		#define __PTCOMPAT__
+    	#endif	
 
-        #INCLUDE "protheus.ch"
+        #include "protheus.ch"
 
         #xtranslate THREAD Static => Static
         #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
@@ -18,10 +22,10 @@
                     [; <uVarN> := iif( <uVarN> == NIL, <uValN>, <uVarN> ) ]
 
 
-        #IFNDEF CRLF
-            #DEFINE CRLF CHR(13)+CHR(10)
-        #ENDIF
+        #ifndef CRLF
+            #define CRLF CHR(13)+CHR(10)
+        #endif
     
-    #ENDIF
+    #endif
     
-#ENDIF
+#endif

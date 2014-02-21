@@ -68,20 +68,16 @@ THREAD Static __pwoNR
 THREAD Static __pwoNT
 THREAD Static __pwoGCD
 
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
 THREAD Static __oeDivN
 THREAD Static __oeDivD
-#endif //__PROTHEUS__
+#endif //__PTCOMPAT__
 THREAD Static __oeDivR
 THREAD Static __oeDivQ 
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
 THREAD Static __oeDivDvD
 THREAD Static __oeDivDvR
-#endif //__PROTHEUS__
+#endif //__PTCOMPAT__
 
 THREAD Static __oSysSQRT
 
@@ -3490,19 +3486,15 @@ Return(oNR)
 */
 Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
 	Local aeDV 		:= Array(0)
 	Local nI		:= 0
-#endif
+#endif //__PTCOMPAT__
 
 	Local cRDiv
 	Local cQDiv
 	
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
  
 	SYMBOL_UNUSED( nSize )
 	SYMBOL_UNUSED( cQDiv )
@@ -3536,14 +3528,14 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
 	__oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,"0",NIL,nAcc)
 
-#else
+#else //__HARBOUR__
 
 	cQDiv := tBIGNeDIV("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
 	
 	__oeDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
 	__oeDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
 	
-#endif
+#endif //__PTCOMPAT__
 	
 	cRDiv := __oeDivR:Int(.F.,.F.)
 
@@ -4562,20 +4554,16 @@ Static Procedure __InitStV1(nBase)
 	__pwoNT	 := oTBigN:Clone()
 	__pwoGCD := oTBigN:Clone()
 	
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
 	__oeDivN   := oTBigN:Clone()
 	__oeDivD   := oTBigN:Clone()
-#endif //__PROTHEUS__	
+#endif //__PTCOMPAT__
 	__oeDivR   := oTBigN:Clone()
 	__oeDivQ   := oTBigN:Clone()
-//TODO: Retirar defined(__ARCH64BIT__) quando resolver problema com as diferenças encontradas
-//      entre 32 e 64.
-#if defined(__ARCH64BIT__).or.defined(__PROTHEUS__)
+#ifdef __PTCOMPAT__
 	__oeDivDvD := oTBigN:Clone()
 	__oeDivDvR := oTBigN:Clone()
-#endif //__PROTHEUS__	
+#endif //__PTCOMPAT__
 
 	__oSysSQRT := oTBigN:Clone()
 	

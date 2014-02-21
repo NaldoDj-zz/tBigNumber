@@ -7,8 +7,9 @@
 #DEFINE __SLEEP         "0.09"
 #DEFINE N_TEST          "1000"
 #DEFINE L_ALOG			   "0"
-#DEFINE C_OOPROGRESS    "INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
+#DEFINE C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
 #DEFINE L_OOPROGRAND       "0"
+#DEFINE L_ROPROGRESS       "0"
 
 #DEFINE __SETDEC__		  8
 #DEFINE __NRTTST__		 32 
@@ -34,6 +35,7 @@ Function Main()
 	MEMVAR lL_ALOG
 	MEMVAR aC_OOPROGRESS
 	MEMVAR lL_OOPROGRAND
+	MEMVAR lL_ROPROGRESS
     #IFDEF __HARBOUR__
         #IFDEF __ALT_D__    // Compile with -b
            AltD(1)          // Enables the debugger. Press F5 to go.
@@ -48,6 +50,7 @@ Function Main()
 	Private lL_ALOG
 	Private aC_OOPROGRESS
 	Private lL_OOPROGRAND
+	Private lL_ROPROGRESS
     IF .NOT.(File(cIni) ) .or. Empty(hIni)
         hIni["GENERAL"] := hb_Hash() 
         hIni["GENERAL"]["ACC_SET"]        := ACC_SET
@@ -58,6 +61,7 @@ Function Main()
 		hIni["GENERAL"]["L_ALOG"]         := L_ALOG
 		hIni["GENERAL"]["C_OOPROGRESS"]   := C_OOPROGRESS
 		hIni["GENERAL"]["L_OOPROGRAND"]   := L_OOPROGRAND
+		hIni["GENERAL"]["L_ROPROGRESS"]	  := L_ROPROGRESS
         hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
@@ -88,6 +92,9 @@ Function Main()
 					CASE "L_OOPROGRAND"
 						lL_OOPROGRAND	:= (aSect[cKey]=="1")
 						EXIT
+					CASE "L_ROPROGRESS"
+						lL_ROPROGRESS	:= (aSect[cKey]=="1")
+						EXIT
 				ENDSWITCH
             NEXT cKey
         NEXT cSection
@@ -100,6 +107,7 @@ Function Main()
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_ATokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
 	lL_OOPROGRAND	:= IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
+	lL_ROPROGRESS	:= IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
 	__SetCentury("ON")
 	SET DATE TO BRITISH
 	__nSLEEP 		:= Min(__nSLEEP,10)
@@ -132,7 +140,8 @@ User Function tBigNTst()
             otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
             otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
 			otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
-			otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)			
+			otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
+			otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_ROPROGRESS)			
 			otFIni:SaveAs(cIni)
         Else
             nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -142,7 +151,8 @@ User Function tBigNTst()
             nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
 			lL_ALOG			:= (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
 			aC_OOPROGRESS   := StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
-			lL_OOPROGRAND	:= (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_ALOG)=="1")
+			lL_OOPROGRAND	:= (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
+			lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_ROPROGRESS)=="1")			
 		EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
@@ -153,6 +163,7 @@ User Function tBigNTst()
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
 	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
 	lL_OOPROGRAND	:= IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
+	lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
 	__nSLEEP 		:= Max(__nSLEEP,10)
 	IF ((__nSLEEP)<10)
 		__nSLEEP *= 10
@@ -189,7 +200,7 @@ Static Procedure tBigNTst()
     Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
     Local otBH16    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,16)
     Local otBH32    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,32)
-    Local oPrime    AS OBJECT CLASS "TPRIME"
+    Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New() 
     Local aPFact    AS ARRAY
     Local aPrimes   AS ARRAY  VALUE {;                                                                                               
                                          "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
@@ -240,6 +251,7 @@ Static Procedure tBigNTst()
 	MEMVAR lL_ALOG
 	MEMVAR aC_OOPROGRESS
 	MEMVAR lL_OOPROGRAND
+	MEMVAR lL_ROPROGRESS
     
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -348,14 +360,8 @@ Static Procedure tBigNTst()
 	#IFDEF __HARBOUR__
 		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
 										       HB_THREAD_INHERIT_MEMVARS),;
-		ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND)
+		ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
 	#ENDIF	
-	
-    __ConOut(fhLog," BEGIN ------------ CARREGANDO PRIMOS -------------- ")
-
-    ASSIGN oPrime := tPrime():New() 
-
-    __ConOut(fhLog," ------------ CARREGANDO PRIMOS -------------- END ")
 
     __ConOut(fhLog,"")
 
@@ -1968,7 +1974,7 @@ Return(lHarbour)
             ASSIGN s := ""
         ENDSWITCH
     Return(s)
-    Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom)
+    Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom,lPRandom)
 	    
 	    Local aRdnPG	 AS ARRAY						VALUE Array(0) 
 	    Local aRdnAn	 AS ARRAY						VALUE Array(0) 
@@ -2197,7 +2203,7 @@ Return(lHarbour)
 							__tbnSleep(nSLEEP)
 						End While
 						aAdd(aRdnAn,nSAnim)						
-						oProgress2:SetProgress(aSAnim[nSAnim])						
+						oProgress2:SetProgress(aSAnim[nSAnim])
 						IF (Len(aRdnPG)==nLenP)
 							aSize(aRdnPG,0)
 						EndIF
@@ -2218,6 +2224,8 @@ Return(lHarbour)
 					ASSIGN cProgress	:= aProgress2[nProgress]
 				EndIF
 			EndIF
+	
+			oProgress2:SetRandom(lPRandom)
 			
 			IF (lCScreen)
 				ASSIGN lCScreen := .F.

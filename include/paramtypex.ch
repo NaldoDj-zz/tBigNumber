@@ -107,7 +107,7 @@
 		*/
 		
 		// This command replaces the traditional := assignment
-		#ifDEF PTEX_ASSIGN_VAR
+		#ifdef PTEX_ASSIGN_VAR
 			#xtranslate ASSIGN <cVar> =  <uVal> => <cVar> := __IsTyped( <"cVar"> , <cVar> , <uVal> )
 			#xtranslate ASSIGN <cVar> := <uVal> => <cVar> := __IsTyped( <"cVar"> , <cVar> , <uVal> )
 			#xtranslate ASSIGN <cVar> += <uVal> => <cVar> += __IsTyped( <"cVar"> , <cVar> , <uVal> )
@@ -229,7 +229,7 @@
                             	
 		Return( xRetVal )
 		
-		#ifDEF PTEX_ASSIGN_VAR
+		#ifdef PTEX_ASSIGN_VAR
 			/*
 				Include		: ParamType.ch
 				Função		: __IsTyped
@@ -272,9 +272,23 @@
 	  
 		#endif
 
-		#ifDEF __HARBOUR__
-			Static Function UserException(e)
-			Return( BREAK( e ) )
+		#ifdef __HARBOUR__
+			#include "error.ch"
+			Static Function UserException(cDescription)
+				Local e			:= ErrorNew()
+				e:description	:= cDescription
+				e:gencode 		:= EG_ARG
+				e:severity 		:= ES_ERROR
+				e:cansubstitute	:= .T.
+				e:subsystem		:= ProcName(1)
+				#ifdef HB_CLP_STRICT
+					HB_SYMBOL_UNUSED(cMethod )
+				#else
+					e:operation := "ASSIGN"
+				#endif
+				e:subcode		:= 0
+				e:args			:= hb_aParams(1)
+				Return(Throw(e))
 		#endif	
 		
 #endif

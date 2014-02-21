@@ -1,24 +1,24 @@
-#IFNDEF _hb_TBigNumber_CH
+#ifndef _hb_TBigNumber_CH
 
-    #DEFINE _hb_TBigNumber_CH
+    #define _hb_TBigNumber_CH
 
-    #IFDEF __HARBOUR__
-        #INCLUDE "common.ch"
-        #INCLUDE "hbclass.ch"
-        #INCLUDE "hbthread.ch"
-*        #INCLUDE "hbCompat.ch"
-        #IFDEF TBN_DBFILE
-            #IFNDEF TBN_MEMIO
+    #ifdef __HARBOUR__
+        #include "common.ch"
+        #include "hbclass.ch"
+        #include "hbthread.ch"
+*       #include "hbCompat.ch"
+        #ifdef TBN_DBFILE
+            #ifndef TBN_MEMIO
                 REQUEST DBFCDX , DBFFPT
             #ELSE
                 #require "hbmemio"
                 REQUEST HB_MEMIO
-            #ENDIF
-        #ENDIF
+            #endif
+        #endif
 
-        #IFNDEF __XHARBOUR__
-            #INCLUDE "xhb.ch" //add xHarbour emulation to Harbour
-        #ENDIF
+        #ifndef __XHARBOUR__
+            #include "xhb.ch" //add xHarbour emulation to Harbour
+        #endif
         
         #xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
 
@@ -31,26 +31,17 @@
                         [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
 		
 
-		/*
-			TODO: Remover quando atualizar a plataforma
-		*/
-		//#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
-		#if defined(__USE_CUSTOM_COMMANDS__)
-			#xtranslate hb_BPeek(<c>,<p>)          => Asc(SubStr(<c>,<p>,1))
-			#xtranslate hb_BCode(<c>)              => Asc(<c>)
-			#xtranslate hb_BChar(<n>)              => Chr(<n>)
-			#xtranslate hb_BLen(<c>)               => Len(<c>)
-			#xtranslate hb_BSubStr(<c>,<p>[,<l>])  => SubStr(<c>,<p>,<l>)
-			#xtranslate hb_BLeft(<c>,<l>)          => Left(<c>,<l>)
-			#xtranslate hb_BRight(<c>,<l>)         => Right(<c>,<l>)
-			#xtranslate hb_BStrTran(<c>,<s>[,<r>]) => StrTran(<c>,<s>,<r>)
-			#xtranslate hb_IsFunction(<c>)         => (Type(<c>+"()")=="UI")
+		/* TODO: Remover quando solucionar problema da divisao em C */
+		#if defined(__ARCH64BIT__)
+	    	#ifndef __PTCOMPAT__
+	    		#define __PTCOMPAT__
+	    	#endif	
 		#endif
 		
-        #IFNDEF CRLF
-            #DEFINE CRLF hb_eol()
-        #ENDIF
+        #ifndef CRLF
+            #define CRLF hb_eol()
+        #endif
     
-    #ENDIF
+    #endif
     
-#ENDIF
+#endif
