@@ -4041,7 +4041,8 @@ Return(r)
 
 		Local y	:= n+1
 		Local c := aFill(aSize(__aZAdd,y),0)
-		Local k := 1
+		Local k := y
+		Local s := ""
 
 		While n>0
 		#ifdef __PROTHEUS__
@@ -4050,14 +4051,16 @@ Return(r)
 			c[k] += Val(a[n])+Val(b[n])
 		#endif
 			IF c[k]>=nBase
-				c[k+1]	+= 1
+				c[k-1]	+= 1
 				c[k]	-= nBase
 			EndIF
-			++k
+			--k
 			--n
 		End While
+		
+		aEval(c,{|v|s+=hb_ntos(v)})
 
-	Return(aGetcN(c,y))
+	Return(s)
 	
 	/*
 		Funcao		: Sub
@@ -4070,7 +4073,8 @@ Return(r)
 
 		Local y := n
 		Local c := aFill(aSize(__aZSub,y),0)
-		Local k := 1
+		Local k := y
+		Local s := ""
 	
 		While n>0
 		#ifdef __PROTHEUS__
@@ -4079,14 +4083,16 @@ Return(r)
 			c[k] += Val(a[n])-Val(b[n])
 		#endif
 			IF c[k]<0
-				c[k+1]	-= 1
+				c[k-1]	-= 1
 				c[k]	+= nBase
 			EndIF
-			++k
+			--k
 			--n
 		End While
+		
+		aEval(c,{|v|s+=hb_ntos(v)})
 
-	Return(aGetcN(c,y))
+	Return(s)
 	
 	/*
 		Funcao		: Mult
@@ -4201,7 +4207,7 @@ Return(r)
 				Local c
 
 				Local y	:= n+1
-				Local k := 1
+				Local k := y
 			
 				Local v := 0
 				Local v1
@@ -4227,17 +4233,17 @@ Return(r)
 					EndIF
 					#ifdef __PROTHEUS__
 						c := Stuff(c,k,1,hb_ntos(v))
-						c := Stuff(c,k+1,1,hb_ntos(v1)) 
+						c := Stuff(c,k-1,1,hb_ntos(v1)) 
 					#else
 						c[k]   := hb_ntos(v)
-						c[k+1] := hb_ntos(v1)
+						c[k-1] := hb_ntos(v1)
 					#endif
 					v := v1
-					++k
+					--k
 					--n
 				End While
 
-			Return(cGetcN(c,y))
+			Return(c)
 		#else
 			Static Function Add(a,b,n,nB)
 			Return(tBigNAdd(a,b,n,n+1,nB))
@@ -4256,7 +4262,7 @@ Return(r)
 				Local c
 
 				Local y := n
-				Local k := 1
+				Local k := y
 				
 				Local v := 0
 				Local v1
@@ -4286,11 +4292,11 @@ Return(r)
 						c[k] := hb_ntos(v)
 					#endif
 					v := v1
-					++k
+					--k
 					--n
 				End While
 
-			Return(cGetcN(c,y))
+			Return(c)
 		#else
 			Static Function Sub(a,b,n,nB)
 			Return(tBigNSub(a,b,n,nB))
