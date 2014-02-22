@@ -87,7 +87,7 @@ Function Main()
 						lL_ALOG			:= (aSect[cKey]=="1")
 						EXIT
 					CASE "C_OOPROGRESS"	
-						aC_OOPROGRESS   := hb_ATokens(Upper(AllTrim(aSect[cKey])),",")
+						aC_OOPROGRESS   := hb_aTokens(Upper(AllTrim(aSect[cKey])),",")
 						EXIT
 					CASE "L_OOPROGRAND"
 						lL_OOPROGRAND	:= (aSect[cKey]=="1")
@@ -105,7 +105,7 @@ Function Main()
     __nSLEEP		:= IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
 	nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
 	lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
-	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_ATokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+	aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_aTokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
 	lL_OOPROGRAND	:= IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
 	lL_ROPROGRESS	:= IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
 	__SetCentury("ON")
@@ -214,8 +214,10 @@ Static Procedure tBigNTst()
 #IFDEF __HARBOUR__
 	Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
     Local cLog       AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
-    Local ptthProg
-    Local ptProgress := @Progress()
+    Local ptProgress   := @Progress()
+    Local ptthProgress
+    Local ptftProgress := @ftProgress()
+    Local ptthftProgress
 #ELSE
     Local cLog      AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 #ENDIF
@@ -268,7 +270,7 @@ Static Procedure tBigNTst()
 	MEMVAR __oRTimeProc
 	MEMVAR __phMutex
 
- 	Private __nMaxRow       AS NUMBER VALUE MaxRow()
+ 	Private __nMaxRow       AS NUMBER VALUE (MaxRow()-10)
     Private __nMaxCol       AS NUMBER VALUE MaxCol()
     Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
     Private __nRow          AS NUMBER VALUE 0
@@ -318,7 +320,7 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,__cSep)   						//3
 	#IFDEF __HARBOUR__
-		DispOutAt(3,(__nCol-1),"[ ]")
+		DispOutAT(3,(__nCol-1),"[ ]")
 	#ENDIF	
 	
     __ConOut(fhLog,"START ") 						//4
@@ -348,19 +350,27 @@ Static Procedure tBigNTst()
 		__ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
 		__ConOut(fhLog,"")												//11	
 		__ConOut(fhLog,"")								  				//12
-		DispOutAt(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
+		DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
 	#ENDIF
 	
     __ConOut(fhLog,"")	//13
 	
-	__ConOut(fhLog,"")	//14
+	#IFDEF __HARBOUR__
+		DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") //14
+		DispOutAT(__nMaxRow+1,0,Replicate("*",__nMaxCol),"w+/n") //14
+	#ENDIF	
 	
-	#DEFINE __NROWAT    14
+	__ConOut(fhLog,"")	//15
+	
+	#DEFINE __NROWAT    15
 
 	#IFDEF __HARBOUR__
-		ptthProg	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
+		ptthProgress	:= hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
 										       HB_THREAD_INHERIT_MEMVARS),;
 		ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
+		ptthftProgress  := hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
+										       HB_THREAD_INHERIT_MEMVARS),;
+		ptftProgress,__nSLEEP,__nMaxCol,__nMaxRow)
 	#ENDIF	
 
     __ConOut(fhLog,"")
@@ -1810,8 +1820,10 @@ Static Procedure tBigNTst()
     #ENDIF
 #ELSE// __HARBOUR__
 	__lKillProgress := .T.
-	hb_threadQuitRequest(ptthProg)
-	hb_ThreadWait(ptthProg)
+	hb_threadQuitRequest(ptthProgress)
+	hb_threadQuitRequest(ptthftProgress)
+	hb_ThreadWait(ptthProgress)
+	hb_ThreadWait(ptthftProgress)
    	otBigN := NIL
    	hb_gcAll()
     WAIT "Press any key to end"
@@ -1896,7 +1908,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	cDOAt += "]["
 	cDOAt += hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
 	cDOAt += " %]" 
-	DispOutAt(09,15,cDOAt,"w+/n")
+	DispOutAT(09,15,cDOAt,"w+/n")
 
 	@ 10,15 CLEAR TO 10,__nMaxCol
 	cDOAt := "["
@@ -1911,7 +1923,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	cDOAt += "]["
 	cDOAt += hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
 	cDOAt += " %]" 
-	DispOutAt(10,15,cDOAt,"w+/n")
+	DispOutAT(10,15,cDOAt,"w+/n")
 	
 	DEFAULT __nRow := 0
     IF ++__nRow >= __nMaxRow
@@ -1922,7 +1934,7 @@ Static Procedure __ConOut(fhLog,e,d)
 	ASSIGN lSep  := (p==__cSep)
 	ASSIGN lMRow := (__nRow>=__NROWAT)
 
-	DispOutAt(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+	DispOutAT(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
 
 	IF hb_mutexLock(__phMutex)
 		__oRTimeProc:Calcule("-------------- END"$p)
@@ -2006,6 +2018,7 @@ Return(lHarbour)
 		MEMVAR __lKillProgress
 		MEMVAR __oRTimeProc
 		MEMVAR __phMutex
+		MEMVAR __nMaxRow
 		
 		ASSIGN aSAnim[01] := Replicate(Chr(7)+";",nSizeP2-1)
 		ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,nSizeP2-1)
@@ -2187,7 +2200,7 @@ Return(lHarbour)
 		
 		While .NOT.(__lKillProgress)
 			
-			DispOutAt(3,nCol,oProgress1:Eval(),"r+/n")
+			DispOutAT(3,nCol,oProgress1:Eval(),"r+/n")
 			
 			IF (oProgress2:GetnProgress()==oProgress2:GetnMax())
 				lChange := (.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
@@ -2238,8 +2251,8 @@ Return(lHarbour)
 			ASSIGN cAT    := SubStr(cStuff,nAT,nQT+1)
 			ASSIGN cStuff := Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
 
-			DispOutAt(12,0,cStuff,"w+/n")
-			DispOutAt(12,nAT-1,cAT,"r+/n")
+			DispOutAT(12,0,cStuff,"w+/n")
+			DispOutAT(12,nAT-1,cAT,"r+/n")
 
 			IF hb_mutexLock(__phMutex)
 				IF (cRTime==cLRTime)
@@ -2256,20 +2269,774 @@ Return(lHarbour)
 			EndIF
 
 			@ 07,15 CLEAR TO 07,nMaxCol
-			DispOutAt(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
-			DispOutAt(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
+			DispOutAT(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
+			DispOutAT(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
 			
 			__tbnSleep(nSLEEP)
 	
 		End While
 	
-	Return
+	Return                                                                     	
+    Static Procedure ftProgress(nSLEEP,nMaxCol,nMaxRow)
+	    
+		Local cAT    AS CHARACTER
+		Local cAnim  AS CHARACTER VALUE GetaRAnim()
+		Local cLAnim AS CHARACTER
+		             
+		Local lBreak AS LOGICAL   VALUE .F.
+		             
+		Local nAT    AS NUMBER
+		
+		MEMVAR __lKillProgress
+		
+		While .NOT.(__lKillProgress)
+			
+			FOR EACH cAT IN hb_aTokens(cAnim,"@")
+				++nAT
+				lBreak := (";"$cAT)
+				IF (lBreak)
+					cLAnim := StrTran(cAT,";","")
+				EndIF
+				cLAnim := PadC(StrTran(cAT,";",""),nMaxCol)
+				DispOutAT(nMaxRow+2+nAT,0,cLAnim,IF(lBreak,"w+/n","r+/n"))
+				__tbnSleep(nSLEEP/2)
+				IF (lBreak)
+					nAT := 0
+				EndIF
+			NEXT cAT
+
+			nAT := 0
+			
+			__tbnSleep(nSLEEP)
+	
+		End While
+	
+	Return                                                                     	
 	Static Procedure BuildScreen(fhLog)
         MEMVAR __nMaxCol
 		CLEAR SCREEN
         __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",__nMaxCol))			//2
 	Return
+	Static Function GetaRAnim()
+		
+		Local cAnim := ""
+		
+		/* http://www.incredibleart.org/links/ascii.html (ASCII Animated Art by Joan Stark) */
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="  O                                                                   @"
+		cAnim+=" /|\   ___                                                            @"
+		cAnim+="  |  _/ 1|                                                            @"
+		cAnim+=" _|_/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="  O_                                                                  @"
+		cAnim+=" /|_   ___                                                            @"
+		cAnim+="  | \_/ 1|                                                            @"
+		cAnim+=" _|_/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="    O_                                                                @"
+		cAnim+="   /_  ___                                                            @"
+		cAnim+="   / |/ 1|                                                            @"
+		cAnim+=" _/_/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="     O_                                                               @"
+		cAnim+="    /|_                                                               @"
+		cAnim+="     | \__                                                            @"
+		cAnim+="     |/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="        O_                                                            @"
+		cAnim+="       /_                                                             @"
+		cAnim+="      /_/_                                                            @"
+		cAnim+="     // 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="        O                                                             @"
+		cAnim+="       /|\                                                            @"
+		cAnim+="        |                                                             @"
+		cAnim+="       _|_                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="        O                                                             @"
+		cAnim+="       /|\                                                            @"
+		cAnim+="        |                                                             @"
+		cAnim+="       _|_                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~~~^~^~^^^~^~^^~^~^~^~^~^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="        O                                                             @"
+		cAnim+="        |\                                                            @"
+		cAnim+="        \                                                             @"
+		cAnim+="       _/_                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~~^~~~^~^~^~^~~^^~^~^~^~^^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="         O                                                            @"
+		cAnim+="        /\                                                            @"
+		cAnim+="        \                                                             @"
+		cAnim+="       _/_                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^~^^^~^~^^^~^^~^^~^^^~^~^~^~^~^~^^~^~^~^~~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="        __O                                                           @"
+		cAnim+="        \ \                                                           @"
+		cAnim+="       _/_                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="        _                                                             @"
+		cAnim+="        \\O                                                           @"
+		cAnim+="       _/_|                                                           @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^^^~^~^^~^~^~^^~^~^^~^~^~^^^~^~^~^~^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="        _                                                             @"
+		cAnim+="        \\O                                                           @"
+		cAnim+="       _/_|                                                           @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^^~^^~^~^^~^~^^~^~^^~^~^~^~^~^~^^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="          _                                                           @"
+		cAnim+="         / \O                                                         @"
+		cAnim+="       _/_  \                                                         @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="              __O                                                     @"
+		cAnim+="           __/  \                                                     @"
+		cAnim+="       ___ `                                                          @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                  __O                                                 @"
+		cAnim+="               __/  \                                                 @"
+		cAnim+="       ___     `                                                      @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                ,______O                                              @"
+		cAnim+="       ___             \                                              @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                    ,____                                             @"
+		cAnim+="       ___               \O                                           @"
+		cAnim+="     _/ 1|                \                                           @"
+		cAnim+=" ___/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___             ,____                                          @"
+		cAnim+="     _/ 1|                  \O                                        @"
+		cAnim+=" ___/____|                  .\,                             .--._____ @"
+		cAnim+="       jgs`~~^~^~^^~^~^~^~^^~^~^~^~^~^~^^^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|               ,_____                                       @"
+		cAnim+=" ___/____|                    .\O.'                         .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                        '.                                  @"
+		cAnim+=" ___/____|                      '.\ .'                      .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^~^~^~^^~^~^^~^^~^~^~^~^^~^~^~^~^^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                           '.  /\O                .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                              '   /                         @"
+		cAnim+=" ___/____|                             `,'  \O              .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                '      __                   @"
+		cAnim+=" ___/____|                                .`'   /O          .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                    '.                      @"
+		cAnim+=" ___/____|                                   `,. /\O        .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^^~^~^~^^~^^~^~^^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                      .'    /               @"
+		cAnim+=" ___/____|                                      '.`   \O    .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^~^~~~^~~~^~^~^~~~^~^~^~^~~^~~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                         `'    __           @"
+		cAnim+=" ___/____|                                         '.`  /O  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                             `'             @"
+		cAnim+=" ___/____|                                            '.<<_'.--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                               .            @"
+		cAnim+=" ___/____|                                              `.,`.--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                          O/\ `.' .--._____ @"
+		cAnim+="       jgs`~~~^~^~^^~~^~^~^~^^~^~^~^^~^~^~^~~^~^~^~^^^~^^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                        \    .'             @"
+		cAnim+=" ___/____|                                       O/   '.`   .--._____ @"
+		cAnim+="       jgs`~~~^~^~^~~~^~^~^~^^~~~~^~^~^^~^^~^~~^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                   ___     .'               @"
+		cAnim+=" ___/____|                                    O/   '..      .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                        `.                  @"
+		cAnim+=" ___/____|                                 O/\  `.'         .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                               \    .                       @"
+		cAnim+=" ___/____|                              O/   .,'            .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^^~^^~^^~^~^^~^~^^~^~^~^^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                          ___   `.                          @"
+		cAnim+=" ___/____|                           O/  `,'                .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                             .'                             @"
+		cAnim+=" ___/____|                       O/\  .'.                   .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^^~^^~^^~^~^~^~^~^^~^~^^~^~^~^^^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                      \   `.                                @"
+		cAnim+=" ___/____|                     O/  `.'                      .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                 ___  .                                     @"
+		cAnim+=" ___/____|                  O/   ,'                         .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^~^^~^~^^~^~^~^~~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                     .                                      @"
+		cAnim+=" ___/____|               O/\ `.'                            .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|             \   `.                                         @"
+		cAnim+=" ___/____|            O/   .'                               .--._____ @"
+		cAnim+="       jgs`~^~^~^~^^~^~^~^^~^~^~^^^^~^~^~^~^~^~~^~~~~^~^~~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|        ___    .                                            @"
+		cAnim+=" ___/____|         O/   '.`                                 .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^^^~^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|             .`                                             @"
+		cAnim+=" ___/____|      O/\   '.,                                   .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|    \    ,                                                  @"
+		cAnim+=" ___/____|   O/   `.'                                       .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1| __  ,                                                      @"
+		cAnim+=" ___/____| O/   .'`                                         .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~~^~^^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|.` .                                                        @"
+		cAnim+=" ___/____|_>>.                                              .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1| .                                                          @"
+		cAnim+=" ___/____|`.,`                                              .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|   .                                                        @"
+		cAnim+=" ___/____| '.  /\O                                          .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|     '   /                                                  @"
+		cAnim+=" ___/____|    `,'  \O                                       .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|      '      __                                             @"
+		cAnim+=" ___/____|      .`'   /O                                    .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|        '.  /\O                                   .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|             '   /                                          @"
+		cAnim+=" ___/____|            `,'  \O                               .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|              '      __                                     @"
+		cAnim+=" ___/____|              .`'   /O                            .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                  '.  /\O                         .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                      '   /                                 @"
+		cAnim+=" ___/____|                     `,'  \O                      .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                        '      __                           @"
+		cAnim+=" ___/____|                        .`'   /O                  .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                           '.  /\O                .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                              '   /                         @"
+		cAnim+=" ___/____|                             `,'  \O              .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                '      __                   @"
+		cAnim+=" ___/____|                                .`'   /O          .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                    '.                      @"
+		cAnim+=" ___/____|                                   `,. /\O        .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^^~^~^~^^~^^~^~^^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                      .'    /               @"
+		cAnim+=" ___/____|                                      '.`   \O    .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^~^~~~^~~~^~^~^~~~^~^~^~^~~^~~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                         `'    __           @"
+		cAnim+=" ___/____|                                         '.`  /O  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                             `'             @"
+		cAnim+=" ___/____|                                            '.<<_'.--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                               .            @"
+		cAnim+=" ___/____|                                              `.,`.--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|                                          O/\ `.' .--._____ @"
+		cAnim+="       jgs`~~~^~^~^^~~^~^~^~^^~^~^~^^~^~^~^~~^~^~^~^^^~^^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                        \    .'             @"
+		cAnim+=" ___/____|                                       O/   '.`   .--._____ @"
+		cAnim+="       jgs`~~~^~^~^~~~^~^~^~^^~~~~^~^~^^~^^~^~~^^~^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                   ___     .'               @"
+		cAnim+=" ___/____|                                    O/   '..      .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                        `.                  @"
+		cAnim+=" ___/____|                                 O/\  `.'         .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                               \    .                       @"
+		cAnim+=" ___/____|                              O/   .,'            .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^^~^^~^^~^~^^~^~^^~^~^~^^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                          ___   `.                          @"
+		cAnim+=" ___/____|                           O/  `,'                .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                             .'                             @"
+		cAnim+=" ___/____|                       O/\  .'.                   .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^^~^^~^^~^~^~^~^~^^~^~^^~^~^~^^^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                      \   `.                                @"
+		cAnim+=" ___/____|                     O/  `.'                      .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                 ___  .                                     @"
+		cAnim+=" ___/____|                  O/   ,'                         .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^~^^~^~^^~^~^~^~~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                     .                                      @"
+		cAnim+=" ___/____|               O/\ `.'                            .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|             \   `.                                         @"
+		cAnim+=" ___/____|            O/   .'                               .--._____ @"
+		cAnim+="       jgs`~^~^~^~^^~^~^~^^~^~^~^^^^~^~^~^~^~^~~^~~~~^~^~~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|        ___    .                                            @"
+		cAnim+=" ___/____|         O/   '.`                                 .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^^^~^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|             .`                                             @"
+		cAnim+=" ___/____|      O/\   '.,                                   .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|    \    ,                                                  @"
+		cAnim+=" ___/____|   O/   `.'                                       .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1| __  ,                                                      @"
+		cAnim+=" ___/____| O/   .'`                                         .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^^^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~~^~^^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/____|O.'                                               .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1|                                                            @"
+		cAnim+=" ___/___/\O.'                                               .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       ___                                                            @"
+		cAnim+="     _/ 1O                                                            @"
+		cAnim+=" ___/___/|\                                                 .--._____ @"
+		cAnim+="       jgs`~~^~^~^~~^~^~^^^~^^~^~~^~^^~^~^~^^~^~^~^^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       O__                                                            @"
+		cAnim+="     _//\                                                             @"
+		cAnim+=" ___/__<<|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^^~^~^~^~~^~^~^~^^~^^^~^^~^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       _O                                                             @"
+		cAnim+="       _|\                                                            @"
+		cAnim+="     _//||                                                            @"
+		cAnim+=" ___/__\|                                                   .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       O                                                              @"
+		cAnim+="      /|__                                                            @"
+		cAnim+="     _/|\|                                                            @"
+		cAnim+=" ___/__|_\                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="       O                                                              @"
+		cAnim+="      /|__                                                            @"
+		cAnim+="     _/|1|                                                            @"
+		cAnim+=" ___/_||_|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^^^^~^~^~^~~^~^~^~^~^~^~~^`          ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="      O                                                               @"
+		cAnim+="     /|___                                                            @"
+		cAnim+="     /| 1|                                                            @"
+		cAnim+=" ___|_\__|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~~~^~^^~~~^~^~~~^~^~^~^~~~^~~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="    O_                                                                @"
+		cAnim+="   /|  ___                                                            @"
+		cAnim+="   /|_/ 1|                                                            @"
+		cAnim+=" __\|____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="    O_                                                                @"
+		cAnim+="   /|  ___                                                            @"
+		cAnim+="   /|_/ 1|                                                            @"
+		cAnim+=" __\|____|                                                  .--._____ @"
+		cAnim+="       jgs`~~^~^~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^`         ;@" 
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="  O_                                                                  @"
+		cAnim+=" /|    ___                                                            @"
+		cAnim+="  |  _/ 1|                                                            @"
+		cAnim+=" _|\/____|                                                  .--._____ @"
+		cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^^~^~^^~^^~~~^~^^~^~~^~^^~^`         ;@"
+		
+		cAnim+="                                                                      @"
+		cAnim+="                                                                      @"
+		cAnim+="  O                                                                   @"
+		cAnim+=" /|\   ___                                                            @"
+		cAnim+="  |  _/ 1|                                                            @"
+		cAnim+=" _|_/____|                                                  .--._____ @"		
+		cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^`          ;@"	
+	
+	Return(cAnim)
 #ELSE
     #IFDEF TBN_DBFILE
     	Static Function tBigNGC()
