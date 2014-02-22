@@ -270,7 +270,7 @@ Static Procedure tBigNTst()
 	MEMVAR __oRTimeProc
 	MEMVAR __phMutex
 
- 	Private __nMaxRow       AS NUMBER VALUE (MaxRow()-10)
+ 	Private __nMaxRow       AS NUMBER VALUE (MaxRow()-8)
     Private __nMaxCol       AS NUMBER VALUE MaxCol()
     Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
     Private __nRow          AS NUMBER VALUE 0
@@ -2300,10 +2300,9 @@ Return(lHarbour)
 			For nAnim := 1 To nAnimes
 				cAnim := aAnim[nAnim]
 				FOR EACH cRow IN hb_aTokens(cAnim,"@")
-					++nRow
 					lBreak := (";"$cRow)
 					IF (lBreak)
-						IF (nRowC==0)
+						IF ((nRowC==0).and..NOT.(nRow==0))
 							nRowC := (nRowAnim+nRow)
 						EndIF
 						cRAnim := StrTran(cRow,";","")
@@ -2313,6 +2312,8 @@ Return(lHarbour)
 					__tbnSleep(nSLEEP/2)
 					IF (lBreak)
 						nRow  := 0
+					Else
+						++nRow
 					EndIF
 				NEXT cRow
 				@ nRowAnim,0 CLEAR TO nRowC,nMaxCol

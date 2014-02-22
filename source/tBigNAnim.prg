@@ -15,7 +15,6 @@ Static Function aSwimming()
 	cAnim+="  |  _/ 1|                                                            @"
 	cAnim+=" _|_/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="  O_                                                                  @"
@@ -23,7 +22,6 @@ Static Function aSwimming()
 	cAnim+="  | \_/ 1|                                                            @"
 	cAnim+=" _|_/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="    O_                                                                @"
@@ -31,7 +29,6 @@ Static Function aSwimming()
 	cAnim+="   / |/ 1|                                                            @"
 	cAnim+=" _/_/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="     O_                                                               @"
 	cAnim+="    /|_                                                               @"
@@ -39,7 +36,6 @@ Static Function aSwimming()
 	cAnim+="     |/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="        O_                                                            @"
 	cAnim+="       /_                                                             @"
@@ -47,7 +43,6 @@ Static Function aSwimming()
 	cAnim+="     // 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="        O                                                             @"
 	cAnim+="       /|\                                                            @"
 	cAnim+="        |                                                             @"
@@ -55,7 +50,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="        O                                                             @"
 	cAnim+="       /|\                                                            @"
 	cAnim+="        |                                                             @"
@@ -63,7 +57,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~~~^~^~^^^~^~^^~^~^~^~^~^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="        O                                                             @"
 	cAnim+="        |\                                                            @"
 	cAnim+="        \                                                             @"
@@ -71,7 +64,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~~^~~~^~^~^~^~~^^~^~^~^~^^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="         O                                                            @"
 	cAnim+="        /\                                                            @"
 	cAnim+="        \                                                             @"
@@ -79,7 +71,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^~^^^~^~^^^~^^~^^~^^^~^~^~^~^~^~^^~^~^~^~~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="        __O                                                           @"
 	cAnim+="        \ \                                                           @"
@@ -87,7 +78,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="        _                                                             @"
 	cAnim+="        \\O                                                           @"
@@ -95,7 +85,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^^^~^~^^~^~^~^^~^~^^~^~^~^^^~^~^~^~^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="        _                                                             @"
 	cAnim+="        \\O                                                           @"
@@ -103,7 +92,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^^~^^~^~^^~^~^^~^~^^~^~^~^~^~^~^^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="          _                                                           @"
 	cAnim+="         / \O                                                         @"
@@ -111,7 +99,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="              __O                                                     @"
 	cAnim+="           __/  \                                                     @"
@@ -119,7 +106,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                  __O                                                 @"
 	cAnim+="               __/  \                                                 @"
@@ -127,7 +113,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                ,______O                                              @"
@@ -135,7 +120,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                    ,____                                             @"
@@ -143,7 +127,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                \                                           @"
 	cAnim+=" ___/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -151,7 +134,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                  \O                                        @"
 	cAnim+=" ___/____|                  .\,                             .--._____ @"
 	cAnim+="       jgs`~~^~^~^^~^~^~^~^^~^~^~^~^~^~^^^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -159,7 +141,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|               ,_____                                       @"
 	cAnim+=" ___/____|                    .\O.'                         .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -167,7 +148,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                        '.                                  @"
 	cAnim+=" ___/____|                      '.\ .'                      .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^~^~^~^^~^~^^~^^~^~^~^~^^~^~^~^~^^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -175,7 +155,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                           '.  /\O                .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -183,7 +162,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                              '   /                         @"
 	cAnim+=" ___/____|                             `,'  \O              .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -191,7 +169,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                '      __                   @"
 	cAnim+=" ___/____|                                .`'   /O          .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -199,7 +176,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                    '.                      @"
 	cAnim+=" ___/____|                                   `,. /\O        .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^^~^~^~^^~^^~^~^^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -207,7 +183,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                      .'    /               @"
 	cAnim+=" ___/____|                                      '.`   \O    .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^~^~~~^~~~^~^~^~~~^~^~^~^~~^~~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -215,7 +190,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                         `'    __           @"
 	cAnim+=" ___/____|                                         '.`  /O  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -223,7 +197,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                             `'             @"
 	cAnim+=" ___/____|                                            '.<<_'.--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -231,7 +204,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                               .            @"
 	cAnim+=" ___/____|                                              `.,`.--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -239,7 +211,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                          O/\ `.' .--._____ @"
 	cAnim+="       jgs`~~~^~^~^^~~^~^~^~^^~^~^~^^~^~^~^~~^~^~^~^^^~^^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -247,7 +218,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                        \    .'             @"
 	cAnim+=" ___/____|                                       O/   '.`   .--._____ @"
 	cAnim+="       jgs`~~~^~^~^~~~^~^~^~^^~~~~^~^~^^~^^~^~~^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -255,7 +225,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                   ___     .'               @"
 	cAnim+=" ___/____|                                    O/   '..      .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -263,7 +232,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                        `.                  @"
 	cAnim+=" ___/____|                                 O/\  `.'         .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -271,7 +239,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                               \    .                       @"
 	cAnim+=" ___/____|                              O/   .,'            .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^^~^^~^^~^~^^~^~^^~^~^~^^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -279,7 +246,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                          ___   `.                          @"
 	cAnim+=" ___/____|                           O/  `,'                .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -287,7 +253,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                             .'                             @"
 	cAnim+=" ___/____|                       O/\  .'.                   .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^^~^^~^^~^~^~^~^~^^~^~^^~^~^~^^^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -295,7 +260,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                      \   `.                                @"
 	cAnim+=" ___/____|                     O/  `.'                      .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -303,7 +267,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                 ___  .                                     @"
 	cAnim+=" ___/____|                  O/   ,'                         .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^~^^~^~^^~^~^~^~~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -311,7 +274,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                     .                                      @"
 	cAnim+=" ___/____|               O/\ `.'                            .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -319,7 +281,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|             \   `.                                         @"
 	cAnim+=" ___/____|            O/   .'                               .--._____ @"
 	cAnim+="       jgs`~^~^~^~^^~^~^~^^~^~^~^^^^~^~^~^~^~^~~^~~~~^~^~~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -327,7 +288,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|        ___    .                                            @"
 	cAnim+=" ___/____|         O/   '.`                                 .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^^^~^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -335,7 +295,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|             .`                                             @"
 	cAnim+=" ___/____|      O/\   '.,                                   .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -343,7 +302,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|    \    ,                                                  @"
 	cAnim+=" ___/____|   O/   `.'                                       .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -351,7 +309,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1| __  ,                                                      @"
 	cAnim+=" ___/____| O/   .'`                                         .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~~^~^^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -359,7 +316,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|.` .                                                        @"
 	cAnim+=" ___/____|_>>.                                              .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -367,7 +323,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1| .                                                          @"
 	cAnim+=" ___/____|`.,`                                              .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -375,7 +330,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|   .                                                        @"
 	cAnim+=" ___/____| '.  /\O                                          .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -383,7 +337,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|     '   /                                                  @"
 	cAnim+=" ___/____|    `,'  \O                                       .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -391,7 +344,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|      '      __                                             @"
 	cAnim+=" ___/____|      .`'   /O                                    .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -399,7 +351,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|        '.  /\O                                   .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -407,7 +358,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|             '   /                                          @"
 	cAnim+=" ___/____|            `,'  \O                               .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -415,7 +365,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|              '      __                                     @"
 	cAnim+=" ___/____|              .`'   /O                            .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -423,7 +372,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                  '.  /\O                         .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -431,7 +379,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                      '   /                                 @"
 	cAnim+=" ___/____|                     `,'  \O                      .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -439,7 +386,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                        '      __                           @"
 	cAnim+=" ___/____|                        .`'   /O                  .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -447,7 +393,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                           '.  /\O                .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~~^~^~~~^~^~^~^~^^^~^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -455,7 +400,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                              '   /                         @"
 	cAnim+=" ___/____|                             `,'  \O              .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -463,7 +407,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                '      __                   @"
 	cAnim+=" ___/____|                                .`'   /O          .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -471,7 +414,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                    '.                      @"
 	cAnim+=" ___/____|                                   `,. /\O        .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^^~^~^~^^~^^~^~^^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -479,7 +421,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                      .'    /               @"
 	cAnim+=" ___/____|                                      '.`   \O    .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^~^~^~^~^~~~^~~~^~^~^~~~^~^~^~^~~^~~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -487,7 +428,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                         `'    __           @"
 	cAnim+=" ___/____|                                         '.`  /O  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -495,7 +435,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                             `'             @"
 	cAnim+=" ___/____|                                            '.<<_'.--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^^^~^~^~^~^^~^~^~^~^~^~^~^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -503,7 +442,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                               .            @"
 	cAnim+=" ___/____|                                              `.,`.--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -511,7 +449,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|                                          O/\ `.' .--._____ @"
 	cAnim+="       jgs`~~~^~^~^^~~^~^~^~^^~^~^~^^~^~^~^~~^~^~^~^^^~^^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -519,7 +456,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                        \    .'             @"
 	cAnim+=" ___/____|                                       O/   '.`   .--._____ @"
 	cAnim+="       jgs`~~~^~^~^~~~^~^~^~^^~~~~^~^~^^~^^~^~~^^~^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -527,7 +463,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                   ___     .'               @"
 	cAnim+=" ___/____|                                    O/   '..      .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -535,7 +470,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                        `.                  @"
 	cAnim+=" ___/____|                                 O/\  `.'         .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -543,7 +477,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                               \    .                       @"
 	cAnim+=" ___/____|                              O/   .,'            .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^^~^^~^^~^~^^~^~^^~^~^~^^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -551,7 +484,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                          ___   `.                          @"
 	cAnim+=" ___/____|                           O/  `,'                .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -559,7 +491,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                             .'                             @"
 	cAnim+=" ___/____|                       O/\  .'.                   .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^^~^^~^^~^~^~^~^~^^~^~^^~^~^~^^^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -567,7 +498,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                      \   `.                                @"
 	cAnim+=" ___/____|                     O/  `.'                      .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -575,7 +505,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                 ___  .                                     @"
 	cAnim+=" ___/____|                  O/   ,'                         .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^^~^^~^^~^~^^~^^~^^~^~^~^^~^~^^~^~^~^~~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -583,7 +512,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                     .                                      @"
 	cAnim+=" ___/____|               O/\ `.'                            .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -591,7 +519,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|             \   `.                                         @"
 	cAnim+=" ___/____|            O/   .'                               .--._____ @"
 	cAnim+="       jgs`~^~^~^~^^~^~^~^^~^~^~^^^^~^~^~^~^~^~~^~~~~^~^~~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -599,7 +526,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|        ___    .                                            @"
 	cAnim+=" ___/____|         O/   '.`                                 .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^~^^~^~^~^^^~^~^~^~^~^~^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -607,7 +533,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|             .`                                             @"
 	cAnim+=" ___/____|      O/\   '.,                                   .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -615,7 +540,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|    \    ,                                                  @"
 	cAnim+=" ___/____|   O/   `.'                                       .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -623,7 +547,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1| __  ,                                                      @"
 	cAnim+=" ___/____| O/   .'`                                         .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^^^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^~^~~^~^^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -631,7 +554,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/____|O.'                                               .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -639,7 +561,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1|                                                            @"
 	cAnim+=" ___/___/\O.'                                               .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -647,7 +568,6 @@ Static Function aSwimming()
 	cAnim+="     _/ 1O                                                            @"
 	cAnim+=" ___/___/|\                                                 .--._____ @"
 	cAnim+="       jgs`~~^~^~^~~^~^~^^^~^^~^~~^~^^~^~^~^^~^~^~^^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
@@ -655,7 +575,6 @@ Static Function aSwimming()
 	cAnim+="     _//\                                                             @"
 	cAnim+=" ___/__<<|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^^~^~^~^~~^~^~^~^^~^^^~^^~^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="       _O                                                             @"
@@ -663,7 +582,6 @@ Static Function aSwimming()
 	cAnim+="     _//||                                                            @"
 	cAnim+=" ___/__\|                                                   .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="       O                                                              @"
@@ -671,7 +589,6 @@ Static Function aSwimming()
 	cAnim+="     _/|\|                                                            @"
 	cAnim+=" ___/__|_\                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^^~^~^~^~^^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="       O                                                              @"
@@ -679,7 +596,6 @@ Static Function aSwimming()
 	cAnim+="     _/|1|                                                            @"
 	cAnim+=" ___/_||_|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^^^^~^~^~^~~^~^~^~^~^~^~~^`          ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="      O                                                               @"
@@ -687,7 +603,6 @@ Static Function aSwimming()
 	cAnim+="     /| 1|                                                            @"
 	cAnim+=" ___|_\__|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~~~^~^^~~~^~^~~~^~^~^~^~~~^~~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="    O_                                                                @"
@@ -695,7 +610,6 @@ Static Function aSwimming()
 	cAnim+="   /|_/ 1|                                                            @"
 	cAnim+=" __\|____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^^~^^~^~^~^^~^~^~^~^^~^~^~^~^^~^~^~^~^~^~^~^~`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="    O_                                                                @"
@@ -703,7 +617,6 @@ Static Function aSwimming()
 	cAnim+="   /|_/ 1|                                                            @"
 	cAnim+=" __\|____|                                                  .--._____ @"
 	cAnim+="       jgs`~~^~^~^~^~^~^~^^~^~^~^~^~^^~^~^~^~^~^~^^~^~^~^~^`         ;@" 
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="  O_                                                                  @"
@@ -711,7 +624,6 @@ Static Function aSwimming()
 	cAnim+="  |  _/ 1|                                                            @"
 	cAnim+=" _|\/____|                                                  .--._____ @"
 	cAnim+="       jgs`~^~^~^~^~^~^~^~^~^~^~^^~^~^^~^^~~~^~^^~^~~^~^^~^`         ;@"
-	
 	cAnim+="                                                                      @"
 	cAnim+="                                                                      @"
 	cAnim+="  O                                                                   @"
@@ -730,7 +642,6 @@ Static Function aBasketball()
 	cAnim+="   c> _o/        |      @"
 	cAnim+="  /     \        |      @"
 	cAnim+="  >>   / \       | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -738,7 +649,6 @@ Static Function aBasketball()
 	cAnim+="   c>  _o/       |      @"
 	cAnim+="  /      )       |      @"
 	cAnim+="  >>   <<        | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -746,7 +656,6 @@ Static Function aBasketball()
 	cAnim+="   c> _o/        |      @"
 	cAnim+="  /     \        |      @"
 	cAnim+="  >>   < \       | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -754,7 +663,6 @@ Static Function aBasketball()
 	cAnim+="   c/   \        |      @"
 	cAnim+="  /    < \       |      @"
 	cAnim+="  >>             | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="      o   \%/ |--\      @"
@@ -762,7 +670,6 @@ Static Function aBasketball()
 	cAnim+="  <c/   \        |      @"
 	cAnim+="  /    < \       |      @"
 	cAnim+="  >>             | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="        o \%/ |--\      @"
@@ -770,7 +677,6 @@ Static Function aBasketball()
 	cAnim+="  <c/   (        |      @"
 	cAnim+="  /    < \       |      @"
 	cAnim+="  >>             | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="         o\%/ |--\      @"
@@ -778,7 +684,6 @@ Static Function aBasketball()
 	cAnim+="  <c/   (        |      @"
 	cAnim+="  /     >\       |      @"
 	cAnim+="  >>             | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -786,7 +691,6 @@ Static Function aBasketball()
 	cAnim+="  <c>   (        |      @"
 	cAnim+="  /    / >       |      @"
 	cAnim+="  >>             | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -794,7 +698,6 @@ Static Function aBasketball()
 	cAnim+="  <c_  \c_o      |      @"
 	cAnim+="  /     )        |      @"
 	cAnim+=" / >   < >       | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -802,7 +705,6 @@ Static Function aBasketball()
 	cAnim+="   \c/  <c>      |      @"
 	cAnim+="   /     \       |      @"
 	cAnim+="   >\   / \      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="         o\%/ |--\      @"
@@ -810,7 +712,6 @@ Static Function aBasketball()
 	cAnim+="   \c/  |c|      |      @"
 	cAnim+="   /     \       |      @"
 	cAnim+="   >>   / \      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="         o\%/ |--\      @"
@@ -818,7 +719,6 @@ Static Function aBasketball()
 	cAnim+="    /   |c/      |      @"
 	cAnim+="   / >   \       |      @"
 	cAnim+="        / \      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          o___|         @"
 	cAnim+="      \c/ \%/ |--\      @"
@@ -826,7 +726,6 @@ Static Function aBasketball()
 	cAnim+="     / > c/      |      @"
 	cAnim+="        <\       |      @"
 	cAnim+="        / \      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="         o____|         @"
 	cAnim+="      \c/ \%/ |--\      @"
@@ -834,7 +733,6 @@ Static Function aBasketball()
 	cAnim+="      >\ c/      |      @"
 	cAnim+="        <\       |      @"
 	cAnim+="        / \      | Shanx@;@"
-			
 	cAnim+="       o                @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -842,7 +740,6 @@ Static Function aBasketball()
 	cAnim+="     |_  o       |      @"
 	cAnim+="    /    |>      |      @"
 	cAnim+="        < \      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="     o    ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -850,7 +747,6 @@ Static Function aBasketball()
 	cAnim+="    \o| o        |      @"
 	cAnim+="    /    \>      |      @"
 	cAnim+="  < \   /<       | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="   o      \%/ |--\      @"
@@ -858,7 +754,6 @@ Static Function aBasketball()
 	cAnim+="  \o/   (>       |      @"
 	cAnim+="   |   < \       |      @"
 	cAnim+="  / \            | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -866,7 +761,6 @@ Static Function aBasketball()
 	cAnim+="  \o_ o/         |      @"
 	cAnim+="   |  /\         |      @"
 	cAnim+="  / \ / <        | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -874,7 +768,6 @@ Static Function aBasketball()
 	cAnim+=" _o/ _o          |      @"
 	cAnim+=" o \  /\         |      @"
 	cAnim+="  / \ < \        | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -882,7 +775,6 @@ Static Function aBasketball()
 	cAnim+="  c/ _o          |      @"
 	cAnim+=" / \  /\         |      @"
 	cAnim+=" o/ \ / \        | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -890,7 +782,6 @@ Static Function aBasketball()
 	cAnim+=" _c/ \o          |      @"
 	cAnim+=" o \  /\         |      @"
 	cAnim+="  / \ /<         | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -898,7 +789,6 @@ Static Function aBasketball()
 	cAnim+="  c/  o          |      @"
 	cAnim+=" / \ /|          |      @"
 	cAnim+=" o/ \/ \         | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -906,7 +796,6 @@ Static Function aBasketball()
 	cAnim+=" _c/ o           |      @"
 	cAnim+=" o \ /\          |      @"
 	cAnim+="  / \/ \         | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -914,7 +803,6 @@ Static Function aBasketball()
 	cAnim+="  c/  o          |      @"
 	cAnim+=" / \ /|          |      @"
 	cAnim+=" o/ \< \         | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -922,7 +810,6 @@ Static Function aBasketball()
 	cAnim+=" _c/o            |      @"
 	cAnim+=" o \/\           |      @"
 	cAnim+="  / X \          | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -930,7 +817,6 @@ Static Function aBasketball()
 	cAnim+="  c/o            |      @"
 	cAnim+=" / \/\>          |      @"
 	cAnim+=" o/ X \          | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -938,7 +824,6 @@ Static Function aBasketball()
 	cAnim+=" _c/o            |      @"
 	cAnim+=" o \/)>          |      @"
 	cAnim+="  / X<           | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -946,7 +831,6 @@ Static Function aBasketball()
 	cAnim+="  c>o|           |      @"
 	cAnim+="   )/\           |      @"
 	cAnim+="  / X \          | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="    o     \%/ |--\      @"
@@ -954,7 +838,6 @@ Static Function aBasketball()
 	cAnim+="  c/ c           |      @"
 	cAnim+="   ) |\          |      @"
 	cAnim+="  / X >          | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="      o   ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -962,7 +845,6 @@ Static Function aBasketball()
 	cAnim+="  c/  |          |      @"
 	cAnim+="   ) / >         |      @"
 	cAnim+="  / \            | Shanx@;@"
-			
 	cAnim+="        o               @"
 	cAnim+="          ____|         @"
 	cAnim+="      \c_ \%/ |--\      @"
@@ -970,7 +852,6 @@ Static Function aBasketball()
 	cAnim+="  c/  /          |      @"
 	cAnim+="   |             |      @"
 	cAnim+="  / >            | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          _o__|         @"
 	cAnim+="          \%/ |--\      @"
@@ -978,7 +859,6 @@ Static Function aBasketball()
 	cAnim+="   \c/ )__       |      @"
 	cAnim+="   /    /        |      @"
 	cAnim+="  / >            | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          )%( |--\      @"
@@ -986,7 +866,6 @@ Static Function aBasketball()
 	cAnim+="      / c/       |      @"
 	cAnim+="     |> <\       |      @"
 	cAnim+="        / >      | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -994,7 +873,6 @@ Static Function aBasketball()
 	cAnim+="     _c_  |c/    |      @"
 	cAnim+="     /    /      |      @"
 	cAnim+="    < >  > \     | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -1002,7 +880,6 @@ Static Function aBasketball()
 	cAnim+="     <c_ _c_o    |      @"
 	cAnim+="     /    )      |      @"
 	cAnim+="    / >  < \     | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -1010,7 +887,6 @@ Static Function aBasketball()
 	cAnim+="    <c/  _c/     |      @"
 	cAnim+="    /     (      |      @"
 	cAnim+="    > >  / \     | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -1018,7 +894,6 @@ Static Function aBasketball()
 	cAnim+="      /  \o/     |      @"
 	cAnim+="     />   |      |      @"
 	cAnim+="         / \     | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -1026,7 +901,6 @@ Static Function aBasketball()
 	cAnim+="    <c/  \o      |      @"
 	cAnim+="     (    |>     |      @"
 	cAnim+="     |\  < \     | Shanx@;@"
-			
 	cAnim+="                        @"
 	cAnim+="          ____|         @"
 	cAnim+="          \%/ |--\      @"
@@ -1034,7 +908,7 @@ Static Function aBasketball()
 	cAnim+="   o_c/  o       |      @"
 	cAnim+="     (   /\>     |      @"
 	cAnim+="     <\  /<      | Shanx@;@"
-
+	cAnim+=cAnim
 Return(cAnim)
 	Static Function aBicycling()
 	/* http://shanx.com/ascii/bicycle-race */
@@ -1044,348 +918,299 @@ Return(cAnim)
 	cAnim+="                                                            //   @"
 	cAnim+="                                                           //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                                             //  @"
 	cAnim+="                                                            //   @"
 	cAnim+=")                                                          //    @"
 	cAnim+="__________________________________________________________//Shanx@;@" 
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                                             //  @"
 	cAnim+="_                                                           //   @"
 	cAnim+="_)                                                         //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="0                                                            //  @"
 	cAnim+=",_                                                          //   @"
 	cAnim+="(_)                                                        //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="_0                                                           //  @"
 	cAnim+="<,_                                                         //   @"
 	cAnim+=" (_)                                                       //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="__0                                                          //  @"
 	cAnim+="\<,_                                                        //   @"
 	cAnim+="/ (_)                                                      //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+=" __0                                                         //  @"
 	cAnim+="-\<,_                                                       //   @"
 	cAnim+=")| (_)                                                     //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="  __0                                                        //  @"
 	cAnim+="_-\<,_                                                      //   @"
 	cAnim+="_) \(_)                                                    //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="  __0                                                        // @"
 	cAnim+="_-\<,_                                                      //   @"
 	cAnim+="_)| (_)                                                    //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="   __0                                                       //  @"
 	cAnim+=" _-\<,_                                                     //   @"
 	cAnim+="(_)/ (_)                                                   //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="    __0                                                      //  @"
 	cAnim+="  _-\<,_                                                    //   @"
 	cAnim+=" (_)| (_)                                                  //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="     __0                                                     //  @"
 	cAnim+="   _-\<,_                                                   //   @"
 	cAnim+="  (_) \(_)                                                 //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="      __0                                                    //  @"
 	cAnim+="    _-\<,_                                                  //   @"
 	cAnim+="   (_)| (_)                                                //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="       __0                                                   //  @"
 	cAnim+="     _-\<,_                                                 //   @"
 	cAnim+="    (_)/ (_)                                               //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="        __0                                                  //  @"
 	cAnim+="      _-\<,_                                                //   @"
 	cAnim+="     (_)| (_)                                              //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="         __0                                                 //  @"
 	cAnim+="       _-\<,_                                               //   @"
 	cAnim+="      (_) \(_)                                             //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="          __0                                                //  @"
 	cAnim+="        _-\<,_                                              //   @"
 	cAnim+="       (_)| (_)                                            //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="           __0                                               //  @"
 	cAnim+="         _-\<,_                                             //   @"
 	cAnim+="        (_)/ (_)                                           //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="            __0                                              //  @"
 	cAnim+="          _-\<,_                                            //   @"
 	cAnim+="         (_)/ (_)                                          //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="             __0                                             //  @"
 	cAnim+="           _-\<,_                                           //   @"
 	cAnim+="          (_)| (_)                                         //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="              __0                                            //  @"
 	cAnim+="            _-\<,_                                          //   @"
 	cAnim+="           (_) \(_)                                        //    @"
 	cAnim+="__________________________________________________________//Shanx@;@" 
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="               __0                                           //  @"
 	cAnim+="             _-\<,_                                         //   @"
 	cAnim+="            (_)| (_)                                       //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                __0                                          //  @"
 	cAnim+="              _-\<,_                                        //   @"
 	cAnim+="             (_)/ (_)                                      //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                 __0                                         //  @"
 	cAnim+="               _-\<,_                                       //   @"
 	cAnim+="              (_)| (_)                                     //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                  __0                                        //  @"
 	cAnim+="                _-\<,_                                      //   @"
 	cAnim+="               (_) \(_)                                    //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                   __0                                       //  @"
 	cAnim+="                 _-\<,_                                     //   @"
 	cAnim+="                (_)| (_)                                   //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                    __0                                      //  @"
 	cAnim+="                  _-\<,_                                    //   @"
 	cAnim+="                 (_)/ (_)                                  //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                     __0                                     //  @"
 	cAnim+="                   _-\<,_                                   //   @"
 	cAnim+="                  (_)| (_)                                 //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                      __0                                    //  @"
 	cAnim+="                    _-\<,_                                  //   @"
 	cAnim+="                   (_) \(_)                                //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                       __0                                   //  @"
 	cAnim+="                     _-\<,_                                 //   @"
 	cAnim+="                    (_)| (_)                               //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                        __0                                  //  @"
 	cAnim+="                      _-\<,_                                //   @"
 	cAnim+="                     (_)/ (_)                              //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                         __0                                 //  @"
 	cAnim+="                       _-\<,_                               //   @"
 	cAnim+="                      (_)| (_)                             //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                          __0                                //  @"
 	cAnim+="                        _-\<,_                              //   @"
 	cAnim+="                       (_) \(_)                            //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                           __0                               //  @"
 	cAnim+="                         _-\<,_                             //   @"
 	cAnim+="                        (_)| (_)                           //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                           __0                               //  @"
 	cAnim+="                         _-\<,_                             //   @"
 	cAnim+="                        (_)/ (_)                           //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                            __0                              //  @"
 	cAnim+="                          _-\<,_                            //   @"
 	cAnim+="                         (_)| (_)                          //    @"
 	cAnim+="__________________________________________________________//Shanx@;@" 
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                             __0                             //  @"
 	cAnim+="                           _-\<,_                           //   @"
 	cAnim+="                          (_) \(_)                         //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                              __0                            //  @"
 	cAnim+="                            _-\<,_                          //   @"
 	cAnim+="                           (_)| (_)                        //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                               __0                           //  @"
 	cAnim+="                             _-\<,_                         //   @"
 	cAnim+="                            (_)/ (_)                       //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                __0                          //  @"
 	cAnim+="                              _-\<,_                        //   @"
 	cAnim+="                             (_)| (_)                      //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                 __0                         //  @"
 	cAnim+="                               _-\<,_                       //   @"
 	cAnim+="                              (_) \(_)                     //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                  __0                        //  @"
 	cAnim+="                                _-\<,_                      //   @"
 	cAnim+="                               (_)| (_)                    //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                   __0                       //  @"
 	cAnim+="                                 _-\<,_                     //   @"
 	cAnim+="                                (_)/ (_)                   //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                    __0                      //  @"
 	cAnim+="                                  _-\<,_                    //   @"
 	cAnim+="                                 (_)| (_)                  //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="                                     __0                     //  @"
 	cAnim+="                                   _-\<,_                   //   @"
 	cAnim+=")                                 (_) \(_)                 //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="_0                                    __0                    //  @"
 	cAnim+="<,_                                 _-\<,_                  //   @"
 	cAnim+="\(_)                               (_)| (_)                //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="  __0                                  __0                   //  @"
 	cAnim+="_-\<,_                               _-\<,_                 //   @"
 	cAnim+="_)| (_)                             (_)/ (_)               //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="     __0                                __0                  //  @"
 	cAnim+="   _-\<,_                             _-\<,_                //   @"
 	cAnim+="  (_)/ (_)                           (_)| (_)              //    @"
 	cAnim+="__________________________________________________________//Shanx@;@" 
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="        __0                              __0                 //  @"
 	cAnim+="      _-\<,_                           _-\<,_               //   @"
 	cAnim+="     (_)| (_)                         (_) \(_)             //    @"
 	cAnim+="__________________________________________________________//Shanx@;@" 
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="           __0                            __0                //  @"
 	cAnim+="         _-\<,_                         _-\<,_              //   @"
 	cAnim+="        (_) \(_)                       (_)| (_)            //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 	cAnim+="_________________________________________________________________@"
 	cAnim+="              __0                          __0               //  @"
 	cAnim+="            _-\<,_                       _-\<,_             //   @"
 	cAnim+="           (_)| (_)                     (_)/ (_)           //    @"
 	cAnim+="__________________________________________________________//Shanx@;@"
-	
 Return(cAnim)
 Static Function aMararena()
 	/* http://shanx.com/ascii/macarena */
 	Local cAnim := ""
-	cAnim+="       @"
-	cAnim+="   o   @" 
-	cAnim+="  .|.  @" 
-	cAnim+="   /\  @;@"
-	cAnim+="       @"
-	cAnim+="   o   @"
-	cAnim+="  \|.  @" 
-	cAnim+="   >\  @;@"
-	cAnim+="       @"
-	cAnim+="   o   @"
-	cAnim+="  \|/  @"
-	cAnim+="  /<   @;@"
-	cAnim+="       @"
-	cAnim+="   o   @" 
-	cAnim+="   //  @"
-	cAnim+="   >\  @;@"
-	cAnim+="       @"
-	cAnim+="   o   @"
-	cAnim+="   X   @"
-	cAnim+="  /<   @;@"
-	cAnim+="       @"
-	cAnim+="  <o   @"
-	cAnim+="   \   @"
-	cAnim+="   >\  @;@"
-	cAnim+="       @"
-	cAnim+="  <o>  @"
-	cAnim+="   |   @"
-	cAnim+="  /<   @;@"
-	cAnim+="       @"
-	cAnim+="   o>  @"
-	cAnim+="  <|   @"
-	cAnim+="   >\  @;@"
-	cAnim+="   o   @"
-	cAnim+="  .|.  @"
-	cAnim+="   >>  @;@"
-	cAnim+="       @"
-	cAnim+="   o   @"
-	cAnim+="  <|>  @"
-	cAnim+="  /<   @;@"		
+    cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @" 
+	cAnim+="  .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.  @" 
+	cAnim+="   /\     /\     /\     /\     /\     /\     /\     /\     /\     /\     /\  @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @"
+	cAnim+="  \|.    \|.    \|.    \|.    \|.    \|.    \|.    \|.    \|.    \|.    \|.  @" 
+	cAnim+="   >\     >\     >\     >\     >\     >\     >\     >\     >\     >\     >\  @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @"
+	cAnim+="  \|/    \|/    \|/    \|/    \|/    \|/    \|/    \|/    \|/    \|/    \|/  @"
+	cAnim+="  /<     /<     /<     /<     /<     /<     /<     /<     /<     /<     /<   @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @" 
+	cAnim+="   //     //     //     //     //     //     //     //     //     //     //  @"
+	cAnim+="   >\     >\     >\     >\     >\     >\     >\     >\     >\     >\     >\  @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @"
+	cAnim+="   X      X      X      X      X      X      X      X      X      X      X   @"
+	cAnim+="  /<     /<     /<     /<     /<     /<     /<     /<     /<     /<     /<   @;@"
+	cAnim+="                                                                             @"
+	cAnim+="  <o     <o     <o     <o     <o     <o     <o     <o     <o     <o     <o   @"
+	cAnim+="   \      \      \      \      \      \      \      \      \      \      \   @"
+	cAnim+="   >\     >\     >\     >\     >\     >\     >\     >\     >\     >\     >\  @;@"
+	cAnim+="                                                                             @"
+	cAnim+="  <o>    <o>    <o>    <o>    <o>    <o>    <o>    <o>    <o>    <o>    <o>  @"
+	cAnim+="   |      |      |      |      |      |      |      |      |      |      |   @"
+	cAnim+="  /<     /<     /<     /<     /<     /<     /<     /<     /<     /<     /<   @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o>     o>     o>     o>     o>     o>     o>     o>     o>     o>     o>  @"
+	cAnim+="  <|     <|     <|     <|     <|     <|     <|     <|     <|     <|     <|   @"
+	cAnim+="   >\     >\     >\     >\     >\     >\     >\     >\     >\     >\     >\  @;@"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @"
+	cAnim+="  .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.    .|.  @"
+	cAnim+="   >>     >>     >>     >>     >>     >>     >>     >>     >>     >>     >>  @;@"
+	cAnim+="                                                                             @"
+	cAnim+="   o      o      o      o      o      o      o      o      o      o      o   @"
+	cAnim+="  <|>    <|>    <|>    <|>    <|>    <|>    <|>    <|>    <|>    <|>    <|>  @"
+	cAnim+="  /<     /<     /<     /<     /<     /<     /<     /<     /<     /<     /<   @;@"
+	cAnim+=cAnim
+	cAnim+=cAnim
 Return(cAnim)
