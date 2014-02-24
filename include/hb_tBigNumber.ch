@@ -30,14 +30,6 @@
                         iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
                         [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
 		
-
-		/* TODO: Remover quando solucionar problema da divisao em C */
-		#if defined(__ARCH64BIT__)
-	    	#ifndef __PTCOMPAT__
-	    		#define __PTCOMPAT__
-	    	#endif	
-		#endif
-		
         #ifndef CRLF
             #define CRLF hb_eol()
         #endif

@@ -1,18 +1,18 @@
-#IFNDEF _TBigNumber_CH
+#ifndef _TBigNumber_CH
 
-    #DEFINE _TBigNumber_CH
+    #define _TBigNumber_CH
 
-    #DEFINE OPERATOR_ADD            { '+' , 'add' }
-    #DEFINE OPERATOR_SUBTRACT       { '-' , 'sub' }
-    #DEFINE OPERATOR_MULTIPLY       { '*' , 'x' , 'mult' }
-    #DEFINE OPERATOR_DIVIDE         { '/' , ':' , 'div'  }
-    #DEFINE OPERATOR_POW            { '^' , '**' , 'xx' , 'pow' }
-    #DEFINE OPERATOR_MOD            { '%' , 'mod' }
-    #DEFINE OPERATOR_EXP            { 'exp' }
-    #DEFINE OPERATOR_SQRT           { 'sqrt' }
-    #DEFINE OPERATOR_ROOT           { 'root' }
+    #define OPERATOR_ADD            { '+' , 'add' }
+    #define OPERATOR_SUBTRACT       { '-' , 'sub' }
+    #define OPERATOR_MULTIPLY       { '*' , 'x' , 'mult' }
+    #define OPERATOR_DIVIDE         { '/' , ':' , 'div'  }
+    #define OPERATOR_POW            { '^' , '**' , 'xx' , 'pow' }
+    #define OPERATOR_MOD            { '%' , 'mod' }
+    #define OPERATOR_EXP            { 'exp' }
+    #define OPERATOR_SQRT           { 'sqrt' }
+    #define OPERATOR_ROOT           { 'root' }
 
-    #DEFINE OPERATORS               {;
+    #define OPERATORS               {;
                                         OPERATOR_ADD,      ;
                                         OPERATOR_SUBTRACT, ;
                                         OPERATOR_MULTIPLY, ;
@@ -24,29 +24,29 @@
                                         OPERATOR_ROOT,     ;
                                     }
 
-    #IFDEF PROTHEUS
-        #DEFINE __PROTHEUS__        
-        #INCLUDE "pt_tBigNumber.ch"
+    #ifdef PROTHEUS
+        #define __PROTHEUS__        
+        #include "pt_tBigNumber.ch"
     #ELSE
-        #IFDEF __HARBOUR__
-            #INCLUDE "hb_tBigNumber.ch"
-        #ENDIF
-    #ENDIF
+        #ifdef __HARBOUR__
+            #include "hb_tBigNumber.ch"
+        #endif
+    #endif
 
-    #INCLUDE "set.ch"
-    #INCLUDE "fileio.ch"
+    #include "set.ch"
+    #include "fileio.ch"
 
-    #DEFINE MAX_DECIMAL_PRECISION    999999999999999 //999.999.999.999.999
+    #define MAX_DECIMAL_PRECISION    999999999999999 //999.999.999.999.999
 
     /* by default create ST version */
-    #IFNDEF __ST__
-        #IFNDEF __MT__
-          #DEFINE __ST__
-       #ENDIF
-    #ENDIF
+    #ifndef __ST__
+        #ifndef __MT__
+          #define __ST__
+       #endif
+    #endif
 
-    #IFNDEF SYMBOL_UNUSED
-        #DEFINE SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
-    #ENDIF
+    #ifndef SYMBOL_UNUSED
+        #define SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
+    #endif
 
-#ENDIF
+#endif
