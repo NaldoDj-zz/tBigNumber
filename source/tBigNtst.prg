@@ -1889,6 +1889,7 @@ Static Procedure tBigNTst()
 	hb_ThreadWait(ptthftProgress)
    	otBigN := NIL
    	hb_gcAll(.T.)
+    SET COLOR TO "r+/n"
     WAIT "Press any key to end"
     CLS
 #endif   
