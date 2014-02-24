@@ -515,10 +515,10 @@ Static Procedure tBigNTst()
             End While
 			__oRTime2:Calcule()
 			__oRTime1:Calcule(.F.)
-			__ConOut(fhLog,__cSep)
-			__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())	
-			__ConOut(fhLog,__cSep)
         Next x
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())	
+		__ConOut(fhLog,__cSep)
 		__oRTime1:Calcule()
 		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())		
         __ConOut(fhLog,__cSep)
