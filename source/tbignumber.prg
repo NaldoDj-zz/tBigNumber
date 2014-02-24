@@ -4503,10 +4503,14 @@ Static Procedure __InitStV1(nBase)
 
 	__lsthdSet := .F.
 
-	__cstcZ0 := "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+#pragma __cstream|__cstcZ0:=%s
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#pragma __endtext
 	__nstcZ0 := 150
-	
-	__cstcN9 := "999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+
+#pragma __cstream|__cstcN9:=%s
+999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+#pragma __endtext
 	__nstcN9 := 150
 	
 	#ifdef TBN_ARRAY
@@ -4847,7 +4851,7 @@ Return
 			char * cDivR;
 		} stBIGNeDiv, * ptBIGNeDiv;
 
-        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_ISIZ nB , ptBIGNeDiv peDiv){
+        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_MAXUINT nB , ptBIGNeDiv peDiv){
 	
 			PHB_ITEM peDVArr    = hb_itemArrayNew(0);
 		
@@ -4936,10 +4940,10 @@ Return
 		
 		HB_FUNC( TBIGNEDIV ){
 			
-			const char * cN  = hb_parc(1);
-			const char * cD  = hb_parc(2);
-			HB_SIZE n        = (HB_SIZE)hb_parnint(4);
-			const HB_ISIZ nB = (HB_MAXUINT)hb_parnint(5);
+			const char * cN     = hb_parc(1);
+			const char * cD     = hb_parc(2);
+			HB_SIZE n           = (HB_SIZE)hb_parnint(4);
+			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
 			
 			ptBIGNeDiv peDiv = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 			
