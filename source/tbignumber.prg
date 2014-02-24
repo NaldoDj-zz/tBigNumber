@@ -75,7 +75,7 @@ THREAD Static __oeDivD
 THREAD Static __oeDivR
 THREAD Static __oeDivQ 
 #ifdef __PTCOMPAT__
-THREAD Static __oeDivDvD
+THREAD Static __oeDivDvQ
 THREAD Static __oeDivDvR
 #endif //__PTCOMPAT__
 
@@ -3492,36 +3492,38 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 #endif //__PTCOMPAT__
 
 	Local cRDiv
+
+#ifndef __PTCOMPAT__
 	Local cQDiv
+#endif //__PTCOMPAT__
 	
 #ifdef __PTCOMPAT__
  
 	SYMBOL_UNUSED( nSize )
-	SYMBOL_UNUSED( cQDiv )
 
 	__oeDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
 	__oeDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
 	__oeDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
 	__oeDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
 
-	__oeDivDvD:SetValue(__o1)
+	__oeDivDvQ:SetValue(__o1)
 	__oeDivDvR:SetValue(__oeDivD)
 
 	While __oeDivDvR:lte(__oeDivN)
 		++nI
-		aAdd(aeDV,{__oeDivDvD:Int(.F.,.F.),__oeDivDvR:Int(.F.,.F.)})
-		__oeDivDvD:SetValue(__oeDivDvD:Add(__oeDivDvD),nBase,"0",NIL,nAcc)
+		aAdd(aeDV,{__oeDivDvQ:Int(.F.,.F.),__oeDivDvR:Int(.F.,.F.)})
+		__oeDivDvQ:SetValue(__oeDivDvQ:Add(__oeDivDvQ),nBase,"0",NIL,nAcc)
 		__oeDivDvR:SetValue(__oeDivDvR:Add(__oeDivDvR),nBase,"0",NIL,nAcc)
 	End While
 
 	While nI>0
-		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
+		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 		IF __oeDivR:eq(__oeDivN)
 			EXIT
 		ElseIF __oeDivR:gt(__oeDivN)
-			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
+			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
@@ -4561,7 +4563,7 @@ Static Procedure __InitStV1(nBase)
 	__oeDivR   := oTBigN:Clone()
 	__oeDivQ   := oTBigN:Clone()
 #ifdef __PTCOMPAT__
-	__oeDivDvD := oTBigN:Clone()
+	__oeDivDvQ := oTBigN:Clone()
 	__oeDivDvR := oTBigN:Clone()
 #endif //__PTCOMPAT__
 
@@ -4640,8 +4642,7 @@ Return
 		  		sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
 				hb_xfree(padding);
 			}else{
-				pbuffer = (char*)hb_xgrab(itmLen+1);
-				memcpy(pbuffer,szItem,itmLen);
+				pbuffer = hb_strdup(szItem);
 			}
 			return pbuffer;
 		}
@@ -4666,8 +4667,7 @@ Return
 				sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
 				hb_xfree(padding);
 			}else{
-				pbuffer = (char*)hb_xgrab(itmLen+1);
-				memcpy(pbuffer,szItem,itmLen);
+				pbuffer = hb_strdup(szItem);
 			}
 			return pbuffer;
 		}
@@ -4847,80 +4847,77 @@ Return
 			char * cDivR;
 		} stBIGNeDiv, * ptBIGNeDiv;
 
-        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_ISIZ nB , HB_SIZE y, ptBIGNeDiv peDiv){
+        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_ISIZ nB , ptBIGNeDiv peDiv){
 	
-			PHB_ITEM peDVArr = hb_itemArrayNew(0);
+			PHB_ITEM peDVArr    = hb_itemArrayNew(0);
 		
-			char * szPADL    = __TBIGNPADL("1",n,"0");
-
-			char * cDivDvD   = (char*)hb_xgrab(y);
-			memcpy(cDivDvD,szPADL,n);
+			ptBIGNeDiv peDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 			
+			char * szPADL       = __TBIGNPADL("1",n,"0");
+			peDivTmp->cDivQ     = hb_strdup(szPADL);
 			hb_xfree(szPADL);
 			
-			char * cDivDvR   = (char*)hb_xgrab(y);
-			memcpy(cDivDvR,cD,n);
+			peDivTmp->cDivR     = hb_strdup(cD);
 	
-			szPADL		     = __TBIGNPADL("0",n,"0");
-	
-			peDiv->cDivQ	 = (char*)hb_xgrab(y);
-			memcpy(peDiv->cDivQ,szPADL,n);
-			
+			szPADL		        = __TBIGNPADL("0",n,"0");
+			peDiv->cDivQ	    = hb_strdup(szPADL);
+			peDiv->cDivR        = hb_strdup(szPADL);
 			hb_xfree(szPADL);
-
-			peDiv->cDivR     = (char*)hb_xgrab(y);
-			memcpy(peDiv->cDivR,peDiv->cDivQ,n);
 			
-			HB_MAXUINT nI    = 0;
-			
-			char * tmp;
+			HB_MAXUINT nI       = 0;
 
-			while (strcmp(cDivDvR,cN)<=0){
-				
-				++nI;
+			while (strcmp(peDivTmp->cDivR,cN)<=0){
 
      			PHB_ITEM pNI = hb_itemArrayNew(2);
 		        
-		        hb_arraySetC(pNI,1,cDivDvD);
-		        hb_arraySetC(pNI,2,cDivDvR);
-	 			hb_arrayAddForward(peDVArr,pNI);  
-	 			
+			        hb_arraySetC(pNI,1,peDivTmp->cDivQ);
+			        hb_arraySetC(pNI,2,peDivTmp->cDivR);
+		 			hb_arrayAddForward(peDVArr,pNI);  
+
+					char * tmp = __TBIGNADD(peDivTmp->cDivQ,peDivTmp->cDivQ,n,n,nB);
+	    			memcpy(peDivTmp->cDivQ,tmp,n);
+	    			hb_xfree(tmp);
+					
+					tmp        = __TBIGNADD(peDivTmp->cDivR,peDivTmp->cDivR,n,n,nB);				
+					memcpy(peDivTmp->cDivR,tmp,n);
+					hb_xfree(tmp);
+
 	 			hb_itemRelease(pNI);
-    			
-    			tmp = __TBIGNADD(cDivDvD,cDivDvD,n,n,nB);
-    			memcpy(cDivDvD,tmp,n);
-    			hb_xfree(tmp);
-				
-				tmp = __TBIGNADD(cDivDvR,cDivDvR,n,n,nB);				
-				memcpy(cDivDvR,tmp,n);
-				hb_xfree(tmp);
+
+				++nI;
 
 			}
+			
+			hb_xfree(peDivTmp->cDivQ);
+			hb_xfree(peDivTmp->cDivR);
 
 			while (nI){
 
 				PHB_ITEM pNI = hb_arrayGetItemPtr(peDVArr,nI);
 				
-				tmp = __TBIGNADD(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-				memcpy(peDiv->cDivR,tmp,n);
-				hb_xfree(tmp);
-				
-				tmp = __TBIGNADD(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-				memcpy(peDiv->cDivQ,tmp,n);
-				hb_xfree(tmp);
-                
+				peDivTmp->cDivQ = __TBIGNADD(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+				memcpy(peDiv->cDivQ,peDivTmp->cDivQ,n);
+				hb_xfree(peDivTmp->cDivQ);
+    
+    			peDivTmp->cDivR = __TBIGNADD(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+				memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
+				hb_xfree(peDivTmp->cDivR);
+	            
 				int iCmp = strcmp(peDiv->cDivR,cN);
 
 				if (iCmp==0){
 					break;
 				} else{
 						if (iCmp==1){
-							tmp = __TBIGNSUB(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-							memcpy(peDiv->cDivR,tmp,n);
-							hb_xfree(tmp);
-							tmp = __TBIGNSUB(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-							memcpy(peDiv->cDivQ,tmp,n);
-							hb_xfree(tmp);
+	
+							peDivTmp->cDivQ = __TBIGNSUB(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+							memcpy(peDiv->cDivQ,peDivTmp->cDivQ,n);
+							hb_xfree(peDivTmp->cDivQ);
+	
+							peDivTmp->cDivR = __TBIGNSUB(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+							memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
+							hb_xfree(peDivTmp->cDivR);
+	
 					}
 				}  
 				
@@ -4929,13 +4926,11 @@ Return
 			}
 
 			hb_itemRelease(peDVArr);
-
-			hb_xfree(cDivDvD);
-			hb_xfree(cDivDvR);
 	
-			tmp = __TBIGNSUB(cN,peDiv->cDivR,n,n,nB);
-			memcpy(peDiv->cDivR,tmp,n);
-			hb_xfree(tmp);
+			peDivTmp->cDivR = __TBIGNSUB(cN,peDiv->cDivR,n,n,nB);
+			memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
+			hb_xfree(peDivTmp->cDivR);
+			hb_xfree(peDivTmp);
 				
 		}
 		
@@ -4944,12 +4939,11 @@ Return
 			const char * cN  = hb_parc(1);
 			const char * cD  = hb_parc(2);
 			HB_SIZE n        = (HB_SIZE)hb_parnint(4);
-			HB_SIZE y        = n+1;
 			const HB_ISIZ nB = (HB_MAXUINT)hb_parnint(5);
 			
 			ptBIGNeDiv peDiv = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 			
-			__TBIGNeDIV(cN,cD,n,nB,y,peDiv);
+			__TBIGNeDIV(cN,cD,n,nB,peDiv);
 			
 			hb_storclen(peDiv->cDivR,n,3);
 			hb_retclen(peDiv->cDivQ,n);
