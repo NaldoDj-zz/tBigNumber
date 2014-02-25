@@ -2517,32 +2517,25 @@ Return(oTrc)
 */
 Method Normalize(oBigN) CLASS tBigNumber
 
-	Local cInt
-	Local cDec
-
 	Local nPadL	:= Max(self:nInt,oBigN:nInt)
 	Local nPadR := Max(self:nDec,oBigN:nDec)
 	Local nSize := (nPadL+nPadR)
 
-    IF nSize>self:nSize
-	    cInt        := PadL(self:cInt,nPadL,"0")
-	    cDec        := PadR(self:cDec,nPadR,"0")
-		self:cInt	:= cInt
+	IF nPadL != self:nInt .or. self:nDec != nPadR
+		self:cInt	:= PadL(self:cInt,nPadL,"0")
 		self:nInt	:= nPadL
-		self:cDec	:= cDec
+		self:cDec	:= PadR(self:cDec,nPadR,"0")
 		self:nDec	:= nPadR
 		self:nSize	:= nSize
 	EndIF
-		
-    IF nSize>oBigN:nSize
-	    cInt        := PadL(oBigN:cInt,nPadL,"0")
-	    cDec        := PadR(oBigN:cDec,nPadR,"0")
-		oBigN:cInt	:= cInt
+			
+	IF nPadL != oBigN:nInt .or. oBigN:nDec != nPadR
+		oBigN:cInt	:= PadL(oBigN:cInt,nPadL,"0")
 		oBigN:nInt	:= nPadL
-		oBigN:cDec	:= cDec
+		oBigN:cDec	:= PadR(oBigN:cDec,nPadR,"0")
 		oBigN:nDec	:= nPadR
 		oBigN:nSize	:= nSize
-	EndIF
+	EndIF	
 	
 Return(self)
 
@@ -4703,14 +4696,13 @@ Return
 		    hb_xfree(szRet);
 		}
 
-		static char * __TBIGNADD(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){	
+		static char * __TBIGNADD(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){	
 			char * c         = (char*)hb_xgrab(y+1);
 			HB_SIZE k        = y-1;
 			HB_MAXUINT v     = 0;
 			HB_MAXUINT v1;
-			HB_MAXUINT i     = n-1;
-			while (n--){
-				v += hb_strVal(&a[i],1)+hb_strVal(&b[i],1);
+			while (--n>=0){
+				v += (int)hb_strVal(&a[n],1)+(int)hb_strVal(&b[n],1);
 				if ( v>=nB ){
 					v  -= nB;
 					v1 = 1;
@@ -4722,7 +4714,6 @@ Return
 				c[k-1] = "0123456789"[v1%nB];
 				v = v1;
 				--k;
-				--i;
 			}
 			return c;
 		}
@@ -4733,19 +4724,18 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-			char * szRet        = __TBIGNADD(a,b,n,y,nB);
+			char * szRet        = __TBIGNADD(a,b,(int)n,y,nB);
 			hb_retclen(szRet,y);
 		    hb_xfree(szRet);
 		}
    
-		static char * __TBIGNSUB(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
+		static char * __TBIGNSUB(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){
 			char * c      = (char*)hb_xgrab(y+1);
 			HB_SIZE k     = y-1;
 			int v         = 0;
 			int v1;
-			HB_MAXUINT i  = n-1;
-			while (n--){
-				v += hb_strVal(&a[i],1)-hb_strVal(&b[i],1);
+			while (--n>=0){
+				v += (int)hb_strVal(&a[n],1)-(int)hb_strVal(&b[n],1);
 				if ( v<0 ){
 					v  += nB;
 					v1 = -1;
@@ -4757,7 +4747,6 @@ Return
 				c[k-1] = "0123456789"[v1%nB];
 				v = v1;
 				--k;
-				--i;
 			}
 			return c;
 		}
@@ -4768,7 +4757,7 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
 			const HB_SIZE y     = n;
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
-			char * szRet        = __TBIGNSUB(a,b,n,y,nB);
+			char * szRet        = __TBIGNSUB(a,b,(int)n,y,nB);
 			hb_retclen(szRet,y);
 		    hb_xfree(szRet);
 		}
