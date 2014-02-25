@@ -4840,7 +4840,7 @@ Return
 			char * cDivR;
 		} stBIGNeDiv, * ptBIGNeDiv;
 
-        static void __TBIGNeDIV(const char * cN, const char * cD, HB_SIZE n, const HB_MAXUINT nB , ptBIGNeDiv peDiv){
+        static void __TBIGNeDIV(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeDiv peDiv){
 	
 			PHB_ITEM peDVArr    = hb_itemArrayNew(0);
 		
@@ -4934,9 +4934,9 @@ Return
 			HB_SIZE n           = (HB_SIZE)hb_parnint(4);
 			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
 			
-			ptBIGNeDiv peDiv = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+			ptBIGNeDiv peDiv    = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 			
-			__TBIGNeDIV(cN,cD,n,nB,peDiv);
+			__TBIGNeDIV(cN,cD,(int)n,nB,peDiv);
 			
 			hb_storclen(peDiv->cDivR,n,3);
 			hb_retclen(peDiv->cDivQ,n);
