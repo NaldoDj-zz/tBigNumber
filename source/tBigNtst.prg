@@ -119,10 +119,10 @@ Function Main()
 	EndIF
     /* set OEM font encoding for non unicode modes */
     hb_gtInfo( HB_GTI_CODEPAGE, 255 )
-    /* Set EN CP-437 encoding */
+    /* set EN CP-437 encoding */
     hb_cdpSelect( "EN" )
     hb_setTermCP( "EN" )
-    /* Set font size */
+    /* set font size */
     hb_gtInfo( HB_GTI_FONTWIDTH, 6 )
     hb_gtInfo( HB_GTI_FONTSIZE, 12 )
     /* resize console window using new font size */
@@ -132,6 +132,8 @@ Function Main()
     nMaxScrCol := hb_gtInfo( HB_GTI_DESKTOPCOLS )
     /* resize console window to the screen size */
     SetMode( nMaxScrRow, nMaxScrCol )
+    /* set window title */
+    hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
 Return(tBigNTst())
 Static Procedure tBigNTst()
 #else
