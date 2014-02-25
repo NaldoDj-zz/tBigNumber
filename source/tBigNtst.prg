@@ -21,12 +21,15 @@
 #ifdef __HARBOUR__
 #include "inkey.ch"
 #include "setcurs.ch"
+#include "hbgtinfo.ch"
 Function Main()
     Local cIni    := "tbigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
     Local cKey
     Local aSect
     Local cSection
+    Local nMaxScrRow
+    Local nMaxScrCol
     MEMVAR nACC_SET
     MEMVAR nROOT_ACC_SET
     MEMVAR nACC_ALOG
@@ -114,6 +117,21 @@ Function Main()
 	IF ((__nSLEEP)>10)
 		__nSLEEP /= 10
 	EndIF
+    /* set OEM font encoding for non unicode modes */
+    hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+    /* Set EN CP-437 encoding */
+    hb_cdpSelect( "EN" )
+    hb_setTermCP( "EN" )
+    /* Set font size */
+    hb_gtInfo( HB_GTI_FONTWIDTH, 6 )
+    hb_gtInfo( HB_GTI_FONTSIZE, 12 )
+    /* resize console window using new font size */
+    SetMode(MaxRow()+1,MaxCol()+1)
+    /* get screen dimensions */
+    nMaxScrRow := hb_gtInfo( HB_GTI_DESKTOPROWS )
+    nMaxScrCol := hb_gtInfo( HB_GTI_DESKTOPCOLS )
+    /* resize console window to the screen size */
+    SetMode( nMaxScrRow, nMaxScrCol )
 Return(tBigNTst())
 Static Procedure tBigNTst()
 #else
