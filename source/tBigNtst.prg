@@ -1,10 +1,10 @@
 #include "tBigNumber.ch"
 #include "paramtypex.ch"
 
-#define ACC_SET          "100"
-#define ROOT_ACC_SET      "99"
-#define ACC_ALOG          "99"
-#define __SLEEP         "0.09"
+#define ACC_SET           "50"
+#define ROOT_ACC_SET      "50"
+#define ACC_ALOG          "50"
+#define __SLEEP         "0.05"
 #define N_TEST          "1000"
 #define L_ALOG			   "0"
 #define C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
@@ -131,7 +131,7 @@ Function Main()
     nMaxScrRow := hb_gtInfo( HB_GTI_DESKTOPROWS )
     nMaxScrCol := hb_gtInfo( HB_GTI_DESKTOPCOLS )
     /* resize console window to the screen size */
-    SetMode( nMaxScrRow, nMaxScrCol )
+    SetMode(nMaxScrRow,nMaxScrCol)
     /* set window title */
     hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
 Return(tBigNTst())
@@ -325,7 +325,7 @@ Static Procedure tBigNTst()
 #ifdef __HARBOUR__
     SetColor("w+/n")
     SetCursor(SC_NONE)
-    BuildScreen(fhLog)
+    BuildScreen(fhLog,__nMaxCol)
 #endif
     
     otBigN:SetDecimals(nACC_SET)
@@ -1462,8 +1462,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
 	__oRTime2:SetRemaining(1)
-    ASSIGN cX   := otBigW:SetValue("1215"):Ln():ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Ln()',"RESULT: "+cX)
+    ASSIGN cX   := otBigW:SetValue("100000000000000000000000000000"):Ln():ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Ln()',"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:aLn():ExactValue())       
@@ -1480,8 +1480,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log2():ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log2()',"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log2():ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log2()',"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:aLog2():ExactValue())
@@ -1495,8 +1495,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log10():ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log10()',"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log10():ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log10()',"RESULT: "+cX)
     IF ( laLog ) 
    		otBigW:SetValue(cX) 
         __ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:aLog10():ExactValue())
@@ -1510,8 +1510,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o1):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("1")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o1):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:aLog(o1):ExactValue())
@@ -1525,8 +1525,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o2):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("2")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o2):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:aLog(o2):ExactValue())
@@ -1540,8 +1540,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o3):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("3")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o3):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")'  ,"RESULT: "+cX)
     IF ( laLog )
         __ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(o3):ExactValue())
     EndIF
@@ -1554,8 +1554,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o4):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("4")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o4):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:aLog(o4):ExactValue())
@@ -1569,8 +1569,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o5):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("5")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o5):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:aLog(o5):ExactValue())
@@ -1584,8 +1584,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o6):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("6")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o6):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:aLog(o6):ExactValue())
@@ -1599,8 +1599,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o7):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("7")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o7):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")'  ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:aLog(o7):ExactValue())
@@ -1614,8 +1614,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o8):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("8")'  ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o8):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")'  ,"RESULT: "+cX)
     IF ( laLog ) 
     	otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:aLog(o8):ExactValue())
@@ -1629,8 +1629,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o9):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("9")'  ,"RESULT: "+cX) 
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o9):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")'  ,"RESULT: "+cX) 
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:aLog(o9):ExactValue())     
@@ -1644,8 +1644,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __oRTime2:SetRemaining(1)
-    ASSIGN cX    := otBigW:SetValue("1215"):Log(o10):ExactValue()
-    __ConOut(fhLog,'1215:tBigNumber():Log("10")' ,"RESULT: "+cX)
+    ASSIGN cX    := otBigW:SetValue("100000000000000000000000000000"):Log(o10):ExactValue()
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("10")' ,"RESULT: "+cX)
     IF ( laLog )
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):ExactValue())
@@ -2102,7 +2102,6 @@ Return(lHarbour)
 		MEMVAR __lKillProgress
 		MEMVAR __oRTimeProc
 		MEMVAR __phMutex
-		MEMVAR __nMaxRow
 		
 		ASSIGN aSAnim[01] := Replicate(Chr(7)+";",nSizeP2-1)
 		ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,nSizeP2-1)
@@ -2409,11 +2408,10 @@ Return(lHarbour)
 		End While
 	
 	Return                                                                     	
-	Static Procedure BuildScreen(fhLog)
-        MEMVAR __nMaxCol
+	Static Procedure BuildScreen(fhLog,nMaxCol)
 		CLEAR SCREEN
-        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",__nMaxCol)) //1
-        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",__nMaxCol))			//2
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",nMaxCol)) //1
+        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",nMaxCol))			  //2
 	Return
 	#include "tBigNAnim.prg"
 #else

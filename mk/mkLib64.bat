@@ -11,7 +11,7 @@ SET PATH=%PATH%;%cygwin_PATH%bin\
 SET PATH=%PATH%;%cygwin_PATH%usr\bin\
 SET path=%PATH%;%MinGW64_PATH%bin\
 
-   %HB_PATH%bin\hbmk2.exe -cpp -compr=no -comp=mingw64 ..\hbp\_tbigNumber.hbp	
+   %HB_PATH%bin\hbmk2.exe -strip- -jobs=10 -cpp -compr=no -comp=mingw64 ..\hbp\_tbigNumber.hbp	
 
 SET HB_PATH=%_HB_PATH%
 SET PATH=%_PATH%

@@ -2519,23 +2519,25 @@ Method Normalize(oBigN) CLASS tBigNumber
 
 	Local nPadL	:= Max(self:nInt,oBigN:nInt)
 	Local nPadR := Max(self:nDec,oBigN:nDec)
-	Local nSize := (nPadL+nPadR)
+	Local nSize
 
 	IF nPadL != self:nInt .or. self:nDec != nPadR
-		self:cInt	:= PadL(self:cInt,nPadL,"0")
-		self:nInt	:= nPadL
-		self:cDec	:= PadR(self:cDec,nPadR,"0")
-		self:nDec	:= nPadR
-		self:nSize	:= nSize
+		self:cInt	  := PadL(self:cInt,nPadL,"0")
+		self:nInt	  := nPadL
+		self:cDec	  := PadR(self:cDec,nPadR,"0")
+		self:nDec	  := nPadR
+		DEFAULT nSize := (nPadL+nPadR)
+		self:nSize	  := nSize
 	EndIF
 			
 	IF nPadL != oBigN:nInt .or. oBigN:nDec != nPadR
-		oBigN:cInt	:= PadL(oBigN:cInt,nPadL,"0")
-		oBigN:nInt	:= nPadL
-		oBigN:cDec	:= PadR(oBigN:cDec,nPadR,"0")
-		oBigN:nDec	:= nPadR
-		oBigN:nSize	:= nSize
-	EndIF	
+		oBigN:cInt	  := PadL(oBigN:cInt,nPadL,"0")
+		oBigN:nInt	  := nPadL
+		oBigN:cDec	  := PadR(oBigN:cDec,nPadR,"0")
+		oBigN:nDec	  := nPadR
+		DEFAULT nSize := (nPadL+nPadR)
+		oBigN:nSize	  := nSize
+	EndIF
 	
 Return(self)
 
@@ -4702,7 +4704,7 @@ Return
 			HB_MAXUINT v     = 0;
 			HB_MAXUINT v1;
 			while (--n>=0){
-				v += (int)hb_strVal(&a[n],1)+(int)hb_strVal(&b[n],1);
+				v += (HB_MAXUINT)hb_strVal(&a[n],1)+(HB_MAXUINT)hb_strVal(&b[n],1);
 				if ( v>=nB ){
 					v  -= nB;
 					v1 = 1;
@@ -4735,7 +4737,7 @@ Return
 			int v         = 0;
 			int v1;
 			while (--n>=0){
-				v += (int)hb_strVal(&a[n],1)-(int)hb_strVal(&b[n],1);
+				v += (HB_MAXUINT)hb_strVal(&a[n],1)-(HB_MAXUINT)hb_strVal(&b[n],1);
 				if ( v<0 ){
 					v  += nB;
 					v1 = -1;
@@ -4781,7 +4783,7 @@ Return
 				s = 0;
 				j = i;
 				while (s<=i){
-					v += hb_strVal(&a[s++],1)*hb_strVal(&b[j--],1);
+					v += (HB_MAXUINT)hb_strVal(&a[s++],1)*(HB_MAXUINT)hb_strVal(&b[j--],1);
 				}
 				if (v>=nB){
 					v1 = v/nB;
@@ -4800,7 +4802,7 @@ Return
 				s = n;
 				j = l;
 				while (s>=l){
-					v += hb_strVal(&a[s--],1)*hb_strVal(&b[j++],1);
+					v += (HB_MAXUINT)hb_strVal(&a[s--],1)*(HB_MAXUINT)hb_strVal(&b[j++],1);
 				}
 				if (v>=nB){
 					v1 = v/nB;
