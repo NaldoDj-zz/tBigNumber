@@ -56,9 +56,13 @@
 
 #ifdef __PROTHEUS__
 	Static __cEnvSrv
+	#xtranslate hb_bLen([<prm,...>]) => Len([<prm>])
+	#xtranslate aLen([<prm,...>])    => Len([<prm>])
 #else // __HARBOUR__
-	#xtranslate PadL([<prm,...>]) => __TBIGNPadL([<prm>])
-	#xtranslate PadR([<prm,...>]) => __TBIGNPadR([<prm>])
+	#xtranslate PadL([<prm,...>])    => __TBIGNPadL([<prm>])
+	#xtranslate PadR([<prm,...>])    => __TBIGNPadR([<prm>])
+	#xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
+	#xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
 #endif //__PROTHEUS__
 
 Static __o0
@@ -401,7 +405,7 @@ Return(self)
 			Local nFile
 			Local nFiles
 			DEFAULT __aFiles := Array(0)
-			nFiles	:= Len(__aFiles)
+			nFiles	:= aLen(__aFiles)
 			For nFile := 1 To nFiles
 				IF Select(__aFiles[nFile][1])>0
 					(__aFiles[nFile][1])->(dbCloseArea())
@@ -434,7 +438,7 @@ Method __cDec(cDec) CLASS tBigNumber
 			cDec   := SubStr(cDec,2)
 		EndIF
 		self:cDec  := cDec
-		self:nDec  := Len(cDec)
+		self:nDec  := hb_bLen(cDec)
 		self:nSize := self:nInt+self:nDec
 		IF self:eq(__o0)
 			self:lNeg := .F.
@@ -457,7 +461,7 @@ Method __cInt(cInt) CLASS tBigNumber
 			cInt   := SubStr(cInt,2)
 		EndIF
 		self:cInt  := cInt
-		self:nInt  := Len(cInt)
+		self:nInt  := hb_bLen(cInt)
 		self:nSize := self:nInt+self:nDec
 		IF self:eq(__o0)
 			self:lNeg := .F.
@@ -682,7 +686,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 	
 				This  := self
 				uBigN := ClassDataArr(uBigN)
-				nFP   := Len(uBigN)
+				nFP   := hb_bLen(uBigN)
 				
 				For nP := 1 To nFP
 					&("This:"+uBigN[nP][1]) := uBigN[nP][2]
@@ -715,7 +719,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		#ifdef __TBN_DYN_OBJ_SET__
 
 			This := self
-			nFP  := Len(uBigN)
+			nFP  := hb_bLen(uBigN)
 	
 			For nP := 1 To nFP
 				&("This:"+uBigN[nP][1]) := uBigN[nP][2]
@@ -765,7 +769,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		    self:cInt := "0"
 		    self:cDec := SubStr(uBigN,nFP+1)
 			IF "0"==SubStr(self:cDec,1,1)
-				nFP	  := Len(self:cDec)
+				nFP	  := hb_bLen(self:cDec)
 				While nFP>__nstcZ0
 					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 					__nstcZ0+=__nstcZ0
@@ -778,7 +782,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 		    self:cInt := SubStr(uBigN,1,nFP-1)
 		    self:cDec := SubStr(uBigN,nFP+1)
 			IF "0"==SubStr(self:cDec,1,1)
-				nFP	  := Len(self:cDec)
+				nFP	  := hb_bLen(self:cDec)
 				While nFP>__nstcZ0
 					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 					__nstcZ0+=__nstcZ0
@@ -794,8 +798,8 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
 			self:cSig := ""
 		EndIF
  
- 	   	self:nInt  := Len(self:cInt)
-    	self:nDec  := Len(self:cDec)
+ 	   	self:nInt  := hb_bLen(self:cInt)
+    	self:nDec  := hb_bLen(self:cDec)
 			
 	EndIF
 
@@ -1200,7 +1204,7 @@ Method Add(uBigN) CLASS tBigNumber
 
 	cNT  := __adoNR:cInt
 	cDec := SubStr(cNT,-nDec)
-	cInt := SubStr(cNT,1,Len(cNT)-nDec)
+	cInt := SubStr(cNT,1,hb_bLen(cNT)-nDec)
 
 	cNT	:= cInt
 	cNT	+= "."
@@ -1274,7 +1278,7 @@ Return(__adoNR)
 				aNR[1][2]	:= cT1
 				aNR[1][3]	:= cT2
 				x			:= 2
-				y			:= Len(cT1)+1
+				y			:= hb_bLen(cT1)+1
 				cT1			:= SubStr(cN1,y)
 				cT2			:= SubStr(cN2,y)
 			Else
@@ -1284,7 +1288,7 @@ Return(__adoNR)
 			EndIF
 
 			z := 1
-			y := Len(aNR)
+			y := aLen(aNR)
 			
 			For x := x To y
 				aNR[x][2]	:= SubStr(cT1,z,MAX_LENGHT_ADD_THREAD)
@@ -1313,14 +1317,14 @@ Return(__adoNR)
 				aNR[nID][1]	:= .F.
 
 	        	#ifdef __HARBOUR__
-		        	aNR[nID][4]	:= hb_threadStart(@ThAdd(),aNR[nID][2],aNR[nID][3],Len(aNR[nID][2]),nBase)
+		        	aNR[nID][4]	:= hb_threadStart(@ThAdd(),aNR[nID][2],aNR[nID][3],hb_bLen(aNR[nID][2]),nBase)
 		        	aNR[nID][5]	:= Array(0)
 		        	hb_threadJoin(aNR[nID][4],@aNR[nID][5])
 		        	aAdd(aThreads,aNR[nID][4])
 				#else //__PROTHEUS__
 		        	aNR[nID][4]	:= ("__ADD__"+"ThAdd__"+cThread+"__ID__"+hb_ntos(nID))
 		        	PutGlbValue(aNR[nID][4],"")
-		        	StartJob("U_ThAdd",__cEnvSrv,.F.,aNR[nID][2],aNR[nID][3],Len(aNR[nID][2]),nBase,aNR[nID][4])
+		        	StartJob("U_ThAdd",__cEnvSrv,.F.,aNR[nID][2],aNR[nID][3],hb_bLen(aNR[nID][2]),nBase,aNR[nID][4])
 		        	aAdd(aThreads,nID)
 		        #endif //__HARBOUR__
 
@@ -1332,7 +1336,7 @@ Return(__adoNR)
 
 					#else //__PROTHEUS__
 
-						t    := Len(aThreads)
+						t    := aLen(aThreads)
 						nIDs := t
 	
 						While .NOT.(lExit)
@@ -1398,11 +1402,11 @@ Return(__adoNR)
 			For x := y To 1 STEP -1
 				z 	:= x-1
 				cT1	:= aNR[x][5]
-				IF z>0 .and. Len(cT1)>MAX_LENGHT_ADD_THREAD
+				IF z>0 .and. hb_bLen(cT1)>MAX_LENGHT_ADD_THREAD
 					cT2 := SubStr(cT1,1,1)
 					cT1	:= SubStr(cT1,2)
 					IF cT2<>"0"
-						w   		:= Len(aNR[z][5])
+						w   		:= hb_bLen(aNR[z][5])
 						cT2			:= Add(aNR[z][5],PadL(cT2,w,"0"),w,nBase)
 						aNR[z][5]	:= IF(SubStr(cT2,1,1)=="0",SubStr(cT2,2),cT2)
 					EndIF
@@ -1507,7 +1511,7 @@ Method Sub(uBigN) CLASS tBigNumber
 	cNT	 := __sboNR:cInt
 	
 	cDec := SubStr(cNT,-nDec)
-	cInt := SubStr(cNT,1,Len(cNT)-nDec)
+	cInt := SubStr(cNT,1,hb_bLen(cNT)-nDec)
 	
 	cNT	:= cInt
 	cNT	+= "."
@@ -1576,7 +1580,7 @@ Method Mult(uBigN,leMult) CLASS tBigNumber
 	cNT	:= __mtoNR:cInt
 	
 	cDec := SubStr(cNT,-nDec)
-	cInt := SubStr(cNT,1,Len(cNT)-nDec)
+	cInt := SubStr(cNT,1,hb_bLen(cNT)-nDec)
 	
 	cNT	:= cInt
 	cNT	+= "."
@@ -1677,7 +1681,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 	    			__dvoRDiv:SetValue(eDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
 
 					cDec += __dvoRDiv:ExactValue(.T.)
-					nDec := Len(cDec)
+					nDec := hb_bLen(cDec)
 		
 					__dvoRDiv:SetValue(__dvoRDiv:cRDiv,NIL,NIL,.F.)
 					__dvoRDiv:SetValue(__dvoRDiv:ExactValue(.T.))
@@ -1799,7 +1803,7 @@ Method Pow(uBigN) CLASS tBigNumber
 			cPowA	:= __pwoNP:cInt+__pwoNP:Dec(NIL,NIL,.T.)
 			__pwoA:SetValue(cPowA)
 
-			nZS := Len(__pwoNP:Dec(NIL,NIL,.T.))
+			nZS := hb_bLen(__pwoNP:Dec(NIL,NIL,.T.))
 			While nZS>__nstcZ0
 				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 				__nstcZ0+=__nstcZ0
@@ -2209,7 +2213,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
 		IF oRootB:Dec(.T.):gt(__o0)
 			
-			nZS := Len(oRootB:Dec(NIL,NIL,.T.))
+			nZS := hb_bLen(oRootB:Dec(NIL,NIL,.T.))
 			While nZS>__nstcZ0
 				__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
 				__nstcZ0+=__nstcZ0
@@ -2227,7 +2231,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		
 		EndIF
 
-		nPFs := Len(aIPF)
+		nPFs := aLen(aIPF)
 
 		IF nPFs>0
 			othRoot:SetValue(__o1)
@@ -2244,7 +2248,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 				EndIF	
 			Next nPF
 			IF .NOT.(Empty(aDPF))
-				nPFs := Len(aDPF)
+				nPFs := aLen(aDPF)
 				IF nPFs>0
 					othRootD:SetValue(__o1)
 					For nPF := 1 To nPFs
@@ -2677,7 +2681,7 @@ Method H2D() CLASS tBigNumber
 	Local cDec
 	Local cSig := self:cSig
 
-	Local nLn  := Len(cHexN)
+	Local nLn  := hb_bLen(cHexN)
 	Local nI   := nLn
 
 	otH:SetValue(cHexB)
@@ -2774,7 +2778,7 @@ Method H2B() CLASS tBigNumber
 	Local oBin  := tBigNumber():New(NIL,2)
 
 	Local nI    := 0
-	Local nLn   := Len(cHexN)
+	Local nLn   := hb_bLen(cHexN)
 	Local nAT
 
 	Local l16
@@ -2876,7 +2880,7 @@ Method B2H(cHexB) CLASS tBigNumber
 	Local oHexN
 
 	Local nI	:= 1
-	Local nLn	:= Len(cBin)
+	Local nLn	:= hb_bLen(cBin)
 	Local nAT
 
 	Local l16
@@ -3978,7 +3982,7 @@ Return(r)
 			s := "0"	
 		EndIF
 	
-		IF Len(s)<n
+		IF hb_bLen(s)<n
 			s := PadL(s,n,"0")
 		EndIF
 	
@@ -4229,7 +4233,7 @@ Return(r)
 			s := "0"
 		EndIF
 	
-		IF Len(s)<n
+		IF hb_bLen(s)<n
 			s := PadL(s,n,"0")
 		EndIF
 	
@@ -4477,7 +4481,7 @@ Return(r)
 					s := "0"
 				EndIF
 			
-				IF Len(s)<n
+				IF hb_bLen(s)<n
 					s := PadL(s,n,"0")
 				EndIF
 			
@@ -4636,7 +4640,7 @@ Static Procedure __InitStV2(nBase)
 	__o20       := tBigNumber():New("20",nBase)
 	__oMinFI	:= tBigNumber():New(MAX_SYS_FI,nBase)
 	__oMinGCD	:= tBigNumber():New(MAX_SYS_GCD,nBase)
-	__nMinLCM	:= Int(Len(MAX_SYS_LCM)/2)
+	__nMinLCM	:= Int(hb_bLen(MAX_SYS_LCM)/2)
 	#ifdef __PROTHEUS__
 		DEFAULT __cEnvSrv := GetEnvServer()
 	#endif
@@ -4656,6 +4660,19 @@ Return
 	Return(__hbeTthD())
 	Static Function __PITthD()
 	Return(__hbPITthD())
+	
+	/* warning: 'void HB_FUN_TBIGNADD()'  defined but not used [-Wunused-function]
+	   warning: 'void HB_FUN_TBIGNSUB()'  defined but not used [-Wunused-function]
+	   warning: 'void HB_FUN_TBIGNMULT()' defined but not used [-Wunused-function]*/	
+	Static Function __Dummy(lDummy)
+		lDummy := .F.
+		IF (lDummy)
+			__Dummy()
+			TBIGNADD()
+			TBIGNSUB()
+			TBIGNMULT()
+		EndIF
+	Return(lDummy)
 	
 #endif //__PROTHEUS__
 
@@ -4700,7 +4717,7 @@ Return
 			return pbuffer;
 		}
 
-		HB_FUNC( __TBIGNPADL ){	  
+		HB_FUNC_STATIC( __TBIGNPADL ){	  
 			const char * szItem = hb_parc(1);
 			HB_ISIZ nLen        = hb_parns(2);
 			const char * szPad  = hb_parc(3);
@@ -4725,7 +4742,7 @@ Return
 			return pbuffer;
 		}
 	   
-		HB_FUNC( __TBIGNPADR ){
+		HB_FUNC_STATIC( __TBIGNPADR ){
 			const char * szItem = hb_parc(1);
 			HB_ISIZ nLen        = hb_parns(2);
 			const char * szPad  = hb_parc(3);
@@ -4744,7 +4761,7 @@ Return
 			return szStringTo;
 		}
 
-		HB_FUNC( TBIGNINVERT ){
+		HB_FUNC_STATIC( TBIGNINVERT ){
 			const char * szStringFrom = hb_parc(1);
 			const HB_SIZE s           = (HB_SIZE)hb_parnint(2);
 			char * szRet              = __TBIGNINVERT(szStringFrom,s);
@@ -4774,7 +4791,7 @@ Return
 			return c;
 		}
 
-		HB_FUNC( TBIGNADD ){	
+		HB_FUNC_STATIC( TBIGNADD ){	
 			const char * a      = hb_parc(1);
 			const char * b      = hb_parc(2);
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
@@ -4807,7 +4824,7 @@ Return
 			return c;
 		}
 
-		HB_FUNC( TBIGNSUB ){	
+		HB_FUNC_STATIC( TBIGNSUB ){	
 			const char * a      = hb_parc(1);
 			const char * b      = hb_parc(2);
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
@@ -4879,7 +4896,7 @@ Return
 			return r;
 		}
 	
-		HB_FUNC( TBIGNMULT ){
+		HB_FUNC_STATIC( TBIGNMULT ){
 			const char * a      = hb_parc(1);
 			const char * b      = hb_parc(2);
 			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
@@ -4983,7 +5000,7 @@ Return
 				
 		}
 		
-		HB_FUNC( TBIGNEDIV ){
+		HB_FUNC_STATIC( TBIGNEDIV ){
 			
 			const char * cN     = hb_parc(1);
 			const char * cD     = hb_parc(2);
@@ -5021,10 +5038,8 @@ Return
 			return nGCD;
 		}
 
-		HB_FUNC( TBIGNGDC ){
-			HB_MAXUINT x = (HB_MAXUINT)hb_parnint(1);
-			HB_MAXUINT y = (HB_MAXUINT)hb_parnint(2);
-			hb_retnint(__TBIGNGDC(x,y));
+		HB_FUNC_STATIC( TBIGNGDC ){
+			hb_retnint(__TBIGNGDC((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
 		}
 
 		static HB_MAXUINT __TBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
@@ -5059,10 +5074,8 @@ Return
 
 		}
 
-		HB_FUNC( TBIGNLCM ){
-			HB_MAXUINT x = (HB_MAXUINT)hb_parnint(1);
-			HB_MAXUINT y = (HB_MAXUINT)hb_parnint(2);
-			hb_retnint(__TBIGNLCM(x,y));
+		HB_FUNC_STATIC( TBIGNLCM ){
+			hb_retnint(__TBIGNLCM((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
 		}
 
 		static HB_MAXUINT __TBIGNFI(HB_MAXUINT n){
@@ -5081,11 +5094,14 @@ Return
        		return fi; 
     	}
     	
-		HB_FUNC( TBIGNFI ){
-			HB_MAXUINT n = (HB_MAXUINT)hb_parnint(1);
-			hb_retnint(__TBIGNFI(n));
+		HB_FUNC_STATIC( TBIGNFI ){
+			hb_retnint(__TBIGNFI((HB_MAXUINT)hb_parnint(1)));
 		}
 		
+		HB_FUNC_STATIC( ALEN ){
+           hb_retns(hb_arrayLen(hb_param(1,HB_IT_ARRAY)));
+		}
+	
 	#pragma ENDDUMP
 
 #endif // __HARBOUR__
