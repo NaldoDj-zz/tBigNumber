@@ -3736,7 +3736,9 @@ Return(r)
 		Local c
 
 		Local y := n+1
-		Local k := 1
+		Local k := y
+		
+		Local s := ""
 
 		#ifdef __HARBOUR__
 			FIELD FN
@@ -3760,18 +3762,21 @@ Return(r)
 				IF (c)->FN>=nBase
 					(c)->FN	-= nBase
 					(c)->(dbUnLock())
-					(c)->(dbGoTo(k+1))
+					(c)->(dbGoTo(k-1))
 					IF (c)->(rLock())
 						(c)->FN	+= 1
 					EndIF	
 				EndIF
 				(c)->(dbUnLock())
 			EndIF
-			++k
+			--k
 			--n
 		End While
-	
-	Return(dbGetcN(c,y))
+		
+		(c)->(dbGoTop())
+		(c)->(dbEval({||s+=hb_ntos(FN)}))
+		
+	Return(s)
 	
 	/*
 		Funcao		: Sub
@@ -3785,7 +3790,9 @@ Return(r)
 		Local c
 
 		Local y := n
-		Local k := 1
+		Local k := y
+		
+		Local s := ""
 	
 		#ifdef __HARBOUR__
 			FIELD FN
@@ -3809,18 +3816,21 @@ Return(r)
 				IF (c)->FN<0
 					(c)->FN += nBase
 					(c)->(dbUnLock())
-					(c)->(dbGoTo(k+1))
+					(c)->(dbGoTo(k-1))
 					IF (c)->(rLock())
 						(c)->FN -= 1
 					EndIF
 				EndIF
 				(c)->(dbUnLock())
 			EndIF
-			++k
+			--k
 			--n
 		End While
-		
-	Return(dbGetcN(c,y))
+
+		(c)->(dbGoTop())
+		(c)->(dbEval({||s+=hb_ntos(FN)}))
+
+	Return(s)
 	
 	/*
 		Funcao		: Mult
@@ -3846,7 +3856,7 @@ Return(r)
 		Local x
 		Local j
 		Local w
-			
+
 		#ifdef __HARBOUR__
 			FIELD FN
 		#endif
@@ -3920,14 +3930,16 @@ Return(r)
 			l++
 		End While
 		
-	Return(dbGetcN(c,y))
+		s := dbGetcN(c,y)
+
+	Return(s)
 
 	/*
 		Funcao		: aNumber
 		Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 		Data        : 04/02/2013
-		Descricao   : Array OF Numbers
-		Sintaxe     : aNumber(c,n) -> a
+		Descricao   : db OF Numbers
+		Sintaxe     : aNumber(c,n,o) -> a
 	*/
 	Static Function aNumber(c,n,o)
 	

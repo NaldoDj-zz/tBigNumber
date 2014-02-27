@@ -1918,14 +1918,22 @@ Return
 
 Static Procedure __tbnSleep(nSleep)
 	#ifdef __HARBOUR__
+		#ifdef TBN_DBFILE
+			Local nTime
+		#endif
 		MEMVAR __nSLEEP
 	#endif		
 	PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
     #ifdef __PROTHEUS__
         Sleep(nSleep*1000)
     #else
-        hb_idleSleep(nSleep)
-        *hb_gcAll()
+        #ifdef TBN_DBFILE
+        	nTime  := (hb_MilliSeconds()+(nSleep*1000))
+        	while (hb_MilliSeconds()<nTime)
+        	end while
+        #else
+        	hb_idleSleep(nSleep)
+        #endif
     #endif    
 Return
 
