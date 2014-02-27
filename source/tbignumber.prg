@@ -4293,7 +4293,7 @@ Return(r)
 			Return(c)
 		#else
 			Static Function Add(a,b,n,nB)
-			Return(tBigNAdd(a,b,n,n+1,nB))
+			Return(TBIGNADD(a,b,n,n+1,nB))
 		#endif
 		
 		/*
@@ -4346,7 +4346,7 @@ Return(r)
 			Return(c)
 		#else
 			Static Function Sub(a,b,n,nB)
-			Return(tBigNSub(a,b,n,nB))
+			Return(TBIGNSUB(a,b,n,nB))
 		#endif
 		/*
 			Funcao		: Mult
@@ -4446,7 +4446,7 @@ Return(r)
 			Static Function Mult(cN1,cN2,n,nB)
 				Local a	:= tBigNInvert(cN1,n)
 				Local b	:= tBigNInvert(cN2,n)
-			Return(tBigNMult(a,b,n,n+n,nB))
+			Return(TBIGNMULT(a,b,n,n+n,nB))
 		#endif
 
 		/*
