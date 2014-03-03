@@ -87,7 +87,7 @@ Static __lstbNSet
 #endif
 
 #ifdef TBN_DBFILE
-	THREAD Static __aFiles
+	THREAD Static __athdFiles
 #endif
 
 THREAD Static __nthRootAcc
@@ -378,14 +378,14 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	IF __lsthdSet==NIL
 		self:SetDecimals()
 		self:nthRootAcc()
-		__InitStV1(nBase)
+		__Initsthd(nBase)
 	EndIF
 
 	DEFAULT uBigN := "0"
 	self:SetValue(uBigN,nBase)
 
 	IF __lstbNSet==NIL
-		__InitStV2(nBase)
+		__InitstbN(nBase)
 	EndIF
 
 Return(self)
@@ -404,23 +404,23 @@ Return(self)
 	#endif	
 			Local nFile
 			Local nFiles
-			DEFAULT __aFiles := Array(0)
-			nFiles	:= aLen(__aFiles)
+			DEFAULT __athdFiles := Array(0)
+			nFiles	:= aLen(__athdFiles)
 			For nFile := 1 To nFiles
-				IF Select(__aFiles[nFile][1])>0
-					(__aFiles[nFile][1])->(dbCloseArea())
+				IF Select(__athdFiles[nFile][1])>0
+					(__athdFiles[nFile][1])->(dbCloseArea())
 				EndIF			
 				#ifdef __PROTEUS__
-					MsErase(__aFiles[nFile][2],NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))
+					MsErase(__athdFiles[nFile][2],NIL,IF((Type("__LocalDriver")=="C"),__LocalDriver,"DBFCDXADS"))
 				#else
 					#ifdef TBN_MEMIO
-						dbDrop(__aFiles[nFile][2])
+						dbDrop(__athdFiles[nFile][2])
 					#else
-						fErase(__aFiles[nFile][2])
+						fErase(__athdFiles[nFile][2])
 					#endif
 				#endif	
 			Next nFile
-			aSize(__aFiles,0)
+			aSize(__athdFiles,0)
 		Return
 #endif	
 
@@ -4033,8 +4033,8 @@ Return(r)
 				cFile := CriaTrab(aStru,cAlias)
 			#endif	
 	#endif
-			DEFAULT __aFiles := Array(0)
-			aAdd(__aFiles,{cAlias,cFile})
+			DEFAULT __athdFiles := Array(0)
+			aAdd(__athdFiles,{cAlias,cFile})
 		Else
 			(cAlias)->(dbRLock())
 	#ifdef __HARBOUR__		
@@ -4562,7 +4562,7 @@ Static Function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
 Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
-Static Procedure __InitStV1(nBase)
+Static Procedure __Initsthd(nBase)
 
 	Local oTBigN
 
@@ -4585,8 +4585,8 @@ Static Procedure __InitStV1(nBase)
 	#endif    
 
 	#ifdef TBN_DBFILE
-		IF (__aFiles==NIL)
-			__aFiles := Array(0)
+		IF (__athdFiles==NIL)
+			__athdFiles := Array(0)
 		EndIF
 	#endif
 	
@@ -4642,7 +4642,7 @@ Static Procedure __InitStV1(nBase)
 
 Return
 
-Static Procedure __InitStV2(nBase)
+Static Procedure __InitstbN(nBase)
 	__lstbNSet := .F.
 	__o0        := tBigNumber():New("0",nBase)
 	__o1        := tBigNumber():New("1",nBase)
