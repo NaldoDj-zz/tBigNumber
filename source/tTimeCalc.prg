@@ -1,16 +1,16 @@
-#IFDEF PROTHEUS
-	#DEFINE __PROTHEUS__
+#ifdef PROTHEUS
+	#define __PROTHEUS__
 	#include "protheus.ch"
-#ELSE
-	#IFDEF __HARBOUR__
+#else
+	#ifdef __HARBOUR__
 		#include "hbClass.ch"
-	#ENDIF
-#ENDIF
+	#endif
+#endif
 #include "tBigNumber.ch"
 Class tTimeCalc
-#IFNDEF __PROTHEUS__
+#ifndef __PROTHEUS__
 	EXPORTED:
-#ENDIF	
+#endif	
 	Method New() CONSTRUCTOR
 	Method ClassName()	
 	Method HMSToTime(nHours,nMinuts,nSeconds)

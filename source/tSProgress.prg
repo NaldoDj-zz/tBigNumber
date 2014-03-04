@@ -1,11 +1,11 @@
-#IFDEF PROTHEUS
-	#DEFINE __PROTHEUS__
+#ifdef PROTHEUS
+	#define __PROTHEUS__
 	#include "protheus.ch"
-#ELSE
-	#IFDEF __HARBOUR__
+#else
+	#ifdef __HARBOUR__
 		#include "hbClass.ch"
-	#ENDIF
-#ENDIF
+	#endif
+#endif
 #include "tBigNumber.ch"
 /*
 	Class		: tSProgress
@@ -18,7 +18,7 @@ Class tSProgress
 
 #IFNDEF __PROTHEUS__	
 	PROTECTED:
-#ENDIF	
+#endif	
 	
 	DATA aMethods   AS ARRAY INIT Array(0) HIDDEN
 	DATA aProgress	AS ARRAY INIT Array(0) HIDDEN
@@ -34,7 +34,7 @@ Class tSProgress
 	
 #IFNDEF __PROTHEUS__
 	EXPORTED:
-#ENDIF
+#endif
 
 	Method New(cProgress,cToken)  CONSTRUCTOR
 
@@ -61,10 +61,10 @@ Class tSProgress
 
 EndClass
 
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	User Function tSProgress(cProgress,cToken)
 	Return(tSProgress():New(@cProgress,@cToken))
-#ENDIF
+#endif
 
 Method New(cProgress,cToken) Class tSProgress
 	self:SetProgress(@cProgress,@cToken)
@@ -340,11 +340,11 @@ Static Function _StrToKArr(cStr,cToken)
 	While (cDToken$cStr)
 		cStr := StrTran(cStr,cDToken,cToken+" "+cToken)
 	End While
-#IFDEF PROTHEUS
+#ifdef PROTHEUS
 Return(StrToKArr(cStr,cToken))
-#ELSE
+#else
 Return(hb_aTokens(cStr,cToken))
-#ENDIF
+#endif
 
 Static Function __Random(nB,nE)
 

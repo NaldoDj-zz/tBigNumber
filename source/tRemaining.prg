@@ -1,17 +1,17 @@
-#IFDEF PROTHEUS
-	#DEFINE __PROTHEUS__
+#ifdef PROTHEUS
+	#define __PROTHEUS__
 	#include "protheus.ch"
-#ELSE
-	#IFDEF __HARBOUR__
+#else
+	#ifdef __HARBOUR__
 		#include "hbClass.ch"
-	#ENDIF
-#ENDIF
+	#endif
+#endif
 #include "tBigNumber.ch"
 Class tRemaining FROM tTimeCalc
 
-#IFNDEF __PROTHEUS__	
+#ifndef __PROTHEUS__	
 	PROTECTED:
-#ENDIF
+#endif
 	
 	DATA cMediumTime	AS CHARACTER INIT "00:00:00:000" HIDDEN
 	DATA cEndTime  		AS CHARACTER INIT "00:00:00" 	 HIDDEN
@@ -24,9 +24,9 @@ Class tRemaining FROM tTimeCalc
 	DATA nSRemaining	AS NUMERIC   INIT 0			     HIDDEN
 	DATA nTotal			AS NUMERIC   INIT 0			     HIDDEN
 
-#IFNDEF __PROTHEUS__
+#ifndef __PROTHEUS__
 	EXPORTED:
-#ENDIF	
+#endif	
 
 	Method New(nTotal) CONSTRUCTOR
 	
@@ -50,11 +50,13 @@ Class tRemaining FROM tTimeCalc
 EndClass
 
 Method New(nTotal) Class tRemaining
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	_Super:New()
-#ELSE
-	self:super:New()
-#ENDIF	
+#else
+	#ifndef __MG__
+		self:super:New()
+	#endif//__MG__	
+#endif	
 	self:SetRemaining(@nTotal)
 Return(self)
 

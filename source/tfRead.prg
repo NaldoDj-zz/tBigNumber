@@ -1,12 +1,12 @@
-#IFDEF PROTHEUS
-	#DEFINE __PROTHEUS__
+#ifdef PROTHEUS
+	#define __PROTHEUS__
 	#include "protheus.ch"
 	#xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
-#ELSE
-	#IFDEF __HARBOUR__
+#else
+	#ifdef __HARBOUR__
 		#include "hbclass.ch"
-	#ENDIF
-#ENDIF
+	#endif
+#endif
 
 #include "fileio.ch"
 
@@ -82,10 +82,10 @@ METHOD New( cFile, nSize ) CLASS tfRead
 
 RETURN Self
 
-#IFDEF __PROTHEUS__
+#ifdef __PROTHEUS__
 	User Function tfRead(cFile,nSize)
 	Return( tfRead():New(@cFile,@nSize) )
-#ENDIF
+#endif
 
 METHOD ClassName() CLASS tfRead
 Return("TFREAD")
