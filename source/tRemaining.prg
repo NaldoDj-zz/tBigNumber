@@ -53,9 +53,7 @@ Method New(nTotal) Class tRemaining
 #ifdef __PROTHEUS__
 	_Super:New()
 #else
-	#ifndef __MG__
-		self:super:New()
-	#endif//__MG__	
+	self:super:New()
 #endif	
 	self:SetRemaining(@nTotal)
 Return(self)
