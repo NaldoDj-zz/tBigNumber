@@ -426,7 +426,7 @@ Static Procedure tBigNTst()
     
 	#ifndef __PROTHEUS__
 		__ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
-*/*(*)*/OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C */
 		__oRTime1:SetRemaining(5+1)
 		For w := 0 To 5
 			ASSIGN cW    := hb_ntos(w)

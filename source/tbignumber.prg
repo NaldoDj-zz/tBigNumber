@@ -307,49 +307,170 @@ CLASS tBigNumber
 	Method Factorial()	//TODO: Otimizar+
 
 #ifndef __PROTHEUS__
-    
-*/*(*)*/OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C
 
-	OPERATOR "==" ARG uBigN INLINE (self:eq(uBigN))
+	 	/* Operators Overloading: 	
+			"+"     = __OpPlus
+		 	"-"     = __OpMinus
+		 	"*"     = __OpMult
+		 	"/"     = __OpDivide
+		 	"%"     = __OpMod
+		 	"^"     = __OpPower
+		 	"**"    = __OpPower
+		 	"++"    = __OpInc
+		 	"--"    = __OpDec
+		 	"=="    = __OpEqual
+		 	"="     = __OpEqual (same as "==")
+		 	"!="    = __OpNotEqual
+		 	"<>"    = __OpNotEqual (same as "!=")
+		 	"#"     = __OpNotEqual (same as "!=")
+		 	"<"     = __OpLess
+		 	"<="    = __OpLessEqual
+		 	">"     = __OpGreater
+		 	">="    = __OpGreaterEqual
+		 	"$"     = __OpInstring
+		 	"$$"    = __OpInclude
+		 	"!"     = __OpNot
+		 	".NOT." = __OpNot (same as "!")
+		 	".AND." = __OpAnd
+		 	".OR."  = __OpOr
+		 	":="    = __OpAssign
+		 	"[]"    = __OpArrayIndex
+		*/
 
-	OPERATOR "!=" ARG uBigN INLINE (self:ne(uBigN))
-	OPERATOR "#"  ARG uBigN INLINE (self:ne(uBigN))
-	OPERATOR "<>" ARG uBigN INLINE (self:ne(uBigN))
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C */
+
+		OPERATOR "=="  ARG uBigN INLINE __OpEqual(self,uBigN)
+		OPERATOR "="   ARG uBigN INLINE __OpEqual(self,uBigN)		//(same as "==")
 		
-	OPERATOR ">"  ARG uBigN INLINE (self:gt(uBigN))
-	OPERATOR ">=" ARG uBigN INLINE (self:gte(uBigN))
+		OPERATOR "!="  ARG uBigN INLINE __OpNotEqual(self,uBigN)
+		OPERATOR "#"   ARG uBigN INLINE __OpNotEqual(self,uBigN) 	//(same as "!=")
+		OPERATOR "<>"  ARG uBigN INLINE __OpNotEqual(self,uBigN) 	//(same as "!=")
+		
+		OPERATOR ">"   ARG uBigN INLINE __OpGreater(self,uBigN)
+		OPERATOR ">="  ARG uBigN INLINE __OpGreaterEqual(self,uBigN)
 
-	OPERATOR "<"  ARG uBigN INLINE (self:lt(uBigN))
-	OPERATOR "<=" ARG uBigN INLINE (self:lte(uBigN))
-	
-	OPERATOR "+"  ARG uBigN INLINE (self:Add(uBigN))
-	OPERATOR "++" INLINE (self:SetValue(self:Add(__o1)))
-/*(*)*/OPERATOR "+=" ARG uBigN INLINE (self:SetValue(self:Add(uBigN)))
+		OPERATOR "<"   ARG uBigN INLINE __OpLess(self,uBigN)
+		OPERATOR "<="  ARG uBigN INLINE __OpLessEqual(self,uBigN)
 
-	OPERATOR "-"  ARG uBigN INLINE (self:Sub(uBigN))
-	OPERATOR "--" INLINE (self:SetValue(self:Sub(__o1)))
-/*(*)*/OPERATOR "-=" ARG uBigN INLINE (self:SetValue(self:Sub(uBigN)))
+		OPERATOR "++"  INLINE __OpInc(self)
+		OPERATOR "--"  INLINE __OpDec(self)
 	
-	OPERATOR "*"  ARG uBigN INLINE (self:Mult(uBigN))
-/*(*)*/OPERATOR "*=" ARG uBigN INLINE (self:SetValue(self:Mult(uBigN)))
+		OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
+/*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
 
-	OPERATOR "/"  ARGS uBigN,lFloat INLINE (self:Div(uBigN,lFloat))
-/*(*)*/OPERATOR "/=" ARGS uBigN,lFloat INLINE (self:SetValue(self:Div(uBigN,lFloat)))
+	    OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
+/*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
 	
-	OPERATOR "%"  ARG uBigN INLINE (self:Mod(uBigN))
-/*(*)*/OPERATOR "%=" ARG uBigN INLINE (self:SetValue(self:Mod(uBigN)))
-	
-	OPERATOR "^"  ARG uBigN INLINE (self:Pow(uBigN))
-	OPERATOR "**" ARG uBigN INLINE (self:Pow(uBigN))
-/*(*)*/OPERATOR "^=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
-/*(*)*/OPERATOR "**=" ARG uBigN INLINE (self:SetValue(self:Pow(uBigN)))
-	
-	OPERATOR ":=" ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
-	OPERATOR "="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE (self:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
+	    OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
+/*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
 
-#endif
+	    OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
+/*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
+	
+	    OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
+/*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
+	
+	    OPERATOR "^"   ARG uBigN INLINE __OpPower("^",self,uBigN)
+	    OPERATOR "**"  ARG uBigN INLINE __OpPower("**",self,uBigN) 	//(same as "^")
+	   
+/*(*)*/ OPERATOR "^="  ARG uBigN INLINE __OpPower("^=",self,uBigN)
+/*(*)*/ OPERATOR "**=" ARG uBigN INLINE __OpPower("**=",self,uBigN)	//(same as "^=")
+	
+	    OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
+
+#endif //__PROTHEUS__
                     
 ENDCLASS
+
+#ifndef __PROTHEUS__
+
+	/* overloaded methods/functions */
+
+	Static Function __OpEqual(oSelf,uBigN)
+	Return(oSelf:eq(uBigN))
+	
+	Static Function __OpNotEqual(oSelf,uBigN)
+	Return(oSelf:ne(uBigN))
+	
+	Static Function __OpGreater(oSelf,uBigN)
+	Return(oSelf:gt(uBigN))
+	
+	Static Function __OpGreaterEqual(oSelf,uBigN)
+	Return(oSelf:gte(uBigN))
+	
+	Static Function __OpLess(oSelf,uBigN)
+	Return(oSelf:lt(uBigN))
+	
+	Static Function __OpLessEqual(oSelf,uBigN)
+	Return(oSelf:lte(uBigN))
+	
+	Static Function __OpInc(oSelf)
+	Return(oSelf:SetValue(oSelf:Add(__o1)))
+	
+	Static Function __OpDec(oSelf)
+	Return(oSelf:SetValue(oSelf:Sub(__o1)))
+	
+	Static Function __OpPlus(cOp,oSelf,uBigN)
+		Local oOpPlus
+		IF cOp=="+="
+			oOpPlus := oSelf:SetValue(oSelf:Add(uBigN))
+		Else
+			oOpPlus := oSelf:Add(uBigN)
+		EndIF
+	Return(oOpPlus)
+	
+	Static Function __OpMinus(cOp,oSelf,uBigN)
+		Local oOpMinus
+		IF cOp=="-="
+			oOpMinus := oSelf:SetValue(oSelf:Sub(uBigN))
+		Else
+			oOpMinus := oSelf:Sub(uBigN)
+		EndIF
+	Return(oOpMinus)
+	
+	Static Function __OpMult(cOp,oSelf,uBigN)
+		Local oOpMult
+		IF cOp=="*="
+			oOpMult := oSelf:SetValue(oSelf:Mult(uBigN))	
+		Else
+			oOpMult := oSelf:Mult(uBigN)
+		EndIF
+	Return(oOpMult)
+	
+	Static Function __OpDivide(cOp,oSelf,uBigN,lFloat)
+		Local oOpDivide
+		IF cOp=="/="
+			oOpDivide := oSelf:SetValue(oSelf:Div(uBigN,lFloat))			
+		Else
+			oOpDivide := oSelf:Div(uBigN,lFloat)
+		EndIF
+	Return(oOpDivide)
+	
+	Static Function __OpMod(cOp,oSelf,uBigN)
+		Local oOpMod
+		IF cOp=="*="
+			oOpMod := oSelf:SetValue(oSelf:Mod(uBigN))	
+		Else
+			oOpMod := oSelf:Mod(uBigN)
+		EndIF
+	Return(oOpMod)
+	
+	Static Function __OpPower(cOp,oSelf,uBigN)
+		Local oOpPower
+		switch cOp
+        	case "^="
+        	case "**="
+       			oOpPower := oSelf:SetValue(oSelf:Pow(uBigN))
+       			exit
+       		otherwise
+            	oOpPower := oSelf:Pow(uBigN)
+        endswitch
+	Return(oOpPower)
+	
+	Static Function __OpAssign(oSelf,uBigN,nBase,cRDiv,lLZRmv,nAcc)
+	Return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
+
+#endif //__PROTHEUS__
 
 /*
 	Função		: tBigNumber():New
@@ -571,10 +692,10 @@ Method __nSize(nSize) CLASS tBigNumber
 	IF .NOT.(nSize==NIL)
 		IF nSize>self:nInt+self:nDec
 			IF self:nInt>self:nDec
-				self:nInt  := nSize-Self:nDec
+				self:nInt  := nSize-self:nDec
 				self:cInt  := PadL(self:cInt,self:nInt,"0")
 			Else
-		 		self:nDec  := nSize-Self:nInt
+		 		self:nDec  := nSize-self:nInt
 		 		self:cDec  := PadR(self:cDec,self:nDec,"0")
 			EndIF	
 			self:nSize     := nSize
@@ -1754,7 +1875,7 @@ Return(oMod)
 */
 Method Pow(uBigN) CLASS tBigNumber
 
-	Local oself	:= self:Clone()
+	Local oSelf	:= self:Clone()
 	
 	Local cM10
 	
@@ -1770,12 +1891,12 @@ Method Pow(uBigN) CLASS tBigNumber
 
 	BEGIN SEQUENCE
 
-		IF oself:eq(__o0) .and. __pwoNP:eq(__o0)
+		IF oSelf:eq(__o0) .and. __pwoNP:eq(__o0)
 			__pwoNR:SetValue(__o1)
 			BREAK
 		EndIF
 
-		IF oself:eq(__o0)
+		IF oSelf:eq(__o0)
 			__pwoNR:SetValue(__o0)
 			BREAK
 		EndIF
@@ -1785,7 +1906,7 @@ Method Pow(uBigN) CLASS tBigNumber
 			BREAK
 		EndIF
 
-		__pwoNR:SetValue(oself)
+		__pwoNR:SetValue(oSelf)
 
 		IF __pwoNR:eq(__o1)
 			__pwoNR:SetValue(__o1)
@@ -1829,7 +1950,7 @@ Method Pow(uBigN) CLASS tBigNumber
 		__pwoNT:SetValue(__o0)
 		__pwoNP:SetValue(__pwoNP:Sub(__o1))
 		While __pwoNT:lt(__pwoNP)
-			__pwoNR:SetValue(__pwoNR:Mult(oself))
+			__pwoNR:SetValue(__pwoNR:Mult(oSelf))
 			__pwoNT:SetValue(__pwoNT:Add(__o1))
 		End While
 
