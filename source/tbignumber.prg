@@ -355,26 +355,26 @@ CLASS tBigNumber
 		OPERATOR "++"  INLINE __OpInc(self)
 		OPERATOR "--"  INLINE __OpDec(self)
 	
-		OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
 /*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
+		OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
 
-	    OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
 /*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
+	    OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
 	
-	    OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
 /*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
+	    OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
 
-	    OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
 /*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
+	    OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
 	
-	    OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
 /*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
-	
-	    OPERATOR "^"   ARG uBigN INLINE __OpPower("^",self,uBigN)
-	    OPERATOR "**"  ARG uBigN INLINE __OpPower("**",self,uBigN) 	//(same as "^")
-	   
+	    OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
+
 /*(*)*/ OPERATOR "^="  ARG uBigN INLINE __OpPower("^=",self,uBigN)
 /*(*)*/ OPERATOR "**=" ARG uBigN INLINE __OpPower("**=",self,uBigN)	//(same as "^=")
+
+	    OPERATOR "^"   ARG uBigN INLINE __OpPower("^",self,uBigN)
+	    OPERATOR "**"  ARG uBigN INLINE __OpPower("**",self,uBigN) 	//(same as "^")
 	
 	    OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
 
@@ -448,7 +448,7 @@ ENDCLASS
 	
 	Static Function __OpMod(cOp,oSelf,uBigN)
 		Local oOpMod
-		IF cOp=="*="
+		IF cOp=="%="
 			oOpMod := oSelf:SetValue(oSelf:Mod(uBigN))	
 		Else
 			oOpMod := oSelf:Mod(uBigN)
