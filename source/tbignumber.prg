@@ -247,8 +247,8 @@ CLASS tBigNumber
 	Method gte(uBigN)
 	Method lte(uBigN)
 	
-	Method Max(uBigN,lObj)
-	Method Min(uBigN,lObj)
+	Method Max(uBigN)
+	Method Min(uBigN)
 	
 	Method Add(uBigN)
 	Method Sub(uBigN)
@@ -287,6 +287,8 @@ CLASS tBigNumber
 	Method Rnd(nAcc)
 	Method NoRnd(nAcc)
 	Method Truncate(nAcc)
+	Method Floor(nAcc)
+	Method Ceiling(nAcc)
 
 	Method D2H(cHexB)
 	Method H2D()
@@ -1205,52 +1207,28 @@ Return(self:lt(uBigN).or.self:eq(uBigN))
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Retorna o maior valor entre o valor corrente e o valor passado como parametro
-	Sintaxe     : tBigNumber():Max(uBigN) -> uNR
+	Sintaxe     : tBigNumber():Max(uBigN) -> oMax
 */
-Method Max(uBigN,lObj) CLASS tBigNumber
-	
-	Local lgte := self:gte(uBigN)
-
-	Local uNR
-	
-	IF lgte
-		uNR	:= self:Clone()
-	Else
-		DEFAULT lObj := .T.
-		IF lObj .and. .NOT.(ValType(uBigN)=="O")
-			uNR	:= tBigNumber():New(uBigN)
-		Else
-			uNR	:= uBigN:Clone()
-		EndIF	
+Method Max(uBigN) CLASS tBigNumber
+	Local oMax := tBigNumber():New(uBigN)
+	IF self:gt(oMax)
+		oMax:SetValue(self)
 	EndIF
-
-Return(uNR)
+Return(oMax)
 
 /*
 	Method		: Min
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Retorna o menor valor entre o valor corrente e o valor passado como parametro
-	Sintaxe     : tBigNumber():Min(uBigN) -> uNR
+	Sintaxe     : tBigNumber():Min(uBigN) -> oMin
 */
-Method Min(uBigN,lObj) CLASS tBigNumber
-	
-	Local llte := self:lte(uBigN)
-
-	Local uNR
-	
-	IF llte
-		uNR	:= self:Clone()
-	Else
-		DEFAULT lObj := .T.
-		IF lObj .and. .NOT.(ValType(uBigN)=="O")
-			uNR	:= tBigNumber():New(uBigN)
-		Else
-			uNR	:= uBigN:Clone()
-		EndIF
+Method Min(uBigN) CLASS tBigNumber
+	Local oMin := tBigNumber():New(uBigN)
+	IF self:lt(oMin)
+		oMin:SetValue(self)
 	EndIF
-
-Return(uNR)
+Return(oMin)
 
 /*
 	Method		: Add
@@ -2617,7 +2595,7 @@ Return(MathO(uBigN1,cOperator,uBigN2,.T.))
 	Method		: Rnd
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 06/02/2013
-	Descricao   : Redefine a Precisao de Numero em PF
+	Descricao   : Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
 	Sintaxe     : tBigNumber():Rnd(nAcc) -> oRND
 */
 Method Rnd(nAcc) CLASS tBigNumber
@@ -2638,16 +2616,6 @@ Method Rnd(nAcc) CLASS tBigNumber
 				__nstcZ0+=__nstcZ0
 			End While
 			cAdd += SubStr(__cstcZ0,1,nAcc)+"5"
-		/*Else
-			cAcc := SubStr(oRnd:cDec,nAcc,1)
-			IF cAcc>="5"
-				cAdd := "0."
-				While nAcc>__nstcZ0
-					__cstcZ0+=SubStr(__cstcZ0,1,__nstcZ0)
-					__nstcZ0+=__nstcZ0
-				End While
-				cAdd += SubStr(__cstcZ0,1,nAcc-1)+"5"
-			EndIF*/	
 		EndIF
 		IF .NOT.(cAdd==NIL)
 			oRnd:SetValue(oRnd:Add(cAdd))
@@ -2661,17 +2629,47 @@ Return(oRnd)
 	Method		: NoRnd
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 06/02/2013
-	Descricao   : Redefine a Precisao de Numero em PF
+	Descricao   : NoRnd trunca um numero decimal
 	Sintaxe     : tBigNumber():NoRnd(nAcc) -> oBigNR
 */
 Method NoRnd(nAcc) CLASS tBigNumber
 Return(self:Truncate(nAcc))
 
 /*
+	Method		: Floor
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 05/03/2014
+	Descricao   : Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
+	Sintaxe     : tBigNumber():Floor(nAcc) -> oFloor
+*/
+Method Floor(nAcc) CLASS tBigNumber
+	Local oInt 		:= self:Int(.T.,.T.)
+	Local oFloor	:= self:Clone()
+	DEFAULT nAcc    := Max((Min(oFloor:nDec,__nSetDecimals)-1),0)
+	oFloor:SetValue(oFloor:Rnd(nAcc):Int(.T.,.T.))
+	oFloor:SetValue(oFloor:Min(oInt))
+Return(oFloor)
+
+/*
+	Method		: Ceiling
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 05/03/2014
+	Descricao   : Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
+	Sintaxe     : tBigNumber():Ceiling(nAcc) -> oCeiling
+*/
+Method Ceiling(nAcc) CLASS tBigNumber
+	Local oInt 		:= self:Int(.T.,.T.)
+	Local oCeiling	:= self:Clone()
+	DEFAULT nAcc    := Max((Min(oCeiling:nDec,__nSetDecimals)-1),0)
+	oCeiling:SetValue(oCeiling:Rnd(nAcc):Int(.T.,.T.))
+	oCeiling:SetValue(oCeiling:Max(oInt))
+Return(oCeiling)
+
+/*
 	Method		: Truncate
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 06/02/2013
-	Descricao   : Redefine a Precisao de Numero em PF
+	Descricao   : Truncate trunca um numero decimal
 	Sintaxe     : tBigNumber():Truncate(nAcc) -> oTrc
 */
 Method Truncate(nAcc) CLASS tBigNumber
