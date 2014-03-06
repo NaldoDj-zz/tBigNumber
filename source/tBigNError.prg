@@ -784,13 +784,3 @@ FUNCTION tBNErrorNew(cSubSystem,nGenCode,nSubCode,cOperation,cDescription,aArgs,
    ENDIF
 
 RETURN oError
-
-/*
-	TODO: Remover quando atualizar a plataforma
-*/
-//#if defined(__ARCH64BIT__).or.defined(__PLATFORM__WINCE)
-#if defined(__USE_CUSTOM_HBCORE_SRC__)
-	#pragma BEGINDUMP
-		#include "../../../../../../source/hb_core/core/src/rtl/hbdef.c"
-	#pragma ENDDUMP
-#endif

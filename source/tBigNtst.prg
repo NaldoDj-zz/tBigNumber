@@ -298,7 +298,12 @@ Static Procedure tBigNTst()
 	
 	Private __cSep 		    AS CHARACTER VALUE Replicate("-",__nMaxCol)
 	
+#ifdef __ALT_D__
+	Private __lKillProgress AS LOGICAL VALUE .T.
+#else
 	Private __lKillProgress AS LOGICAL VALUE .F.
+#endif
+
 	Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
 	
 	Private __phMutex := hb_mutexCreate()
@@ -426,7 +431,7 @@ Static Procedure tBigNTst()
     
 	#ifndef __PROTHEUS__
 		__ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C */
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H, CLASSES.C AND HVM.C */
 		__oRTime1:SetRemaining(5+1)
 		For w := 0 To 5
 			ASSIGN cW    := hb_ntos(w)
@@ -440,7 +445,7 @@ Static Procedure tBigNTst()
 /*(*)*/			__ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
 /*(*)*/			__ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
 /*(*)*/			__ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigX:=(otBigW+=cN),otBigX:ExactValue()))             
-/*(*)*/			__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
+				__ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
 				__ConOut(fhLog,"++otBigW"    ,"RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
 /*(*)*/			__ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigX:=(otBigW-=cN),otBigX:ExactValue()))
 /*(*)*/			__ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))

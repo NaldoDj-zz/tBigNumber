@@ -287,8 +287,8 @@ CLASS tBigNumber
 	Method Rnd(nAcc)
 	Method NoRnd(nAcc)
 	Method Truncate(nAcc)
-	Method Floor(nAcc)
-	Method Ceiling(nAcc)
+	Method Floor(nAcc)   //TODO: Verificar regra a partir de referencias bibliograficas.
+	Method Ceiling(nAcc) //TODO: Verificar regra a partir de referencias bibliograficas.
 
 	Method D2H(cHexB)
 	Method H2D()
@@ -339,7 +339,7 @@ CLASS tBigNumber
 		 	"[]"    = __OpArrayIndex
 		*/
 
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS_H_ And CLASSES.C */
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H, CLASSES.C AND HVM.C */
 
 		OPERATOR "=="  ARG uBigN INLINE __OpEqual(self,uBigN)
 		OPERATOR "="   ARG uBigN INLINE __OpEqual(self,uBigN)		//(same as "==")
@@ -357,26 +357,26 @@ CLASS tBigNumber
 		OPERATOR "++"  INLINE __OpInc(self)
 		OPERATOR "--"  INLINE __OpDec(self)
 	
-/*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
 		OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
+/*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
 
-/*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
 	    OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
+/*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
 	
-/*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
 	    OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
+/*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
 
-/*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
 	    OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
+/*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
 	
-/*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
 	    OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
-
-/*(*)*/ OPERATOR "^="  ARG uBigN INLINE __OpPower("^=",self,uBigN)
-/*(*)*/ OPERATOR "**=" ARG uBigN INLINE __OpPower("**=",self,uBigN)	//(same as "^=")
+/*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
 
 	    OPERATOR "^"   ARG uBigN INLINE __OpPower("^",self,uBigN)
 	    OPERATOR "**"  ARG uBigN INLINE __OpPower("**",self,uBigN) 	//(same as "^")
+
+/*(*)*/ OPERATOR "^="  ARG uBigN INLINE __OpPower("^=",self,uBigN)
+/*(*)*/ OPERATOR "**=" ARG uBigN INLINE __OpPower("**=",self,uBigN)	//(same as "^=")
 	
 	    OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
 
