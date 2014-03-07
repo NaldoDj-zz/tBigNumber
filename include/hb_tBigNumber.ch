@@ -9,10 +9,10 @@
 *       #include "hbCompat.ch"
         #ifdef TBN_DBFILE
             #ifndef TBN_MEMIO
-                REQUEST DBFCDX , DBFFPT
-            #ELSE
+                request DBFCDX , DBFFPT
+            #else
                 #require "hbmemio"
-                REQUEST HB_MEMIO
+                request HB_MEMIO
             #endif
         #endif
 
@@ -23,7 +23,6 @@
         #xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
 
         #xcommand DEFAULT =>
-
         /* Default parameters management */
         #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
                         => ;

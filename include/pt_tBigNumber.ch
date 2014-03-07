@@ -10,9 +10,9 @@
 
         #include "protheus.ch"
 
-        #xtranslate THREAD Static => Static
-        #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
-        #xtranslate USER PROCEDURE => USER FUNCTION
+        #xtranslate THREAD Static      => Static
+        #xtranslate hb_ntos([<n,...>]) => LTrim(Str([<n>]))
+        #xtranslate USER PROCEDURE     => USER FUNCTION
 
         #xcommand DEFAULT =>
         /* Default parameters management */

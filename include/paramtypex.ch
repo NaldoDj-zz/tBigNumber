@@ -288,7 +288,7 @@
 				#endif
 				e:subcode		:= 0
 				e:args			:= hb_aParams(1)
-				Return(Throw(e))
+			Return(Throw(e))
 		#endif	
 		
 #endif

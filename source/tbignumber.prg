@@ -498,6 +498,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	DEFAULT nBase := 10	
 	self:nBase    := nBase
 
+	// -------------------- assign THREAD STATIC values -------------------------
 	IF __lsthdSet==NIL
 		self:SetDecimals()
 		self:nthRootAcc()
@@ -507,6 +508,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
 	DEFAULT uBigN := "0"
 	self:SetValue(uBigN,nBase)
 
+ 	// -------------------- assign STATIC values --------------------------------
 	IF __lstbNSet==NIL
 		__InitstbN(nBase)
 	EndIF
@@ -4681,6 +4683,7 @@ Static Function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
 Return(IF(lRetObject,oBigNR,oBigNR:ExactValue()))
 
+// -------------------- assign THREAD STATIC values -------------------------
 Static Procedure __Initsthd(nBase)
 
 	Local oTBigN
@@ -4761,6 +4764,7 @@ Static Procedure __Initsthd(nBase)
 
 Return
 
+// -------------------- assign STATIC values --------------------------------
 Static Procedure __InitstbN(nBase)
 	__lstbNSet := .F.
 	__o0        := tBigNumber():New("0",nBase)
