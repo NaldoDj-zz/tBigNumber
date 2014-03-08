@@ -9,10 +9,11 @@
 *.err*
 *.ppx_*
 *.exe
-*.upx
-*.000
+*.0*
 *.ini
 *.a
+*.o
+*.cnt
 
 /lib
 /lib/wce/mingwarm/.hbmk
@@ -26,3 +27,8 @@
 /tbigN_log
 /tbigN_tmp
 /exe/win
+/exe/mg
+/prj/mg/win/32/__mih_obj_m2wh
+/prj/mg/win/32/*.TXT
+/prj/mg/win/64/__mih_obj_m2wh
+/prj/mg/win/64/*.TXT

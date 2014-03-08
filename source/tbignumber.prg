@@ -59,6 +59,9 @@
 	#xtranslate hb_bLen([<prm,...>]) => Len([<prm>])
 	#xtranslate aLen([<prm,...>])    => Len([<prm>])
 #else // __HARBOUR__
+	#pragma -w3
+	#require "hbvmmt"
+	request HB_MT
 	#xtranslate PadL([<prm,...>])    => __TBIGNPadL([<prm>])
 	#xtranslate PadR([<prm,...>])    => __TBIGNPadR([<prm>])
 	#xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
@@ -297,7 +300,7 @@ CLASS tBigNumber
 	Method B2H(cHexB)
 
 	Method D2B(cHexB)
-	Method B2D()
+	Method B2D(cHexB)
 
 	Method Randomize(uB,uE,nExit)
 
@@ -1346,18 +1349,21 @@ Return(__adoNR)
 		Local cThread := hb_ntos(ThreadID())
 	#endif	
 
-		Local lAdd1 := .F.
-		Local lExit := .F.
+		Local lAdd1
 
 	#ifdef __PROTHEUS__
 		Local nNR
+		Local lExit
 	#endif
+
 		Local nID
+
 	#ifdef __PROTHEUS__
 		Local nIDs
 		Local n
 		Local t
 	#endif		
+
 		Local w
 		Local x
 		Local y := Mod(nSize,MAX_LENGHT_ADD_THREAD)
@@ -1397,7 +1403,6 @@ Return(__adoNR)
 				z			+= MAX_LENGHT_ADD_THREAD
 			Next x
             
-			x := 0
 			z := 0
 
 			aThreads := Array(0)
@@ -3057,7 +3062,7 @@ Return(oHexN)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 23/03/2013
 	Descricao   : Converte Dec para Bin
-	Sintaxe     : tBigNumber():D2B(cHexB) -> cBin
+	Sintaxe     : tBigNumber():D2B(cHexB) -> oBin
 */
 Method D2B(cHexB) CLASS tBigNumber
 	Local oHex	:= self:D2H(cHexB)
@@ -3069,7 +3074,7 @@ Return(oBin)
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 23/03/2013
 	Descricao   : Converte Bin para Dec
-	Sintaxe     : tBigNumber():B2D(cBin,cHexB) -> oBigNR
+	Sintaxe     : tBigNumber():B2D(cHexB) -> oDec
 */
 Method B2D(cHexB) CLASS tBigNumber
 	Local oHex	:= self:B2H(cHexB) 
@@ -3112,8 +3117,8 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 	DEFAULT uB	:= "1"
 	DEFAULT uE	:= oM:ExactValue()
 
-	oB	:= tBigNumber():New(uB)
-	oE	:= tBigNumber():New(uE)
+	oB:SetValue(uB)
+	oE:SetValue(uE)
 
 	oB:SetValue(oB:Int(.T.):Abs(.T.))
 	oE:SetValue(oE:Int(.T.):Abs(.T.))

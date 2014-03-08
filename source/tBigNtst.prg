@@ -19,6 +19,9 @@
 #endif    
 
 #ifdef __HARBOUR__
+#pragma -w2
+#require "hbvmmt"
+request HB_MT
 #include "inkey.ch"
 #include "setcurs.ch"
 #include "hbgtinfo.ch"
@@ -123,8 +126,8 @@ Function Main()
     hb_cdpSelect( "EN" )
     hb_setTermCP( "EN" )
     /* set font size */
-    hb_gtInfo( HB_GTI_FONTWIDTH, 6 )
-    hb_gtInfo( HB_GTI_FONTSIZE, 12 )
+    hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
+    hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
     /* resize console window using new font size */
     SetMode(MaxRow()+1,MaxCol()+1)
     /* get screen dimensions */
