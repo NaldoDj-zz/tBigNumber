@@ -17,25 +17,25 @@ Group svn_tBigNumber
       Folder Fontes
          VSSPath=Fontes
          FilesCount=7
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\__pteTthD.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\__pteTthD.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\__ptPITthD.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\__ptPITthD.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\tBigNtst.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\tBigNtst.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\tbignumber.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\tbignumber.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\tfRead.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\tfRead.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\tPrime.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\tPrime.prg
              Type=T
          End
-         File \svn\totvs-advpl-naldodj\tBigNumber\source\tSProgress.prg
+         File \svn\totvs-advpl-naldodj\tBigNumber\src\tSProgress.prg
              Type=T
          End
       End

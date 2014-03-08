@@ -11,7 +11,7 @@
 /D__MULTMT__
 /D__TBN_DYN_OBJ_SET__
 
-../source/tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
-../source/tBigNumber.prg -w3
+../src/tBigNtst.prg -w2 /DPTEX_ASSIGN_VAR
+../src/tBigNumber.prg -w3
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

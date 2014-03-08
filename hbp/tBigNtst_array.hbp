@@ -6,7 +6,7 @@
 
 /DTBN_ARRAY
 
-../source/../source/tBigNtst.prg -w2
-../source/../source/tBigNumber.prg -w3
+../src/../src/tBigNtst.prg -w2
+../src/../src/tBigNumber.prg -w3
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

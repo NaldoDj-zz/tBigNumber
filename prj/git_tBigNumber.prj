@@ -33,31 +33,31 @@ Group git_tBigNumber
       Folder Fontes
          VSSPath=Nova Pasta2
          FilesCount=9
-         File \GitHub\tBigNumber\source\__pteTthD.prg
+         File \GitHub\tBigNumber\src\__pteTthD.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\__ptPITthD.prg
+         File \GitHub\tBigNumber\src\__ptPITthD.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tBigNtst.prg
+         File \GitHub\tBigNumber\src\tBigNtst.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tbignumber.prg
+         File \GitHub\tBigNumber\src\tbignumber.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tfRead.prg
+         File \GitHub\tBigNumber\src\tfRead.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tPrime.prg
+         File \GitHub\tBigNumber\src\tPrime.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tSProgress.prg
+         File \GitHub\tBigNumber\src\tSProgress.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tRemaining.prg
+         File \GitHub\tBigNumber\src\tRemaining.prg
              Type=T
          End
-         File \GitHub\tBigNumber\source\tTimeCalc.prg
+         File \GitHub\tBigNumber\src\tTimeCalc.prg
              Type=T
          End
       End

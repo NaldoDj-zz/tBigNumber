@@ -3,14 +3,14 @@
 
 -w3 -es2
 
-../source/tfread.prg
-../source/tprime.prg
-../source/tSProgress.prg
-../source/tTimeCalc.prg
-../source/tRemaining.prg
-../source/__hbeTthD.prg
-../source/__hbPITthD.prg
-../source/tBigNError.prg
-../source/tBigNErrorSys.prg
+../src/tfread.prg
+../src/tprime.prg
+../src/tSProgress.prg
+../src/tTimeCalc.prg
+../src/tRemaining.prg
+../src/__hbeTthD.prg
+../src/__hbPITthD.prg
+../src/tBigNError.prg
+../src/tBigNErrorSys.prg
 
 -o../lib/${hb_plat}/${hb_comp}/${hb_name}

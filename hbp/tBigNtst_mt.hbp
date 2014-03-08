@@ -9,7 +9,7 @@
 /D__SUBTMT__
 /D__MULTMT__
 
-../source/tBigNtst.prg -w2
-../source/tBigNumber.prg -w3
+../src/tBigNtst.prg -w2
+../src/tBigNumber.prg -w3
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}
