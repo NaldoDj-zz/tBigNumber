@@ -12,7 +12,9 @@
 *.upx
 *.000
 *.ini
+*.a
 
+/lib
 /lib/wce/mingwarm/.hbmk
 /lib/win/mingw/.hbmk
 /lib/win/mingw64/.hbmk
@@ -24,5 +26,3 @@
 /tbigN_log
 /tbigN_tmp
 /exe/win
-
-/lib
