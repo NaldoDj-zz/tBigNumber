@@ -3613,48 +3613,54 @@ Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
 	Descricao   : Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-	Sintaxe     : eMult(cN1,cN2,nBase,nAcc) -> oNR
+	Sintaxe     : eMult(cN1,cN2,nBase,nAcc) -> oMTP
 	Obs.		: Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
 Static Function eMult(cN1,cN2,nBase,nAcc)
 
-	Local aeMT 		:= Array(0)
+#ifdef __PTCOMPAT__
+
+	Local aeMT := Array(0)
                 	
-	Local nI		:= 0
+	Local nI   := 0
 	
-	Local oPe
-	Local oPd
-	Local ocT
-	
-	Local oN1		:= tBigNumber():New(cN1)
+	Local oN1  := tBigNumber():New(cN1)
+	Local oMTM := __o1:Clone()
+	Local oMTP := tBigNumber():New(cN2)
 
-	Local oNR
-
-	oPe	:= __o1:Clone()
-	oPd := tBigNumber():New(cN2)
-	
-	While oPe:lte(oN1)
+	While oMTM:lte(oN1)
 		++nI
-		aAdd(aeMT,{oPe:Int(.F.,.F.),oPd:Int(.F.,.F.)})
-		oPe:SetValue(oPe:Add(oPe),nBase,"0",NIL,nAcc)
-		oPd:SetValue(oPd:Add(oPd),nBase,"0",NIL,nAcc)
+		aAdd(aeMT,{oMTM:Int(.F.,.F.),oMTP:Int(.F.,.F.)})
+		oMTM:SetValue(oMTM:Add(oMTM),nBase,"0",NIL,nAcc)
+		oMTP:SetValue(oMTP:Add(oMTP),nBase,"0",NIL,nAcc)
 	End While
 
-	ocT	:= __o0:Clone()
-	oNR	:= __o0:Clone()
+	oMTM:SetValue(__o0)
+	oMTP:SetValue(__o0)
+	
 	While nI>0
-		ocT:SetValue(ocT:Add(aeMT[nI][1]),nBase,"0",NIL,nAcc)
-		oNR:SetValue(oNR:Add(aeMT[nI][2]),nBase,"0",NIL,nAcc)
-		IF ocT:eq(oN1)
+		oMTM:SetValue(oMTM:Add(aeMT[nI][1]),nBase,"0",NIL,nAcc)
+		oMTP:SetValue(oMTP:Add(aeMT[nI][2]),nBase,"0",NIL,nAcc)
+		IF oMTM:eq(oN1)
 			EXIT
-		ElseIF ocT:gt(oN1)
-			ocT:SetValue(ocT:Sub(aeMT[nI][1]),nBase,"0",NIL,nAcc)
-			oNR:SetValue(oNR:Sub(aeMT[nI][2]),nBase,"0",NIL,nAcc)
+		ElseIF oMTM:gt(oN1)
+			oMTM:SetValue(oMTM:Sub(aeMT[nI][1]),nBase,"0",NIL,nAcc)
+			oMTP:SetValue(oMTP:Sub(aeMT[nI][2]),nBase,"0",NIL,nAcc)
 		EndIF
 		--nI
 	End While
+	
+#else
 
-Return(oNR)
+	Local oMTP	:= __o0:Clone()
+	Local n     := (Len(cN1)*2)
+	cN1 := PadL(cN1,n,"0")
+	cN2 := PadL(cN2,n,"0")
+	oMTP:SetValue(TBIGNeMult(cN1,cN2,n,nBase),nBase,"0",NIL,nAcc)
+	
+#endif //__PTCOMPAT__
+	
+Return(oMTP)
 	
 /*
 	Funcao		: eDiv
@@ -5045,6 +5051,113 @@ Return
 			char * szRet        = __TBIGNMULT(a,b,n,y,nB);
 			hb_retclen(szRet,y);
 		    hb_xfree(szRet);
+		}
+		
+		typedef struct
+		{
+			char * cMultM;
+			char * cMultP;
+		} stBIGNeMult, * ptBIGNeMult;
+
+        static void __TBIGNeMult(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeMult peMult){
+	
+			PHB_ITEM peMTArr      = hb_itemArrayNew(0);
+		
+			ptBIGNeMult peMultTmp = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+			
+			char * szPADL         = __TBIGNPADL("1",n,"0");
+			peMultTmp->cMultM     = hb_strdup(szPADL);
+			hb_xfree(szPADL);
+			
+			peMultTmp->cMultP     = hb_strdup(cD);
+	
+			szPADL		          = __TBIGNPADL("0",n,"0");
+			peMult->cMultM	      = hb_strdup(szPADL);
+			peMult->cMultP        = hb_strdup(szPADL);
+			hb_xfree(szPADL);
+			
+			HB_MAXUINT nI         = 0;
+
+			while (strcmp(peMultTmp->cMultM,cN)<=0){
+
+     			PHB_ITEM pNI = hb_itemArrayNew(2);
+		        
+			        hb_arraySetC(pNI,1,peMultTmp->cMultM);
+			        hb_arraySetC(pNI,2,peMultTmp->cMultP);
+		 			hb_arrayAddForward(peMTArr,pNI);  
+
+					char * tmp = __TBIGNADD(peMultTmp->cMultM,peMultTmp->cMultM,n,n,nB);
+	    			memcpy(peMultTmp->cMultM,tmp,n);
+	    			hb_xfree(tmp);
+					
+					tmp        = __TBIGNADD(peMultTmp->cMultP,peMultTmp->cMultP,n,n,nB);				
+					memcpy(peMultTmp->cMultP,tmp,n);
+					hb_xfree(tmp);
+
+	 			hb_itemRelease(pNI);
+
+				++nI;
+
+			}
+			
+			hb_xfree(peMultTmp->cMultM);
+			hb_xfree(peMultTmp->cMultP);
+
+			while (nI){
+
+				PHB_ITEM pNI = hb_arrayGetItemPtr(peMTArr,nI);
+				
+				peMultTmp->cMultM = __TBIGNADD(peMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
+				memcpy(peMult->cMultM,peMultTmp->cMultM,n);
+				hb_xfree(peMultTmp->cMultM);
+    
+    			peMultTmp->cMultP = __TBIGNADD(peMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
+				memcpy(peMult->cMultP,peMultTmp->cMultP,n);
+				hb_xfree(peMultTmp->cMultP);
+	            
+				int iCmp = strcmp(peMult->cMultM,cN);
+
+				if (iCmp==0){
+					break;
+				} else{
+						if (iCmp==1){
+	
+							peMultTmp->cMultM = __TBIGNSUB(peMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
+							memcpy(peMult->cMultM,peMultTmp->cMultM,n);
+							hb_xfree(peMultTmp->cMultM);
+	
+							peMultTmp->cMultP = __TBIGNSUB(peMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
+							memcpy(peMult->cMultP,peMultTmp->cMultP,n);
+							hb_xfree(peMultTmp->cMultP);
+	
+					}
+				}  
+				
+				--nI;
+				
+			}
+
+			hb_xfree(peMultTmp);
+			hb_itemRelease(peMTArr);
+				
+		}
+		
+		HB_FUNC_STATIC( TBIGNEMULT ){
+			
+			const char * cN     = hb_parc(1);
+			const char * cD     = hb_parc(2);
+			HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+			const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
+			
+			ptBIGNeMult peMult  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+			
+			__TBIGNeMult(cN,cD,(int)n,nB,peMult);
+		
+			hb_retclen(peMult->cMultP,n);
+
+			hb_xfree(peMult->cMultM);
+			hb_xfree(peMult->cMultP);
+			hb_xfree(peMult);
 		}
 
 		typedef struct
