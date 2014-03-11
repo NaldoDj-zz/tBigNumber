@@ -12,7 +12,7 @@
 #define L_ROPROGRESS       "0"
 
 #define __SETDEC__		  8
-#define __NRTTST__		 32 
+#define __NRTTST__		 35
 
 #ifdef __PROTHEUS__
     #xcommand ? <e> => ConOut(<e>)
@@ -940,12 +940,94 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __ConOut(fhLog," ------------ MULT Teste 1 -------------- END ")
-    
-    __ConOut(fhLog,"")
 
     __ConOut(fhLog,"")
 
     __ConOut(fhLog," BEGIN ------------ MULT Teste 2 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    ASSIGN n := 1
+    otBigN:SetValue(o1)
+    otBigW:SetValue(o1)
+    
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    For x := 1 TO nN_TEST Step nISQRT    	
+		__oRTime2:SetRemaining(1)
+        ASSIGN cN   := hb_ntos(n)
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "0") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "*") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN n    *= 1.5
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
+        ASSIGN cN   := otBigN:ExactValue()
+#ifndef __PROTHEUS__
+        otBigN *= "1.5"
+#else
+        otBigN:SetValue(otBigN:Mult("1.5"))
+#endif        
+        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+otBigN:ExactValue())
+		__oRTime2:Calcule()
+    	__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    Next x
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
+
+    __ConOut(fhLog,"")
+    
+    __ConOut(fhLog," ------------ MULT Teste 2 -------------- END ")
+    
+     __ConOut(fhLog,"")
+
+    __ConOut(fhLog," BEGIN ------------ MULT Teste 3 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    ASSIGN n := 1
+    otBigN:SetValue(o1)
+    otBigW:SetValue(o1)
+    
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    For x := 1 TO nN_TEST Step nISQRT    	
+		__oRTime2:SetRemaining(1)
+        ASSIGN cN   := hb_ntos(n)
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "0") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "*") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN n    *= 1.5
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
+        ASSIGN cN   := otBigW:ExactValue()
+        otBigW:SetValue(otBigW:Mult("1.5",.T.))
+        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5,.T.)',"RESULT: "+otBigW:ExactValue())
+		__oRTime2:Calcule()
+    	__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    Next x
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
+
+    __ConOut(fhLog,"")
+    
+    __ConOut(fhLog," ------------ MULT Teste 3 -------------- END ")
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," BEGIN ------------ MULT Teste 4 -------------- ")
     
     __ConOut(fhLog,"")
 
@@ -990,7 +1072,52 @@ Static Procedure tBigNTst()
 
     __ConOut(fhLog,"")
     
-    __ConOut(fhLog," ------------ MULT Teste 2 -------------- END ")
+    __ConOut(fhLog," ------------ MULT Teste 4 -------------- END ")
+    
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," BEGIN ------------ MULT Teste 5 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+    ASSIGN w := 1
+    otBigW:SetValue(o1)
+
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	For x := 1 TO nN_TEST Step nISQRT
+		__oRTime2:SetRemaining(1)
+        ASSIGN cN   := hb_ntos(w)
+        ASSIGN w    *= 3.555
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "0") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN z := Len(cN)
+        While ((SubStr(cN,-1) == "*") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
+        ASSIGN cN := otBigW:ExactValue()
+        otBigW:SetValue(otBigW:Mult("3.555",.T.))
+        __ConOut(fhLog,cN+':tBigNumber():Mult(3.555,.T.)',"RESULT: "+otBigW:ExactValue())
+		ASSIGN cW    := otBigW:Rnd(nACC_SET):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555,.T.)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:NoRnd(__SETDEC__):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555,.T.)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:Rnd(__SETDEC__):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():Mult(3.555,.T.)',"RESULT: "+cW)
+		__oRTime2:Calcule()
+    	__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    Next x
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)    
+
+    __ConOut(fhLog,"")
+    
+    __ConOut(fhLog," ------------ MULT Teste 5 -------------- END ")
     
     __ConOut(fhLog,"")
 

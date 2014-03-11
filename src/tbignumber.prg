@@ -2260,6 +2260,8 @@ Method nthRoot(uBigN) CLASS tBigNumber
 	Local aDPF
 
 	Local cFExit
+	
+	Local lDec
 
 	Local nPF
 
@@ -2305,6 +2307,8 @@ Method nthRoot(uBigN) CLASS tBigNumber
 			othRoot:SetValue(oRootB)
 			BREAK
 		EndIF
+		
+		oRootT := __o0:Clone()
 
 		nZS := __nthRootAcc-1
 		While nZS>__nstcZ0
@@ -2317,7 +2321,9 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		oFExit := __o0:Clone()
 		oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
 
-		IF oRootB:Dec(.T.):gt(__o0)
+		lDec := oRootB:Dec(.T.):gt(__o0)
+		
+		IF lDec
 			
 			nZS := hb_bLen(oRootB:Dec(NIL,NIL,.T.))
 			While nZS>__nstcZ0
@@ -2325,9 +2331,9 @@ Method nthRoot(uBigN) CLASS tBigNumber
 				__nstcZ0+=__nstcZ0
 			End While
 			oRootD	:= tBigNumber():New("1"+SubStr(__cstcZ0,1,nZS))
-			oRootB:SetValue(oRootB:cInt+oRootB:cDec)
+			oRootT:SetValue(oRootB:cInt+oRootB:cDec)
 			
-			aIPF := oRootB:PFactors()
+			aIPF := oRootT:PFactors()
 			aDPF := oRootD:PFactors()
 
 		Else
@@ -2342,7 +2348,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 		IF nPFs>0
 			othRoot:SetValue(__o1)
 			othRootD := __o0:Clone()
-			oRootT   := __o0:Clone()
+			oRootT:SetValue(__o0)
 			For nPF := 1 To nPFs
 				IF oRootE:eq(aIPF[nPF][2])
 					othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
