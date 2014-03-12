@@ -249,6 +249,7 @@ CLASS tBigNumber
 	Method lt(uBigN)
 	Method gte(uBigN)
 	Method lte(uBigN)
+	Method cmp(uBigN)
 	
 	Method Max(uBigN)
 	Method Min(uBigN)
@@ -310,7 +311,7 @@ CLASS tBigNumber
 	
 	Method PFactors()
 	Method Factorial()	//TODO: Otimizar+
-
+	
 #ifndef __PROTHEUS__
 
 	 	/* Operators Overloading: 	
@@ -1208,6 +1209,27 @@ Method lte(uBigN) CLASS tBigNumber
 Return(self:lt(uBigN).or.self:eq(uBigN))
 
 /*
+	Method		: cmp
+	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+	Data        : 11/03/2014
+	Descricao   : Compara self com valor passado como parametro e retorna:
+	              -1 : self < que valor de referencia;
+				   0 : self = valor de referencia;
+				   1 : self > que valor de referencia;
+	Sintaxe     : tBigNumber():cmp(uBigN) -> nCmp
+*/
+Method cmp(uBigN) CLASS tBigNumber
+	Local nCmp
+	IF self:lt(uBigN)
+		nCmp := -1
+	ElseIF self:eq(uBigN)
+		nCmp := 0
+	Else
+		nCmp := 1
+	EndIF
+Return(nCmp)
+
+/*
 	Method		: Max
 	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
 	Data        : 04/02/2013
@@ -1839,15 +1861,14 @@ Return(__dvoNR)
 */
 Method Mod(uBigN) CLASS tBigNumber
 	Local oMod	 := tBigNumber():New(uBigN)
-	Local cRDiv
-	IF self:lt(oMod)
+	Local nCmp   := self:cmp(oMod)
+	IF nCmp==-1
 		oMod:SetValue(self)
-	ElseIF self:eq(oMod)
+	ElseIF nCmp==0
 		oMod:SetValue(__o0)
 	Else
 		oMod:SetValue(self:Div(oMod,.F.))
-		cRDiv := oMod:cRDiv
-    	oMod:SetValue(cRDiv,NIL,NIL,.F.)
+    	oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
     EndIF	
 Return(oMod)
 
@@ -3629,6 +3650,7 @@ Static Function eMult(cN1,cN2,nBase,nAcc)
 	Local aeMT := Array(0)
                 	
 	Local nI   := 0
+	Local nCmp
 	
 	Local oN1  := tBigNumber():New(cN1)
 	Local oMTM := __o1:Clone()
@@ -3647,9 +3669,10 @@ Static Function eMult(cN1,cN2,nBase,nAcc)
 	While nI>0
 		oMTM:SetValue(oMTM:Add(aeMT[nI][1]),nBase,"0",NIL,nAcc)
 		oMTP:SetValue(oMTP:Add(aeMT[nI][2]),nBase,"0",NIL,nAcc)
-		IF oMTM:eq(oN1)
+		nCmp := oMTM:cmp(oN1)
+		IF nCmp==0
 			EXIT
-		ElseIF oMTM:gt(oN1)
+		ElseIF nCmp==1
 			oMTM:SetValue(oMTM:Sub(aeMT[nI][1]),nBase,"0",NIL,nAcc)
 			oMTP:SetValue(oMTP:Sub(aeMT[nI][2]),nBase,"0",NIL,nAcc)
 		EndIF
@@ -3680,6 +3703,7 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 #ifdef __PTCOMPAT__
 	Local aeDV 		:= Array(0)
 	Local nI		:= 0
+	Local nCmp
 #endif //__PTCOMPAT__
 
 	Local cRDiv
@@ -3710,9 +3734,10 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 	While nI>0
 		__oeDivQ:SetValue(__oeDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 		__oeDivR:SetValue(__oeDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
-		IF __oeDivR:eq(__oeDivN)
+		nCmp := __oeDivR:cmp(__oeDivN)
+		IF nCmp==0
 			EXIT
-		ElseIF __oeDivR:gt(__oeDivN)
+		ElseIF nCmp==1
 			__oeDivQ:SetValue(__oeDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
 			__oeDivR:SetValue(__oeDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
 		EndIF
