@@ -105,6 +105,9 @@ THREAD Static __gtoN2
 THREAD Static __ltoN1
 THREAD Static __ltoN2
 
+THREAD Static __cmpoN1
+THREAD Static __cmpoN2
+
 THREAD Static __adoNR
 THREAD Static __adoN1
 THREAD Static __adoN2
@@ -1196,7 +1199,7 @@ Return(llt)
 	Sintaxe     : tBigNumber():gte(uBigN) -> lgte
 */
 Method gte(uBigN) CLASS tBigNumber
-Return(self:gt(uBigN).or.self:eq(uBigN))
+Return(self:cmp(uBigN)>=0)
 
 /*
 	Method		: lte
@@ -1206,7 +1209,7 @@ Return(self:gt(uBigN).or.self:eq(uBigN))
 	Sintaxe     : tBigNumber():lte(uBigN) -> lte
 */
 Method lte(uBigN) CLASS tBigNumber
-Return(self:lt(uBigN).or.self:eq(uBigN))
+Return(self:cmp(uBigN)<=0)
 
 /*
 	Method		: cmp
@@ -1219,14 +1222,46 @@ Return(self:lt(uBigN).or.self:eq(uBigN))
 	Sintaxe     : tBigNumber():cmp(uBigN) -> nCmp
 */
 Method cmp(uBigN) CLASS tBigNumber
+
+	Local cN1
+	Local cN2
+
 	Local nCmp
-	IF self:lt(uBigN)
-		nCmp := -1
-	ElseIF self:eq(uBigN)
-		nCmp := 0
+	
+	Local llt
+	Local leq
+	
+	__cmpoN1:SetValue(self)
+	__cmpoN2:SetValue(uBigN)
+	
+	__cmpoN1:Normalize(@__cmpoN2)
+	
+	cN1	:= __cmpoN1:GetValue(.T.)
+	cN2	:= __cmpoN2:GetValue(.T.)
+	
+	leq	:= cN1==cN2 .and. __cmpoN1:lNeg==__cmpoN2:lNeg
+
+	IF leq
+		nCmp := 0	
 	Else
-		nCmp := 1
+		IF __cmpoN1:lNeg .or. __cmpoN2:lNeg
+			IF __cmpoN1:lNeg .and. __cmpoN2:lNeg
+				llt := cN1>cN2
+			ElseIF __cmpoN1:lNeg .and. .NOT.(__cmpoN2:lNeg)
+				llt := .T.
+			ElseIF .NOT.(__cmpoN1:lNeg) .and. __cmpoN2:lNeg
+				llt := .F.
+			EndIF
+		Else
+			llt := cN1<cN2
+		EndIF
+		IF llt
+			nCmp := -1
+		Else
+			nCmp := 1
+		EndIF
 	EndIF
+	
 Return(nCmp)
 
 /*
@@ -4760,6 +4795,9 @@ Static Procedure __Initsthd(nBase)
 
 	__ltoN1 := oTBigN:Clone()
 	__ltoN2 := oTBigN:Clone()
+	
+	__cmpoN1 := oTBigN:Clone()
+	__cmpoN2 := oTBigN:Clone()
 
 	__adoNR := oTBigN:Clone()
 	__adoN1 := oTBigN:Clone()
