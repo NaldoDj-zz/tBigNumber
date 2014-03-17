@@ -3,7 +3,7 @@
 	#include "protheus.ch"
 #else
 	#ifdef __HARBOUR__
-		#include "hbClass.ch"
+		#include "hbclass.ch"
 	#endif
 #endif
 #include "tBigNumber.ch"

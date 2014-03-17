@@ -3,9 +3,9 @@ echo BATCH FILE FOR Harbour MinGW64
 rem ============================================================================
 SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
-SET HB_PATH=c:\hb32\
-SET cygwin_PATH=c:\cygwin64\
-SET MinGW64_PATH=c:\MinGW64\
+SET HB_PATH=d:\hb32\
+SET cygwin_PATH=d:\cygwin64\
+SET MinGW64_PATH=d:\MinGW64\
 SET PATH=%HB_PATH%bin\
 SET PATH=%PATH%;%cygwin_PATH%bin\
 SET PATH=%PATH%;%cygwin_PATH%usr\bin\

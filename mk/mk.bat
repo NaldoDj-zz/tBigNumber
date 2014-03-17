@@ -3,7 +3,7 @@ echo BATCH FILE FOR Harbour MinGW32
 rem ============================================================================
 SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
-SET HB_PATH=c:\hb32\
+SET HB_PATH=d:\hb32\
 SET PATH=%HB_PATH%
 
     %HB_PATH%bin\hbmk2.exe -strip- -jobs=10 -cpp  -compr=max -comp=mingw ..\hbp\tBigNtst.hbp

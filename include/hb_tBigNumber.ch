@@ -6,7 +6,7 @@
         #include "common.ch"
         #include "hbclass.ch"
         #include "hbthread.ch"
-*       #include "hbCompat.ch"
+*       #include "hbcompat.ch"
         #ifdef TBN_DBFILE
             #ifndef TBN_MEMIO
                 request DBFCDX , DBFFPT

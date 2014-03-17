@@ -48,7 +48,7 @@ CLASS tPrime
 END CLASS
 
 /*
-	Função		: tPrime():New
+	Function		: tPrime():New
 	Autor		: Marinaldo de Jesus [ http://www.blacktdn.com.br ]
 	Data		: 16/03/2013
 	Descricao	: Instancia um novo Objeto tPrime

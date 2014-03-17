@@ -3,7 +3,7 @@
  * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r    
  *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr     
  *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r    
- *  ttt  bbbbb  iiiii  ggggo  n   n  uuuuu  m   m  bbbbb  eeeee  r   r    
+ *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r    
  *
  * Copyright 2013-2014 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
  * www - http://www.blacktdn.com.br
@@ -67,6 +67,13 @@
     #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
 #endif //__PROTHEUS__
+
+#xcommand IncZeros(<n>);
+=>;
+While <n>\>__nstcZ0;;
+	__cstcZ0+=__cstcZ0;;
+	__nstcZ0+=__nstcZ0;;
+End While;;
 
 Static __o0
 Static __o1
@@ -179,6 +186,7 @@ THREAD Static __lsthdSet
 *        /D__TBN_DYN_OBJ_SET__ 
 *        /D__ADDMT__
 *        /D__SUBTMT__
+*        /D__PTCOMPAT__
 *    #endif
 */
 
@@ -486,7 +494,7 @@ ENDCLASS
 #endif //__PROTHEUS__
 
 /*
-    Função      : tBigNumber():New
+    Function    : tBigNumber():New
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Instancia um novo Objeto tBigNumber
@@ -906,10 +914,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             IF "0"==SubStr(self:cDec,1,1)
                 nFP:=hb_bLen(self:cDec)
-                While nFP>__nstcZ0
-                    __cstcZ0+=__cstcZ0
-                    __nstcZ0+=__nstcZ0
-                End While
+                IncZeros(nFP)
                 IF self:cDec==SubStr(__cstcZ0,1,nFP)
                     self:cDec:="0"
                 EndIF
@@ -919,10 +924,7 @@ Method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) CLASS tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             IF "0"==SubStr(self:cDec,1,1)
                 nFP:=hb_bLen(self:cDec)
-                While nFP>__nstcZ0
-                    __cstcZ0+=__cstcZ0
-                    __nstcZ0+=__nstcZ0
-                End While
+                IncZeros(nFP)
                 IF self:cDec==SubStr(__cstcZ0,1,nFP)
                     self:cDec:="0"
                 EndIF
@@ -1389,7 +1391,7 @@ Return(__adoNR)
 #ifdef __ADDMT__
 
     /*/
-        Funcao    : AddThread
+        Function  : AddThread
         Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data      : 25/02/2013
         Descricao : ADD via JOB
@@ -2029,10 +2031,7 @@ Method Pow(uBigN) CLASS tBigNumber
             __pwoA:SetValue(cPowA)
 
             nZS:=hb_bLen(__pwoNP:Dec(NIL,NIL,.T.))
-            While nZS>__nstcZ0
-                __cstcZ0+=__cstcZ0
-                __nstcZ0+=__nstcZ0
-            End While
+            IncZeros(nZS)
             
             cM10:="1"
             cM10+=SubStr(__cstcZ0,1,nZS)
@@ -2413,11 +2412,8 @@ Method nthRoot(uBigN) CLASS tBigNumber
         EndIF
 
         nZS:=__nthRootAcc-1
-        While nZS>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
-    
+        IncZeros(nZS)
+		
         cFExit:="0."+SubStr(__cstcZ0,1,nZS)+"1"
             
         oFExit:=__o0:Clone()
@@ -2491,10 +2487,7 @@ Method nthRootPF(uBigN) CLASS tBigNumber
         oRootT:=__o0:Clone()
 
         nZS:=__nthRootAcc-1
-        While nZS>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
+        IncZeros(nZS)
     
         cFExit:="0."+SubStr(__cstcZ0,1,nZS)+"1"
             
@@ -2506,10 +2499,8 @@ Method nthRootPF(uBigN) CLASS tBigNumber
         IF lDec
             
             nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
-            While nZS>__nstcZ0
-                __cstcZ0+=__cstcZ0
-                __nstcZ0+=__nstcZ0
-            End While
+            IncZeros(nZS)
+			
             oRootD:=tBigNumber():New("1"+SubStr(__cstcZ0,1,nZS))
             oRootT:SetValue(oRootB:cInt+oRootB:cDec)
             
@@ -2807,10 +2798,7 @@ Method Rnd(nAcc) CLASS tBigNumber
         EndIF
         IF cAcc>="5"
             cAdd:="0."
-            While nAcc>__nstcZ0
-                __cstcZ0+=__cstcZ0
-                __nstcZ0+=__nstcZ0
-            End While
+            IncZeros(nAcc)
             cAdd+=SubStr(__cstcZ0,1,nAcc)+"5"
             oRnd:SetValue(oRnd:Add(cAdd))
         EndIF
@@ -2895,10 +2883,7 @@ Method Normalize(oBigN) CLASS tBigNumber
     Local lPadL:=nPadL != self:nInt
     Local lPadR:=nPadR != self:nDec
 
-    While nSize>__nstcZ0
-        __cstcZ0+=__cstcZ0
-        __nstcZ0+=__nstcZ0
-    End While
+    IncZeros(nSize)
     
     IF lPadL .or. lPadR
         IF lPadL
@@ -3498,7 +3483,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
 Return(oR)
 
 /*
-    Funcao      : __Random
+    Function    : __Random
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 03/03/2013
     Descricao   : Define a chamada para a funcao Random Padrao
@@ -3813,7 +3798,7 @@ Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 #endif
 
 /*
-    Funcao      : eMult
+    Function    : eMult
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
@@ -3869,7 +3854,7 @@ Static Function eMult(cN1,cN2,nBase,nAcc)
 Return(oMTP)
     
 /*
-    Funcao      : eDiv
+    Function    : eDiv
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
@@ -3947,7 +3932,7 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 Return(__oeDivQ)
 
 /*
-    Funcao      : nthRoot
+    Function    : nthRoot
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 10/02/2013
     Descricao   : Metodo Newton-Raphson
@@ -3957,7 +3942,7 @@ Static Function nthRoot(oRootB,oRootE,oAcc)
 Return(__Pow(oRootB,__o1:Div(oRootE),oAcc))
 
 /*
-    Funcao      : __Pow
+    Function    : __Pow
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 10/02/2013
     Descricao   : Metodo Newton-Raphson
@@ -4023,7 +4008,7 @@ Static Function __Pow(base,expR,EPS)
 return(acc)
 
 /*
-    Funcao      : __SQRT
+    Function    : __SQRT
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 10/02/2013
     Descricao   : SQRT
@@ -4041,10 +4026,7 @@ Static Function __SQRT(p)
         r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
     Else
         n:=__nthRootAcc-1
-        While n>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
+        IncZeros(n)
         s:="0."+SubStr(__cstcZ0,1,n)+"1"
         EPS:=__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
@@ -4065,7 +4047,7 @@ Return(r)
 #ifdef TBN_DBFILE
 
     /*
-        Funcao      : Add
+        Function    : Add
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Adicao
@@ -4084,10 +4066,7 @@ Return(r)
             FIELD FN
         #endif    
         
-        While y>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
+        IncZeros(y)
 
         c:=aNumber(SubStr(__cstcZ0,1,y),y,"ADD_C")
     
@@ -4119,7 +4098,7 @@ Return(r)
     Return(s)
     
     /*
-        Funcao      : Sub
+        Function    : Sub
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Subtracao
@@ -4138,10 +4117,7 @@ Return(r)
             FIELD FN
         #endif
         
-        While y>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
+        IncZeros(y)
         
         c:=aNumber(SubStr(__cstcZ0,1,y),y,"SUB_C")
 
@@ -4173,7 +4149,7 @@ Return(r)
     Return(s)
     
     /*
-        Funcao      : Mult
+        Function    : Mult
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Multiplicacao de Inteiros
@@ -4201,10 +4177,7 @@ Return(r)
             FIELD FN
         #endif
         
-        While y>__nstcZ0
-            __cstcZ0+=__cstcZ0
-            __nstcZ0+=__nstcZ0
-        End While
+        IncZeros(y)
         
         c:=aNumber(SubStr(__cstcZ0,1,y),y,"MULT_C")
     
@@ -4275,7 +4248,7 @@ Return(r)
     Return(s)
 
     /*
-        Funcao      : aNumber
+        Function    : aNumber
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : db OF Numbers
@@ -4304,7 +4277,7 @@ Return(r)
     Return(a)
     
     /*
-        Funcao      : dbGetcN
+        Function    : dbGetcN
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Montar a String de Retorno
@@ -4430,7 +4403,7 @@ Return(r)
     #ifdef TBN_ARRAY
 
     /*
-        Funcao      : Add
+        Function    : Add
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Adicao
@@ -4462,7 +4435,7 @@ Return(r)
     Return(s)
     
     /*
-        Funcao      : Sub
+        Function    : Sub
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Subtracao
@@ -4494,7 +4467,7 @@ Return(r)
     Return(s)
     
     /*
-        Funcao      : Mult
+        Function    : Mult
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Multiplicacao de Inteiros
@@ -4560,7 +4533,7 @@ Return(r)
     Return(aGetcN(c,y))
 
     /*
-        Funcao      : aGetcN
+        Function    : aGetcN
         Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data        : 04/02/2013
         Descricao   : Montar a String de Retorno
@@ -4594,7 +4567,7 @@ Return(r)
     #else
 
         /*
-            Funcao      : Add
+            Function    : Add
             Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
             Data        : 04/02/2013
             Descricao   : Adicao
@@ -4611,10 +4584,7 @@ Return(r)
                 Local v:=0
                 Local v1
                 
-                While y>__nstcZ0
-                    __cstcZ0+=__cstcZ0
-                    __nstcZ0+=__nstcZ0
-                End While
+                IncZeros(y)
                 
                 c:=SubStr(__cstcZ0,1,y)
 
@@ -4649,7 +4619,7 @@ Return(r)
         #endif //__PTCOMPAT__
         
         /*
-            Funcao      : Sub
+            Function    : Sub
             Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
             Data        : 04/02/2013
             Descricao   : Subtracao
@@ -4666,10 +4636,7 @@ Return(r)
                 Local v:=0
                 Local v1
                 
-                While y>__nstcZ0
-                    __cstcZ0+=__cstcZ0
-                    __nstcZ0+=__nstcZ0
-                End While
+                IncZeros(y)
                 
                 c:=SubStr(__cstcZ0,1,y)
             
@@ -4701,7 +4668,7 @@ Return(r)
             Return(TBIGNSUB(a,b,n,nB))
         #endif //__PTCOMPAT__
         /*
-            Funcao      : Mult
+            Function    : Mult
             Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
             Data        : 04/02/2013
             Descricao   : Multiplicacao de Inteiros
@@ -4728,10 +4695,7 @@ Return(r)
                 Local v:=0
                 Local v1
                 
-                While y>__nstcZ0
-                    __cstcZ0+=__cstcZ0
-                    __nstcZ0+=__nstcZ0
-                End While
+                IncZeros(y)
                 
                 c:=SubStr(__cstcZ0,1,y)
                     
@@ -4802,7 +4766,7 @@ Return(r)
         #endif //__PTCOMPAT__
 
         /*
-            Funcao      : cGetcN
+            Function    : cGetcN
             Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
             Data        : 04/02/2013
             Descricao   : Montar a String de Retorno
@@ -4845,7 +4809,7 @@ Return(r)
 #endif
 
 /*
-    Funcao      : tBigNInvert
+    Function    : tBigNInvert
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Inverte o Numero
@@ -4869,7 +4833,7 @@ Return(r)
 #endif //__PTCOMPAT__
 
 /*
-    Funcao      : MathO
+    Function    : MathO
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Operacoes matematicas
