@@ -2129,11 +2129,11 @@ Method e(lForce) CLASS tBigNumber
 Return(oeTthD)
 
 /*
-    Method:        Exp
-    Autor:        Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:        06/02/2013
-    Descricao:    Potencia do Numero de Neper e^cN
-    Sintaxe:    tBigNumber():Exp(lForce) -> oBigNR
+    Method    : Exp
+    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data      : 06/02/2013
+    Descricao : Potencia do Numero de Neper e^cN
+    Sintaxe   : tBigNumber():Exp(lForce) -> oBigNR
 */
 Method Exp(lForce) CLASS tBigNumber
     Local oBigNe:=self:e(lForce)
@@ -2756,11 +2756,11 @@ Method aLn() CLASS tBigNumber
 Return(self:aLog(__o1:Exp()))
 
 /*
-    Method:        MathC
-    Autor:        Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:        05/03/2013
-    Descricao:    Operacoes Matematicas
-    Sintaxe:    tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
+    Method    : MathC
+    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data      : 05/03/2013
+    Descricao : Operacoes Matematicas
+    Sintaxe   : tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
 */
 Method MathC(uBigN1,cOperator,uBigN2) CLASS tBigNumber
 Return(MathO(uBigN1,cOperator,uBigN2,.F.))
