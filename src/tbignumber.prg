@@ -2369,7 +2369,7 @@ Return(hb_ntos(nLCM))
     Method    : nthRoot
     Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data      : 05/03/2013
-    Descricao : Radiciação 
+    Descricao : Radiciacao 
     Sintaxe   : tBigNumber():nthRoot(uBigN) -> othRoot
 */
 Method nthRoot(uBigN) CLASS tBigNumber
@@ -2430,7 +2430,7 @@ Return(othRoot)
     Method    : nthRootPF
     Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data      : 05/03/2013
-    Descricao : Radiciação 
+    Descricao : Radiciacao 
     Sintaxe   : tBigNumber():nthRootPF(uBigN) -> othRoot
 */
 Method nthRootPF(uBigN) CLASS tBigNumber
