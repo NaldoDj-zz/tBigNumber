@@ -269,7 +269,7 @@ CLASS tBigNumber
     Method Sub(uBigN)
     
     Method Mult(uBigN)
-    Method eMult(uBigN)
+    Method egMult(uBigN)
     
     Method Div(uBigN,lFloat)
 
@@ -1765,13 +1765,13 @@ Method Mult(uBigN) CLASS tBigNumber
 Return(__mtoNR)
 
 /*
-    Method      : eMult
+    Method      : egMult
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Multiplicacao Egipcia
-    Sintaxe     : tBigNumber():eMult(uBigN) -> oBigNR
+    Sintaxe     : tBigNumber():egMult(uBigN) -> oBigNR
 */
-Method eMult(uBigN) CLASS tBigNumber
+Method egMult(uBigN) CLASS tBigNumber
 
     Local cInt
     Local cDec
@@ -1803,7 +1803,7 @@ Method eMult(uBigN) CLASS tBigNumber
     cN2:=__mtoN2:cInt
     cN2+=__mtoN2:cDec
 
-    __mtoNR:SetValue(eMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+    __mtoNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
 
     cNT:=__mtoNR:cInt
     
@@ -1875,7 +1875,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
         DEFAULT lFloat:=.T.
 
-        __dvoNR:SetValue(eDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
+        __dvoNR:SetValue(egDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
 
         IF lFloat
 
@@ -1906,7 +1906,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
                     cN2:=__dvoN2:cInt
                     cN2+=__dvoN2:cDec
 
-                    __dvoRDiv:SetValue(eDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
+                    __dvoRDiv:SetValue(egDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
 
                     cDec+=__dvoRDiv:ExactValue(.T.)
                     nDec:=hb_bLen(cDec)
@@ -3798,14 +3798,14 @@ Return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 #endif
 
 /*
-    Function    : eMult
+    Function    : egMult
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-    Sintaxe     : eMult(cN1,cN2,nBase,nAcc) -> oMTP
+    Sintaxe     : egMult(cN1,cN2,nBase,nAcc) -> oMTP
     Obs.        : Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
-Static Function eMult(cN1,cN2,nBase,nAcc)
+Static Function egMult(cN1,cN2,nBase,nAcc)
 
 #ifdef __PTCOMPAT__
 
@@ -3847,20 +3847,20 @@ Static Function eMult(cN1,cN2,nBase,nAcc)
     Local n:=(Len(cN1)*2)
     cN1:=PadL(cN1,n,"0")
     cN2:=PadL(cN2,n,"0")
-    oMTP:SetValue(TBIGNeMult(cN1,cN2,n,nBase),nBase,"0",NIL,nAcc)
+    oMTP:SetValue(TBIGNegMult(cN1,cN2,n,nBase),nBase,"0",NIL,nAcc)
     
 #endif //__PTCOMPAT__
     
 Return(oMTP)
     
 /*
-    Function    : eDiv
+    Function    : egDiv
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-    Sintaxe     : eDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> __oeDivQ
+    Sintaxe     : egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> __oeDivQ
 */
-Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
+Static Function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
 #ifdef __PTCOMPAT__
     Local aeDV:=Array(0)
@@ -3910,7 +3910,7 @@ Static Function eDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
 #else //__PTCOMPAT__
 
-    cQDiv:=tBIGNeDIV("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
+    cQDiv:=tBIGNegDiv("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
     
     __oeDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
     __oeDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
@@ -4990,8 +4990,8 @@ Return
             __Dummy()
             #ifdef __PTCOMPAT__
                 TBIGNREVERSE()
-                TBIGNEMULT()
-                TBIGNEDIV()
+                TBIGNegMult()
+                TBIGNegDiv()
                 TBIGNGDC()
                 TBIGNLCM()
                 TBIGNADD()
@@ -5244,39 +5244,39 @@ Return
             char * cMultP;
         } stBIGNeMult, * ptBIGNeMult;
 
-        static void __TBIGNeMult(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeMult peMult){
+        static void __TBIGNegMult(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult){
     
             PHB_ITEM peMTArr      = hb_itemArrayNew(0);
         
-            ptBIGNeMult peMultTmp = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+            ptBIGNeMult pegMultTmp = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
             char * szPADL         = __TBIGNPADL("1",n,"0");
-            peMultTmp->cMultM     = hb_strdup(szPADL);
+            pegMultTmp->cMultM     = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
-            peMultTmp->cMultP     = hb_strdup(cD);
+            pegMultTmp->cMultP     = hb_strdup(cD);
     
             szPADL                = __TBIGNPADL("0",n,"0");
-            peMult->cMultM        = hb_strdup(szPADL);
-            peMult->cMultP        = hb_strdup(szPADL);
+            pegMult->cMultM        = hb_strdup(szPADL);
+            pegMult->cMultP        = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
             HB_MAXUINT nI         = 0;
 
-            while (strcmp(peMultTmp->cMultM,cN)<=0){
+            while (strcmp(pegMultTmp->cMultM,cN)<=0){
 
                  PHB_ITEM pNI = hb_itemArrayNew(2);
                 
-                    hb_arraySetC(pNI,1,peMultTmp->cMultM);
-                    hb_arraySetC(pNI,2,peMultTmp->cMultP);
+                    hb_arraySetC(pNI,1,pegMultTmp->cMultM);
+                    hb_arraySetC(pNI,2,pegMultTmp->cMultP);
                      hb_arrayAddForward(peMTArr,pNI);  
 
-                    char * tmp = __TBIGNADD(peMultTmp->cMultM,peMultTmp->cMultM,n,n,nB);
-                    memcpy(peMultTmp->cMultM,tmp,n);
+                    char * tmp = __TBIGNADD(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
+                    memcpy(pegMultTmp->cMultM,tmp,n);
                     hb_xfree(tmp);
                     
-                    tmp        = __TBIGNADD(peMultTmp->cMultP,peMultTmp->cMultP,n,n,nB);                
-                    memcpy(peMultTmp->cMultP,tmp,n);
+                    tmp        = __TBIGNADD(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
+                    memcpy(pegMultTmp->cMultP,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5285,35 +5285,35 @@ Return
 
             }
             
-            hb_xfree(peMultTmp->cMultM);
-            hb_xfree(peMultTmp->cMultP);
+            hb_xfree(pegMultTmp->cMultM);
+            hb_xfree(pegMultTmp->cMultP);
 
             while (nI){
 
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peMTArr,nI);
                 
-                peMultTmp->cMultM = __TBIGNADD(peMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                memcpy(peMult->cMultM,peMultTmp->cMultM,n);
-                hb_xfree(peMultTmp->cMultM);
+                pegMultTmp->cMultM = __TBIGNADD(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
+                memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                hb_xfree(pegMultTmp->cMultM);
     
-                peMultTmp->cMultP = __TBIGNADD(peMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                memcpy(peMult->cMultP,peMultTmp->cMultP,n);
-                hb_xfree(peMultTmp->cMultP);
+                pegMultTmp->cMultP = __TBIGNADD(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
+                memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                hb_xfree(pegMultTmp->cMultP);
                 
-                int iCmp = strcmp(peMult->cMultM,cN);
+                int iCmp = strcmp(pegMult->cMultM,cN);
 
                 if (iCmp==0){
                     break;
                 } else{
                         if (iCmp==1){
     
-                            peMultTmp->cMultM = __TBIGNSUB(peMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            memcpy(peMult->cMultM,peMultTmp->cMultM,n);
-                            hb_xfree(peMultTmp->cMultM);
+                            pegMultTmp->cMultM = __TBIGNSUB(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
+                            memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                            hb_xfree(pegMultTmp->cMultM);
     
-                            peMultTmp->cMultP = __TBIGNSUB(peMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            memcpy(peMult->cMultP,peMultTmp->cMultP,n);
-                            hb_xfree(peMultTmp->cMultP);
+                            pegMultTmp->cMultP = __TBIGNSUB(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
+                            memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                            hb_xfree(pegMultTmp->cMultP);
     
                     }
                 }  
@@ -5322,27 +5322,27 @@ Return
                 
             }
 
-            hb_xfree(peMultTmp);
+            hb_xfree(pegMultTmp);
             hb_itemRelease(peMTArr);
                 
         }
         
-        HB_FUNC_STATIC( TBIGNEMULT ){
+        HB_FUNC_STATIC( TBIGNEGMULT ){
             
             const char * cN     = hb_parc(1);
             const char * cD     = hb_parc(2);
             HB_SIZE n           = (HB_SIZE)hb_parnint(3);
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
             
-            ptBIGNeMult peMult  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+            ptBIGNeMult pegMult  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
-            __TBIGNeMult(cN,cD,(int)n,nB,peMult);
+            __TBIGNegMult(cN,cD,(int)n,nB,pegMult);
         
-            hb_retclen(peMult->cMultP,n);
+            hb_retclen(pegMult->cMultP,n);
 
-            hb_xfree(peMult->cMultM);
-            hb_xfree(peMult->cMultP);
-            hb_xfree(peMult);
+            hb_xfree(pegMult->cMultM);
+            hb_xfree(pegMult->cMultP);
+            hb_xfree(pegMult);
         }
 
         typedef struct
@@ -5351,39 +5351,39 @@ Return
             char * cDivR;
         } stBIGNeDiv, * ptBIGNeDiv;
 
-        static void __TBIGNeDIV(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeDiv peDiv){
+        static void __TBIGNegDiv(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv){
     
             PHB_ITEM peDVArr    = hb_itemArrayNew(0);
         
-            ptBIGNeDiv peDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            ptBIGNeDiv pegDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
             char * szPADL       = __TBIGNPADL("1",n,"0");
-            peDivTmp->cDivQ     = hb_strdup(szPADL);
+            pegDivTmp->cDivQ     = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
-            peDivTmp->cDivR     = hb_strdup(cD);
+            pegDivTmp->cDivR     = hb_strdup(cD);
     
             szPADL                = __TBIGNPADL("0",n,"0");
-            peDiv->cDivQ        = hb_strdup(szPADL);
-            peDiv->cDivR        = hb_strdup(szPADL);
+            pegDiv->cDivQ        = hb_strdup(szPADL);
+            pegDiv->cDivR        = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
             HB_MAXUINT nI       = 0;
 
-            while (strcmp(peDivTmp->cDivR,cN)<=0){
+            while (strcmp(pegDivTmp->cDivR,cN)<=0){
 
                  PHB_ITEM pNI = hb_itemArrayNew(2);
                 
-                    hb_arraySetC(pNI,1,peDivTmp->cDivQ);
-                    hb_arraySetC(pNI,2,peDivTmp->cDivR);
+                    hb_arraySetC(pNI,1,pegDivTmp->cDivQ);
+                    hb_arraySetC(pNI,2,pegDivTmp->cDivR);
                     hb_arrayAddForward(peDVArr,pNI);  
 
-                    char * tmp = __TBIGNADD(peDivTmp->cDivQ,peDivTmp->cDivQ,n,n,nB);
-                    memcpy(peDivTmp->cDivQ,tmp,n);
+                    char * tmp = __TBIGNADD(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
+                    memcpy(pegDivTmp->cDivQ,tmp,n);
                     hb_xfree(tmp);
                     
-                    tmp        = __TBIGNADD(peDivTmp->cDivR,peDivTmp->cDivR,n,n,nB);                
-                    memcpy(peDivTmp->cDivR,tmp,n);
+                    tmp        = __TBIGNADD(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);                
+                    memcpy(pegDivTmp->cDivR,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5392,35 +5392,35 @@ Return
 
             }
             
-            hb_xfree(peDivTmp->cDivQ);
-            hb_xfree(peDivTmp->cDivR);
+            hb_xfree(pegDivTmp->cDivQ);
+            hb_xfree(pegDivTmp->cDivR);
 
             while (nI){
 
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peDVArr,nI);
                 
-                peDivTmp->cDivQ = __TBIGNADD(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                memcpy(peDiv->cDivQ,peDivTmp->cDivQ,n);
-                hb_xfree(peDivTmp->cDivQ);
+                pegDivTmp->cDivQ = __TBIGNADD(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+                memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                hb_xfree(pegDivTmp->cDivQ);
     
-                peDivTmp->cDivR = __TBIGNADD(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
-                hb_xfree(peDivTmp->cDivR);
+                pegDivTmp->cDivR = __TBIGNADD(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+                memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                hb_xfree(pegDivTmp->cDivR);
                 
-                int iCmp = strcmp(peDiv->cDivR,cN);
+                int iCmp = strcmp(pegDiv->cDivR,cN);
 
                 if (iCmp==0){
                     break;
                 } else{
                         if (iCmp==1){
     
-                            peDivTmp->cDivQ = __TBIGNSUB(peDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            memcpy(peDiv->cDivQ,peDivTmp->cDivQ,n);
-                            hb_xfree(peDivTmp->cDivQ);
+                            pegDivTmp->cDivQ = __TBIGNSUB(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
+                            memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                            hb_xfree(pegDivTmp->cDivQ);
     
-                            peDivTmp->cDivR = __TBIGNSUB(peDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
-                            hb_xfree(peDivTmp->cDivR);
+                            pegDivTmp->cDivR = __TBIGNSUB(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
+                            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                            hb_xfree(pegDivTmp->cDivR);
     
                     }
                 }  
@@ -5431,30 +5431,30 @@ Return
 
             hb_itemRelease(peDVArr);
     
-            peDivTmp->cDivR = __TBIGNSUB(cN,peDiv->cDivR,n,n,nB);
-            memcpy(peDiv->cDivR,peDivTmp->cDivR,n);
-            hb_xfree(peDivTmp->cDivR);
-            hb_xfree(peDivTmp);
+            pegDivTmp->cDivR = __TBIGNSUB(cN,pegDiv->cDivR,n,n,nB);
+            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+            hb_xfree(pegDivTmp->cDivR);
+            hb_xfree(pegDivTmp);
                 
         }
         
-        HB_FUNC_STATIC( TBIGNEDIV ){
+        HB_FUNC_STATIC( TBIGNEGDIV ){
             
             const char * cN     = hb_parc(1);
             const char * cD     = hb_parc(2);
             HB_SIZE n           = (HB_SIZE)hb_parnint(4);
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
             
-            ptBIGNeDiv peDiv    = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            ptBIGNeDiv pegDiv    = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
-            __TBIGNeDIV(cN,cD,(int)n,nB,peDiv);
+            __TBIGNegDiv(cN,cD,(int)n,nB,pegDiv);
             
-            hb_storclen(peDiv->cDivR,n,3);
-            hb_retclen(peDiv->cDivQ,n);
+            hb_storclen(pegDiv->cDivR,n,3);
+            hb_retclen(pegDiv->cDivQ,n);
 
-            hb_xfree(peDiv->cDivR);
-            hb_xfree(peDiv->cDivQ);
-            hb_xfree(peDiv);
+            hb_xfree(pegDiv->cDivR);
+            hb_xfree(pegDiv->cDivQ);
+            hb_xfree(pegDiv);
         }
                 
         static HB_MAXUINT __TBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
