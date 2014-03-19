@@ -71,8 +71,8 @@
 #xcommand IncZeros(<n>);
 =>;
 While <n>\>__nstcZ0;;
-	__cstcZ0+=__cstcZ0;;
-	__nstcZ0+=__nstcZ0;;
+    __cstcZ0+=__cstcZ0;;
+    __nstcZ0+=__nstcZ0;;
 End While;;
 
 Static __o0
@@ -1386,7 +1386,7 @@ Method Add(uBigN) CLASS tBigNumber
         EndIF
     EndIF
 
-Return(__adoNR)
+Return(__adoNR:Clone())
 
 #ifdef __ADDMT__
 
@@ -1695,7 +1695,7 @@ Method Sub(uBigN) CLASS tBigNumber
         EndIF
     EndIF
 
-Return(__sboNR)
+Return(__sboNR:Clone())
 
 /*
     Method      : Mult
@@ -1762,7 +1762,7 @@ Method Mult(uBigN) CLASS tBigNumber
         EndIF
     EndIF
 
-Return(__mtoNR)
+Return(__mtoNR:Clone())
 
 /*
     Method      : egMult
@@ -1827,7 +1827,7 @@ Method egMult(uBigN) CLASS tBigNumber
         EndIF
     EndIF
 
-Return(__mtoNR)
+Return(__mtoNR:Clone())
 
 /*
     Method      : Div
@@ -1875,7 +1875,11 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
         DEFAULT lFloat:=.T.
 
-        __dvoNR:SetValue(egDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
+        #ifdef __PTCOMPAT__
+            __dvoNR:SetValue(ecDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
+        #else
+            __dvoNR:SetValue(egDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
+        #endif    
 
         IF lFloat
 
@@ -1906,7 +1910,11 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
                     cN2:=__dvoN2:cInt
                     cN2+=__dvoN2:cDec
 
-                    __dvoRDiv:SetValue(egDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
+                    #ifdef __PTCOMPAT__
+                        __dvoRDiv:SetValue(ecDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
+                    #else
+                        __dvoRDiv:SetValue(egDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
+                    #endif
 
                     cDec+=__dvoRDiv:ExactValue(.T.)
                     nDec:=hb_bLen(cDec)
@@ -1950,7 +1958,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
     End Sequence
 
-Return(__dvoNR)
+Return(__dvoNR:Clone())
 
 /*
     Method      : Mod
@@ -2067,7 +2075,7 @@ Method Pow(uBigN) CLASS tBigNumber
         __pwoNR:SetValue(__o1:Div(__pwoNR))    
     EndIF
 
-Return(__pwoNR)
+Return(__pwoNR:Clone())
 
 /*
     Method      : e
@@ -2413,7 +2421,7 @@ Method nthRoot(uBigN) CLASS tBigNumber
 
         nZS:=__nthRootAcc-1
         IncZeros(nZS)
-		
+        
         cFExit:="0."+SubStr(__cstcZ0,1,nZS)+"1"
             
         oFExit:=__o0:Clone()
@@ -2500,7 +2508,7 @@ Method nthRootPF(uBigN) CLASS tBigNumber
             
             nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
             IncZeros(nZS)
-			
+            
             oRootD:=tBigNumber():New("1"+SubStr(__cstcZ0,1,nZS))
             oRootT:SetValue(oRootB:cInt+oRootB:cDec)
             
@@ -2880,8 +2888,8 @@ Method Normalize(oBigN) CLASS tBigNumber
     Local nPadR:=Max(self:nDec,oBigN:nDec)
     Local nSize:=(nPadL+nPadR)
     
-    Local lPadL:=nPadL != self:nInt
-    Local lPadR:=nPadR != self:nDec
+    Local lPadL:=nPadL!=self:nInt
+    Local lPadR:=nPadR!=self:nDec
 
     IncZeros(nSize)
     
@@ -2897,8 +2905,8 @@ Method Normalize(oBigN) CLASS tBigNumber
         self:nSize:=nSize
     EndIF
 
-    lPadL:=nPadL != oBigN:nInt
-    lPadR:=nPadR != oBigN:nDec 
+    lPadL:=nPadL!=oBigN:nInt
+    lPadR:=nPadR!=oBigN:nDec 
     
     IF lPadL .or. lPadR
         IF lPadL
@@ -3736,7 +3744,7 @@ Method Factorial() CLASS tBigNumber
     IF oN:eq(__o0)
         Return(__o1:Clone())
     EndIF
-Return(recFact(__o1,oN))
+Return(recFact(__o1:Clone(),oN))
 
 /*
     Function    : recFact 
@@ -3758,7 +3766,11 @@ Static Function recFact(oS,oN)
     Local oSI
     Local oNI
 
+#ifdef __PTCOMPAT__
+	IF oN:lte(__o20:Mult(oN:Div(__o2):Int(.T.,.F.)))
+#else
     IF oN:lte(__o20)
+#endif	
         oR:SetValue(oS)
         oI:=oS:Clone()
         oI:SetValue(oI:Add(__o1))
@@ -3929,7 +3941,64 @@ Static Function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
         __oeDivQ:SetValue(__oeDivQ,nBase,cRDiv,NIL,nAcc)
     EndIF
 
-Return(__oeDivQ)
+Return(__oeDivQ:Clone())
+
+/*
+    Function    : ecDiv
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 18/03/2014
+    Descricao   : Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
+    Sintaxe     : ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q    
+ */
+Static Function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
+
+   Local a:=tBigNumber():New(pA,nBase) 
+   Local b:=tBigNumber():New(pB,nBase)
+   Local r:=a:Clone()
+   Local q:=__o0:Clone()
+   Local n:=__o1:Clone()
+   Local aux:=__o0:Clone()
+   Local tmp:=__o0:Clone()
+   Local base:=tBigNumber():New(hb_ntos(nBase),nBase)
+   
+   Local cRDiv
+   
+   SYMBOL_UNUSED( nSize )
+
+   While r:gte(b)
+      aux:SetValue(b:Mult(n))
+      IF aux:lte(a)
+        While .T.
+           n:SetValue(n:Mult(base))
+           tmp:SetValue(b:Mult(n))
+           IF tmp:gt(a)
+               EXIT
+           EndIF
+           aux:SetValue(tmp)
+        End While
+      EndIF      
+      n:Normalize(@base)  
+      n:SetValue(egDiv(n:__cInt(),base:__cInt(),n:__nInt(),nBase,nAcc,.F.))
+      While r:gte(aux)
+        r:SetValue(r:Sub(aux))
+        q:SetValue(q:Add(n))
+      End While
+      a:SetValue(r)
+      n:SetValue(__o1)
+    End While
+  
+    cRDiv:=r:Int(.F.,.F.)
+    q:SetValue(q,nBase,cRDiv,NIL,nAcc)
+    
+    IF .NOT.(lFloat) .and. SubStr(cRDiv,r:__nInt(),1)=="0"
+        cRDiv:=SubStr(cRDiv,1,r:__nInt()-1)
+        IF Empty(cRDiv)
+            cRDiv:="0"
+        EndIF
+        q:SetValue(q,nBase,cRDiv,NIL,nAcc)
+    EndIF
+
+Return(q)
 
 /*
     Function    : nthRoot
@@ -4981,9 +5050,7 @@ Return
     Static Function __PITthD()
     Return(__hbPITthD())
     
-    /* warning: 'void HB_FUN_TBIGNADD()'  defined but not used [-Wunused-function]
-       warning: 'void HB_FUN_TBIGNSUB()'  defined but not used [-Wunused-function]
-       warning: 'void HB_FUN_TBIGNMULT()' defined but not used [-Wunused-function]*/    
+    /* warning: 'void HB_FUN_...()'  defined but not used [-Wunused-function]...*/    
     Static Function __Dummy(lDummy)
         lDummy:=.F.
         IF (lDummy)
@@ -5001,6 +5068,7 @@ Return
                 TBIGNADD()
                 TBIGNSUB()
                 TBIGNMULT()
+                ECDIV()
             #endif
         EndIF
     Return(lDummy)
@@ -5246,22 +5314,22 @@ Return
 
         static void __TBIGNegMult(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult){
     
-            PHB_ITEM peMTArr      = hb_itemArrayNew(0);
+            PHB_ITEM peMTArr       = hb_itemArrayNew(0);
         
             ptBIGNeMult pegMultTmp = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
-            char * szPADL         = __TBIGNPADL("1",n,"0");
+            char * szPADL          = __TBIGNPADL("1",n,"0");
             pegMultTmp->cMultM     = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
             pegMultTmp->cMultP     = hb_strdup(cD);
     
-            szPADL                = __TBIGNPADL("0",n,"0");
+            szPADL                 = __TBIGNPADL("0",n,"0");
             pegMult->cMultM        = hb_strdup(szPADL);
             pegMult->cMultP        = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
-            HB_MAXUINT nI         = 0;
+            HB_MAXUINT nI          = 0;
 
             while (strcmp(pegMultTmp->cMultM,cN)<=0){
 
@@ -5353,22 +5421,22 @@ Return
 
         static void __TBIGNegDiv(const char * cN, const char * cD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv){
     
-            PHB_ITEM peDVArr    = hb_itemArrayNew(0);
+            PHB_ITEM peDVArr     = hb_itemArrayNew(0);
         
             ptBIGNeDiv pegDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
-            char * szPADL       = __TBIGNPADL("1",n,"0");
+            char * szPADL        = __TBIGNPADL("1",n,"0");
             pegDivTmp->cDivQ     = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
             pegDivTmp->cDivR     = hb_strdup(cD);
     
-            szPADL                = __TBIGNPADL("0",n,"0");
+            szPADL               = __TBIGNPADL("0",n,"0");
             pegDiv->cDivQ        = hb_strdup(szPADL);
             pegDiv->cDivR        = hb_strdup(szPADL);
             hb_xfree(szPADL);
             
-            HB_MAXUINT nI       = 0;
+            HB_MAXUINT nI        = 0;
 
             while (strcmp(pegDivTmp->cDivR,cN)<=0){
 
@@ -5445,7 +5513,7 @@ Return
             HB_SIZE n           = (HB_SIZE)hb_parnint(4);
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
             
-            ptBIGNeDiv pegDiv    = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            ptBIGNeDiv pegDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
             __TBIGNegDiv(cN,cD,(int)n,nB,pegDiv);
             
@@ -5482,7 +5550,7 @@ Return
 
         static HB_MAXUINT __TBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
              
-             HB_MAXUINT nLCM = 1;
+            HB_MAXUINT nLCM = 1;
             HB_MAXUINT i    = 2;
         
             HB_BOOL lMx;
