@@ -21,10 +21,10 @@
         #endif
         
         #xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
-		
-		#if defined(__CYGWIN__) //TODO: Remover teste quando resolver diferencas encontradas nesta plataforma.
-			#define __PTCOMPAT__ //Forco o modo de Compatibilidade com o Protheus
-		#endif
+
+        #if defined(__PLATFORM__CYGWIN) //TODO: Remover teste quando resolver diferencas encontradas nesta plataforma.
+            #define __PTCOMPAT__        //Forco o modo de Compatibilidade com o Protheus
+        #endif
 
         #xcommand DEFAULT =>
         /* Default parameters management */
@@ -32,7 +32,7 @@
                         => ;
                         iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
                         [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
-		
+        
         #ifndef CRLF
             #define CRLF hb_eol()
         #endif
