@@ -266,20 +266,30 @@ CLASS tBigNumber
     Method Min(uBigN)
     
     Method Add(uBigN)
-    Method Sub(uBigN)
+	Method Plus(uBigN) INLINE self:Add(uBigN)    
+	
+	Method Sub(uBigN)
+	Method Minus(uBigN) INLINE self:Sub(uBigN)
     
     Method Mult(uBigN)
-    Method egMult(uBigN)
+	Method Multiply(uBigN) INLINE self:Mult(uBigN)
+    
+	Method egMult(uBigN)
+	Method egMultiply(uBigN) INLINE self:egMult(uBigN)
     
     Method Div(uBigN,lFloat)
+	Method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
 
     Method Mod(uBigN)
 
     Method Pow(uBigN)
     
     Method e(lForce)
-    Method Exp(lForce)
-    Method PI(lForce)    //TODO: Implementar o calculo.
+    
+	Method Exp(lForce)
+    
+	Method PI(lForce)    //TODO: Implementar o calculo.
+   
     Method GCD(uBigN)
     Method LCM(uBigN)
     
@@ -4025,9 +4035,9 @@ Static Function __Pow(base,expR,EPS)
     Local sqr
     Local tmp
 
-       Local low
-       Local mid
-       Local lst
+    Local low
+    Local mid
+    Local lst
     Local high
     
     Local exp:=expR:Clone()
