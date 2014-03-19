@@ -266,19 +266,19 @@ CLASS tBigNumber
     Method Min(uBigN)
     
     Method Add(uBigN)
-	Method Plus(uBigN) INLINE self:Add(uBigN)    
-	
-	Method Sub(uBigN)
-	Method Minus(uBigN) INLINE self:Sub(uBigN)
+    Method Plus(uBigN) INLINE self:Add(uBigN)    
+    
+    Method Sub(uBigN)
+    Method Minus(uBigN) INLINE self:Sub(uBigN)
     
     Method Mult(uBigN)
-	Method Multiply(uBigN) INLINE self:Mult(uBigN)
+    Method Multiply(uBigN) INLINE self:Mult(uBigN)
     
-	Method egMult(uBigN)
-	Method egMultiply(uBigN) INLINE self:egMult(uBigN)
+    Method egMult(uBigN)
+    Method egMultiply(uBigN) INLINE self:egMult(uBigN)
     
     Method Div(uBigN,lFloat)
-	Method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
+    Method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
 
     Method Mod(uBigN)
 
@@ -286,9 +286,9 @@ CLASS tBigNumber
     
     Method e(lForce)
     
-	Method Exp(lForce)
+    Method Exp(lForce)
     
-	Method PI(lForce)    //TODO: Implementar o calculo.
+    Method PI(lForce)    //TODO: Implementar o calculo.
    
     Method GCD(uBigN)
     Method LCM(uBigN)
@@ -3777,10 +3777,10 @@ Static Function recFact(oS,oN)
     Local oNI
 
 #ifdef __PTCOMPAT__
-	IF oN:lte(__o20:Mult(oN:Div(__o2):Int(.T.,.F.)))
+    IF oN:lte(__o20:Mult(oN:Div(__o2):Int(.T.,.F.)))
 #else
     IF oN:lte(__o20)
-#endif	
+#endif    
         oR:SetValue(oS)
         oI:=oS:Clone()
         oI:SetValue(oI:Add(__o1))
@@ -5595,8 +5595,8 @@ Return
         }
 
         static HB_MAXUINT __TBIGNFI(HB_MAXUINT n){
-			HB_MAXUINT i;
-		    HB_MAXUINT fi = n;
+            HB_MAXUINT i;
+            HB_MAXUINT fi = n;
             for(i=2;((i*i)<=n);i++){
                 if ((n%i)==0){
                     fi -= fi/i;
