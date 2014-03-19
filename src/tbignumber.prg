@@ -2438,7 +2438,7 @@ Return(othRoot)
     Method    : nthRootPF
     Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data      : 05/03/2013
-    Descricao : Radiciacao 
+    Descricao : Radiciacao utilizando Fatores Primos
     Sintaxe   : tBigNumber():nthRootPF(uBigN) -> othRoot
 */
 Method nthRootPF(uBigN) CLASS tBigNumber
