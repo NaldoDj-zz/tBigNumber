@@ -3920,7 +3920,7 @@ Static Function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
     __oeDivR:SetValue(__oeDivN:Sub(__oeDivR),nBase,"0",NIL,nAcc)
 
-#else //__PTCOMPAT__
+#else //__HARBOUR__
 
     cQDiv:=tBIGNegDiv("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
     
@@ -5318,16 +5318,16 @@ Return
         
             ptBIGNeMult pegMultTmp = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
-            char * szPADL          = __TBIGNPADL("1",n,"0");
-            pegMultTmp->cMultM     = hb_strdup(szPADL);
-            hb_xfree(szPADL);
+            char * szTmp           = __TBIGNPADL("1",n,"0");
+            pegMultTmp->cMultM     = hb_strdup(szTmp);
+            hb_xfree(szTmp);
             
             pegMultTmp->cMultP     = hb_strdup(cD);
     
-            szPADL                 = __TBIGNPADL("0",n,"0");
-            pegMult->cMultM        = hb_strdup(szPADL);
-            pegMult->cMultP        = hb_strdup(szPADL);
-            hb_xfree(szPADL);
+            szTmp                  = __TBIGNPADL("0",n,"0");
+            pegMult->cMultM        = hb_strdup(szTmp);
+            pegMult->cMultP        = hb_strdup(szTmp);
+            hb_xfree(szTmp);
             
             HB_MAXUINT nI          = 0;
 
@@ -5337,7 +5337,7 @@ Return
                 
                     hb_arraySetC(pNI,1,pegMultTmp->cMultM);
                     hb_arraySetC(pNI,2,pegMultTmp->cMultP);
-                     hb_arrayAddForward(peMTArr,pNI);  
+                    hb_arrayAddForward(peMTArr,pNI);  
 
                     char * tmp = __TBIGNADD(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
                     memcpy(pegMultTmp->cMultM,tmp,n);
@@ -5425,16 +5425,16 @@ Return
         
             ptBIGNeDiv pegDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
-            char * szPADL        = __TBIGNPADL("1",n,"0");
-            pegDivTmp->cDivQ     = hb_strdup(szPADL);
-            hb_xfree(szPADL);
+            char * szTmp         = __TBIGNPADL("1",n,"0");
+            pegDivTmp->cDivQ     = hb_strdup(szTmp);
+            hb_xfree(szTmp);
             
             pegDivTmp->cDivR     = hb_strdup(cD);
     
-            szPADL               = __TBIGNPADL("0",n,"0");
-            pegDiv->cDivQ        = hb_strdup(szPADL);
-            pegDiv->cDivR        = hb_strdup(szPADL);
-            hb_xfree(szPADL);
+            szTmp                = __TBIGNPADL("0",n,"0");
+            pegDiv->cDivQ        = hb_strdup(szTmp);
+            pegDiv->cDivR        = hb_strdup(szTmp);
+            hb_xfree(szTmp);
             
             HB_MAXUINT nI        = 0;
 
@@ -5585,8 +5585,9 @@ Return
         }
 
         static HB_MAXUINT __TBIGNFI(HB_MAXUINT n){
-            HB_MAXUINT fi = n;
-            for(HB_MAXUINT i=2;((i*i)<=n);i++){
+			HB_MAXUINT i;
+		    HB_MAXUINT fi = n;
+            for(i=2;((i*i)<=n);i++){
                 if ((n%i)==0){
                     fi -= fi/i;
                 }    

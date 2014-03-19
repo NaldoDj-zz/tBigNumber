@@ -21,6 +21,10 @@
         #endif
         
         #xtranslate tbNCurrentFolder() => (hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir())
+		
+		#if defined(__CYGWIN__) //TODO: Remover teste quando resolver diferencas encontradas nesta plataforma.
+			#define __PTCOMPAT__ //Forco o modo de Compatibilidade com o Protheus
+		#endif
 
         #xcommand DEFAULT =>
         /* Default parameters management */
