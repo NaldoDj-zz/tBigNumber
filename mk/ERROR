@@ -1,36 +1,0 @@
-BATCH FILE FOR Harbour MinGW32
-hbmk2: Processando script local: hbmk.hbm
-Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-100100200200300300400400500500600600700700Compiling '..\hbp\..\src\..\src\tBigNtst.prg'...
-Compiling '..\hbp\..\src\..\src\tBigNumber.prg'...
-1001001002001002003003004004005005001001002002001001002002003003004004005005001001001001001002001001002003001002001002003004005006007008009001000110012001300140015001600170018001900200021002200230024002500100200300400500600700800900100011001200Lines 7202, Functions/Procedures 16
-Generating C source output to 'C:\Users\MARIN_~1\AppData\Local\Temp\hbmk_2xzamr.dir\tBigNtst.c'... Done.
-hbmk2: Processando script local: hbmk.hbm
-Harbour 3.2.0dev (r1403161922)Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-
-Copyright (c) 1999-2014, http://harbour-project.org/
-100100200200300300400400500500600600700700Compiling '..\hbp\..\src\..\src\tBigNtst.prg'...
-Compiling '..\hbp\..\src\..\src\tBigNumber.prg'...
-1001001001002002003003004004005005001001002002001001002002003003004004005005001001001001001002001001002003001002001002003004005006007008009001000110012001300140015001600170018001900200021002200230024002500100200300400500600700800900100011001200Lines 7202, Functions/Procedures 16
-Generating C source output to 'C:\Users\MARIN_~1\AppData\Local\Temp\hbmk_b7ah6b.dir\tBigNtst.c'... Done.
-hbmk2: Processando script local: hbmk.hbm
-Harbour 3.2.0dev (r1403161922)Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-
-Copyright (c) 1999-2014, http://harbour-project.org/
-100100200200300300400400500500600600700700Compiling '..\hbp\..\src\tBigNumber.prg'...
-Compiling '..\hbp\..\src\tBigNtst.prg'...
-1001001001002002003003004004005005001001002002001001002002003003004004005005001001001001001002001001002003001002001002003004005006007008009001000110012001300140015001600170018001900200021002200230024002500100200300400500600700800900100011001200Lines 7202, Functions/Procedures 17
-Generating C source output to 'C:\Users\MARIN_~1\AppData\Local\Temp\hbmk_3q29s1.dir\tBigNtst.c'... Done.
-hbmk2: Processando script local: hbmk.hbm
-Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-100Harbour 3.2.0dev (r1403161922)
-Copyright (c) 1999-2014, http://harbour-project.org/
-200100300200400300500400500600600700700Compiling '..\hbp\..\src\tBigNumber.prg'...
-Compiling '..\hbp\..\src\tBigNtst.prg'...
-1001001001002002003003004004005005001001002002001001002002003003004004005005001001001001001002001001002003001002001002003004005006007008009001000110012001300140015001600Deseja finalizar o arquivo em lotes (S/N)? 
