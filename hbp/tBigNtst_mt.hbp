@@ -1,16 +1,16 @@
-#/D__HB_Q_SQRT__
-#/D__PTCOMPAT__
-#/D__ALT_D__
+#/d__HB_Q_SQRT__
+#/d__PTCOMPAT__
+#/d__ALT_D__
 #-b
 
 -mt
 
-/D__MT__
-/D__POWMT__
-/D__ROOTMT__
-/D__ADDMT__
-/D__SUBTMT__
-/D__MULTMT__
+/d__MT__
+/d__POWMT__
+/d__ROOTMT__
+/d__ADDMT__
+/d__SUBTMT__
+/d__MULTMT__
 
 ../src/tBigNtst.prg -w2
 ../src/tBigNumber.prg -w3

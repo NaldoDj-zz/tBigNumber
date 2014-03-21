@@ -1,11 +1,11 @@
-#/D__HB_Q_SQRT__
-#/D__PTCOMPAT__
-#/D__ALT_D__
+#/d__HB_Q_SQRT__
+#/d__PTCOMPAT__
+#/d__ALT_D__
 #-b
 
 -mt
 
-/D__TBN_DYN_OBJ_SET__
+/d__TBN_DYN_OBJ_SET__
 
 ../src/tBigNtst.prg -w2
 ../src/tBigNumber.prg -w3

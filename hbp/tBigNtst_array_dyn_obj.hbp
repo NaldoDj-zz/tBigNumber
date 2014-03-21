@@ -1,12 +1,12 @@
-#/D__HB_Q_SQRT__
-#/D__PTCOMPAT__
-#/D__ALT_D__
+#/d__HB_Q_SQRT__
+#/d__PTCOMPAT__
+#/d__ALT_D__
 #-b
 
 -mt
 
-/DTBN_ARRAY
-/D__TBN_DYN_OBJ_SET__
+/dTBN_ARRAY
+/d__TBN_DYN_OBJ_SET__
 
 ../src/tBigNtst.prg -w2
 ../src/tBigNumber.prg -w3
