@@ -5595,7 +5595,8 @@ Return
         }
         
         static void tBIGNecDiv(const char * pA, const char * pB, int n, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
-            tBIGNegDiv(pA,pB,n,nB,pecDiv);
+            //TODO: Implementar Divisao Euclidiana.
+			tBIGNegDiv(pA,pB,n,nB,pecDiv);
         }
         
         HB_FUNC_STATIC( TBIGNECDIV ){
