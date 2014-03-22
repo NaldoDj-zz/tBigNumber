@@ -5225,7 +5225,7 @@ Return
             for(;f;){
                 szT[t++]=szF[--f];
             }
-            memset(&szT[t],szF[t],1);
+            hb_xmemset(&szT[t],szF[t],1);
             return szT;
         }
 
@@ -5409,11 +5409,11 @@ Return
                     hb_arrayAddForward(peMTArr,pNI);  
 
                     char * tmp = tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
-                    memcpy(pegMultTmp->cMultM,tmp,n);
+                    hb_xmemcpy(pegMultTmp->cMultM,tmp,n);
                     hb_xfree(tmp);
                     
                     tmp        = tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
-                    memcpy(pegMultTmp->cMultP,tmp,n);
+                    hb_xmemcpy(pegMultTmp->cMultP,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5430,11 +5430,11 @@ Return
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peMTArr,nI);
                 
                 pegMultTmp->cMultM = tBIGNAdd(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                 hb_xfree(pegMultTmp->cMultM);
     
                 pegMultTmp->cMultP = tBIGNAdd(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                 hb_xfree(pegMultTmp->cMultP);
                 
                 int iCmp = strcmp(pegMult->cMultM,pN);
@@ -5445,11 +5445,11 @@ Return
                         if (iCmp==1){
     
                             pegMultTmp->cMultM = tBIGNSub(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                             hb_xfree(pegMultTmp->cMultM);
     
                             pegMultTmp->cMultP = tBIGNSub(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                             hb_xfree(pegMultTmp->cMultP);
     
                     }
@@ -5494,13 +5494,13 @@ Return
         
             ptBIGNeDiv pegDivTmp = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             
-            char * Tmp         = tBIGNPadL("1",n,"0");
+            char * Tmp           = tBIGNPadL("1",n,"0");
             pegDivTmp->cDivQ     = hb_strdup(Tmp);
             hb_xfree(Tmp);
             
             pegDivTmp->cDivR     = hb_strdup(pD);
     
-            Tmp                = tBIGNPadL("0",n,"0");
+            Tmp                  = tBIGNPadL("0",n,"0");
             pegDiv->cDivQ        = hb_strdup(Tmp);
             pegDiv->cDivR        = hb_strdup(Tmp);
             hb_xfree(Tmp);
@@ -5516,11 +5516,11 @@ Return
                     hb_arrayAddForward(peDVArr,pNI);  
 
                     char * tmp = tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
-                    memcpy(pegDivTmp->cDivQ,tmp,n);
+                    hb_xmemcpy(pegDivTmp->cDivQ,tmp,n);
                     hb_xfree(tmp);
                     
                     tmp        = tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);                
-                    memcpy(pegDivTmp->cDivR,tmp,n);
+                    hb_xmemcpy(pegDivTmp->cDivR,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5537,11 +5537,11 @@ Return
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peDVArr,nI);
                 
                 pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                 hb_xfree(pegDivTmp->cDivQ);
     
                 pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                 hb_xfree(pegDivTmp->cDivR);
                 
                 int iCmp = strcmp(pegDiv->cDivR,pN);
@@ -5552,11 +5552,11 @@ Return
                         if (iCmp==1){
     
                             pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                             hb_xfree(pegDivTmp->cDivQ);
     
                             pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                             hb_xfree(pegDivTmp->cDivR);
     
                     }
@@ -5569,7 +5569,7 @@ Return
             hb_itemRelease(peDVArr);
     
             pegDivTmp->cDivR = tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
-            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
             hb_xfree(pegDivTmp->cDivR);
             hb_xfree(pegDivTmp);
                 

@@ -4,11 +4,8 @@ rem ============================================================================
 SET _PATH=%PATH%
 SET _HB_PATH=%HB_PATH%
 SET HB_PATH=d:\hb32\
-SET cygwin_PATH=d:\cygwin64\
 SET MinGW64_PATH=d:\MinGW64\
 SET PATH=%HB_PATH%bin\
-SET PATH=%PATH%;%cygwin_PATH%bin\
-SET PATH=%PATH%;%cygwin_PATH%usr\bin\
 SET path=%PATH%;%MinGW64_PATH%bin\
 
    %HB_PATH%bin\hbmk2.exe -strip- -jobs=10 -cpp -compr=no -comp=mingw64 ..\hbp\_tbigNumber.hbp	
