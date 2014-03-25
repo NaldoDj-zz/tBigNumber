@@ -5631,47 +5631,57 @@ Return
             
             char * tmp;
             
-            HB_MAXUINT ipNS1 = ipN-1;
-
+            int ipNS1 = ipN-1;
+            int i;
+             
             HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
-            HB_MAXUINT i;
           
             ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            //ptBIGNeMult pegMultTmp  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+
+            int ia[ipNS1];
+            int iaux[ipNS1];
+			
+            i = ipNS1;
+			while(i>=0){
+                ia[i]   = (*(&a[i])-'0');
+                iaux[i] = (*(&aux[i])-'0');
+                i--;
+            }
             
-            while (memcmp(aux,a,ipN)<=0){
+            while (memcmp(iaux,ia,ipN)<=0){
                 n++;
                 v1 = 0;
-                for(i=ipNS1;i>0;i--){
-                    v = (*(&aux[i])-'0');
+				i = ipNS1;
+                while(i>=0){
+                    v = iaux[i];
                     v <<= 1;
                     v += v1;
                     if (v>=nB){
                         v1 = v/nB;
                         v %= nB;
-                        aux[i] = "0123456789"[v];
                     }else{
                         v1 = 0;
-                        aux[i] = "0123456789"[v%nB];                        
                     }
+                    iaux[i] = v;
+                    i--;
                 }
-                /*
-                tBIGNegMult(aux,sN2,ipN,nB,pegMultTmp);
-                memcpy(aux,pegMultTmp->cMultP,ipN);
-                hb_xfree(pegMultTmp->cMultP);
-                hb_xfree(pegMultTmp->cMultM);
-                */
             }
 
-            while (n){                
+            i = ipNS1;
+			while(i>=0){
+                aux[i]   = "0123456789"[iaux[i]%nB];
+                i--;
+            }
+            
+            while (n){
                 --n;                
                 tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
                 memcpy(aux,pecDivTmp->cDivQ,ipN);
                 hb_xfree(pecDivTmp->cDivQ);
                 hb_xfree(pecDivTmp->cDivR);    
                 v1 = 0;
-                for(i=ipNS1;i>0;i--){
+                for(i=ipNS1;i>=0;i--){
                     v = (*(&pecDiv->cDivQ[i])-'0');
                     v <<= 1;
                     v += v1;
@@ -5684,12 +5694,6 @@ Return
                         pecDiv->cDivQ[i] = "0123456789"[v%nB];
                     }                    
                 }
-                /*
-                tBIGNegMult(pecDiv->cDivQ,sN2,ipN,nB,pegMultTmp);
-                memcpy(pecDiv->cDivQ,pegMultTmp->cMultP,ipN);
-                hb_xfree(pegMultTmp->cMultP);
-                hb_xfree(pegMultTmp->cMultM);
-                */
                 if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
                     tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
                     memcpy(pecDiv->cDivR,tmp,ipN);
@@ -5705,9 +5709,7 @@ Return
             hb_xfree(aux);
             hb_xfree(sN1);
             hb_xfree(sN2);
-            hb_xfree(pecDivTmp);
-            //hb_xfree(pegMultTmp);
-            
+            hb_xfree(pecDivTmp);            
         }
         
         HB_FUNC_STATIC( TBIGNECDIV ){
