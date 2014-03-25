@@ -89,6 +89,7 @@ Static __nstcZ0
 Static __cstcN9
 Static __nstcN9
 Static __lstbNSet
+Static __nDivMeth
 
 #ifdef TBN_ARRAY
     THREAD Static __aZAdd
@@ -279,6 +280,7 @@ CLASS tBigNumber
     
     Method Div(uBigN,lFloat)
     Method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
+    Method DivMethod(nMethod)
 
     Method Mod(uBigN)
 
@@ -540,6 +542,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
      // -------------------- assign STATIC values --------------------------------
     IF __lstbNSet==NIL
         __InitstbN(nBase)
+        self:DivMethod()
     EndIF
 
 Return(self)
@@ -1125,7 +1128,7 @@ Method eq(uBigN) CLASS tBigNumber
         #ifdef __PTCOMPAT__
             leq:=__eqoN1:GetValue(.T.)==__eqoN2:GetValue(.T.)
         #else
-            leq:=tBIGNstrcmp(__eqoN1:GetValue(.T.),__eqoN2:GetValue(.T.))==0
+            leq:=tBIGNmemcmp(__eqoN1:GetValue(.T.),__eqoN2:GetValue(.T.))==0
         #endif    
     EndIF        
 
@@ -1161,7 +1164,7 @@ Method gt(uBigN) CLASS tBigNumber
             #ifdef __PTCOMPAT__
                 lgt:=__gtoN1:GetValue(.T.)<__gtoN2:GetValue(.T.)
             #else
-                lgt:=tBIGNstrcmp(__gtoN1:GetValue(.T.),__gtoN2:GetValue(.T.))==-1
+                lgt:=tBIGNmemcmp(__gtoN1:GetValue(.T.),__gtoN2:GetValue(.T.))==-1
             #endif    
         ElseIF __gtoN1:lNeg .and. .NOT.(__gtoN2:lNeg)
             lgt:=.F.
@@ -1173,7 +1176,7 @@ Method gt(uBigN) CLASS tBigNumber
         #ifdef __PTCOMPAT__
             lgt:=__gtoN1:GetValue(.T.)>__gtoN2:GetValue(.T.)
         #else
-            lgt:=tBIGNstrcmp(__gtoN1:GetValue(.T.),__gtoN2:GetValue(.T.))==1
+            lgt:=tBIGNmemcmp(__gtoN1:GetValue(.T.),__gtoN2:GetValue(.T.))==1
         #endif    
     EndIF 
 
@@ -1199,7 +1202,7 @@ Method lt(uBigN) CLASS tBigNumber
             #ifdef __PTCOMPAT__
                 llt:=__ltoN1:GetValue(.T.)>__ltoN2:GetValue(.T.)
             #else
-                llt:=tBIGNstrcmp(__ltoN1:GetValue(.T.),__ltoN2:GetValue(.T.))==1
+                llt:=tBIGNmemcmp(__ltoN1:GetValue(.T.),__ltoN2:GetValue(.T.))==1
             #endif    
         ElseIF __ltoN1:lNeg .and. .NOT.(__ltoN2:lNeg)
             llt:=.T.
@@ -1211,7 +1214,7 @@ Method lt(uBigN) CLASS tBigNumber
         #ifdef __PTCOMPAT__
             llt:=__ltoN1:GetValue(.T.)<__ltoN2:GetValue(.T.)
         #else
-            llt:=tBIGNstrcmp(__ltoN1:GetValue(.T.),__ltoN2:GetValue(.T.))==-1
+            llt:=tBIGNmemcmp(__ltoN1:GetValue(.T.),__ltoN2:GetValue(.T.))==-1
         #endif    
     EndIF    
 
@@ -1270,7 +1273,7 @@ Method cmp(uBigN) CLASS tBigNumber
         #ifdef __PTCOMPAT__
             iCmp:=IF(__cmpoN1:GetValue(.T.)==__cmpoN2:GetValue(.T.),0,NIL)
         #else
-            iCmp:=tBIGNstrcmp(__cmpoN1:GetValue(.T.),__cmpoN2:GetValue(.T.))
+            iCmp:=tBIGNmemcmp(__cmpoN1:GetValue(.T.),__cmpoN2:GetValue(.T.))
         #endif
         leq:=iCmp==0
     EndIF    
@@ -1287,7 +1290,7 @@ Method cmp(uBigN) CLASS tBigNumber
                     #ifdef __PTCOMPAT__
                         iCmp:=IF(__cmpoN1:GetValue(.T.)>__cmpoN2:GetValue(.T.),1,-1)
                     #else
-                        iCmp:=tBIGNstrcmp(__cmpoN1:GetValue(.T.),__cmpoN2:GetValue(.T.))
+                        iCmp:=tBIGNmemcmp(__cmpoN1:GetValue(.T.),__cmpoN2:GetValue(.T.))
                     #endif    
                 EndIF
                 llt:=iCmp==1
@@ -1913,11 +1916,11 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
 
         DEFAULT lFloat:=.T.
 
-        #ifdef __PTCOMPAT__
+        IF __nDivMeth==2
             __dvoNR:SetValue(ecDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
-        #else
+        Else
             __dvoNR:SetValue(egDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
-        #endif    
+        EndIF    
 
         IF lFloat
 
@@ -1948,11 +1951,11 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
                     cN2:=__dvoN2:cInt
                     cN2+=__dvoN2:cDec
 
-                    #ifdef __PTCOMPAT__
+                    IF __nDivMeth==2
                         __dvoRDiv:SetValue(ecDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
-                    #else
+                    Else
                         __dvoRDiv:SetValue(egDiv(cN1,cN2,__dvoRDiv:nSize,__dvoRDiv:nBase,nAcc,lFloat))
-                    #endif
+                    EndIF
 
                     cDec+=__dvoRDiv:ExactValue(.T.)
                     nDec:=hb_bLen(cDec)
@@ -1997,6 +2000,21 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
     End Sequence
 
 Return(__dvoNR:Clone())
+
+/*
+    Method      : DivMethod
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 24/03/2014
+    Descricao   : Setar o metodo de Divisao a ser utilizado
+    Sintaxe     : tBigNumber():DivMethod(nMethod) -> nLstMethod
+*/
+Method DivMethod(nMethod) CLASS tBigNumber
+    Local nLstMethod
+    DEFAULT __nDivMeth:= 1
+    DEFAULT nMethod:= __nDivMeth
+    nLstMethod:= __nDivMeth
+    __nDivMeth:=nMethod
+Return(nLstMethod)
 
 /*
     Method      : Mod
@@ -5137,7 +5155,7 @@ Return
             TBIGNLCM()
             TBIGNFI()
             TBIGNALEN()
-            TBIGNSTRCMP()
+            TBIGNMEMCMP()
         EndIF
     Return(lDummy)
     
@@ -5162,7 +5180,7 @@ Return
             HB_ISIZ n;
             for(n=0;n<nTimes;++n)
             {
-                hb_xmemcpy(szPtr,szText,nLen);
+                memcpy(szPtr,szText,nLen);
                 szPtr+=nLen;
             }
             return szResult;
@@ -5225,7 +5243,7 @@ Return
             for(;f;){
                 szT[t++]=szF[--f];
             }
-            hb_xmemset(&szT[t],szF[t],1);
+            memset(&szT[t],szF[t],1);
             return szT;
         }
 
@@ -5243,7 +5261,7 @@ Return
             HB_MAXUINT v     = 0;
             HB_MAXUINT v1;
             while (--n>=0){
-                v+=(HB_MAXUINT)hb_strVal(&a[n],1)+(HB_MAXUINT)hb_strVal(&b[n],1);
+                v+=(*(&a[n])-'0')+(*(&b[n])-'0');
                 if ( v>=nB ){
                     v  -= nB;
                     v1 = 1;
@@ -5276,7 +5294,7 @@ Return
             int v         = 0;
             int v1;
             while (--n>=0){
-                v+=(HB_MAXUINT)hb_strVal(&a[n],1)-(HB_MAXUINT)hb_strVal(&b[n],1);
+                v+=(*(&a[n])-'0')-(*(&b[n])    -'0');
                 if ( v<0 ){
                     v+=nB;
                     v1 = -1;
@@ -5315,23 +5333,25 @@ Return
             
             HB_MAXUINT v = 0;
             HB_MAXUINT v1;
-
+            
             n-=1;
             
             while (i<=n){
                 s = 0;
                 j = i;
                 while (s<=i){
-                    v+=(HB_MAXUINT)hb_strVal(&a[s++],1)*(HB_MAXUINT)hb_strVal(&b[j--],1);
+                    v+=(*(&a[s++])-'0')*(*(&b[j--])-'0');
                 }
                 if (v>=nB){
                     v1 = v/nB;
                     v %= nB;
-                }else{
+                    c[k]   = "0123456789"[v];
+                    c[k+1] = "0123456789"[v1%nB];
+               }else{
                     v1 = 0;
-                }
-                c[k]   = "0123456789"[v%nB];
-                c[k+1] = "0123456789"[v1%nB];
+                    c[k]   = "0123456789"[v%nB];
+                    c[k+1] = "0123456789"[v1];
+                 };
                 v = v1;
                 k++;
                 i++;
@@ -5341,16 +5361,18 @@ Return
                 s = n;
                 j = l;
                 while (s>=l){
-                    v+=(HB_MAXUINT)hb_strVal(&a[s--],1)*(HB_MAXUINT)hb_strVal(&b[j++],1);
+                    v+=(*(&a[s--])-'0')*(*(&b[j++])-'0');
                 }
                 if (v>=nB){
                     v1 = v/nB;
                     v %= nB;
+                    c[k]   = "0123456789"[v];
+                    c[k+1] = "0123456789"[v1%nB];
                 }else{
-                    v1 = 0;    
+                    v1     = 0;
+                    c[k]   = "0123456789"[v%nB];
+                    c[k+1] = "0123456789"[v1];                    
                 }
-                c[k]   = "0123456789"[v%nB];
-                c[k+1] = "0123456789"[v1%nB];
                 v = v1;
                 if (++k>=y){
                     break;
@@ -5400,7 +5422,7 @@ Return
             
             HB_MAXUINT nI          = 0;
 
-            while (strcmp(pegMultTmp->cMultM,pN)<=0){
+            while (memcmp(pegMultTmp->cMultM,pN,n)<=0){
 
                  PHB_ITEM pNI = hb_itemArrayNew(2);
                 
@@ -5409,11 +5431,11 @@ Return
                     hb_arrayAddForward(peMTArr,pNI);  
 
                     char * tmp = tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
-                    hb_xmemcpy(pegMultTmp->cMultM,tmp,n);
+                    memcpy(pegMultTmp->cMultM,tmp,n);
                     hb_xfree(tmp);
                     
                     tmp        = tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
-                    hb_xmemcpy(pegMultTmp->cMultP,tmp,n);
+                    memcpy(pegMultTmp->cMultP,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5430,14 +5452,14 @@ Return
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peMTArr,nI);
                 
                 pegMultTmp->cMultM = tBIGNAdd(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                 hb_xfree(pegMultTmp->cMultM);
     
                 pegMultTmp->cMultP = tBIGNAdd(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                 hb_xfree(pegMultTmp->cMultP);
                 
-                int iCmp = strcmp(pegMult->cMultM,pN);
+                int iCmp = memcmp(pegMult->cMultM,pN,n);
 
                 if (iCmp==0){
                     break;
@@ -5445,11 +5467,11 @@ Return
                         if (iCmp==1){
     
                             pegMultTmp->cMultM = tBIGNSub(pegMult->cMultM,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                            memcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                             hb_xfree(pegMultTmp->cMultM);
     
                             pegMultTmp->cMultP = tBIGNSub(pegMult->cMultP,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                            memcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                             hb_xfree(pegMultTmp->cMultP);
     
                     }
@@ -5507,7 +5529,7 @@ Return
             
             HB_MAXUINT nI        = 0;
 
-            while (strcmp(pegDivTmp->cDivR,pN)<=0){
+            while (memcmp(pegDivTmp->cDivR,pN,n)<=0){
 
                  PHB_ITEM pNI = hb_itemArrayNew(2);
                 
@@ -5516,11 +5538,11 @@ Return
                     hb_arrayAddForward(peDVArr,pNI);  
 
                     char * tmp = tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
-                    hb_xmemcpy(pegDivTmp->cDivQ,tmp,n);
+                    memcpy(pegDivTmp->cDivQ,tmp,n);
                     hb_xfree(tmp);
                     
                     tmp        = tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);                
-                    hb_xmemcpy(pegDivTmp->cDivR,tmp,n);
+                    memcpy(pegDivTmp->cDivR,tmp,n);
                     hb_xfree(tmp);
 
                  hb_itemRelease(pNI);
@@ -5537,14 +5559,14 @@ Return
                 PHB_ITEM pNI = hb_arrayGetItemPtr(peDVArr,nI);
                 
                 pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                 hb_xfree(pegDivTmp->cDivQ);
     
                 pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                 hb_xfree(pegDivTmp->cDivR);
                 
-                int iCmp = strcmp(pegDiv->cDivR,pN);
+                int iCmp = memcmp(pegDiv->cDivR,pN,n);
 
                 if (iCmp==0){
                     break;
@@ -5552,11 +5574,11 @@ Return
                         if (iCmp==1){
     
                             pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,hb_arrayGetCPtr(pNI,1),n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                            memcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                             hb_xfree(pegDivTmp->cDivQ);
     
                             pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,hb_arrayGetCPtr(pNI,2),n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                             hb_xfree(pegDivTmp->cDivR);
     
                     }
@@ -5569,7 +5591,7 @@ Return
             hb_itemRelease(peDVArr);
     
             pegDivTmp->cDivR = tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
-            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+            memcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
             hb_xfree(pegDivTmp->cDivR);
             hb_xfree(pegDivTmp);
                 
@@ -5594,9 +5616,98 @@ Return
             hb_xfree(pegDiv);
         }
         
-        static void tBIGNecDiv(const char * pA, const char * pB, int n, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
-            //TODO: Implementar Divisao Euclidiana.
-			tBIGNegDiv(pA,pB,n,nB,pecDiv);
+        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
+            
+            char * a        = tBIGNPadL(pA,ipN,"0");
+            char * b        = tBIGNPadL(pB,ipN,"0");
+            
+            pecDiv->cDivR   = hb_strdup(a);
+            pecDiv->cDivQ   = tBIGNPadL("0",ipN,"0");
+            int n           = 0;
+            char * aux      = hb_strdup(b);
+            
+            char * sN1      = tBIGNPadL("1",ipN,"0");
+            char * sN2      = tBIGNPadL("2",ipN,"0");
+            
+            char * tmp;
+            
+            HB_MAXUINT ipNS1 = ipN-1;
+
+	        HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            HB_MAXUINT i;
+  		
+            ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            //ptBIGNeMult pegMultTmp  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+            
+            while (memcmp(aux,a,ipN)<=0){
+                n++;
+                v1 = 0;
+                for(i=ipNS1;i>0;i--){
+                    v = (*(&aux[i])-'0');
+                    v <<= 1;
+                    v += v1;
+                    if (v>=nB){
+                        v1 = v/nB;
+                        v %= nB;
+                        aux[i] = "0123456789"[v];
+                    }else{
+                        v1 = 0;
+                        aux[i] = "0123456789"[v%nB];                        
+                    }
+                }
+                /*
+                tBIGNegMult(aux,sN2,ipN,nB,pegMultTmp);
+                memcpy(aux,pegMultTmp->cMultP,ipN);
+                hb_xfree(pegMultTmp->cMultP);
+                hb_xfree(pegMultTmp->cMultM);
+                */
+            }
+
+            while (n){                
+                --n;                
+                tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
+                memcpy(aux,pecDivTmp->cDivQ,ipN);
+                hb_xfree(pecDivTmp->cDivQ);
+                hb_xfree(pecDivTmp->cDivR);    
+                v1 = 0;
+                for(i=ipNS1;i>0;i--){
+                    v = (*(&pecDiv->cDivQ[i])-'0');
+                    v <<= 1;
+                    v += v1;
+                    if (v>=nB){
+                        v1 = v/nB;
+                        v %= nB;
+                        pecDiv->cDivQ[i] = "0123456789"[v];
+                    }else{
+                        v1 = 0;    
+                        pecDiv->cDivQ[i] = "0123456789"[v%nB];
+                    }                    
+                }
+                /*
+                tBIGNegMult(pecDiv->cDivQ,sN2,ipN,nB,pegMultTmp);
+                memcpy(pecDiv->cDivQ,pegMultTmp->cMultP,ipN);
+                hb_xfree(pegMultTmp->cMultP);
+                hb_xfree(pegMultTmp->cMultM);
+                */
+                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
+                    tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
+                    memcpy(pecDiv->cDivR,tmp,ipN);
+                    hb_xfree(tmp);
+                    tmp = tBIGNAdd(pecDiv->cDivQ,sN1,ipN,ipN,nB);
+                    memcpy(pecDiv->cDivQ,tmp,ipN);
+                    hb_xfree(tmp);
+                }
+            }
+            
+            hb_xfree(a);
+            hb_xfree(b);
+            hb_xfree(aux);
+            hb_xfree(sN1);
+            hb_xfree(sN2);
+            hb_xfree(pecDivTmp);
+            //hb_xfree(pegMultTmp);
+            
         }
         
         HB_FUNC_STATIC( TBIGNECDIV ){
@@ -5607,8 +5718,8 @@ Return
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
             
             ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            
-            tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
+          
+            tBIGNecDiv(pN,pD,(int)(n+=2),nB,pecDiv);
             
             hb_storclen(pecDiv->cDivR,n,3);
             hb_retclen(pecDiv->cDivQ,n);
@@ -5618,6 +5729,7 @@ Return
             hb_xfree(pecDiv);
         }
                 
+        /*
         static HB_MAXUINT tBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
             HB_MAXUINT nGCD = x;  
             x = HB_MAX(y,nGCD);
@@ -5635,12 +5747,51 @@ Return
                   }
             }
             return nGCD;
+        }*/
+        
+        //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
+        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v){
+          int shift;
+         
+          /* GCD(0,v) == v; GCD(u,0) == u, GCD(0,0) == 0 */
+          if (u == 0) return v;
+          if (v == 0) return u;
+         
+          /* Let shift := lg K, where K is the greatest power of 2
+                dividing both u and v. */
+          for (shift = 0; ((u | v) & 1) == 0; ++shift) {
+                 u >>= 1;
+                 v >>= 1;
+          }
+         
+          while ((u & 1) == 0)
+            u >>= 1;
+         
+          /* From here on, u is always odd. */
+          do {
+               /* remove all factors of 2 in v -- they are not common */
+               /*   note: v is not zero, so while will terminate */
+               while ((v & 1) == 0)  /* Loop X */
+                   v >>= 1;
+         
+               /* Now u and v are both odd. Swap if necessary so u <= v,
+                  then set v = v - u (which is even). For bignums, the
+                  swapping is just pointer movement, and the subtraction
+                  can be done in-place. */
+               if (u > v) {
+                 unsigned int t = v; v = u; u = t;}  // Swap u and v.
+               v = v - u;                            // Here v >= u.
+             } while (v != 0);
+         
+          /* restore common factors of 2 */
+          return u << shift;
         }
 
         HB_FUNC_STATIC( TBIGNGDC ){
             hb_retnint(tBIGNGDC((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
         }
 
+        /*
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
              
             HB_MAXUINT nLCM = 1;
@@ -5672,7 +5823,12 @@ Return
             return nLCM;
 
         }
+        */
 
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
+            return (y/tBIGNGDC(x,y))*x;
+        }    
+        
         HB_FUNC_STATIC( TBIGNLCM ){
             hb_retnint(tBIGNLCM((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
         }
@@ -5702,8 +5858,8 @@ Return
            hb_retns(hb_arrayLen(hb_param(1,HB_IT_ARRAY)));
         }
       
-        HB_FUNC_STATIC( TBIGNSTRCMP ){
-           hb_retnint(strcmp(hb_parc(1),hb_parc(2)));
+        HB_FUNC_STATIC( TBIGNMEMCMP ){
+           hb_retnint(memcmp(hb_parc(1),hb_parc(2),hb_parclen(1)));
         }
     
     #pragma ENDDUMP
