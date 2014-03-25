@@ -5269,8 +5269,8 @@ Return
                 else{
                     v1 = 0;
                 }
-                c[k]   = "0123456789"[v%nB];
-                c[k-1] = "0123456789"[v1%nB];
+                c[k]   = "0123456789"[v];
+                c[k-1] = "0123456789"[v1];
                 v = v1;
                 --k;
             }
@@ -5302,8 +5302,8 @@ Return
                 else{
                     v1 = 0;
                 }
-                c[k]   = "0123456789"[v%nB];
-                c[k-1] = "0123456789"[v1%nB];
+                c[k]   = "0123456789"[v];
+                c[k-1] = "0123456789"[v1];
                 v = v1;
                 --k;
             }
@@ -5345,14 +5345,12 @@ Return
                 if (v>=nB){
                     v1 = v/nB;
                     v %= nB;
-                    c[k]   = "0123456789"[v];
-                    c[k+1] = "0123456789"[v1%nB];
                }else{
                     v1 = 0;
-                    c[k]   = "0123456789"[v%nB];
-                    c[k+1] = "0123456789"[v1];
                  };
-                v = v1;
+                c[k]   = "0123456789"[v];
+                c[k+1] = "0123456789"[v1];
+			    v = v1;
                 k++;
                 i++;
             }
@@ -5366,13 +5364,11 @@ Return
                 if (v>=nB){
                     v1 = v/nB;
                     v %= nB;
-                    c[k]   = "0123456789"[v];
-                    c[k+1] = "0123456789"[v1%nB];
                 }else{
-                    v1     = 0;
-                    c[k]   = "0123456789"[v%nB];
-                    c[k+1] = "0123456789"[v1];                    
+                    v1     = 0;                    
                 }
+                c[k]   = "0123456789"[v];
+                c[k+1] = "0123456789"[v1];
                 v = v1;
                 if (++k>=y){
                     break;
@@ -5641,9 +5637,10 @@ Return
 
             int ia[ipNS1];
             int iaux[ipNS1];
-			
+			int idivQ[ipNS1];
+            
             i = ipNS1;
-			while(i>=0){
+            while(i>=0){
                 ia[i]   = (*(&a[i])-'0');
                 iaux[i] = (*(&aux[i])-'0');
                 i--;
@@ -5652,7 +5649,7 @@ Return
             while (memcmp(iaux,ia,ipN)<=0){
                 n++;
                 v1 = 0;
-				i = ipNS1;
+                i = ipNS1;
                 while(i>=0){
                     v = iaux[i];
                     v <<= 1;
@@ -5669,8 +5666,9 @@ Return
             }
 
             i = ipNS1;
-			while(i>=0){
-                aux[i]   = "0123456789"[iaux[i]%nB];
+            while(i>=0){
+                aux[i]   = "0123456789"[iaux[i]];
+                idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
                 i--;
             }
             
@@ -5681,26 +5679,33 @@ Return
                 hb_xfree(pecDivTmp->cDivQ);
                 hb_xfree(pecDivTmp->cDivR);    
                 v1 = 0;
-                for(i=ipNS1;i>=0;i--){
-                    v = (*(&pecDiv->cDivQ[i])-'0');
+                i = ipNS1;
+                while(i>=0){
+                    v = idivQ[i];
                     v <<= 1;
                     v += v1;
                     if (v>=nB){
                         v1 = v/nB;
                         v %= nB;
-                        pecDiv->cDivQ[i] = "0123456789"[v];
                     }else{
-                        v1 = 0;    
-                        pecDiv->cDivQ[i] = "0123456789"[v%nB];
-                    }                    
+                        v1 = 0;
+                    }
+                    idivQ[i] = v;
+					pecDiv->cDivQ[i]  = "0123456789"[v];
+                    i--;
                 }
-                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
+                 if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
                     tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
                     memcpy(pecDiv->cDivR,tmp,ipN);
                     hb_xfree(tmp);
                     tmp = tBIGNAdd(pecDiv->cDivQ,sN1,ipN,ipN,nB);
                     memcpy(pecDiv->cDivQ,tmp,ipN);
                     hb_xfree(tmp);
+                    i = ipNS1;
+                    while(i>=0){
+                        idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
+                        i--;
+                    }
                 }
             }
             
