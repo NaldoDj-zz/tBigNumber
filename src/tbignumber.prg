@@ -2246,12 +2246,12 @@ Return(oPITthD)
 Method GCD(uBigN) CLASS tBigNumber
 
     Local oX:=self:Clone()
-     Local oY:=tBigNumber():New(uBigN)
+    Local oY:=tBigNumber():New(uBigN)
      
-     Local oGCD  
+    Local oGCD  
      
-     oX:SetValue(oY:Max(self))
-     oY:SetValue(oY:Min(self))
+    oX:SetValue(oY:Max(self))
+    oY:SetValue(oY:Min(self))
 
     IF oY:eq(__o0)
         oGCD:=oX
