@@ -5633,10 +5633,10 @@ Return
             
             HB_MAXUINT ipNS1 = ipN-1;
 
-	        HB_MAXUINT v;
+            HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
             HB_MAXUINT i;
-  		
+          
             ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             //ptBIGNeMult pegMultTmp  = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
