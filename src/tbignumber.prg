@@ -75,6 +75,10 @@ While <n>\>__nstcZ0;;
     __nstcZ0+=__nstcZ0;;
 End While;;
 
+#ifndef __DIVMETHOD__
+    #define __DIVMETHOD__ 1
+#endif
+
 Static __o0
 Static __o1
 Static __o2
@@ -542,7 +546,7 @@ Method New(uBigN,nBase) CLASS tBigNumber
      // -------------------- assign STATIC values --------------------------------
     IF __lstbNSet==NIL
         __InitstbN(nBase)
-        self:DivMethod()
+        self:DivMethod(__DIVMETHOD__)
     EndIF
 
 Return(self)
@@ -2010,7 +2014,7 @@ Return(__dvoNR:Clone())
 */
 Method DivMethod(nMethod) CLASS tBigNumber
     Local nLstMethod
-    DEFAULT __nDivMeth:= 1
+    DEFAULT __nDivMeth:= __DIVMETHOD__
     DEFAULT nMethod:= __nDivMeth
     nLstMethod:= __nDivMeth
     __nDivMeth:=nMethod
@@ -2715,8 +2719,7 @@ Method Log(uBigNB) CLASS tBigNumber
 
     oS:SetValue(oS:Add(oY))
     oY:SetValue(__o0)
-*    oT:SetValue(oT:Sqrt())
-    oT:SetValue(__SQRT(oT))
+    oT:SetValue(oT:nthRoot(__o2))
     oI:SetValue(oI:Div(__o2))
     
     While oT:gt(__o1)
@@ -2729,8 +2732,7 @@ Method Log(uBigNB) CLASS tBigNumber
         oS:SetValue(oS:Add(oY))
         oY:SetValue(__o0)
         oLT:SetValue(oT)
-*        oT:SetValue(oT:Sqrt())
-        oT:SetValue(__SQRT(oT))
+        oT:SetValue(oT:nthRoot(__o2))
         IF oT:eq(oLT)
             oT:SetValue(__o0)    
         EndIF 
@@ -5613,7 +5615,8 @@ Return
         }
         
         static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
-            
+            tBIGNegDiv(pA,pB,ipN,nB,pecDiv);
+            /* TODO: Verificar possibilidade de otimizar o codigo abaixo
             char * a        = tBIGNPadL(pA,ipN,"0");
             char * b        = tBIGNPadL(pB,ipN,"0");
             
@@ -5672,8 +5675,7 @@ Return
                 i--;
             }
             
-            while (n){
-                --n;                
+            while (n--){            
                 tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
                 memcpy(aux,pecDivTmp->cDivQ,ipN);
                 hb_xfree(pecDivTmp->cDivQ);
@@ -5694,18 +5696,20 @@ Return
                     pecDiv->cDivQ[i]  = "0123456789"[v];
                     i--;
                 }
-                 if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
+                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
                     tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
                     memcpy(pecDiv->cDivR,tmp,ipN);
                     hb_xfree(tmp);
                     tmp = tBIGNAdd(pecDiv->cDivQ,sN1,ipN,ipN,nB);
                     memcpy(pecDiv->cDivQ,tmp,ipN);
                     hb_xfree(tmp);
-                    i = ipNS1;
-                    while(i>=0){
-                        idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
-                        i--;
-                    }
+                    if (n){
+                        i = ipNS1;
+                        while(i>=0){
+                            idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
+                            i--;
+                        }
+                    }    
                 }
             }
             
@@ -5714,7 +5718,8 @@ Return
             hb_xfree(aux);
             hb_xfree(sN1);
             hb_xfree(sN2);
-            hb_xfree(pecDivTmp);            
+            hb_xfree(pecDivTmp);
+            */
         }
         
         HB_FUNC_STATIC( TBIGNECDIV ){
@@ -5726,7 +5731,9 @@ Return
             
             ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
           
-            tBIGNecDiv(pN,pD,(int)(n+=2),nB,pecDiv);
+            /* TODO: Restaurar quando conseguir otimizar o calculo em tBIGNecDiv
+            tBIGNecDiv(pN,pD,(int)(n+=2),nB,pecDiv);*/
+            tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
             
             hb_storclen(pecDiv->cDivR,n,3);
             hb_retclen(pecDiv->cDivQ,n);
