@@ -5350,7 +5350,7 @@ Return
                  };
                 c[k]   = "0123456789"[v];
                 c[k+1] = "0123456789"[v1];
-			    v = v1;
+                v = v1;
                 k++;
                 i++;
             }
@@ -5637,7 +5637,7 @@ Return
 
             int ia[ipNS1];
             int iaux[ipNS1];
-			int idivQ[ipNS1];
+            int idivQ[ipNS1];
             
             i = ipNS1;
             while(i>=0){
@@ -5691,7 +5691,7 @@ Return
                         v1 = 0;
                     }
                     idivQ[i] = v;
-					pecDiv->cDivQ[i]  = "0123456789"[v];
+                    pecDiv->cDivQ[i]  = "0123456789"[v];
                     i--;
                 }
                  if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
