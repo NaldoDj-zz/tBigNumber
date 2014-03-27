@@ -5296,7 +5296,7 @@ Return
             int v         = 0;
             int v1;
             while (--n>=0){
-                v+=(*(&a[n])-'0')-(*(&b[n])    -'0');
+                v+=(*(&a[n])-'0')-(*(&b[n])-'0');
                 if ( v<0 ){
                     v+=nB;
                     v1 = -1;
@@ -5615,65 +5615,59 @@ Return
         }
         
         static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
-            tBIGNegDiv(pA,pB,ipN,nB,pecDiv);
-            /* TODO: Verificar possibilidade de otimizar o codigo abaixo
-            char * a        = tBIGNPadL(pA,ipN,"0");
-            char * b        = tBIGNPadL(pB,ipN,"0");
             
-            pecDiv->cDivR   = hb_strdup(a);
-            pecDiv->cDivQ   = tBIGNPadL("0",ipN,"0");
             int n           = 0;
-            char * aux      = hb_strdup(b);
             
-            char * sN1      = tBIGNPadL("1",ipN,"0");
+            pecDiv->cDivR   = tBIGNPadL(pA,ipN,"0");
+            pecDiv->cDivQ   = (char*)hb_xgrab(ipN+1);
+            char * aux      = tBIGNPadL(pB,ipN,"0");
+ 
             char * sN2      = tBIGNPadL("2",ipN,"0");
-            
-            char * tmp;
             
             int ipNS1 = ipN-1;
             int i;
              
-            HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
           
             ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 
-            int ia[ipNS1];
-            int iaux[ipNS1];
-            int idivQ[ipNS1];
-            
+            HB_MAXUINT *ipA   = (HB_MAXUINT*)calloc(ipN,sizeof(HB_MAXUINT));
+            HB_MAXUINT *iaux  = (HB_MAXUINT*)calloc(ipN,sizeof(HB_MAXUINT));
+            HB_MAXUINT *idivQ = (HB_MAXUINT*)calloc(ipN,sizeof(HB_MAXUINT));
+                        
             i = ipNS1;
             while(i>=0){
-                ia[i]   = (*(&a[i])-'0');
+                ipA[i]  = (*(&pecDiv->cDivR[i])-'0');
                 iaux[i] = (*(&aux[i])-'0');
                 i--;
             }
-            
-            while (memcmp(iaux,ia,ipN)<=0){
+ 
+            while (memcmp(iaux,ipA,ipNS1)<=0){
                 n++;
                 v1 = 0;
                 i = ipNS1;
                 while(i>=0){
-                    v = iaux[i];
-                    v <<= 1;
-                    v += v1;
-                    if (v>=nB){
-                        v1 = v/nB;
-                        v %= nB;
+                    iaux[i] <<= 1;
+                    iaux[i] += v1;
+                    if (iaux[i]>=nB){
+                        v1      = iaux[i]/nB;
+                        iaux[i] %= nB;
                     }else{
-                        v1 = 0;
+                        v1      = 0;
                     }
-                    iaux[i] = v;
                     i--;
                 }
             }
 
+           free(ipA);
+ 
             i = ipNS1;
             while(i>=0){
                 aux[i]   = "0123456789"[iaux[i]];
-                idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
                 i--;
             }
+            
+            free(iaux);
             
             while (n--){            
                 tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
@@ -5683,43 +5677,50 @@ Return
                 v1 = 0;
                 i = ipNS1;
                 while(i>=0){
-                    v = idivQ[i];
-                    v <<= 1;
-                    v += v1;
-                    if (v>=nB){
-                        v1 = v/nB;
-                        v %= nB;
+                    idivQ[i] <<= 1;
+                    idivQ[i] += v1;
+                    if (idivQ[i]>=nB){
+                        v1       = idivQ[i]/nB;
+                        idivQ[i] %= nB;
                     }else{
-                        v1 = 0;
+                        v1       = 0;
                     }
-                    idivQ[i] = v;
-                    pecDiv->cDivQ[i]  = "0123456789"[v];
                     i--;
                 }
                 if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
-                    tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
+                    char * tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
                     memcpy(pecDiv->cDivR,tmp,ipN);
                     hb_xfree(tmp);
-                    tmp = tBIGNAdd(pecDiv->cDivQ,sN1,ipN,ipN,nB);
-                    memcpy(pecDiv->cDivQ,tmp,ipN);
-                    hb_xfree(tmp);
-                    if (n){
-                        i = ipNS1;
-                        while(i>=0){
-                            idivQ[i] = (*(&pecDiv->cDivQ[i])-'0');
-                            i--;
+                    v1 = 0;
+                    i = ipNS1;
+                    while(i>=0){
+                        if (i==ipNS1){
+                            idivQ[i]++;
+                        }    
+                        idivQ[i] += v1;
+                        if (idivQ[i]>=nB){
+                            idivQ[i] -= nB;
+                            v1       = 1;
+                        }else{
+                            v1       = 0;
                         }
-                    }    
+                        i--;
+                    } 
                 }
             }
             
-            hb_xfree(a);
-            hb_xfree(b);
+            i = ipNS1;
+            while(i>=0){
+                pecDiv->cDivQ[i]  = "0123456789"[idivQ[i]];
+                i--;
+            }
+            
+            free(idivQ);
+            
             hb_xfree(aux);
-            hb_xfree(sN1);
             hb_xfree(sN2);
             hb_xfree(pecDivTmp);
-            */
+            
         }
         
         HB_FUNC_STATIC( TBIGNECDIV ){
@@ -5731,9 +5732,7 @@ Return
             
             ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
           
-            /* TODO: Restaurar quando conseguir otimizar o calculo em tBIGNecDiv
-            tBIGNecDiv(pN,pD,(int)(n+=2),nB,pecDiv);*/
-            tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
+            tBIGNecDiv(pN,pD,(int)(n+=2),nB,pecDiv);
             
             hb_storclen(pecDiv->cDivR,n,3);
             hb_retclen(pecDiv->cDivQ,n);
