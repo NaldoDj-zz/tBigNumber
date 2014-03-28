@@ -1304,6 +1304,9 @@ Method cmp(uBigN) CLASS tBigNumber
                 llt:=.F.
             EndIF
         Else
+            #ifdef __PTCOMPAT__
+                iCmp:=IF(__cmpoN1:GetValue(.T.)<__cmpoN2:GetValue(.T.),-1,1)
+            #endif
             llt:=iCmp==-1
         EndIF
         IF llt
