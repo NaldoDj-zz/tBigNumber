@@ -59,7 +59,13 @@
     #xtranslate hb_bLen([<prm,...>])   => Len([<prm>])
     #xtranslate tBIGNaLen([<prm,...>]) => Len([<prm>])
 #else // __HARBOUR__
+    /* Keeping it tidy */
     #pragma -w3
+    #pragma -es2
+    /* Optimizations */
+    #pragma -km+
+    #pragma -ko+
+    /* Force HB_MT */
     #require "hbvmmt"
     request HB_MT
     *#xtranslate PadL([<prm,...>])   => tBIGNPadL([<prm>])
@@ -5627,10 +5633,10 @@ Return
  
             char * sN2      = tBIGNPadL("2",ipN,"0");
             
-            int ipNS1 = ipN-1;
+            int ipNS1       = ipN-1;
             int i;
              
-            HB_MAXUINT v1 = 0;
+            HB_MAXUINT v1;
           
             ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 
@@ -5842,7 +5848,7 @@ Return
         */
 
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
-            return (y/tBIGNGDC(x,y))*x;
+            return ((y/tBIGNGDC(x,y))*x);
         }    
         
         HB_FUNC_STATIC( TBIGNLCM ){
