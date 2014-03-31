@@ -4180,16 +4180,16 @@ Static Function __Pow(base,expR,EPS)
             if mid:lte(exp)
                 low:SetValue(mid)
                 acc:SetValue(acc:Mult(sqr))
-              else
-                  high:SetValue(mid)
-                  acc:SetValue(__o1:Div(sqr))
-              endif
-              mid:SetValue(low:Add(high):Mult(__od2))
-              tmp:SetValue(mid:Sub(exp):Abs(.T.))
-              if tmp:eq(lst)
-                  exit
-              endif
-              lst:SetValue(tmp)
+            else
+                high:SetValue(mid)
+                acc:SetValue(__o1:Div(sqr))
+            endif
+            mid:SetValue(low:Add(high):Mult(__od2))
+            tmp:SetValue(mid:Sub(exp):Abs(.T.))
+            if tmp:eq(lst)
+                exit
+            endif
+            lst:SetValue(tmp)
         end while
     endif
 
