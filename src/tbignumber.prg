@@ -88,9 +88,12 @@ End While;;
 Static __o0
 Static __o1
 Static __o2
-*Static __o5
+Static __o4
+Static __o5
+Static __o8
 Static __o10
 Static __o20
+Static __od2
 Static __oMinFI
 Static __oMinGCD
 Static __nMinLCM
@@ -244,6 +247,7 @@ CLASS tBigNumber
 
     Method __cDec(cDec)   SETGET
     Method __cInt(cInt)   SETGET
+    Method __cRDiv(cRDiv) SETGET
     Method __cSig(cSig)   SETGET
     Method __lNeg(lNeg)   SETGET
     Method __nBase(nBase) SETGET
@@ -636,6 +640,21 @@ Method __cInt(cInt) CLASS tBigNumber
         EndIF
     ENDIF
 Return(self:cInt)
+
+/*
+    Method      : __cRDiv
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 30/03/2014
+    Descricao   : __cRDiv
+    Sintaxe     : tBigNumber():__cRDiv() -> __cRDiv
+*/
+Method __cRDiv(cRDiv) CLASS tBigNumber
+  DEFAULT cRDiv := "0"
+  IF Empty(cRDiv)
+     cRDiv:="0"
+  EndIF
+  self:cRDiv:=cRDiv
+Return(self:cRDiv)
 
 /*
     Method      : __cSig
@@ -1915,6 +1934,19 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
         __dvoN1:SetValue(self)
         __dvoN2:SetValue(uBigN)
         
+        DEFAULT lFloat:=.T.
+ 
+        IF __dvoN2:eq(__o2)
+            //(Div(2)==Mult(.5)
+            __dvoNR:SetValue(__dvoN1:Mult(__od2))
+            IF .NOT.(lFloat)
+                __dvoNR:__cDec("0")
+                __dvoNR:__cInt(__dvoNR:Int(.F.,.T.))
+                __dvoNR:__cRDiv(__dvoN1:Sub(__dvoN2:Mult(__dvoNR:Int(.T.,.F.))):ExactValue(.T.))
+            EndIF
+            BREAK
+        EndIF
+        
         __dvoN1:Normalize(@__dvoN2)
     
         lNeg1:=__dvoN1:lNeg
@@ -1926,8 +1958,6 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
     
         cN2:=__dvoN2:cInt
         cN2+=__dvoN2:cDec
-
-        DEFAULT lFloat:=.T.
 
         IF __nDivMeth==2
             __dvoNR:SetValue(ecDiv(cN1,cN2,__dvoN1:nSize,__dvoN1:nBase,nAcc,lFloat))
@@ -2729,7 +2759,7 @@ Method Log(uBigNB) CLASS tBigNumber
     oS:SetValue(oS:Add(oY))
     oY:SetValue(__o0)
     oT:SetValue(oT:nthRoot(__o2))
-    oI:SetValue(oI:Div(__o2))
+    oI:SetValue(oI:Mult(__od2))
     
     While oT:gt(__o1)
 
@@ -2745,7 +2775,7 @@ Method Log(uBigNB) CLASS tBigNumber
         IF oT:eq(oLT)
             oT:SetValue(__o0)    
         EndIF 
-        oI:SetValue(oI:Div(__o2))
+        oI:SetValue(oI:Mult(__od2))
 
     End While
 
@@ -3537,7 +3567,7 @@ Method Randomize(uB,uE,nExit) CLASS tBigNumber
         cR:=oM:Min(oE:Min(oT)):ExactValue()
         nT:=Val(cR)
 
-        oT:SetValue(oE:Sub(oB):Div(__o2):Int(.T.))
+        oT:SetValue(oE:Sub(oB):Mult(__od2):Int(.T.))
 
         While oR:lt(oB)
             oR:SetValue(oR:Add(oT))
@@ -3594,8 +3624,6 @@ Return(nR)
 */
 Method millerRabin(uI) CLASS tBigNumber
 
-    Local o2:=__o2:Clone()
-
     Local oN:=self:Clone()
     Local oD:=tBigNumber():New(oN:Sub(__o1))
     Local oS:=__o0:Clone()
@@ -3611,8 +3639,8 @@ Method millerRabin(uI) CLASS tBigNumber
             BREAK
         EndIF
 
-        While oD:Mod(o2):eq(__o0)
-            oD:SetValue(oD:Div(o2,.F.))
+        While oD:Mod(__o2):eq(__o0)
+            oD:SetValue(oD:Mult(__od2))
             oS:SetValue(oS:Add(__o1))
         End While
     
@@ -3834,7 +3862,7 @@ Static Function recFact(oS,oN)
     Local oNI
 
 #ifdef __PTCOMPAT__
-    IF oN:lte(__o20:Mult(oN:Div(__o2):Int(.T.,.F.)))
+    IF oN:lte(__o20:Mult(oN:Mult(__od2):Int(.T.,.F.)))
 #else
     IF oN:lte(__o20)
 #endif    
@@ -3851,7 +3879,7 @@ Static Function recFact(oS,oN)
     EndIF
 
     oI:=oN:Clone()
-    oI:SetValue(oI:Div(__o2):Int(.T.,.F.))
+    oI:SetValue(oI:Mult(__od2):Int(.T.,.F.))
 
     oSI:=oS:Clone()
     oSI:SetValue(oSI:Add(oI))
@@ -3923,9 +3951,7 @@ Static Function egMult(cN1,cN2,nBase,nAcc)
 #else
 
     Local oMTP:=__o0:Clone()
-    Local n:=(Len(cN1)*2)
-    cN1:=PadL(cN1,n,"0")
-    cN2:=PadL(cN2,n,"0")
+    Local n:=Len(cN1)
     oMTP:SetValue(TBIGNegMult(cN1,cN2,n,nBase),nBase,"0",NIL,nAcc)
     
 #endif //__PTCOMPAT__
@@ -3989,7 +4015,7 @@ Static Function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
 #else //__HARBOUR__
 
-    cQDiv:=tBIGNegDiv("0"+cN,"0"+cD,@cRDiv,nSize+1,nBase)
+    cQDiv:=tBIGNegDiv(cN,cD,@cRDiv,nSize,nBase)
     
     __oeDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
     __oeDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
@@ -4076,7 +4102,7 @@ Static Function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 
 #else
 
-    cQDiv:=tBIGNecDiv("0"+pA,"0"+pB,@cRDiv,nSize+1,nBase)
+    cQDiv:=tBIGNecDiv(pA,pB,@cRDiv,nSize,nBase)
     
     q:SetValue(cQDiv,NIL,"0",NIL,nAcc)
     r:SetValue(cRDiv,NIL,"0",NIL,nAcc)
@@ -4136,7 +4162,7 @@ Static Function __Pow(base,expR,EPS)
         acc:=__pow(base,exp:Abs(.T.),EPS)
         return(__o1:Div(acc))
     elseif exp:Mod(__o2):eq(__o0)
-         acc:=__pow(base,exp:Div(__o2),EPS)
+         acc:=__pow(base,exp:Mult(__od2),EPS)
         return(acc:Mult(acc))
     elseif exp:Dec(.T.):gt(__o0) .and. exp:Int(.T.):gt(__o0)
         acc:=base:Pow(expR)
@@ -4149,7 +4175,7 @@ Static Function __Pow(base,expR,EPS)
         high:=__o1:Clone()
         sqr:=__SQRT(base)
         acc:=sqr:Clone()    
-        mid:=high:Div(__o2)
+        mid:=high:Mult(__od2)
         tmp:=mid:Sub(exp):Abs(.T.)
         lst:=__o0:Clone()    
         while tmp:gte(EPS)
@@ -4161,7 +4187,7 @@ Static Function __Pow(base,expR,EPS)
                   high:SetValue(mid)
                   acc:SetValue(__o1:Div(sqr))
               endif
-              mid:SetValue(low:Add(high):Div(__o2))
+              mid:SetValue(low:Add(high):Mult(__od2))
               tmp:SetValue(mid:Sub(exp):Abs(.T.))
               if tmp:eq(lst)
                   exit
@@ -4195,7 +4221,7 @@ Static Function __SQRT(p)
         s:="0."+SubStr(__cstcZ0,1,n)+"1"
         EPS:=__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
-        r:=q:Div(__o2)
+        r:=q:Mult(__od2)
         t:=r:Pow(__o2):Sub(q):Abs(.T.)
         l:=__o0:Clone()
         while t:gte(EPS)
@@ -4780,7 +4806,7 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Add(a,b,n,nB)
-            Return(TBIGNADD(a,b,n,n+1,nB))
+            Return(TBIGNADD(a,b,n,n,nB))
         #endif //__PTCOMPAT__
         
         /*
@@ -4924,10 +4950,8 @@ Return(r)
 
             Return(cGetcN(c,y))
         #else //__HARBOUR__
-            Static Function Mult(cN1,cN2,n,nB)
-                Local a:=tBigNInvert(cN1,n)
-                Local b:=tBigNInvert(cN2,n)
-            Return(TBIGNMULT(a,b,n,n+n,nB))
+            Static Function Mult(a,b,n,nB)
+            Return(TBIGNMULT(a,b,n,n,nB))
         #endif //__PTCOMPAT__
 
         /*
@@ -5120,9 +5144,12 @@ Static Procedure __InitstbN(nBase)
     __o0:=tBigNumber():New("0",nBase)
     __o1:=tBigNumber():New("1",nBase)
     __o2:=tBigNumber():New("2",nBase)
-*   __o5:=tBigNumber():New("5",nBase)
+    __o4:=tBigNumber():New("4",nBase)
+    __o5:=tBigNumber():New("5",nBase)
+    __o8:=tBigNumber():New("8",nBase)
     __o10:=tBigNumber():New("10",nBase)
     __o20:=tBigNumber():New("20",nBase)
+    __od2:=tBigNumber():New("0.5",nBase)
     __oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     __oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     __nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
@@ -5155,6 +5182,7 @@ Return
             ECDIV()
             TBIGNPADL()
             TBIGNPADR()
+            TBIGNINVERT()
             TBIGNREVERSE()
             TBIGNADD()
             TBIGNSUB()
@@ -5254,7 +5282,7 @@ Return
             for(;f;){
                 szT[t++]=szF[--f];
             }
-            hb_xmemset(&szT[t],szF[t],1);
+            szT[t]=szF[t];
             return szT;
         }
 
@@ -5292,7 +5320,7 @@ Return
             const char * a      = hb_parc(1);
             const char * b      = hb_parc(2);
             HB_SIZE n           = (HB_SIZE)hb_parnint(3);
-            const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
+            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)+1);
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
             char * szRet        = tBIGNAdd(a,b,(int)n,y,nB);
             hb_retclen(szRet,y);
@@ -5394,13 +5422,15 @@ Return
         }
     
         HB_FUNC_STATIC( TBIGNMULT ){
-            const char * a      = hb_parc(1);
-            const char * b      = hb_parc(2);
             HB_SIZE n           = (HB_SIZE)hb_parnint(3);
-            const HB_SIZE y     = (HB_SIZE)hb_parnint(4);
+            char * a            = tBIGNReverse(hb_parc(1),n);
+            char * b            = tBIGNReverse(hb_parc(2),n);
+            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
             char * szRet        = tBIGNMult(a,b,n,y,nB);
             hb_retclen(szRet,y);
+            hb_xfree(a);
+            hb_xfree(b);
             hb_xfree(szRet);
         }
         
@@ -5504,9 +5534,9 @@ Return
         
         HB_FUNC_STATIC( TBIGNEGMULT ){
             
-            const char * pN     = hb_parc(1);
-            const char * pD     = hb_parc(2);
-            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(3)*2);            
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
             const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
             
             ptBIGNeMult pegMult = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
@@ -5515,6 +5545,8 @@ Return
         
             hb_retclen(pegMult->cMultP,n);
 
+            hb_xfree(pN);
+            hb_xfree(pD);
             hb_xfree(pegMult->cMultM);
             hb_xfree(pegMult->cMultP);
             hb_xfree(pegMult);
@@ -5539,11 +5571,6 @@ Return
             hb_xfree(Tmp);
             
             pegDivTmp->cDivR        = hb_strdup(pD);
-    
-            Tmp                     = tBIGNPadL("0",n,"0");
-            pegDiv->cDivQ           = hb_strdup(Tmp);
-            pegDiv->cDivR           = hb_strdup(Tmp);
-            hb_xfree(Tmp);
             
             int nI = 0;
  
@@ -5575,7 +5602,12 @@ Return
             hb_xfree(pegDivTmp->cDivR);
 
             int nF = nI;
-            
+  
+            Tmp                     = tBIGNPadL("0",n,"0");
+            pegDiv->cDivQ           = hb_strdup(Tmp);
+            pegDiv->cDivR           = hb_strdup(Tmp);
+            hb_xfree(Tmp);
+  
             do {
                 
                 pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ ,n,n,nB);
@@ -5622,10 +5654,10 @@ Return
         }
         
         HB_FUNC_STATIC( TBIGNEGDIV ){
-            
-            const char * pN     = hb_parc(1);
-            const char * pD     = hb_parc(2);
-            HB_SIZE n           = (HB_SIZE)hb_parnint(4);
+ 
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1); 
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
             ptBIGNeDiv pegDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             int iCmp            = memcmp(pN,pD,n);
           
@@ -5649,6 +5681,8 @@ Return
             hb_storclen(pegDiv->cDivR,n,3);
             hb_retclen(pegDiv->cDivQ,n);
 
+            hb_xfree(pN);
+            hb_xfree(pD);
             hb_xfree(pegDiv->cDivR);
             hb_xfree(pegDiv->cDivQ);
             hb_xfree(pegDiv);
@@ -5658,8 +5692,8 @@ Return
             
             int n                   = 0;
             
-            pecDiv->cDivR           = tBIGNPadL(pA,ipN,"0");
-            char * aux              = tBIGNPadL(pB,ipN,"0");
+            pecDiv->cDivR           = hb_strdup(pA);
+            char * aux              = hb_strdup(pB);
             
             int ipNS1               = ipN-1;
             int i;
@@ -5772,9 +5806,9 @@ Return
         
         HB_FUNC_STATIC( TBIGNECDIV ){
             
-            const char * pN     = hb_parc(1);
-            const char * pD     = hb_parc(2);
-            HB_SIZE n           = (HB_SIZE)hb_parnint(4);
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1);
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
             ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             int iCmp            = memcmp(pN,pD,n);
           
@@ -5798,6 +5832,8 @@ Return
             hb_storclen(pecDiv->cDivR,n,3);
             hb_retclen(pecDiv->cDivQ,n);
 
+            hb_xfree(pN);
+            hb_xfree(pD);
             hb_xfree(pecDiv->cDivR);
             hb_xfree(pecDiv->cDivQ);
             hb_xfree(pecDiv);
