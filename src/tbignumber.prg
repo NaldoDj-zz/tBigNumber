@@ -88,9 +88,6 @@ End While;;
 Static __o0
 Static __o1
 Static __o2
-Static __o4
-Static __o5
-Static __o8
 Static __o10
 Static __o20
 Static __od2
@@ -5144,9 +5141,6 @@ Static Procedure __InitstbN(nBase)
     __o0:=tBigNumber():New("0",nBase)
     __o1:=tBigNumber():New("1",nBase)
     __o2:=tBigNumber():New("2",nBase)
-    __o4:=tBigNumber():New("4",nBase)
-    __o5:=tBigNumber():New("5",nBase)
-    __o8:=tBigNumber():New("8",nBase)
     __o10:=tBigNumber():New("10",nBase)
     __o20:=tBigNumber():New("20",nBase)
     __od2:=tBigNumber():New("0.5",nBase)
