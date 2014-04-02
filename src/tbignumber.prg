@@ -1835,7 +1835,7 @@ Method Mult(uBigN) CLASS tBigNumber
     #ifdef __HARBOUR__
        #ifndef __PTCOMPAT__
             __mtoN1:__cSig("")
-            l0at9M:=.T. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
+            l0at9M:=.F. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
             IF l0at9M
                 nM:=Val(__mtoN2:Int(.F.,.F.))
                 cNT:=__mtoN1:cInt
@@ -1844,7 +1844,7 @@ Method Mult(uBigN) CLASS tBigNumber
                 l2Mult:=nM==2
             Else
                 __mtoN2:__cSig("")
-                l0at9M:=.T. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
+                l0at9M:=.F. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
                 IF l0at9M
                    nM:=Val(__mtoN1:Int(.F.,.F.))
                    cNT:=__mtoN2:cInt
@@ -1938,7 +1938,7 @@ Method egMult(uBigN) CLASS tBigNumber
    #ifdef __HARBOUR__
        #ifndef __PTCOMPAT__
             __mtoN1:__cSig("")
-            l0at9M:=.T. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
+            l0at9M:=.F. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
             IF l0at9M
                 nM:=Val(__mtoN2:Int(.F.,.F.))
                 cNT:=__mtoN1:cInt
@@ -1947,7 +1947,7 @@ Method egMult(uBigN) CLASS tBigNumber
                 l2Mult:=nM==2
             Else
                 __mtoN2:__cSig("")
-                l0at9M:=.T. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
+                l0at9M:=.F. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
                 IF l0at9M
                    nM:=Val(__mtoN1:Int(.F.,.F.))
                    cNT:=__mtoN2:cInt
@@ -4092,13 +4092,13 @@ Static Function egMult(cN1,cN2,nBase,nAcc)
 #else
 
     Local oMTP:=__o0:Clone()
-    __mtoN1:SetValue(cN1)
+    /*__mtoN1:SetValue(cN1)
     __mtoN2:SetValue(cN2)
     IF .F. .and. __mtoN1:ibtw(__o0,MAX_SYS_lMULT) .and.  __mtoN2:ibtw(__o0,MAX_SYS_lMULT)
         oMTP:SetValue(hb_ntos(tBigNlMult(Val(cN1),Val(cN2))),nBase,"0",NIL,nAcc)
     Else
-        oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
-    EndIF
+        */oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
+    //EndIF
     
 #endif //__PTCOMPAT__
     
@@ -4953,13 +4953,13 @@ Return(r)
         #else //__HARBOUR__
             Static Function Add(a,b,n,nB)
                 Local r
-                __adoN1:SetValue(a)
+                /*__adoN1:SetValue(a)
                 __adoN2:SetValue(b)
                 IF .F. .and. __adoN1:ibtw(__o0,MAX_SYS_lADD) .and.  __adoN2:ibtw(__o0,MAX_SYS_lADD)
                     r:=hb_ntos(tBIGNlADD(Val(a),Val(b)))
                 Else
-                    r:=tBIGNADD(a,b,n,n,nB)
-                EndIF
+                    */r:=tBIGNADD(a,b,n,n,nB)
+                //EndIF
             Return(r)
         #endif //__PTCOMPAT__
         
@@ -5010,14 +5010,14 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Sub(a,b,n,nB)
-                Local r
+                Local r/*
                 __sboN1:SetValue(a)
                 __sboN2:SetValue(b)
                 IF .F. .and. __sboN1:ibtw(__o0,MAX_SYS_lADD) .and.  __sboN2:ibtw(__o0,MAX_SYS_lADD)
                     r:=hb_ntos(tBIGNlSUB(Val(a),Val(b)))
                 Else
-                    r:=tBIGNSUB(a,b,n,nB)
-                EndIF
+                    */r:=tBIGNSUB(a,b,n,nB)
+                //EndIF
             Return(r)
         #endif //__PTCOMPAT__
         /*
@@ -5113,14 +5113,14 @@ Return(r)
             Return(cGetcN(c,y))
         #else //__HARBOUR__
             Static Function Mult(a,b,n,nB)
-                Local r
+                Local r/*
                 __mtoN1:SetValue(a)
                 __mtoN2:SetValue(b)
                 IF .F. .and. __mtoN1:ibtw(__o0,MAX_SYS_lMULT) .and.  __mtoN2:ibtw(__o0,MAX_SYS_lMULT)
                     r:=hb_ntos(tBigNlMult(Val(a),Val(b)))
                 Else
-                    r:=TBIGNMULT(a,b,n,n,nB)
-                EndIF
+                    */r:=TBIGNMULT(a,b,n,n,nB)
+                //EndIF
             Return(r)
         #endif //__PTCOMPAT__
 
