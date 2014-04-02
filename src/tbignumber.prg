@@ -68,10 +68,12 @@
     /* Force HB_MT */
     #require "hbvmmt"
     request HB_MT
-    *#xtranslate PadL([<prm,...>])   => tBIGNPadL([<prm>])
-    *#xtranslate PadR([<prm,...>])   => tBIGNPadR([<prm>])
+    #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
+    #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
     #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
+    #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
+    #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
 #endif //__PROTHEUS__
 
 #xcommand IncZeros(<n>);
@@ -88,6 +90,7 @@ End While;;
 Static __o0
 Static __o1
 Static __o2
+Static __o9
 Static __o10
 Static __o20
 Static __od2
@@ -175,11 +178,14 @@ THREAD Static __lsthdSet
 
 #define NTHROOT_EXIT        3
 #define MAX_SYS_SQRT        "9999999999999999"
+#define MAX_SYS_lMULT       "9999999999"
+#define MAX_SYS_lADD        "99999999999999999"
+#define MAX_SYS_lSUB        "99999999999999999"
+#define MAX_SYS_iMULT       "999999999999999999"
+#define MAX_SYS_GCD         MAX_SYS_iMULT
+#define MAX_SYS_LCM         MAX_SYS_iMULT
 
-#define MAX_SYS_GCD         "999999999999999999"
-#define MAX_SYS_LCM         "999999999999999999"
-
-#define MAX_SYS_FI          "999999999999999999"
+#define MAX_SYS_FI          MAX_SYS_iMULT
 
 /*
 *    Alternative Compile Options: /d
@@ -273,13 +279,15 @@ CLASS tBigNumber
     Method gte(uBigN)
     Method lte(uBigN)
     Method cmp(uBigN)
+    Method btw(uBigS,uBigE)
+    Method ibtw(uiBigS,uiBigE)
     
     Method Max(uBigN)
     Method Min(uBigN)
     
     Method Add(uBigN)
     Method Plus(uBigN) INLINE self:Add(uBigN)    
-    
+
     Method Sub(uBigN)
     Method Minus(uBigN) INLINE self:Sub(uBigN)
     
@@ -292,10 +300,13 @@ CLASS tBigNumber
     Method Div(uBigN,lFloat)
     Method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
     Method DivMethod(nMethod)
-
+    
     Method Mod(uBigN)
 
     Method Pow(uBigN)
+
+    Method OpInc()
+    Method OpDec()
     
     Method e(lForce)
     
@@ -449,10 +460,10 @@ ENDCLASS
     Return(oSelf:lte(uBigN))
     
     Static Function __OpInc(oSelf)
-    Return(oSelf:SetValue(oSelf:Add(__o1)))
+    Return(oSelf:SetValue(oSelf:OpInc()))
     
     Static Function __OpDec(oSelf)
-    Return(oSelf:SetValue(oSelf:Sub(__o1)))
+    Return(oSelf:SetValue(oSelf:OpDec()))
     
     Static Function __OpPlus(cOp,oSelf,uBigN)
         Local oOpPlus
@@ -646,11 +657,12 @@ Return(self:cInt)
     Sintaxe     : tBigNumber():__cRDiv() -> __cRDiv
 */
 Method __cRDiv(cRDiv) CLASS tBigNumber
-  DEFAULT cRDiv := "0"
-  IF Empty(cRDiv)
-     cRDiv:="0"
-  EndIF
-  self:cRDiv:=cRDiv
+    IF .NOT.(cRDiv==NIL)
+        IF Empty(cRDiv)
+            cRDiv:="0"
+        EndIF
+        self:cRDiv:=cRDiv
+    EndIF
 Return(self:cRDiv)
 
 /*
@@ -1341,6 +1353,30 @@ Method cmp(uBigN) CLASS tBigNumber
 Return(nCmp)
 
 /*
+    Method      : btw (between)
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 01/04/2014
+    Descricao   : Retorna .T. se self estiver no intervalo passado.  
+    Sintaxe     : tBigNumber():btw(uBigS,uBigE) -> lRet
+*/
+Method btw(uBigS,uBigE) CLASS tBigNumber
+Return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
+
+/*
+    Method      : ibtw (integer between)
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 11/03/2014
+    Descricao   : Retorna .T. se self estiver no intervalo passado.  
+    Sintaxe     : tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
+*/
+Method ibtw(uiBigS,uiBigE) CLASS tBigNumber
+    Local lbtw := .F.
+    IF self:Dec(.T.,.F.,.T.):eq(__o0)
+        lbtw := self:cmp(uiBigS)>=0.and.self:cmp(uiBigE)<=0
+    EndIF   
+Return(lbtw)
+
+/*
     Method      : Max
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
@@ -1450,10 +1486,7 @@ Method Add(uBigN) CLASS tBigNumber
     __adoNR:SetValue(cNT)
 
     IF lNeg
-        IF  __adoNR:gt(__o0)
-            __adoNR:cSig:="-"
-            __adoNR:lNeg:=lNeg
-        EndIF
+        __adoNR:__cSig("-")
     EndIF
 
 Return(__adoNR:Clone())
@@ -1759,10 +1792,7 @@ Method Sub(uBigN) CLASS tBigNumber
     __sboNR:SetValue(cNT)
 
     IF lNeg
-        IF __sboNR:gt(__o0)
-            __sboNR:cSig:="-"
-            __sboNR:lNeg:=lNeg
-        EndIF
+        __sboNR:__cSig("-")
     EndIF
 
 Return(__sboNR:Clone())
@@ -1785,8 +1815,11 @@ Method Mult(uBigN) CLASS tBigNumber
 
     Local lNeg    
     Local lNeg1 
-    Local lNeg2 
+    Local lNeg2
+    Local l0at9M
+    Local l2Mult
 
+    Local nM
     Local nDec    
     Local nSize 
 
@@ -1794,30 +1827,67 @@ Method Mult(uBigN) CLASS tBigNumber
     __mtoN2:SetValue(uBigN)
     
     __mtoN1:Normalize(@__mtoN2)
-
-    nDec:=__mtoN1:nDec*2
-    nSize:=__mtoN1:nSize
-
+ 
     lNeg1:=__mtoN1:lNeg
     lNeg2:=__mtoN2:lNeg    
     lNeg:=(lNeg1 .and. .NOT.(lNeg2)) .or. (.NOT.(lNeg1) .and. lNeg2)
-
-    cN1:=__mtoN1:cInt
-    cN1+=__mtoN1:cDec
-
-    cN2:=__mtoN2:cInt
-    cN2+=__mtoN2:cDec
-
-    __mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
+   
+    #ifdef __HARBOUR__
+       #ifndef __PTCOMPAT__
+            __mtoN1:__cSig("")
+            l0at9M:=.T. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
+            IF l0at9M
+                nM:=Val(__mtoN2:Int(.F.,.F.))
+                cNT:=__mtoN1:cInt
+                cNT+=__mtoN1:cDec
+                nDec:=__mtoN1:nDec
+                l2Mult:=nM==2
+            Else
+                __mtoN2:__cSig("")
+                l0at9M:=.T. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
+                IF l0at9M
+                   nM:=Val(__mtoN1:Int(.F.,.F.))
+                   cNT:=__mtoN2:cInt
+                   cNT+=__mtoN2:cDec
+                   nDec:=__mtoN2:nDec
+                   l2Mult:=nM==2
+                EndIF
+            EndIF
+            IF .NOT.(l0at9M)
+                l2Mult:=.F.
+            EndIF
+        #else
+            l0at9M:=.F.
+            l2Mult:=.F.
+        #endif
+    #else
+        l0at9M:=.F.
+        l2Mult:=.F.
+    #endif
+    
+    IF l2Mult
+        __mtoNR:SetValue(tBigN2Mult(cNT,self:nBase),self:nBase,NIL,.F.)
+    ElseIF l0at9M
+        __mtoNR:SetValue(tBigNiMult(cNT,nM,self:nBase),self:nBase,NIL,.F.)        
+    Else 
+        cN1:=__mtoN1:cInt
+        cN1+=__mtoN1:cDec
+        cN2:=__mtoN2:cInt
+        cN2+=__mtoN2:cDec
+        nDec:=__mtoN1:nDec*2
+        nSize:=__mtoN1:nSize
+        __mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
+    EndIF    
 
     cNT:=__mtoNR:cInt
     
-    cDec:=SubStr(cNT,-nDec)
-    cInt:=SubStr(cNT,1,hb_bLen(cNT)-nDec)
-    
-    cNT:=cInt
-    cNT+="."
-    cNT+=cDec
+    IF nDec>0
+        cDec:=SubStr(cNT,-nDec)
+        cInt:=SubStr(cNT,1,hb_bLen(cNT)-nDec)
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
+    EndIF    
     
     __mtoNR:SetValue(cNT)
     
@@ -1826,10 +1896,7 @@ Method Mult(uBigN) CLASS tBigNumber
     __mtoNR:SetValue(cNT)
 
     IF lNeg
-        IF __mtoNR:gt(__o0)
-            __mtoNR:cSig:="-"
-            __mtoNR:lNeg:=lNeg
-        EndIF
+        __mtoNR:__cSig("-")
     EndIF
 
 Return(__mtoNR:Clone())
@@ -1852,28 +1919,67 @@ Method egMult(uBigN) CLASS tBigNumber
 
     Local lNeg    
     Local lNeg1 
-    Local lNeg2 
-
+    Local lNeg2
+    Local l0at9M
+    Local l2Mult  
+ 
+    Local nM
     Local nDec    
 
     __mtoN1:SetValue(self)
     __mtoN2:SetValue(uBigN)
     
     __mtoN1:Normalize(@__mtoN2)
-
-    nDec:=__mtoN1:nDec*2
-  
+ 
     lNeg1:=__mtoN1:lNeg
     lNeg2:=__mtoN2:lNeg    
     lNeg:=(lNeg1 .and. .NOT.(lNeg2)) .or. (.NOT.(lNeg1) .and. lNeg2)
 
-    cN1:=__mtoN1:cInt
-    cN1+=__mtoN1:cDec
-
-    cN2:=__mtoN2:cInt
-    cN2+=__mtoN2:cDec
-
-    __mtoNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+   #ifdef __HARBOUR__
+       #ifndef __PTCOMPAT__
+            __mtoN1:__cSig("")
+            l0at9M:=.T. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
+            IF l0at9M
+                nM:=Val(__mtoN2:Int(.F.,.F.))
+                cNT:=__mtoN1:cInt
+                cNT+=__mtoN1:cDec
+                nDec:=__mtoN1:nDec
+                l2Mult:=nM==2
+            Else
+                __mtoN2:__cSig("")
+                l0at9M:=.T. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
+                IF l0at9M
+                   nM:=Val(__mtoN1:Int(.F.,.F.))
+                   cNT:=__mtoN2:cInt
+                   cNT+=__mtoN2:cDec
+                   nDec:=__mtoN2:nDec
+                   l2Mult:=nM==2
+                EndIF
+            EndIF
+            IF .NOT.(l0at9M)
+                l2Mult:=.F.
+            EndIF
+        #else
+            l0at9M:=.F.
+            l2Mult:=.F.
+        #endif
+    #else
+        l0at9M:=.F.
+        l2Mult:=.F.
+    #endif
+    
+    IF l2Mult
+        __mtoNR:SetValue(tBigN2Mult(cNT,self:nBase),self:nBase,NIL,.F.)
+    ElseIF l0at9M
+        __mtoNR:SetValue(tBigNiMult(cNT,nM,self:nBase),self:nBase,NIL,.F.) 
+    Else    
+        cN1:=__mtoN1:cInt
+        cN1+=__mtoN1:cDec
+        cN2:=__mtoN2:cInt
+        cN2+=__mtoN2:cDec
+        nDec:=__mtoN1:nDec*2
+        __mtoNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+    EndIF    
 
     cNT:=__mtoNR:cInt
     
@@ -1891,10 +1997,7 @@ Method egMult(uBigN) CLASS tBigNumber
     __mtoNR:SetValue(cNT)
 
     IF lNeg
-        IF __mtoNR:gt(__o0)
-            __mtoNR:cSig:="-"
-            __mtoNR:lNeg:=lNeg
-        EndIF
+        __mtoNR:__cSig("-")
     EndIF
 
 Return(__mtoNR:Clone())
@@ -2031,10 +2134,7 @@ Method Div(uBigN,lFloat) CLASS tBigNumber
         EndIF
     
         IF lNeg
-            IF __dvoNR:gt(__o0)
-                __dvoNR:cSig:="-"
-                __dvoNR:lNeg:=lNeg
-            EndIF
+            __dvoNR:__cSig("-")
         EndIF
 
     End Sequence
@@ -2155,10 +2255,10 @@ Method Pow(uBigN) CLASS tBigNumber
         EndIF
 
         __pwoNT:SetValue(__o0)
-        __pwoNP:SetValue(__pwoNP:Sub(__o1))
+        __pwoNP:SetValue(__pwoNP:OpDec())
         While __pwoNT:lt(__pwoNP)
             __pwoNR:SetValue(__pwoNR:Mult(oSelf))
-            __pwoNT:SetValue(__pwoNT:Add(__o1))
+            __pwoNT:SetValue(__pwoNT:OpInc())
         End While
 
         IF lPowF
@@ -2172,6 +2272,35 @@ Method Pow(uBigN) CLASS tBigNumber
     EndIF
 
 Return(__pwoNR:Clone())
+
+/*
+    Method      : OpInc
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 04/02/2013
+    Descricao   : Incrementa em 1
+    Sintaxe     : tBigNumber():OpInc() -> oBigNR
+*/
+Method OpInc() CLASS tBigNumber
+#ifdef __PTCOMPAT__
+    Return(self:Add(__o1))
+#else        
+    Return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
+#endif    
+
+/*
+    Method      : OpDec
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 04/02/2013
+    Descricao   : Decrementa em 1
+    Sintaxe     : tBigNumber():OpDec() -> oBigNR
+*/
+Method OpDec() CLASS tBigNumber
+#ifdef __PTCOMPAT__
+    Return(self:Sub(__o1))
+#else
+    Return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
+#endif    
+
 
 /*
     Method      : e
@@ -2217,8 +2346,8 @@ Method e(lForce) CLASS tBigNumber
         
         oPowN:SetValue(oPowN:Pow(oPowN))
         
-        oAdd1N:=oBigNC:Add(__o1)
-        oSub1N:=oBigNC:Sub(__o1)
+        oAdd1N:=oBigNC:OpInc()
+        oSub1N:=oBigNC:OpDec()
 
         oPoWNAd:=oAdd1N:Pow(oAdd1N)
         oPoWNS1:=oSub1N:Pow(oSub1N)
@@ -2416,7 +2545,7 @@ Method LCM(uBigN) CLASS tBigNumber
             IF oX:eq(__o1) .and. oY:eq(__o1)
                 EXIT
             EndIF
-            oI:SetValue(oI:Add(__o1))        
+            oI:SetValue(oI:OpInc())        
         End While
     EndIF
     
@@ -2728,6 +2857,8 @@ Method Log(uBigNB) CLASS tBigNumber
     Local oX:=self:Clone()
     Local oY:=__o0:Clone()
     Local oLT:=__o0:Clone()
+    
+    Local noTcmp1
 
     Local lflag:=.F.
     
@@ -2739,16 +2870,18 @@ Method Log(uBigNB) CLASS tBigNumber
 
     oT:SetValue(uBigNB)
 
-    IF oT:eq(__o1)
+    noTcmp1:=oT:cmp(__o1)
+    IF noTcmp1==0
         Return(__o0:Clone())
     EndIF
     
-    IF __o0:lt(oT) .and. oT:lt(__o1)
+    IF __o0:lt(oT) .and. noTcmp1==-1
          lflag:=.NOT.(lflag)
          oT:SetValue(__o1:Div(oT))
+         noTcmp1:=oT:cmp(__o1)
     EndIF
 
-    While oX:gt(oT) .and. oT:gt(__o1)
+    While oX:gt(oT) .and. noTcmp1==1
         oY:SetValue(oY:Add(oI))
         oX:SetValue(oX:Div(oT))
     End While 
@@ -2757,22 +2890,31 @@ Method Log(uBigNB) CLASS tBigNumber
     oY:SetValue(__o0)
     oT:SetValue(oT:nthRoot(__o2))
     oI:SetValue(oI:Mult(__od2))
-    
-    While oT:gt(__o1)
 
-        While oX:gt(oT) .and. oT:gt(__o1)
+    noTcmp1:=oT:cmp(__o1)
+    
+    While noTcmp1==1
+
+        While oX:gt(oT) .and. noTcmp1==1
             oY:SetValue(oY:Add(oI))
             oX:SetValue(oX:Div(oT))
         End While 
     
         oS:SetValue(oS:Add(oY))
+        
         oY:SetValue(__o0)
+        
         oLT:SetValue(oT)
+        
         oT:SetValue(oT:nthRoot(__o2))
+        
         IF oT:eq(oLT)
-            oT:SetValue(__o0)    
+            exit    
         EndIF 
+        
         oI:SetValue(oI:Mult(__od2))
+  
+        noTcmp1:=oT:cmp(__o1)
 
     End While
 
@@ -2977,7 +3119,7 @@ Return(oTrc)
     Sintaxe     : tBigNumber():Normalize(oBigN) -> self
 */
 Method Normalize(oBigN) CLASS tBigNumber
-    
+#ifdef __PTCOMPAT__    
     Local nPadL:=Max(self:nInt,oBigN:nInt)
     Local nPadR:=Max(self:nDec,oBigN:nDec)
     Local nSize:=(nPadL+nPadR)
@@ -3013,7 +3155,9 @@ Method Normalize(oBigN) CLASS tBigNumber
         EndIF
         oBigN:nSize:=nSize
     EndIF
-    
+#else    
+    tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
+#endif    
 Return(self)
 
 /*
@@ -3108,7 +3252,7 @@ Method H2D() CLASS tBigNumber
         otNI:SetValue(hb_ntos(--nI))
         otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1))) 
         otPw:SetValue(otLN:Sub(otNI))
-        otPw:SetValue(otPw:Sub(__o1))
+        otPw:SetValue(otPw:OpDec())
         otPw:SetValue(otH:Pow(otPw))
         otAT:SetValue(otAT:Mult(otPw))
         otNR:SetValue(otNR:Add(otAT))
@@ -3126,7 +3270,7 @@ Method H2D() CLASS tBigNumber
         otNI:SetValue(hb_ntos(--nI))
         otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
         otPw:SetValue(otLN:Sub(otNI))
-        otPw:SetValue(otPw:Sub(__o1))
+        otPw:SetValue(otPw:OpDec())
         otPw:SetValue(otH:Pow(otPw))
         otAT:SetValue(otAT:Mult(otPw))
         otNR:SetValue(otNR:Add(otAT))
@@ -3622,7 +3766,7 @@ Return(nR)
 Method millerRabin(uI) CLASS tBigNumber
 
     Local oN:=self:Clone()
-    Local oD:=tBigNumber():New(oN:Sub(__o1))
+    Local oD:=tBigNumber():New(oN:OpDec())
     Local oS:=__o0:Clone()
     Local oI:=__o0:Clone()
     Local oA:=__o0:Clone()
@@ -3638,7 +3782,7 @@ Method millerRabin(uI) CLASS tBigNumber
 
         While oD:Mod(__o2):eq(__o0)
             oD:SetValue(oD:Mult(__od2))
-            oS:SetValue(oS:Add(__o1))
+            oS:SetValue(oS:OpInc())
         End While
     
         DEFAULT uI:=__o2:Clone()
@@ -3650,7 +3794,7 @@ Method millerRabin(uI) CLASS tBigNumber
             IF .NOT.(lPrime)
                 BREAK
             EndIF
-            oI:SetValue(oI:Sub(__o1))
+            oI:SetValue(oI:OpDec())
         End While
 
     END SEQUENCE
@@ -3671,10 +3815,10 @@ Static Function mrPass(uA,uS,uD,uN)
     Local oS:=tBigNumber():New(uS)
     Local oD:=tBigNumber():New(uD)
     Local oN:=tBigNumber():New(uN)
-    Local oM:=tBigNumber():New(oN:Sub(__o1))
+    Local oM:=tBigNumber():New(oN:OpDec())
 
     Local oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
-    Local oW:=tBigNumber():New(oS:Sub(__o1))
+    Local oW:=tBigNumber():New(oS:OpDec())
     
     Local lmrP:=.T.
 
@@ -3690,7 +3834,7 @@ Static Function mrPass(uA,uS,uD,uN)
                 BREAK
             EndIF
             oP:SetValue(oP:Mult(oP):Mod(oN))
-            oW:SetValue(oW:Sub(__o1))
+            oW:SetValue(oW:OpDec())
         End While
 
         lmrP:=oP:eq(oM)        
@@ -3741,7 +3885,7 @@ Method FI() CLASS tBigNumber
             While oN:Mod(oI):eq(__o0)
                 oN:SetValue(oN:Div(oI,.F.))
             End While
-            oI:SetValue(oI:Add(__o1))
+            oI:SetValue(oI:OpInc())
         End While
         IF oN:gt(__o1)
             oT:SetValue(oT:Sub(oT:Div(oN,.F.)))        
@@ -3808,7 +3952,7 @@ Method PFactors() CLASS tBigNumber
                 aAdd(aPFactors,{cP,"1"})
             Else
                 oT:SetValue(aPFactors[nP][2])
-                aPFactors[nP][2]:=oT:SetValue(oT:Add(__o1)):ExactValue()
+                aPFactors[nP][2]:=oT:SetValue(oT:OpInc()):ExactValue()
             EndIF
             oN:SetValue(oN:Div(oP,.F.))
             nC:=0
@@ -3865,12 +4009,12 @@ Static Function recFact(oS,oN)
 #endif    
         oR:SetValue(oS)
         oI:=oS:Clone()
-        oI:SetValue(oI:Add(__o1))
+        oI:SetValue(oI:OpInc())
         oSN:=oS:Clone()
         oSN:SetValue(oSN:Add(oN)) 
         While oI:lt(oSN)
             oR:SetValue(oR:Mult(oI))            
-            oI:SetValue(oI:Add(__o1))
+            oI:SetValue(oI:OpInc())
         End While
         Return(oR)
     EndIF
@@ -3948,8 +4092,13 @@ Static Function egMult(cN1,cN2,nBase,nAcc)
 #else
 
     Local oMTP:=__o0:Clone()
-    Local n:=Len(cN1)
-    oMTP:SetValue(TBIGNegMult(cN1,cN2,n,nBase),nBase,"0",NIL,nAcc)
+    __mtoN1:SetValue(cN1)
+    __mtoN2:SetValue(cN2)
+    IF .F. .and. __mtoN1:ibtw(__o0,MAX_SYS_lMULT) .and.  __mtoN2:ibtw(__o0,MAX_SYS_lMULT)
+        oMTP:SetValue(hb_ntos(tBigNlMult(Val(cN1),Val(cN2))),nBase,"0",NIL,nAcc)
+    Else
+        oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
+    EndIF
     
 #endif //__PTCOMPAT__
     
@@ -4165,7 +4314,7 @@ Static Function __Pow(base,expR,EPS)
         acc:=base:Pow(expR)
         return(acc)
     elseif exp:gte(__o1)
-        acc:=base:Mult(__pow(base,exp:Sub(__o1),EPS))
+        acc:=base:Mult(__pow(base,exp:OpDec(),EPS))
         return(acc)
     else
         low:=__o0:Clone()
@@ -4803,7 +4952,15 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Add(a,b,n,nB)
-            Return(TBIGNADD(a,b,n,n,nB))
+                Local r
+                __adoN1:SetValue(a)
+                __adoN2:SetValue(b)
+                IF .F. .and. __adoN1:ibtw(__o0,MAX_SYS_lADD) .and.  __adoN2:ibtw(__o0,MAX_SYS_lADD)
+                    r:=hb_ntos(tBIGNlADD(Val(a),Val(b)))
+                Else
+                    r:=tBIGNADD(a,b,n,n,nB)
+                EndIF
+            Return(r)
         #endif //__PTCOMPAT__
         
         /*
@@ -4853,7 +5010,15 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Sub(a,b,n,nB)
-            Return(TBIGNSUB(a,b,n,nB))
+                Local r
+                __sboN1:SetValue(a)
+                __sboN2:SetValue(b)
+                IF .F. .and. __sboN1:ibtw(__o0,MAX_SYS_lADD) .and.  __sboN2:ibtw(__o0,MAX_SYS_lADD)
+                    r:=hb_ntos(tBIGNlSUB(Val(a),Val(b)))
+                Else
+                    r:=tBIGNSUB(a,b,n,nB)
+                EndIF
+            Return(r)
         #endif //__PTCOMPAT__
         /*
             Function    : Mult
@@ -4948,7 +5113,15 @@ Return(r)
             Return(cGetcN(c,y))
         #else //__HARBOUR__
             Static Function Mult(a,b,n,nB)
-            Return(TBIGNMULT(a,b,n,n,nB))
+                Local r
+                __mtoN1:SetValue(a)
+                __mtoN2:SetValue(b)
+                IF .F. .and. __mtoN1:ibtw(__o0,MAX_SYS_lMULT) .and.  __mtoN2:ibtw(__o0,MAX_SYS_lMULT)
+                    r:=hb_ntos(tBigNlMult(Val(a),Val(b)))
+                Else
+                    r:=TBIGNMULT(a,b,n,n,nB)
+                EndIF
+            Return(r)
         #endif //__PTCOMPAT__
 
         /*
@@ -5141,6 +5314,7 @@ Static Procedure __InitstbN(nBase)
     __o0:=tBigNumber():New("0",nBase)
     __o1:=tBigNumber():New("1",nBase)
     __o2:=tBigNumber():New("2",nBase)
+    __o9:=tBigNumber():New("9",nBase)
     __o10:=tBigNumber():New("10",nBase)
     __o20:=tBigNumber():New("20",nBase)
     __od2:=tBigNumber():New("0.5",nBase)
@@ -5189,6 +5363,14 @@ Return
             TBIGNFI()
             TBIGNALEN()
             TBIGNMEMCMP()
+            TBIGN2MULT()
+            TBIGNIMULT()
+            TBIGNIADD()
+            TBIGNISUB()
+            TBIGNLMULT()
+            TBIGNLADD()
+            TBIGNLSUB()
+            TBIGNNORMALIZE()
         EndIF
     Return(lDummy)
     
@@ -5320,6 +5502,46 @@ Return
             hb_retclen(szRet,y);
             hb_xfree(szRet);
         }
+        
+        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB){
+            HB_BOOL bAdd  = HB_TRUE;
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i         = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                if (bAdd){
+                    v    += a;
+                    bAdd =  HB_FALSE;
+                }    
+                v += v1;
+                if ( v>=nB ){
+                    v  -= nB;
+                    v1 = 1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNIADD ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            HB_MAXUINT a        = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLADD ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)+(HB_MAXUINT)hb_parnint(2));
+        }
    
         static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){
             char * c      = (char*)hb_xgrab(y+1);
@@ -5353,7 +5575,47 @@ Return
             hb_retclen(szRet,y);
             hb_xfree(szRet);
         }
-
+        
+        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB){
+            HB_BOOL bSub  = HB_TRUE;
+            int v;
+            int v1        = 0;
+            int i         = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                if (bSub){
+                    v    -= s;
+                    bSub =  HB_FALSE;
+                }                
+                v += v1;
+                if ( v<0 ){
+                    v+=nB;
+                    v1 = -1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNISUB ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1));
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            int s               = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiSUB(szRet,s,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLSUB ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)-(HB_MAXUINT)hb_parnint(2));
+        }
+ 
         static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
             
             char * c     = (char*)hb_xgrab(y+1);
@@ -5545,6 +5807,65 @@ Return
             hb_xfree(pegMult->cMultP);
             hb_xfree(pegMult);
         }
+        
+        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB){
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                v <<= 1;
+                v += v1;
+                if (v>=nB){
+                    v1 = v/nB;
+                    v  %= nB;
+                }else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGN2MULT ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(2);
+            hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB){
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                v *= m;
+                v += v1;
+                if (v>=nB){
+                    v1 = v/nB;
+                    v  %= nB;
+                }else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNIMULT ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)*2);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            HB_MAXUINT m        = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiMult(szRet,m,n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLMULT ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)*(HB_MAXUINT)hb_parnint(2));
+        }
 
         typedef struct
         {
@@ -5688,9 +6009,6 @@ Return
             
             pecDiv->cDivR           = hb_strdup(pA);
             char * aux              = hb_strdup(pB);
-            
-            int ipNS1               = ipN-1;
-            int i;
              
             HB_MAXUINT v1;
           
@@ -5702,37 +6020,34 @@ Return
             HB_MAXUINT *ipA         = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
             HB_MAXUINT *iaux        = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
                         
-            i = ipNS1;
-            while(i>=0){
+            int i = ipN;
+            while(--i>=0){
                 ipA[i]  = (*(&pecDiv->cDivR[i])-'0');
                 iaux[i] = (*(&aux[i])-'0');
-                i--;
             }
  
-            while (memcmp(iaux,ipA,ipNS1)<=0){
+            while (memcmp(iaux,ipA,ipN)<=0){
                 n++;
                 v1 = 0;
-                i = ipNS1;
-                while(i>=0){
+                i = ipN;
+                while(--i>=0){
                     iaux[i] <<= 1;
                     iaux[i] += v1;
                     if (iaux[i]>=nB){
-                        v1      = iaux[i]/nB;
+                        v1 = iaux[i]/nB;
                         iaux[i] %= nB;
                     }else{
-                        v1      = 0;
+                        v1 = 0;
                     }
-                    i--;
                 }
             }
 
-           hb_xfree(ipA);
-           ipA = NULL;
+            hb_xfree(ipA);
+            ipA = NULL;
  
-            i = ipNS1;
-            while(i>=0){
+            i = ipN;
+            while(--i>=0){
                 aux[i]   = "0123456789"[iaux[i]];
-                i--;
             }
             
             hb_xfree(iaux);
@@ -5747,36 +6062,36 @@ Return
                 hb_xfree(pecDivTmp->cDivQ);
                 hb_xfree(pecDivTmp->cDivR);    
                 v1 = 0;
-                i = ipNS1;
-                while(i>=0){
+                i = ipN;
+                while(--i>=0){
                     idivQ[i] <<= 1;
                     idivQ[i] += v1;
                     if (idivQ[i]>=nB){
-                        v1       = idivQ[i]/nB;
+                        v1 = idivQ[i]/nB;
                         idivQ[i] %= nB;
                     }else{
-                        v1       = 0;
+                        v1 = 0;
                     }
-                    i--;
                 }
                 if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
                     char * tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
                     hb_xmemcpy(pecDiv->cDivR,tmp,ipN);
                     hb_xfree(tmp);
                     v1 = 0;
-                    i = ipNS1;
-                    while(i>=0){
-                        if (i==ipNS1){
+                    i  = ipN;
+                    HB_BOOL bAdd = HB_TRUE;
+                    while(--i>=0){
+                        if (bAdd){
                             idivQ[i]++;
+                            bAdd = HB_FALSE;
                         }    
                         idivQ[i] += v1;
                         if (idivQ[i]>=nB){
                             idivQ[i] -= nB;
-                            v1       = 1;
+                            v1 = 1;
                         }else{
-                            v1       = 0;
+                            v1 = 0;
                         }
-                        i--;
                     } 
                 }
             }
@@ -5785,12 +6100,11 @@ Return
             hb_xfree(sN2);
             hb_xfree(pecDivTmp);
             
-            pecDiv->cDivQ        = (char*)hb_xgrab(ipN+1);
+            pecDiv->cDivQ = (char*)hb_xgrab(ipN+1);
 
-            i = ipNS1;
-            while(i>=0){
+            i = ipN;
+            while(--i>=0){
                 pecDiv->cDivQ[i] = "0123456789"[idivQ[i]];
-                i--;
             }
             
             free(idivQ);
@@ -5861,7 +6175,7 @@ Return
           if (u == 0) return v;
           if (v == 0) return u;
          
-          /* Let shift := lg K, where K is the greatest power of 2
+          /* Let shift:=lg K, where K is the greatest power of 2
                 dividing both u and v. */
           for (shift = 0; ((u | v) & 1) == 0; ++shift) {
                  u >>= 1;
@@ -5965,7 +6279,70 @@ Return
         HB_FUNC_STATIC( TBIGNMEMCMP ){
            hb_retnint(memcmp(hb_parc(1),hb_parc(2),hb_parclen(1)));
         }
+
+        HB_FUNC_STATIC( TBIGNMAX ){
+           hb_retnint(HB_MAX(hb_parnint(1),hb_parnint(2)));
+        }
+        
+        HB_FUNC_STATIC( TBIGNMIN ){
+           hb_retnint(HB_MIN(hb_parnint(1),hb_parnint(2)));
+        }
+         
+        HB_FUNC_STATIC( TBIGNNORMALIZE ){
+            
+            HB_SIZE nInt1 = (HB_SIZE)hb_parnint(2);
+            HB_SIZE nInt2 = (HB_SIZE)hb_parnint(7);
+ 
+            HB_SIZE nDec1 = (HB_SIZE)hb_parnint(4);
+            HB_SIZE nDec2 = (HB_SIZE)hb_parnint(9);
+ 
+            HB_SIZE nPadL = HB_MAX(nInt1,nInt2);
+            HB_SIZE nPadR = HB_MAX(nDec1,nDec2);
     
+            HB_BOOL lPadL = nPadL!=nInt1;
+            HB_BOOL lPadR = nPadR!=nDec1;
+        
+            char * tmpPad;
+    
+            if (lPadL || lPadR){
+                if (lPadL){
+                    tmpPad = tBIGNPadL(hb_parc(1),nPadL,"0");
+                    hb_storclen(tmpPad,nPadL,1);
+                    hb_stornint(nPadL,2);
+                    hb_xfree(tmpPad);
+                }
+                if (lPadR){
+                    tmpPad = tBIGNPadR(hb_parc(3),nPadR,"0");
+                    hb_storclen(tmpPad,nPadR,3);
+                    hb_stornint(nPadR,4);
+                    hb_xfree(tmpPad);
+                }
+                HB_SIZE nSize=nPadL+nPadR;
+                hb_stornint(nSize,5);
+            }
+
+            lPadL=nPadL!=nInt2;
+            lPadR=nPadR!=nDec2;
+           
+            if (lPadL || lPadR){
+                if (lPadL){
+                    tmpPad = tBIGNPadL(hb_parc(6),nPadL,"0");
+                    hb_storclen(tmpPad,nPadL,6);
+                    hb_stornint(nPadL,7);
+                    hb_xfree(tmpPad);
+                }
+                if (lPadR){
+                    tmpPad = tBIGNPadR(hb_parc(8),nPadR,"0");
+                    hb_storclen(tmpPad,nPadR,8);
+                    hb_stornint(nPadR,9);
+                    hb_xfree(tmpPad);
+                }
+                HB_SIZE nSize=nPadL+nPadR;
+                hb_stornint(nSize,10);
+            }
+       
+        }
+        
     #pragma ENDDUMP
 
 #endif // __HARBOUR__
