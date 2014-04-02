@@ -1816,10 +1816,7 @@ Method Mult(uBigN) CLASS tBigNumber
     Local lNeg    
     Local lNeg1 
     Local lNeg2
-    Local l0at9M
-    Local l2Mult
 
-    Local nM
     Local nDec    
     Local nSize 
 
@@ -1831,53 +1828,17 @@ Method Mult(uBigN) CLASS tBigNumber
     lNeg1:=__mtoN1:lNeg
     lNeg2:=__mtoN2:lNeg    
     lNeg:=(lNeg1 .and. .NOT.(lNeg2)) .or. (.NOT.(lNeg1) .and. lNeg2)
-   
-    #ifdef __HARBOUR__
-       #ifndef __PTCOMPAT__
-            __mtoN1:__cSig("")
-            l0at9M:=.F. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
-            IF l0at9M
-                nM:=Val(__mtoN2:Int(.F.,.F.))
-                cNT:=__mtoN1:cInt
-                cNT+=__mtoN1:cDec
-                nDec:=__mtoN1:nDec
-                l2Mult:=nM==2
-            Else
-                __mtoN2:__cSig("")
-                l0at9M:=.F. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
-                IF l0at9M
-                   nM:=Val(__mtoN1:Int(.F.,.F.))
-                   cNT:=__mtoN2:cInt
-                   cNT+=__mtoN2:cDec
-                   nDec:=__mtoN2:nDec
-                   l2Mult:=nM==2
-                EndIF
-            EndIF
-            IF .NOT.(l0at9M)
-                l2Mult:=.F.
-            EndIF
-        #else
-            l0at9M:=.F.
-            l2Mult:=.F.
-        #endif
-    #else
-        l0at9M:=.F.
-        l2Mult:=.F.
-    #endif
+ 
+    cN1:=__mtoN1:cInt
+    cN1+=__mtoN1:cDec
+
+    cN2:=__mtoN2:cInt
+    cN2+=__mtoN2:cDec
+
+    nDec:=__mtoN1:nDec*2
+    nSize:=__mtoN1:nSize
     
-    IF l2Mult
-        __mtoNR:SetValue(tBigN2Mult(cNT,self:nBase),self:nBase,NIL,.F.)
-    ElseIF l0at9M
-        __mtoNR:SetValue(tBigNiMult(cNT,nM,self:nBase),self:nBase,NIL,.F.)        
-    Else 
-        cN1:=__mtoN1:cInt
-        cN1+=__mtoN1:cDec
-        cN2:=__mtoN2:cInt
-        cN2+=__mtoN2:cDec
-        nDec:=__mtoN1:nDec*2
-        nSize:=__mtoN1:nSize
-        __mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
-    EndIF    
+    __mtoNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
 
     cNT:=__mtoNR:cInt
     
@@ -1920,10 +1881,7 @@ Method egMult(uBigN) CLASS tBigNumber
     Local lNeg    
     Local lNeg1 
     Local lNeg2
-    Local l0at9M
-    Local l2Mult  
  
-    Local nM
     Local nDec    
 
     __mtoN1:SetValue(self)
@@ -1934,52 +1892,16 @@ Method egMult(uBigN) CLASS tBigNumber
     lNeg1:=__mtoN1:lNeg
     lNeg2:=__mtoN2:lNeg    
     lNeg:=(lNeg1 .and. .NOT.(lNeg2)) .or. (.NOT.(lNeg1) .and. lNeg2)
-
-   #ifdef __HARBOUR__
-       #ifndef __PTCOMPAT__
-            __mtoN1:__cSig("")
-            l0at9M:=.F. .and. __mtoN2:ibtw(__o0,MAX_SYS_iMULT)
-            IF l0at9M
-                nM:=Val(__mtoN2:Int(.F.,.F.))
-                cNT:=__mtoN1:cInt
-                cNT+=__mtoN1:cDec
-                nDec:=__mtoN1:nDec
-                l2Mult:=nM==2
-            Else
-                __mtoN2:__cSig("")
-                l0at9M:=.F. .and. __mtoN1:ibtw(__o0,MAX_SYS_iMULT)
-                IF l0at9M
-                   nM:=Val(__mtoN1:Int(.F.,.F.))
-                   cNT:=__mtoN2:cInt
-                   cNT+=__mtoN2:cDec
-                   nDec:=__mtoN2:nDec
-                   l2Mult:=nM==2
-                EndIF
-            EndIF
-            IF .NOT.(l0at9M)
-                l2Mult:=.F.
-            EndIF
-        #else
-            l0at9M:=.F.
-            l2Mult:=.F.
-        #endif
-    #else
-        l0at9M:=.F.
-        l2Mult:=.F.
-    #endif
     
-    IF l2Mult
-        __mtoNR:SetValue(tBigN2Mult(cNT,self:nBase),self:nBase,NIL,.F.)
-    ElseIF l0at9M
-        __mtoNR:SetValue(tBigNiMult(cNT,nM,self:nBase),self:nBase,NIL,.F.) 
-    Else    
-        cN1:=__mtoN1:cInt
-        cN1+=__mtoN1:cDec
-        cN2:=__mtoN2:cInt
-        cN2+=__mtoN2:cDec
-        nDec:=__mtoN1:nDec*2
-        __mtoNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
-    EndIF    
+    cN1:=__mtoN1:cInt
+    cN1+=__mtoN1:cDec
+
+    cN2:=__mtoN2:cInt
+    cN2+=__mtoN2:cDec
+
+    nDec:=__mtoN1:nDec*2
+
+    __mtoNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
 
     cNT:=__mtoNR:cInt
     
@@ -4952,15 +4874,7 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Add(a,b,n,nB)
-                Local r
-                /*__adoN1:SetValue(a)
-                __adoN2:SetValue(b)
-                IF .F. .and. __adoN1:ibtw(__o0,MAX_SYS_lADD) .and.  __adoN2:ibtw(__o0,MAX_SYS_lADD)
-                    r:=hb_ntos(tBIGNlADD(Val(a),Val(b)))
-                Else
-                    */r:=tBIGNADD(a,b,n,n,nB)
-                //EndIF
-            Return(r)
+            Return(tBIGNADD(a,b,n,n,nB))
         #endif //__PTCOMPAT__
         
         /*
@@ -5010,15 +4924,7 @@ Return(r)
             Return(c)
         #else //__HARBOUR__
             Static Function Sub(a,b,n,nB)
-                Local r/*
-                __sboN1:SetValue(a)
-                __sboN2:SetValue(b)
-                IF .F. .and. __sboN1:ibtw(__o0,MAX_SYS_lADD) .and.  __sboN2:ibtw(__o0,MAX_SYS_lADD)
-                    r:=hb_ntos(tBIGNlSUB(Val(a),Val(b)))
-                Else
-                    */r:=tBIGNSUB(a,b,n,nB)
-                //EndIF
-            Return(r)
+            Return(tBIGNSUB(a,b,n,nB))
         #endif //__PTCOMPAT__
         /*
             Function    : Mult
@@ -5113,15 +5019,7 @@ Return(r)
             Return(cGetcN(c,y))
         #else //__HARBOUR__
             Static Function Mult(a,b,n,nB)
-                Local r/*
-                __mtoN1:SetValue(a)
-                __mtoN2:SetValue(b)
-                IF .F. .and. __mtoN1:ibtw(__o0,MAX_SYS_lMULT) .and.  __mtoN2:ibtw(__o0,MAX_SYS_lMULT)
-                    r:=hb_ntos(tBigNlMult(Val(a),Val(b)))
-                Else
-                    */r:=TBIGNMULT(a,b,n,n,nB)
-                //EndIF
-            Return(r)
+            Return(tBIGNMULT(a,b,n,n,nB))
         #endif //__PTCOMPAT__
 
         /*
