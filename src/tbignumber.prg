@@ -90,7 +90,6 @@ End While;;
 Static __o0
 Static __o1
 Static __o2
-Static __o9
 Static __o10
 Static __o20
 Static __od2
@@ -5212,7 +5211,6 @@ Static Procedure __InitstbN(nBase)
     __o0:=tBigNumber():New("0",nBase)
     __o1:=tBigNumber():New("1",nBase)
     __o2:=tBigNumber():New("2",nBase)
-    __o9:=tBigNumber():New("9",nBase)
     __o10:=tBigNumber():New("10",nBase)
     __o20:=tBigNumber():New("20",nBase)
     __od2:=tBigNumber():New("0.5",nBase)
@@ -6190,11 +6188,10 @@ Return
             
             HB_SIZE nInt1 = (HB_SIZE)hb_parnint(2);
             HB_SIZE nInt2 = (HB_SIZE)hb_parnint(7);
+            HB_SIZE nPadL = HB_MAX(nInt1,nInt2);
  
             HB_SIZE nDec1 = (HB_SIZE)hb_parnint(4);
-            HB_SIZE nDec2 = (HB_SIZE)hb_parnint(9);
- 
-            HB_SIZE nPadL = HB_MAX(nInt1,nInt2);
+            HB_SIZE nDec2 = (HB_SIZE)hb_parnint(9);            
             HB_SIZE nPadR = HB_MAX(nDec1,nDec2);
     
             HB_BOOL lPadL = nPadL!=nInt1;
@@ -6219,8 +6216,8 @@ Return
                 hb_stornint(nSize,5);
             }
 
-            lPadL=nPadL!=nInt2;
-            lPadR=nPadR!=nDec2;
+            lPadL = nPadL!=nInt2;
+            lPadR = nPadR!=nDec2;
            
             if (lPadL || lPadR){
                 if (lPadL){
