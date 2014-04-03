@@ -2106,6 +2106,10 @@ Return(oMod)
 */
 Method Pow(uBigN) CLASS tBigNumber
 
+#ifndef __PTCOMPAT__
+    Local aThreads
+#endif
+
     Local oSelf:=self:Clone()
     
     Local cM10
@@ -2165,8 +2169,19 @@ Method Pow(uBigN) CLASS tBigNumber
 
             IF __pwoB:SetValue(cPowB):gt(__o1)
                 __pwoGCD:SetValue(__pwoA:GCD(__pwoB))
-                __pwoA:SetValue(__pwoA:Div(__pwoGCD))
-                __pwoB:SetValue(__pwoB:Div(__pwoGCD))
+                #ifndef __PTCOMPAT__
+                    aThreads:=Array(2,2)
+                    aThreads[1][1]:=hb_threadStart(@thDiv(),__pwoA,__pwoGCD)
+                    hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                    aThreads[1][2]:=hb_threadStart(@thDiv(),__pwoB,__pwoGCD)
+                    hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                    hb_threadWait(aThreads[1])
+                    __pwoA:SetValue(aThreads[2][1])
+                    __pwoB:SetValue(aThreads[2][2])
+                #else
+                    __pwoA:SetValue(__pwoA:Div(__pwoGCD))
+                    __pwoB:SetValue(__pwoB:Div(__pwoGCD))
+                #endif
             EndIF
 
             __pwoA:Normalize(@__pwoB)
@@ -2193,6 +2208,14 @@ Method Pow(uBigN) CLASS tBigNumber
     EndIF
 
 Return(__pwoNR:Clone())
+
+#ifndef __PTCOMPAT__
+    Static Function thDiv(oN,oD,lFloat)
+        Local othDiv:=__o0:Clone()
+        othDiv:SetValue(oN:Div(oD,lFloat))
+    Return(othDiv)
+#endif //__PTCOMPAT__    
+
 
 /*
     Method      : OpInc
@@ -2367,22 +2390,20 @@ Static Function cGCD(nX,nY)
     #ifndef __PTCOMPAT__
         Local nGCD:=TBIGNGDC(nX,nY)
     #else //__PROTHEUS__
-         Local nGCD:=nX  
-         
-         nX:=Max(nY,nGCD)
-         nY:=Min(nGCD,nY)
-    
+        Local nGCD:=nX
+        nX:=Max(nY,nGCD)
+        nY:=Min(nGCD,nY)
         IF nY==0
             nGCD:=nX
         Else
-               nGCD:=nY
-               While .T.
-                   IF (nY:=(nX%nY))==0
-                       EXIT
-                   EndIF
-                   nX:=nGCD
-                   nGCD:=nY
-               End While
+            nGCD:=nY
+            While .T.
+                IF (nY:=(nX%nY))==0
+                    EXIT
+                EndIF
+                nX:=nGCD
+                nGCD:=nY
+            End While
         EndIF
     #endif //__PTCOMPAT__
 Return(hb_ntos(nGCD))
@@ -2432,9 +2453,14 @@ Method LCM(uBigN) CLASS tBigNumber
             While lMX .or. lMY
                 oLCM:SetValue(oLCM:Mult(oI))
                 #ifndef __PTCOMPAT__
-                    IF lMX .and. lMY
-                        oX:SetValue(oX:Div(oI,.F.))
-                        oY:SetValue(oY:Div(oI,.F.))
+                    IF lMX .and. lMY                    
+                        aThreads[1][1]:=hb_threadStart(@thDiv(),oX,oI,.F.)
+                        hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                        aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI,.F.)
+                        hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                        hb_threadWait(aThreads[1])
+                        oX:SetValue(aThreads[2][1])
+                        oY:SetValue(aThreads[2][2])
                         aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
                         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
                         aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
@@ -2473,20 +2499,13 @@ Method LCM(uBigN) CLASS tBigNumber
 Return(oLCM)
 
 Static Function cLCM(nX,nY)
-
     #ifndef __PTCOMPAT__
-    
         Local nLCM:=TBIGNLCM(nX,nY)
-    
     #else //__PROTHEUS__
-         
         Local nLCM:=1
-    
         Local nI:=2
-    
         Local lMX
         Local lMY
-    
         While .T.
             lMX:=(nX%nI)==0
             lMY:=(nY%nI)==0
@@ -2506,9 +2525,7 @@ Static Function cLCM(nX,nY)
             EndIF
             ++nI
         End While
-    
     #endif //__PTCOMPAT__    
-    
 Return(hb_ntos(nLCM))
 
 #ifndef __PTCOMPAT__
