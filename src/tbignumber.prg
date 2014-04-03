@@ -187,22 +187,22 @@ THREAD Static __lsthdSet
 #define MAX_SYS_FI          MAX_SYS_iMULT
 
 /*
-*    Alternative Compile Options: /d
+*    Alternative Compile Options: -d
 *
 *    #ifdef __PROTHEUS__
-*        /dTBN_ARRAY
-*        /dTBN_DBFILE 
-*        /d__TBN_DYN_OBJ_SET__ 
-*        /d__ADDMT__
-*        /d__SUBTMT__
+*        -dTBN_ARRAY
+*        -dTBN_DBFILE 
+*        -d__TBN_DYN_OBJ_SET__ 
+*        -d__ADDMT__
+*        -d__SUBTMT__
 *    #else //__HARBOUR__
-*        /dTBN_ARRAY
-*        /dTBN_DBFILE 
-*        /dTBN_MEMIO 
-*        /d__TBN_DYN_OBJ_SET__ 
-*        /d__ADDMT__
-*        /d__SUBTMT__
-*        /d__PTCOMPAT__
+*        -dTBN_ARRAY
+*        -dTBN_DBFILE 
+*        -dTBN_MEMIO 
+*        -d__TBN_DYN_OBJ_SET__ 
+*        -d__ADDMT__
+*        -d__SUBTMT__
+*        -d__PTCOMPAT__
 *    #endif
 */
 

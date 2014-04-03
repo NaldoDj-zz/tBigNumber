@@ -1,18 +1,21 @@
-#/d__HB_Q_SQRT__
-#/d__PTCOMPAT__
-#/d__ALT_D__
+#-d__HB_Q_SQRT__
+#-d__PTCOMPAT__
+#-d__ALT_D__
 #-b
 
 -mt
 
-/d__MT__
-/d__POWMT__
-/d__ROOTMT__
-/d__ADDMT__
-/d__SUBTMT__
-/d__MULTMT__
+-d__MT__
+-d__POWMT__
+-d__ROOTMT__
+-d__ADDMT__
+-d__SUBTMT__
+-d__MULTMT__
 
-../src/tBigNtst.prg -w2
-../src/tBigNumber.prg -w3
+-i../include
+-i../../core/contrib/xhb
+
+../src/tBigNtst.prg
+../src/tBigNumber.prg
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

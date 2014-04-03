@@ -1,14 +1,17 @@
-#/d__HB_Q_SQRT__
-#/d__PTCOMPAT__
-#/d__ALT_D__
+#-d__HB_Q_SQRT__
+#-d__PTCOMPAT__
+#-d__ALT_D__
 #-b
 
 -mt
 
-/dTBN_ARRAY
-/d__TBN_DYN_OBJ_SET__
+-dTBN_ARRAY
+-d__TBN_DYN_OBJ_SET__
 
-../src/tBigNtst.prg -w2
-../src/tBigNumber.prg -w3
+-i../include
+-i../../core/contrib/xhb
+
+../src/tBigNtst.prg
+../src/tBigNumber.prg
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}
