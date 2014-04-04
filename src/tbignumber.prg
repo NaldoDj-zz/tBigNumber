@@ -81,18 +81,36 @@
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
 #endif //__PROTHEUS__
 
-#xcommand IncZeros(<n>);
+#xcommand __IncS0(<n>);
 =>;
-while <n> > thsnstcZ0;;
-    thscstcZ0+=thscstcZ0;;
-    thsnstcZ0+=thsnstcZ0;;
+while <n> > s__nN0;;
+    while .not.(hb_mutexLock(s__MTXcN0));;
+        tBigNSleep(0.001);;
+    end while;;
+    s__cN0+=s__cN0;;
+    s__nN0+=s__nN0;;
+    hb_mutexUnLock(s__MTXcN0);;
+end while;;
+
+#xcommand __IncS9(<n>);
+=>;
+while <n> > s__nN9;;
+    while .not.(hb_mutexLock(s__MTXcN9));;
+        tBigNSleep(0.001);;
+    end while;;
+    s__cN9+=s__cN9;;
+    s__nN9+=s__nN9;;
+    hb_mutexUnLock(s__MTXcN9);;
 end while;;
 
 #ifndef __DIVMETHOD__
     #define __DIVMETHOD__ 1
 #endif
 
-static __stkMutex:=hb_mutexCreate()
+static s__cN0
+static s__nN0
+static s__cN9
+static s__nN9
 
 static __o0
 static __o1
@@ -100,79 +118,82 @@ static __o2
 static __o10
 static __o20
 static __od2
+
 static __oMinFI
 static __oMinGCD
 static __nMinLCM
+
 static __lstbNSet
+
 static __nDivMeth
+
 static __nthRootAcc
 static __nDecimalSet
 
-thread static thscstcZ0
-thread static thsnstcZ0
-thread static thscstcN9
-thread static htsnstcN9
+static s__MTXcN0:=hb_mutexCreate()
+static s__MTXcN9:=hb_mutexCreate()
+static s__MTXACC:=hb_mutexCreate()
 
 #ifdef TBN_ARRAY
-    thread static thsaZAdd
-    thread static thsaZSub
-    thread static thsaZMult
+    thread static ths_aZAdd
+    thread static ths_aZSub
+    thread static ths_aZMult
 #endif
 
 #ifdef TBN_DBFILE
-    thread static thsdFiles
+    thread static ths_dFiles
 #endif
 
-thread static thseqN1
-thread static thseqN2
+thread static ths_eqN1
+thread static ths_eqN2
 
-thread static thsgtN1
-thread static thsgtN2
+thread static ths_gtN1
+thread static ths_gtN2
 
-thread static thsltN1
-thread static thsltN2
+thread static ths_ltN1
+thread static ths_ltN2
 
-thread static thscmpN1
-thread static thscmpN2
+thread static ths_cmpN1
+thread static ths_cmpN2
 
-thread static thsadNR
-thread static thsadN1
-thread static thsadN2
+thread static ths_adNR
+thread static ths_adN1
+thread static ths_adN2
 
-thread static thssbNR
-thread static thssbN1
-thread static thssbN2
+thread static ths_sbNR
+thread static ths_sbN1
+thread static ths_sbN2
 
-thread static thsmtNR
-thread static thsmtN1
-thread static thsmtN2
+thread static ths_mtNR
+thread static ths_mtN1
+thread static ths_mtN2
 
-thread static thsdvNR
-thread static thsdvN1
-thread static thsdvN2
-thread static thsdvRDiv    
+thread static ths_dvNR
+thread static ths_dvN1
+thread static ths_dvN2
+thread static ths_dvRDiv    
 
-thread static thspwA
-thread static thspwB
-thread static thspwNP
-thread static thspwNR
-thread static thspwNT
-thread static thspwGCD
+thread static ths_pwA
+thread static ths_pwB
+thread static ths_pwNP
+thread static ths_pwNR
+thread static ths_pwNT
+thread static ths_pwGCD
 
 #ifdef __PTCOMPAT__
-thread static thseDivN
-thread static thseDivD
+thread static ths_eDivN
+thread static ths_eDivD
 #endif //__PTCOMPAT__
-thread static thseDivR
-thread static thseDivQ 
+thread static ths_eDivR
+thread static ths_eDivQ 
 #ifdef __PTCOMPAT__
-thread static thseDivDvQ
-thread static thseDivDvR
+thread static ths_eDivDvQ
+thread static ths_eDivDvR
 #endif //__PTCOMPAT__
 
-thread static thsSysSQRT
+thread static ths_SysSQRT
 
-thread static thslsdSet
+thread static ths_lsdSet
 
 #define RANDOM_MAX_EXIT 5
 #define EXIT_MAX_RANDOM 50
@@ -557,7 +578,7 @@ method New(uBigN,nBase) class tBigNumber
     endif
     
     // -------------------- assign thread static values -------------------------
-    if thslsdSet==NIL
+    if ths_lsdSet==NIL
         __Initsthd(nBase)
     endif
  
@@ -580,29 +601,29 @@ return(self)
 */
 #ifdef TBN_DBFILE
     #ifdef __HARBOUR__
-        Procedure tBigNGC() class tBigNumber
+        procedure tBigNGC() class tBigNumber
     #else
-        static Procedure tBigNGC()
+        static procedure tBigNGC()
     #endif    
             local nFile
             local nFiles
-            DEFAULT thsdFiles:=Array(0)
-            nFiles:=tBIGNaLen(thsdFiles)
+            DEFAULT ths_dFiles:=Array(0)
+            nFiles:=tBIGNaLen(ths_dFiles)
             for nFile:=1 to nFiles
-                if Select(thsdFiles[nFile][1])>0
-                    (thsdFiles[nFile][1])->(dbCloseArea())
+                if Select(ths_dFiles[nFile][1])>0
+                    (ths_dFiles[nFile][1])->(dbCloseArea())
                 endif            
                 #ifdef __PROTEUS__
-                    MsErase(thsdFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
+                    MsErase(ths_dFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
                 #else
                     #ifdef TBN_MEMIO
-                        dbDrop(thsdFiles[nFile][2])
+                        dbDrop(ths_dFiles[nFile][2])
                     #else
-                        fErase(thsdFiles[nFile][2])
+                        fErase(ths_dFiles[nFile][2])
                     #endif
                 #endif    
             next nFile
-            aSize(thsdFiles,0)
+            aSize(ths_dFiles,0)
         return
 #endif    
 
@@ -788,7 +809,7 @@ return(self:nSize)
     Sintaxe     : tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
-    if thslsdSet==NIL
+    if ths_lsdSet==NIL
         return(tBigNumber():New(self))
     endif
 #ifdef __PROTHEUS__
@@ -818,23 +839,23 @@ method SetDecimals(nSet) class tBigNumber
 
     local nLastSet
 
-    if hb_mutexLock(__stkMutex)
+    while .not.(hb_mutexLock(s__MTXACC))
+        tBigNSleep(0.001)
+    end while
     
-        nLastSet:=__nDecimalSet
-    
-        DEFAULT __nDecimalSet:=if(nSet==NIL,32,nSet)
-        DEFAULT nSet :=__nDecimalSet
-        DEFAULT nLastSet:=nSet
+    nLastSet:=__nDecimalSet
 
-        if nSet>MAX_DECIMAL_PRECISION
-            nSet:=MAX_DECIMAL_PRECISION
-        endif
+    DEFAULT __nDecimalSet:=if(nSet==NIL,32,nSet)
+    DEFAULT nSet :=__nDecimalSet
+    DEFAULT nLastSet:=nSet
 
-        __nDecimalSet:=nSet
+    if nSet>MAX_DECIMAL_PRECISION
+        nSet:=MAX_DECIMAL_PRECISION
+    endif
 
-        hb_mutexUnLock(__stkMutex)
+    __nDecimalSet:=nSet
 
-  	endif
+    hb_mutexUnLock(s__MTXACC)
     
     DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
     
@@ -851,24 +872,24 @@ method nthRootAcc(nSet) class tBigNumber
 
     local nLastSet
     
-    if hb_mutexLock(__stkMutex)
+    while .not.(hb_mutexLock(s__MTXACC))
+        tBigNSleep(0.001)
+    end while
     
-        nLastSet:=__nthRootAcc
+    nLastSet:=__nthRootAcc
 
-        DEFAULT __nthRootAcc:=if(nSet==NIL,6,nSet)
-        DEFAULT nSet:=__nthRootAcc
-        DEFAULT nLastSet:=nSet
+    DEFAULT __nthRootAcc:=if(nSet==NIL,6,nSet)
+    DEFAULT nSet:=__nthRootAcc
+    DEFAULT nLastSet:=nSet
 
-        if nSet>MAX_DECIMAL_PRECISION
-            nSet:=MAX_DECIMAL_PRECISION
-        endif
-
-        __nthRootAcc:=Min(self:SetDecimals()-1,nSet)
-        
-        hb_mutexUnLock(__stkMutex)
-    
+    if nSet>MAX_DECIMAL_PRECISION
+        nSet:=MAX_DECIMAL_PRECISION
     endif
+
+    __nthRootAcc:=Min(self:SetDecimals()-1,nSet)
     
+    hb_mutexUnLock(s__MTXACC)
+
     DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
 
 return(nLastSet)
@@ -988,8 +1009,8 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             if "0"==Left(self:cDec,1)
                 nFP:=hb_bLen(self:cDec)
-                IncZeros(nFP)
-                if self:cDec==Left(thscstcZ0,nFP)
+                __IncS0(nFP)
+                if self:cDec==Left(s__cN0,nFP)
                     self:cDec:="0"
                 endif
             endif    
@@ -998,8 +1019,8 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             if "0"==Left(self:cDec,1)
                 nFP:=hb_bLen(self:cDec)
-                IncZeros(nFP)
-                if self:cDec==Left(thscstcZ0,nFP)
+                __IncS0(nFP)
+                if self:cDec==Left(s__cN0,nFP)
                     self:cDec:="0"
                 endif
             endif    
@@ -1179,16 +1200,16 @@ method eq(uBigN) class tBigNumber
 
     local leq
 
-    thseqN1:SetValue(self)
-    thseqN2:SetValue(uBigN)
+    ths_eqN1:SetValue(self)
+    ths_eqN2:SetValue(uBigN)
  
-    leq:=thseqN1:lNeg==thseqN2:lNeg
+    leq:=ths_eqN1:lNeg==ths_eqN2:lNeg
     if leq
-        thseqN1:Normalize(@thseqN2)
+        ths_eqN1:Normalize(@ths_eqN2)
         #ifdef __PTCOMPAT__
-            leq:=thseqN1:GetValue(.T.)==thseqN2:GetValue(.T.)
+            leq:=ths_eqN1:GetValue(.T.)==ths_eqN2:GetValue(.T.)
         #else
-            leq:=tBIGNmemcmp(thseqN1:GetValue(.T.),thseqN2:GetValue(.T.))==0
+            leq:=tBIGNmemcmp(ths_eqN1:GetValue(.T.),ths_eqN2:GetValue(.T.))==0
         #endif    
     endif        
 
@@ -1215,28 +1236,28 @@ method gt(uBigN) class tBigNumber
 
     local lgt
 
-    thsgtN1:SetValue(self)
-    thsgtN2:SetValue(uBigN)
+    ths_gtN1:SetValue(self)
+    ths_gtN2:SetValue(uBigN)
     
-    if thsgtN1:lNeg .or. thsgtN2:lNeg
-        if thsgtN1:lNeg .and. thsgtN2:lNeg
-            thsgtN1:Normalize(@thsgtN2)
+    if ths_gtN1:lNeg .or. ths_gtN2:lNeg
+        if ths_gtN1:lNeg .and. ths_gtN2:lNeg
+            ths_gtN1:Normalize(@ths_gtN2)
             #ifdef __PTCOMPAT__
-                lgt:=thsgtN1:GetValue(.T.)<thsgtN2:GetValue(.T.)
+                lgt:=ths_gtN1:GetValue(.T.)<ths_gtN2:GetValue(.T.)
             #else
-                lgt:=tBIGNmemcmp(thsgtN1:GetValue(.T.),thsgtN2:GetValue(.T.))==-1
+                lgt:=tBIGNmemcmp(ths_gtN1:GetValue(.T.),ths_gtN2:GetValue(.T.))==-1
             #endif    
-        elseif thsgtN1:lNeg .and. .not.(thsgtN2:lNeg)
+        elseif ths_gtN1:lNeg .and. .not.(ths_gtN2:lNeg)
             lgt:=.F.
-        elseif .not.(thsgtN1:lNeg) .and. thsgtN2:lNeg
+        elseif .not.(ths_gtN1:lNeg) .and. ths_gtN2:lNeg
             lgt:=.T.
         endif
     Else
-        thsgtN1:Normalize(@thsgtN2)
+        ths_gtN1:Normalize(@ths_gtN2)
         #ifdef __PTCOMPAT__
-            lgt:=thsgtN1:GetValue(.T.)>thsgtN2:GetValue(.T.)
+            lgt:=ths_gtN1:GetValue(.T.)>ths_gtN2:GetValue(.T.)
         #else
-            lgt:=tBIGNmemcmp(thsgtN1:GetValue(.T.),thsgtN2:GetValue(.T.))==1
+            lgt:=tBIGNmemcmp(ths_gtN1:GetValue(.T.),ths_gtN2:GetValue(.T.))==1
         #endif    
     endif 
 
@@ -1253,28 +1274,28 @@ method lt(uBigN) class tBigNumber
    
     local llt
 
-    thsltN1:SetValue(self)
-    thsltN2:SetValue(uBigN)
+    ths_ltN1:SetValue(self)
+    ths_ltN2:SetValue(uBigN)
     
-    if thsltN1:lNeg .or. thsltN2:lNeg
-        if thsltN1:lNeg .and. thsltN2:lNeg
-            thsltN1:Normalize(@thsltN2)
+    if ths_ltN1:lNeg .or. ths_ltN2:lNeg
+        if ths_ltN1:lNeg .and. ths_ltN2:lNeg
+            ths_ltN1:Normalize(@ths_ltN2)
             #ifdef __PTCOMPAT__
-                llt:=thsltN1:GetValue(.T.)>thsltN2:GetValue(.T.)
+                llt:=ths_ltN1:GetValue(.T.)>ths_ltN2:GetValue(.T.)
             #else
-                llt:=tBIGNmemcmp(thsltN1:GetValue(.T.),thsltN2:GetValue(.T.))==1
+                llt:=tBIGNmemcmp(ths_ltN1:GetValue(.T.),ths_ltN2:GetValue(.T.))==1
             #endif    
-        elseif thsltN1:lNeg .and. .not.(thsltN2:lNeg)
+        elseif ths_ltN1:lNeg .and. .not.(ths_ltN2:lNeg)
             llt:=.T.
-        elseif .not.(thsltN1:lNeg) .and. thsltN2:lNeg
+        elseif .not.(ths_ltN1:lNeg) .and. ths_ltN2:lNeg
             llt:=.F.
         endif
     Else
-        thsltN1:Normalize(@thsltN2)
+        ths_ltN1:Normalize(@ths_ltN2)
         #ifdef __PTCOMPAT__
-            llt:=thsltN1:GetValue(.T.)<thsltN2:GetValue(.T.)
+            llt:=ths_ltN1:GetValue(.T.)<ths_ltN2:GetValue(.T.)
         #else
-            llt:=tBIGNmemcmp(thsltN1:GetValue(.T.),thsltN2:GetValue(.T.))==-1
+            llt:=tBIGNmemcmp(ths_ltN1:GetValue(.T.),ths_ltN2:GetValue(.T.))==-1
         #endif    
     endif    
 
@@ -1318,22 +1339,22 @@ method cmp(uBigN) class tBigNumber
     local llt
     local leq
     
-    thscmpN1:SetValue(self)
-    thscmpN2:SetValue(uBigN)
+    ths_cmpN1:SetValue(self)
+    ths_cmpN2:SetValue(uBigN)
     
 #ifdef __PTCOMPAT__
-    thscmpN1:Normalize(@thscmpN2)
+    ths_cmpN1:Normalize(@ths_cmpN2)
 #endif
     
-    leq:=thscmpN1:lNeg==thscmpN2:lNeg
+    leq:=ths_cmpN1:lNeg==ths_cmpN2:lNeg
     if leq
         #ifndef __PTCOMPAT__    
-            thscmpN1:Normalize(@thscmpN2)
+            ths_cmpN1:Normalize(@ths_cmpN2)
         #endif        
         #ifdef __PTCOMPAT__
-            iCmp:=if(thscmpN1:GetValue(.T.)==thscmpN2:GetValue(.T.),0,NIL)
+            iCmp:=if(ths_cmpN1:GetValue(.T.)==ths_cmpN2:GetValue(.T.),0,NIL)
         #else
-            iCmp:=tBIGNmemcmp(thscmpN1:GetValue(.T.),thscmpN2:GetValue(.T.))
+            iCmp:=tBIGNmemcmp(ths_cmpN1:GetValue(.T.),ths_cmpN2:GetValue(.T.))
         #endif
         leq:=iCmp==0
     endif    
@@ -1341,27 +1362,27 @@ method cmp(uBigN) class tBigNumber
     if leq
         nCmp:=0    
     Else
-        if thscmpN1:lNeg .or. thscmpN2:lNeg
-            if thscmpN1:lNeg .and. thscmpN2:lNeg
+        if ths_cmpN1:lNeg .or. ths_cmpN2:lNeg
+            if ths_cmpN1:lNeg .and. ths_cmpN2:lNeg
                 if iCmp==NIL
                     #ifndef __PTCOMPAT__
-                        thscmpN1:Normalize(@thscmpN2)
+                        ths_cmpN1:Normalize(@ths_cmpN2)
                     #endif    
                     #ifdef __PTCOMPAT__
-                        iCmp:=if(thscmpN1:GetValue(.T.)>thscmpN2:GetValue(.T.),1,-1)
+                        iCmp:=if(ths_cmpN1:GetValue(.T.)>ths_cmpN2:GetValue(.T.),1,-1)
                     #else
-                        iCmp:=tBIGNmemcmp(thscmpN1:GetValue(.T.),thscmpN2:GetValue(.T.))
+                        iCmp:=tBIGNmemcmp(ths_cmpN1:GetValue(.T.),ths_cmpN2:GetValue(.T.))
                     #endif    
                 endif
                 llt:=iCmp==1
-            elseif thscmpN1:lNeg .and. .not.(thscmpN2:lNeg)
+            elseif ths_cmpN1:lNeg .and. .not.(ths_cmpN2:lNeg)
                 llt:=.T.
-            elseif .not.(thscmpN1:lNeg) .and. thscmpN2:lNeg
+            elseif .not.(ths_cmpN1:lNeg) .and. ths_cmpN2:lNeg
                 llt:=.F.
             endif
         Else
             #ifdef __PTCOMPAT__
-                iCmp:=if(thscmpN1:GetValue(.T.)<thscmpN2:GetValue(.T.),-1,1)
+                iCmp:=if(ths_cmpN1:GetValue(.T.)<ths_cmpN2:GetValue(.T.),-1,1)
             #endif
             llt:=iCmp==-1
         endif
@@ -1449,26 +1470,26 @@ method Add(uBigN) class tBigNumber
     local nDec        
     local nSize     
 
-    thsadN1:SetValue(self)
-    thsadN2:SetValue(uBigN)
+    ths_adN1:SetValue(self)
+    ths_adN2:SetValue(uBigN)
     
-    thsadN1:Normalize(@thsadN2)
+    ths_adN1:Normalize(@ths_adN2)
 
-    nDec:=thsadN1:nDec
-    nSize:=thsadN1:nSize
+    nDec:=ths_adN1:nDec
+    nSize:=ths_adN1:nSize
 
-    cN1:=thsadN1:cInt
-    cN1+=thsadN1:cDec
+    cN1:=ths_adN1:cInt
+    cN1+=ths_adN1:cDec
 
-    cN2:=thsadN2:cInt
-    cN2+=thsadN2:cDec
+    cN2:=ths_adN2:cInt
+    cN2+=ths_adN2:cDec
 
-    lNeg:=(thsadN1:lNeg .and. .not.(thsadN2:lNeg)) .or. (.not.(thsadN1:lNeg) .and. thsadN2:lNeg)
+    lNeg:=(ths_adN1:lNeg .and. .not.(ths_adN2:lNeg)) .or. (.not.(ths_adN1:lNeg) .and. ths_adN2:lNeg)
 
     if lNeg
         lAdd:=.F.
         lInv:=cN1<cN2
-        lNeg:=(thsadN1:lNeg .and. .not.(lInv)) .or. (thsadN2:lNeg .and. lInv)
+        lNeg:=(ths_adN1:lNeg .and. .not.(lInv)) .or. (ths_adN2:lNeg .and. lInv)
         if lInv
             cNT:=cN1
             cN1:=cN2
@@ -1476,16 +1497,16 @@ method Add(uBigN) class tBigNumber
             cNT:=NIL
         endif
     Else
-        lNeg:=thsadN1:lNeg
+        lNeg:=ths_adN1:lNeg
     endif
 
     if lAdd
-        thsadNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+        ths_adNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
     Else
-        thsadNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+        ths_adNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
     endif
 
-    cNT:=thsadNR:cInt
+    cNT:=ths_adNR:cInt
     cDec:=Right(cNT,nDec)
     cInt:=Left(cNT,hb_bLen(cNT)-nDec)
 
@@ -1493,13 +1514,13 @@ method Add(uBigN) class tBigNumber
     cNT+="."
     cNT+=cDec
 
-    thsadNR:SetValue(cNT)
+    ths_adNR:SetValue(cNT)
 
     if lNeg
-        thsadNR:__cSig("-")
+        ths_adNR:__cSig("-")
     endif
 
-return(thsadNR:Clone())
+return(ths_adNR:Clone())
 
 /*
     method      : Sub
@@ -1524,28 +1545,28 @@ method Sub(uBigN) class tBigNumber
     local nDec        
     local nSize     
 
-    thssbN1:SetValue(self)
-    thssbN2:SetValue(uBigN)
+    ths_sbN1:SetValue(self)
+    ths_sbN2:SetValue(uBigN)
     
-    thssbN1:Normalize(@thssbN2)
+    ths_sbN1:Normalize(@ths_sbN2)
     
-    nDec:=thssbN1:nDec
-    nSize:=thssbN1:nSize
+    nDec:=ths_sbN1:nDec
+    nSize:=ths_sbN1:nSize
 
-    cN1:=thssbN1:cInt
-    cN1+=thssbN1:cDec
+    cN1:=ths_sbN1:cInt
+    cN1+=ths_sbN1:cDec
 
-    cN2:=thssbN2:cInt
-    cN2+=thssbN2:cDec
+    cN2:=ths_sbN2:cInt
+    cN2+=ths_sbN2:cDec
 
-    lNeg:=(thssbN1:lNeg .and. .not.(thssbN2:lNeg)) .or. (.not.(thssbN1:lNeg) .and. thssbN2:lNeg)
+    lNeg:=(ths_sbN1:lNeg .and. .not.(ths_sbN2:lNeg)) .or. (.not.(ths_sbN1:lNeg) .and. ths_sbN2:lNeg)
 
     if lNeg
         lSub:=.F.
-        lNeg:=thssbN1:lNeg
+        lNeg:=ths_sbN1:lNeg
     Else
         lInv:=cN1<cN2
-        lNeg:=thssbN1:lNeg .or. lInv
+        lNeg:=ths_sbN1:lNeg .or. lInv
         if lInv
             cNT:=cN1
             cN1:=cN2
@@ -1555,12 +1576,12 @@ method Sub(uBigN) class tBigNumber
     endif
 
     if lSub
-        thssbNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+        ths_sbNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
     Else
-        thssbNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+        ths_sbNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
     endif
 
-    cNT:=thssbNR:cInt
+    cNT:=ths_sbNR:cInt
     
     cDec:=Right(cNT,nDec)
     cInt:=Left(cNT,hb_bLen(cNT)-nDec)
@@ -1569,13 +1590,13 @@ method Sub(uBigN) class tBigNumber
     cNT+="."
     cNT+=cDec
     
-    thssbNR:SetValue(cNT)
+    ths_sbNR:SetValue(cNT)
 
     if lNeg
-        thssbNR:__cSig("-")
+        ths_sbNR:__cSig("-")
     endif
 
-return(thssbNR:Clone())
+return(ths_sbNR:Clone())
 
 /*
     method      : Mult
@@ -1600,27 +1621,27 @@ method Mult(uBigN) class tBigNumber
     local nDec    
     local nSize 
 
-    thsmtN1:SetValue(self)
-    thsmtN2:SetValue(uBigN)
+    ths_mtN1:SetValue(self)
+    ths_mtN2:SetValue(uBigN)
     
-    thsmtN1:Normalize(@thsmtN2)
+    ths_mtN1:Normalize(@ths_mtN2)
  
-    lNeg1:=thsmtN1:lNeg
-    lNeg2:=thsmtN2:lNeg    
+    lNeg1:=ths_mtN1:lNeg
+    lNeg2:=ths_mtN2:lNeg    
     lNeg:=(lNeg1 .and. .not.(lNeg2)) .or. (.not.(lNeg1) .and. lNeg2)
  
-    cN1:=thsmtN1:cInt
-    cN1+=thsmtN1:cDec
+    cN1:=ths_mtN1:cInt
+    cN1+=ths_mtN1:cDec
 
-    cN2:=thsmtN2:cInt
-    cN2+=thsmtN2:cDec
+    cN2:=ths_mtN2:cInt
+    cN2+=ths_mtN2:cDec
 
-    nDec:=thsmtN1:nDec*2
-    nSize:=thsmtN1:nSize
+    nDec:=ths_mtN1:nDec*2
+    nSize:=ths_mtN1:nSize
     
-    thsmtNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
+    ths_mtNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
 
-    cNT:=thsmtNR:cInt
+    cNT:=ths_mtNR:cInt
     
     if nDec>0
         cDec:=Right(cNT,nDec)
@@ -1630,17 +1651,17 @@ method Mult(uBigN) class tBigNumber
         cNT+=cDec
     endif    
     
-    thsmtNR:SetValue(cNT)
+    ths_mtNR:SetValue(cNT)
     
-    cNT:=thsmtNR:ExactValue()
+    cNT:=ths_mtNR:ExactValue()
     
-    thsmtNR:SetValue(cNT)
+    ths_mtNR:SetValue(cNT)
 
     if lNeg
-        thsmtNR:__cSig("-")
+        ths_mtNR:__cSig("-")
     endif
 
-return(thsmtNR:Clone())
+return(ths_mtNR:Clone())
 
 /*
     method      : egMult
@@ -1664,26 +1685,26 @@ method egMult(uBigN) class tBigNumber
  
     local nDec    
 
-    thsmtN1:SetValue(self)
-    thsmtN2:SetValue(uBigN)
+    ths_mtN1:SetValue(self)
+    ths_mtN2:SetValue(uBigN)
     
-    thsmtN1:Normalize(@thsmtN2)
+    ths_mtN1:Normalize(@ths_mtN2)
  
-    lNeg1:=thsmtN1:lNeg
-    lNeg2:=thsmtN2:lNeg    
+    lNeg1:=ths_mtN1:lNeg
+    lNeg2:=ths_mtN2:lNeg    
     lNeg:=(lNeg1 .and. .not.(lNeg2)) .or. (.not.(lNeg1) .and. lNeg2)
     
-    cN1:=thsmtN1:cInt
-    cN1+=thsmtN1:cDec
+    cN1:=ths_mtN1:cInt
+    cN1+=ths_mtN1:cDec
 
-    cN2:=thsmtN2:cInt
-    cN2+=thsmtN2:cDec
+    cN2:=ths_mtN2:cInt
+    cN2+=ths_mtN2:cDec
 
-    nDec:=thsmtN1:nDec*2
+    nDec:=ths_mtN1:nDec*2
 
-    thsmtNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+    ths_mtNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
 
-    cNT:=thsmtNR:cInt
+    cNT:=ths_mtNR:cInt
     
     cDec:=Right(cNT,nDec)
     cInt:=Left(cNT,hb_bLen(cNT)-nDec)
@@ -1692,17 +1713,17 @@ method egMult(uBigN) class tBigNumber
     cNT+="."
     cNT+=cDec
     
-    thsmtNR:SetValue(cNT)
+    ths_mtNR:SetValue(cNT)
     
-    cNT:=thsmtNR:ExactValue()
+    cNT:=ths_mtNR:ExactValue()
     
-    thsmtNR:SetValue(cNT)
+    ths_mtNR:SetValue(cNT)
 
     if lNeg
-        thsmtNR:__cSig("-")
+        ths_mtNR:__cSig("-")
     endif
 
-return(thsmtNR:Clone())
+return(ths_mtNR:Clone())
 
 /*
     method      : Div
@@ -1729,119 +1750,119 @@ method Div(uBigN,lFloat) class tBigNumber
     begin sequence
 
         if __o0:eq(uBigN)
-            thsdvNR:SetValue(__o0)
+            ths_dvNR:SetValue(__o0)
             break
         endif
 
-        thsdvN1:SetValue(self)
-        thsdvN2:SetValue(uBigN)
+        ths_dvN1:SetValue(self)
+        ths_dvN2:SetValue(uBigN)
         
         DEFAULT lFloat:=.T.
  
-        if thsdvN2:eq(__o2)
+        if ths_dvN2:eq(__o2)
             //(Div(2)==Mult(.5)
-            thsdvNR:SetValue(thsdvN1:Mult(__od2))
+            ths_dvNR:SetValue(ths_dvN1:Mult(__od2))
             if .not.(lFloat)
-                thsdvNR:__cDec("0")
-                thsdvNR:__cInt(thsdvNR:Int(.F.,.T.))
-                thsdvNR:__cRDiv(thsdvN1:Sub(thsdvN2:Mult(thsdvNR:Int(.T.,.F.))):ExactValue(.T.))
+                ths_dvNR:__cDec("0")
+                ths_dvNR:__cInt(ths_dvNR:Int(.F.,.T.))
+                ths_dvNR:__cRDiv(ths_dvN1:Sub(ths_dvN2:Mult(ths_dvNR:Int(.T.,.F.))):ExactValue(.T.))
             endif
             break
         endif
         
-        thsdvN1:Normalize(@thsdvN2)
+        ths_dvN1:Normalize(@ths_dvN2)
     
-        lNeg1:=thsdvN1:lNeg
-        lNeg2:=thsdvN2:lNeg    
+        lNeg1:=ths_dvN1:lNeg
+        lNeg2:=ths_dvN2:lNeg    
         lNeg:=(lNeg1 .and. .not.(lNeg2)) .or. (.not.(lNeg1) .and. lNeg2)
     
-        cN1:=thsdvN1:cInt
-        cN1+=thsdvN1:cDec
+        cN1:=ths_dvN1:cInt
+        cN1+=ths_dvN1:cDec
     
-        cN2:=thsdvN2:cInt
-        cN2+=thsdvN2:cDec
+        cN2:=ths_dvN2:cInt
+        cN2+=ths_dvN2:cDec
 
         if __nDivMeth==2
-            thsdvNR:SetValue(ecDiv(cN1,cN2,thsdvN1:nSize,thsdvN1:nBase,nAcc,lFloat))
+            ths_dvNR:SetValue(ecDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
         Else
-            thsdvNR:SetValue(egDiv(cN1,cN2,thsdvN1:nSize,thsdvN1:nBase,nAcc,lFloat))
+            ths_dvNR:SetValue(egDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
         endif    
 
         if lFloat
 
-            thsdvRDiv:SetValue(thsdvNR:cRDiv,NIL,NIL,.F.)
+            ths_dvRDiv:SetValue(ths_dvNR:cRDiv,NIL,NIL,.F.)
         
-            if thsdvRDiv:gt(__o0)
+            if ths_dvRDiv:gt(__o0)
     
                 cDec:=""
         
-                thsdvN2:SetValue(cN2)
+                ths_dvN2:SetValue(cN2)
         
-                while thsdvRDiv:lt(thsdvN2)
-                    thsdvRDiv:cInt+="0"
-                    thsdvRDiv:nInt++
-                    thsdvRDiv:nSize++
-                    if thsdvRDiv:lt(thsdvN2)
+                while ths_dvRDiv:lt(ths_dvN2)
+                    ths_dvRDiv:cInt+="0"
+                    ths_dvRDiv:nInt++
+                    ths_dvRDiv:nSize++
+                    if ths_dvRDiv:lt(ths_dvN2)
                         cDec+="0"
                     endif
                 end while
         
-                while thsdvRDiv:gte(thsdvN2)
+                while ths_dvRDiv:gte(ths_dvN2)
                     
-                    thsdvRDiv:Normalize(@thsdvN2)
+                    ths_dvRDiv:Normalize(@ths_dvN2)
             
-                    cN1:=thsdvRDiv:cInt
-                    cN1+=thsdvRDiv:cDec
+                    cN1:=ths_dvRDiv:cInt
+                    cN1+=ths_dvRDiv:cDec
         
-                    cN2:=thsdvN2:cInt
-                    cN2+=thsdvN2:cDec
+                    cN2:=ths_dvN2:cInt
+                    cN2+=ths_dvN2:cDec
 
                     if __nDivMeth==2
-                        thsdvRDiv:SetValue(ecDiv(cN1,cN2,thsdvRDiv:nSize,thsdvRDiv:nBase,nAcc,lFloat))
+                        ths_dvRDiv:SetValue(ecDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
                     Else
-                        thsdvRDiv:SetValue(egDiv(cN1,cN2,thsdvRDiv:nSize,thsdvRDiv:nBase,nAcc,lFloat))
+                        ths_dvRDiv:SetValue(egDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
                     endif
 
-                    cDec+=thsdvRDiv:ExactValue(.T.)
+                    cDec+=ths_dvRDiv:ExactValue(.T.)
                     nDec:=hb_bLen(cDec)
         
-                    thsdvRDiv:SetValue(thsdvRDiv:cRDiv,NIL,NIL,.F.)
-                    thsdvRDiv:SetValue(thsdvRDiv:ExactValue(.T.))
+                    ths_dvRDiv:SetValue(ths_dvRDiv:cRDiv,NIL,NIL,.F.)
+                    ths_dvRDiv:SetValue(ths_dvRDiv:ExactValue(.T.))
 
-                    if thsdvRDiv:eq(__o0) .or. nDec>=nAcc
+                    if ths_dvRDiv:eq(__o0) .or. nDec>=nAcc
                         exit
                     endif
         
-                    thsdvN2:SetValue(cN2)        
+                    ths_dvN2:SetValue(cN2)        
                     
-                    while thsdvRDiv:lt(thsdvN2)
-                        thsdvRDiv:cInt+="0"
-                        thsdvRDiv:nInt++
-                        thsdvRDiv:nSize++
-                        if thsdvRDiv:lt(thsdvN2)
+                    while ths_dvRDiv:lt(ths_dvN2)
+                        ths_dvRDiv:cInt+="0"
+                        ths_dvRDiv:nInt++
+                        ths_dvRDiv:nSize++
+                        if ths_dvRDiv:lt(ths_dvN2)
                             cDec+="0"
                         endif
                     end while
                 
                 end while
         
-                cNR:=thsdvNR:__cInt()
+                cNR:=ths_dvNR:__cInt()
                 cNR+="."
                 cNR+=Left(cDec,nAcc)
         
-                thsdvNR:SetValue(cNR,NIL,thsdvRDiv:ExactValue(.T.))
+                ths_dvNR:SetValue(cNR,NIL,ths_dvRDiv:ExactValue(.T.))
     
             endif
     
         endif
     
         if lNeg
-            thsdvNR:__cSig("-")
+            ths_dvNR:__cSig("-")
         endif
 
     end sequence
 
-return(thsdvNR:Clone())
+return(ths_dvNR:Clone())
 
 /*
     method      : Divmethod
@@ -1903,92 +1924,92 @@ method Pow(uBigN) class tBigNumber
     
     local nZS
 
-    lPoWN:=thspwNP:SetValue(uBigN):lt(__o0)
+    lPoWN:=ths_pwNP:SetValue(uBigN):lt(__o0)
 
     begin sequence
 
-        if oSelf:eq(__o0) .and. thspwNP:eq(__o0)
-            thspwNR:SetValue(__o1)
+        if oSelf:eq(__o0) .and. ths_pwNP:eq(__o0)
+            ths_pwNR:SetValue(__o1)
             break
         endif
 
         if oSelf:eq(__o0)
-            thspwNR:SetValue(__o0)
+            ths_pwNR:SetValue(__o0)
             break
         endif
 
-        if thspwNP:eq(__o0)
-            thspwNR:SetValue(__o1)
+        if ths_pwNP:eq(__o0)
+            ths_pwNR:SetValue(__o1)
             break
         endif
 
-        thspwNR:SetValue(oSelf)
+        ths_pwNR:SetValue(oSelf)
 
-        if thspwNR:eq(__o1)
-            thspwNR:SetValue(__o1)
+        if ths_pwNR:eq(__o1)
+            ths_pwNR:SetValue(__o1)
             break
         endif
 
-        if __o1:eq(thspwNP:SetValue(thspwNP:Abs()))
+        if __o1:eq(ths_pwNP:SetValue(ths_pwNP:Abs()))
             break
         endif
 
-        lPowF:=thspwA:SetValue(thspwNP:cDec):gt(__o0)
+        lPowF:=ths_pwA:SetValue(ths_pwNP:cDec):gt(__o0)
         
         if lPowF
 
-            cPowA:=thspwNP:cInt+thspwNP:Dec(NIL,NIL,.T.)
-            thspwA:SetValue(cPowA)
+            cPowA:=ths_pwNP:cInt+ths_pwNP:Dec(NIL,NIL,.T.)
+            ths_pwA:SetValue(cPowA)
 
-            nZS:=hb_bLen(thspwNP:Dec(NIL,NIL,.T.))
-            IncZeros(nZS)
+            nZS:=hb_bLen(ths_pwNP:Dec(NIL,NIL,.T.))
+            __IncS0(nZS)
             
             cM10:="1"
-            cM10+=Left(thscstcZ0,nZS)
+            cM10+=Left(s__cN0,nZS)
             
             cPowB:=cM10
 
-            if thspwB:SetValue(cPowB):gt(__o1)
-                thspwGCD:SetValue(thspwA:GCD(thspwB))
+            if ths_pwB:SetValue(cPowB):gt(__o1)
+                ths_pwGCD:SetValue(ths_pwA:GCD(ths_pwB))
                 #ifndef __PTCOMPAT__
                     aThreads:=Array(2,2)
-                    aThreads[1][1]:=hb_threadStart(@thDiv(),thspwA,thspwGCD)
-                    aThreads[1][2]:=hb_threadStart(@thDiv(),thspwB,thspwGCD)
+                    aThreads[1][1]:=hb_threadStart(@thDiv(),ths_pwA,ths_pwGCD)
                     hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                    aThreads[1][2]:=hb_threadStart(@thDiv(),ths_pwB,ths_pwGCD)
                     hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
                     hb_threadWait(aThreads[1])
-                    thspwA:SetValue(aThreads[2][1])
-                    thspwB:SetValue(aThreads[2][2])
+                    ths_pwA:SetValue(aThreads[2][1])
+                    ths_pwB:SetValue(aThreads[2][2])
                 #else
-                    thspwA:SetValue(thspwA:Div(thspwGCD))
-                    thspwB:SetValue(thspwB:Div(thspwGCD))
+                    ths_pwA:SetValue(ths_pwA:Div(ths_pwGCD))
+                    ths_pwB:SetValue(ths_pwB:Div(ths_pwGCD))
                 #endif
             endif
 
-            thspwA:Normalize(@thspwB)
+            ths_pwA:Normalize(@ths_pwB)
     
-            thspwNP:SetValue(thspwA)
+            ths_pwNP:SetValue(ths_pwA)
 
         endif
 
-        thspwNT:SetValue(__o0)
-        thspwNP:SetValue(thspwNP:OpDec())
-        while thspwNT:lt(thspwNP)
-            thspwNR:SetValue(thspwNR:Mult(oSelf))
-            thspwNT:SetValue(thspwNT:OpInc())
+        ths_pwNT:SetValue(__o0)
+        ths_pwNP:SetValue(ths_pwNP:OpDec())
+        while ths_pwNT:lt(ths_pwNP)
+            ths_pwNR:SetValue(ths_pwNR:Mult(oSelf))
+            ths_pwNT:SetValue(ths_pwNT:OpInc())
         end while
 
         if lPowF
-            thspwNR:SetValue(thspwNR:nthRoot(thspwB))
+            ths_pwNR:SetValue(ths_pwNR:nthRoot(ths_pwB))
         endif
 
     end sequence
 
     if lPoWN
-        thspwNR:SetValue(__o1:Div(thspwNR))    
+        ths_pwNR:SetValue(__o1:Div(ths_pwNR))    
     endif
 
-return(thspwNR:Clone())
+return(ths_pwNR:Clone())
 
 /*
     method      : OpInc
@@ -2213,9 +2234,9 @@ method LCM(uBigN) class tBigNumber
         while .T.
             #ifndef __PTCOMPAT__
                 aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
-                aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
                 hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
-                hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
+                 hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
                 hb_threadWait(aThreads[1])
                 lMX:=aThreads[2][1]
                 lMY:=aThreads[2][2]
@@ -2228,15 +2249,15 @@ method LCM(uBigN) class tBigNumber
                 #ifndef __PTCOMPAT__
                     if lMX .and. lMY                    
                         aThreads[1][1]:=hb_threadStart(@thDiv(),oX,oI,.F.)
-                        aThreads[1][2]:=hb_threadStart(@thDiv(),oY,oI,.F.)
                         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                        aThreads[1][2]:=hb_threadStart(@thDiv(),oY,oI,.F.)
                         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
                         hb_threadWait(aThreads[1])
                         oX:SetValue(aThreads[2][1])
                         oY:SetValue(aThreads[2][2])
                         aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
-                        aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
                         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                        aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
                         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
                         hb_threadWait(aThreads[1])
                         lMX:=aThreads[2][1]
@@ -2349,9 +2370,9 @@ method nthRoot(uBigN) class tBigNumber
         endif
 
         nZS:=__nthRootAcc-1
-        IncZeros(nZS)
+        __IncS0(nZS)
         
-        cFExit:="0."+Left(thscstcZ0,nZS)+"1"
+        cFExit:="0."+Left(s__cN0,nZS)+"1"
             
         oFExit:=__o0:Clone()
         oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
@@ -2424,9 +2445,9 @@ method nthRootPF(uBigN) class tBigNumber
         oRootT:=__o0:Clone()
 
         nZS:=__nthRootAcc-1
-        IncZeros(nZS)
+        __IncS0(nZS)
     
-        cFExit:="0."+Left(thscstcZ0,nZS)+"1"
+        cFExit:="0."+Left(s__cN0,nZS)+"1"
             
         oFExit:=__o0:Clone()
         oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
@@ -2436,9 +2457,9 @@ method nthRootPF(uBigN) class tBigNumber
         if lDec
             
             nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
-            IncZeros(nZS)
+            __IncS0(nZS)
             
-            oRootD:=tBigNumber():New("1"+Left(thscstcZ0,nZS))
+            oRootD:=tBigNumber():New("1"+Left(s__cN0,nZS))
             oRootT:SetValue(oRootB:cInt+oRootB:cDec)
             
             aIPF:=oRootT:PFactors()
@@ -2537,13 +2558,13 @@ method SysSQRT(uSet) class tBigNumber
     
     cType:=ValType(uSet)
     if ( cType $ "C|N|O" )
-        thsSysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
-        if thsSysSQRT:gt(MAX_SYS_SQRT)
-            thsSysSQRT:SetValue(MAX_SYS_SQRT)
+        ths_SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
+        if ths_SysSQRT:gt(MAX_SYS_SQRT)
+            ths_SysSQRT:SetValue(MAX_SYS_SQRT)
         endif
     endif
     
-return(thsSysSQRT)
+return(ths_SysSQRT)
 
 /*
     method      : Log
@@ -2598,8 +2619,8 @@ method Log(uBigNB) class tBigNumber
     oY:SetValue(__o0)
     #ifndef __PTCOMPAT__
         aThreads[1][1]:=hb_threadStart(@thnthRoot(),oT,__o2)
-        aThreads[1][2]:=hb_threadStart(@thMult(),oI,__od2)
         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+        aThreads[1][2]:=hb_threadStart(@thMult(),oI,__od2)
         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
         hb_threadWait(aThreads[1])
         oT:SetValue(aThreads[2][1])
@@ -2760,8 +2781,8 @@ method Rnd(nAcc) class tBigNumber
         endif
         if cAcc>="5"
             cAdd:="0."
-            IncZeros(nAcc)
-            cAdd+=Left(thscstcZ0,nAcc)+"5"
+            __IncS0(nAcc)
+            cAdd+=Left(s__cN0,nAcc)+"5"
             oRnd:SetValue(oRnd:Add(cAdd))
         endif
         oRnd:SetValue(oRnd:cInt+"."+Left(oRnd:cDec,nAcc),NIL,oRnd:cRDiv)
@@ -2845,15 +2866,15 @@ method Normalize(oBigN) class tBigNumber
     local lPadL:=nPadL!=self:nInt
     local lPadR:=nPadR!=self:nDec
 
-    IncZeros(nSize)
+    __IncS0(nSize)
     
     if lPadL .or. lPadR
         if lPadL
-            self:cInt:=Left(thscstcZ0,nPadL-self:nInt)+self:cInt
+            self:cInt:=Left(s__cN0,nPadL-self:nInt)+self:cInt
             self:nInt:=nPadL
         endif
         if lPadR
-            self:cDec+=Left(thscstcZ0,nPadR-self:nDec)
+            self:cDec+=Left(s__cN0,nPadR-self:nDec)
             self:nDec:=nPadR
         endif
         self:nSize:=nSize
@@ -2864,11 +2885,11 @@ method Normalize(oBigN) class tBigNumber
     
     if lPadL .or. lPadR
         if lPadL
-            oBigN:cInt:=Left(thscstcZ0,nPadL-oBigN:nInt)+oBigN:cInt
+            oBigN:cInt:=Left(s__cN0,nPadL-oBigN:nInt)+oBigN:cInt
             oBigN:nInt:=nPadL
         endif
         if lPadR
-            oBigN:cDec+=Left(thscstcZ0,nPadR-oBigN:nDec)
+            oBigN:cDec+=Left(s__cN0,nPadR-oBigN:nDec)
             oBigN:nDec:=nPadR
         endif
         oBigN:nSize:=nSize
@@ -3417,11 +3438,8 @@ method Randomize(uB,uE,nExit) class tBigNumber
     if oR:lt(oB) .or. oR:gt(oE)
 
         nT:=Min(oE:nInt,oM:nInt)
-        while nT>htsnstcN9
-            thscstcN9+=thscstcN9
-            htsnstcN9+=htsnstcN9
-        end while
-        cR:=Left(thscstcN9,nT)
+        __IncS9(nT)
+        cR:=Left(s__cN9,nT)
         oT:SetValue(cR)
         cR:=oM:Min(oE:Min(oT)):ExactValue()
         nT:=Val(cR)
@@ -3749,8 +3767,8 @@ static function recFact(oS,oN)
 #ifndef __PTCOMPAT__
     aThreads:=Array(2,2)
     aThreads[1][1]:=hb_threadStart(@recFact(),oS,oI)
-    aThreads[1][2]:=hb_threadStart(@recFact(),oSI,oNI)
     hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+    aThreads[1][2]:=hb_threadStart(@recFact(),oSI,oNI)
     hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
     hb_threadWait(aThreads[1])    
 return(aThreads[2][1]:Mult(aThreads[2][2]))
@@ -3805,9 +3823,9 @@ static function egMult(cN1,cN2,nBase,nAcc)
 #else
 
     local oMTP:=__o0:Clone()
-    /*thsmtN1:SetValue(cN1)
-    thsmtN2:SetValue(cN2)
-    if .F. .and. thsmtN1:ibtw(__o0,MAX_SYS_lMULT) .and.  thsmtN2:ibtw(__o0,MAX_SYS_lMULT)
+    /*ths_mtN1:SetValue(cN1)
+    ths_mtN2:SetValue(cN2)
+    if .F. .and. ths_mtN1:ibtw(__o0,MAX_SYS_lMULT) .and.  ths_mtN2:ibtw(__o0,MAX_SYS_lMULT)
         oMTP:SetValue(hb_ntos(tBigNlMult(Val(cN1),Val(cN2))),nBase,"0",NIL,nAcc)
     Else
         */oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
@@ -3822,7 +3840,7 @@ return(oMTP)
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
     Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-    Sintaxe     : egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> thseDivQ
+    Sintaxe     : egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> ths_eDivQ
 */
 static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
@@ -3842,58 +3860,58 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
  
     SYMBOL_UNUSED( nSize )
 
-    thseDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
-    thseDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
-    thseDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
-    thseDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
+    ths_eDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
+    ths_eDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
+    ths_eDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
+    ths_eDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
 
-    thseDivDvQ:SetValue(__o1)
-    thseDivDvR:SetValue(thseDivD)
+    ths_eDivDvQ:SetValue(__o1)
+    ths_eDivDvR:SetValue(ths_eDivD)
 
-    while thseDivDvR:lte(thseDivN)
+    while ths_eDivDvR:lte(ths_eDivN)
         ++nI
-        aAdd(aeDV,{thseDivDvQ:Int(.F.,.F.),thseDivDvR:Int(.F.,.F.)})
-        thseDivDvQ:SetValue(thseDivDvQ:Add(thseDivDvQ),nBase,"0",NIL,nAcc)
-        thseDivDvR:SetValue(thseDivDvR:Add(thseDivDvR),nBase,"0",NIL,nAcc)
+        aAdd(aeDV,{ths_eDivDvQ:Int(.F.,.F.),ths_eDivDvR:Int(.F.,.F.)})
+        ths_eDivDvQ:SetValue(ths_eDivDvQ:Add(ths_eDivDvQ),nBase,"0",NIL,nAcc)
+        ths_eDivDvR:SetValue(ths_eDivDvR:Add(ths_eDivDvR),nBase,"0",NIL,nAcc)
     end while
 
     while nI>0
-        thseDivQ:SetValue(thseDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
-        thseDivR:SetValue(thseDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
-        nCmp:=thseDivR:cmp(thseDivN)
+        ths_eDivQ:SetValue(ths_eDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
+        ths_eDivR:SetValue(ths_eDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
+        nCmp:=ths_eDivR:cmp(ths_eDivN)
         if nCmp==0
             exit
         elseif nCmp==1
-            thseDivQ:SetValue(thseDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
-            thseDivR:SetValue(thseDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
+            ths_eDivQ:SetValue(ths_eDivQ:Sub(aeDV[nI][1]),nBase,"0",NIL,nAcc)
+            ths_eDivR:SetValue(ths_eDivR:Sub(aeDV[nI][2]),nBase,"0",NIL,nAcc)
         endif
         --nI
     end while
 
-    thseDivR:SetValue(thseDivN:Sub(thseDivR),nBase,"0",NIL,nAcc)
+    ths_eDivR:SetValue(ths_eDivN:Sub(ths_eDivR),nBase,"0",NIL,nAcc)
 
 #else //__HARBOUR__
 
     cQDiv:=tBIGNegDiv(cN,cD,@cRDiv,nSize,nBase)
     
-    thseDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
-    thseDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
+    ths_eDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
+    ths_eDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
     
 #endif //__PTCOMPAT__
     
-    cRDiv:=thseDivR:Int(.F.,.F.)
+    cRDiv:=ths_eDivR:Int(.F.,.F.)
 
-    thseDivQ:SetValue(thseDivQ,nBase,cRDiv,NIL,nAcc)
+    ths_eDivQ:SetValue(ths_eDivQ,nBase,cRDiv,NIL,nAcc)
     
     if .not.(lFloat) .and. Right(cRDiv,1)=="0"
-        cRDiv:=Left(cRDiv,thseDivR:__nInt()-1)
+        cRDiv:=Left(cRDiv,ths_eDivR:__nInt()-1)
         if Empty(cRDiv)
             cRDiv:="0"
         endif
-        thseDivQ:SetValue(thseDivQ,nBase,cRDiv,NIL,nAcc)
+        ths_eDivQ:SetValue(ths_eDivQ,nBase,cRDiv,NIL,nAcc)
     endif
 
-return(thseDivQ:Clone())
+return(ths_eDivQ:Clone())
 
 /*
     function    : ecDiv
@@ -4076,8 +4094,8 @@ static function __SQRT(p)
         r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
     Else
         n:=__nthRootAcc-1
-        IncZeros(n)
-        s:="0."+Left(thscstcZ0,n)+"1"
+        __IncS0(n)
+        s:="0."+Left(s__cN0,n)+"1"
         EPS:=__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
         r:=q:Mult(__od2)
@@ -4116,9 +4134,9 @@ return(r)
             FIELD FN
         #endif    
         
-        IncZeros(y)
+        __IncS0(y)
 
-        c:=aNumber(Left(thscstcZ0,y),y,"ADD_C")
+        c:=aNumber(Left(s__cN0,y),y,"ADD_C")
     
         while n>0
             (c)->(dbGoTo(k))
@@ -4167,9 +4185,9 @@ return(r)
             FIELD FN
         #endif
         
-        IncZeros(y)
+        __IncS0(y)
         
-        c:=aNumber(Left(thscstcZ0,y),y,"SUB_C")
+        c:=aNumber(Left(s__cN0,y),y,"SUB_C")
 
         while n>0
             (c)->(dbGoTo(k))
@@ -4227,9 +4245,9 @@ return(r)
             FIELD FN
         #endif
         
-        IncZeros(y)
+        __IncS0(y)
         
-        c:=aNumber(Left(thscstcZ0,y),y,"MULT_C")
+        c:=aNumber(Left(s__cN0,y),y,"MULT_C")
     
         while i<=n
             s:=1
@@ -4396,8 +4414,8 @@ return(r)
                 cFile:=CriaTrab(aStru,cAlias)
             #endif    
     #endif
-            DEFAULT thsdFiles:=Array(0)
-            aAdd(thsdFiles,{cAlias,cFile})
+            DEFAULT ths_dFiles:=Array(0)
+            aAdd(ths_dFiles,{cAlias,cFile})
         Else
             (cAlias)->(dbRLock())
     #ifdef __HARBOUR__        
@@ -4462,7 +4480,7 @@ return(r)
     static function Add(a,b,n,nBase)
 
         local y:=n+1
-        local c:=aFill(aSize(thsaZAdd,y),0)
+        local c:=aFill(aSize(ths_aZAdd,y),0)
         local k:=y
         local s:=""
 
@@ -4494,7 +4512,7 @@ return(r)
     static function Sub(a,b,n,nBase)
 
         local y:=n
-        local c:=aFill(aSize(thsaZSub,y),0)
+        local c:=aFill(aSize(ths_aZSub,y),0)
         local k:=y
         local s:=""
     
@@ -4530,7 +4548,7 @@ return(r)
         local b:=tBigNInvert(cN2,n)
 
         local y:=n+n
-        local c:=aFill(aSize(thsaZMult,y),0)
+        local c:=aFill(aSize(ths_aZMult,y),0)
     
         local i:=1
         local k:=1
@@ -4634,9 +4652,9 @@ return(r)
                 local v:=0
                 local v1
                 
-                IncZeros(y)
+                __IncS0(y)
                 
-                c:=Left(thscstcZ0,y)
+                c:=Left(s__cN0,y)
 
                 while n>0
                     #ifdef __PROTHEUS__
@@ -4686,9 +4704,9 @@ return(r)
                 local v:=0
                 local v1
                 
-                IncZeros(y)
+                __IncS0(y)
                 
-                c:=Left(thscstcZ0,y)
+                c:=Left(s__cN0,y)
             
                 while n>0
                     #ifdef __PROTHEUS__
@@ -4745,9 +4763,9 @@ return(r)
                 local v:=0
                 local v1
                 
-                IncZeros(y)
+                __IncS0(y)
                 
-                c:=Left(thscstcZ0,y)
+                c:=Left(s__cN0,y)
                     
                 while i<=n
                     s:=1
@@ -4941,86 +4959,87 @@ static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 // -------------------- assign thread static values -------------------------
-static Procedure __Initsthd(nBase)
+static procedure __Initsthd(nBase)
 
     local oTBigN
 
-    thslsdSet:=.F.
+    ths_lsdSet:=.F.
     
-    thscstcZ0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-    thsnstcZ0:=150
-    thscstcN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-    htsnstcN9:=150
+    s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__nN0:=150
+    
+    s__cN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__nN9:=150
    
     #ifdef TBN_ARRAY
-        thsaZAdd:=Array(0)
-        thsaZSub:=Array(0)
-        thsaZMult:=Array(0)
+        ths_aZAdd:=Array(0)
+        ths_aZSub:=Array(0)
+        ths_aZMult:=Array(0)
     #endif    
 
     #ifdef TBN_DBFILE
-        if (thsdFiles==NIL)
-            thsdFiles:=Array(0)
+        if (ths_dFiles==NIL)
+            ths_dFiles:=Array(0)
         endif
     #endif
     
     oTBigN:=tBigNumber():New("0",nBase)
 
-    thseqN1:=oTBigN:Clone()
-    thseqN2:=oTBigN:Clone()
+    ths_eqN1:=oTBigN:Clone()
+    ths_eqN2:=oTBigN:Clone()
 
-    thsgtN1:=oTBigN:Clone()
-    thsgtN2:=oTBigN:Clone()
+    ths_gtN1:=oTBigN:Clone()
+    ths_gtN2:=oTBigN:Clone()
 
-    thsltN1:=oTBigN:Clone()
-    thsltN2:=oTBigN:Clone()
+    ths_ltN1:=oTBigN:Clone()
+    ths_ltN2:=oTBigN:Clone()
     
-    thscmpN1:=oTBigN:Clone()
-    thscmpN2:=oTBigN:Clone()
+    ths_cmpN1:=oTBigN:Clone()
+    ths_cmpN2:=oTBigN:Clone()
 
-    thsadNR:=oTBigN:Clone()
-    thsadN1:=oTBigN:Clone()
-    thsadN2:=oTBigN:Clone()
+    ths_adNR:=oTBigN:Clone()
+    ths_adN1:=oTBigN:Clone()
+    ths_adN2:=oTBigN:Clone()
 
-    thssbNR:=oTBigN:Clone()
-    thssbN1:=oTBigN:Clone()
-    thssbN2:=oTBigN:Clone()
+    ths_sbNR:=oTBigN:Clone()
+    ths_sbN1:=oTBigN:Clone()
+    ths_sbN2:=oTBigN:Clone()
 
-    thsmtNR:=oTBigN:Clone()
-    thsmtN1:=oTBigN:Clone()
-    thsmtN2:=oTBigN:Clone()
+    ths_mtNR:=oTBigN:Clone()
+    ths_mtN1:=oTBigN:Clone()
+    ths_mtN2:=oTBigN:Clone()
 
-    thsdvNR:=oTBigN:Clone()
-    thsdvN1:=oTBigN:Clone()
-    thsdvN2:=oTBigN:Clone()
-    thsdvRDiv:=oTBigN:Clone()
+    ths_dvNR:=oTBigN:Clone()
+    ths_dvN1:=oTBigN:Clone()
+    ths_dvN2:=oTBigN:Clone()
+    ths_dvRDiv:=oTBigN:Clone()
 
-    thspwA:=oTBigN:Clone()
-    thspwB:=oTBigN:Clone()
-    thspwNP:=oTBigN:Clone()
-    thspwNR:=oTBigN:Clone()
-    thspwNT:=oTBigN:Clone()
-    thspwGCD:=oTBigN:Clone()
+    ths_pwA:=oTBigN:Clone()
+    ths_pwB:=oTBigN:Clone()
+    ths_pwNP:=oTBigN:Clone()
+    ths_pwNR:=oTBigN:Clone()
+    ths_pwNT:=oTBigN:Clone()
+    ths_pwGCD:=oTBigN:Clone()
     
 #ifdef __PTCOMPAT__
-    thseDivN:=oTBigN:Clone()
-    thseDivD:=oTBigN:Clone()
+    ths_eDivN:=oTBigN:Clone()
+    ths_eDivD:=oTBigN:Clone()
 #endif //__PTCOMPAT__
-    thseDivR:=oTBigN:Clone()
-    thseDivQ:=oTBigN:Clone()
+    ths_eDivR:=oTBigN:Clone()
+    ths_eDivQ:=oTBigN:Clone()
 #ifdef __PTCOMPAT__
-    thseDivDvQ:=oTBigN:Clone()
-    thseDivDvR:=oTBigN:Clone()
+    ths_eDivDvQ:=oTBigN:Clone()
+    ths_eDivDvR:=oTBigN:Clone()
 #endif //__PTCOMPAT__
 
-    thsSysSQRT:=oTBigN:Clone()
+    ths_SysSQRT:=oTBigN:Clone()
     
-    thslsdSet:=.T.
+    ths_lsdSet:=.T.
 
 return
 
 // -------------------- assign static values --------------------------------
-static Procedure __InitstbN(nBase)
+static procedure __InitstbN(nBase)
     __lstbNSet:=.F.
     __o0:=tBigNumber():New("0",nBase)
     __o1:=tBigNumber():New("1",nBase)
@@ -5036,6 +5055,17 @@ static Procedure __InitstbN(nBase)
     #endif
     __lstbNSet:=.T.
 return
+
+static procedure tBigNSleep(nSleep)
+    #ifdef __PROTHEUS__
+        sleep(nSleep*1000)
+    #else
+		Local nTime
+        nTime := (hb_MilliSeconds()+(nSleep*1000))
+       	while (hb_MilliSeconds()<nTime)
+       	end while
+    #endif   
+Return
 
 #ifdef __PROTHEUS__
 
@@ -5897,8 +5927,8 @@ return
                  v >>= 1;
           }
          
-          while ((u & 1) == 0)
             u >>= 1;
+          while ((u & 1) == 0)
          
           /* From here on, u is always odd. */
           do {
