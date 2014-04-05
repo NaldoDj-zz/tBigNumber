@@ -81,7 +81,7 @@
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
 #endif //__PROTHEUS__
 
-#xcommand __IncS0(<n>);
+#xcommand s__IncS0(<n>);
 =>;
 while <n> > s__nN0;;
     while .not.(hb_mutexLock(s__MTXcN0));;
@@ -92,7 +92,7 @@ while <n> > s__nN0;;
     hb_mutexUnLock(s__MTXcN0);;
 end while;;
 
-#xcommand __IncS9(<n>);
+#xcommand s__IncS9(<n>);
 =>;
 while <n> > s__nN9;;
     while .not.(hb_mutexLock(s__MTXcN9));;
@@ -1009,7 +1009,7 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             if "0"==Left(self:cDec,1)
                 nFP:=hb_bLen(self:cDec)
-                __IncS0(nFP)
+                s__IncS0(nFP)
                 if self:cDec==Left(s__cN0,nFP)
                     self:cDec:="0"
                 endif
@@ -1019,7 +1019,7 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
             self:cDec:=SubStr(uBigN,nFP+1)
             if "0"==Left(self:cDec,1)
                 nFP:=hb_bLen(self:cDec)
-                __IncS0(nFP)
+                s__IncS0(nFP)
                 if self:cDec==Left(s__cN0,nFP)
                     self:cDec:="0"
                 endif
@@ -1962,7 +1962,7 @@ method Pow(uBigN) class tBigNumber
             ths_pwA:SetValue(cPowA)
 
             nZS:=hb_bLen(ths_pwNP:Dec(NIL,NIL,.T.))
-            __IncS0(nZS)
+            s__IncS0(nZS)
             
             cM10:="1"
             cM10+=Left(s__cN0,nZS)
@@ -2370,7 +2370,7 @@ method nthRoot(uBigN) class tBigNumber
         endif
 
         nZS:=s__nthRootAcc-1
-        __IncS0(nZS)
+        s__IncS0(nZS)
         
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
@@ -2445,7 +2445,7 @@ method nthRootPF(uBigN) class tBigNumber
         oRootT:=s__o0:Clone()
 
         nZS:=s__nthRootAcc-1
-        __IncS0(nZS)
+        s__IncS0(nZS)
     
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
@@ -2457,7 +2457,7 @@ method nthRootPF(uBigN) class tBigNumber
         if lDec
             
             nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
-            __IncS0(nZS)
+            s__IncS0(nZS)
             
             oRootD:=tBigNumber():New("1"+Left(s__cN0,nZS))
             oRootT:SetValue(oRootB:cInt+oRootB:cDec)
@@ -2704,7 +2704,13 @@ return(self:Log(s__o1:Exp()))
 */
 method aLog(uBigNB) class tBigNumber
     local oaLog:=tBigNumber():New(uBigNB)
-return(oaLog:Pow(self))
+    local EPS:=s__o0:Clone() 
+    local n:=s__nthRootAcc-1
+    local s
+    s__IncS0(n)
+    s:="0."+Left(s__cN0,n)+"1"
+    EPS:SetValue(s,NIL,NIL,NIL,s__nthRootAcc)
+return(__Pow(oaLog,self,EPS))
 
 /*
     method      : aLog2
@@ -2781,7 +2787,7 @@ method Rnd(nAcc) class tBigNumber
         endif
         if cAcc>="5"
             cAdd:="0."
-            __IncS0(nAcc)
+            s__IncS0(nAcc)
             cAdd+=Left(s__cN0,nAcc)+"5"
             oRnd:SetValue(oRnd:Add(cAdd))
         endif
@@ -2866,7 +2872,7 @@ method Normalize(oBigN) class tBigNumber
     local lPadL:=nPadL!=self:nInt
     local lPadR:=nPadR!=self:nDec
 
-    __IncS0(nSize)
+    s__IncS0(nSize)
     
     if lPadL .or. lPadR
         if lPadL
@@ -3438,7 +3444,7 @@ method Randomize(uB,uE,nExit) class tBigNumber
     if oR:lt(oB) .or. oR:gt(oE)
 
         nT:=Min(oE:nInt,oM:nInt)
-        __IncS9(nT)
+        s__IncS9(nT)
         cR:=Left(s__cN9,nT)
         oT:SetValue(cR)
         cR:=oM:Min(oE:Min(oT)):ExactValue()
@@ -4094,7 +4100,7 @@ static function __SQRT(p)
         r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
     Else
         n:=s__nthRootAcc-1
-        __IncS0(n)
+        s__IncS0(n)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRootAcc)
@@ -4134,7 +4140,7 @@ return(r)
             FIELD FN
         #endif    
         
-        __IncS0(y)
+        s__IncS0(y)
 
         c:=aNumber(Left(s__cN0,y),y,"ADD_C")
     
@@ -4185,7 +4191,7 @@ return(r)
             FIELD FN
         #endif
         
-        __IncS0(y)
+        s__IncS0(y)
         
         c:=aNumber(Left(s__cN0,y),y,"SUB_C")
 
@@ -4245,7 +4251,7 @@ return(r)
             FIELD FN
         #endif
         
-        __IncS0(y)
+        s__IncS0(y)
         
         c:=aNumber(Left(s__cN0,y),y,"MULT_C")
     
@@ -4652,7 +4658,7 @@ return(r)
                 local v:=0
                 local v1
                 
-                __IncS0(y)
+                s__IncS0(y)
                 
                 c:=Left(s__cN0,y)
 
@@ -4704,7 +4710,7 @@ return(r)
                 local v:=0
                 local v1
                 
-                __IncS0(y)
+                s__IncS0(y)
                 
                 c:=Left(s__cN0,y)
             
@@ -4763,7 +4769,7 @@ return(r)
                 local v:=0
                 local v1
                 
-                __IncS0(y)
+                s__IncS0(y)
                 
                 c:=Left(s__cN0,y)
                     
