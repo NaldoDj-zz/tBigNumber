@@ -6085,6 +6085,6 @@ Return
        
         }
         
-    #pragma endDUMP
+    #pragma ENDDUMP
 
 #endif // __HARBOUR__
