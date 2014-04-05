@@ -112,23 +112,23 @@ static s__nN0
 static s__cN9
 static s__nN9
 
-static __o0
-static __o1
-static __o2
-static __o10
-static __o20
-static __od2
+static s__o0
+static s__o1
+static s__o2
+static s__o10
+static s__o20
+static s__od2
 
-static __oMinFI
-static __oMinGCD
-static __nMinLCM
+static s__oMinFI
+static s__oMinGCD
+static s__nMinLCM
 
-static __lstbNSet
+static s__lstbNSet
 
-static __nDivMeth
+static s__nDivMeth
 
-static __nthRootAcc
-static __nDecimalSet
+static s__nthRootAcc
+static s__nDecimalSet
 
 static s__MTXcN0:=hb_mutexCreate()
 static s__MTXcN9:=hb_mutexCreate()
@@ -569,11 +569,11 @@ method New(uBigN,nBase) class tBigNumber
     DEFAULT nBase:=10    
     self:nBase:=nBase
 
-    if __nDecimalSet==NIL
+    if s__nDecimalSet==NIL
         self:SetDecimals()
     endif    
 
-    if __nthRootAcc==NIL
+    if s__nthRootAcc==NIL
         self:nthRootAcc()
     endif
     
@@ -586,7 +586,7 @@ method New(uBigN,nBase) class tBigNumber
     self:SetValue(uBigN,nBase)
 
      // -------------------- assign static values --------------------------------
-    if __lstbNSet==NIL
+    if s__lstbNSet==NIL
         __InitstbN(nBase)
         self:Divmethod(__DIVMETHOD__)
     endif
@@ -643,7 +643,7 @@ method __cDec(cDec) class tBigNumber
         self:cDec:=cDec
         self:nDec:=hb_bLen(cDec)
         self:nSize:=self:nInt+self:nDec
-        if self:eq(__o0)
+        if self:eq(s__o0)
             self:lNeg:=.F.
             self:cSig:=""
         endif
@@ -666,7 +666,7 @@ method __cInt(cInt) class tBigNumber
         self:cInt:=cInt
         self:nInt:=hb_bLen(cInt)
         self:nSize:=self:nInt+self:nDec
-        if self:eq(__o0)
+        if self:eq(s__o0)
             self:lNeg:=.F.
             self:cSig:=""
         endif
@@ -700,7 +700,7 @@ method __cSig(cSig) class tBigNumber
     if .not.(cSig==NIL)
         self:cSig:=cSig 
         self:lNeg:=(cSig=="-")
-        if self:eq(__o0)
+        if self:eq(s__o0)
             self:lNeg:=.F.
             self:cSig:=""
         endif
@@ -720,7 +720,7 @@ return(self:cSig)
 method __lNeg(lNeg) class tBigNumber
     if .not.(lNeg==NIL)
         self:lNeg:=lNeg
-        if self:eq(__o0)
+        if self:eq(s__o0)
             self:lNeg:=.F.
             self:cSig:=""
         endif
@@ -843,17 +843,17 @@ method SetDecimals(nSet) class tBigNumber
         tBigNSleep(0.001)
     end while
     
-    nLastSet:=__nDecimalSet
+    nLastSet:=s__nDecimalSet
 
-    DEFAULT __nDecimalSet:=if(nSet==NIL,32,nSet)
-    DEFAULT nSet :=__nDecimalSet
+    DEFAULT s__nDecimalSet:=if(nSet==NIL,32,nSet)
+    DEFAULT nSet :=s__nDecimalSet
     DEFAULT nLastSet:=nSet
 
     if nSet>MAX_DECIMAL_PRECISION
         nSet:=MAX_DECIMAL_PRECISION
     endif
 
-    __nDecimalSet:=nSet
+    s__nDecimalSet:=nSet
 
     hb_mutexUnLock(s__MTXACC)
     
@@ -876,17 +876,17 @@ method nthRootAcc(nSet) class tBigNumber
         tBigNSleep(0.001)
     end while
     
-    nLastSet:=__nthRootAcc
+    nLastSet:=s__nthRootAcc
 
-    DEFAULT __nthRootAcc:=if(nSet==NIL,6,nSet)
-    DEFAULT nSet:=__nthRootAcc
+    DEFAULT s__nthRootAcc:=if(nSet==NIL,6,nSet)
+    DEFAULT nSet:=s__nthRootAcc
     DEFAULT nLastSet:=nSet
 
     if nSet>MAX_DECIMAL_PRECISION
         nSet:=MAX_DECIMAL_PRECISION
     endif
 
-    __nthRootAcc:=Min(self:SetDecimals()-1,nSet)
+    s__nthRootAcc:=Min(self:SetDecimals()-1,nSet)
     
     hb_mutexUnLock(s__MTXACC)
 
@@ -1058,7 +1058,7 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
         end while
     endif
 
-    DEFAULT nAcc:=__nDecimalSet
+    DEFAULT nAcc:=s__nDecimalSet
     if self:nDec>nAcc
         self:nDec:=nAcc
         self:cDec:=Left(self:cDec,self:nDec)
@@ -1414,7 +1414,7 @@ return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
 */
 method ibtw(uiBigS,uiBigE) class tBigNumber
     local lbtw := .F.
-    if self:Dec(.T.,.F.,.T.):eq(__o0)
+    if self:Dec(.T.,.F.,.T.):eq(s__o0)
         lbtw := self:cmp(uiBigS)>=0.and.self:cmp(uiBigE)<=0
     endif   
 return(lbtw)
@@ -1744,13 +1744,13 @@ method Div(uBigN,lFloat) class tBigNumber
     local lNeg1 
     local lNeg2
     
-    local nAcc:=__nDecimalSet
+    local nAcc:=s__nDecimalSet
     local nDec
     
     begin sequence
 
-        if __o0:eq(uBigN)
-            ths_dvNR:SetValue(__o0)
+        if s__o0:eq(uBigN)
+            ths_dvNR:SetValue(s__o0)
             break
         endif
 
@@ -1759,9 +1759,9 @@ method Div(uBigN,lFloat) class tBigNumber
         
         DEFAULT lFloat:=.T.
  
-        if ths_dvN2:eq(__o2)
+        if ths_dvN2:eq(s__o2)
             //(Div(2)==Mult(.5)
-            ths_dvNR:SetValue(ths_dvN1:Mult(__od2))
+            ths_dvNR:SetValue(ths_dvN1:Mult(s__od2))
             if .not.(lFloat)
                 ths_dvNR:__cDec("0")
                 ths_dvNR:__cInt(ths_dvNR:Int(.F.,.T.))
@@ -1782,7 +1782,7 @@ method Div(uBigN,lFloat) class tBigNumber
         cN2:=ths_dvN2:cInt
         cN2+=ths_dvN2:cDec
 
-        if __nDivMeth==2
+        if s__nDivMeth==2
             ths_dvNR:SetValue(ecDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
         Else
             ths_dvNR:SetValue(egDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
@@ -1792,7 +1792,7 @@ method Div(uBigN,lFloat) class tBigNumber
 
             ths_dvRDiv:SetValue(ths_dvNR:cRDiv,NIL,NIL,.F.)
         
-            if ths_dvRDiv:gt(__o0)
+            if ths_dvRDiv:gt(s__o0)
     
                 cDec:=""
         
@@ -1817,7 +1817,7 @@ method Div(uBigN,lFloat) class tBigNumber
                     cN2:=ths_dvN2:cInt
                     cN2+=ths_dvN2:cDec
 
-                    if __nDivMeth==2
+                    if s__nDivMeth==2
                         ths_dvRDiv:SetValue(ecDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
                     Else
                         ths_dvRDiv:SetValue(egDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
@@ -1829,7 +1829,7 @@ method Div(uBigN,lFloat) class tBigNumber
                     ths_dvRDiv:SetValue(ths_dvRDiv:cRDiv,NIL,NIL,.F.)
                     ths_dvRDiv:SetValue(ths_dvRDiv:ExactValue(.T.))
 
-                    if ths_dvRDiv:eq(__o0) .or. nDec>=nAcc
+                    if ths_dvRDiv:eq(s__o0) .or. nDec>=nAcc
                         exit
                     endif
         
@@ -1873,10 +1873,10 @@ return(ths_dvNR:Clone())
 */
 method Divmethod(nmethod) class tBigNumber
     local nLstmethod
-    DEFAULT __nDivMeth:= __DIVMETHOD__
-    DEFAULT nmethod:= __nDivMeth
-    nLstmethod:= __nDivMeth
-    __nDivMeth:=nmethod
+    DEFAULT s__nDivMeth:= __DIVMETHOD__
+    DEFAULT nmethod:= s__nDivMeth
+    nLstmethod:= s__nDivMeth
+    s__nDivMeth:=nmethod
 return(nLstmethod)
 
 /*
@@ -1892,7 +1892,7 @@ method Mod(uBigN) class tBigNumber
     if nCmp==-1
         oMod:SetValue(self)
     elseif nCmp==0
-        oMod:SetValue(__o0)
+        oMod:SetValue(s__o0)
     Else
         oMod:SetValue(self:Div(oMod,.F.))
         oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
@@ -1924,37 +1924,37 @@ method Pow(uBigN) class tBigNumber
     
     local nZS
 
-    lPoWN:=ths_pwNP:SetValue(uBigN):lt(__o0)
+    lPoWN:=ths_pwNP:SetValue(uBigN):lt(s__o0)
 
     begin sequence
 
-        if oSelf:eq(__o0) .and. ths_pwNP:eq(__o0)
-            ths_pwNR:SetValue(__o1)
+        if oSelf:eq(s__o0) .and. ths_pwNP:eq(s__o0)
+            ths_pwNR:SetValue(s__o1)
             break
         endif
 
-        if oSelf:eq(__o0)
-            ths_pwNR:SetValue(__o0)
+        if oSelf:eq(s__o0)
+            ths_pwNR:SetValue(s__o0)
             break
         endif
 
-        if ths_pwNP:eq(__o0)
-            ths_pwNR:SetValue(__o1)
+        if ths_pwNP:eq(s__o0)
+            ths_pwNR:SetValue(s__o1)
             break
         endif
 
         ths_pwNR:SetValue(oSelf)
 
-        if ths_pwNR:eq(__o1)
-            ths_pwNR:SetValue(__o1)
+        if ths_pwNR:eq(s__o1)
+            ths_pwNR:SetValue(s__o1)
             break
         endif
 
-        if __o1:eq(ths_pwNP:SetValue(ths_pwNP:Abs()))
+        if s__o1:eq(ths_pwNP:SetValue(ths_pwNP:Abs()))
             break
         endif
 
-        lPowF:=ths_pwA:SetValue(ths_pwNP:cDec):gt(__o0)
+        lPowF:=ths_pwA:SetValue(ths_pwNP:cDec):gt(s__o0)
         
         if lPowF
 
@@ -1969,7 +1969,7 @@ method Pow(uBigN) class tBigNumber
             
             cPowB:=cM10
 
-            if ths_pwB:SetValue(cPowB):gt(__o1)
+            if ths_pwB:SetValue(cPowB):gt(s__o1)
                 ths_pwGCD:SetValue(ths_pwA:GCD(ths_pwB))
                 #ifndef __PTCOMPAT__
                     aThreads:=Array(2,2)
@@ -1992,7 +1992,7 @@ method Pow(uBigN) class tBigNumber
 
         endif
 
-        ths_pwNT:SetValue(__o0)
+        ths_pwNT:SetValue(s__o0)
         ths_pwNP:SetValue(ths_pwNP:OpDec())
         while ths_pwNT:lt(ths_pwNP)
             ths_pwNR:SetValue(ths_pwNR:Mult(oSelf))
@@ -2006,7 +2006,7 @@ method Pow(uBigN) class tBigNumber
     end sequence
 
     if lPoWN
-        ths_pwNR:SetValue(__o1:Div(ths_pwNR))    
+        ths_pwNR:SetValue(s__o1:Div(ths_pwNR))    
     endif
 
 return(ths_pwNR:Clone())
@@ -2020,7 +2020,7 @@ return(ths_pwNR:Clone())
 */
 method OpInc() class tBigNumber
 #ifdef __PTCOMPAT__
-    return(self:Add(__o1))
+    return(self:Add(s__o1))
 #else        
     return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
 #endif    
@@ -2034,7 +2034,7 @@ method OpInc() class tBigNumber
 */
 method OpDec() class tBigNumber
 #ifdef __PTCOMPAT__
-    return(self:Sub(__o1))
+    return(self:Sub(s__o1))
 #else
     return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
 #endif    
@@ -2067,7 +2067,7 @@ method e(lforce) class tBigNumber
 
         if .not.(lforce)
 
-            oeTthD:=__o0:Clone()
+            oeTthD:=s__o0:Clone()
             oeTthD:SetValue(__eTthD())
 
             break
@@ -2076,8 +2076,8 @@ method e(lforce) class tBigNumber
 
         oBigNC:=self:Clone()
         
-        if oBigNC:eq(__o0)
-            oBigNC:SetValue(__o1)
+        if oBigNC:eq(s__o0)
+            oBigNC:SetValue(s__o1)
         endif
 
         oPowN:=oBigNC:Clone()
@@ -2130,7 +2130,7 @@ method PI(lforce) class tBigNumber
 
         if .not.(lforce)
 
-            oPITthD:=__o0:Clone()
+            oPITthD:=s__o0:Clone()
             oPITthD:SetValue(__PITthD())
 
             break
@@ -2160,16 +2160,16 @@ method GCD(uBigN) class tBigNumber
     oX:SetValue(oY:Max(self))
     oY:SetValue(oY:Min(self))
 
-    if oY:eq(__o0)
+    if oY:eq(s__o0)
         oGCD:=oX
     Else
         oGCD:=oY:Clone()
-        if oX:lte(__oMinGCD).and.oY:lte(__oMinGCD)
+        if oX:lte(s__oMinGCD).and.oY:lte(s__oMinGCD)
             oGCD:SetValue(cGCD(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
         Else
             while .T.
                 oY:SetValue(oX:Mod(oY))
-                if oY:eq(__o0)
+                if oY:eq(s__o0)
                     exit
                 endif
                 oX:SetValue(oGCD)
@@ -2218,14 +2218,14 @@ method LCM(uBigN) class tBigNumber
     local oX:=self:Clone()
     local oY:=tBigNumber():New(uBigN)
 
-    local oI:=__o2:Clone()
+    local oI:=s__o2:Clone()
     
-    local oLCM:=__o1:Clone()
+    local oLCM:=s__o1:Clone()
     
     local lMX
     local lMY
     
-    if oX:nInt<=__nMinLCM.and.oY:nInt<=__nMinLCM
+    if oX:nInt<=s__nMinLCM.and.oY:nInt<=s__nMinLCM
         oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
     Else
         #ifndef __PTCOMPAT__
@@ -2241,8 +2241,8 @@ method LCM(uBigN) class tBigNumber
                 lMX:=aThreads[2][1]
                 lMY:=aThreads[2][2]
             #else
-                lMX:=oX:Mod(oI):eq(__o0)
-                lMY:=oY:Mod(oI):eq(__o0)
+                lMX:=oX:Mod(oI):eq(s__o0)
+                lMY:=oY:Mod(oI):eq(s__o0)
             #endif    
             while lMX .or. lMY
                 oLCM:SetValue(oLCM:Mult(oI))
@@ -2265,25 +2265,25 @@ method LCM(uBigN) class tBigNumber
                     Else
                         if lMX
                             oX:SetValue(oX:Div(oI,.F.))
-                            lMX:=oX:Mod(oI):eq(__o0)
+                            lMX:=oX:Mod(oI):eq(s__o0)
                         endif
                         if lMY
                             oY:SetValue(oY:Div(oI,.F.))
-                            lMY:=oY:Mod(oI):eq(__o0)
+                            lMY:=oY:Mod(oI):eq(s__o0)
                         endif
                     endif    
                 #else
                     if lMX
                         oX:SetValue(oX:Div(oI,.F.))
-                        lMX:=oX:Mod(oI):eq(__o0)
+                        lMX:=oX:Mod(oI):eq(s__o0)
                     endif
                     if lMY
                         oY:SetValue(oY:Div(oI,.F.))
-                        lMY:=oY:Mod(oI):eq(__o0)
+                        lMY:=oY:Mod(oI):eq(s__o0)
                     endif
                 #endif    
             end while
-            if oX:eq(__o1) .and. oY:eq(__o1)
+            if oX:eq(s__o1) .and. oY:eq(s__o1)
                 exit
             endif
             oI:SetValue(oI:OpInc())        
@@ -2339,13 +2339,13 @@ method nthRoot(uBigN) class tBigNumber
     local oRootB:=self:Clone()
     local oRootE
     
-    local othRoot:=__o0:Clone()
+    local othRoot:=s__o0:Clone()
 
     local oFExit
 
     begin sequence
 
-        if oRootB:eq(__o0)
+        if oRootB:eq(s__o0)
             break
         endif
 
@@ -2353,29 +2353,29 @@ method nthRoot(uBigN) class tBigNumber
             break
         endif
 
-        if oRootB:eq(__o1)
-            othRoot:SetValue(__o1)
+        if oRootB:eq(s__o1)
+            othRoot:SetValue(s__o1)
             break
         endif
 
         oRootE:=tBigNumber():New(uBigN)
 
-        if oRootE:eq(__o0)
+        if oRootE:eq(s__o0)
             break
         endif
 
-        if oRootE:eq(__o1)
+        if oRootE:eq(s__o1)
             othRoot:SetValue(oRootB)
             break
         endif
 
-        nZS:=__nthRootAcc-1
+        nZS:=s__nthRootAcc-1
         __IncS0(nZS)
         
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
-        oFExit:=__o0:Clone()
-        oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
+        oFExit:=s__o0:Clone()
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRootAcc)
 
         othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit))
 
@@ -2411,14 +2411,14 @@ method nthRootPF(uBigN) class tBigNumber
 
     local oRootT
 
-    local othRoot:=__o0:Clone()
+    local othRoot:=s__o0:Clone()
     local othRootD
 
     local oFExit
 
     begin sequence
 
-        if oRootB:eq(__o0)
+        if oRootB:eq(s__o0)
             break
         endif
 
@@ -2426,33 +2426,33 @@ method nthRootPF(uBigN) class tBigNumber
             break
         endif
 
-        if oRootB:eq(__o1)
-            othRoot:SetValue(__o1)
+        if oRootB:eq(s__o1)
+            othRoot:SetValue(s__o1)
             break
         endif
 
         oRootE:=tBigNumber():New(uBigN)
 
-        if oRootE:eq(__o0)
+        if oRootE:eq(s__o0)
             break
         endif
 
-        if oRootE:eq(__o1)
+        if oRootE:eq(s__o1)
             othRoot:SetValue(oRootB)
             break
         endif
         
-        oRootT:=__o0:Clone()
+        oRootT:=s__o0:Clone()
 
-        nZS:=__nthRootAcc-1
+        nZS:=s__nthRootAcc-1
         __IncS0(nZS)
     
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
-        oFExit:=__o0:Clone()
-        oFExit:SetValue(cFExit,NIL,NIL,NIL,__nthRootAcc)
+        oFExit:=s__o0:Clone()
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRootAcc)
 
-        lDec:=oRootB:Dec(.T.):gt(__o0)
+        lDec:=oRootB:Dec(.T.):gt(s__o0)
         
         if lDec
             
@@ -2475,9 +2475,9 @@ method nthRootPF(uBigN) class tBigNumber
         nPFs:=tBIGNaLen(aIPF)
 
         if nPFs>0
-            othRoot:SetValue(__o1)
-            othRootD:=__o0:Clone()
-            oRootT:SetValue(__o0)
+            othRoot:SetValue(s__o1)
+            othRootD:=s__o0:Clone()
+            oRootT:SetValue(s__o0)
             for nPF:=1 to nPFs
                 if oRootE:eq(aIPF[nPF][2])
                     othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
@@ -2491,7 +2491,7 @@ method nthRootPF(uBigN) class tBigNumber
             if .not.(Empty(aDPF))
                 nPFs:=tBIGNaLen(aDPF)
                 if nPFs>0
-                    othRootD:SetValue(__o1)
+                    othRootD:SetValue(s__o1)
                     for nPF:=1 to nPFs
                         if oRootE:eq(aDPF[nPF][2])
                             othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
@@ -2502,7 +2502,7 @@ method nthRootPF(uBigN) class tBigNumber
                             othRootD:SetValue(othRootD:Mult(oRootT))
                         endif
                     next nPF
-                    if othRootD:gt(__o0)
+                    if othRootD:gt(s__o0)
                         othRoot:SetValue(othRoot:Div(othRootD))    
                     endif
                 endif    
@@ -2534,8 +2534,8 @@ method SQRT() class tBigNumber
             break
         endif
 
-        if oSQRT:eq(__o0)
-            oSQRT:SetValue(__o0)
+        if oSQRT:eq(s__o0)
+            oSQRT:SetValue(s__o0)
             break
         endif
 
@@ -2580,34 +2580,34 @@ method Log(uBigNB) class tBigNumber
     local aThreads:=Array(2,2)
 #endif
 
-    local oS:=__o0:Clone()
-    local oT:=__o0:Clone()
-    local oI:=__o1:Clone()
+    local oS:=s__o0:Clone()
+    local oT:=s__o0:Clone()
+    local oI:=s__o1:Clone()
     local oX:=self:Clone()
-    local oY:=__o0:Clone()
-    local oLT:=__o0:Clone()
+    local oY:=s__o0:Clone()
+    local oLT:=s__o0:Clone()
     
     local noTcmp1
 
     local lflag:=.F.
     
-    if oX:eq(__o0)
-        return(__o0:Clone())
+    if oX:eq(s__o0)
+        return(s__o0:Clone())
     endif
 
     DEFAULT uBigNB:=self:e()
 
     oT:SetValue(uBigNB)
 
-    noTcmp1:=oT:cmp(__o1)
+    noTcmp1:=oT:cmp(s__o1)
     if noTcmp1==0
-        return(__o0:Clone())
+        return(s__o0:Clone())
     endif
     
-    if __o0:lt(oT) .and. noTcmp1==-1
+    if s__o0:lt(oT) .and. noTcmp1==-1
          lflag:=.not.(lflag)
-         oT:SetValue(__o1:Div(oT))
-         noTcmp1:=oT:cmp(__o1)
+         oT:SetValue(s__o1:Div(oT))
+         noTcmp1:=oT:cmp(s__o1)
     endif
 
     while oX:gt(oT) .and. noTcmp1==1
@@ -2616,21 +2616,21 @@ method Log(uBigNB) class tBigNumber
     end while 
 
     oS:SetValue(oS:Add(oY))
-    oY:SetValue(__o0)
+    oY:SetValue(s__o0)
     #ifndef __PTCOMPAT__
-        aThreads[1][1]:=hb_threadStart(@thnthRoot(),oT,__o2)
+        aThreads[1][1]:=hb_threadStart(@thnthRoot(),oT,s__o2)
         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
-        aThreads[1][2]:=hb_threadStart(@thMult(),oI,__od2)
+        aThreads[1][2]:=hb_threadStart(@thMult(),oI,s__od2)
         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
         hb_threadWait(aThreads[1])
         oT:SetValue(aThreads[2][1])
         oI:SetValue(aThreads[2][2])
     #else
-        oT:SetValue(oT:nthRoot(__o2))
-        oI:SetValue(oI:Mult(__od2))
+        oT:SetValue(oT:nthRoot(s__o2))
+        oI:SetValue(oI:Mult(s__od2))
     #endif   
 
-    noTcmp1:=oT:cmp(__o1)
+    noTcmp1:=oT:cmp(s__o1)
     
     while noTcmp1==1
 
@@ -2641,19 +2641,19 @@ method Log(uBigNB) class tBigNumber
     
         oS:SetValue(oS:Add(oY))
         
-        oY:SetValue(__o0)
+        oY:SetValue(s__o0)
         
         oLT:SetValue(oT)
         
-        oT:SetValue(oT:nthRoot(__o2))
+        oT:SetValue(oT:nthRoot(s__o2))
         
         if oT:eq(oLT)
             exit    
         endif 
         
-        oI:SetValue(oI:Mult(__od2))
+        oI:SetValue(oI:Mult(s__od2))
   
-        noTcmp1:=oT:cmp(__o1)
+        noTcmp1:=oT:cmp(s__o1)
 
     end while
 
@@ -2671,7 +2671,7 @@ return(oS)
     Sintaxe     : tBigNumber():Log2() -> oBigNR
 */
 method Log2() class tBigNumber
-    local ob2:=__o2:Clone()
+    local ob2:=s__o2:Clone()
 return(self:Log(ob2))
 
 /*
@@ -2682,7 +2682,7 @@ return(self:Log(ob2))
     Sintaxe     : tBigNumber():Log10() -> oBigNR
 */
 method Log10() class tBigNumber
-    local ob10:=__o10:Clone()
+    local ob10:=s__o10:Clone()
 return(self:Log(ob10))
 
 /*
@@ -2693,7 +2693,7 @@ return(self:Log(ob10))
     Sintaxe     : tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
-return(self:Log(__o1:Exp()))
+return(self:Log(s__o1:Exp()))
 
 /*
     method      : aLog
@@ -2714,7 +2714,7 @@ return(oaLog:Pow(self))
     Sintaxe     : tBigNumber():aLog2() -> oBigNR
 */
 method aLog2() class tBigNumber
-    local ob2:=__o2:Clone()
+    local ob2:=s__o2:Clone()
 return(self:aLog(ob2))
 
 /*
@@ -2725,7 +2725,7 @@ return(self:aLog(ob2))
     Sintaxe     : tBigNumber():aLog10() -> oBigNR
 */
 method aLog10() class tBigNumber
-    local ob10:=__o10:Clone()
+    local ob10:=s__o10:Clone()
 return(self:aLog(ob10))
 
 /*
@@ -2736,7 +2736,7 @@ return(self:aLog(ob10))
     Sintaxe     : tBigNumber():aLn() -> oBigNR
 */
 method aLn() class tBigNumber
-return(self:aLog(__o1:Exp()))
+return(self:aLog(s__o1:Exp()))
 
 /*
     method    : MathC
@@ -2772,9 +2772,9 @@ method Rnd(nAcc) class tBigNumber
     local cAdd
     local cAcc
 
-    DEFAULT nAcc:=Max((Min(oRnd:nDec,__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oRnd:nDec,s__nDecimalSet)-1),0)
 
-    if .not.(oRnd:eq(__o0))
+    if .not.(oRnd:eq(s__o0))
         cAcc:=SubStr(oRnd:cDec,nAcc+1,1)
         if cAcc==""
             cAcc:=SubStr(oRnd:cDec,--nAcc+1,1)
@@ -2810,7 +2810,7 @@ return(self:Truncate(nAcc))
 method Floor(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
     local oFloor:=self:Clone()
-    DEFAULT nAcc:=Max((Min(oFloor:nDec,__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oFloor:nDec,s__nDecimalSet)-1),0)
     oFloor:SetValue(oFloor:Rnd(nAcc):Int(.T.,.T.))
     oFloor:SetValue(oFloor:Min(oInt))
 return(oFloor)
@@ -2825,7 +2825,7 @@ return(oFloor)
 method Ceiling(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
     local oCeiling:=self:Clone()
-    DEFAULT nAcc:=Max((Min(oCeiling:nDec,__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oCeiling:nDec,s__nDecimalSet)-1),0)
     oCeiling:SetValue(oCeiling:Rnd(nAcc):Int(.T.,.T.))
     oCeiling:SetValue(oCeiling:Max(oInt))
 return(oCeiling)
@@ -2842,8 +2842,8 @@ method Truncate(nAcc) class tBigNumber
     local oTrc:=self:Clone()
     local cDec:=oTrc:cDec
 
-    if .not.(__o0:eq(cDec))
-        DEFAULT nAcc:=Min(oTrc:nDec,__nDecimalSet)
+    if .not.(s__o0:eq(cDec))
+        DEFAULT nAcc:=Min(oTrc:nDec,s__nDecimalSet)
         cDec:=Left(cDec,nAcc)
         oTrc:SetValue(oTrc:cInt+"."+cDec)
     endif
@@ -2908,7 +2908,7 @@ return(self)
 */
 method D2H(cHexB) class tBigNumber
 
-    local otH:=__o0:Clone()
+    local otH:=s__o0:Clone()
     local otN:=tBigNumber():New(self:cInt)
 
     local cHexN:=""
@@ -2926,7 +2926,7 @@ method D2H(cHexB) class tBigNumber
 
     otH:SetValue(cHexB)
     
-    while otN:gt(__o0)
+    while otN:gt(s__o0)
         otN:SetValue(otN:Div(otH,.F.))
         nAT:=Val(otN:cRDiv)+1
         cHexN:=SubStr(cHexC,nAT,1)+cHexN
@@ -2941,7 +2941,7 @@ method D2H(cHexB) class tBigNumber
     cHexN:=""
     otN:=tBigNumber():New(self:Dec(NIL,NIL,.T.))
 
-    while otN:gt(__o0)
+    while otN:gt(s__o0)
         otN:SetValue(otN:Div(otH,.F.))
         nAT:=Val(otN:cRDiv)+1
         cHexN:=SubStr(cHexC,nAT,1)+cHexN
@@ -2966,12 +2966,12 @@ return(oHexN)
 */
 method H2D() class tBigNumber
 
-    local otH:=__o0:Clone()
-    local otNR:=__o0:Clone()
-    local otLN:=__o0:Clone()
-    local otPw:=__o0:Clone()
-    local otNI:=__o0:Clone()
-    local otAT:=__o0:Clone()
+    local otH:=s__o0:Clone()
+    local otNR:=s__o0:Clone()
+    local otLN:=s__o0:Clone()
+    local otPw:=s__o0:Clone()
+    local otNI:=s__o0:Clone()
+    local otAT:=s__o0:Clone()
 
     local cHexB:=hb_ntos(self:nBase)
     local cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
@@ -3266,11 +3266,11 @@ method Randomize(uB,uE,nExit) class tBigNumber
 
     local aE
     
-    local oB:=__o0:Clone()
-    local oE:=__o0:Clone()
-    local oT:=__o0:Clone()
-    local oM:=__o0:Clone()
-    local oR:=__o0:Clone()
+    local oB:=s__o0:Clone()
+    local oE:=s__o0:Clone()
+    local oT:=s__o0:Clone()
+    local oM:=s__o0:Clone()
+    local oR:=s__o0:Clone()
 
     local cR:=""
 
@@ -3444,7 +3444,7 @@ method Randomize(uB,uE,nExit) class tBigNumber
         cR:=oM:Min(oE:Min(oT)):ExactValue()
         nT:=Val(cR)
 
-        oT:SetValue(oE:Sub(oB):Mult(__od2):Int(.T.))
+        oT:SetValue(oE:Sub(oB):Mult(s__od2):Int(.T.))
 
         while oR:lt(oB)
             oR:SetValue(oR:Add(oT))
@@ -3503,29 +3503,29 @@ method millerRabin(uI) class tBigNumber
 
     local oN:=self:Clone()
     local oD:=tBigNumber():New(oN:OpDec())
-    local oS:=__o0:Clone()
-    local oI:=__o0:Clone()
-    local oA:=__o0:Clone()
+    local oS:=s__o0:Clone()
+    local oI:=s__o0:Clone()
+    local oA:=s__o0:Clone()
 
     local lPrime:=.T.
 
     begin sequence
 
-        if oN:lte(__o1)
+        if oN:lte(s__o1)
             lPrime:=.F.
             break
         endif
 
-        while oD:Mod(__o2):eq(__o0)
-            oD:SetValue(oD:Mult(__od2))
+        while oD:Mod(s__o2):eq(s__o0)
+            oD:SetValue(oD:Mult(s__od2))
             oS:SetValue(oS:OpInc())
         end while
     
-        DEFAULT uI:=__o2:Clone()
+        DEFAULT uI:=s__o2:Clone()
 
         oI:SetValue(uI)
-        while oI:gt(__o0)
-            oA:SetValue(oA:Randomize(__o1,oN))
+        while oI:gt(s__o0)
+            oA:SetValue(oA:Randomize(s__o1,oN))
             lPrime:=mrPass(oA,oS,oD,oN)
             if .not.(lPrime)
                 break
@@ -3560,11 +3560,11 @@ static function mrPass(uA,uS,uD,uN)
 
     begin sequence
 
-        if oP:eq(__o1)
+        if oP:eq(s__o1)
             break
         endif
 
-        while oW:gt(__o0)
+        while oW:gt(s__o0)
             lmrP:=oP:eq(oM)
             if lmrP
                 break
@@ -3609,21 +3609,21 @@ method FI() class tBigNumber
     local oI
     local oN
     
-    if oT:lte(__oMinFI)
+    if oT:lte(s__oMinFI)
         oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
     Else
-        oI:=__o2:Clone()
+        oI:=s__o2:Clone()
         oN:=oT:Clone()
         while oI:Mult(oI):lte(oC)
-            if oN:Mod(oI):eq(__o0)
+            if oN:Mod(oI):eq(s__o0)
                 oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
             endif
-            while oN:Mod(oI):eq(__o0)
+            while oN:Mod(oI):eq(s__o0)
                 oN:SetValue(oN:Div(oI,.F.))
             end while
             oI:SetValue(oI:OpInc())
         end while
-        if oN:gt(__o1)
+        if oN:gt(s__o1)
             oT:SetValue(oT:Sub(oT:Div(oN,.F.)))        
         endif
     endif
@@ -3662,8 +3662,8 @@ method PFactors() class tBigNumber
     local cP:=""
 
     local oN:=self:Clone()
-    local oP:=__o0:Clone()
-    local oT:=__o0:Clone()
+    local oP:=s__o0:Clone()
+    local oT:=s__o0:Clone()
 
     local otP:=tPrime():New()
     
@@ -3682,7 +3682,7 @@ method PFactors() class tBigNumber
             aAdd(aPFactors,{oN:cInt,"1"})
             exit
         endif
-        while oN:Mod(oP):eq(__o0)
+        while oN:Mod(oP):eq(s__o0)
             nP:=aScan(aPFactors,{|e|e[1]==cP})
             if nP==0
                 aAdd(aPFactors,{cP,"1"})
@@ -3694,7 +3694,7 @@ method PFactors() class tBigNumber
             nC:=0
             lPrime:=.T.
         end while
-        if oN:lte(__o1)
+        if oN:lte(s__o1)
             exit
         endif
     end while
@@ -3713,10 +3713,10 @@ return(aPFactors)
 */
 method Factorial() class tBigNumber 
     local oN:=self:Clone():Int(.T.,.F.)
-    if oN:eq(__o0)
-        return(__o1:Clone())
+    if oN:eq(s__o0)
+        return(s__o1:Clone())
     endif
-return(recFact(__o1:Clone(),oN))
+return(recFact(s__o1:Clone(),oN))
 
 /*
     function    : recFact 
@@ -3733,15 +3733,15 @@ static function recFact(oS,oN)
 #endif
 
     local oI
-    local oR:=__o0:Clone()
+    local oR:=s__o0:Clone()
     local oSN
     local oSI
     local oNI
 
 #ifdef __PTCOMPAT__
-    if oN:lte(__o20:Mult(oN:Mult(__od2):Int(.T.,.F.)))
+    if oN:lte(s__o20:Mult(oN:Mult(s__od2):Int(.T.,.F.)))
 #else
-    if oN:lte(__o20)
+    if oN:lte(s__o20)
 #endif    
         oR:SetValue(oS)
         oI:=oS:Clone()
@@ -3756,7 +3756,7 @@ static function recFact(oS,oN)
     endif
 
     oI:=oN:Clone()
-    oI:SetValue(oI:Mult(__od2):Int(.T.,.F.))
+    oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
 
     oSI:=oS:Clone()
     oSI:SetValue(oSI:Add(oI))
@@ -3794,7 +3794,7 @@ static function egMult(cN1,cN2,nBase,nAcc)
     local nCmp
     
     local oN1:=tBigNumber():New(cN1)
-    local oMTM:=__o1:Clone()
+    local oMTM:=s__o1:Clone()
     local oMTP:=tBigNumber():New(cN2)
 
     while oMTM:lte(oN1)
@@ -3804,8 +3804,8 @@ static function egMult(cN1,cN2,nBase,nAcc)
         oMTP:SetValue(oMTP:Add(oMTP),nBase,"0",NIL,nAcc)
     end while
 
-    oMTM:SetValue(__o0)
-    oMTP:SetValue(__o0)
+    oMTM:SetValue(s__o0)
+    oMTP:SetValue(s__o0)
     
     while nI>0
         oMTM:SetValue(oMTM:Add(aeMT[nI][1]),nBase,"0",NIL,nAcc)
@@ -3822,10 +3822,10 @@ static function egMult(cN1,cN2,nBase,nAcc)
     
 #else
 
-    local oMTP:=__o0:Clone()
+    local oMTP:=s__o0:Clone()
     /*ths_mtN1:SetValue(cN1)
     ths_mtN2:SetValue(cN2)
-    if .F. .and. ths_mtN1:ibtw(__o0,MAX_SYS_lMULT) .and.  ths_mtN2:ibtw(__o0,MAX_SYS_lMULT)
+    if .F. .and. ths_mtN1:ibtw(s__o0,MAX_SYS_lMULT) .and.  ths_mtN2:ibtw(s__o0,MAX_SYS_lMULT)
         oMTP:SetValue(hb_ntos(tBigNlMult(Val(cN1),Val(cN2))),nBase,"0",NIL,nAcc)
     Else
         */oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
@@ -3862,10 +3862,10 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
     ths_eDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
     ths_eDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
-    ths_eDivR:SetValue(__o0,nBase,"0",NIL,nAcc)
-    ths_eDivQ:SetValue(__o0,nBase,"0",NIL,nAcc)
+    ths_eDivR:SetValue(s__o0,nBase,"0",NIL,nAcc)
+    ths_eDivQ:SetValue(s__o0,nBase,"0",NIL,nAcc)
 
-    ths_eDivDvQ:SetValue(__o1)
+    ths_eDivDvQ:SetValue(s__o1)
     ths_eDivDvR:SetValue(ths_eDivD)
 
     while ths_eDivDvR:lte(ths_eDivN)
@@ -3930,17 +3930,17 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 
 #else
     
-    local r:=__o0:Clone()   
+    local r:=s__o0:Clone()   
 
 #endif   
 
-   local q:=__o0:Clone()
+   local q:=s__o0:Clone()
 
 #ifdef __PTCOMPAT__
 
-   local n:=__o1:Clone()
-   local aux:=__o0:Clone()
-   local tmp:=__o0:Clone()
+   local n:=s__o1:Clone()
+   local aux:=s__o0:Clone()
+   local tmp:=s__o0:Clone()
    local base:=tBigNumber():New(hb_ntos(nBase),nBase)
 
 #endif
@@ -3974,7 +3974,7 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
         q:SetValue(q:Add(n))
       end while
       a:SetValue(r)
-      n:SetValue(__o1)
+      n:SetValue(s__o1)
     end while
 
 #else
@@ -4007,7 +4007,7 @@ return(q)
     Sintaxe     : nthRoot(oRootB,oRootE,oAcc) -> othRoot
 */
 static function nthRoot(oRootB,oRootE,oAcc)   
-return(__Pow(oRootB,__o1:Div(oRootE),oAcc))
+return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
 
 /*
     function    : __Pow
@@ -4031,30 +4031,30 @@ static function __Pow(base,expR,EPS)
     
     local exp:=expR:Clone()
 
-    if base:eq(__o1) .or. exp:eq(__o0)
-        return(__o1:Clone())
-    elseif base:eq(__o0)
-        return(__o0:Clone())
-    elseif exp:lt(__o0)
+    if base:eq(s__o1) .or. exp:eq(s__o0)
+        return(s__o1:Clone())
+    elseif base:eq(s__o0)
+        return(s__o0:Clone())
+    elseif exp:lt(s__o0)
         acc:=__pow(base,exp:Abs(.T.),EPS)
-        return(__o1:Div(acc))
-    elseif exp:Mod(__o2):eq(__o0)
-         acc:=__pow(base,exp:Mult(__od2),EPS)
+        return(s__o1:Div(acc))
+    elseif exp:Mod(s__o2):eq(s__o0)
+         acc:=__pow(base,exp:Mult(s__od2),EPS)
         return(acc:Mult(acc))
-    elseif exp:Dec(.T.):gt(__o0) .and. exp:Int(.T.):gt(__o0)
+    elseif exp:Dec(.T.):gt(s__o0) .and. exp:Int(.T.):gt(s__o0)
         acc:=base:Pow(expR)
         return(acc)
-    elseif exp:gte(__o1)
+    elseif exp:gte(s__o1)
         acc:=base:Mult(__pow(base,exp:OpDec(),EPS))
         return(acc)
     else
-        low:=__o0:Clone()
-        high:=__o1:Clone()
+        low:=s__o0:Clone()
+        high:=s__o1:Clone()
         sqr:=__SQRT(base)
         acc:=sqr:Clone()    
-        mid:=high:Mult(__od2)
+        mid:=high:Mult(s__od2)
         tmp:=mid:Sub(exp):Abs(.T.)
-        lst:=__o0:Clone()    
+        lst:=s__o0:Clone()    
         while tmp:gte(EPS)
             sqr:SetValue(__SQRT(sqr))
             if mid:lte(exp)
@@ -4062,9 +4062,9 @@ static function __Pow(base,expR,EPS)
                 acc:SetValue(acc:Mult(sqr))
             else
                 high:SetValue(mid)
-                acc:SetValue(__o1:Div(sqr))
+                acc:SetValue(s__o1:Div(sqr))
             endif
-            mid:SetValue(low:Add(high):Mult(__od2))
+            mid:SetValue(low:Add(high):Mult(s__od2))
             tmp:SetValue(mid:Sub(exp):Abs(.T.))
             if tmp:eq(lst)
                 exit
@@ -4093,17 +4093,17 @@ static function __SQRT(p)
     if q:lte(q:SysSQRT())
         r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
     Else
-        n:=__nthRootAcc-1
+        n:=s__nthRootAcc-1
         __IncS0(n)
         s:="0."+Left(s__cN0,n)+"1"
-        EPS:=__o0:Clone()
-        EPS:SetValue(s,NIL,NIL,NIL,__nthRootAcc)
-        r:=q:Mult(__od2)
-        t:=r:Pow(__o2):Sub(q):Abs(.T.)
-        l:=__o0:Clone()
+        EPS:=s__o0:Clone()
+        EPS:SetValue(s,NIL,NIL,NIL,s__nthRootAcc)
+        r:=q:Mult(s__od2)
+        t:=r:Pow(s__o2):Sub(q):Abs(.T.)
+        l:=s__o0:Clone()
         while t:gte(EPS)
-            r:SetValue(r:pow(__o2):Add(q):Div(__o2:Mult(r)))
-            t:SetValue(r:Pow(__o2):Sub(q):Abs(.T.))
+            r:SetValue(r:pow(s__o2):Add(q):Div(s__o2:Mult(r)))
+            t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
             if t:eq(l)
                 exit
             endif
@@ -4876,23 +4876,23 @@ return(r)
 
 #ifndef __PTCOMPAT__
     static function thAdd(oN,oP)
-        local othAdd:=__o0:Clone()
+        local othAdd:=s__o0:Clone()
         othAdd:SetValue(oN:Add(oP))
     return(othAdd)
     static function thDiv(oN,oD,lFloat)
-        local othDiv:=__o0:Clone()
+        local othDiv:=s__o0:Clone()
         othDiv:SetValue(oN:Div(oD,lFloat))
     return(othDiv)
     static function thMod0(oN,oD)
-        local othMod0:=__o0:Clone()
+        local othMod0:=s__o0:Clone()
         othMod0:SetValue(oN:Mod(oD))
-    return(othMod0:eq(__o0))
+    return(othMod0:eq(s__o0))
     static function thnthRoot(oN,oE)
-        local othnthRoot:=__o0:Clone()
+        local othnthRoot:=s__o0:Clone()
         othnthRoot:SetValue(oN:nthRoot(oE))
     return(othnthRoot)
     static function thMult(oN,oM)
-        local othMult:=__o0:Clone()
+        local othMult:=s__o0:Clone()
         othMult:SetValue(oN:Mult(oM))
     return(othMult)
 #endif //__PTCOMPAT__    
@@ -4930,7 +4930,7 @@ return(r)
 */
 static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
-    local oBigNR:=__o0:Clone()
+    local oBigNR:=s__o0:Clone()
 
     local oBigN1:=tBigNumber():New(uBigN1)
     local oBigN2:=tBigNumber():New(uBigN2)
@@ -4964,12 +4964,6 @@ static procedure __Initsthd(nBase)
     local oTBigN
 
     ths_lsdSet:=.F.
-    
-    s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-    s__nN0:=150
-    
-    s__cN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-    s__nN9:=150
    
     #ifdef TBN_ARRAY
         ths_aZAdd:=Array(0)
@@ -5040,20 +5034,24 @@ return
 
 // -------------------- assign static values --------------------------------
 static procedure __InitstbN(nBase)
-    __lstbNSet:=.F.
-    __o0:=tBigNumber():New("0",nBase)
-    __o1:=tBigNumber():New("1",nBase)
-    __o2:=tBigNumber():New("2",nBase)
-    __o10:=tBigNumber():New("10",nBase)
-    __o20:=tBigNumber():New("20",nBase)
-    __od2:=tBigNumber():New("0.5",nBase)
-    __oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
-    __oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
-    __nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
+    s__lstbNSet:=.F.
+    s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__nN0:=150
+    s__cN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__nN9:=150
+    s__o0:=tBigNumber():New("0",nBase)
+    s__o1:=tBigNumber():New("1",nBase)
+    s__o2:=tBigNumber():New("2",nBase)
+    s__o10:=tBigNumber():New("10",nBase)
+    s__o20:=tBigNumber():New("20",nBase)
+    s__od2:=tBigNumber():New("0.5",nBase)
+    s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
+    s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
+    s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     #ifdef __PROTHEUS__
         DEFAULT __cEnvSrv:=GetEnvServer()
     #endif
-    __lstbNSet:=.T.
+    s__lstbNSet:=.T.
 return
 
 static procedure tBigNSleep(nSleep)
