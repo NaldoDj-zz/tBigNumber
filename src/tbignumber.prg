@@ -5927,8 +5927,8 @@ Return
                  v >>= 1;
           }
          
-            u >>= 1;
           while ((u & 1) == 0)
+            u >>= 1;
          
           /* From here on, u is always odd. */
           do {
