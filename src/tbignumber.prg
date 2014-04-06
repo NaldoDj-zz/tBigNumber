@@ -133,6 +133,7 @@ static s__nDecimalSet
 static s__MTXcN0:=hb_mutexCreate()
 static s__MTXcN9:=hb_mutexCreate()
 static s__MTXACC:=hb_mutexCreate()
+static s__MTXDEC:=hb_mutexCreate()
 
 #ifdef TBN_ARRAY
     thread static ths_aZAdd
@@ -839,7 +840,7 @@ method SetDecimals(nSet) class tBigNumber
 
     local nLastSet
 
-    while .not.(hb_mutexLock(s__MTXACC))
+    while .not.(hb_mutexLock(s__MTXDEC))
         tBigNSleep(0.001)
     end while
     
@@ -855,7 +856,7 @@ method SetDecimals(nSet) class tBigNumber
 
     s__nDecimalSet:=nSet
 
-    hb_mutexUnLock(s__MTXACC)
+    hb_mutexUnLock(s__MTXDEC)
     
     DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
     
