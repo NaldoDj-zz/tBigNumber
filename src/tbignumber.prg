@@ -196,6 +196,10 @@ thread static ths_SysSQRT
 
 thread static ths_lsdSet
 
+thread static ths_ibtwS
+thread static ths_ibtwE
+
+
 #define RANDOM_MAX_EXIT 5
 #define EXIT_MAX_RANDOM 50
 
@@ -1416,7 +1420,11 @@ return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
 method ibtw(uiBigS,uiBigE) class tBigNumber
     local lbtw := .F.
     if self:Dec(.T.,.F.,.T.):eq(s__o0)
-        lbtw := self:cmp(uiBigS)>=0.and.self:cmp(uiBigE)<=0
+        ths_ibtwS:SetValue(uiBigS)
+        ths_ibtwE:SetValue(uiBigE)
+        if ths_ibtwS:Dec(.T.,.F.,.T.):eq(s__o0) .and. ths_ibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
+            lbtw := self:cmp(ths_ibtwS)>=0.and.self:cmp(ths_ibtwE)<=0
+        endif    
     endif   
 return(lbtw)
 
@@ -5021,6 +5029,9 @@ static procedure __Initsthd(nBase)
     ths_pwNR:=oTBigN:Clone()
     ths_pwNT:=oTBigN:Clone()
     ths_pwGCD:=oTBigN:Clone()
+    
+    ths_ibtwS:=oTBigN:Clone()
+    ths_ibtwE:=oTBigN:Clone()
     
 #ifdef __PTCOMPAT__
     ths_eDivN:=oTBigN:Clone()
