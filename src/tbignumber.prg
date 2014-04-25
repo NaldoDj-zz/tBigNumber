@@ -5236,6 +5236,34 @@ Return
         #include <hbdefs.h>
         #include <hbstack.h>
         #include <hbapiitm.h>
+        
+        typedef struct{
+            char * cMultM;
+            char * cMultP;
+        } stBIGNeMult, * ptBIGNeMult;
+        
+        typedef struct{
+            char * cDivQ;
+            char * cDivR;
+        } stBIGNeDiv, * ptBIGNeDiv;
+
+        static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes);
+        static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad);
+        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad);
+        static char * tBIGNReverse(const char * szF,const HB_SIZE s);
+        static char * tBIGNAdd(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);
+        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB);
+        static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);        
+        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB); 
+        static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB);
+        static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult);        
+        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB);
+        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB);
+        static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv);        
+        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv);        
+        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v);
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y);
+        static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
 
         static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
             HB_SIZE nLen    = strlen(szText);       
@@ -5539,12 +5567,6 @@ Return
             hb_xfree(b);
             hb_xfree(szRet);
         }
-        
-        typedef struct
-        {
-            char * cMultM;
-            char * cMultP;
-        } stBIGNeMult, * ptBIGNeMult;
 
         static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult){
     
@@ -5716,12 +5738,6 @@ Return
         HB_FUNC_STATIC( TBIGNLMULT ){
             hb_retnint((HB_MAXUINT)hb_parnint(1)*(HB_MAXUINT)hb_parnint(2));
         }
-
-        typedef struct
-        {
-            char * cDivQ;
-            char * cDivR;
-        } stBIGNeDiv, * ptBIGNeDiv;
 
         static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv){
     
