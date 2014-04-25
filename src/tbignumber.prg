@@ -319,6 +319,9 @@ class tBigNumber
     
     method egMult(uBigN)
     method egMultiply(uBigN) INLINE self:egMult(uBigN)
+
+    method rMult(uBigN)
+    method rMultiply(uBigN) INLINE self:rMult(uBigN)
     
     method Div(uBigN,lFloat)
     method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
@@ -1712,6 +1715,68 @@ method egMult(uBigN) class tBigNumber
     nDec:=ths_mtN1:nDec*2
 
     ths_mtNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+
+    cNT:=ths_mtNR:cInt
+    
+    cDec:=Right(cNT,nDec)
+    cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+    
+    cNT:=cInt
+    cNT+="."
+    cNT+=cDec
+    
+    ths_mtNR:SetValue(cNT)
+    
+    cNT:=ths_mtNR:ExactValue()
+    
+    ths_mtNR:SetValue(cNT)
+
+    if lNeg
+        ths_mtNR:__cSig("-")
+    endif
+
+return(ths_mtNR:Clone())
+
+/*
+    method      : rMult
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 04/02/2013
+    Descricao   : Multiplicacao Russa
+    Sintaxe     : tBigNumber():rMult(uBigN) -> oBigNR
+*/
+method rMult(uBigN) class tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg    
+    local lNeg1 
+    local lNeg2
+ 
+    local nDec    
+
+    ths_mtN1:SetValue(self)
+    ths_mtN2:SetValue(uBigN)
+    
+    ths_mtN1:Normalize(@ths_mtN2)
+ 
+    lNeg1:=ths_mtN1:lNeg
+    lNeg2:=ths_mtN2:lNeg    
+    lNeg:=(lNeg1 .and. .not.(lNeg2)) .or. (.not.(lNeg1) .and. lNeg2)
+    
+    cN1:=ths_mtN1:cInt
+    cN1+=ths_mtN1:cDec
+
+    cN2:=ths_mtN2:cInt
+    cN2+=ths_mtN2:cDec
+
+    nDec:=ths_mtN1:nDec*2
+
+    ths_mtNR:SetValue(rMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
 
     cNT:=ths_mtNR:cInt
     
@@ -3849,6 +3914,30 @@ static function egMult(cN1,cN2,nBase,nAcc)
 #endif //__PTCOMPAT__
     
 return(oMTP)
+
+/*
+    function    : rMult
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 04/02/2013
+    Descricao   : Multiplicacao Russa (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
+    Sintaxe     : rMult(cN1,cN2,nBase,nAcc) -> oNR
+*/
+static function rMult(cN1,cN2,nBase,nAcc)
+ 
+    local oN1:=tBigNumber():New(cN1)
+    local oN2:=tBigNumber():New(cN2)
+    local oNR:=tBigNumber():New(s__o0)
+    
+    while oN1:gt(s__o0)
+        if oN1:Mod(s__o2):gt(s__o0)
+            oNR:SetValue(oNR:Add(oN2),nBase,"0",NIL,nAcc)
+            oN1:OpDec()
+        endif    
+        oN1:SetValue(oN1:Div(s__o2,.F.),nBase,"0",NIL,nAcc)
+        oN2:SetValue(oN2:Mult(s__o2),nBase,"0",NIL,nAcc)
+    end while
+    
+return(oNR)
     
 /*
     function    : egDiv

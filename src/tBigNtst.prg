@@ -12,7 +12,7 @@
 #define L_ROPROGRESS       "0"
 
 #define __SETDEC__		  8
-#define __NRTTST__		 35
+#define __NRTTST__		 36
 
 #ifdef __PROTHEUS__
     #xcommand ? <e> => ConOut(<e>)
@@ -1118,6 +1118,51 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
     
     __ConOut(fhLog," ------------ MULT Teste 5 -------------- END ")
+    
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," BEGIN ------------ MULT Teste 6 -------------- ")
+    
+    __ConOut(fhLog,"")
+
+   ASSIGN w := 1
+    otBigW:SetValue(o1)
+
+	__oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+	For x := 1 TO nN_TEST Step nISQRT
+		__oRTime2:SetRemaining(1)
+        ASSIGN cN   := hb_ntos(w)
+        ASSIGN w    *= 3.555
+        ASSIGN z    := Len(cN)
+        While ((SubStr(cN,-1) == "0") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        ASSIGN z := Len(cN)
+        While ((SubStr(cN,-1) == "*") .and. (z>1))
+            ASSIGN cN := SubStr(cN,1,--z)
+        End While
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
+        ASSIGN cN := otBigW:ExactValue()
+        otBigW:SetValue(otBigW:rMult("3.555"))
+        __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+otBigW:ExactValue())
+		ASSIGN cW    := otBigW:Rnd(nACC_SET):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:NoRnd(__SETDEC__):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
+		ASSIGN cW    := otBigW:Rnd(__SETDEC__):ExactValue()
+		__ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
+		__oRTime2:Calcule()
+    	__oRTime1:Calcule()
+		__ConOut(fhLog,__cSep)
+		__ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
+    	__ConOut(fhLog,__cSep)
+    Next x
+	__ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
+	__ConOut(fhLog,__cSep)   
+
+    __ConOut(fhLog,"")
+    
+    __ConOut(fhLog," ------------ MULT Teste 6 -------------- END ")
     
     __ConOut(fhLog,"")
 
