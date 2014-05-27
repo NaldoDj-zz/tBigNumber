@@ -83,6 +83,7 @@ Method SetProgress(cProgress,cToken) Class tSProgress
 		cProgress		:= &(cProgress)
 	EndIF
 	IF Empty(self:aMethods)
+		DEFAULT self:aMethods := Array(0)
 		aAdd(self:aMethods,"PROGRESS")
 		aAdd(self:aMethods,"INCREMENT")
 		aAdd(self:aMethods,"DECREMENT")

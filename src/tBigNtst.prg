@@ -152,6 +152,7 @@ User Function tBigNTst()
 	Private lL_ALOG
 	Private aC_OOPROGRESS
 	Private lL_OOPROGRAND
+	Private lL_ROPROGRESS
     IF FindFunction("U_TFINI") //NDJLIB020.PRG    
         otFIni := U_TFINI(cIni)
         IF .NOT.File(cIni)
@@ -175,7 +176,7 @@ User Function tBigNTst()
 			lL_ALOG			:= (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
 			aC_OOPROGRESS   := StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
 			lL_OOPROGRAND	:= (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
-			lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_ROPROGRESS)=="1")			
+			lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")			
 		EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)

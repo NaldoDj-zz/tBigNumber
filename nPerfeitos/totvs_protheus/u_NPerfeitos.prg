@@ -29,6 +29,8 @@
 		#DEFINE _SET_DELETED	11
 	#ENDIF
 	
+	#xtranslate NToS([<prm,...>]) => LTrim(Str([<prm>]))
+	
 	Static __aLockNPFile		AS ARRAY
 	Static __nPMaxNumP			AS NUMBER		VALUE NP_MAXNUMP
 
@@ -79,21 +81,27 @@
 		Local cRDDDefault	AS CHARACTER	VALUE RddSetDefault( @__cNPRDD )
 		
 		Local lIsBlind		AS LOGICAL		VALUE IsBlind()
-		Local bExec			AS BLOCK		VALUE { || NPerfeitos( @lIsBlind , @oProcess ) }
+		Local bExec			AS BLOCK
 		
 		Local oProcess		AS OBJECT
+		Local oFont 		AS OBJECT
 	
 		PTInternal( 1 , "[NP][U_NPerfeitos][Start]" )
 	
 		IF ( lIsBlind )
+			ASSIGN bExec	:= {||NPerfeitos(@lIsBlind,@oProcess)}
 			Eval( bExec )
 		Else
+			ASSIGN bExec	:= {|lEnd,oProcess|ProcRedefine(@oProcess,@oFont,0,400,400,.T.,.T.),NPerfeitos(@lIsBlind,@oProcess)}
+			ASSIGN oFont 	:= TFont():New("Lucida Console",NIL,14,NIL,.T.)
 			ASSIGN oProcess	:= MsNewProcess():New( bExec , OemToAnsi( "Números Perfeitos :: http://www.blacktdn.com.br" ) , "Calculando..." , .T. )
 			oProcess:Activate()
 			IF .NOT.( oProcess:lEnd )
 				oProcess:oDlg:End()
 			EndIF
-			oProcess	:= NIL
+			IF ValType(oProcess)=="O"
+				oProcess := FreeObj(oProcess)	
+			EndIF
 		EndIF
 	    
 		aEval( __aLockNPFile , { |e| UnLockNPFile( e[1] ) } )
@@ -121,7 +129,10 @@
 		Local cNP			AS CHARACTER	VALUE NP_GRID
 		Local cNG			AS CHARACTER	
 		Local cMG			AS CHARACTER	
-		Local cNS			AS CHARACTER	
+		Local cNS			AS CHARACTER
+		Local cIncRegua		AS CHARACTER	
+    	Local ctPAnim1		AS CHARACTER	VALUE Replicate(Chr(7)+";",25)
+    	Local ctPAnim2		AS CHARACTER	VALUE Replicate(Chr(7)+";",25)
 	
 		Local lGridC		AS LOGICAL
 		Local lGPCall		AS LOGICAL
@@ -143,6 +154,11 @@
 		Local oNP			AS OBJECT CLASS "TBIGNUMBER"
 		Local oN2			AS OBJECT CLASS "TBIGNUMBER"
 		Local oNS			AS OBJECT CLASS "TBIGNUMBER"
+		
+		Local oRTime1		AS OBJECT CLASS "TREMAINING"
+		Local oRTime2		AS OBJECT CLASS "TREMAINING"
+		Local oProgress1	AS OBJECT CLASS "TSPROGRESS"
+		Local oProgress2	AS OBJECT CLASS "TSPROGRESS"
 	
 		Local oGClient		AS OBJECT
 
@@ -197,12 +213,29 @@
 			ASSIGN nSL	:= Len( cNI )
 	
 			IF ( lProcessa )
-				oProcess:SetRegua1( nEL )
+				ASSIGN oProgress1	:= tSProgress():New(ctPAnim1,";")
+				ASSIGN oProgress2	:= tSProgress():New(ctPAnim2,";")
+				ASSIGN oRTime1		:= tRemaining():New(nEL)
+				ASSIGN oRTime2		:= tRemaining():New(nEL)
+				oProcess:SetRegua1(nEL)
+				oProcess:SetRegua2(nEL)
 				ASSIGN nWait := 0
 				While ( ( ++nWait ) <= nSL )
-					oProcess:IncRegua1()
+					ASSIGN cIncRegua := "["+oProgress1:Eval("DISJUNCTION")+"]"
+					ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+					ASSIGN cIncRegua += " | "+"Média"+":["+oRTime1:GetcMediumTime()+"]"
+					oProcess:IncRegua1(cIncRegua)
+					ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"
+					ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
+					ASSIGN cIncRegua += " | "+"Média"+":["+oRTime2:GetcMediumTime()+"]"
+					oProcess:IncRegua2(cIncRegua)
+					oRTime1:Calcule()
+					oRTime2:Calcule()
 				End While
-				oProcess:SetRegua2( 0 )
+				oProcess:SetRegua1(nEL)
+				oProcess:SetRegua2(nEL)
+				oRTime1:SetRemaining(nEL)
+				oRTime2:SetRemaining(nEL)
 			EndIF
 
 			oNI:SetValue( cNI )
@@ -212,7 +245,10 @@
 				IKillApp(.T.)
 
 				IF ( lProcessa )
-					oProcess:IncRegua1()
+					ASSIGN cIncRegua := "["+oProgress1:Eval("DISJUNCTION")+"]"
+					ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+					ASSIGN cIncRegua += " | "+"Média"+":["+oRTime1:GetcMediumTime()+"]"
+					oProcess:IncRegua1(cIncRegua)
 					IF ( oProcess:lEnd )
 						UnLockNPFile( @NP_FILELCK )
 						IKillApp(.T.)
@@ -227,7 +263,10 @@
 					IKillApp(.T.)
 	
 					IF ( lProcessa )
-						oProcess:IncRegua2()
+						ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"
+						ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
+						ASSIGN cIncRegua += " | "+"Média"+":["+oRTime2:GetcMediumTime()+"]"
+						oProcess:IncRegua2(cIncRegua)
 						IF ( oProcess:lEnd )
 							UnLockNPFile( @NP_FILELCK )
 							IKillApp(.T.)
@@ -243,7 +282,7 @@
 						IKillApp(.T.)
 	
 						IF ( lProcessa )
-							oProcess:IncRegua2()
+							oProcess:IncRegua2(cIncRegua)
 							IF ( oProcess:lEnd )
 								UnLockNPFile( @NP_FILELCK )
 								IKillApp(.T.)
@@ -275,7 +314,9 @@
 	
 					IF ( lProcessa )
 						IF( lGPCall )
-							oProcess:IncRegua2( "[Interval]["+aGPCall[1][1]+"|"+aGPCall[Len(aGPCall)][2]+"]" )
+							ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"							
+							ASSIGN cIncRegua += "[Interval]["+aGPCall[1][1]+"|"+aGPCall[Len(aGPCall)][2]+"]"
+							oProcess:IncRegua2(cIncRegua)
 							IF ( oProcess:lEnd )
 								UnLockNPFile( @NP_FILELCK )
 								IKillApp(.T.)
@@ -308,6 +349,10 @@
 							aEval( aGPCall , { |e| U_GMathCall( @e ) } )
 						#ENDIF
 					EndIF
+
+					IF ( lProcessa )
+						oRTime2:Calcule()
+					EndIF
 	
 				End While
 
@@ -319,6 +364,10 @@
 						ASSIGN cNI := oNI:Int()
 						ASSIGN nSL	:= Len( cNI )
 					EndIF	
+				EndIF
+
+				IF ( lProcessa )
+					oRTime1:Calcule()
 				EndIF
 
 			Next nBL
@@ -514,7 +563,7 @@
 
 		ASSIGN cIP			:= StrTran( IF( lGridC , GetPvProfString( "GRIDAGENT" , "AGENTIP" , "" , GetSrvIniName() ) , GetServerIP() ) , "." , "" )
 		ASSIGN cPort		:= GetPvProfString( "TCP" , "PORT" , "" , GetSrvIniName() )
-		ASSIGN cThread		:= AllTrim( Str( ThreadID() ) )
+		ASSIGN cThread		:= NToS( ThreadID() )
 		ASSIGN cEnvServer	:= GetEnvServer()
 		ASSIGN cInterval	:= (cN+"|"+cM)
 		
@@ -539,7 +588,7 @@
 			ASSIGN nNumbers	:= Len( aNumbers )
 			
 			ASSIGN nFinal	:= MIN( nNumbers , NP_THREAD )     
-			ASSIGN nStrZero	:= Len(AllTrim(Str(nFinal)))
+			ASSIGN nStrZero	:= Len(NToS(nFinal))
 
 			For nID := 1 To nFinal
 				IKillApp(.F.)
@@ -1199,8 +1248,8 @@
 				
 				aAdd(;
 						aOrdBagIP , {;
-	 										 "PADL(RTRIM(IP_NUMBER),"+AllTrim(STR(__nPMaxNumP))+")"			,; // 01 - Chave do Indice 
-	 										 &("{||PADL(RTRIM(IP_NUMBER),"+AllTrim(STR(__nPMaxNumP))+")}")	,; // 02 - Chave do Indice 
+	 										 "PADL(RTRIM(IP_NUMBER),"+NToS(__nPMaxNumP)+")"			,; // 01 - Chave do Indice 
+	 										 &("{||PADL(RTRIM(IP_NUMBER),"+NToS(__nPMaxNumP)+")}")	,; // 02 - Chave do Indice 
 	 										 "IP_NUMBER2"													,; // 03 - Nome Fisico do Arquivo de Indice
 	 										 "2"															,; // 04 - Ordem do Indice
 	 										 "IP_NUMBER2"	 										 		 ; // 05 - Apelido do Indice
@@ -1304,8 +1353,8 @@
 			
 				aAdd(;
 						aOrdBagNP , {;
-	 										 "PADL(RTRIM(NP_NUMBER),"+AllTrim(STR(__nPMaxNumP))+")"			,; // 01 - Chave do Indice 
-	 										 &("{||PADL(RTRIM(NP_NUMBER),"+AllTrim(STR(__nPMaxNumP))+")}")	,; // 02 - Chave do Indice 
+	 										 "PADL(RTRIM(NP_NUMBER),"+NToS(__nPMaxNumP)+")"			,; // 01 - Chave do Indice 
+	 										 &("{||PADL(RTRIM(NP_NUMBER),"+NToS(__nPMaxNumP)+")}")	,; // 02 - Chave do Indice 
 	 										 "NP_NUMBER2"													,; // 03 - Nome Fisico do Arquivo de Indice
 	 										 "2"															,; // 04 - Ordem do Indice
 	 										 "NP_NUMBER2"	 										 		 ; // 05 - Apelido do Indice
@@ -1777,4 +1826,57 @@
 
 	Return( lDropped )
 
+	Static Function ProcRedefine(oProcess,oFont,nLeft,nWidth,nCTLFLeft,lODlgF,lODlgW)
+		Local aClassData
+		Local laMeter
+		Local nObj
+		Local nMeter
+		Local nMeters
+		Local lProcRedefine := .F.
+		IF (ValType(oProcess)=="O")
+			aClassData	:= ClassDataArr(oProcess)
+			laMeter		:= (aScan(aClassData,{|e|e[1]=="AMETER"})>0)
+			IF (laMeter)
+				DEFAULT oFont := TFont():New("Lucida Console",NIL,12,NIL,.T.)
+				DEFAULT nLeft 					:= 40
+				DEFAULT nWidth  				:= 95
+				nMeters := Len(oProcess:aMeter)
+				For nMeter := 1 To nMeters
+					For nObj := 1 To 2
+						oProcess:aMeter[nMeter][nObj]:oFont 	:= oFont
+						oProcess:aMeter[nMeter][nObj]:nWidth	+= nWidth
+						oProcess:aMeter[nMeter][nObj]:nLeft 	-= nLeft
+					Next nObj
+				Next nMeter
+			Else
+				DEFAULT oFont := TFont():New("Lucida Console",NIL,18,NIL,.T.)
+				DEFAULT lODlgF 					:= .T.
+				DEFAULT lODlgW 					:= .F. 
+				DEFAULT nLeft 					:= 100	
+				DEFAULT nWidth  				:= 200
+				DEFAULT nCTLFLeft				:= IF(lODlgW,nWidth,nWidth/2)
+				IF (lODlgF)
+					oProcess:oDlg:oFont  		:= oFont
+				EndIF
+				IF (lODlgW)
+					oProcess:oDlg:nWidth 		+= nWidth
+					oProcess:oDlg:nLeft 		-= (nWidth/2)
+				EndIF
+				oProcess:oMsg1:oFont 			:= oFont
+				oProcess:oMsg2:oFont 			:= oFont
+				oProcess:oMsg1:nLeft 			-= nLeft
+				oProcess:oMsg1:nWidth 			+= nWidth
+				oProcess:oMsg2:nLeft 			-= nLeft
+				oProcess:oMsg2:nWidth 			+= nWidth
+				oProcess:oMeter1:nWidth 		+= nWidth
+				oProcess:oMeter1:nLeft 			-= nLeft
+				oProcess:oMeter2:nWidth			+= nWidth    
+				oProcess:oMeter2:nLeft 			-= nLeft
+				oProcess:oDlg:oCTLFocus:nLeft	+= nCTLFLeft
+				oProcess:oDlg:Refresh(.T.)
+			EndIF
+			lProcRedefine := .T.
+		EndIF
+	Return(lProcRedefine)
+	
 #ENDIF

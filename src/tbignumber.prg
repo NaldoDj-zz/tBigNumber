@@ -56,21 +56,13 @@
 
 #ifdef __PROTHEUS__
     static __cEnvSrv
-    #xtranslate hb_bLen([<prm,...>])    => Len([<prm>])
-    #xtranslate tBIGNaLen([<prm,...>])  => Len([<prm>])
-    #xtranslate hb_mutexCreate()        => ThreadID()
-    #xtranslate hb_mutexLock(<p>)       => AllWaysTrue()
-    #xtranslate hb_mutexUnLock(<p>)     => AllWaysTrue()
+    #xtranslate hb_bLen([<prm,...>])    	=> Len([<prm>])
+    #xtranslate tBIGNaLen([<prm,...>])  	=> Len([<prm>])
+    #xtranslate hb_mutexCreate()        	=> ThreadID()
+    #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
+    #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
+	#xtranslate method <methodName> SETGET  => method <methodName>
 #else // __HARBOUR__
-    /* Keeping it tidy */
-    #pragma -w3
-    #pragma -es2
-    /* Optimizations */
-    #pragma -km+
-    #pragma -ko+
-    /* Force HB_MT */
-    #require "hbvmmt"
-    request HB_MT
     #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
     #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
     #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
@@ -78,30 +70,8 @@
     #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
-    #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
+    #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>]) 
 #endif //__PROTHEUS__
-
-#xcommand s__IncS0(<n>);
-=>;
-while <n> > s__nN0;;
-    while .not.(hb_mutexLock(s__MTXcN0));;
-        tBigNSleep(0.001);;
-    end while;;
-    s__cN0+=s__cN0;;
-    s__nN0+=s__nN0;;
-    hb_mutexUnLock(s__MTXcN0);;
-end while;;
-
-#xcommand s__IncS9(<n>);
-=>;
-while <n> > s__nN9;;
-    while .not.(hb_mutexLock(s__MTXcN9));;
-        tBigNSleep(0.001);;
-    end while;;
-    s__cN9+=s__cN9;;
-    s__nN9+=s__nN9;;
-    hb_mutexUnLock(s__MTXcN9);;
-end while;;
 
 #ifndef __DIVMETHOD__
     #define __DIVMETHOD__ 1
@@ -125,10 +95,10 @@ static s__nMinLCM
 
 static s__lstbNSet
 
-static s__nDivMeth
+static s__nDivMTD
 
-static s__nthRootAcc
-static s__nDecimalSet
+static s__nthRAcc
+static s__nDecSet
 
 static s__MTXcN0:=hb_mutexCreate()
 static s__MTXcN9:=hb_mutexCreate()
@@ -172,7 +142,7 @@ thread static ths_mtN2
 thread static ths_dvNR
 thread static ths_dvN1
 thread static ths_dvN2
-thread static ths_dvRDiv    
+thread static ths_dvRD    
 
 thread static ths_pwA
 thread static ths_pwB
@@ -183,13 +153,12 @@ thread static ths_pwGCD
 
 #ifdef __PTCOMPAT__
 thread static ths_eDivN
-thread static ths_eDivD
 #endif //__PTCOMPAT__
 thread static ths_eDivR
 thread static ths_eDivQ 
 #ifdef __PTCOMPAT__
-thread static ths_eDivDvQ
-thread static ths_eDivDvR
+thread static ths_eDivQ
+thread static ths_eDivR
 #endif //__PTCOMPAT__
 
 thread static ths_SysSQRT
@@ -198,7 +167,6 @@ thread static ths_lsdSet
 
 thread static ths_ibtwS
 thread static ths_ibtwE
-
 
 #define RANDOM_MAX_EXIT 5
 #define EXIT_MAX_RANDOM 50
@@ -237,7 +205,11 @@ thread static ths_ibtwE
     Descricao   : Instancia um novo objeto do tipo BigNumber
     Sintaxe     : tBigNumber():New(uBigN) -> self
 */
-class tBigNumber
+#ifdef __PROTHEUS__ 
+class tBigNumber from LongClassName
+#else //__HARBOUR__
+class tBigNumber from hbClass
+#endif //__PROTHEUS__
 
 #ifndef __PROTHEUS__
     #ifndef __TBN_DYN_OBJ_SET__
@@ -309,22 +281,46 @@ class tBigNumber
     method Min(uBigN)
     
     method Add(uBigN)
-    method Plus(uBigN) INLINE self:Add(uBigN)    
+#ifndef __PROTHEUS__
+    method Plus(uBigN) INLINE self:Add(uBigN)
+#else
+	method Plus(uBigN)
+#endif        
 
     method Sub(uBigN)
+#ifndef __PROTHEUS__    
     method Minus(uBigN) INLINE self:Sub(uBigN)
+#else
+	method Minus(uBigN)
+#endif    
     
     method Mult(uBigN)
+#ifndef __PROTHEUS__    
     method Multiply(uBigN) INLINE self:Mult(uBigN)
+#else
+	method Multiply(uBigN)
+#endif   
     
     method egMult(uBigN)
+#ifndef __PROTHEUS__    
     method egMultiply(uBigN) INLINE self:egMult(uBigN)
+#else
+	method egMultiply(uBigN)
+#endif    
 
     method rMult(uBigN)
+#ifndef __PROTHEUS__    
     method rMultiply(uBigN) INLINE self:rMult(uBigN)
+#else
+	method rMultiply(uBigN)
+#endif    
     
     method Div(uBigN,lFloat)
+#ifndef __PROTHEUS__
     method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
+#else
+	method Divide(uBigN,lFloat)
+#endif    
     method Divmethod(nmethod)
     
     method Mod(uBigN)
@@ -551,6 +547,26 @@ endclass
     static function __OpAssign(oSelf,uBigN,nBase,cRDiv,lLZRmv,nAcc)
     return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
 
+#else //INLINE HARBOUR METHODS
+
+    method Plus(uBigN) class tBigNumber
+	return(self:Add(uBigN))
+ 
+    method Minus(uBigN) class tBigNumber
+    return(self:Sub(uBigN))
+    
+    method Multiply(uBigN)  class tBigNumber
+    return(self:Mult(uBigN))    
+   
+    method egMultiply(uBigN) class tBigNumber
+	return(self:egMult(uBigN))
+	
+    method rMultiply(uBigN) class tBigNumber
+	return(self:rMult(uBigN))
+    
+    method Divide(uBigN,lFloat) class tBigNumber
+	return(self:Div(uBigN,lFloat))
+
 #endif //__PROTHEUS__
 
 /*
@@ -577,11 +593,11 @@ method New(uBigN,nBase) class tBigNumber
     DEFAULT nBase:=10    
     self:nBase:=nBase
 
-    if s__nDecimalSet==NIL
+    if s__nDecSet==NIL
         self:SetDecimals()
     endif    
 
-    if s__nthRootAcc==NIL
+    if s__nthRAcc==NIL
         self:nthRootAcc()
     endif
     
@@ -851,17 +867,17 @@ method SetDecimals(nSet) class tBigNumber
         tBigNSleep(0.001)
     end while
     
-    nLastSet:=s__nDecimalSet
+    nLastSet:=s__nDecSet
 
-    DEFAULT s__nDecimalSet:=if(nSet==NIL,32,nSet)
-    DEFAULT nSet :=s__nDecimalSet
+    DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
+    DEFAULT nSet :=s__nDecSet
     DEFAULT nLastSet:=nSet
 
     if nSet>MAX_DECIMAL_PRECISION
         nSet:=MAX_DECIMAL_PRECISION
     endif
 
-    s__nDecimalSet:=nSet
+    s__nDecSet:=nSet
 
     hb_mutexUnLock(s__MTXDEC)
     
@@ -884,17 +900,17 @@ method nthRootAcc(nSet) class tBigNumber
         tBigNSleep(0.001)
     end while
     
-    nLastSet:=s__nthRootAcc
+    nLastSet:=s__nthRAcc
 
-    DEFAULT s__nthRootAcc:=if(nSet==NIL,6,nSet)
-    DEFAULT nSet:=s__nthRootAcc
+    DEFAULT s__nthRAcc:=if(nSet==NIL,6,nSet)
+    DEFAULT nSet:=s__nthRAcc
     DEFAULT nLastSet:=nSet
 
     if nSet>MAX_DECIMAL_PRECISION
         nSet:=MAX_DECIMAL_PRECISION
     endif
 
-    s__nthRootAcc:=Min(self:SetDecimals()-1,nSet)
+    s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
     
     hb_mutexUnLock(s__MTXACC)
 
@@ -1066,7 +1082,7 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
         end while
     endif
 
-    DEFAULT nAcc:=s__nDecimalSet
+    DEFAULT nAcc:=s__nDecSet
     if self:nDec>nAcc
         self:nDec:=nAcc
         self:cDec:=Left(self:cDec,self:nDec)
@@ -1818,7 +1834,7 @@ method Div(uBigN,lFloat) class tBigNumber
     local lNeg1 
     local lNeg2
     
-    local nAcc:=s__nDecimalSet
+    local nAcc:=s__nDecSet
     local nDec
     
     begin sequence
@@ -1856,7 +1872,7 @@ method Div(uBigN,lFloat) class tBigNumber
         cN2:=ths_dvN2:cInt
         cN2+=ths_dvN2:cDec
 
-        if s__nDivMeth==2
+        if s__nDivMTD==2
             ths_dvNR:SetValue(ecDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
         Else
             ths_dvNR:SetValue(egDiv(cN1,cN2,ths_dvN1:nSize,ths_dvN1:nBase,nAcc,lFloat))
@@ -1864,56 +1880,56 @@ method Div(uBigN,lFloat) class tBigNumber
 
         if lFloat
 
-            ths_dvRDiv:SetValue(ths_dvNR:cRDiv,NIL,NIL,.F.)
+            ths_dvRD:SetValue(ths_dvNR:cRDiv,NIL,NIL,.F.)
         
-            if ths_dvRDiv:gt(s__o0)
+            if ths_dvRD:gt(s__o0)
     
                 cDec:=""
         
                 ths_dvN2:SetValue(cN2)
         
-                while ths_dvRDiv:lt(ths_dvN2)
-                    ths_dvRDiv:cInt+="0"
-                    ths_dvRDiv:nInt++
-                    ths_dvRDiv:nSize++
-                    if ths_dvRDiv:lt(ths_dvN2)
+                while ths_dvRD:lt(ths_dvN2)
+                    ths_dvRD:cInt+="0"
+                    ths_dvRD:nInt++
+                    ths_dvRD:nSize++
+                    if ths_dvRD:lt(ths_dvN2)
                         cDec+="0"
                     endif
                 end while
         
-                while ths_dvRDiv:gte(ths_dvN2)
+                while ths_dvRD:gte(ths_dvN2)
                     
-                    ths_dvRDiv:Normalize(@ths_dvN2)
+                    ths_dvRD:Normalize(@ths_dvN2)
             
-                    cN1:=ths_dvRDiv:cInt
-                    cN1+=ths_dvRDiv:cDec
+                    cN1:=ths_dvRD:cInt
+                    cN1+=ths_dvRD:cDec
         
                     cN2:=ths_dvN2:cInt
                     cN2+=ths_dvN2:cDec
 
-                    if s__nDivMeth==2
-                        ths_dvRDiv:SetValue(ecDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
+                    if s__nDivMTD==2
+                        ths_dvRD:SetValue(ecDiv(cN1,cN2,ths_dvRD:nSize,ths_dvRD:nBase,nAcc,lFloat))
                     Else
-                        ths_dvRDiv:SetValue(egDiv(cN1,cN2,ths_dvRDiv:nSize,ths_dvRDiv:nBase,nAcc,lFloat))
+                        ths_dvRD:SetValue(egDiv(cN1,cN2,ths_dvRD:nSize,ths_dvRD:nBase,nAcc,lFloat))
                     endif
 
-                    cDec+=ths_dvRDiv:ExactValue(.T.)
+                    cDec+=ths_dvRD:ExactValue(.T.)
                     nDec:=hb_bLen(cDec)
         
-                    ths_dvRDiv:SetValue(ths_dvRDiv:cRDiv,NIL,NIL,.F.)
-                    ths_dvRDiv:SetValue(ths_dvRDiv:ExactValue(.T.))
+                    ths_dvRD:SetValue(ths_dvRD:cRDiv,NIL,NIL,.F.)
+                    ths_dvRD:SetValue(ths_dvRD:ExactValue(.T.))
 
-                    if ths_dvRDiv:eq(s__o0) .or. nDec>=nAcc
+                    if ths_dvRD:eq(s__o0) .or. nDec>=nAcc
                         exit
                     endif
         
                     ths_dvN2:SetValue(cN2)        
                     
-                    while ths_dvRDiv:lt(ths_dvN2)
-                        ths_dvRDiv:cInt+="0"
-                        ths_dvRDiv:nInt++
-                        ths_dvRDiv:nSize++
-                        if ths_dvRDiv:lt(ths_dvN2)
+                    while ths_dvRD:lt(ths_dvN2)
+                        ths_dvRD:cInt+="0"
+                        ths_dvRD:nInt++
+                        ths_dvRD:nSize++
+                        if ths_dvRD:lt(ths_dvN2)
                             cDec+="0"
                         endif
                     end while
@@ -1924,7 +1940,7 @@ method Div(uBigN,lFloat) class tBigNumber
                 cNR+="."
                 cNR+=Left(cDec,nAcc)
         
-                ths_dvNR:SetValue(cNR,NIL,ths_dvRDiv:ExactValue(.T.))
+                ths_dvNR:SetValue(cNR,NIL,ths_dvRD:ExactValue(.T.))
     
             endif
     
@@ -1947,10 +1963,10 @@ return(ths_dvNR:Clone())
 */
 method Divmethod(nmethod) class tBigNumber
     local nLstmethod
-    DEFAULT s__nDivMeth:= __DIVMETHOD__
-    DEFAULT nmethod:= s__nDivMeth
-    nLstmethod:= s__nDivMeth
-    s__nDivMeth:=nmethod
+    DEFAULT s__nDivMTD:= __DIVMETHOD__
+    DEFAULT nmethod:= s__nDivMTD
+    nLstmethod:= s__nDivMTD
+    s__nDivMTD:=nmethod
 return(nLstmethod)
 
 /*
@@ -2443,13 +2459,13 @@ method nthRoot(uBigN) class tBigNumber
             break
         endif
 
-        nZS:=s__nthRootAcc-1
+        nZS:=s__nthRAcc-1
         s__IncS0(nZS)
         
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
         oFExit:=s__o0:Clone()
-        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRootAcc)
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRAcc)
 
         othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit))
 
@@ -2518,13 +2534,13 @@ method nthRootPF(uBigN) class tBigNumber
         
         oRootT:=s__o0:Clone()
 
-        nZS:=s__nthRootAcc-1
+        nZS:=s__nthRAcc-1
         s__IncS0(nZS)
     
         cFExit:="0."+Left(s__cN0,nZS)+"1"
             
         oFExit:=s__o0:Clone()
-        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRootAcc)
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRAcc)
 
         lDec:=oRootB:Dec(.T.):gt(s__o0)
         
@@ -2779,11 +2795,11 @@ return(self:Log(s__o1:Exp()))
 method aLog(uBigNB) class tBigNumber
     local oaLog:=tBigNumber():New(uBigNB)
     local EPS:=s__o0:Clone() 
-    local n:=s__nthRootAcc-1
+    local n:=s__nthRAcc-1
     local s
     s__IncS0(n)
     s:="0."+Left(s__cN0,n)+"1"
-    EPS:SetValue(s,NIL,NIL,NIL,s__nthRootAcc)
+    EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
 return(__Pow(oaLog,self,EPS))
 
 /*
@@ -2852,7 +2868,7 @@ method Rnd(nAcc) class tBigNumber
     local cAdd
     local cAcc
 
-    DEFAULT nAcc:=Max((Min(oRnd:nDec,s__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oRnd:nDec,s__nDecSet)-1),0)
 
     if .not.(oRnd:eq(s__o0))
         cAcc:=SubStr(oRnd:cDec,nAcc+1,1)
@@ -2890,7 +2906,7 @@ return(self:Truncate(nAcc))
 method Floor(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
     local oFloor:=self:Clone()
-    DEFAULT nAcc:=Max((Min(oFloor:nDec,s__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oFloor:nDec,s__nDecSet)-1),0)
     oFloor:SetValue(oFloor:Rnd(nAcc):Int(.T.,.T.))
     oFloor:SetValue(oFloor:Min(oInt))
 return(oFloor)
@@ -2905,7 +2921,7 @@ return(oFloor)
 method Ceiling(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
     local oCeiling:=self:Clone()
-    DEFAULT nAcc:=Max((Min(oCeiling:nDec,s__nDecimalSet)-1),0)
+    DEFAULT nAcc:=Max((Min(oCeiling:nDec,s__nDecSet)-1),0)
     oCeiling:SetValue(oCeiling:Rnd(nAcc):Int(.T.,.T.))
     oCeiling:SetValue(oCeiling:Max(oInt))
 return(oCeiling)
@@ -2923,7 +2939,7 @@ method Truncate(nAcc) class tBigNumber
     local cDec:=oTrc:cDec
 
     if .not.(s__o0:eq(cDec))
-        DEFAULT nAcc:=Min(oTrc:nDec,s__nDecimalSet)
+        DEFAULT nAcc:=Min(oTrc:nDec,s__nDecSet)
         cDec:=Left(cDec,nAcc)
         oTrc:SetValue(oTrc:cInt+"."+cDec)
     endif
@@ -3962,22 +3978,25 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
     
 #ifdef __PTCOMPAT__
  
-    SYMBOL_UNUSED( nSize )
+    SYMBOL_UNUSED(nSize)
 
     ths_eDivN:SetValue(cN,nBase,NIL,NIL,nAcc)
-    ths_eDivD:SetValue(cD,nBase,NIL,NIL,nAcc)
-    ths_eDivR:SetValue(s__o0,nBase,"0",NIL,nAcc)
-    ths_eDivQ:SetValue(s__o0,nBase,"0",NIL,nAcc)
+    ths_eDivQ:SetValue(s__o1)
+    ths_eDivR:SetValue(cD,nBase,NIL,NIL,nAcc)
 
-    ths_eDivDvQ:SetValue(s__o1)
-    ths_eDivDvR:SetValue(ths_eDivD)
-
-    while ths_eDivDvR:lte(ths_eDivN)
+    while .T.
         ++nI
-        aAdd(aeDV,{ths_eDivDvQ:Int(.F.,.F.),ths_eDivDvR:Int(.F.,.F.)})
-        ths_eDivDvQ:SetValue(ths_eDivDvQ:Add(ths_eDivDvQ),nBase,"0",NIL,nAcc)
-        ths_eDivDvR:SetValue(ths_eDivDvR:Add(ths_eDivDvR),nBase,"0",NIL,nAcc)
+        aAdd(aeDV,{ths_eDivQ:Int(.F.,.F.),ths_eDivR:Int(.F.,.F.)})
+        ths_eDivQ:SetValue(ths_eDivQ:Add(ths_eDivQ),nBase,"0",NIL,nAcc)
+        ths_eDivR:SetValue(ths_eDivR:Add(ths_eDivR),nBase,"0",NIL,nAcc)
+    	nCmp:=ths_eDivR:cmp(ths_eDivN)
+    	if nCmp==1
+    		exit
+    	endif
     end while
+    
+    ths_eDivQ:SetValue(s__o0)
+    ths_eDivR:SetValue(s__o0)
 
     while nI>0
         ths_eDivQ:SetValue(ths_eDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
@@ -3991,6 +4010,8 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
         endif
         --nI
     end while
+    
+    aSize(aeDV,0)
 
     ths_eDivR:SetValue(ths_eDivN:Sub(ths_eDivR),nBase,"0",NIL,nAcc)
 
@@ -4057,7 +4078,7 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
    
 #ifdef __PTCOMPAT__   
    
-   SYMBOL_UNUSED( nSize )
+   SYMBOL_UNUSED(nSize)
 
    while r:gte(b)
       aux:SetValue(b:Mult(n))
@@ -4197,11 +4218,11 @@ static function __SQRT(p)
     if q:lte(q:SysSQRT())
         r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
     Else
-        n:=s__nthRootAcc-1
+        n:=s__nthRAcc-1
         s__IncS0(n)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
-        EPS:SetValue(s,NIL,NIL,NIL,s__nthRootAcc)
+        EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
         r:=q:Mult(s__od2)
         t:=r:Pow(s__o2):Sub(q):Abs(.T.)
         l:=s__o0:Clone()
@@ -4972,7 +4993,7 @@ return(r)
                 endif
             
             return(s)
-        #endif __PTCOMPAT__
+        #endif //__PTCOMPAT__
     
     #endif
 
@@ -5110,7 +5131,7 @@ static procedure __Initsthd(nBase)
     ths_dvNR:=oTBigN:Clone()
     ths_dvN1:=oTBigN:Clone()
     ths_dvN2:=oTBigN:Clone()
-    ths_dvRDiv:=oTBigN:Clone()
+    ths_dvRD:=oTBigN:Clone()
 
     ths_pwA:=oTBigN:Clone()
     ths_pwB:=oTBigN:Clone()
@@ -5124,13 +5145,12 @@ static procedure __Initsthd(nBase)
     
 #ifdef __PTCOMPAT__
     ths_eDivN:=oTBigN:Clone()
-    ths_eDivD:=oTBigN:Clone()
 #endif //__PTCOMPAT__
     ths_eDivR:=oTBigN:Clone()
     ths_eDivQ:=oTBigN:Clone()
 #ifdef __PTCOMPAT__
-    ths_eDivDvQ:=oTBigN:Clone()
-    ths_eDivDvR:=oTBigN:Clone()
+    ths_eDivQ:=oTBigN:Clone()
+    ths_eDivR:=oTBigN:Clone()
 #endif //__PTCOMPAT__
 
     ths_SysSQRT:=oTBigN:Clone()
@@ -5171,6 +5191,29 @@ static procedure tBigNSleep(nSleep)
        	end while
     #endif   
 Return
+
+static procedure s__IncS0(n)
+	while n>s__nN0
+	    while .not.(hb_mutexLock(s__MTXcN0))
+	        tBigNSleep(0.001)
+	    end while
+	    s__cN0+=s__cN0
+	    s__nN0+=s__nN0
+	    hb_mutexUnLock(s__MTXcN0)
+	end while
+return	
+
+static procedure s__IncS9(n)
+	while n>s__nN9
+	    while .not.(hb_mutexLock(s__MTXcN9))
+	        tBigNSleep(0.001)
+	    end while
+	    s__cN9+=s__cN9
+	    s__nN9+=s__nN9
+	    hb_mutexUnLock(s__MTXcN9)
+	end while
+return    
+
 
 #ifdef __PROTHEUS__
 
@@ -5227,985 +5270,5 @@ Return
 #endif //__PROTHEUS__
 
 #ifdef __HARBOUR__
-
-    #pragma BEGINDUMP
-
-        #include <stdio.h>
-        #include <string.h>
-        #include <hbapi.h>
-        #include <hbdefs.h>
-        #include <hbstack.h>
-        #include <hbapiitm.h>
-        
-        typedef struct{
-            char * cMultM;
-            char * cMultP;
-        } stBIGNeMult, * ptBIGNeMult;
-        
-        typedef struct{
-            char * cDivQ;
-            char * cDivR;
-        } stBIGNeDiv, * ptBIGNeDiv;
-
-        static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes);
-        static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad);
-        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad);
-        static char * tBIGNReverse(const char * szF,const HB_SIZE s);
-        static char * tBIGNAdd(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);
-        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB);
-        static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);        
-        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB); 
-        static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB);
-        static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult);        
-        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB);
-        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB);
-        static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv);        
-        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv);        
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v);
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y);
-        static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
-
-        static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
-            HB_SIZE nLen    = strlen(szText);       
-            HB_ISIZ nRLen   = (nLen*nTimes);
-            char * szResult = (char*)hb_xgrab(nRLen+1);
-            char * szPtr    = szResult;
-            HB_ISIZ n;
-            for(n=0;n<nTimes;++n)
-            {
-                hb_xmemcpy(szPtr,szText,nLen);
-                szPtr+=nLen;
-            }
-            return szResult;
-        }
-
-        static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad){
-            int itmLen = strlen(szItem);
-            int padLen = nLen-itmLen;
-            char * pbuffer;
-            if((padLen)>0){
-                if(szPad==NULL){szPad="0";}
-                char *padding  = TBIGNReplicate(szPad,nLen); 
-                pbuffer = (char*)hb_xgrab(nLen+1);
-                sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
-                hb_xfree(padding);
-            }else{
-                pbuffer = hb_strdup(szItem);
-            }
-            return pbuffer;
-        }
-
-        HB_FUNC_STATIC( TBIGNPADL ){      
-            const char * szItem = hb_parc(1);
-            HB_ISIZ nLen        = hb_parns(2);
-            const char * szPad  = hb_parc(3);
-            char * szRet        = tBIGNPadL(szItem,nLen,szPad);
-            hb_retclen(szRet,(HB_SIZE)nLen);
-            hb_xfree(szRet);
-        }
-
-        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad){    
-            int itmLen = strlen(szItem);
-            int padLen = nLen-itmLen;
-            char * pbuffer;
-            if((padLen)>0){
-                if(szPad==NULL){szPad="0";}
-                char *padding  = TBIGNReplicate(szPad,nLen); 
-                pbuffer = (char*)hb_xgrab(nLen+1);
-                sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
-                hb_xfree(padding);
-            }else{
-                pbuffer = hb_strdup(szItem);
-            }
-            return pbuffer;
-        }
-       
-        HB_FUNC_STATIC( TBIGNPADR ){
-            const char * szItem = hb_parc(1);
-            HB_ISIZ nLen        = hb_parns(2);
-            const char * szPad  = hb_parc(3);
-            char * szRet        = tBIGNPadR(szItem,nLen,szPad);
-            hb_retclen(szRet,(HB_SIZE)nLen);
-            hb_xfree(szRet);
-        }
-
-        static char * tBIGNReverse(const char * szF,const HB_SIZE s){
-            HB_SIZE f  = s;
-            HB_SIZE t  = 0;
-            char * szT = (char*)hb_xgrab(s+1);
-            for(;f;){
-                szT[t++]=szF[--f];
-            }
-            szT[t]=szF[t];
-            return szT;
-        }
-
-        HB_FUNC_STATIC( TBIGNREVERSE ){
-            const char * szF = hb_parc(1);
-            const HB_SIZE s  = (HB_SIZE)hb_parnint(2);
-            char * szR       = tBIGNReverse(szF,s);
-            hb_retclen(szR,s);
-            hb_xfree(szR);
-        }
-
-        static char * tBIGNAdd(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){    
-            char * c         = (char*)hb_xgrab(y+1);
-            HB_SIZE k        = y-1;
-            HB_MAXUINT v     = 0;
-            HB_MAXUINT v1;
-            while (--n>=0){
-                v+=(*(&a[n])-'0')+(*(&b[n])-'0');
-                if ( v>=nB ){
-                    v  -= nB;
-                    v1 = 1;
-                }    
-                else{
-                    v1 = 0;
-                }
-                c[k]   = "0123456789"[v];
-                c[k-1] = "0123456789"[v1];
-                v = v1;
-                --k;
-            }
-            return c;
-        }
-
-        HB_FUNC_STATIC( TBIGNADD ){    
-            const char * a      = hb_parc(1);
-            const char * b      = hb_parc(2);
-            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
-            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)+1);
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-            char * szRet        = tBIGNAdd(a,b,(int)n,y,nB);
-            hb_retclen(szRet,y);
-            hb_xfree(szRet);
-        }
-        
-        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB){
-            HB_BOOL bAdd  = HB_TRUE;
-            HB_MAXUINT v;
-            HB_MAXUINT v1 = 0;
-            int i         = isN;
-            while(--i>=0){
-                v = (*(&sN[i])-'0');
-                if (bAdd){
-                    v    += a;
-                    bAdd =  HB_FALSE;
-                }    
-                v += v1;
-                if ( v>=nB ){
-                    v  -= nB;
-                    v1 = 1;
-                }    
-                else{
-                    v1 = 0;
-                }
-                sN[i] = "0123456789"[v];
-                if (v1==0){
-                    break;
-                }
-            }
-            return sN;
-        }
-        
-        HB_FUNC_STATIC( TBIGNIADD ){
-            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
-            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
-            HB_MAXUINT a        = (HB_MAXUINT)hb_parnint(2);
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
-            hb_xfree(szRet);
-        }
-        
-        HB_FUNC_STATIC( TBIGNLADD ){
-            hb_retnint((HB_MAXUINT)hb_parnint(1)+(HB_MAXUINT)hb_parnint(2));
-        }
-   
-        static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){
-            char * c      = (char*)hb_xgrab(y+1);
-            HB_SIZE k     = y-1;
-            int v         = 0;
-            int v1;
-            while (--n>=0){
-                v+=(*(&a[n])-'0')-(*(&b[n])-'0');
-                if ( v<0 ){
-                    v+=nB;
-                    v1 = -1;
-                }    
-                else{
-                    v1 = 0;
-                }
-                c[k]   = "0123456789"[v];
-                c[k-1] = "0123456789"[v1];
-                v = v1;
-                --k;
-            }
-            return c;
-        }
-
-        HB_FUNC_STATIC( TBIGNSUB ){    
-            const char * a      = hb_parc(1);
-            const char * b      = hb_parc(2);
-            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
-            const HB_SIZE y     = n;
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
-            char * szRet        = tBIGNSub(a,b,(int)n,y,nB);
-            hb_retclen(szRet,y);
-            hb_xfree(szRet);
-        }
-        
-        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB){
-            HB_BOOL bSub  = HB_TRUE;
-            int v;
-            int v1        = 0;
-            int i         = isN;
-            while(--i>=0){
-                v = (*(&sN[i])-'0');
-                if (bSub){
-                    v    -= s;
-                    bSub =  HB_FALSE;
-                }                
-                v += v1;
-                if ( v<0 ){
-                    v+=nB;
-                    v1 = -1;
-                }    
-                else{
-                    v1 = 0;
-                }
-                sN[i] = "0123456789"[v];
-                if (v1==0){
-                    break;
-                }
-            }
-            return sN;
-        }
-        
-        HB_FUNC_STATIC( TBIGNISUB ){
-            HB_SIZE n           = (HB_SIZE)(hb_parclen(1));
-            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
-            int s               = (HB_MAXUINT)hb_parnint(2);
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiSUB(szRet,s,(int)n,nB),n);
-            hb_xfree(szRet);
-        }
-        
-        HB_FUNC_STATIC( TBIGNLSUB ){
-            hb_retnint((HB_MAXUINT)hb_parnint(1)-(HB_MAXUINT)hb_parnint(2));
-        }
- 
-        static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
-            
-            char * c     = (char*)hb_xgrab(y+1);
-            
-            HB_SIZE i    = 0;
-            HB_SIZE k    = 0;
-            HB_SIZE l    = 1;
-            HB_SIZE s;
-            HB_SIZE j;
-            
-            HB_MAXUINT v = 0;
-            HB_MAXUINT v1;
-            
-            n-=1;
-            
-            while (i<=n){
-                s = 0;
-                j = i;
-                while (s<=i){
-                    v+=(*(&a[s++])-'0')*(*(&b[j--])-'0');
-                }
-                if (v>=nB){
-                    v1 = v/nB;
-                    v %= nB;
-               }else{
-                    v1 = 0;
-                 };
-                c[k]   = "0123456789"[v];
-                c[k+1] = "0123456789"[v1];
-                v = v1;
-                k++;
-                i++;
-            }
-        
-            while (l<=n){
-                s = n;
-                j = l;
-                while (s>=l){
-                    v+=(*(&a[s--])-'0')*(*(&b[j++])-'0');
-                }
-                if (v>=nB){
-                    v1 = v/nB;
-                    v %= nB;
-                }else{
-                    v1     = 0;                    
-                }
-                c[k]   = "0123456789"[v];
-                c[k+1] = "0123456789"[v1];
-                v = v1;
-                if (++k>=y){
-                    break;
-                }
-                l++;
-            }        
-            
-            char * r = tBIGNReverse(c,y);
-            hb_xfree(c);
-    
-            return r;
-        }
-    
-        HB_FUNC_STATIC( TBIGNMULT ){
-            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
-            char * a            = tBIGNReverse(hb_parc(1),n);
-            char * b            = tBIGNReverse(hb_parc(2),n);
-            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)*2);
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-            char * szRet        = tBIGNMult(a,b,n,y,nB);
-            hb_retclen(szRet,y);
-            hb_xfree(a);
-            hb_xfree(b);
-            hb_xfree(szRet);
-        }
-
-        static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult){
-    
-            HB_MAXUINT szptBIGNeMult = sizeof(ptBIGNeMult*);
-            HB_MAXUINT szstBIGNeMult = sizeof(stBIGNeMult);            
-            
-            ptBIGNeMult *peMTArr     = (ptBIGNeMult*)hb_xgrab(szptBIGNeMult);        
-            ptBIGNeMult pegMultTmp   = (ptBIGNeMult)hb_xgrab(szstBIGNeMult);
-            
-            char * Tmp               = tBIGNPadL("1",n,"0");
-            pegMultTmp->cMultM       = hb_strdup(Tmp);
-            hb_xfree(Tmp);
-            
-            pegMultTmp->cMultP       = hb_strdup(pD);
-    
-            Tmp                      = tBIGNPadL("0",n,"0");
-            pegMult->cMultM          = hb_strdup(Tmp);
-            pegMult->cMultP          = hb_strdup(Tmp);
-            hb_xfree(Tmp);
-            
-            int nI                   = 0;
-
-            do {
-            
-                peMTArr     = (ptBIGNeMult*)hb_xrealloc(peMTArr,(nI+1)*szptBIGNeMult);
-                peMTArr[nI] = (ptBIGNeMult)hb_xgrab(szstBIGNeMult);
-                
-                peMTArr[nI]->cMultM = hb_strdup(pegMultTmp->cMultM);
-                peMTArr[nI]->cMultP = hb_strdup(pegMultTmp->cMultP);  
-
-                char * tmp = tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
-                hb_xmemcpy(pegMultTmp->cMultM,tmp,n);
-                hb_xfree(tmp);
-                    
-                tmp        = tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
-                hb_xmemcpy(pegMultTmp->cMultP,tmp,n);
-                hb_xfree(tmp);
-                
-                if (memcmp(pegMultTmp->cMultM,pN,n)==1){
-                    break;
-                }
-                
-                ++nI;
-
-            } while (HB_TRUE);
-            
-            hb_xfree(pegMultTmp->cMultM);
-            hb_xfree(pegMultTmp->cMultP);
-            
-            int nF = nI;
-
-            do {
-               
-                pegMultTmp->cMultM = tBIGNAdd(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
-                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
-                hb_xfree(pegMultTmp->cMultM);
-    
-                pegMultTmp->cMultP = tBIGNAdd(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
-                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
-                hb_xfree(pegMultTmp->cMultP);
-                
-                int iCmp = memcmp(pegMult->cMultM,pN,n);
-
-                if (iCmp==0){
-                    break;
-                } else{
-                        if (iCmp==1){
-    
-                            pegMultTmp->cMultM = tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
-                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
-                            hb_xfree(pegMultTmp->cMultM);
-    
-                            pegMultTmp->cMultP = tBIGNSub(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
-                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
-                            hb_xfree(pegMultTmp->cMultP);
-    
-                    }
-                }  
-                
-            } while (--nI>=0);
-            
-            for(nI=nF;nI>=0;nI--){
-                hb_xfree(peMTArr[nI]->cMultM);
-                hb_xfree(peMTArr[nI]->cMultP);
-                hb_xfree(peMTArr[nI]);
-            }
-            hb_xfree(peMTArr);
-            peMTArr = NULL;
-
-            hb_xfree(pegMultTmp);
-                
-        }
-        
-        HB_FUNC_STATIC( TBIGNEGMULT ){
-            
-            HB_SIZE n           = (HB_SIZE)(hb_parnint(3)*2);            
-            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
-            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
-            
-            ptBIGNeMult pegMult = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
-            
-            tBIGNegMult(pN,pD,(int)n,nB,pegMult);
-        
-            hb_retclen(pegMult->cMultP,n);
-
-            hb_xfree(pN);
-            hb_xfree(pD);
-            hb_xfree(pegMult->cMultM);
-            hb_xfree(pegMult->cMultP);
-            hb_xfree(pegMult);
-        }
-        
-        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB){
-            HB_MAXUINT v;
-            HB_MAXUINT v1 = 0;
-            int i = isN;
-            while(--i>=0){
-                v = (*(&sN[i])-'0');
-                v <<= 1;
-                v += v1;
-                if (v>=nB){
-                    v1 = v/nB;
-                    v  %= nB;
-                }else{
-                    v1 = 0;
-                }
-                sN[i] = "0123456789"[v];
-            }
-            return sN;
-        }
-        
-        HB_FUNC_STATIC( TBIGN2MULT ){
-            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
-            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(2);
-            hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
-            hb_xfree(szRet);
-        }
-        
-        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB){
-            HB_MAXUINT v;
-            HB_MAXUINT v1 = 0;
-            int i = isN;
-            while(--i>=0){
-                v = (*(&sN[i])-'0');
-                v *= m;
-                v += v1;
-                if (v>=nB){
-                    v1 = v/nB;
-                    v  %= nB;
-                }else{
-                    v1 = 0;
-                }
-                sN[i] = "0123456789"[v];
-            }
-            return sN;
-        }
-        
-        HB_FUNC_STATIC( TBIGNIMULT ){
-            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)*2);
-            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
-            HB_MAXUINT m        = (HB_MAXUINT)hb_parnint(2);
-            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiMult(szRet,m,n,nB),n);
-            hb_xfree(szRet);
-        }
-        
-        HB_FUNC_STATIC( TBIGNLMULT ){
-            hb_retnint((HB_MAXUINT)hb_parnint(1)*(HB_MAXUINT)hb_parnint(2));
-        }
-
-        static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv){
-    
-            HB_MAXUINT szptBIGNeDiv = sizeof(ptBIGNeDiv*);
-            HB_MAXUINT szstBIGNeDiv = sizeof(stBIGNeDiv);
-    
-            ptBIGNeDiv *peDVArr     = (ptBIGNeDiv*)hb_xgrab(szptBIGNeDiv);
-            ptBIGNeDiv pegDivTmp    = (ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
-            
-            char * Tmp              = tBIGNPadL("1",n,"0");
-            pegDivTmp->cDivQ        = hb_strdup(Tmp);
-            hb_xfree(Tmp);
-            
-            pegDivTmp->cDivR        = hb_strdup(pD);
-            
-            int nI = 0;
- 
-            do {
-
-                peDVArr     = (ptBIGNeDiv*)hb_xrealloc(peDVArr,(nI+1)*szptBIGNeDiv);
-                peDVArr[nI] = (ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
-                
-                peDVArr[nI]->cDivQ = hb_strdup(pegDivTmp->cDivQ);
-                peDVArr[nI]->cDivR = hb_strdup(pegDivTmp->cDivR);  
-
-                char * tmp = tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
-                hb_xmemcpy(pegDivTmp->cDivQ,tmp,n);
-                hb_xfree(tmp);
-                    
-                tmp        = tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);
-                hb_xmemcpy(pegDivTmp->cDivR,tmp,n);
-                hb_xfree(tmp);
-
-                if (memcmp(pegDivTmp->cDivR,pN,n)==1){
-                    break;
-                }
-                
-                ++nI;
-
-            } while (HB_TRUE);
-  
-            hb_xfree(pegDivTmp->cDivQ);
-            hb_xfree(pegDivTmp->cDivR);
-
-            int nF = nI;
-  
-            Tmp                     = tBIGNPadL("0",n,"0");
-            pegDiv->cDivQ           = hb_strdup(Tmp);
-            pegDiv->cDivR           = hb_strdup(Tmp);
-            hb_xfree(Tmp);
-  
-            do {
-                
-                pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ ,n,n,nB);
-                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
-                hb_xfree(pegDivTmp->cDivQ);
-    
-                pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR ,n,n,nB);
-                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
-                hb_xfree(pegDivTmp->cDivR);
-                
-                int iCmp = memcmp(pegDiv->cDivR,pN,n);
-
-                if (iCmp==0){
-                    break;
-                } else{
-                        if (iCmp==1){
-    
-                            pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ ,n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
-                            hb_xfree(pegDivTmp->cDivQ);
-    
-                            pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR ,n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
-                            hb_xfree(pegDivTmp->cDivR);
-    
-                    }
-                }  
-                
-            } while (--nI>=0);
-            
-            for(nI=nF;nI>=0;nI--){
-                hb_xfree(peDVArr[nI]->cDivQ);
-                hb_xfree(peDVArr[nI]->cDivR);
-                hb_xfree(peDVArr[nI]);
-            }
-            hb_xfree(peDVArr);
-            peDVArr = NULL;
-   
-            pegDivTmp->cDivR = tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
-            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
-            hb_xfree(pegDivTmp->cDivR);
-            hb_xfree(pegDivTmp);
-                
-        }
-        
-        HB_FUNC_STATIC( TBIGNEGDIV ){
- 
-            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1); 
-            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
-            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
-            ptBIGNeDiv pegDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            int iCmp            = memcmp(pN,pD,n);
-          
-            switch(iCmp){
-                case -1:{
-                    pegDiv->cDivQ = tBIGNPadL("0",n,"0");
-                    pegDiv->cDivR = hb_strdup(pN);
-                    break;
-                }
-                case 0:{
-                    pegDiv->cDivQ = tBIGNPadL("1",n,"0");
-                    pegDiv->cDivR = tBIGNPadL("0",n,"0");
-                    break;
-                }
-                default:{
-                    const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-                    tBIGNegDiv(pN,pD,(int)n,nB,pegDiv);
-                }
-            }
-            
-            hb_storclen(pegDiv->cDivR,n,3);
-            hb_retclen(pegDiv->cDivQ,n);
-
-            hb_xfree(pN);
-            hb_xfree(pD);
-            hb_xfree(pegDiv->cDivR);
-            hb_xfree(pegDiv->cDivQ);
-            hb_xfree(pegDiv);
-        }
-        
-        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
-            
-            int n                   = 0;
-            
-            pecDiv->cDivR           = hb_strdup(pA);
-            char * aux              = hb_strdup(pB);
-             
-            HB_MAXUINT v1;
-          
-            ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-
-            HB_MAXUINT szHB_MAXUINT = sizeof(HB_MAXUINT);
-            HB_MAXUINT snHB_MAXUINT = ipN*szHB_MAXUINT;
-            
-            HB_MAXUINT *ipA         = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
-            HB_MAXUINT *iaux        = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
-                        
-            int i = ipN;
-            while(--i>=0){
-                ipA[i]  = (*(&pecDiv->cDivR[i])-'0');
-                iaux[i] = (*(&aux[i])-'0');
-            }
- 
-            while (memcmp(iaux,ipA,ipN)<=0){
-                n++;
-                v1 = 0;
-                i = ipN;
-                while(--i>=0){
-                    iaux[i] <<= 1;
-                    iaux[i] += v1;
-                    if (iaux[i]>=nB){
-                        v1 = iaux[i]/nB;
-                        iaux[i] %= nB;
-                    }else{
-                        v1 = 0;
-                    }
-                }
-            }
-
-            hb_xfree(ipA);
-            ipA = NULL;
- 
-            i = ipN;
-            while(--i>=0){
-                aux[i]   = "0123456789"[iaux[i]];
-            }
-            
-            hb_xfree(iaux);
-            iaux = NULL;
-            
-            HB_MAXUINT *idivQ = (HB_MAXUINT*)calloc(ipN,szHB_MAXUINT);
-            char * sN2        = tBIGNPadL("2",ipN,"0");
- 
-            while (n--){            
-                tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
-                hb_xmemcpy(aux,pecDivTmp->cDivQ,ipN);
-                hb_xfree(pecDivTmp->cDivQ);
-                hb_xfree(pecDivTmp->cDivR);    
-                v1 = 0;
-                i = ipN;
-                while(--i>=0){
-                    idivQ[i] <<= 1;
-                    idivQ[i] += v1;
-                    if (idivQ[i]>=nB){
-                        v1 = idivQ[i]/nB;
-                        idivQ[i] %= nB;
-                    }else{
-                        v1 = 0;
-                    }
-                }
-                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
-                    char * tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
-                    hb_xmemcpy(pecDiv->cDivR,tmp,ipN);
-                    hb_xfree(tmp);
-                    v1 = 0;
-                    i  = ipN;
-                    HB_BOOL bAdd = HB_TRUE;
-                    while(--i>=0){
-                        if (bAdd){
-                            idivQ[i]++;
-                            bAdd = HB_FALSE;
-                        }    
-                        idivQ[i] += v1;
-                        if (idivQ[i]>=nB){
-                            idivQ[i] -= nB;
-                            v1 = 1;
-                        }else{
-                            v1 = 0;
-                        }
-                    } 
-                }
-            }
-            
-            hb_xfree(aux);
-            hb_xfree(sN2);
-            hb_xfree(pecDivTmp);
-            
-            pecDiv->cDivQ = (char*)hb_xgrab(ipN+1);
-
-            i = ipN;
-            while(--i>=0){
-                pecDiv->cDivQ[i] = "0123456789"[idivQ[i]];
-            }
-            
-            free(idivQ);
-            idivQ = NULL;
-            
-        }
-        
-        HB_FUNC_STATIC( TBIGNECDIV ){
-            
-            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1);
-            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
-            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
-            ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            int iCmp            = memcmp(pN,pD,n);
-          
-            switch(iCmp){
-                case -1:{
-                    pecDiv->cDivQ = tBIGNPadL("0",n,"0");
-                    pecDiv->cDivR = hb_strdup(pN);
-                    break;
-                }
-                case 0:{
-                    pecDiv->cDivQ = tBIGNPadL("1",n,"0");
-                    pecDiv->cDivR = tBIGNPadL("0",n,"0");
-                    break;
-                }
-                default:{
-                    const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
-                    tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
-                }
-            }
-            
-            hb_storclen(pecDiv->cDivR,n,3);
-            hb_retclen(pecDiv->cDivQ,n);
-
-            hb_xfree(pN);
-            hb_xfree(pD);
-            hb_xfree(pecDiv->cDivR);
-            hb_xfree(pecDiv->cDivQ);
-            hb_xfree(pecDiv);
-        }
-                
-        /*
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
-            HB_MAXUINT nGCD = x;  
-            x = HB_MAX(y,nGCD);
-            y = HB_MIN(nGCD,y);
-            if (y==0){
-               nGCD = x;
-            } else {
-                  nGCD = y;
-                  while (HB_TRUE){
-                      if ((y=(x%y))==0){
-                          break;
-                      }
-                      x    = nGCD;
-                      nGCD = y;
-                  }
-            }
-            return nGCD;
-        }*/
-        
-        //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v){
-          int shift;
-         
-          /* GCD(0,v) == v; GCD(u,0) == u, GCD(0,0) == 0 */
-          if (u == 0) return v;
-          if (v == 0) return u;
-         
-          /* Let shift:=lg K, where K is the greatest power of 2
-                dividing both u and v. */
-          for (shift = 0; ((u | v) & 1) == 0; ++shift) {
-                 u >>= 1;
-                 v >>= 1;
-          }
-         
-          while ((u & 1) == 0)
-            u >>= 1;
-         
-          /* From here on, u is always odd. */
-          do {
-               /* remove all factors of 2 in v -- they are not common */
-               /*   note: v is not zero, so while will terminate */
-               while ((v & 1) == 0)  /* Loop X */
-                   v >>= 1;
-         
-               /* Now u and v are both odd. Swap if necessary so u <= v,
-                  then set v = v - u (which is even). for bignums, the
-                  swapping is just pointer movement, and the subtraction
-                  can be done in-place. */
-               if (u > v) {
-                 unsigned int t = v; v = u; u = t;}  // Swap u and v.
-               v = v - u;                            // Here v >= u.
-             } while (v != 0);
-         
-          /* restore common factors of 2 */
-          return u << shift;
-        }
-
-        HB_FUNC_STATIC( TBIGNGDC ){
-            hb_retnint(tBIGNGDC((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
-        }
-
-        /*
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
-             
-            HB_MAXUINT nLCM = 1;
-            HB_MAXUINT i    = 2;
-        
-            HB_BOOL lMx;
-            HB_BOOL lMy;
-        
-            while (HB_TRUE){
-                lMx = ((x%i)==0);
-                lMy = ((y%i)==0);
-                while (lMx||lMy){
-                    nLCM *= i;
-                    if (lMx){
-                        x   /= i;
-                        lMx = ((x%i)==0);
-                    }
-                    if (lMy){
-                        y   /= i;
-                        lMy = ((y%i)==0);
-                    }
-                }
-                if ((x==1)&&(y==1)){
-                    break;
-                }
-                ++i;
-            }
-            
-            return nLCM;
-
-        }
-        */
-
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
-            return ((y/tBIGNGDC(x,y))*x);
-        }    
-        
-        HB_FUNC_STATIC( TBIGNLCM ){
-            hb_retnint(tBIGNLCM((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
-        }
-
-        static HB_MAXUINT tBIGNFI(HB_MAXUINT n){
-            HB_MAXUINT i;
-            HB_MAXUINT fi = n;
-            for(i=2;((i*i)<=n);i++){
-                if ((n%i)==0){
-                    fi -= fi/i;
-                }    
-                while ((n%i)==0){
-                    n /= i;
-                }    
-            } 
-               if (n>1){
-                   fi -= fi/n;
-               }     
-               return fi; 
-        }
-        
-        HB_FUNC_STATIC( TBIGNFI ){
-            hb_retnint(tBIGNFI((HB_MAXUINT)hb_parnint(1)));
-        }
-        
-        HB_FUNC_STATIC( TBIGNALEN ){
-           hb_retns(hb_arrayLen(hb_param(1,HB_IT_ARRAY)));
-        }
-      
-        HB_FUNC_STATIC( TBIGNMEMCMP ){
-           hb_retnint(memcmp(hb_parc(1),hb_parc(2),hb_parclen(1)));
-        }
-
-        HB_FUNC_STATIC( TBIGNMAX ){
-           hb_retnint(HB_MAX(hb_parnint(1),hb_parnint(2)));
-        }
-        
-        HB_FUNC_STATIC( TBIGNMIN ){
-           hb_retnint(HB_MIN(hb_parnint(1),hb_parnint(2)));
-        }
-         
-        HB_FUNC_STATIC( TBIGNNORMALIZE ){
-            
-            HB_SIZE nInt1 = (HB_SIZE)hb_parnint(2);
-            HB_SIZE nInt2 = (HB_SIZE)hb_parnint(7);
-            HB_SIZE nPadL = HB_MAX(nInt1,nInt2);
- 
-            HB_SIZE nDec1 = (HB_SIZE)hb_parnint(4);
-            HB_SIZE nDec2 = (HB_SIZE)hb_parnint(9);            
-            HB_SIZE nPadR = HB_MAX(nDec1,nDec2);
-    
-            HB_BOOL lPadL = nPadL!=nInt1;
-            HB_BOOL lPadR = nPadR!=nDec1;
-        
-            char * tmpPad;
-    
-            if (lPadL || lPadR){
-                if (lPadL){
-                    tmpPad = tBIGNPadL(hb_parc(1),nPadL,"0");
-                    hb_storclen(tmpPad,nPadL,1);
-                    hb_stornint(nPadL,2);
-                    hb_xfree(tmpPad);
-                }
-                if (lPadR){
-                    tmpPad = tBIGNPadR(hb_parc(3),nPadR,"0");
-                    hb_storclen(tmpPad,nPadR,3);
-                    hb_stornint(nPadR,4);
-                    hb_xfree(tmpPad);
-                }
-                hb_stornint(nPadL+nPadR,5);
-            }
-
-            lPadL = nPadL!=nInt2;
-            lPadR = nPadR!=nDec2;
-           
-            if (lPadL || lPadR){
-                if (lPadL){
-                    tmpPad = tBIGNPadL(hb_parc(6),nPadL,"0");
-                    hb_storclen(tmpPad,nPadL,6);
-                    hb_stornint(nPadL,7);
-                    hb_xfree(tmpPad);
-                }
-                if (lPadR){
-                    tmpPad = tBIGNPadR(hb_parc(8),nPadR,"0");
-                    hb_storclen(tmpPad,nPadR,8);
-                    hb_stornint(nPadR,9);
-                    hb_xfree(tmpPad);
-                }
-                hb_stornint(nPadL+nPadR,10);
-            }
-       
-        }
-        
-    #pragma ENDDUMP
-
+    #include "tbignumber.c"
 #endif // __HARBOUR__
