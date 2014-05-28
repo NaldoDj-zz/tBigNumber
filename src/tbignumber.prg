@@ -320,7 +320,8 @@ class tBigNumber from hbClass
     method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
 #else
 	method Divide(uBigN,lFloat)
-#endif    
+#endif 
+   
     method Divmethod(nmethod)
     
     method Mod(uBigN)
@@ -5213,7 +5214,6 @@ static procedure s__IncS9(n)
 	    hb_mutexUnLock(s__MTXcN9)
 	end while
 return    
-
 
 #ifdef __PROTHEUS__
 

@@ -22,29 +22,29 @@
         typedef struct{
             char * cMultM;
             char * cMultP;
-        } stBIGNeMult, * ptBIGNeMult;
+        } stBIGNeMult,* ptBIGNeMult;
         
         typedef struct{
             char * cDivQ;
             char * cDivR;
-        } stBIGNeDiv, * ptBIGNeDiv;
+        } stBIGNeDiv,* ptBIGNeDiv;
 
         static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes);
         static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad);
         static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad);
         static char * tBIGNReverse(const char * szF,const HB_SIZE s);
-        static char * tBIGNAdd(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);
-        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB);
-        static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB);        
-        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB); 
-        static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB);
-        static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult);        
-        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB);
-        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB);
-        static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv);        
-        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv);        
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v);
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y);
+        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB);
+        static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB);
+        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB);        
+        static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB); 
+        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB);
+        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult);        
+        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXUINT nB);
+        static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB);
+        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv);        
+        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv);        
+        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u,HB_MAXUINT v);
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y);
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
 
         static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
@@ -130,7 +130,7 @@
             hb_xfree(szR);
         }
 
-        static char * tBIGNAdd(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){    
+        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){    
             char * c         = (char*)hb_xgrab(y+1);
             HB_SIZE k        = y-1;
             HB_MAXUINT v     = 0;
@@ -163,7 +163,7 @@
             hb_xfree(szRet);
         }
         
-        static char * tBigNiADD(char * sN ,  HB_MAXUINT a, const int isN, const HB_MAXUINT nB){
+        static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB){
             HB_BOOL bAdd  = HB_TRUE;
             HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
@@ -203,7 +203,7 @@
             hb_retnint((HB_MAXUINT)hb_parnint(1)+(HB_MAXUINT)hb_parnint(2));
         }
    
-        static char * tBIGNSub(const char * a, const char * b, int n, const HB_SIZE y, const HB_MAXUINT nB){
+        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){
             char * c      = (char*)hb_xgrab(y+1);
             HB_SIZE k     = y-1;
             int v         = 0;
@@ -236,7 +236,7 @@
             hb_xfree(szRet);
         }
         
-        static char * tBigNiSUB(char * sN , const HB_MAXUINT s, const int isN, const HB_MAXUINT nB){
+        static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB){
             HB_BOOL bSub  = HB_TRUE;
             int v;
             int v1        = 0;
@@ -276,7 +276,7 @@
             hb_retnint((HB_MAXUINT)hb_parnint(1)-(HB_MAXUINT)hb_parnint(2));
         }
  
-        static char * tBIGNMult(const char * a, const char * b, HB_SIZE n, const HB_SIZE y, const HB_MAXUINT nB){
+        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB){
             
             char * c     = (char*)hb_xgrab(y+1);
             
@@ -350,7 +350,7 @@
             hb_xfree(szRet);
         }
 
-        static void tBIGNegMult(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeMult pegMult){
+        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult){
     
             HB_MAXUINT szptBIGNeMult = sizeof(ptBIGNeMult*);
             HB_MAXUINT szstBIGNeMult = sizeof(stBIGNeMult);            
@@ -462,7 +462,7 @@
             hb_xfree(pegMult);
         }
         
-        static char * tBigN2Mult(char * sN , const int isN, const HB_MAXUINT nB){
+        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXUINT nB){
             HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
             int i = isN;
@@ -489,7 +489,7 @@
             hb_xfree(szRet);
         }
         
-        static char * tBigNiMult(char * sN , const HB_MAXUINT m, const HB_SIZE isN, const HB_MAXUINT nB){
+        static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB){
             HB_MAXUINT v;
             HB_MAXUINT v1 = 0;
             int i = isN;
@@ -521,7 +521,7 @@
             hb_retnint((HB_MAXUINT)hb_parnint(1)*(HB_MAXUINT)hb_parnint(2));
         }
 
-        static void tBIGNegDiv(const char * pN, const char * pD, int n, const HB_MAXUINT nB , ptBIGNeDiv pegDiv){
+        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv){
     
             HB_MAXUINT szptBIGNeDiv = sizeof(ptBIGNeDiv*);
             HB_MAXUINT szstBIGNeDiv = sizeof(stBIGNeDiv);
@@ -573,11 +573,11 @@
   
             do {
                 
-                pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ ,n,n,nB);
+                pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
                 hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                 hb_xfree(pegDivTmp->cDivQ);
     
-                pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR ,n,n,nB);
+                pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
                 hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                 hb_xfree(pegDivTmp->cDivR);
                 
@@ -588,11 +588,11 @@
                 } else{
                         if (iCmp==1){
     
-                            pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ ,n,n,nB);
+                            pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
                             hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                             hb_xfree(pegDivTmp->cDivQ);
     
-                            pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR ,n,n,nB);
+                            pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
                             hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                             hb_xfree(pegDivTmp->cDivR);
     
@@ -651,7 +651,7 @@
             hb_xfree(pegDiv);
         }
         
-        static void tBIGNecDiv(const char * pA, const char * pB, int ipN, const HB_MAXUINT nB , ptBIGNeDiv pecDiv){
+        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv){
             
             int n                   = 0;
             
@@ -796,7 +796,7 @@
         }
                 
         /*
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT x, HB_MAXUINT y){
+        static HB_MAXUINT tBIGNGDC(HB_MAXUINT x,HB_MAXUINT y){
             HB_MAXUINT nGCD = x;  
             x = HB_MAX(y,nGCD);
             y = HB_MIN(nGCD,y);
@@ -816,14 +816,14 @@
         }*/
         
         //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u, HB_MAXUINT v){
+        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u,HB_MAXUINT v){
           int shift;
          
-          /* GCD(0,v) == v; GCD(u,0) == u, GCD(0,0) == 0 */
+          /* GCD(0,v) == v; GCD(u,0) == u,GCD(0,0) == 0 */
           if (u == 0) return v;
           if (v == 0) return u;
          
-          /* Let shift:=lg K, where K is the greatest power of 2
+          /* Let shift:=lg K,where K is the greatest power of 2
                 dividing both u and v. */
           for (shift = 0; ((u | v) & 1) == 0; ++shift) {
                  u >>= 1;
@@ -833,16 +833,16 @@
           while ((u & 1) == 0)
             u >>= 1;
          
-          /* From here on, u is always odd. */
+          /* From here on,u is always odd. */
           do {
                /* remove all factors of 2 in v -- they are not common */
-               /*   note: v is not zero, so while will terminate */
+               /*   note: v is not zero,so while will terminate */
                while ((v & 1) == 0)  /* Loop X */
                    v >>= 1;
          
                /* Now u and v are both odd. Swap if necessary so u <= v,
-                  then set v = v - u (which is even). for bignums, the
-                  swapping is just pointer movement, and the subtraction
+                  then set v = v - u (which is even). for bignums,the
+                  swapping is just pointer movement,and the subtraction
                   can be done in-place. */
                if (u > v) {
                  unsigned int t = v; v = u; u = t;}  // Swap u and v.
@@ -858,7 +858,7 @@
         }
 
         /*
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
              
             HB_MAXUINT nLCM = 1;
             HB_MAXUINT i    = 2;
@@ -891,7 +891,7 @@
         }
         */
 
-        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x, HB_MAXUINT y){
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
             return ((y/tBIGNGDC(x,y))*x);
         }    
         

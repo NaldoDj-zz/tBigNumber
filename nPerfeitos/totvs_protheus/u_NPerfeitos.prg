@@ -15,6 +15,7 @@
 	#DEFINE NP_FILELCK			NP_PATHLCK+"execute_np_number.nplck"
 	#DEFINE NP_LOCKBYFNAME		NP_PATHLCK+"waitrun_np_number.nplck"
 	#DEFINE NP_GRIDBMAXWAIT		10
+	#DEFINE NP_MAXINCREGUA2		10
 	
 	#DEFINE NP_PRVT_IPALIAS		"__cAliasIP" 
 	#DEFINE NP_PRVT_NPALIAS		"__cAliasNP"
@@ -92,8 +93,8 @@
 			ASSIGN bExec	:= {||NPerfeitos(@lIsBlind,@oProcess)}
 			Eval( bExec )
 		Else
-			ASSIGN bExec	:= {|lEnd,oProcess|ProcRedefine(@oProcess,@oFont,0,400,400,.T.,.T.),NPerfeitos(@lIsBlind,@oProcess)}
-			ASSIGN oFont 	:= TFont():New("Lucida Console",NIL,14,NIL,.T.)
+			ASSIGN bExec	:= {|lEnd,oProcess|ProcRedefine(@oProcess,@oFont,0,600,600,.T.,.T.),NPerfeitos(@lIsBlind,@oProcess)}
+			ASSIGN oFont 	:= TFont():New("COURIER NEW",NIL,14,NIL,.T.)
 			ASSIGN oProcess	:= MsNewProcess():New( bExec , OemToAnsi( "Números Perfeitos :: http://www.blacktdn.com.br" ) , "Calculando..." , .T. )
 			oProcess:Activate()
 			IF .NOT.( oProcess:lEnd )
@@ -146,6 +147,7 @@
 	
 		Local nWait			AS NUMERIC
 		Local nSeconds		AS NUMERIC
+		Local nIncRegua	AS NUMERIC
 	
 		Local oNI			AS OBJECT CLASS "TBIGNUMBER"
 		Local oNG			AS OBJECT CLASS "TBIGNUMBER"
@@ -211,31 +213,28 @@
 	
 			ASSIGN cNI 	:= GetStartNumber(.F.)
 			ASSIGN nSL	:= Len( cNI )
+
+			ASSIGN oProgress1	:= tSProgress():New(ctPAnim1,";")
+			ASSIGN oProgress2	:= tSProgress():New(ctPAnim2,";")
+			ASSIGN oRTime1		:= tRemaining():New(nEL)
+			ASSIGN oRTime2		:= tRemaining():New(NP_MAXINCREGUA2)
 	
 			IF ( lProcessa )
-				ASSIGN oProgress1	:= tSProgress():New(ctPAnim1,";")
-				ASSIGN oProgress2	:= tSProgress():New(ctPAnim2,";")
-				ASSIGN oRTime1		:= tRemaining():New(nEL)
-				ASSIGN oRTime2		:= tRemaining():New(nEL)
 				oProcess:SetRegua1(nEL)
-				oProcess:SetRegua2(nEL)
+				oProcess:SetRegua2(NP_MAXINCREGUA2)
 				ASSIGN nWait := 0
 				While ( ( ++nWait ) <= nSL )
 					ASSIGN cIncRegua := "["+oProgress1:Eval("DISJUNCTION")+"]"
 					ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
 					ASSIGN cIncRegua += " | "+"Média"+":["+oRTime1:GetcMediumTime()+"]"
 					oProcess:IncRegua1(cIncRegua)
-					ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"
-					ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
-					ASSIGN cIncRegua += " | "+"Média"+":["+oRTime2:GetcMediumTime()+"]"
-					oProcess:IncRegua2(cIncRegua)
 					oRTime1:Calcule()
-					oRTime2:Calcule()
+					IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
 				End While
 				oProcess:SetRegua1(nEL)
-				oProcess:SetRegua2(nEL)
+				oProcess:SetRegua2(NP_MAXINCREGUA2)
 				oRTime1:SetRemaining(nEL)
-				oRTime2:SetRemaining(nEL)
+				oRTime2:SetRemaining(NP_MAXINCREGUA2)
 			EndIF
 
 			oNI:SetValue( cNI )
@@ -263,14 +262,7 @@
 					IKillApp(.T.)
 	
 					IF ( lProcessa )
-						ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"
-						ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
-						ASSIGN cIncRegua += " | "+"Média"+":["+oRTime2:GetcMediumTime()+"]"
-						oProcess:IncRegua2(cIncRegua)
-						IF ( oProcess:lEnd )
-							UnLockNPFile( @NP_FILELCK )
-							IKillApp(.T.)
-						EndIF
+						IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
 					EndIF
 	
 					ASSIGN cNG		:= "1"
@@ -280,14 +272,6 @@
 					While ( oNG:lte( @oNP ) )
 	
 						IKillApp(.T.)
-	
-						IF ( lProcessa )
-							oProcess:IncRegua2(cIncRegua)
-							IF ( oProcess:lEnd )
-								UnLockNPFile( @NP_FILELCK )
-								IKillApp(.T.)
-							EndIF
-						EndIF
 	
 						oNG:SetValue( oNG:Add( "1" ) )
 						oNF:SetValue( oNI:Add( oNP ) )
@@ -305,6 +289,10 @@
 							cNI := oNI:Int()
 							Exit
 						EndIF
+
+						IF ( lProcessa )
+							IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+						EndIF
 	
 					End While
 	
@@ -314,13 +302,7 @@
 	
 					IF ( lProcessa )
 						IF( lGPCall )
-							ASSIGN cIncRegua := "["+oProgress2:Eval("UNION")+"]"							
-							ASSIGN cIncRegua += "[Interval]["+aGPCall[1][1]+"|"+aGPCall[Len(aGPCall)][2]+"]"
-							oProcess:IncRegua2(cIncRegua)
-							IF ( oProcess:lEnd )
-								UnLockNPFile( @NP_FILELCK )
-								IKillApp(.T.)
-							EndIF
+							IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
 						EndIF
 					EndIF	
 
@@ -338,20 +320,20 @@
 								ASSIGN lBatchExec	:= oGClient:BatchExec( "U_GMathPEnv" , @aGPPEnv , "U_GMathCall" , @aGPCall , "U_GMathEnd" )
 								IF .NOT.( lBatchExec )
 									ASSIGN lGridC	:= .F.
-									aEval( aGPCall , { |e,y| aGPCall[y][3] := lGridC , U_GMathCall( @e ) } )
+									aEval( aGPCall , { |e,y| aGPCall[y][3] := lGridC , U_GMathCall( @e ),IF(lProcessa,IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall),NIL) } )
 								EndIF
 								StartGJob( @oGClient , .F. )
 								oGClient	:= FreeObj( oGClient )
 							Else
-								aEval( aGPCall , { |e| U_GMathCall( @e ) } )
+								aEval( aGPCall , { |e| U_GMathCall( @e ) , IF(lProcessa,IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall),NIL) } )
 							EndIF
 						#ELSE
-							aEval( aGPCall , { |e| U_GMathCall( @e ) } )
+							aEval( aGPCall , { |e| U_GMathCall( @e , IF(lProcessa,IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall),NIL) ) } )
 						#ENDIF
 					EndIF
 
 					IF ( lProcessa )
-						oRTime2:Calcule()
+						oRTime2:Calcule(.F.)
 					EndIF
 	
 				End While
@@ -1878,5 +1860,45 @@
 			lProcRedefine := .T.
 		EndIF
 	Return(lProcRedefine)
+	
+	Static Procedure IncRegua(oProcess,oProgress1,oProgress2,oRTime1,oRTime2,nIncRegua,aGPCall)
+		Local cIncRegua		AS CHARACTER
+		//----------------------------------------------------------------------------------------------
+		oRTime2:Calcule(.T.)
+		ASSIGN cIncRegua := "["+oProgress2:Eval("RANDOM")+"]"
+		ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
+		ASSIGN cIncRegua += " | "+"Média"+":["+oRTime2:GetcMediumTime()+"]"
+		IF .NOT.(Empty(aGPCall))
+			ASSIGN cIncRegua += " | [Interval]["+aGPCall[1][1]+"|"+aGPCall[Len(aGPCall)][2]+"]"
+		EndIF
+		//----------------------------------------------------------------------------------------------
+		oProcess:cMsg2 := cIncRegua
+		oProcess:oMsg2:Refresh(.T.)
+		//----------------------------------------------------------------------------------------------
+		oRTime1:Calcule(.F.)
+		ASSIGN cIncRegua := "["+oProgress1:Eval("DISJUNCTION")+"]"
+		ASSIGN cIncRegua += " | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+		ASSIGN cIncRegua += " | "+"Média"+":["+oRTime1:GetcMediumTime()+"]"
+		//----------------------------------------------------------------------------------------------
+		oProcess:cMsg1 := cIncRegua
+		oProcess:oMsg1:Refresh(.T.)
+		//----------------------------------------------------------------------------------------------
+		oProcess:IncRegua2()
+		//----------------------------------------------------------------------------------------------
+		oProcess:oDlg:Refresh(.T.)
+		SysRefresh(.T.)
+		//----------------------------------------------------------------------------------------------
+		ASSIGN nIncRegua+=1
+		IF nIncRegua >= NP_MAXINCREGUA2
+			ASSIGN nIncRegua := 0
+			oProcess:SetRegua2(NP_MAXINCREGUA2)
+			oRTime2:SetRemaining(NP_MAXINCREGUA2)
+		EndIF
+		//----------------------------------------------------------------------------------------------
+		IF ( oProcess:lEnd )
+			UnLockNPFile( @NP_FILELCK )
+			IKillApp(.T.)
+		EndIF
+	Return
 	
 #ENDIF
