@@ -11,11 +11,11 @@
     request HB_MT
     
     /*
-    	About       : C(++) tBigNumber functions
-    	Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    	Data        : Any
-    	Descricao   : tBig'C(++)'Number Optimizations (?) functions
-	*/
+        About       : C(++) tBigNumber functions
+        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data        : Any
+        Descricao   : tBig'C(++)'Number Optimizations (?) functions
+    */
 
     #pragma BEGINDUMP
 

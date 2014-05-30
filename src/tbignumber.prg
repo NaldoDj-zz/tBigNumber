@@ -56,12 +56,12 @@
 
 #ifdef __PROTHEUS__
     static __cEnvSrv
-    #xtranslate hb_bLen([<prm,...>])    	=> Len([<prm>])
-    #xtranslate tBIGNaLen([<prm,...>])  	=> Len([<prm>])
-    #xtranslate hb_mutexCreate()        	=> ThreadID()
+    #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
+    #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
+    #xtranslate hb_mutexCreate()            => ThreadID()
     #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
-	#xtranslate method <methodName> SETGET  => method <methodName>
+    #xtranslate method <methodName> SETGET  => method <methodName>
 #else // __HARBOUR__
     #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
     #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
@@ -284,42 +284,42 @@ class tBigNumber from hbClass
 #ifndef __PROTHEUS__
     method Plus(uBigN) INLINE self:Add(uBigN)
 #else
-	method Plus(uBigN)
+    method Plus(uBigN)
 #endif        
 
     method Sub(uBigN)
 #ifndef __PROTHEUS__    
     method Minus(uBigN) INLINE self:Sub(uBigN)
 #else
-	method Minus(uBigN)
+    method Minus(uBigN)
 #endif    
     
     method Mult(uBigN)
 #ifndef __PROTHEUS__    
     method Multiply(uBigN) INLINE self:Mult(uBigN)
 #else
-	method Multiply(uBigN)
+    method Multiply(uBigN)
 #endif   
     
     method egMult(uBigN)
 #ifndef __PROTHEUS__    
     method egMultiply(uBigN) INLINE self:egMult(uBigN)
 #else
-	method egMultiply(uBigN)
+    method egMultiply(uBigN)
 #endif    
 
     method rMult(uBigN)
 #ifndef __PROTHEUS__    
     method rMultiply(uBigN) INLINE self:rMult(uBigN)
 #else
-	method rMultiply(uBigN)
+    method rMultiply(uBigN)
 #endif    
     
     method Div(uBigN,lFloat)
 #ifndef __PROTHEUS__
     method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
 #else
-	method Divide(uBigN,lFloat)
+    method Divide(uBigN,lFloat)
 #endif 
    
     method Divmethod(nmethod)
@@ -551,7 +551,7 @@ endclass
 #else //INLINE HARBOUR METHODS
 
     method Plus(uBigN) class tBigNumber
-	return(self:Add(uBigN))
+    return(self:Add(uBigN))
  
     method Minus(uBigN) class tBigNumber
     return(self:Sub(uBigN))
@@ -560,13 +560,13 @@ endclass
     return(self:Mult(uBigN))    
    
     method egMultiply(uBigN) class tBigNumber
-	return(self:egMult(uBigN))
-	
+    return(self:egMult(uBigN))
+    
     method rMultiply(uBigN) class tBigNumber
-	return(self:rMult(uBigN))
+    return(self:rMult(uBigN))
     
     method Divide(uBigN,lFloat) class tBigNumber
-	return(self:Div(uBigN,lFloat))
+    return(self:Div(uBigN,lFloat))
 
 #endif //__PROTHEUS__
 
@@ -3990,10 +3990,10 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
         aAdd(aeDV,{ths_eDivQ:Int(.F.,.F.),ths_eDivR:Int(.F.,.F.)})
         ths_eDivQ:SetValue(ths_eDivQ:Add(ths_eDivQ),nBase,"0",NIL,nAcc)
         ths_eDivR:SetValue(ths_eDivR:Add(ths_eDivR),nBase,"0",NIL,nAcc)
-    	nCmp:=ths_eDivR:cmp(ths_eDivN)
-    	if nCmp==1
-    		exit
-    	endif
+        nCmp:=ths_eDivR:cmp(ths_eDivN)
+        if nCmp==1
+            exit
+        endif
     end while
     
     ths_eDivQ:SetValue(s__o0)
@@ -5186,33 +5186,33 @@ static procedure tBigNSleep(nSleep)
     #ifdef __PROTHEUS__
         sleep(nSleep*1000)
     #else
-		Local nTime
+        Local nTime
         nTime := (hb_MilliSeconds()+(nSleep*1000))
-       	while (hb_MilliSeconds()<nTime)
-       	end while
+           while (hb_MilliSeconds()<nTime)
+           end while
     #endif   
 Return
 
 static procedure s__IncS0(n)
-	while n>s__nN0
-	    while .not.(hb_mutexLock(s__MTXcN0))
-	        tBigNSleep(0.001)
-	    end while
-	    s__cN0+=s__cN0
-	    s__nN0+=s__nN0
-	    hb_mutexUnLock(s__MTXcN0)
-	end while
-return	
+    while n>s__nN0
+        while .not.(hb_mutexLock(s__MTXcN0))
+            tBigNSleep(0.001)
+        end while
+        s__cN0+=s__cN0
+        s__nN0+=s__nN0
+        hb_mutexUnLock(s__MTXcN0)
+    end while
+return    
 
 static procedure s__IncS9(n)
-	while n>s__nN9
-	    while .not.(hb_mutexLock(s__MTXcN9))
-	        tBigNSleep(0.001)
-	    end while
-	    s__cN9+=s__cN9
-	    s__nN9+=s__nN9
-	    hb_mutexUnLock(s__MTXcN9)
-	end while
+    while n>s__nN9
+        while .not.(hb_mutexLock(s__MTXcN9))
+            tBigNSleep(0.001)
+        end while
+        s__cN9+=s__cN9
+        s__nN9+=s__nN9
+        hb_mutexUnLock(s__MTXcN9)
+    end while
 return    
 
 #ifdef __PROTHEUS__
