@@ -1517,7 +1517,11 @@ method Add(uBigN) class tBigNumber
 
     if lNeg
         lAdd:=.F.
-        lInv:=cN1<cN2
+        #ifdef __HARBOUR__
+            lInv := tBIGNmemcmp(cN1,cN2)==-1
+        #else //__PROTEUS__
+            lInv:=cN1<cN2
+        #endif //__HARBOUR__    
         lNeg:=(ths_adN1:lNeg .and. .not.(lInv)) .or. (ths_adN2:lNeg .and. lInv)
         if lInv
             cNT:=cN1
@@ -1594,7 +1598,11 @@ method Sub(uBigN) class tBigNumber
         lSub:=.F.
         lNeg:=ths_sbN1:lNeg
     else
-        lInv:=cN1<cN2
+        #ifdef __HARBOUR__
+            lInv := tBIGNmemcmp(cN1,cN2)==-1
+        #else //__PROTEUS__
+            lInv:=cN1<cN2
+        #endif //__HARBOUR__    
         lNeg:=ths_sbN1:lNeg .or. lInv
         if lInv
             cNT:=cN1
@@ -3940,6 +3948,8 @@ return(oMTP)
     Sintaxe     : rMult(cN1,cN2,nBase,nAcc) -> oNR
 */
 static function rMult(cN1,cN2,nBase,nAcc)
+
+    //TODO: Implementar a tBigNrMult em C(++) para versao __HARBOUR__
  
     local oN1:=tBigNumber():New(cN1)
     local oN2:=tBigNumber():New(cN2)
