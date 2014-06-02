@@ -12,9 +12,9 @@
     
     /*
         About       : C(++) tBigNumber functions
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : Any
-        Descricao   : tBig'C(++)'Number Optimizations (?) functions
+        Author      : Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Date        : 04/02/2013
+        Description : tBig'C(++)'Number Optimizations (?) functions
     */
 
     #pragma BEGINDUMP
