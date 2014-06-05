@@ -98,7 +98,6 @@ Method SetProgress(cProgress,cToken) Class tSProgress
 	EndIF
 	self:aProgress		:= _StrToKArr(@cProgress,@cToken)
 	self:lRandom		:= .F.
-	self:lRandom		:= .F.
 	self:lShuttle		:= .NOT.(self:lShuttle)
 	self:nMethod		:= 0
 	self:nMax			:= Len(self:aProgress)
