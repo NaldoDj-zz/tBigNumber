@@ -2002,7 +2002,7 @@ return(oMod)
     method      : Pow
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 05/03/2013
-    Descricao   : Caltulo de Potencia
+    Descricao   : Calculo de Potencia n^x
     Sintaxe     : tBigNumber():Pow(uBigN) -> oBigNR
 */
 method Pow(uBigN) class tBigNumber
