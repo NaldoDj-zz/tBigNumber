@@ -1,4 +1,4 @@
-/*                                                                         
+/*
  *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr     
  * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r    
  *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr     
@@ -112,7 +112,7 @@ static s__MTXDEC:=hb_mutexCreate()
 #endif
 
 #ifdef TBN_DBFILE
-    thread static ths_dFiles
+    thread static ths_aFiles
 #endif
 
 thread static ths_eqN1
@@ -632,23 +632,23 @@ return(self)
     #endif    
             local nFile
             local nFiles
-            DEFAULT ths_dFiles:=Array(0)
-            nFiles:=tBIGNaLen(ths_dFiles)
+            DEFAULT ths_aFiles:=Array(0)
+            nFiles:=tBIGNaLen(ths_aFiles)
             for nFile:=1 to nFiles
-                if Select(ths_dFiles[nFile][1])>0
-                    (ths_dFiles[nFile][1])->(dbCloseArea())
+                if Select(ths_aFiles[nFile][1])>0
+                    (ths_aFiles[nFile][1])->(dbCloseArea())
                 endif            
                 #ifdef __PROTEUS__
-                    MsErase(ths_dFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
+                    MsErase(ths_aFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
                 #else
                     #ifdef TBN_MEMIO
-                        dbDrop(ths_dFiles[nFile][2])
+                        dbDrop(ths_aFiles[nFile][2])
                     #else
-                        fErase(ths_dFiles[nFile][2])
+                        fErase(ths_aFiles[nFile][2])
                     #endif
                 #endif    
             next nFile
-            aSize(ths_dFiles,0)
+            aSize(ths_aFiles,0)
         return
 #endif    
 
@@ -3440,7 +3440,7 @@ method Randomize(uB,uE,nExit) class tBigNumber
                         if oR:gte(oE)
                             exit
                         endif
-                        nT -= nR
+                        nT-=nR
                     end while
                 endif
                 lI:=.not.(lI)
@@ -3471,7 +3471,7 @@ method Randomize(uB,uE,nExit) class tBigNumber
                         if oR:gte(oE)
                             exit
                         endif
-                        nT -= nR
+                        nT-=nR
                     end while
                 endif
                 lI:=.not.(lI)
@@ -3525,7 +3525,7 @@ method Randomize(uB,uE,nExit) class tBigNumber
                     if oR:gte(oE)
                         exit
                     endif
-                    nT    -= nR
+                    nT-=nR
                 end while
             endif
             lI:=.not.(lI)
@@ -3698,10 +3698,10 @@ return(lmrP)
        int result = n; 
        for(int i=2;i*i<=n;i++) 
        {
-         if (n % i==0) result -= result/i; 
+         if (n % i==0) result-=result/i; 
          while (n % i==0) n /= i; 
       } 
-       if (n>1) result -= result/n; 
+       if (n>1) result-=result/n; 
        return result; 
     } 
     
@@ -3740,7 +3740,7 @@ return(oT)
         local fi:=n
         while ((i*i)<=n)
             if ((n%i)==0)
-                fi -= Int(fi/i)
+                fi-=Int(fi/i)
             endif
             while ((n%i)==0)
                 n:=Int(n/i)
@@ -3748,7 +3748,7 @@ return(oT)
             i++
         end while
            if (n>1)
-               fi -= Int(fi/n)
+               fi-=Int(fi/n)
            endif
     return(fi)
 #endif //__PROTHEUS__
@@ -4283,7 +4283,7 @@ return(r)
                     (c)->FN+=Val(a[n])+Val(b[n])
                 #endif
                 if (c)->FN>=nBase
-                    (c)->FN    -= nBase
+                    (c)->FN-=nBase
                     (c)->(dbUnLock())
                     (c)->(dbGoTo(k-1))
                     if (c)->(rLock())
@@ -4338,7 +4338,7 @@ return(r)
                     (c)->(dbUnLock())
                     (c)->(dbGoTo(k-1))
                     if (c)->(rLock())
-                        (c)->FN -= 1
+                        (c)->FN-=1
                     endif
                 endif
                 (c)->(dbUnLock())
@@ -4406,7 +4406,7 @@ return(r)
                         (c)->(dbUnLock())
                         w:=(c)->FN*nBase
                         (c)->(dbGoTo(k))
-                        (c)->FN    -= w
+                        (c)->FN-=w
                     endif    
                 endif
                 (c)->(dbUnLock())
@@ -4436,7 +4436,7 @@ return(r)
                         (c)->(dbUnLock())
                         w:=(c)->FN*nBase
                         (c)->(dbGoTo(k))
-                        (c)->FN -= w
+                        (c)->FN-=w
                     endif    
                 endif
                 (c)->(dbUnLock())
@@ -4550,8 +4550,8 @@ return(r)
                 cFile:=CriaTrab(aStru,cAlias)
             #endif    
     #endif
-            DEFAULT ths_dFiles:=Array(0)
-            aAdd(ths_dFiles,{cAlias,cFile})
+            DEFAULT ths_aFiles:=Array(0)
+            aAdd(ths_aFiles,{cAlias,cFile})
         else
             (cAlias)->(dbRLock())
     #ifdef __HARBOUR__        
@@ -4628,7 +4628,7 @@ return(r)
         #endif
             if c[k]>=nBase
                 c[k-1]+=1
-                c[k]    -= nBase
+                c[k]-=nBase
             endif
             --k
             --n
@@ -4659,7 +4659,7 @@ return(r)
             c[k]+=Val(a[n])-Val(b[n])
         #endif
             if c[k]<0
-                c[k-1]    -= 1
+                c[k-1]-=1
                 c[k]+=nBase
             endif
             --k
@@ -4707,7 +4707,7 @@ return(r)
             if c[k]>=nBase
                 x:=k+1
                 c[x]:=Int(c[k]/nBase)
-                c[k]    -= c[x]*nBase
+                c[k]-=(c[x]*nBase)
             endif
             k++
             i++
@@ -4726,7 +4726,7 @@ return(r)
             if c[k]>=nBase
                 x:=k+1
                 c[x]:=Int(c[k]/nBase)
-                c[k]    -= c[x]*nBase
+                c[k]-=(c[x]*nBase)
             endif
             if ++k>=y
                 exit
@@ -4799,7 +4799,7 @@ return(r)
                         v+=Val(a[n])+Val(b[n])
                     #endif
                     if v>=nBase
-                        v  -= nBase
+                        v-=nBase
                         v1:=1
                     else
                         v1:=0
@@ -4915,7 +4915,7 @@ return(r)
                     end while
                     if v>=nBase
                         v1:=Int(v/nBase)
-                        v    -= v1*nBase
+                        v-=(v1*nBase)
                     else
                         v1:=0    
                     endif
@@ -4943,7 +4943,7 @@ return(r)
                     end while
                     if v>=nBase
                         v1:=Int(v/nBase)
-                        v    -= v1*nBase
+                        v-=v1*nBase
                     else
                         v1:=0    
                     endif
@@ -5108,8 +5108,8 @@ static procedure __Initsthd(nBase)
     #endif    
 
     #ifdef TBN_DBFILE
-        if (ths_dFiles==NIL)
-            ths_dFiles:=Array(0)
+        if (ths_aFiles==NIL)
+            ths_aFiles:=Array(0)
         endif
     #endif
     
