@@ -6,7 +6,7 @@
 #define ACC_ALOG          "50"
 #define __SLEEP         "0.05"
 #define N_TEST          "1000"
-#define L_ALOG               "0"
+#define L_ALOG             "0"
 #define C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
@@ -294,7 +294,7 @@ Static Procedure tBigNTst()
     MEMVAR __oRTimeProc
     MEMVAR __phMutex
 
-     Private __nMaxRow      AS NUMBER VALUE (MaxRow()-8)
+    Private __nMaxRow      AS NUMBER VALUE (MaxRow()-8)
     Private __nMaxCol       AS NUMBER VALUE MaxCol()
     Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
     Private __nRow          AS NUMBER VALUE 0
@@ -660,7 +660,7 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         ASSIGN cHex := otBBin:SetValue(cN):B2H('32'):Int()
         __ConOut(fhLog,cN+':tBigNumber():B2H(32)',"RESULT: "+cHex)
-          __oRTime2:Calcule()
+        __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
         __ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
