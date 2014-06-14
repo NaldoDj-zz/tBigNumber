@@ -294,7 +294,7 @@ Static Procedure tBigNTst()
     MEMVAR __oRTimeProc
     MEMVAR __phMutex
 
-    Private __nMaxRow      AS NUMBER VALUE (MaxRow()-8)
+    Private __nMaxRow       AS NUMBER VALUE (MaxRow()-8)
     Private __nMaxCol       AS NUMBER VALUE MaxCol()
     Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
     Private __nRow          AS NUMBER VALUE 0
@@ -378,8 +378,8 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
         __ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
         __ConOut(fhLog,"")                                                //11    
-        __ConOut(fhLog,"")                                                  //12
-        DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
+        __ConOut(fhLog,"")                                                //12
+        DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
     #endif
     
     __ConOut(fhLog,"")    //13
