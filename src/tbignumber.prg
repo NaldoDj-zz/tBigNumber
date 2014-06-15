@@ -3948,24 +3948,36 @@ return(oMTP)
     Sintaxe     : rMult(cN1,cN2,nBase,nAcc) -> oNR
 */
 static function rMult(cN1,cN2,nBase,nAcc)
-
-    //TODO: Implementar a tBigNrMult em C(++) para versao __HARBOUR__
  
+#ifndef __PTCOMPAT__
+    local aThreads:=Array(2,2)
+#endif
+    
     local oN1:=tBigNumber():New(cN1)
     local oN2:=tBigNumber():New(cN2)
-    local oNR:=tBigNumber():New(s__o0)
+    local oNR:=s__o0:Clone()
     
     while oN1:gt(s__o0)
         if oN1:Mod(s__o2):gt(s__o0)
             oNR:SetValue(oNR:Add(oN2),nBase,"0",NIL,nAcc)
             oN1:OpDec()
-        endif    
-        oN1:SetValue(oN1:Div(s__o2,.F.),nBase,"0",NIL,nAcc)
-        oN2:SetValue(oN2:Mult(s__o2),nBase,"0",NIL,nAcc)
+        endif
+        #ifdef __PTCOMPAT__
+            oN1:SetValue(oN1:Div(s__o2,.F.),nBase,"0",NIL,nAcc)
+            oN2:SetValue(oN2:Mult(s__o2),nBase,"0",NIL,nAcc)
+        #else
+            aThreads[1][1]:=hb_threadStart(@thDiv(),oN1,s__o2,.F.)
+            hb_threadJoin(aThreads[1][1],@aThreads[2][1])
+            aThreads[1][2]:=hb_threadStart(@thMult(),oN2,s__o2)
+            hb_threadJoin(aThreads[1][2],@aThreads[2][2])
+            hb_threadWait(aThreads[1])
+            oN1:SetValue(aThreads[2][1])
+            oN2:SetValue(aThreads[2][2])
+        #endif
     end while
     
 return(oNR)
-    
+
 /*
     function    : egDiv
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
