@@ -142,7 +142,7 @@ Static Procedure tBigNTst()
 #else
 #xtranslate ExeName() => ProcName()
 //----------------------------------------------------------
-//Obs.: TAMANHO MÃXIMO DE UMA STRING NO PROTHEUS 1.048.575
+//Obs.: TAMANHO MÁXIMO DE UMA STRING NO PROTHEUS 1.048.575
 //      (1.048.575+1)->String size overflow!
 User Function tBigNTst() 
     Local cIni := "tbigNtst.ini"
