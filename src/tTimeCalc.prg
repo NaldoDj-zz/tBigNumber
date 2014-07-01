@@ -45,7 +45,7 @@ Method HMSToTime(nHours,nMinuts,nSeconds) Class tTimeCalc
 	cTime := hb_ntos(nHours)
 	cTime := StrZero(Val(cTime),Max(Len(cTime),2))
 	cTime += ":"
-	cTime += StrZero(Val(AllTrim(Str(nMinuts))),2)
+	cTime += StrZero(Val(hb_ntos(nMinuts)),2)
 	cTime += ":"
 	cTime += StrZero(Val(hb_ntos(nSeconds)),2)
 

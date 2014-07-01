@@ -10,6 +10,10 @@
 
 #include "fileio.ch"
 
+#ifndef SYMBOL_UNUSED
+	#define SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
+#endif
+
 #define oF_CREATE_OBJECT      1
 #define oF_OPEN_FILE          2
 #define oF_READ_FILE          3
@@ -44,7 +48,7 @@ CLASS tfRead
 
 	METHOD New(cFile,nSize)	CONSTRUCTOR	//Create a new class instance
 	METHOD ClassName()					// Returns ClassName
-	METHOD Open(cFile,nMode)			// Open the file for reading
+	METHOD Open(cFile,nMode,nLocal)		// Open the file for reading
 	METHOD Seek(nOffset,nOrigin)		// sets the file pointer in the file
 	METHOD Close(lFClear)				// Close the file when done
 	METHOD ReadLine()					// Read a line from the file
@@ -90,7 +94,7 @@ RETURN Self
 METHOD ClassName() CLASS tfRead
 Return("TFREAD")
 
-METHOD Open( cFile , nMode ) CLASS tfRead
+METHOD Open( cFile , nMode , nLocal ) CLASS tfRead
 
 	IF .NOT.( cFile == NIL )
 		IF .NOT.( cFile == self:cFile )
@@ -107,7 +111,15 @@ METHOD Open( cFile , nMode ) CLASS tfRead
 			nMode := FO_READ + FO_SHARED   // Default to shared read-only mode
 		ENDIF
 		self:nLastOp 	:= oF_OPEN_FILE
-		self:nfHandle	:= FOPEN( self:cFile, nMode )   // Try to open the file
+		#ifdef __PROTHEUS__
+			//----------------------------------------------------------------------------
+			//if(nLocal,0/*Client*/,1/*Server*/)
+			DEFAULT nLocal  := 0
+			self:nfHandle	:= FOPEN( self:cFile, nMode, nLocal )   // Try to open the file
+		#else
+			SYMBOL_UNUSED(nLocal)
+			self:nfHandle	:= FOPEN( self:cFile, nMode )   		// Try to open the file	
+		#endif	
 		IF self:nfHandle == -1
 			self:nError := FERROR()       // It didn't work
 			self:lEOF   := .T.            // So force EOF

@@ -191,7 +191,7 @@ User Function tBigNTst()
     aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
     lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
     lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
-    __nSLEEP         := Max(__nSLEEP,10)
+    __nSLEEP        := Max(__nSLEEP,10)
     IF ((__nSLEEP)<10)
         __nSLEEP *= 10
     EndIF
@@ -365,15 +365,15 @@ Static Procedure tBigNTst()
 
     #ifdef TBN_DBFILE
         #ifndef TBN_MEMIO
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")    //8
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")   //8
         #else
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")//8
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")  //8
         #endif    
     #else
         #ifdef TBN_ARRAY
             __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")    //8
         #else
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")    //8
+            __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")   //8
         #endif
     #endif    
 
@@ -388,7 +388,7 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")    //13
     
     #ifdef __HARBOUR__
-        DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") //14
+        DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") 		 //14
         DispOutAT(__nMaxRow+1,0,Replicate("*",__nMaxCol),"w+/n") //14
     #endif    
     
@@ -627,12 +627,8 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
         __ConOut(fhLog,__cSep)
     Next x
-    #ifdef __HARBOUR__
-        otBH16  := NIL
-        hb_gcAll(.T.)
-    #else  //__PROTHEUS__
-        otBH16  := FreeObj(otBH16)
-    #endif //__HARBOUR__
+    
+    otBH16  := FreeObj(otBH16)
     
     __ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
     __ConOut(fhLog,__cSep)
@@ -669,14 +665,9 @@ Static Procedure tBigNTst()
         __ConOut(fhLog,"MEDIUM TIME: "+__oRTime2:GetcMediumTime())
         __ConOut(fhLog,__cSep)
     Next x
-    #ifdef __HARBOUR__
-        otBH32  := NIL
-        otBBin  := NIL
-        hb_gcAll(.T.)
-    #else  //__PROTHEUS__
-        otBH32  := FreeObj(otBH32)
-        otBBin  := FreeObj(otBBin)
-    #endif //__HARBOUR__
+
+    otBH32  := FreeObj(otBH32)
+
     __oRTime1:Calcule()
     __ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
     __ConOut(fhLog,__cSep)    
@@ -1505,7 +1496,8 @@ Static Procedure tBigNTst()
     __ConOut(fhLog,"")
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
-    For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+    //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+    For x := IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT 
         ASSIGN cN := hb_ntos(x)
         __oRTime2:SetRemaining(nISQRT)
         For w := -nISQRT To 0
@@ -1836,32 +1828,19 @@ Static Procedure tBigNTst()
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):ExactValue())
     EndIF
-    #ifdef __HARBOUR__
-        o0  := NIL
-        o1  := NIL
-        o2  := NIL
-        o3  := NIL
-        o4  := NIL
-        o5  := NIL
-        o6  := NIL
-        o7  := NIL
-        o8  := NIL
-        o9  := NIL
-        o10 := NIL
-        hb_gcAll(.T.)
-    #else //__PROTHEUS__
-        o0  := FreeObj(o0)
-        o1  := FreeObj(o1)
-        o2  := FreeObj(o2)
-        o3  := FreeObj(o3)
-        o4  := FreeObj(o4)
-        o5  := FreeObj(o5)  
-        o6  := FreeObj(o6)
-        o7  := FreeObj(o7)
-        o8  := FreeObj(o8)
-        o9  := FreeObj(o9)
-        o10 := FreeObj(o10)
-    #endif //__HARBOUR__
+
+    o0  := FreeObj(o0)
+    o1  := FreeObj(o1)
+    o2  := FreeObj(o2)
+    o3  := FreeObj(o3)
+    o4  := FreeObj(o4)
+    o5  := FreeObj(o5)  
+    o6  := FreeObj(o6)
+    o7  := FreeObj(o7)
+    o8  := FreeObj(o8)
+    o9  := FreeObj(o9)
+    o10 := FreeObj(o10)
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -1995,12 +1974,8 @@ Static Procedure tBigNTst()
     End While
     oPrime:IsPReset()
     oPrime:NextPReset()
-    #ifdef __HARBOUR__
-        oPrime := NIL
-        hb_gcAll(.T.)
-    #else  // __PROTHEUS__
-        oPrime := FreeObj(oPrime)    
-    #endif //__HARBOUR__
+
+    oPrime := FreeObj(oPrime)    
     
     __ConOut(fhLog,"MEDIUM TIME: "+__oRTime1:GetcMediumTime())
     __ConOut(fhLog,__cSep)    
@@ -2466,7 +2441,7 @@ Return(lHarbour)
         EndIF
 
         IF (lRandom)
-            ASSIGN nSAnim        := abs(HB_RandomInt(1,nLenA))
+            ASSIGN nSAnim       := abs(HB_RandomInt(1,nLenA))
             aAdd(aRdnAn,nSAnim)    
             ASSIGN nProgress    := abs(HB_RandomInt(1,nLenP))
             aAdd(aRdnPG,nProgress)
@@ -2605,8 +2580,11 @@ Return(lHarbour)
     Static Procedure BuildScreen(fhLog,nMaxCol)
         CLEAR SCREEN
         __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",nMaxCol)) //1
-        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",nMaxCol))              //2
+        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",nMaxCol))            //2
     Return
+    Static Function FreeObj(oObj)
+    	oObj := NIL    	
+    Return(hb_gcAll(.T.))
     #include "tBigNAnim.prg"
 #else
     #ifdef TBN_DBFILE

@@ -109,10 +109,10 @@ static s__MTXDEC:=hb_mutexCreate()
     thread static ths_aZAdd
     thread static ths_aZSub
     thread static ths_aZMult
-#endif
-
-#ifdef TBN_DBFILE
-    thread static ths_aFiles
+#else
+	#ifdef TBN_DBFILE
+	    thread static ths_aFiles
+	#endif
 #endif
 
 thread static ths_eqN1
@@ -4103,27 +4103,27 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
    
    SYMBOL_UNUSED(nSize)
 
-   while r:gte(b)
-      aux:SetValue(b:Mult(n))
-      if aux:lte(a)
-        while .T.
-           n:SetValue(n:Mult(base))
-           tmp:SetValue(b:Mult(n))
-           if tmp:gt(a)
-               exit
-           endif
-           aux:SetValue(tmp)
-        end while
-      endif      
-      n:Normalize(@base)  
-      n:SetValue(egDiv(n:__cInt(),base:__cInt(),n:__nInt(),nBase,nAcc,.F.))
-      while r:gte(aux)
-        r:SetValue(r:Sub(aux))
-        q:SetValue(q:Add(n))
-      end while
-      a:SetValue(r)
-      n:SetValue(s__o1)
-    end while
+	while r:gte(b)
+		aux:SetValue(b:Mult(n))
+		if aux:lte(a)
+			while .T.
+				n:SetValue(n:Mult(base))
+				tmp:SetValue(b:Mult(n))
+				if tmp:gt(a)
+					exit
+					endif
+				aux:SetValue(tmp)
+			end while
+		endif      
+		n:Normalize(@base)  
+		n:SetValue(egDiv(n:__cInt(),base:__cInt(),n:__nInt(),nBase,nAcc,.F.))
+		while r:gte(aux)
+			r:SetValue(r:Sub(aux))
+			q:SetValue(q:Add(n))
+		end while
+		a:SetValue(r)
+		n:SetValue(s__o1)
+	end while
 
 #else
 
@@ -5117,13 +5117,13 @@ static procedure __Initsthd(nBase)
         ths_aZAdd:=Array(0)
         ths_aZSub:=Array(0)
         ths_aZMult:=Array(0)
-    #endif    
-
-    #ifdef TBN_DBFILE
-        if (ths_aFiles==NIL)
-            ths_aFiles:=Array(0)
-        endif
-    #endif
+    #else
+  		#ifdef TBN_DBFILE
+        	if (ths_aFiles==NIL)
+            	ths_aFiles:=Array(0)
+        	endif
+    	#endif    
+    #endif  
     
     oTBigN:=tBigNumber():New("0",nBase)
 

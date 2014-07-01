@@ -33,7 +33,7 @@ CLASS tPrime
 	
 	DATA nSize
 
-	Method New( cPath ) CONSTRUCTOR
+	Method New( cPath , nLocal ) CONSTRUCTOR
 
 	Method ClassName()
 
@@ -66,7 +66,7 @@ END CLASS
 	Descricao	: CONSTRUCTOR
 	Sintaxe		: tPrime():New( cPath ) -> self
 */
-Method New( cPath ) CLASS tPrime 
+Method New( cPath , nLocal ) CLASS tPrime 
 
 	Local aLine
 	Local aFiles
@@ -99,7 +99,7 @@ Method New( cPath ) CLASS tPrime
 		For nFile := 1 To nFiles
 			cFile	:= cPath+aFiles[nFile][F_NAME]
 			nLine	:= 0
-			ofRead:Open(cFile)
+			ofRead:Open(cFile,NIL,nLocal)
 			ofRead:ReadLine()
 			While ofRead:MoreToRead()
 				cLine := ofRead:ReadLine()
