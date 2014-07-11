@@ -1859,6 +1859,7 @@ method Div(uBigN,lFloat) class tBigNumber
         DEFAULT lFloat:=.T.
  
         if ths_dvN2:eq(s__o2)
+            //-------------------------------------------------------------------------------------
             //(Div(2)==Mult(.5)
             ths_dvNR:SetValue(ths_dvN1:Mult(s__od2))
             if .not.(lFloat)
@@ -2008,8 +2009,7 @@ return(oMod)
 method Pow(uBigN) class tBigNumber
 
 #ifndef __PTCOMPAT__
-    local oThread_1
-    local oThread_2
+    local aThreads
 #endif
 
     local oSelf:=self:Clone()
@@ -2072,14 +2072,14 @@ method Pow(uBigN) class tBigNumber
             if ths_pwB:SetValue(cPowB):gt(s__o1)
                 ths_pwGCD:SetValue(ths_pwA:GCD(ths_pwB))
                 #ifndef __PTCOMPAT__
-                    oThread_1:=Thread():New()
-                    oThread_2:=Thread():New()
-                    oThread_1:Start(@thDiv(),ths_pwA,ths_pwGCD)
-                    oThread_2:Start(@thDiv(),ths_pwB,ths_pwGCD)
-                    oThread_1:synchronize(0)
-                    oThread_2:synchronize(0)                        
-                    ths_pwA:SetValue(oThread_1:Result)
-                    ths_pwB:SetValue(oThread_2:Result)
+                    aThreads:=Array(2,2)
+                    aThreads[1][1]:=hb_threadStart(@thDiv(),ths_pwA,ths_pwGCD)
+                    hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                    aThreads[1][2]:=hb_threadStart(@thDiv(),ths_pwB,ths_pwGCD)
+                    hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                    hb_threadWait(aThreads[1])
+                    ths_pwA:SetValue(aThreads[2][1])
+                    ths_pwB:SetValue(aThreads[2][2])
                 #else
                     ths_pwA:SetValue(ths_pwA:Div(ths_pwGCD))
                     ths_pwB:SetValue(ths_pwB:Div(ths_pwGCD))
@@ -2312,8 +2312,7 @@ return(hb_ntos(nGCD))
 method LCM(uBigN) class tBigNumber
 
 #ifndef __PTCOMPAT__
-    local oThread_1
-    local oThread_2
+    local aThreads
 #endif
     
     local oX:=self:Clone()
@@ -2330,17 +2329,17 @@ method LCM(uBigN) class tBigNumber
         oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
     else
         #ifndef __PTCOMPAT__
-            oThread_1:=Thread():New()
-            oThread_2:=Thread():New()
+            aThreads:=Array(2,2)
         #endif    
         while .T.
             #ifndef __PTCOMPAT__
-                oThread_1:Start(@thMod0(),oX,oI)
-                oThread_2:Start(@thMod0(),oY,oI)
-                oThread_1:synchronize(0)
-                oThread_2:synchronize(0)                        
-                lMX:=oThread_1:Result
-                lMY:=oThread_2:Result
+                aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
+                hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
+                 hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                hb_threadWait(aThreads[1])
+                lMX:=aThreads[2][1]
+                lMY:=aThreads[2][2]
             #else
                 lMX:=oX:Mod(oI):eq(s__o0)
                 lMY:=oY:Mod(oI):eq(s__o0)
@@ -2349,18 +2348,20 @@ method LCM(uBigN) class tBigNumber
                 oLCM:SetValue(oLCM:Mult(oI))
                 #ifndef __PTCOMPAT__
                     if lMX .and. lMY                    
-                        oThread_1:Start(@thDiv(),oX,oI,.F.)
-                        oThread_2:Start(@thDiv(),oY,oI,.F.)
-                        oThread_1:synchronize(0)
-                        oThread_2:synchronize(0)                        
-                        oX:SetValue(oThread_1:Result)
-                        oY:SetValue(oThread_2:Result)
-                        oThread_1:Start(@thMod0(),oX,oI)
-                        oThread_2:Start(@thMod0(),oY,oI)
-                        oThread_1:synchronize(0)
-                        oThread_2:synchronize(0)                        
-                        lMX:=oThread_1:Result
-                        lMY:=oThread_2:Result
+                        aThreads[1][1]:=hb_threadStart(@thDiv(),oX,oI,.F.)
+                        hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                        aThreads[1][2]:=hb_threadStart(@thDiv(),oY,oI,.F.)
+                        hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                        hb_threadWait(aThreads[1])
+                        oX:SetValue(aThreads[2][1])
+                        oY:SetValue(aThreads[2][2])
+                        aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
+                        hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+                        aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
+                        hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                        hb_threadWait(aThreads[1])
+                        lMX:=aThreads[2][1]
+                        lMY:=aThreads[2][2]
                     else
                         if lMX
                             oX:SetValue(oX:Div(oI,.F.))
@@ -2676,8 +2677,7 @@ return(ths_SysSQRT)
 method Log(uBigNB) class tBigNumber
 
 #ifndef __PTCOMPAT__
-    local oThread_1
-    local oThread_2
+    local aThreads:=Array(2,2)
 #endif
 
     local oS:=s__o0:Clone()
@@ -2717,17 +2717,20 @@ method Log(uBigNB) class tBigNumber
 
     oS:SetValue(oS:Add(oY))
     oY:SetValue(s__o0)
-    #ifndef __PTCOMPAT__    
-        oThread_1:=Thread():New()
-        oThread_2:=Thread():New()
-        oThread_1:Start(@thnthRoot(),oT,s__o2)
-        oThread_2:Start(@thMult(),oI,s__od2)
-        oThread_1:synchronize(0)
-        oThread_2:synchronize(0)                        
-        oT:SetValue(oThread_1:Result)
-        oI:SetValue(oThread_2:Result)
+    #ifndef __PTCOMPAT__
+        aThreads[1][1]:=hb_threadStart(@thnthRoot(),oT,s__o2)
+        hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
+        aThreads[1][2]:=hb_threadStart(@thMult(),oI,s__od2)
+        hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+        hb_threadWait(aThreads[1])
+        oT:SetValue(aThreads[2][1])
+        oI:SetValue(aThreads[2][2])
     #else
         oT:SetValue(oT:nthRoot(s__o2))
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
         oI:SetValue(oI:Mult(s__od2))
     #endif   
 
@@ -2752,6 +2755,8 @@ method Log(uBigNB) class tBigNumber
             exit    
         endif 
         
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
         oI:SetValue(oI:Mult(s__od2))
   
         noTcmp1:=oT:cmp(s__o1)
@@ -3551,6 +3556,8 @@ method Randomize(uB,uE,nExit) class tBigNumber
         cR:=oM:Min(oE:Min(oT)):ExactValue()
         nT:=Val(cR)
 
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
         oT:SetValue(oE:Sub(oB):Mult(s__od2):Int(.T.))
 
         while oR:lt(oB)
@@ -3624,6 +3631,8 @@ method millerRabin(uI) class tBigNumber
         endif
 
         while oD:Mod(s__o2):eq(s__o0)
+            //-------------------------------------------------------------------------------------
+            //(Div(2)==Mult(.5)
             oD:SetValue(oD:Mult(s__od2))
             oS:SetValue(oS:OpInc())
         end while
@@ -3836,8 +3845,7 @@ return(recFact(s__o1:Clone(),oN))
 static function recFact(oS,oN)
 
 #ifndef __PTCOMPAT__
-    local oThread_1
-    local oThread_2
+    local aThreads
 #endif
 
     local oI
@@ -3847,6 +3855,8 @@ static function recFact(oS,oN)
     local oNI
 
 #ifdef __PTCOMPAT__
+    //-------------------------------------------------------------------------------------
+    //(Div(2)==Mult(.5)
     if oN:lte(s__o20:Mult(oN:Mult(s__od2):Int(.T.,.F.)))
 #else
     if oN:lte(s__o20)
@@ -3864,6 +3874,8 @@ static function recFact(oS,oN)
     endif
 
     oI:=oN:Clone()
+    //-------------------------------------------------------------------------------------
+    //(Div(2)==Mult(.5)
     oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
 
     oSI:=oS:Clone()
@@ -3873,13 +3885,13 @@ static function recFact(oS,oN)
     oNI:SetValue(oNI:Sub(oI))
 
 #ifndef __PTCOMPAT__
-    oThread_1:=Thread():New()
-    oThread_2:=Thread():New()
-    oThread_1:Start(@recFact(),oS,oI)
-    oThread_2:Start(@recFact(),oSI,oNI)
-    oThread_1:synchronize(0)
-    oThread_2:synchronize(0)                        
-return(oThread_1:Result:Mult(oThread_2:Result))
+    aThreads:=Array(2,2)
+    aThreads[1][1]:=hb_threadStart(@recFact(),oS,oI)
+    hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
+    aThreads[1][2]:=hb_threadStart(@recFact(),oSI,oNI)
+    hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+    hb_threadWait(aThreads[1])    
+return(aThreads[2][1]:Mult(aThreads[2][2]))
 #else    
 return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
 #endif
@@ -3953,8 +3965,7 @@ return(oMTP)
 static function rMult(cN1,cN2,nBase,nAcc)
  
 #ifndef __PTCOMPAT__
-    local oThread_1:=Thread():New()
-    local oThread_2:=Thread():New()
+    local aThreads:=Array(2,2)
 #endif
     
     local oN1:=tBigNumber():New(cN1)
@@ -3967,15 +3978,20 @@ static function rMult(cN1,cN2,nBase,nAcc)
             oN1:OpDec()
         endif
         #ifdef __PTCOMPAT__
-            oN1:SetValue(oN1:Div(s__o2,.F.),nBase,"0",NIL,nAcc)
+            //-------------------------------------------------------------------------------------
+            //(Div(2)==Mult(.5)
+            oN1:SetValue(oN1:Mult(s__oD2),nBase,"0",NIL,nAcc)
             oN2:SetValue(oN2:Mult(s__o2),nBase,"0",NIL,nAcc)
         #else
-            oThread_1:Start(@thDiv(),oN1,s__o2,.F.)
-            oThread_2:Start(@thMult(),oN2,s__o2)
-            oThread_1:synchronize(0)
-            oThread_2:synchronize(0)
-            oN1:SetValue(oThread_1:Result)
-            oN2:SetValue(oThread_2:Result)
+            //-------------------------------------------------------------------------------------
+            //(Div(2)==Mult(.5)
+            aThreads[1][1]:=hb_threadStart(@thMult(),oN1,s__oD2)
+            hb_threadJoin(aThreads[1][1],@aThreads[2][1])
+            aThreads[1][2]:=hb_threadStart(@th2Mult(),oN2)
+            hb_threadJoin(aThreads[1][2],@aThreads[2][2])
+            hb_threadWait(aThreads[1])
+            oN1:SetValue(aThreads[2][1])
+            oN2:SetValue(aThreads[2][2])
         #endif
     end while
     
@@ -4190,7 +4206,9 @@ static function __Pow(base,expR,EPS)
         acc:=__pow(base,exp:Abs(.T.),EPS)
         return(s__o1:Div(acc))
     elseif exp:Mod(s__o2):eq(s__o0)
-         acc:=__pow(base,exp:Mult(s__od2),EPS)
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
+        acc:=__pow(base,exp:Mult(s__od2),EPS)
         return(acc:Mult(acc))
     elseif exp:Dec(.T.):gt(s__o0) .and. exp:Int(.T.):gt(s__o0)
         acc:=base:Pow(expR)
@@ -4203,6 +4221,8 @@ static function __Pow(base,expR,EPS)
         high:=s__o1:Clone()
         sqr:=__SQRT(base)
         acc:=sqr:Clone()    
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
         mid:=high:Mult(s__od2)
         tmp:=mid:Sub(exp):Abs(.T.)
         lst:=s__o0:Clone()    
@@ -4215,6 +4235,8 @@ static function __Pow(base,expR,EPS)
                 high:SetValue(mid)
                 acc:SetValue(s__o1:Div(sqr))
             endif
+            //-------------------------------------------------------------------------------------
+            //(Div(2)==Mult(.5)
             mid:SetValue(low:Add(high):Mult(s__od2))
             tmp:SetValue(mid:Sub(exp):Abs(.T.))
             if tmp:eq(lst)
@@ -4249,6 +4271,8 @@ static function __SQRT(p)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
         r:=q:Mult(s__od2)
         t:=r:Pow(s__o2):Sub(q):Abs(.T.)
         l:=s__o0:Clone()
@@ -5046,6 +5070,10 @@ return(r)
         local othMult:=s__o0:Clone()
         othMult:SetValue(oN:Mult(oM))
     return(othMult)
+    static function th2Mult(oN)
+        local othMult:=s__o0:Clone()
+        othMult:SetValue(TBIGN2MULT(oN:__cInt(),oN:__nBase()))
+    return(othMult)
 #endif //__PTCOMPAT__    
 
 /*
@@ -5289,6 +5317,7 @@ return
             THMOD0()
             THNTHROOT()
             THMULT()
+            TH2MULT()
         endif
     return(lDummy)
     
