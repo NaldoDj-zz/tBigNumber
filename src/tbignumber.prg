@@ -71,6 +71,7 @@
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>]) 
+    //TODO: Rever as Threads utilizando: hb_mutexNotify e hb_mutexSubscribe em conjunto com hb_threadStart e hb_threadJoin
 #endif //__PROTHEUS__
 
 #ifndef __DIVMETHOD__
@@ -2077,7 +2078,7 @@ method Pow(uBigN) class tBigNumber
                     hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
                     aThreads[1][2]:=hb_threadStart(@thDiv(),ths_pwB,ths_pwGCD)
                     hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-                    hb_threadWait(aThreads[1])
+                    *hb_threadWait(aThreads[1])
                     ths_pwA:SetValue(aThreads[2][1])
                     ths_pwB:SetValue(aThreads[2][2])
                 #else
@@ -2336,8 +2337,8 @@ method LCM(uBigN) class tBigNumber
                 aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
                 hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
                 aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
-                 hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-                hb_threadWait(aThreads[1])
+                hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
+                *hb_threadWait(aThreads[1])
                 lMX:=aThreads[2][1]
                 lMY:=aThreads[2][2]
             #else
@@ -2352,14 +2353,14 @@ method LCM(uBigN) class tBigNumber
                         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
                         aThreads[1][2]:=hb_threadStart(@thDiv(),oY,oI,.F.)
                         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-                        hb_threadWait(aThreads[1])
+                        *hb_threadWait(aThreads[1])
                         oX:SetValue(aThreads[2][1])
                         oY:SetValue(aThreads[2][2])
                         aThreads[1][1]:=hb_threadStart(@thMod0(),oX,oI)
                         hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
                         aThreads[1][2]:=hb_threadStart(@thMod0(),oY,oI)
                         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-                        hb_threadWait(aThreads[1])
+                        *hb_threadWait(aThreads[1])
                         lMX:=aThreads[2][1]
                         lMY:=aThreads[2][2]
                     else
@@ -2724,7 +2725,7 @@ method Log(uBigNB) class tBigNumber
         //(Div(2)==Mult(.5)
         aThreads[1][2]:=hb_threadStart(@thMult(),oI,s__od2)
         hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-        hb_threadWait(aThreads[1])
+        *hb_threadWait(aThreads[1])
         oT:SetValue(aThreads[2][1])
         oI:SetValue(aThreads[2][2])
     #else
@@ -3890,7 +3891,7 @@ static function recFact(oS,oN)
     hb_threadJoin(aThreads[1][1],@aThreads[2][1])                
     aThreads[1][2]:=hb_threadStart(@recFact(),oSI,oNI)
     hb_threadJoin(aThreads[1][2],@aThreads[2][2])                        
-    hb_threadWait(aThreads[1])    
+    *hb_threadWait(aThreads[1])    
 return(aThreads[2][1]:Mult(aThreads[2][2]))
 #else    
 return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
@@ -3989,7 +3990,7 @@ static function rMult(cN1,cN2,nBase,nAcc)
             hb_threadJoin(aThreads[1][1],@aThreads[2][1])
             aThreads[1][2]:=hb_threadStart(@th2Mult(),oN2)
             hb_threadJoin(aThreads[1][2],@aThreads[2][2])
-            hb_threadWait(aThreads[1])
+            *hb_threadWait(aThreads[1])
             oN1:SetValue(aThreads[2][1])
             oN2:SetValue(aThreads[2][2])
         #endif
