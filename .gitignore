@@ -14,6 +14,8 @@
 *.a
 *.o
 *.cnt
+*.cld
+mg_error_log.htm
 
 /lib
 /lib/wce/mingwarm/.hbmk
@@ -21,17 +23,17 @@
 /lib/win/mingw64/.hbmk
 /mk/tbigN_log
 /mk/*.ini
-/source/hb_q_rsqrt.c
-/source/__tbignumber.prg
 /tbigN_err
 /tbigN_log
 /tbigN_tmp
-/exe/win
-/exe/mg
+/exe/win/mingw/*
+/exe/win/mingw64/*
+/exe/mg/mingw/*
+/exe/wce/mingwarm/*.exe
 /exe/cygwin
 /prj/mg/win/32/__mih_obj_m2wh
-/prj/mg/win/32/*.TXT
+/prj/mg/win/32/*.txt
 /prj/mg/win/64/__mih_obj_m2wh
-/prj/mg/win/64/*.TXT
+/prj/mg/win/64/*.txt
 /PrimesTables/*.txt
 /mk/ERROR

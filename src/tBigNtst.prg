@@ -10,6 +10,7 @@
 #define C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
+#define L_LOGPROCESS       "0"
 
 #define __SETDEC__          8
 #define __NRTTST__         36
@@ -42,6 +43,7 @@ Function Main()
     MEMVAR aC_OOPROGRESS
     MEMVAR lL_OOPROGRAND
     MEMVAR lL_ROPROGRESS
+    MEMVAR lL_LOGPROCESS
     #ifdef __HARBOUR__
         #ifdef __ALT_D__    // Compile with -b
            AltD(1)          // Enables the debugger. Press F5 to go.
@@ -57,17 +59,19 @@ Function Main()
     Private aC_OOPROGRESS
     Private lL_OOPROGRAND
     Private lL_ROPROGRESS
+    Private lL_LOGPROCESS
     IF .NOT.(File(cIni) ) .or. Empty(hIni)
         hIni["GENERAL"] := hb_Hash() 
-        hIni["GENERAL"]["ACC_SET"]        := ACC_SET
-        hIni["GENERAL"]["ROOT_ACC_SET"]   := ROOT_ACC_SET
-        hIni["GENERAL"]["ACC_ALOG"]       := ACC_ALOG
-        hIni["GENERAL"]["__SLEEP"]        := __SLEEP
-        hIni["GENERAL"]["N_TEST"]         := N_TEST
-        hIni["GENERAL"]["L_ALOG"]         := L_ALOG
-        hIni["GENERAL"]["C_OOPROGRESS"]   := C_OOPROGRESS
-        hIni["GENERAL"]["L_OOPROGRAND"]   := L_OOPROGRAND
-        hIni["GENERAL"]["L_ROPROGRESS"]   := L_ROPROGRESS
+        hIni["GENERAL"]["ACC_SET"]      := ACC_SET
+        hIni["GENERAL"]["ROOT_ACC_SET"] := ROOT_ACC_SET
+        hIni["GENERAL"]["ACC_ALOG"]     := ACC_ALOG
+        hIni["GENERAL"]["__SLEEP"]      := __SLEEP
+        hIni["GENERAL"]["N_TEST"]       := N_TEST
+        hIni["GENERAL"]["L_ALOG"]       := L_ALOG
+        hIni["GENERAL"]["C_OOPROGRESS"] := C_OOPROGRESS
+        hIni["GENERAL"]["L_OOPROGRAND"] := L_OOPROGRAND
+        hIni["GENERAL"]["L_ROPROGRESS"] := L_ROPROGRESS
+        hIni["GENERAL"]["L_LOGPROCESS"] := L_LOGPROCESS     
         hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
@@ -101,6 +105,8 @@ Function Main()
                     CASE "L_ROPROGRESS"
                         lL_ROPROGRESS   := (aSect[cKey]=="1")
                         EXIT
+                    CASE "L_LOGPROCESS"
+                        lL_LOGPROCESS   := (aSect[cKey]=="1")  
                 ENDSWITCH
             NEXT cKey
         NEXT cSection
@@ -114,6 +120,7 @@ Function Main()
     aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_aTokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
     lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
     lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
+    lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
     __SetCentury("ON")
     SET DATE TO BRITISH
     __nSLEEP        := Min(__nSLEEP,10)
@@ -156,6 +163,7 @@ User Function tBigNTst()
     Private aC_OOPROGRESS
     Private lL_OOPROGRAND
     Private lL_ROPROGRESS
+    Private lL_LOGPROCESS
     IF FindFunction("U_TFINI") //NDJLIB020.PRG    
         otFIni := U_TFINI(cIni)
         IF .NOT.File(cIni)
@@ -168,7 +176,8 @@ User Function tBigNTst()
             otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
             otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
             otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
-            otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_ROPROGRESS)            
+            otFIni:AddNewProperty("GENERAL","L_ROPROGRESS",L_ROPROGRESS)
+            otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
             otFIni:SaveAs(cIni)
         Else
             nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -180,6 +189,7 @@ User Function tBigNTst()
             aC_OOPROGRESS   := StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
             lL_OOPROGRAND   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
             lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")            
+            lL_LOGPROCESS   := (oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
         EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
@@ -191,6 +201,7 @@ User Function tBigNTst()
     aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
     lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
     lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
+    lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
     __nSLEEP        := Max(__nSLEEP,10)
     IF ((__nSLEEP)<10)
         __nSLEEP *= 10
@@ -281,6 +292,7 @@ Static Procedure tBigNTst()
     MEMVAR aC_OOPROGRESS
     MEMVAR lL_OOPROGRAND
     MEMVAR lL_ROPROGRESS
+    MEMVAR lL_LOGPROCESS
     
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -328,9 +340,11 @@ Static Procedure tBigNTst()
     Private __oRTime1       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
     Private __oRTime2       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
     
-    ASSIGN fhLog := fCreate(cLog,FC_NORMAL)
-    fClose(fhLog)
-    ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
+    ASSIGN fhLog := if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),NIL)
+    if (lL_LOGPROCESS)
+        fClose(fhLog)
+        ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
+    endif    
     
     ASSIGN nISQRT := Int(SQRT(nN_TEST))
 
@@ -2056,11 +2070,13 @@ Static Procedure tBigNTst()
     
     __ConOut(fhLog,__cSep)
     
-    fClose(fhLog)
+    if (lL_LOGPROCESS)
+        fClose(fhLog)
+    endif    
     
 #ifdef __PROTHEUS__
     #ifdef TBN_DBFILE
-           tBigNGC()
+        tBigNGC()
     #endif
 #else// __HARBOUR__
     __lKillProgress := .T.
@@ -2126,6 +2142,8 @@ Static Procedure __ConOut(fhLog,e,d)
     
     MEMVAR __oRTimeProc
     MEMVAR __phMutex
+    
+    MEMVAR lL_LOGPROCESS
 
 #endif
 
@@ -2198,12 +2216,14 @@ Static Procedure __ConOut(fhLog,e,d)
     ? p
 #endif    
 
-    IF ((ld) .and. (nATd>0))
-        fWrite(fhLog,x+__CRLF)
-        fWrite(fhLog,"...................................................................................................."+y+__CRLF)
-    Else
-        fWrite(fhLog,x+y+__CRLF)
-    EndIF    
+    if (lL_LOGPROCESS)
+        IF ((ld) .and. (nATd>0))
+            fWrite(fhLog,x+__CRLF)
+            fWrite(fhLog,"...................................................................................................."+y+__CRLF)
+        Else
+            fWrite(fhLog,x+y+__CRLF)
+        EndIF
+    endif
 
 Return
 
