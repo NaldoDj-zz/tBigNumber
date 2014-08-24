@@ -5429,10 +5429,12 @@ return
         begin sequence
             while .T.
                 if hb_mutexSubscribe(mtxJob,NIL,@xJob)
-                    cTyp := ValType(xJob)
-                    if (cTyp=="B")
+                    cTyp:=ValType(xJob)
+                    switch cTyp
+                    case "B"
                         Eval(xJob)
-                    elseif (cTyp=="N")
+                        exit
+                    case "N"
                         if (ValType(aThreads[xJob][TH_EXE])=="B")
                             aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
                             aThreads[xJob][TH_END]:=.T.
@@ -5440,7 +5442,8 @@ return
                             aThreads[xJob][TH_RES]:=NIL
                             aThreads[xJob][TH_END]:=.T.
                         endif
-                    endif
+                        exit
+                    endswitch
                 endif
             end while
         end sequence
