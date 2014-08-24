@@ -1,9 +1,4 @@
-/*
- *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
- * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
- *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr
- *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
- *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
+ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
  *
  * Copyright 2013-2014 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
  * www - http://www.blacktdn.com.br
@@ -442,10 +437,10 @@ endclass
     return(oSelf:lte(uBigN))
 
     static function __OpInc(oSelf)
-    return(oSelf:SetValue(oSelf:OpInc()))
+    return(oSelf:OpInc())
 
     static function __OpDec(oSelf)
-    return(oSelf:SetValue(oSelf:OpDec()))
+    return(oSelf:OpDec())
 
     static function __OpPlus(cOp,oSelf,uBigN)
         local oOpPlus
@@ -2137,10 +2132,10 @@ method Pow(uBigN) class tBigNumber
 
         opwNT:=s__o0:Clone()
         opwNT:SetValue(s__o0)
-        opwNP:SetValue(opwNP:OpDec())
+        opwNP:OpDec()
         while opwNT:lt(opwNP)
             opwNR:SetValue(opwNR:Mult(oSelf))
-            opwNT:SetValue(opwNT:OpInc())
+            opwNT:OpInc()
         end while
 
         if lPowF
@@ -2228,8 +2223,8 @@ method e(lforce) class tBigNumber
 
         oPowN:SetValue(oPowN:Pow(oPowN))
 
-        oAdd1N:=oBigNC:OpInc()
-        oSub1N:=oBigNC:OpDec()
+        oAdd1N:=oBigNC:Add(s__o1)
+        oSub1N:=oBigNC:Sub(s__o1)
 
         oPoWNAd:=oAdd1N:Pow(oAdd1N)
         oPoWNS1:=oSub1N:Pow(oSub1N)
@@ -2441,7 +2436,7 @@ method LCM(uBigN) class tBigNumber
             if oX:eq(s__o1) .and. oY:eq(s__o1)
                 exit
             endif
-            oI:SetValue(oI:OpInc())
+            oI:OpInc()
         end while
        #ifndef __PTCOMPAT__
             tBigNthJoin(@aThreads)
@@ -3197,7 +3192,7 @@ method H2D() class tBigNumber
         otNI:SetValue(hb_ntos(--nI))
         otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
         otPw:SetValue(otLN:Sub(otNI))
-        otPw:SetValue(otPw:OpDec())
+        otPw:OpDec()
         otPw:SetValue(otH:Pow(otPw))
         otAT:SetValue(otAT:Mult(otPw))
         otNR:SetValue(otNR:Add(otAT))
@@ -3215,7 +3210,7 @@ method H2D() class tBigNumber
         otNI:SetValue(hb_ntos(--nI))
         otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
         otPw:SetValue(otLN:Sub(otNI))
-        otPw:SetValue(otPw:OpDec())
+        otPw:OpDec()
         otPw:SetValue(otH:Pow(otPw))
         otAT:SetValue(otAT:Mult(otPw))
         otNR:SetValue(otNR:Add(otAT))
@@ -3710,7 +3705,7 @@ return(nR)
 method millerRabin(uI) class tBigNumber
 
     local oN:=self:Clone()
-    local oD:=tBigNumber():New(oN:OpDec())
+    local oD:=tBigNumber():New(oN:Sub(s__o1))
     local oS:=s__o0:Clone()
     local oI:=s__o0:Clone()
     local oA:=s__o0:Clone()
@@ -3728,7 +3723,7 @@ method millerRabin(uI) class tBigNumber
             //-------------------------------------------------------------------------------------
             //(Div(2)==Mult(.5)
             oD:SetValue(oD:Mult(s__od2))
-            oS:SetValue(oS:OpInc())
+            oS:OpInc()
         end while
 
         DEFAULT uI:=s__o2:Clone()
@@ -3740,7 +3735,7 @@ method millerRabin(uI) class tBigNumber
             if .not.(lPrime)
                 break
             endif
-            oI:SetValue(oI:OpDec())
+            oI:OpDec()
         end while
 
     end sequence
@@ -3761,10 +3756,10 @@ static function mrPass(uA,uS,uD,uN)
     local oS:=tBigNumber():New(uS)
     local oD:=tBigNumber():New(uD)
     local oN:=tBigNumber():New(uN)
-    local oM:=tBigNumber():New(oN:OpDec())
+    local oM:=tBigNumber():New(oN:Sub(s__o1))
 
     local oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
-    local oW:=tBigNumber():New(oS:OpDec())
+    local oW:=tBigNumber():New(oS:Sub(s__o1))
 
     local lmrP:=.T.
 
@@ -3780,7 +3775,7 @@ static function mrPass(uA,uS,uD,uN)
                 break
             endif
             oP:SetValue(oP:Mult(oP):Mod(oN))
-            oW:SetValue(oW:OpDec())
+            oW:OpDec()
         end while
 
         lmrP:=oP:eq(oM)
@@ -3831,7 +3826,7 @@ method FI() class tBigNumber
             while oN:Mod(oI):eq(s__o0)
                 oN:SetValue(oN:Div(oI,.F.))
             end while
-            oI:SetValue(oI:OpInc())
+            oI:OpInc()
         end while
         if oN:gt(s__o1)
             oT:SetValue(oT:Sub(oT:Div(oN,.F.)))
@@ -3898,7 +3893,7 @@ method PFactors() class tBigNumber
                 aAdd(aPFactors,{cP,"1"})
             else
                 oT:SetValue(aPFactors[nP][2])
-                aPFactors[nP][2]:=oT:SetValue(oT:OpInc()):ExactValue()
+                aPFactors[nP][2]:=oT:OpInc():ExactValue()
             endif
             oN:SetValue(oN:Div(oP,.F.))
             nC:=0
@@ -3962,12 +3957,12 @@ static function recFact(oS,oN)
 #endif
         oR:SetValue(oS)
         oI:=oS:Clone()
-        oI:SetValue(oI:OpInc())
+        oI:OpInc()
         oSN:=oS:Clone()
         oSN:SetValue(oSN:Add(oN))
         while oI:lt(oSN)
             oR:SetValue(oR:Mult(oI))
-            oI:SetValue(oI:OpInc())
+            oI:OpInc()
         end while
         #ifndef __PTCOMPAT__
             --s__recFact
@@ -5429,7 +5424,7 @@ return
         begin sequence
             while .T.
                 if hb_mutexSubscribe(mtxJob,NIL,@xJob)
-                    cTyp:=ValType(xJob)
+                    cTyp := ValType(xJob)
                     switch cTyp
                     case "B"
                         Eval(xJob)
