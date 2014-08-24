@@ -340,7 +340,7 @@ Static Procedure tBigNTst()
     Private __oRTime1       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
     Private __oRTime2       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
     
-    ASSIGN fhLog := if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),NIL)
+    ASSIGN fhLog := if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),-1)
     if (lL_LOGPROCESS)
         fClose(fhLog)
         ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
