@@ -4369,10 +4369,10 @@ static function __Pow(base,expR,EPS)
         acc:=__pow(base,exp:Mult(s__od2),EPS)
         return(acc:Mult(acc))
     elseif exp:Dec(.T.):gt(s__o0) .and. exp:Int(.T.):gt(s__o0)
-        acc:=base:Pow(expR)
+        acc:=base:Pow(exp)
         return(acc)
     elseif exp:gt(s__o1)
-        acc:=base:Mult(__pow(base,exp:OpDec(),EPS))
+        acc:=base:Pow(exp)
         return(acc)
     else
         low:=s__o0:Clone()
@@ -5232,6 +5232,25 @@ return(r)
         local othMult:=s__o0:Clone()
         othMult:SetValue(TBIGN2MULT(oN:__cInt(),oN:__nBase()))
     return(othMult)
+    static function thPower(oB,oE)
+        local oP
+        SYMBOL_UNUSED(oB)
+        SYMBOL_UNUSED(oE)
+        SYMBOL_UNUSED(oP)
+        /*TODO
+        2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
+                 4  *  4  *  4  *  4  *  4
+                      16     *    16  *  4
+                                 256  *  4
+                                      1024
+        2^11-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)*(1*2)
+                 4  *  4  *  4  *  4  *  4  *  2
+                      16     *    16  *  4  *  2
+                                 256  *  4  *  2
+                                      1024  *  2
+                                            2048
+        */
+    return(oP)
 #endif //__PTCOMPAT__
 
 /*
@@ -5484,6 +5503,7 @@ return
             THNTHROOT()
             THMULT()
             TH2MULT()
+            THPOWER()
         endif
     return(lDummy)
 
