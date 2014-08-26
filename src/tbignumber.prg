@@ -1,4 +1,9 @@
-ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
+/*
+ *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
+ * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
+ *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr
+ *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
+ *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
  *
  * Copyright 2013-2014 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
  * www - http://www.blacktdn.com.br
@@ -2077,12 +2082,12 @@ method Pow(uBigN) class tBigNumber
             break
         endif
 
-        opwNR:SetValue(oSelf)
-
-        if opwNR:eq(s__o1)
+        if oSelf:eq(s__o1)
             opwNR:SetValue(s__o1)
             break
         endif
+
+        opwNR:SetValue(oSelf)
 
         if s__o1:eq(opwNP:SetValue(opwNP:Abs()))
             break
@@ -4366,7 +4371,7 @@ static function __Pow(base,expR,EPS)
     elseif exp:Dec(.T.):gt(s__o0) .and. exp:Int(.T.):gt(s__o0)
         acc:=base:Pow(expR)
         return(acc)
-    elseif exp:gte(s__o1)
+    elseif exp:gt(s__o1)
         acc:=base:Mult(__pow(base,exp:OpDec(),EPS))
         return(acc)
     else
@@ -5404,14 +5409,13 @@ return
     return
 
     static procedure tBigNthNotify(aThreads)
-        aEval(aThreads,{|ath,nTh|hb_mutexNotify(ath[TH_MTX],nTh)})
+        aEval(aThreads,{|ath,nTh|ath[TH_RES]:=NIL,ath[TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
     return
 
     static procedure tBigNthWait(aThreads)
         while (aScan(aThreads,{|ath|.not.(aTh[TH_END])})>0)
             tBigNSleep(0.001)
         end while
-        aEval(aThreads,{|ath|ath[TH_END]:=.F.})
     return
 
     static procedure tBigNthJoin(aThreads)
