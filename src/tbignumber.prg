@@ -55,6 +55,7 @@
 #include "tBigNumber.ch"
 
 #ifdef __PROTHEUS__
+    //-------------------------------------------------------------------------------------
     static __cEnvSrv
     #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
     #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
@@ -63,13 +64,14 @@
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
     #xtranslate method <methodName> SETGET  => method <methodName>
 #else // __HARBOUR__
+    //-------------------------------------------------------------------------------------
     #define TH_MTX 1
     #define TH_NUM 2
     #define TH_EXE 3
     #define TH_RES 4
     #define TH_END 5
     #define SIZ_TH 5
-    //--------------------------------------------------------------
+    //-------------------------------------------------------------------------------------
     #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
     #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
     #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
@@ -78,6 +80,7 @@
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
+    //-------------------------------------------------------------------------------------
 #endif //__PROTHEUS__
 
 #ifndef __DIVMETHOD__
@@ -2060,7 +2063,6 @@ method Pow(uBigN) class tBigNumber
     local opwNP:=s__o0:Clone()
     local opwNR:=s__o0:Clone()
 
-    local opwNT
     local opwGCD
 
     lPoWN:=opwNP:SetValue(uBigN):lt(s__o0)
@@ -2135,13 +2137,7 @@ method Pow(uBigN) class tBigNumber
 
         endif
 
-        opwNT:=s__o0:Clone()
-        opwNT:SetValue(s__o0)
-        opwNP:OpDec()
-        while opwNT:lt(opwNP)
-            opwNR:SetValue(opwNR:Mult(oSelf))
-            opwNT:OpInc()
-        end while
+        opwNR:SetValue(Power(opwNR,opwNP))
 
         if lPowF
             opwNR:SetValue(opwNR:nthRoot(opwB))
@@ -5232,12 +5228,25 @@ return(r)
         local othMult:=s__o0:Clone()
         othMult:SetValue(TBIGN2MULT(oN:__cInt(),oN:__nBase()))
     return(othMult)
-    static function thPower(oB,oE)
-        local oP
-        SYMBOL_UNUSED(oB)
-        SYMBOL_UNUSED(oE)
-        SYMBOL_UNUSED(oP)
-        /*TODO
+#endif //__PTCOMPAT__
+
+/*
+    function    : Power
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 26/08/2014
+    Descricao   : Exponenciação de Números Inteiros
+    Sintaxe     : Power(oB,oE)
+*/
+static function Power(oB,oE)
+#ifdef TBIGN_RECPOWER
+    return(recPower(oB,oE))
+    /*
+        function    : recPower
+        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data        : 26/08/2014
+        Descricao   : Exponenciação de Números Inteiros
+        Sintaxe     : recPower(oB,oE)
+        Referencias : Baseada em recFact
         2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
                  4  *  4  *  4  *  4  *  4
                       16     *    16  *  4
@@ -5249,9 +5258,74 @@ return(r)
                                  256  *  4  *  2
                                       1024  *  2
                                             2048
-        */
-    return(oP)
-#endif //__PTCOMPAT__
+    */
+    static function recPower(oB,oE)
+
+    #ifndef __PTCOMPAT__
+        local aThreads
+    #endif
+
+        local oR:=oB:Clone()
+
+        local oI
+        local oE1
+        local oE2
+
+    #ifndef __PTCOMPAT__
+        static s__recPower:=0
+    #endif
+
+        if oE:lte(s__o2)
+    #ifndef __PTCOMPAT__
+        ++s__recPower
+    #endif
+            oI:=oE:Clone()
+            while oI:gt(s__o1)
+                oR:SetValue(oR:Mult(oB))
+                oI:OpDec()
+            end while
+            #ifndef __PTCOMPAT__
+                --s__recPower
+            #endif
+            return(oR)
+        endif
+
+        oE1:=oE:Clone()
+        oE2:=oE:Clone()
+
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
+        oE1:SetValue(oE1:Mult(s__od2):Int(.T.,.F.))
+        oE2:SetValue(oE2:Sub(oE1))
+
+    #ifndef __PTCOMPAT__
+        if s__recPower>100
+            aThreads:=Array(2,SIZ_TH)
+            aThreads[1][TH_NUM]:=hb_threadStart(@recPower(),oB,oE1)
+            hb_threadJoin(aThreads[1][TH_NUM],@aThreads[1][TH_RES])
+            aThreads[2][TH_NUM]:=hb_threadStart(@recPower(),oB,oE2)
+            hb_threadJoin(aThreads[2][TH_NUM],@aThreads[2][TH_RES])
+        else
+            tBigNthStart(2,@aThreads)
+            aThreads[1][TH_EXE]:={||recPower(oB,oE1)}
+            aThreads[2][TH_EXE]:={||recPower(oB,oE2)}
+            tBigNthNotify(@aThreads)
+            tBigNthWait(@aThreads)
+            tBigNthJoin(@aThreads)
+        endif
+    return(aThreads[1][TH_RES]:Mult(aThreads[2][TH_RES]))
+    #else
+    return(recPower(oB,oE1):Mult(recPower(oB,oE2)))
+    #endif //__PTCOMPAT__
+#else
+    Local oR:=oB:Clone()
+    Local oI:=oE:Clone()
+    while oI:gt(s__o1)
+        oR:SetValue(oR:Mult(oB))
+        oI:OpDec()
+    end while
+return(oR)
+#endif
 
 /*
     function    : tBigNInvert
@@ -5503,7 +5577,6 @@ return
             THNTHROOT()
             THMULT()
             TH2MULT()
-            THPOWER()
         endif
     return(lDummy)
 
