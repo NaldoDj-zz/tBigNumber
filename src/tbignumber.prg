@@ -5247,17 +5247,20 @@ static function Power(oB,oE)
         Descricao   : Exponenciação de Números Inteiros
         Sintaxe     : recPower(oB,oE)
         Referencias : Baseada em recFact
+        //-------------------------------------------------------------------------------------
         2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
                  4  *  4  *  4  *  4  *  4
                       16     *    16  *  4
                                  256  *  4
                                       1024
+        //-------------------------------------------------------------------------------------
         2^11-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)*(1*2)
                  4  *  4  *  4  *  4  *  4  *  2
                       16     *    16  *  4  *  2
                                  256  *  4  *  2
                                       1024  *  2
                                             2048
+        //-------------------------------------------------------------------------------------
     */
     static function recPower(oB,oE)
 
@@ -5318,8 +5321,8 @@ static function Power(oB,oE)
     return(recPower(oB,oE1):Mult(recPower(oB,oE2)))
     #endif //__PTCOMPAT__
 #else
-    Local oR:=oB:Clone()
-    Local oI:=oE:Clone()
+    local oR:=oB:Clone()
+    local oI:=oE:Clone()
     while oI:gt(s__o1)
         oR:SetValue(oR:Mult(oB))
         oI:OpDec()
