@@ -2117,8 +2117,8 @@ method Pow(uBigN) class tBigNumber
                 opwGCD:SetValue(opwA:GCD(opwB))
                 #ifndef __PTCOMPAT__
                     tBigNthStart(2,@aThreads)
-                    aThreads[1][TH_EXE]:={||opwA:Div(opwGCD)}
-                    aThreads[2][TH_EXE]:={||opwB:Div(opwGCD)}
+                    aThreads[1][TH_EXE]:={||thDiv(opwA,opwGCD)}
+                    aThreads[2][TH_EXE]:={||thDiv(opwB,opwGCD)}
                     tBigNthNotify(@aThreads)
                     tBigNthWait(@aThreads)
                     tBigNthJoin(@aThreads)
@@ -2373,8 +2373,8 @@ method LCM(uBigN) class tBigNumber
         #endif
         while .T.
             #ifndef __PTCOMPAT__
-                aThreads[1][TH_EXE]:={||oX:Mod(oI):eq(s__o0)}
-                aThreads[2][TH_EXE]:={||oY:Mod(oI):eq(s__o0)}
+                aThreads[1][TH_EXE]:={||thMod0(oX,oI)}
+                aThreads[2][TH_EXE]:={||thMod0(oY,oI)}
                 tBigNthNotify(@aThreads)
                 tBigNthWait(@aThreads)
                 lMX:=aThreads[1][TH_RES]
@@ -2386,28 +2386,28 @@ method LCM(uBigN) class tBigNumber
             while lMX .or. lMY
                 #ifndef __PTCOMPAT__
                     if lMX .and. lMY
-                        aThreads[1][TH_EXE]:={||oLCM:Mult(oI)}
-                        aThreads[2][TH_EXE]:={||oX:Div(oI,.F.)}
-                        aThreads[3][TH_EXE]:={||oY:Div(oI,.F.)}
+                        aThreads[1][TH_EXE]:={||thMult(oLCM,oI)}
+                        aThreads[2][TH_EXE]:={||thDiv(oX,oI,.F.)}
+                        aThreads[3][TH_EXE]:={||thDiv(oY,oI,.F.)}
                         tBigNthNotify(@aThreads)
                         tBigNthWait(@aThreads)
                         oLCM:SetValue(aThreads[1][TH_RES])
                         oX:SetValue(aThreads[2][TH_RES])
                         oY:SetValue(aThreads[3][TH_RES])
-                        aThreads[1][TH_EXE]:={||oX:Mod(oI):eq(s__o0)}
-                        aThreads[2][TH_EXE]:={||oY:Mod(oI):eq(s__o0)}
+                        aThreads[1][TH_EXE]:={||thMod0(oX,oI)}
+                        aThreads[2][TH_EXE]:={||thMod0(oY,oI)}
                         aThreads[3][TH_EXE]:=NIL
                         tBigNthNotify(@aThreads)
                         tBigNthWait(@aThreads)
                         lMX:=aThreads[1][TH_RES]
                         lMY:=aThreads[2][TH_RES]
                     else
-                        aThreads[1][TH_EXE]:={||oLCM:Mult(oI)}
+                        aThreads[1][TH_EXE]:={||thMult(oLCM,oI)}
                         if lMX
-                            aThreads[2][TH_EXE]:={||oX:Div(oI,.F.)}
+                            aThreads[2][TH_EXE]:={||thDiv(oX,oI,.F.)}
                         endif
                         if lMY
-                            aThreads[2][TH_EXE]:={||oY:Div(oI,.F.)}
+                            aThreads[2][TH_EXE]:={||thDiv(oY,oI,.F.)}
                         endif
                         aThreads[3][TH_EXE]:=NIL
                         tBigNthNotify(@aThreads)
@@ -2772,8 +2772,8 @@ method Log(uBigNB) class tBigNumber
 
     #ifndef __PTCOMPAT__
         tBigNthStart(2,@aThreads_1)
-        aThreads_1[1][TH_EXE]:={||oY:Add(oI)}
-        aThreads_1[2][TH_EXE]:={||oX:Div(oT)}
+        aThreads_1[1][TH_EXE]:={||thAdd(oY,oI)}
+        aThreads_1[2][TH_EXE]:={||thDiv(oX,oT)}
     #endif
 
     while oX:gt(oT) .and. noTcmp1==1
@@ -2790,11 +2790,11 @@ method Log(uBigNB) class tBigNumber
 
     #ifndef __PTCOMPAT__
         tBigNthStart(3,@aThreads_2)
-        aThreads_2[1][TH_EXE]:={||oS:Add(oY)}
-        aThreads_2[2][TH_EXE]:={||oT:nthRoot(s__o2)}
+        aThreads_2[1][TH_EXE]:={||thAdd(oS,oY)}
+        aThreads_2[2][TH_EXE]:={||thnthRoot(oT,s__o2)}
         //-------------------------------------------------------------------------------------
         //(Div(2)==Mult(.5)
-        aThreads_2[3][TH_EXE]:={||oI:Mult(s__od2)}
+        aThreads_2[3][TH_EXE]:={||thMult(oI,s__od2)}
         tBigNthNotify(@aThreads_2)
         tBigNthWait(@aThreads_2)
         tBigNthJoin(@aThreads_2)
@@ -4114,8 +4114,8 @@ static function rMult(cA,cB,nBase,nAcc)
 
 #ifndef __PTCOMPAT__
     tBigNthStart(2,@aThreads)
-    aThreads[1][TH_EXE]:={||oa:Mult(s__oD2)}
-    aThreads[2][TH_EXE]:={||ob:Mult(s__o2)}
+    aThreads[1][TH_EXE]:={||thMult(oa,s__oD2)}
+    aThreads[2][TH_EXE]:={||th2Mult(ob)}
 #endif
 
     while oa:ne(s__o0)
