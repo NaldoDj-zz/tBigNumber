@@ -1546,7 +1546,7 @@ return(oadNR)
     method      : Sub
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
-    Descricao   : Soma
+    Descricao   : Subtracao
     Sintaxe     : tBigNumber():Sub(uBigN) -> oBigNR
 */
 method Sub(uBigN) class tBigNumber
