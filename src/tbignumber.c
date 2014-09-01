@@ -50,7 +50,7 @@
         static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB);
         static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv);        
         static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv);        
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u,HB_MAXUINT v);
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v);
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y);
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
 
@@ -803,7 +803,7 @@
         }
                 
         /*
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT x,HB_MAXUINT y){
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT x,HB_MAXUINT y){
             HB_MAXUINT nGCD = x;  
             x = HB_MAX(y,nGCD);
             y = HB_MIN(nGCD,y);
@@ -823,7 +823,7 @@
         }*/
         
         //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
-        static HB_MAXUINT tBIGNGDC(HB_MAXUINT u,HB_MAXUINT v){
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v){
           int shift;
          
           /* GCD(0,v) == v; GCD(u,0) == u,GCD(0,0) == 0 */
@@ -860,8 +860,8 @@
           return u << shift;
         }
 
-        HB_FUNC_STATIC( TBIGNGDC ){
-            hb_retnint(tBIGNGDC((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
+        HB_FUNC_STATIC( TBIGNGCD ){
+            hb_retnint(tBIGNGCD((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
         }
 
         /*
@@ -899,7 +899,7 @@
         */
 
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
-            return ((y/tBIGNGDC(x,y))*x);
+            return ((y/tBIGNGCD(x,y))*x);
         }    
         
         HB_FUNC_STATIC( TBIGNLCM ){

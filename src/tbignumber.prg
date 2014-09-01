@@ -2322,7 +2322,7 @@ return(oGCD)
 
 static function cGCD(nX,nY)
     #ifndef __PTCOMPAT__
-        local nGCD:=TBIGNGDC(nX,nY)
+        local nGCD:=TBIGNGCD(nX,nY)
     #else //__PROTHEUS__
         local nGCD:=nX
         nX:=Max(nY,nGCD)
@@ -5561,7 +5561,7 @@ return
             TBIGNEGMULT()
             TBIGNEGDIV()
             TBIGNECDIV()
-            TBIGNGDC()
+            TBIGNGCD()
             TBIGNLCM()
             TBIGNFI()
             TBIGNALEN()
