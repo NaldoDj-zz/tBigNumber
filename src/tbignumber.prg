@@ -4284,7 +4284,7 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
                 tmp:SetValue(b:Mult(n))
                 if tmp:gt(a)
                     exit
-                    endif
+                endif
                 aux:SetValue(tmp)
             end while
         endif
