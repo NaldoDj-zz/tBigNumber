@@ -4054,7 +4054,7 @@ static function egMult(cN1,cN2,nBase,nAcc)
     if .F. .and. omtN1:ibtw(s__o0,MAX_SYS_lMULT) .and.  omtN2:ibtw(s__o0,MAX_SYS_lMULT)
         oMTP:SetValue(hb_ntos(tBigNlMult(Val(cN1),Val(cN2))),nBase,"0",NIL,nAcc)
     else
-        */oMTP:SetValue(TBIGNegMult(cN1,cN2,Len(cN1),nBase),nBase,"0",NIL,nAcc)
+        */oMTP:SetValue(TBIGNegMult(cN1,cN2,hb_bLen(cN1),nBase),nBase,"0",NIL,nAcc)
     //endif
 
 #endif //__PTCOMPAT__
@@ -5509,8 +5509,22 @@ return
     return
 
     static procedure tBigNthWait(aThreads)
-        while (aScan(aThreads,{|ath|.not.(aTh[TH_END])})>0)
-            tBigNSleep(0.001)
+        local nThread
+        local nThreads:=tBIGNaLen(aThreads)
+        local nThCount:=0
+        while .t.
+            for nThread:=1 to nThreads
+                if hb_mutexLock(aThreads[nThread][TH_MTX])
+                    if aThreads[nThread][TH_END]
+                        ++nThCount
+                    endif
+                    hb_MutexUnLock(aThreads[nThread][TH_MTX])
+                endif
+            next nThread
+            if nThCount==nThreads
+                exit
+            endif
+            nThCount:=0
         end while
     return
 
@@ -5530,6 +5544,8 @@ return
                         Eval(xJob)
                         exit
                     case "N"
+                        while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
+                        end while
                         if (ValType(aThreads[xJob][TH_EXE])=="B")
                             aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
                             aThreads[xJob][TH_END]:=.T.
@@ -5537,6 +5553,7 @@ return
                             aThreads[xJob][TH_RES]:=NIL
                             aThreads[xJob][TH_END]:=.T.
                         endif
+                        hb_MutexUnLock(aThreads[xJob][TH_MTX])
                         exit
                     endswitch
                 endif
