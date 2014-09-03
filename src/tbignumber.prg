@@ -4410,11 +4410,16 @@ return(acc)
     Sintaxe     : __SQRT(p) -> oSQRT
 */
 static function __SQRT(p)
+#ifndef __PTCOMPAT__
+    local aThreads
+#endif
     local l
     local r
     local t
     local s
     local n
+    local x
+    local y
     local EPS
     local q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
@@ -4430,14 +4435,31 @@ static function __SQRT(p)
         r:=q:Mult(s__od2)
         t:=r:Pow(s__o2):Sub(q):Abs(.T.)
         l:=s__o0:Clone()
+        #ifndef __PTCOMPAT__
+            tBigNthStart(2,@aThreads)
+            aThreads[1][TH_EXE]:={||r:pow(s__o2)}
+            aThreads[2][TH_EXE]:={||s__o2:Mult(r)}
+        #endif
         while t:gte(EPS)
-            r:SetValue(r:pow(s__o2):Add(q):Div(s__o2:Mult(r)))
+            #ifndef __PTCOMPAT__
+                tBigNthNotify(@aThreads)
+                tBigNthWait(@aThreads)
+                x:=aThreads[1][TH_RES]
+                y:=aThreads[2][TH_RES]
+            #else
+                x:=r:pow(s__o2)
+                y:=s__o2:Mult(r)
+            #endif    
+            r:SetValue(x:Add(q):Div(y))
             t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
             if t:eq(l)
                 exit
             endif
             l:SetValue(t)
         end while
+        #ifndef __PTCOMPAT__
+            tBigNthJoin(@aThreads)
+        #endif
     endif
 return(r)
 
