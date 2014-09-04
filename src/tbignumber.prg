@@ -81,6 +81,8 @@
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
     //-------------------------------------------------------------------------------------
+*   #define TBIGN_RECPOWER
+    //-------------------------------------------------------------------------------------
 #endif //__PROTHEUS__
 
 #ifndef __DIVMETHOD__
@@ -4410,8 +4412,14 @@ return(acc)
     Sintaxe     : __SQRT(p) -> oSQRT
 */
 static function __SQRT(p)
-#ifndef __PTCOMPAT__
-    local aThreads
+#ifdef TBIGN_RECPOWER
+    /*
+        TODO:   This application has requested the Runtime to terminate it in an unusual way
+                Please contact the application's support team for more information.
+    */
+    #ifndef __PTCOMPAT__
+        local aThreads
+    #endif
 #endif
     local l
     local r
@@ -4435,21 +4443,28 @@ static function __SQRT(p)
         r:=q:Mult(s__od2)
         t:=r:Pow(s__o2):Sub(q):Abs(.T.)
         l:=s__o0:Clone()
-        #ifndef __PTCOMPAT__
-            tBigNthStart(2,@aThreads)
-            aThreads[1][TH_EXE]:={||r:pow(s__o2)}
-            aThreads[2][TH_EXE]:={||s__o2:Mult(r)}
+        #ifdef TBIGN_RECPOWER
+            #ifndef __PTCOMPAT__
+                tBigNthStart(2,@aThreads)
+                aThreads[1][TH_EXE]:={||r:pow(s__o2)}
+                aThreads[2][TH_EXE]:={||s__o2:Mult(r)}
+            #endif
         #endif
         while t:gte(EPS)
-            #ifndef __PTCOMPAT__
-                tBigNthNotify(@aThreads)
-                tBigNthWait(@aThreads)
-                x:=aThreads[1][TH_RES]
-                y:=aThreads[2][TH_RES]
+            #ifdef TBIGN_RECPOWER
+                #ifndef __PTCOMPAT__
+                    tBigNthNotify(@aThreads)
+                    tBigNthWait(@aThreads)
+                    x:=aThreads[1][TH_RES]
+                    y:=aThreads[2][TH_RES]
+                #else
+                    x:=r:pow(s__o2)
+                    y:=s__o2:Mult(r)
+                #endif
             #else
                 x:=r:pow(s__o2)
                 y:=s__o2:Mult(r)
-            #endif    
+            #endif
             r:SetValue(x:Add(q):Div(y))
             t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
             if t:eq(l)
@@ -4457,8 +4472,10 @@ static function __SQRT(p)
             endif
             l:SetValue(t)
         end while
-        #ifndef __PTCOMPAT__
-            tBigNthJoin(@aThreads)
+        #ifdef TBIGN_RECPOWER
+            #ifndef __PTCOMPAT__
+                tBigNthJoin(@aThreads)
+            #endif
         #endif
     endif
 return(r)
@@ -5261,6 +5278,10 @@ return(r)
 */
 static function Power(oB,oE)
 #ifdef TBIGN_RECPOWER
+    /*
+        TODO:   This application has requested the Runtime to terminate it in an unusual way
+                Please contact the application's support team for more information.
+    */
     return(recPower(oB,oE))
     /*
         function    : recPower
