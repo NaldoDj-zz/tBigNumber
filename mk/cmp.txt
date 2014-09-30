@@ -1,0 +1,21 @@
+BATCH FILE FOR Harbour MinGW64
+hbmk2: Processando script local: hbmk.hbm
+Harbour 3.2.0dev (r1408202311)
+Copyright (c) 1999-2014, http://harbour-project.org/
+100200300400500600Harbour 3.2.0dev (r1408202311)
+Copyright (c) 1999-2014, http://harbour-project.org/
+700100200Compiling '..\hbp\..\src\tBigNtst.prg'...
+300400500600700100Compiling '..\hbp\..\src\tBigNumber.prg'...
+100200300400500100100200300100400200500100200300400500100200100200300400500100100100100100100200200100100200300100200100200300300400500600700800900100011001200130014001500160040017001800190020005002100220060023002400700250026002700800280029009003000310032001003300200340035003004005003600600370070038003900800400041009004200430010001100440045004600470048004900500051005200120053005400550056001002003004005006007008009001000Lines 8996, Functions/Procedures 131
+1000Generating C source output to 'C:\Users\MARIN_~1\AppData\Local\Temp\hbmk_a16svp.dir\tBigNumber.c'... Done.
+1100120013001400150016001700180019002000210022002300240025002600270028002900300031003200330034003500360037003800390040004100420035 errors
+
+No code generated.
+hbmk2: Processando script local: hbmk.hbm
+Harbour 3.2.0dev (r1408202311)
+Copyright (c) 1999-2014, http://harbour-project.org/
+Harbour 3.2.0dev (r1408202311)
+Copyright (c) 1999-2014, http://harbour-project.org/
+100100200200300300400400500500600600700700Compiling '..\hbp\..\src\tBigNumber.prg'...
+Compiling '..\hbp\..\src\tBigNtst.prg'...
+100100100100200200300300400400500500100200100200300100200100400200500300400500100100100100100100200200100100200300100200100200300Deseja finalizar o arquivo em lotes (S/N)? 
