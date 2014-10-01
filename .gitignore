@@ -7,6 +7,8 @@
 *.scc
 *.old
 *.err*
+*.erx_prg
+*.erx_prw
 *.ppx_*
 *.exe
 *.0*
