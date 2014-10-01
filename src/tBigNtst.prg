@@ -1,4 +1,4 @@
-//TODO: core / tests / gtwin.prg
+//TODO: core/tests/gtwin.prg
 #include "tBigNumber.ch"
 #include "paramtypex.ch"
 
@@ -18,6 +18,7 @@
 
 #ifdef __PROTHEUS__
     #xcommand ? <e> => ConOut(<e>)
+    #xcommand MEMVAR <m> =>
 #endif
 
 #ifdef __HARBOUR__
