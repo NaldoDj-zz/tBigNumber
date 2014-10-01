@@ -1,0 +1,356 @@
+#line 203 "D:\marinas-ide(64bits)\harbour\include\hbclass.ch"
+DECLARE HBClass  New( cName AS STRING, OPTIONAL SuperParams ) AS CLASS HBClass  Create() AS OBJECT  Instance() AS OBJECT  AddClsMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC, n2 AS NUMERIC, n3 AS NUMERIC )  AddMultiClsData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING )  AddMultiData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING, x AS LOGICAL, lPer AS LOGICAL )  AddMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC )  AddInLine( cName AS STRING, bBlock AS CODEBLOCK, nScope AS NUMERIC )  AddVirtual( cName AS STRING )
+#line 58 "D:\GitHub\core\contrib\xhb\xhb.ch"
+   EXTERNAL xhb_Lib
+#line 17 "D:\GitHub\tbigNumber\src\tSProgress.prg"
+_HB_CLASS tSProgress ; function tSProgress ( ... ) ; STATIC s_oClass ; LOCAL nScope, oClass, oInstance ; IF s_oClass == NIL .AND. __clsLockDef( @s_oClass ) ; BEGIN SEQUENCE ; nScope := 1 ; ( ( nScope ) ) ; oClass := iif( .F.,, HBClass():new( "tSProgress", iif( .F., { }, { @HBObject() } ), @tSProgress() ) ) ;
+
+
+    nScope := 2; ( ( nScope ) )
+
+
+; _HB_MEMBER { AS ARRAY aMethods } ; oClass:AddMultiData( "ARRAY", Array(0), 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"aMethods"}, .F. )
+; _HB_MEMBER { AS ARRAY aProgress } ; oClass:AddMultiData( "ARRAY", Array(0), 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"aProgress"}, .F. )
+
+; _HB_MEMBER { AS LOGICAL lRandom } ; oClass:AddMultiData( "LOGICAL", .F., 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"lRandom"}, .F. )
+
+; _HB_MEMBER { AS NUMERIC nMax } ; oClass:AddMultiData( "NUMERIC", 0, 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nMax"}, .F. )
+; _HB_MEMBER { AS NUMERIC nMethod } ; oClass:AddMultiData( "NUMERIC", 0, 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nMethod"}, .F. )
+; _HB_MEMBER { AS NUMERIC nMethods } ; oClass:AddMultiData( "NUMERIC", 0, 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nMethods"}, .F. )
+; _HB_MEMBER { AS NUMERIC nProgress } ; oClass:AddMultiData( "NUMERIC", 0, 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nProgress"}, .F. )
+
+; _HB_MEMBER { AS LOGICAL lShuttle } ; oClass:AddMultiData( "LOGICAL", .F., 4 + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"lShuttle"}, .F. )
+
+
+    nScope := 1 ; ( ( nScope ) )
+
+
+    _HB_MEMBER New( cProgress,cToken) AS CLASS tSProgress; oClass:AddMethod( "New", @tSProgress_New(), nScope + iif( .T., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER ClassName(); oClass:AddMethod( "ClassName", @tSProgress_ClassName(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER SetProgress( cProgress,cToken); oClass:AddMethod( "SetProgress", @tSProgress_SetProgress(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Eval( cMethod,cAlign); oClass:AddMethod( "Eval", @tSProgress_Eval(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Progress(); oClass:AddMethod( "Progress", @tSProgress_Progress(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Increment( cAlign); oClass:AddMethod( "Increment", @tSProgress_Increment(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Decrement( cAlign); oClass:AddMethod( "Decrement", @tSProgress_Decrement(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Shuttle( cAlign); oClass:AddMethod( "Shuttle", @tSProgress_Shuttle(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Junction( cAlign); oClass:AddMethod( "Junction", @tSProgress_Junction(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Dispersion( cAlign); oClass:AddMethod( "Dispersion", @tSProgress_Dispersion(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Disjunction( cAlign); oClass:AddMethod( "Disjunction", @tSProgress_Disjunction(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Union( cAlign); oClass:AddMethod( "Union", @tSProgress_Union(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Occult( cAlign); oClass:AddMethod( "Occult", @tSProgress_Occult(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Random( cAlign); oClass:AddMethod( "Random", @tSProgress_Random(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER GetnMax(); oClass:AddMethod( "GetnMax", @tSProgress_GetnMax(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER GetnProgress(); oClass:AddMethod( "GetnProgress", @tSProgress_GetnProgress(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER SetRandom( lSet); oClass:AddMethod( "SetRandom", @tSProgress_SetRandom(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+oClass:Create() ; ; ALWAYS ; __clsUnlockDef( @s_oClass, oClass ) ; end ; oInstance := oClass:Instance() ; IF __objHasMsg( oInstance, "InitClass" ) ; oInstance:InitClass( ... ) ; END ; RETURN oInstance ; END ; RETURN s_oClass:Instance() AS CLASS tSProgress ;
+
+
+
+
+
+
+static FUNCTION tSProgress_New(cProgress,cToken) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    self:SetProgress(@cProgress,@cToken)
+Return(self)
+
+static FUNCTION tSProgress_ClassName() ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+Return("TSPROGRESS")
+
+static FUNCTION tSProgress_SetProgress(cProgress,cToken) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local lMacro
+    iif( cProgress == NIL , hb_Default(@cProgress,"-;\;|;/") , )
+    iif( cToken == NIL , hb_Default(@cToken,";") , )
+    lMacro := (SubStr(cProgress,1,1)=="&")
+    IF (lMacro)
+        cProgress        := SubStr(cProgress,2)
+        cProgress        := &(cProgress)
+    EndIF
+    IF Empty(self:aMethods)
+        iif( self:aMethods == NIL , hb_Default(@self:aMethods,Array(0)) , )
+        aAdd(self:aMethods,"PROGRESS")
+        aAdd(self:aMethods,"INCREMENT")
+        aAdd(self:aMethods,"DECREMENT")
+        aAdd(self:aMethods,"SHUTTLE")
+        aAdd(self:aMethods,"JUNCTION")
+        aAdd(self:aMethods,"DISPERSION")
+        aAdd(self:aMethods,"DISJUNCTION")
+        aAdd(self:aMethods,"UNION")
+        aAdd(self:aMethods,"OCCULT")
+        aAdd(self:aMethods,"RANDOM")
+        self:nMethods := Len(self:aMethods)
+    EndIF
+    self:aProgress        := _StrToKArr(@cProgress,@cToken)
+    self:lRandom        := .F.
+    self:lShuttle        := !(self:lShuttle)
+    self:nMethod        := 0
+    self:nMax            := Len(self:aProgress)
+    self:nProgress        := 0
+Return(self)
+
+static FUNCTION tSProgress_Eval(cMethod,cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cEval
+    Local nMethod
+    iif( cMethod == NIL , hb_Default(@cMethod,"PROGRESS") , )
+    cMethod := Upper(xhb_AllTrim( cMethod ))
+    nMethod := Max(aScan(self:aMethods,{|m|m==cMethod}),1)
+    cMethod := self:aMethods[nMethod]
+    DO CASE
+    CASE (cMethod=="PROGRESS")
+        cEval := self:Progress()
+    CASE (cMethod=="INCREMENT")
+        cEval := self:Increment(@cAlign)
+    CASE (cMethod=="DECREMENT")
+        cEval := self:Decrement(@cAlign)
+    CASE (cMethod=="SHUTTLE")
+        cEval := self:Shuttle(@cAlign)
+    CASE (cMethod=="JUNCTION")
+        cEval := self:Junction(@cAlign)
+    CASE (cMethod=="DISPERSION")
+        cEval := self:Dispersion(@cAlign)
+    CASE (cMethod=="DISJUNCTION")
+        cEval := self:Disjunction(@cAlign)
+    CASE (cMethod=="UNION")
+        cEval := self:Union(@cAlign)
+    CASE (cMethod=="OCCULT")
+        cEval := self:Occult(@cAlign)
+    CASE (cMethod=="RANDOM")
+        cEval := self:Random(@cAlign)
+    OTHERWISE
+        cEval := self:Progress()
+    ENDCASE
+Return(cEval)
+
+static FUNCTION tSProgress_Progress() ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+Return(self:aProgress[IF(++self:nProgress>self:nMax,self:nProgress:=1,self:nProgress)])
+
+static FUNCTION tSProgress_Increment(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cPADFunc      := "PAD"
+    Local cProgress     := ""
+    Local nProgress
+    Local nsProgress
+    iif( cAlign == NIL , hb_Default(@cAlign,"R") , )
+    IF Empty(cAlign)
+        cAlign := "R"
+    EndIF
+    IF (++self:nProgress>self:nMax)
+        self:nProgress := 1
+    EndIF
+    nsProgress := self:nProgress
+    IF (cAlign=="C")
+        ++nsProgress
+        IF (nsProgress>self:nMax)
+            nsProgress := 1
+        EndIF
+    EndIF
+    For nProgress := 1 To nsProgress
+        IF self:lRandom .AND. ((__Random(nProgress,self:nMax)%__Random(1,5))==0)
+            cProgress += Space(Len(self:aProgress[nProgress]))
+        Else
+            cProgress += self:aProgress[nProgress]
+        EndIF
+    next
+    cPADFunc += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+static FUNCTION tSProgress_Decrement(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    iif( cAlign == NIL , hb_Default(@cAlign,"L") , )
+Return(self:Increment(cAlign))
+
+static FUNCTION tSProgress_Shuttle(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cEval
+    IF (!(self:lShuttle).AND.(self:nProgress>=self:nMax))
+        self:lShuttle := .T.
+    ElseIF (self:lShuttle.AND.(self:nProgress>=self:nMax))
+        self:lShuttle := .F.
+    EndIF
+    IF (self:lShuttle)
+        cEval  := "DECREMENT"
+        cAlign := "L"
+    Else
+        cEval  := "INCREMENT"
+        cAlign := "R"
+    EndIF
+Return(self:Eval(cEval,@cAlign))
+
+static FUNCTION tSProgress_Junction(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cLToR        := ""
+    Local cRToL        := ""
+    Local cProgress    := ""
+    Local cPADFunc  := "PAD"
+    Local nProgress
+    iif( cAlign == NIL , hb_Default(@cAlign,"R") , )
+    IF Empty(cAlign)
+        cAlign := "R"
+    EndIF
+    IF (++self:nProgress>self:nMax)
+        self:nProgress := 1
+    EndIF
+    For nProgress := 1 To self:nProgress
+        IF self:lRandom .AND. ((__Random(nProgress,self:nMax)%__Random(1,5))==0)
+            cLToR += Space(Len(self:aProgress[nProgress]))
+        Else
+            cLToR += self:aProgress[nProgress]
+        EndIF
+    next
+    For nProgress := self:nMax To Min(((self:nMax-self:nProgress)+1),self:nMax) STEP (-1)
+        IF self:lRandom .AND. ((__Random(nProgress,self:nMax)%__Random(1,5))==0)
+            cRToL += Space(Len(self:aProgress[nProgress]))
+        Else
+            cRToL += self:aProgress[nProgress]
+        EndIF
+    next
+    self:nProgress += Len(cRToL)
+    self:nProgress := Min(self:nProgress,self:nMax)
+    cProgress += cLToR
+    cProgress += Space(self:nMax-self:nProgress)
+    cProgress += cRToL
+    cPADFunc  += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+static FUNCTION tSProgress_Dispersion(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cEval
+    iif( cAlign == NIL , hb_Default(@cAlign,"R") , )
+    IF Empty(cAlign)
+        cAlign := "R"
+    EndIF
+    IF (cAlign=="R")
+        cEval := "INCREMENT"
+    Else
+        cEval := "DECREMENT"
+    EndIF
+Return(self:Eval(cEval,"C"))
+
+static FUNCTION tSProgress_Disjunction(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cPADFunc  := "PAD"
+    Local cProgress    := ""
+    Local nAT
+    iif( cAlign == NIL , hb_Default(@cAlign,"C") , )
+    IF Empty(cAlign)
+        cAlign := "C"
+    EndIF
+    IF (++self:nProgress>self:nMax)
+        self:nProgress := 1
+    EndIF
+    aEval(self:aProgress,{|p,n|cProgress+=IF(self:lRandom.AND.((__Random(n,self:nMax)%__Random(1,5))==0),Space(Len(p)),p)})
+    IF (self:nProgress>1)
+        nAT       := Int(self:nMax/self:nProgress)
+        cProgress := SubStr(cProgress,1,nAT)
+        cProgress += Space(self:nProgress-1)+cProgress
+    EndIF
+    cPADFunc += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+static FUNCTION tSProgress_Union(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cPADFunc  := "PAD"
+    Local cProgress    := ""
+    Local nAT
+    Local nQT
+    iif( cAlign == NIL , hb_Default(@cAlign,"C") , )
+    IF Empty(cAlign)
+        cAlign := "C"
+    EndIF
+    IF (++self:nProgress>self:nMax)
+        self:nProgress := 1
+    EndIF
+    aEval(self:aProgress,{|p,n|cProgress+=IF(self:lRandom.AND.((__Random(n,self:nMax)%__Random(1,5))==0),Space(Len(p)),p)})
+    IF (self:nProgress>1)
+        nAT := Round(self:nMax/self:nProgress,0)
+        IF (Mod(self:nMax,2)==0)
+            nQT := ((self:nProgress-1)*2)
+        Else
+            nQT := ((self:nProgress-1)*3)
+        EndIF
+        cProgress := Stuff(cProgress,nAT,nQT,"")
+    EndIF
+    cPADFunc  += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+static FUNCTION tSProgress_Occult(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local cPADFunc  := "PAD"
+    Local cProgress := ""
+    Local nProgress
+    Local nsProgress
+    iif( cAlign == NIL , hb_Default(@cAlign,"L") , )
+    IF Empty(cAlign)
+        cAlign := "L"
+    EndIF
+    IF (++self:nProgress>self:nMax)
+        self:nProgress := 1
+    EndIF
+    nsProgress := self:nProgress
+    IF (cAlign=="C")
+        ++nsProgress
+        IF (nsProgress>self:nMax)
+            nsProgress := 1
+        EndIF
+    EndIF
+    For nProgress := self:nMax To nsProgress STEP (-1)
+        IF self:lRandom .AND. ((__Random(nProgress,self:nMax)%__Random(1,5))==0)
+            cProgress += Space(Len(self:aProgress[(self:nMax-nProgress)+1]))
+        Else
+            cProgress += self:aProgress[(self:nMax-nProgress)+1]
+        EndIF
+    next
+    cPADFunc += cAlign
+Return(&cPADFunc.(cProgress,self:nMax))
+
+static FUNCTION tSProgress_Random(cAlign) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    IF ((self:nMethod==0) .OR. (self:nProgress>=self:nMax))
+        self:nMethod := Min(__Random(1,self:nMethods+1),self:nMethods)
+        While (("RANDOM"$self:aMethods[self:nMethod]).OR.("PROGRESS"$self:aMethods[self:nMethod]))
+            self:nMethod := Min(__Random(1,self:nMethods+1),self:nMethods)
+        end
+    EndIF
+Return(self:Eval(self:aMethods[self:nMethod],@cAlign))
+
+static FUNCTION tSProgress_SetRandom(lSet) ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+    Local lRandom := self:lRandom
+    iif( lSet == NIL , hb_Default(@lSet,.T.) , )
+    self:lRandom  := lSet
+Return(lRandom)
+
+static FUNCTION tSProgress_GetnMax() ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+Return(self:nMax)
+
+static FUNCTION tSProgress_GetnProgress() ; local Self AS CLASS tSProgress := QSelf() AS CLASS tSProgress
+Return(self:nProgress)
+
+Static Function _StrToKArr(cStr,cToken)
+    Local cDToken
+    iif( cStr == NIL , hb_Default(@cStr,"") , )
+    iif( cToken == NIL , hb_Default(@cToken,";") , )
+    cDToken := (cToken+cToken)
+    While (cDToken$cStr)
+        cStr := StrTran(cStr,cDToken,cToken+" "+cToken)
+    end
+
+
+
+Return(hb_aTokens(cStr,cToken))
+
+
+Static Function __Random(nB,nE)
+
+    Local nR
+
+    IF nB==0
+        nB := 1
+    EndIF
+
+    IF nB==nE
+        ++nE
+    EndIF
+
+
+        nR := Abs(HB_RandomInt(nB,nE))
+
+
+
+
+Return(nR)

@@ -1,0 +1,6547 @@
+#line 203 "D:\marinas-ide(64bits)\harbour\include\hbclass.ch"
+DECLARE HBClass  New( cName AS STRING, OPTIONAL SuperParams ) AS CLASS HBClass  Create() AS OBJECT  Instance() AS OBJECT  AddClsMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC, n2 AS NUMERIC, n3 AS NUMERIC )  AddMultiClsData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING )  AddMultiData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING, x AS LOGICAL, lPer AS LOGICAL )  AddMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC )  AddInLine( cName AS STRING, bBlock AS CODEBLOCK, nScope AS NUMERIC )  AddVirtual( cName AS STRING )
+#line 58 "D:\GitHub\core\contrib\xhb\xhb.ch"
+   EXTERNAL xhb_Lib
+#line 92 "D:\GitHub\tbigNumber\src\tbignumber.prg"
+static s__cN0
+static s__nN0
+static s__cN9
+static s__nN9
+
+static s__o0
+static s__o1
+static s__o2
+static s__o10
+static s__o20
+static s__od2
+
+static s__oMinFI
+static s__oMinGCD
+static s__nMinLCM
+
+static s__lstbNSet
+
+static s__nDivMTD
+
+static s__nthRAcc
+static s__nDecSet
+
+static s__MTXcN0:=hb_mutexCreate()
+static s__MTXcN9:=hb_mutexCreate()
+static s__MTXACC:=hb_mutexCreate()
+static s__MTXDEC:=hb_mutexCreate()
+static s__MTXSQR:=hb_mutexCreate()
+
+
+
+
+
+
+
+
+
+
+
+thread static ths_SysSQRT
+
+thread static ths_lsdSet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_HB_CLASS tBigNumber ; function tBigNumber ( ... ) ; STATIC s_oClass ; LOCAL nScope, oClass, oInstance ; IF s_oClass == NIL .AND. __clsLockDef( @s_oClass ) ; BEGIN SEQUENCE ; nScope := 1 ; ( ( nScope ) ) ; oClass := iif( .F.,, HBClass():new( "tBigNumber", iif( .T., { @hbClass() }, { @HBObject() } ), @tBigNumber() ) ) ;
+
+
+
+
+
+            nScope := 2; ( ( nScope ) )
+
+
+
+
+; _HB_MEMBER { AS CHARACTER cDec } ; oClass:AddMultiData( "CHARACTER", "0", nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"cDec"}, .F. )
+; _HB_MEMBER { AS CHARACTER cInt } ; oClass:AddMultiData( "CHARACTER", "0", nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"cInt"}, .F. )
+; _HB_MEMBER { AS CHARACTER cRDiv } ; oClass:AddMultiData( "CHARACTER", "0", nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"cRDiv"}, .F. )
+; _HB_MEMBER { AS CHARACTER cSig } ; oClass:AddMultiData( "CHARACTER", "", nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"cSig"}, .F. )
+; _HB_MEMBER { AS LOGICAL lNeg } ; oClass:AddMultiData( "LOGICAL", .F., nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"lNeg"}, .F. )
+; _HB_MEMBER { AS NUMERIC nBase } ; oClass:AddMultiData( "NUMERIC", 10, nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nBase"}, .F. )
+; _HB_MEMBER { AS NUMERIC nDec } ; oClass:AddMultiData( "NUMERIC", 1, nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nDec"}, .F. )
+; _HB_MEMBER { AS NUMERIC nInt } ; oClass:AddMultiData( "NUMERIC", 1, nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nInt"}, .F. )
+; _HB_MEMBER { AS NUMERIC nSize } ; oClass:AddMultiData( "NUMERIC", 2, nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ), {"nSize"}, .F. )
+
+
+    nScope := 1 ; ( ( nScope ) )
+
+
+    _HB_MEMBER New( uBigN,nBase) AS CLASS tBigNumber; oClass:AddMethod( "New", @tBigNumber_New(), nScope + iif( .T., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+
+
+
+    _HB_MEMBER Normalize( oBigN); oClass:AddMethod( "Normalize", @tBigNumber_Normalize(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER __cDec( cDec); _HB_MEMBER ___cDec( cDec); oClass:AddMethod( "__cDec", @tBigNumber___cDec(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___cDec", @tBigNumber___cDec(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __cInt( cInt); _HB_MEMBER ___cInt( cInt); oClass:AddMethod( "__cInt", @tBigNumber___cInt(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___cInt", @tBigNumber___cInt(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __cRDiv( cRDiv); _HB_MEMBER ___cRDiv( cRDiv); oClass:AddMethod( "__cRDiv", @tBigNumber___cRDiv(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___cRDiv", @tBigNumber___cRDiv(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __cSig( cSig); _HB_MEMBER ___cSig( cSig); oClass:AddMethod( "__cSig", @tBigNumber___cSig(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___cSig", @tBigNumber___cSig(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __lNeg( lNeg); _HB_MEMBER ___lNeg( lNeg); oClass:AddMethod( "__lNeg", @tBigNumber___lNeg(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___lNeg", @tBigNumber___lNeg(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __nBase( nBase); _HB_MEMBER ___nBase( nBase); oClass:AddMethod( "__nBase", @tBigNumber___nBase(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___nBase", @tBigNumber___nBase(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __nDec( nDec); _HB_MEMBER ___nDec( nDec); oClass:AddMethod( "__nDec", @tBigNumber___nDec(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___nDec", @tBigNumber___nDec(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __nInt( nInt); _HB_MEMBER ___nInt( nInt); oClass:AddMethod( "__nInt", @tBigNumber___nInt(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___nInt", @tBigNumber___nInt(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER __nSize( nSize); _HB_MEMBER ___nSize( nSize); oClass:AddMethod( "__nSize", @tBigNumber___nSize(), nScope + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) ) ; oClass:AddMethod( "___nSize", @tBigNumber___nSize(), nScope + iif( .F., 16, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Clone(); oClass:AddMethod( "Clone", @tBigNumber_Clone(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER className(); oClass:AddMethod( "className", @tBigNumber_className(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER SetDecimals( nSet); oClass:AddMethod( "SetDecimals", @tBigNumber_SetDecimals(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER SetValue( uBigN,nBase,cRDiv,lLZRmv,nAcc); oClass:AddMethod( "SetValue", @tBigNumber_SetValue(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER GetValue( lAbs,lObj); oClass:AddMethod( "GetValue", @tBigNumber_GetValue(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER ExactValue( lAbs,lObj); oClass:AddMethod( "ExactValue", @tBigNumber_ExactValue(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Abs( lObj); oClass:AddMethod( "Abs", @tBigNumber_Abs(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Int( lObj,lSig); oClass:AddMethod( "Int", @tBigNumber_Int(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Dec( lObj,lSig,lNotZ); oClass:AddMethod( "Dec", @tBigNumber_Dec(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER eq( uBigN); oClass:AddMethod( "eq", @tBigNumber_eq(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER ne( uBigN); oClass:AddMethod( "ne", @tBigNumber_ne(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER gt( uBigN); oClass:AddMethod( "gt", @tBigNumber_gt(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER lt( uBigN); oClass:AddMethod( "lt", @tBigNumber_lt(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER gte( uBigN); oClass:AddMethod( "gte", @tBigNumber_gte(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER lte( uBigN); oClass:AddMethod( "lte", @tBigNumber_lte(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER cmp( uBigN); oClass:AddMethod( "cmp", @tBigNumber_cmp(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER btw( uBigS,uBigE); oClass:AddMethod( "btw", @tBigNumber_btw(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER ibtw( uiBigS,uiBigE); oClass:AddMethod( "ibtw", @tBigNumber_ibtw(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER tBIGNMax( uBigN); oClass:AddMethod( "tBIGNMax", @tBigNumber_tBIGNMax(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER tBIGNMin( uBigN); oClass:AddMethod( "tBIGNMin", @tBigNumber_tBIGNMin(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Add( uBigN); oClass:AddMethod( "Add", @tBigNumber_Add(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Plus(); oClass:AddInline( "Plus", {|Self, uBigN | ( ( Self ) ), self:Add(uBigN) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER Sub( uBigN); oClass:AddMethod( "Sub", @tBigNumber_Sub(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Minus(); oClass:AddInline( "Minus", {|Self, uBigN | ( ( Self ) ), self:Sub(uBigN) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER Mult( uBigN); oClass:AddMethod( "Mult", @tBigNumber_Mult(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Multiply(); oClass:AddInline( "Multiply", {|Self, uBigN | ( ( Self ) ), self:Mult(uBigN) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER egMult( uBigN); oClass:AddMethod( "egMult", @tBigNumber_egMult(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER egMultiply(); oClass:AddInline( "egMultiply", {|Self, uBigN | ( ( Self ) ), self:egMult(uBigN) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER rMult( uBigN); oClass:AddMethod( "rMult", @tBigNumber_rMult(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER rMultiply(); oClass:AddInline( "rMultiply", {|Self, uBigN | ( ( Self ) ), self:rMult(uBigN) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER Div( uBigN,lFloat); oClass:AddMethod( "Div", @tBigNumber_Div(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Divide(); oClass:AddInline( "Divide", {|Self, uBigN,lFloat | ( ( Self ) ), self:Div(uBigN,lFloat) }, nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+    _HB_MEMBER Divmethod( nmethod); oClass:AddMethod( "Divmethod", @tBigNumber_Divmethod(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Mod( uBigN); oClass:AddMethod( "Mod", @tBigNumber_Mod(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Pow( uBigN); oClass:AddMethod( "Pow", @tBigNumber_Pow(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER OpInc(); oClass:AddMethod( "OpInc", @tBigNumber_OpInc(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER OpDec(); oClass:AddMethod( "OpDec", @tBigNumber_OpDec(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER e( lforce); oClass:AddMethod( "e", @tBigNumber_e(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Exp( lforce); oClass:AddMethod( "Exp", @tBigNumber_Exp(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER PI( lforce); oClass:AddMethod( "PI", @tBigNumber_PI(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER GCD( uBigN); oClass:AddMethod( "GCD", @tBigNumber_GCD(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER LCM( uBigN); oClass:AddMethod( "LCM", @tBigNumber_LCM(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER nthRoot( uBigN); oClass:AddMethod( "nthRoot", @tBigNumber_nthRoot(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER nthRootPF( uBigN); oClass:AddMethod( "nthRootPF", @tBigNumber_nthRootPF(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER nthRootAcc( nSet); oClass:AddMethod( "nthRootAcc", @tBigNumber_nthRootAcc(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER SQRT(); oClass:AddMethod( "SQRT", @tBigNumber_SQRT(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER SysSQRT( uSet); oClass:AddMethod( "SysSQRT", @tBigNumber_SysSQRT(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Log( uBigNB); oClass:AddMethod( "Log", @tBigNumber_Log(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Log2(); oClass:AddMethod( "Log2", @tBigNumber_Log2(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Log10(); oClass:AddMethod( "Log10", @tBigNumber_Log10(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Ln(); oClass:AddMethod( "Ln", @tBigNumber_Ln(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER aLog( uBigNB); oClass:AddMethod( "aLog", @tBigNumber_aLog(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER aLog2(); oClass:AddMethod( "aLog2", @tBigNumber_aLog2(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER aLog10(); oClass:AddMethod( "aLog10", @tBigNumber_aLog10(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER aLn(); oClass:AddMethod( "aLn", @tBigNumber_aLn(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER MathC( uBigN1,cOperator,uBigN2); oClass:AddMethod( "MathC", @tBigNumber_MathC(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER MathN( uBigN1,cOperator,uBigN2); oClass:AddMethod( "MathN", @tBigNumber_MathN(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Rnd( nAcc); oClass:AddMethod( "Rnd", @tBigNumber_Rnd(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER NoRnd( nAcc); oClass:AddMethod( "NoRnd", @tBigNumber_NoRnd(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Truncate( nAcc); oClass:AddMethod( "Truncate", @tBigNumber_Truncate(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Floor( nAcc); oClass:AddMethod( "Floor", @tBigNumber_Floor(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Ceiling( nAcc); oClass:AddMethod( "Ceiling", @tBigNumber_Ceiling(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER D2H( cHexB); oClass:AddMethod( "D2H", @tBigNumber_D2H(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER H2D(); oClass:AddMethod( "H2D", @tBigNumber_H2D(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER H2B(); oClass:AddMethod( "H2B", @tBigNumber_H2B(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER B2H( cHexB); oClass:AddMethod( "B2H", @tBigNumber_B2H(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER D2B( cHexB); oClass:AddMethod( "D2B", @tBigNumber_D2B(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER B2D( cHexB); oClass:AddMethod( "B2D", @tBigNumber_B2D(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER Randomize( uB,uE,nExit); oClass:AddMethod( "Randomize", @tBigNumber_Randomize(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER millerRabin( uI); oClass:AddMethod( "millerRabin", @tBigNumber_millerRabin(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER FI(); oClass:AddMethod( "FI", @tBigNumber_FI(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+    _HB_MEMBER PFactors(); oClass:AddMethod( "PFactors", @tBigNumber_PFactors(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+    _HB_MEMBER Factorial(); oClass:AddMethod( "Factorial", @tBigNumber_Factorial(), nScope + iif( .F., 8, 0 ) + iif( .F., 256, 0 ) + iif( .F., 2048, 0 ) )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        oClass:AddInline( "==", {|Self,uBigN| ( ( Self ) ), __OpEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "=", {|Self,uBigN| ( ( Self ) ), __OpEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "!=", {|Self,uBigN| ( ( Self ) ), __OpNotEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "#", {|Self,uBigN| ( ( Self ) ), __OpNotEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "<>", {|Self,uBigN| ( ( Self ) ), __OpNotEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( ">", {|Self,uBigN| ( ( Self ) ), __OpGreater(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( ">=", {|Self,uBigN| ( ( Self ) ), __OpGreaterEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "<", {|Self,uBigN| ( ( Self ) ), __OpLess(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "<=", {|Self,uBigN| ( ( Self ) ), __OpLessEqual(self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "++", {|Self| ( ( Self ) ), __OpInc(self)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "--", {|Self| ( ( Self ) ), __OpDec(self)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "+", {|Self,uBigN| ( ( Self ) ), __OpPlus("+",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "+=", {|Self,uBigN| ( ( Self ) ), __OpPlus("+=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "-", {|Self,uBigN| ( ( Self ) ), __OpMinus("-",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "-=", {|Self,uBigN| ( ( Self ) ), __OpMinus("-=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "*", {|Self,uBigN| ( ( Self ) ), __OpMult("*",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "*=", {|Self,uBigN| ( ( Self ) ), __OpMult("*=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "/", {|Self,uBigN,lFloat| ( ( Self ) ), __OpDivide("/",self,uBigN,lFloat)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "/=", {|Self,uBigN,lFloat| ( ( Self ) ), __OpDivide("/=",self,uBigN,lFloat)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "%", {|Self,uBigN| ( ( Self ) ), __OpMod("%",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "%=", {|Self,uBigN| ( ( Self ) ), __OpMod("%=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( "^", {|Self,uBigN| ( ( Self ) ), __OpPower("^",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+        oClass:AddInline( "**", {|Self,uBigN| ( ( Self ) ), __OpPower("**",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+ oClass:AddInline( "^=", {|Self,uBigN| ( ( Self ) ), __OpPower("^=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+ oClass:AddInline( "**=", {|Self,uBigN| ( ( Self ) ), __OpPower("**=",self,uBigN)}, nScope + iif( .F., 2048, 0 ) )
+
+        oClass:AddInline( ":=", {|Self,uBigN,nBase,cRDiv,lLZRmv,nAcc| ( ( Self ) ), __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)}, nScope + iif( .F., 2048, 0 ) )
+
+
+
+oClass:Create() ; ; ALWAYS ; __clsUnlockDef( @s_oClass, oClass ) ; end ; oInstance := oClass:Instance() ; IF __objHasMsg( oInstance, "InitClass" ) ; oInstance:InitClass( ... ) ; END ; RETURN oInstance ; END ; RETURN s_oClass:Instance() AS CLASS tBigNumber ;
+
+
+
+
+
+    static function __OpEqual(oSelf,uBigN)
+    return(oSelf:eq(uBigN))
+
+    static function __OpNotEqual(oSelf,uBigN)
+    return(oSelf:ne(uBigN))
+
+    static function __OpGreater(oSelf,uBigN)
+    return(oSelf:gt(uBigN))
+
+    static function __OpGreaterEqual(oSelf,uBigN)
+    return(oSelf:gte(uBigN))
+
+    static function __OpLess(oSelf,uBigN)
+    return(oSelf:lt(uBigN))
+
+    static function __OpLessEqual(oSelf,uBigN)
+    return(oSelf:lte(uBigN))
+
+    static function __OpInc(oSelf)
+    return(oSelf:OpInc())
+
+    static function __OpDec(oSelf)
+    return(oSelf:OpDec())
+
+    static function __OpPlus(cOp,oSelf,uBigN)
+        local oOpPlus
+        if cOp=="+="
+            oOpPlus:=oSelf:SetValue(oSelf:Add(uBigN))
+        else
+            oOpPlus:=oSelf:Add(uBigN)
+        endif
+    return(oOpPlus)
+
+    static function __OpMinus(cOp,oSelf,uBigN)
+        local oOpMinus
+        if cOp=="-="
+            oOpMinus:=oSelf:SetValue(oSelf:Sub(uBigN))
+        else
+            oOpMinus:=oSelf:Sub(uBigN)
+        endif
+    return(oOpMinus)
+
+    static function __OpMult(cOp,oSelf,uBigN)
+        local oOpMult
+        if cOp=="*="
+            oOpMult:=oSelf:SetValue(oSelf:Mult(uBigN))
+        else
+            oOpMult:=oSelf:Mult(uBigN)
+        endif
+    return(oOpMult)
+
+    static function __OpDivide(cOp,oSelf,uBigN,lFloat)
+        local oOpDivide
+        if cOp=="/="
+            oOpDivide:=oSelf:SetValue(oSelf:Div(uBigN,lFloat))
+        else
+            oOpDivide:=oSelf:Div(uBigN,lFloat)
+        endif
+    return(oOpDivide)
+
+    static function __OpMod(cOp,oSelf,uBigN)
+        local oOpMod
+        if cOp=="%="
+            oOpMod:=oSelf:SetValue(oSelf:Mod(uBigN))
+        else
+            oOpMod:=oSelf:Mod(uBigN)
+        endif
+    return(oOpMod)
+
+    static function __OpPower(cOp,oSelf,uBigN)
+        local oOpPower
+        switch cOp
+            case "^="
+            case "**="
+                oOpPower:=oSelf:SetValue(oSelf:Pow(uBigN))
+                exit
+            otherwise
+                oOpPower:=oSelf:Pow(uBigN)
+        endswitch
+    return(oOpPower)
+
+    static function __OpAssign(oSelf,uBigN,nBase,cRDiv,lLZRmv,nAcc)
+    return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_New(uBigN,nBase) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    iif( nBase == NIL , hb_Default(@nBase,10) , )
+    self:nBase:=nBase
+
+    if s__nDecSet==NIL
+        self:SetDecimals()
+    endif
+
+    if s__nthRAcc==NIL
+        self:nthRootAcc()
+    endif
+
+
+    if ths_lsdSet==NIL
+        __Initsthd(nBase)
+    endif
+
+    iif( uBigN == NIL , hb_Default(@uBigN,"0") , )
+    self:SetValue(uBigN,nBase)
+
+
+    if s__lstbNSet==NIL
+        __InitstbN(nBase)
+        self:Divmethod(1)
+    endif
+
+return(self)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___cDec(cDec) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(cDec==NIL)
+        self:lNeg:=hb_bLeft(cDec,1)=="-"
+        if self:lNeg
+            cDec:=hb_bSubStr(cDec,2)
+        endif
+        self:cDec:=cDec
+        self:nDec:=hb_bLen(cDec)
+        self:nSize:=self:nInt+self:nDec
+        if self:eq(s__o0)
+            self:lNeg:=.F.
+            self:cSig:=""
+        endif
+    endif
+return(self:cDec)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___cInt(cInt) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(cInt==NIL)
+        self:lNeg:=hb_bLeft(cInt,1)=="-"
+        if self:lNeg
+            cInt:=hb_bSubStr(cInt,2)
+        endif
+        self:cInt:=cInt
+        self:nInt:=hb_bLen(cInt)
+        self:nSize:=self:nInt+self:nDec
+        if self:eq(s__o0)
+            self:lNeg:=.F.
+            self:cSig:=""
+        endif
+    endif
+return(self:cInt)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___cRDiv(cRDiv) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(cRDiv==NIL)
+        if Empty(cRDiv)
+            cRDiv:="0"
+        endif
+        self:cRDiv:=cRDiv
+    endif
+return(self:cRDiv)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___cSig(cSig) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(cSig==NIL)
+        self:cSig:=cSig
+        self:lNeg:=(cSig=="-")
+        if self:eq(s__o0)
+            self:lNeg:=.F.
+            self:cSig:=""
+        endif
+        if !(self:lNeg)
+            self:cSig:=""
+        endif
+    endif
+return(self:cSig)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___lNeg(lNeg) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(lNeg==NIL)
+        self:lNeg:=lNeg
+        if self:eq(s__o0)
+            self:lNeg:=.F.
+            self:cSig:=""
+        endif
+        if lNeg
+            self:cSig:="-"
+        endif
+    endif
+return(self:lNeg)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___nBase(nBase) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(nBase==NIL)
+        self:nBase:=nBase
+    endif
+return(self:nBase)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___nDec(nDec) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(nDec==NIL)
+        if nDec>self:nDec
+            self:cDec:=tBIGNPadR(self:cDec,nDec,"0")
+        else
+            self:cDec:=hb_bLeft(self:cDec,nDec)
+        endif
+        self:nDec:=nDec
+        self:nSize:=self:nInt+self:nDec
+    endif
+return(self:nDec)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___nInt(nInt) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(nInt==NIL)
+        if nInt>self:nInt
+            self:cInt:=tBIGNPadL(self:cInt,nInt,"0")
+            self:nInt:=nInt
+            self:nSize:=self:nInt+self:nDec
+        endif
+    endif
+return(self:nInt)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber___nSize(nSize) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if !(nSize==NIL)
+        if nSize>self:nInt+self:nDec
+            if self:nInt>self:nDec
+                self:nInt:=nSize-self:nDec
+                self:cInt:=tBIGNPadL(self:cInt,self:nInt,"0")
+            else
+                 self:nDec:=nSize-self:nInt
+                 self:cDec:=tBIGNPadR(self:cDec,self:nDec,"0")
+            endif
+            self:nSize:=nSize
+        endif
+    endif
+return(self:nSize)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Clone() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    if ths_lsdSet==NIL
+        return(tBigNumber():New(self))
+    endif
+
+
+
+return(__objClone(self))
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_className() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return("TBIGNUMBER")
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_SetDecimals(nSet) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local nLastSet
+
+    while !(hb_mutexLock(s__MTXDEC))
+        tBigNSleep(0.001)
+    end
+
+    nLastSet:=s__nDecSet
+
+    iif( s__nDecSet == NIL , hb_Default(@s__nDecSet,if(nSet==NIL,32,nSet)) , )
+    iif( nSet == NIL , hb_Default(@nSet,s__nDecSet) , )
+    iif( nLastSet == NIL , hb_Default(@nLastSet,nSet) , )
+
+    if nSet>999999999999999
+        nSet:=999999999999999
+    endif
+
+    s__nDecSet:=nSet
+
+    hb_mutexUnLock(s__MTXDEC)
+
+    iif( nLastSet == NIL , hb_Default(@nLastSet,if(nSet==NIL,32,nSet)) , )
+
+return(nLastSet)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_nthRootAcc(nSet) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local nLastSet
+
+    while !(hb_mutexLock(s__MTXACC))
+        tBigNSleep(0.001)
+    end
+
+    nLastSet:=s__nthRAcc
+
+    iif( s__nthRAcc == NIL , hb_Default(@s__nthRAcc,if(nSet==NIL,6,nSet)) , )
+    iif( nSet == NIL , hb_Default(@nSet,s__nthRAcc) , )
+    iif( nLastSet == NIL , hb_Default(@nLastSet,nSet) , )
+
+    if nSet>999999999999999
+        nSet:=999999999999999
+    endif
+
+    s__nthRAcc:=tBIGNMin(self:SetDecimals()-1,nSet)
+
+    hb_mutexUnLock(s__MTXACC)
+
+    iif( nLastSet == NIL , hb_Default(@nLastSet,if(nSet==NIL,6,nSet)) , )
+
+return(nLastSet)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cType:=ValType(uBigN)
+
+    local nFP
+
+
+
+
+
+
+
+
+
+    if cType=="O"
+
+        iif( cRDiv == NIL , hb_Default(@cRDiv,uBigN:cRDiv) , )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            self:cDec:=uBigN:cDec
+            self:cInt:=uBigN:cInt
+            self:cRDiv:=uBigN:cRDiv
+            self:cSig:=uBigN:cSig
+            self:lNeg:=uBigN:lNeg
+            self:nBase:=uBigN:nBase
+            self:nDec:=uBigN:nDec
+            self:nInt:=uBigN:nInt
+            self:nSize:=uBigN:nSize
+
+
+
+    elseif cType=="A"
+
+        iif( cRDiv == NIL , hb_Default(@cRDiv,uBigN[3][2]) , )
+
+
+
+
+
+
+
+
+
+
+
+
+            self:cDec:=uBigN[1][2]
+            self:cInt:=uBigN[2][2]
+            self:cRDiv:=uBigN[3][2]
+            self:cSig:=uBigN[4][2]
+            self:lNeg:=uBigN[5][2]
+            self:nBase:=uBigN[6][2]
+            self:nDec:=uBigN[7][2]
+            self:nInt:=uBigN[8][2]
+            self:nSize:=uBigN[9][2]
+
+
+
+    elseif cType=="C"
+
+        while " " $ uBigN
+            uBigN:=StrTran(uBigN," ","")
+        end
+
+        self:lNeg:=hb_bLeft(uBigN,1)=="-"
+
+        if self:lNeg
+            uBigN:=hb_bSubStr(uBigN,2)
+            self:cSig:="-"
+        else
+            self:cSig:=""
+        endif
+
+        nFP:=hb_bAT(".",uBigN)
+
+        iif( nBase == NIL , hb_Default(@nBase,self:nBase) , )
+
+        self:cInt:="0"
+        self:cDec:="0"
+
+        do case
+        case nFP==0
+            self:cInt:=uBigN
+            self:cDec:="0"
+        case nFP==1
+            self:cInt:="0"
+            self:cDec:=hb_bSubStr(uBigN,nFP+1)
+            if "0"==hb_bLeft(self:cDec,1)
+                nFP:=hb_bLen(self:cDec)
+                s__IncS0(nFP)
+                if self:cDec==hb_bLeft(s__cN0,nFP)
+                    self:cDec:="0"
+                endif
+            endif
+        otherwise
+            self:cInt:=hb_bLeft(uBigN,nFP-1)
+            self:cDec:=hb_bSubStr(uBigN,nFP+1)
+            if "0"==hb_bLeft(self:cDec,1)
+                nFP:=hb_bLen(self:cDec)
+                s__IncS0(nFP)
+                if self:cDec==hb_bLeft(s__cN0,nFP)
+                    self:cDec:="0"
+                endif
+            endif
+        endcase
+
+        if self:cInt=="0" .AND. (self:cDec=="0".OR.self:cDec=="")
+            self:lNeg:=.F.
+            self:cSig:=""
+        endif
+
+        self:nInt:=hb_bLen(self:cInt)
+        self:nDec:=hb_bLen(self:cDec)
+
+    endif
+
+    if self:cInt==""
+        self:cInt:="0"
+        self:nInt:=1
+    endif
+
+    if self:cDec==""
+        self:cDec:="0"
+        self:nDec:=1
+    endif
+
+    if Empty(cRDiv)
+        cRDiv:="0"
+    endif
+    self:cRDiv:=cRDiv
+
+    iif( lLZRmv == NIL , hb_Default(@lLZRmv,(self:nBase==10)) , )
+    if lLZRmv
+        while self:nInt>1 .AND. hb_bLeft(self:cInt,1)=="0"
+            self:cInt:=hb_bRight(self:cInt,--self:nInt)
+        end
+    endif
+
+    iif( nAcc == NIL , hb_Default(@nAcc,s__nDecSet) , )
+    if self:nDec>nAcc
+        self:nDec:=nAcc
+        self:cDec:=hb_bLeft(self:cDec,self:nDec)
+        if self:cDec==""
+            self:cDec:="0"
+            self:nDec:=1
+        endif
+    endif
+
+    self:nSize:=(self:nInt+self:nDec)
+
+return(self)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_GetValue(lAbs,lObj) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local uNR
+
+    iif( lAbs == NIL , hb_Default(@lAbs,.F.) , )
+    iif( lObj == NIL , hb_Default(@lObj,.F.) , )
+
+    uNR:=if(lAbs,"",self:cSig)
+    uNR+=self:cInt
+    uNR+="."
+    uNR+=self:cDec
+
+    if lObj
+        uNR:=tBigNumber():New(uNR)
+    endif
+
+return(uNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_ExactValue(lAbs,lObj) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cDec
+
+    local uNR
+
+    iif( lAbs == NIL , hb_Default(@lAbs,.F.) , )
+    iif( lObj == NIL , hb_Default(@lObj,.F.) , )
+
+    uNR:=if(lAbs,"",self:cSig)
+
+    uNR+=self:cInt
+    cDec:=self:Dec(NIL,NIL,self:nBase==10)
+
+    if !(cDec=="")
+        uNR+="."
+        uNR+=cDec
+    endif
+
+    if lObj
+        uNR:=tBigNumber():New(uNR)
+    endif
+
+return(uNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Abs(lObj) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:GetValue(.T.,lObj))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Int(lObj,lSig) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local uNR
+    iif( lObj == NIL , hb_Default(@lObj,.F.) , )
+    iif( lSig == NIL , hb_Default(@lSig,.F.) , )
+    uNR:=if(lSig,self:cSig,"")+self:cInt
+    if lObj
+        uNR:=tBigNumber():New(uNR)
+    endif
+return(uNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Dec(lObj,lSig,lNotZ) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cDec:=self:cDec
+
+    local nDec
+
+    local uNR
+
+    iif( lNotZ == NIL , hb_Default(@lNotZ,.F.) , )
+    if lNotZ
+        nDec:=self:nDec
+        while hb_bRight(cDec,1)=="0"
+            cDec:=hb_bLeft(cDec,--nDec)
+        end
+    endif
+
+    iif( lObj == NIL , hb_Default(@lObj,.F.) , )
+    iif( lSig == NIL , hb_Default(@lSig,.F.) , )
+    if lObj
+        uNR:=tBigNumber():New(if(lSig,self:cSig,"")+"0."+cDec)
+    else
+        uNR:=if(lSig,self:cSig,"")+cDec
+    endif
+
+return(uNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_eq(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local leq
+
+    local oeqN1:=s__o0:Clone()
+    local oeqN2:=s__o0:Clone()
+
+    oeqN1:SetValue(self)
+    oeqN2:SetValue(uBigN)
+
+    leq:=oeqN1:lNeg==oeqN2:lNeg
+    if leq
+        oeqN1:Normalize(@oeqN2)
+
+
+
+            leq:=tBIGNmemcmp(oeqN1:GetValue(.T.),oeqN2:GetValue(.T.))==0
+
+    endif
+
+return(leq)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_ne(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(!(self:eq(uBigN)))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_gt(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local lgt
+
+    local ogtN1:=s__o0:Clone()
+    local ogtN2:=s__o0:Clone()
+
+    ogtN1:SetValue(self)
+    ogtN2:SetValue(uBigN)
+
+    if ogtN1:lNeg .OR. ogtN2:lNeg
+        if ogtN1:lNeg .AND. ogtN2:lNeg
+            ogtN1:Normalize(@ogtN2)
+
+
+
+                lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))== -1
+
+        elseif ogtN1:lNeg .AND. !(ogtN2:lNeg)
+            lgt:=.F.
+        elseif !(ogtN1:lNeg) .AND. ogtN2:lNeg
+            lgt:=.T.
+        endif
+    else
+        ogtN1:Normalize(@ogtN2)
+
+
+
+            lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==1
+
+    endif
+
+return(lgt)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_lt(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local llt
+
+    local oltN1:=s__o0:Clone()
+    local oltN2:=s__o0:Clone()
+
+    oltN1:SetValue(self)
+    oltN2:SetValue(uBigN)
+
+    if oltN1:lNeg .OR. oltN2:lNeg
+        if oltN1:lNeg .AND. oltN2:lNeg
+            oltN1:Normalize(@oltN2)
+
+
+
+                llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1
+
+        elseif oltN1:lNeg .AND. !(oltN2:lNeg)
+            llt:=.T.
+        elseif !(oltN1:lNeg) .AND. oltN2:lNeg
+            llt:=.F.
+        endif
+    else
+        oltN1:Normalize(@oltN2)
+
+
+
+            llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))== -1
+
+    endif
+
+return(llt)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_gte(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:cmp(uBigN)>=0)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_lte(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:cmp(uBigN)<=0)
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_cmp(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local nCmp
+    local iCmp
+
+    local llt
+    local leq
+
+    local ocmpN1:=s__o0:Clone()
+    local ocmpN2:=s__o0:Clone()
+
+    ocmpN1:SetValue(self)
+    ocmpN2:SetValue(uBigN)
+
+
+
+
+
+    leq:=ocmpN1:lNeg==ocmpN2:lNeg
+    if leq
+
+            ocmpN1:Normalize(@ocmpN2)
+
+
+
+
+            iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+
+        leq:=iCmp==0
+    endif
+
+    if leq
+        nCmp:=0
+    else
+        if ocmpN1:lNeg .OR. ocmpN2:lNeg
+            if ocmpN1:lNeg .AND. ocmpN2:lNeg
+                if iCmp==NIL
+
+                        ocmpN1:Normalize(@ocmpN2)
+
+
+
+
+                        iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+
+                endif
+                llt:=iCmp==1
+            elseif ocmpN1:lNeg .AND. !(ocmpN2:lNeg)
+                llt:=.T.
+            elseif !(ocmpN1:lNeg) .AND. ocmpN2:lNeg
+                llt:=.F.
+            endif
+        else
+
+
+
+            llt:=iCmp== -1
+        endif
+        if llt
+            nCmp:= -1
+        else
+            nCmp:=1
+        endif
+    endif
+
+return(nCmp)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_btw(uBigS,uBigE) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:cmp(uBigS)>=0.AND.self:cmp(uBigE)<=0)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_ibtw(uiBigS,uiBigE) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local lbtw:= .F.
+    local oibtwS
+    local oibtwE
+    if self:Dec(.T.,.F.,.T.):eq(s__o0)
+        oibtwS:=s__o0:Clone()
+        oibtwS:SetValue(uiBigS)
+        oibtwE:=s__o0:Clone()
+        oibtwE:SetValue(uiBigE)
+        if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0) .AND. oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
+            lbtw := self:cmp(oibtwS)>=0.AND.self:cmp(oibtwE)<=0
+        endif
+    endif
+return(lbtw)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_tBIGNMax(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oMax:=tBigNumber():New(uBigN)
+    if self:gt(oMax)
+        oMax:SetValue(self)
+    endif
+return(oMax)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_tBIGNMin(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oMin:=tBigNumber():New(uBigN)
+    if self:lt(oMin)
+        oMin:SetValue(self)
+    endif
+return(oMin)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Add(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lInv
+    local lAdd:=.T.
+
+    local nDec
+    local nSize
+
+    local oadNR
+
+    local oadN1
+    local oadN2
+
+    oadN1:=s__o0:Clone()
+    oadN1:SetValue(self)
+
+    oadN2:=s__o0:Clone()
+    oadN2:SetValue(uBigN)
+
+    oadN1:Normalize(@oadN2)
+
+    nDec:=oadN1:nDec
+    nSize:=oadN1:nSize
+
+    cN1:=oadN1:cInt
+    cN1+=oadN1:cDec
+
+    cN2:=oadN2:cInt
+    cN2+=oadN2:cDec
+
+    lNeg:=(oadN1:lNeg .AND. !(oadN2:lNeg)) .OR. (!(oadN1:lNeg) .AND. oadN2:lNeg)
+
+    if lNeg
+        lAdd:=.F.
+
+            lInv := tBIGNmemcmp(cN1,cN2)== -1
+
+
+
+        lNeg:=(oadN1:lNeg .AND. !(lInv)) .OR. (oadN2:lNeg .AND. lInv)
+        if lInv
+            cNT:=cN1
+            cN1:=cN2
+            cN2:=cNT
+            cNT:=NIL
+        endif
+    else
+        lNeg:=oadN1:lNeg
+    endif
+
+    oadNR:=s__o0:Clone()
+    if lAdd
+        oadNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+    else
+        oadNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+    endif
+
+    cNT:=oadNR:cInt
+    cDec:=hb_bRight(cNT,nDec)
+    cInt:=hb_bLeft(cNT,hb_bLen(cNT)-nDec)
+
+    cNT:=cInt
+    cNT+="."
+    cNT+=cDec
+
+    oadNR:SetValue(cNT)
+
+    if lNeg
+        oadNR:__cSig("-")
+    endif
+
+return(oadNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Sub(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lInv
+    local lSub:=.T.
+
+    local nDec
+    local nSize
+
+    local osbNR
+
+    local osbN1
+    local osbN2
+
+    osbN1:=s__o0:Clone()
+    osbN1:SetValue(self)
+
+    osbN2:=s__o0:Clone()
+    osbN2:SetValue(uBigN)
+
+    osbN1:Normalize(@osbN2)
+
+    nDec:=osbN1:nDec
+    nSize:=osbN1:nSize
+
+    cN1:=osbN1:cInt
+    cN1+=osbN1:cDec
+
+    cN2:=osbN2:cInt
+    cN2+=osbN2:cDec
+
+    lNeg:=(osbN1:lNeg .AND. !(osbN2:lNeg)) .OR. (!(osbN1:lNeg) .AND. osbN2:lNeg)
+
+    if lNeg
+        lSub:=.F.
+        lNeg:=osbN1:lNeg
+    else
+
+            lInv := tBIGNmemcmp(cN1,cN2)== -1
+
+
+
+        lNeg:=osbN1:lNeg .OR. lInv
+        if lInv
+            cNT:=cN1
+            cN1:=cN2
+            cN2:=cNT
+            cNT:=NIL
+        endif
+    endif
+
+    osbNR:=s__o0:Clone()
+    if lSub
+        osbNR:SetValue(Sub(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+    else
+        osbNR:SetValue(Add(cN1,cN2,nSize,self:nBase),NIL,NIL,.F.)
+    endif
+
+    cNT:=osbNR:cInt
+
+    cDec:=hb_bRight(cNT,nDec)
+    cInt:=hb_bLeft(cNT,hb_bLen(cNT)-nDec)
+
+    cNT:=cInt
+    cNT+="."
+    cNT+=cDec
+
+    osbNR:SetValue(cNT)
+
+    if lNeg
+        osbNR:__cSig("-")
+    endif
+
+return(osbNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Mult(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lNeg1
+    local lNeg2
+
+    local nDec
+    local nSize
+
+    local omtNR
+
+    local omtN1
+    local omtN2
+
+    omtN1:=s__o0:Clone()
+    omtN1:SetValue(self)
+
+    omtN2:=s__o0:Clone()
+    omtN2:SetValue(uBigN)
+
+    omtN1:Normalize(@omtN2)
+
+    lNeg1:=omtN1:lNeg
+    lNeg2:=omtN2:lNeg
+    lNeg:=(lNeg1 .AND. !(lNeg2)) .OR. (!(lNeg1) .AND. lNeg2)
+
+    cN1:=omtN1:cInt
+    cN1+=omtN1:cDec
+
+    cN2:=omtN2:cInt
+    cN2+=omtN2:cDec
+
+    nDec:=omtN1:nDec*2
+    nSize:=omtN1:nSize
+
+    omtNR:=s__o0:Clone()
+    omtNR:SetValue(Mult(cN1,cN2,nSize,self:nBase),self:nBase,NIL,.F.)
+
+    cNT:=omtNR:cInt
+
+    if nDec>0
+        cDec:=hb_bRight(cNT,nDec)
+        cInt:=hb_bLeft(cNT,hb_bLen(cNT)-nDec)
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
+    endif
+
+    omtNR:SetValue(cNT)
+
+    cNT:=omtNR:ExactValue()
+
+    omtNR:SetValue(cNT)
+
+    if lNeg
+        omtNR:__cSig("-")
+    endif
+
+return(omtNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_egMult(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lNeg1
+    local lNeg2
+
+    local nDec
+
+    local omtNR
+
+    local omtN1
+    local omtN2
+
+    omtN1:=s__o0:Clone()
+    omtN1:SetValue(self)
+
+    omtN2:=s__o0:Clone()
+    omtN2:SetValue(uBigN)
+
+    omtN1:Normalize(@omtN2)
+
+    lNeg1:=omtN1:lNeg
+    lNeg2:=omtN2:lNeg
+    lNeg:=(lNeg1 .AND. !(lNeg2)) .OR. (!(lNeg1) .AND. lNeg2)
+
+    cN1:=omtN1:cInt
+    cN1+=omtN1:cDec
+
+    cN2:=omtN2:cInt
+    cN2+=omtN2:cDec
+
+    nDec:=omtN1:nDec*2
+
+    omtNR:=s__o0:Clone()
+    omtNR:SetValue(egMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+
+    cNT:=omtNR:cInt
+
+    cDec:=hb_bRight(cNT,nDec)
+    cInt:=hb_bLeft(cNT,hb_bLen(cNT)-nDec)
+
+    cNT:=cInt
+    cNT+="."
+    cNT+=cDec
+
+    omtNR:SetValue(cNT)
+
+    cNT:=omtNR:ExactValue()
+
+    omtNR:SetValue(cNT)
+
+    if lNeg
+        omtNR:__cSig("-")
+    endif
+
+return(omtNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_rMult(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cInt
+    local cDec
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lNeg1
+    local lNeg2
+
+    local nDec
+
+    local omtNR
+
+    local omtN1
+    local omtN2
+
+    omtN1:=s__o0:Clone()
+    omtN1:SetValue(self)
+
+    omtN2:=s__o0:Clone()
+    omtN2:SetValue(uBigN)
+
+    omtN1:Normalize(@omtN2)
+
+    lNeg1:=omtN1:lNeg
+    lNeg2:=omtN2:lNeg
+    lNeg:=(lNeg1 .AND. !(lNeg2)) .OR. (!(lNeg1) .AND. lNeg2)
+
+    cN1:=omtN1:cInt
+    cN1+=omtN1:cDec
+
+    cN2:=omtN2:cInt
+    cN2+=omtN2:cDec
+
+    nDec:=omtN1:nDec*2
+
+    omtNR:=s__o0:Clone()
+    omtNR:SetValue(rMult(cN1,cN2,self:nBase),self:nBase,NIL,.F.)
+
+    cNT:=omtNR:cInt
+
+    cDec:=hb_bRight(cNT,nDec)
+    cInt:=hb_bLeft(cNT,hb_bLen(cNT)-nDec)
+
+    cNT:=cInt
+    cNT+="."
+    cNT+=cDec
+
+    omtNR:SetValue(cNT)
+
+    cNT:=omtNR:ExactValue()
+
+    omtNR:SetValue(cNT)
+
+    if lNeg
+        omtNR:__cSig("-")
+    endif
+
+return(omtNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Div(uBigN,lFloat) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cDec
+
+    local cN1
+    local cN2
+    local cNR
+
+    local lNeg
+    local lNeg1
+    local lNeg2
+
+    local nAcc:=s__nDecSet
+    local nDec
+
+    local odvN1
+    local odvN2
+
+    local odvRD
+    local odvNR:=s__o0:Clone()
+
+    begin sequence
+
+        if s__o0:eq(uBigN)
+            odvNR:SetValue(s__o0)
+            break
+        endif
+
+        odvN1:=s__o0:Clone()
+        odvN1:SetValue(self)
+
+        odvN2:=s__o0:Clone()
+        odvN2:SetValue(uBigN)
+
+        iif( lFloat == NIL , hb_Default(@lFloat,.T.) , )
+
+        if odvN2:eq(s__o2)
+
+
+            odvNR:SetValue(odvN1:Mult(s__od2))
+            if !(lFloat)
+                odvNR:__cDec("0")
+                odvNR:__cInt(odvNR:Int(.F.,.T.))
+                odvNR:__cRDiv(odvN1:Sub(odvN2:Mult(odvNR:Int(.T.,.F.))):ExactValue(.T.))
+            endif
+            break
+        endif
+
+        odvN1:Normalize(@odvN2)
+
+        lNeg1:=odvN1:lNeg
+        lNeg2:=odvN2:lNeg
+        lNeg:=(lNeg1 .AND. !(lNeg2)) .OR. (!(lNeg1) .AND. lNeg2)
+
+        cN1:=odvN1:cInt
+        cN1+=odvN1:cDec
+
+        cN2:=odvN2:cInt
+        cN2+=odvN2:cDec
+
+        if s__nDivMTD==2
+            odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
+        else
+            odvNR:SetValue(egDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
+        endif
+
+        if lFloat
+
+            odvRD:=s__o0:Clone()
+            odvRD:SetValue(odvNR:cRDiv,NIL,NIL,.F.)
+
+            if odvRD:gt(s__o0)
+
+                cDec:=""
+
+                odvN2:SetValue(cN2)
+
+                while odvRD:lt(odvN2)
+                    odvRD:cInt+="0"
+                    odvRD:nInt++
+                    odvRD:nSize++
+                    if odvRD:lt(odvN2)
+                        cDec+="0"
+                    endif
+                end
+
+                while odvRD:gte(odvN2)
+
+                    odvRD:Normalize(@odvN2)
+
+                    cN1:=odvRD:cInt
+                    cN1+=odvRD:cDec
+
+                    cN2:=odvN2:cInt
+                    cN2+=odvN2:cDec
+
+                    if s__nDivMTD==2
+                        odvRD:SetValue(ecDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
+                    else
+                        odvRD:SetValue(egDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
+                    endif
+
+                    cDec+=odvRD:ExactValue(.T.)
+                    nDec:=hb_bLen(cDec)
+
+                    odvRD:SetValue(odvRD:cRDiv,NIL,NIL,.F.)
+                    odvRD:SetValue(odvRD:ExactValue(.T.))
+
+                    if odvRD:eq(s__o0) .OR. nDec>=nAcc
+                        exit
+                    endif
+
+                    odvN2:SetValue(cN2)
+
+                    while odvRD:lt(odvN2)
+                        odvRD:cInt+="0"
+                        odvRD:nInt++
+                        odvRD:nSize++
+                        if odvRD:lt(odvN2)
+                            cDec+="0"
+                        endif
+                    end
+
+                end
+
+                cNR:=odvNR:__cInt()
+                cNR+="."
+                cNR+=hb_bLeft(cDec,nAcc)
+
+                odvNR:SetValue(cNR,NIL,odvRD:ExactValue(.T.))
+
+            endif
+
+        endif
+
+        if lNeg
+            odvNR:__cSig("-")
+        endif
+
+    end
+
+return(odvNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Divmethod(nmethod) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local nLstmethod
+    iif( s__nDivMTD == NIL , hb_Default(@s__nDivMTD,1) , )
+    iif( nmethod == NIL , hb_Default(@nmethod,s__nDivMTD) , )
+    nLstmethod:= s__nDivMTD
+    s__nDivMTD:=nmethod
+return(nLstmethod)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Mod(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oMod:=tBigNumber():New(uBigN)
+    local nCmp:=self:cmp(oMod)
+    if nCmp== -1
+        oMod:SetValue(self)
+    elseif nCmp==0
+        oMod:SetValue(s__o0)
+    else
+        oMod:SetValue(self:Div(oMod,.F.))
+        oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
+    endif
+return(oMod)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Pow(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+    local aThreads
+
+
+    local oSelf:=self:Clone()
+
+    local cM10
+
+    local cPowB
+    local cPowA
+
+    local lPoWN
+    local lPowF
+
+    local nZS
+
+    local opwA
+    local opwB
+
+    local opwNP:=s__o0:Clone()
+    local opwNR:=s__o0:Clone()
+
+    local opwGCD
+
+    lPoWN:=opwNP:SetValue(uBigN):lt(s__o0)
+
+    begin sequence
+
+        if oSelf:eq(s__o0) .AND. opwNP:eq(s__o0)
+            opwNR:SetValue(s__o1)
+            break
+        endif
+
+        if oSelf:eq(s__o0)
+            opwNR:SetValue(s__o0)
+            break
+        endif
+
+        if opwNP:eq(s__o0)
+            opwNR:SetValue(s__o1)
+            break
+        endif
+
+        if oSelf:eq(s__o1)
+            opwNR:SetValue(s__o1)
+            break
+        endif
+
+        opwNR:SetValue(oSelf)
+
+        if s__o1:eq(opwNP:SetValue(opwNP:Abs()))
+            break
+        endif
+
+        opwA:=s__o0:Clone()
+        lPowF:=opwA:SetValue(opwNP:cDec):gt(s__o0)
+
+        if lPowF
+
+            cPowA:=opwNP:cInt+opwNP:Dec(NIL,NIL,.T.)
+            opwA:SetValue(cPowA)
+
+            nZS:=hb_bLen(opwNP:Dec(NIL,NIL,.T.))
+            s__IncS0(nZS)
+
+            cM10:="1"
+            cM10+=hb_bLeft(s__cN0,nZS)
+
+            cPowB:=cM10
+
+            opwB:=s__o0:Clone()
+            if opwB:SetValue(cPowB):gt(s__o1)
+                opwGCD:=s__o0:Clone()
+                opwGCD:SetValue(opwA:GCD(opwB))
+
+                    tBigNthStart(2,@aThreads)
+                    aThreads[1][3]:={||thDiv(opwA,opwGCD)}
+                    aThreads[2][3]:={||thDiv(opwB,opwGCD)}
+                    tBigNthNotify(@aThreads)
+                    tBigNthWait(@aThreads)
+                    tBigNthJoin(@aThreads)
+                    opwA:SetValue(aThreads[1][4])
+                    opwB:SetValue(aThreads[2][4])
+                    aSize(aThreads,0)
+
+
+
+
+            endif
+
+            opwA:Normalize(@opwB)
+
+            opwNP:SetValue(opwA)
+
+        endif
+
+        opwNR:SetValue(Power(opwNR,opwNP))
+
+        if lPowF
+            opwNR:SetValue(opwNR:nthRoot(opwB))
+        endif
+
+    end
+
+    if lPoWN
+        opwNR:SetValue(s__o1:Div(opwNR))
+    endif
+
+return(opwNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_OpInc() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+
+    return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_OpDec() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+
+    return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_e(lforce) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oeTthD
+
+    local oPowN
+    local oDiv1P
+    local oDiv1S
+    local oBigNC
+    local oAdd1N
+    local oSub1N
+    local oPoWNAd
+    local oPoWNS1
+
+    begin sequence
+
+        iif( lforce == NIL , hb_Default(@lforce,.F.) , )
+
+        if !(lforce)
+
+            oeTthD:=s__o0:Clone()
+            oeTthD:SetValue(__eTthD())
+
+            break
+
+        endif
+
+        oBigNC:=self:Clone()
+
+        if oBigNC:eq(s__o0)
+            oBigNC:SetValue(s__o1)
+        endif
+
+        oPowN:=oBigNC:Clone()
+
+        oPowN:SetValue(oPowN:Pow(oPowN))
+
+        oAdd1N:=oBigNC:Add(s__o1)
+        oSub1N:=oBigNC:Sub(s__o1)
+
+        oPoWNAd:=oAdd1N:Pow(oAdd1N)
+        oPoWNS1:=oSub1N:Pow(oSub1N)
+
+        oDiv1P:=oPoWNAd:Div(oPowN)
+        oDiv1S:=oPowN:Div(oPoWNS1)
+
+        oeTthD:SetValue(oDiv1P:Sub(oDiv1S))
+
+    end
+
+return(oeTthD)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Exp(lforce) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oBigNe:=self:e(lforce)
+    local oBigNR:=oBigNe:Pow(self)
+return(oBigNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_PI(lforce) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oPITthD
+
+    iif( lforce == NIL , hb_Default(@lforce,.F.) , )
+
+    begin sequence
+
+        lforce:=.F.
+
+        if !(lforce)
+
+            oPITthD:=s__o0:Clone()
+            oPITthD:SetValue(__PITthD())
+
+            break
+
+        endif
+
+
+
+    end
+
+return(oPITthD)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_GCD(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oX:=self:Clone()
+    local oY:=tBigNumber():New(uBigN)
+
+    local oGCD
+
+    oX:SetValue(oY:tBIGNMax(self))
+    oY:SetValue(oY:tBIGNMin(self))
+
+    if oY:eq(s__o0)
+        oGCD:=oX
+    else
+        oGCD:=oY:Clone()
+        if oX:lte(s__oMinGCD).AND.oY:lte(s__oMinGCD)
+            oGCD:SetValue(cGCD(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
+        else
+            while .T.
+                oY:SetValue(oX:Mod(oY))
+                if oY:eq(s__o0)
+                    exit
+                endif
+                oX:SetValue(oGCD)
+                oGCD:SetValue(oY)
+            end
+        endif
+    endif
+
+return(oGCD)
+
+static function cGCD(nX,nY)
+
+        local nGCD:=TBIGNGCD(nX,nY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return(hb_ntos(nGCD))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_LCM(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+    local aThreads
+
+
+    local oX:=self:Clone()
+    local oY:=tBigNumber():New(uBigN)
+
+    local oI:=s__o2:Clone()
+
+    local oLCM:=s__o1:Clone()
+
+    local lMX
+    local lMY
+
+    if oX:nInt<=s__nMinLCM.AND.oY:nInt<=s__nMinLCM
+        oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
+    else
+
+            tBigNthStart(3,@aThreads)
+
+        while .T.
+
+                aThreads[1][3]:={||thMod0(oX,oI)}
+                aThreads[2][3]:={||thMod0(oY,oI)}
+                tBigNthNotify(@aThreads)
+                tBigNthWait(@aThreads)
+                lMX:=aThreads[1][4]
+                lMY:=aThreads[2][4]
+
+
+
+
+            while lMX .OR. lMY
+
+                    if lMX .AND. lMY
+                        aThreads[1][3]:={||thMult(oLCM,oI)}
+                        aThreads[2][3]:={||thDiv(oX,oI,.F.)}
+                        aThreads[3][3]:={||thDiv(oY,oI,.F.)}
+                        tBigNthNotify(@aThreads)
+                        tBigNthWait(@aThreads)
+                        oLCM:SetValue(aThreads[1][4])
+                        oX:SetValue(aThreads[2][4])
+                        oY:SetValue(aThreads[3][4])
+                        aThreads[1][3]:={||thMod0(oX,oI)}
+                        aThreads[2][3]:={||thMod0(oY,oI)}
+                        aThreads[3][3]:=NIL
+                        tBigNthNotify(@aThreads)
+                        tBigNthWait(@aThreads)
+                        lMX:=aThreads[1][4]
+                        lMY:=aThreads[2][4]
+                    else
+                        aThreads[1][3]:={||thMult(oLCM,oI)}
+                        if lMX
+                            aThreads[2][3]:={||thDiv(oX,oI,.F.)}
+                        endif
+                        if lMY
+                            aThreads[2][3]:={||thDiv(oY,oI,.F.)}
+                        endif
+                        aThreads[3][3]:=NIL
+                        tBigNthNotify(@aThreads)
+                        tBigNthWait(@aThreads)
+                        oLCM:SetValue(aThreads[1][4])
+                        if lMX
+                            oX:SetValue(aThreads[2][4])
+                            lMX:=oX:Mod(oI):eq(s__o0)
+                        endif
+                        if lMY
+                            oY:SetValue(aThreads[2][4])
+                            lMY:=oY:Mod(oI):eq(s__o0)
+                        endif
+                    endif
+
+
+
+
+
+
+
+
+
+
+
+            end
+            if oX:eq(s__o1) .AND. oY:eq(s__o1)
+                exit
+            endif
+            oI:OpInc()
+        end
+
+            tBigNthJoin(@aThreads)
+            aSize(aThreads,0)
+
+    endif
+
+return(oLCM)
+
+static function cLCM(nX,nY)
+
+        local nLCM:=TBIGNLCM(nX,nY)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return(hb_ntos(nLCM))
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_nthRoot(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cFExit
+
+    local nZS
+
+    local oRootB:=self:Clone()
+    local oRootE
+
+    local othRoot:=s__o0:Clone()
+
+    local oFExit
+
+    begin sequence
+
+        if oRootB:eq(s__o0)
+            break
+        endif
+
+        if oRootB:lNeg
+            break
+        endif
+
+        if oRootB:eq(s__o1)
+            othRoot:SetValue(s__o1)
+            break
+        endif
+
+        oRootE:=tBigNumber():New(uBigN)
+
+        if oRootE:eq(s__o0)
+            break
+        endif
+
+        if oRootE:eq(s__o1)
+            othRoot:SetValue(oRootB)
+            break
+        endif
+
+        nZS:=s__nthRAcc-1
+        s__IncS0(nZS)
+
+        cFExit:="0."+hb_bLeft(s__cN0,nZS)+"1"
+
+        oFExit:=s__o0:Clone()
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRAcc)
+
+        othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit))
+
+    end
+
+return(othRoot)
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_nthRootPF(uBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local aIPF
+    local aDPF
+
+    local cFExit
+
+    local lDec
+
+    local nZS
+
+    local nPF
+    local nPFs
+
+    local oRootB:=self:Clone()
+    local oRootD
+    local oRootE
+
+    local oRootT
+
+    local othRoot:=s__o0:Clone()
+    local othRootD
+
+    local oFExit
+
+    begin sequence
+
+        if oRootB:eq(s__o0)
+            break
+        endif
+
+        if oRootB:lNeg
+            break
+        endif
+
+        if oRootB:eq(s__o1)
+            othRoot:SetValue(s__o1)
+            break
+        endif
+
+        oRootE:=tBigNumber():New(uBigN)
+
+        if oRootE:eq(s__o0)
+            break
+        endif
+
+        if oRootE:eq(s__o1)
+            othRoot:SetValue(oRootB)
+            break
+        endif
+
+        oRootT:=s__o0:Clone()
+
+        nZS:=s__nthRAcc-1
+        s__IncS0(nZS)
+
+        cFExit:="0."+hb_bLeft(s__cN0,nZS)+"1"
+
+        oFExit:=s__o0:Clone()
+        oFExit:SetValue(cFExit,NIL,NIL,NIL,s__nthRAcc)
+
+        lDec:=oRootB:Dec(.T.):gt(s__o0)
+
+        if lDec
+
+            nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
+            s__IncS0(nZS)
+
+            oRootD:=tBigNumber():New("1"+hb_bLeft(s__cN0,nZS))
+            oRootT:SetValue(oRootB:cInt+oRootB:cDec)
+
+            aIPF:=oRootT:PFactors()
+            aDPF:=oRootD:PFactors()
+
+        else
+
+            aIPF:=oRootB:PFactors()
+            aDPF:=Array(0)
+
+        endif
+
+        nPFs:=tBIGNaLen(aIPF)
+
+        if nPFs>0
+            othRoot:SetValue(s__o1)
+            othRootD:=s__o0:Clone()
+            oRootT:SetValue(s__o0)
+            for nPF:=1 to nPFs
+                if oRootE:eq(aIPF[nPF][2])
+                    othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
+                else
+                    oRootT:SetValue(aIPF[nPF][1])
+                    oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+                    oRootT:SetValue(oRootT:Pow(aIPF[nPF][2]))
+                    othRoot:SetValue(othRoot:Mult(oRootT))
+                endif
+            next
+            if !(Empty(aDPF))
+                nPFs:=tBIGNaLen(aDPF)
+                if nPFs>0
+                    othRootD:SetValue(s__o1)
+                    for nPF:=1 to nPFs
+                        if oRootE:eq(aDPF[nPF][2])
+                            othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
+                        else
+                            oRootT:SetValue(aDPF[nPF][1])
+                            oRootT:SetValue(nthRoot(oRootT,oRootE,oFExit))
+                            oRootT:SetValue(oRootT:Pow(aDPF[nPF][2]))
+                            othRootD:SetValue(othRootD:Mult(oRootT))
+                        endif
+                    next
+                    if othRootD:gt(s__o0)
+                        othRoot:SetValue(othRoot:Div(othRootD))
+                    endif
+                endif
+            endif
+            break
+        endif
+
+        othRoot:SetValue(nthRoot(oRootB,oRootE,oFExit))
+
+    end
+
+return(othRoot)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_SQRT() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oSQRT:=self:Clone()
+
+    begin sequence
+
+        if oSQRT:lte(oSQRT:SysSQRT())
+            oSQRT:SetValue(__SQRT(hb_ntos(Val(oSQRT:GetValue()))))
+            break
+        endif
+
+        if oSQRT:eq(s__o0)
+            oSQRT:SetValue(s__o0)
+            break
+        endif
+
+        oSQRT:SetValue(__SQRT(oSQRT))
+
+    end
+
+return(oSQRT)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_SysSQRT(uSet) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local cType
+
+    cType:=ValType(uSet)
+    if ( cType $ "C|N|O" )
+        while !(hb_mutexLock(s__MTXSQR))
+            tBigNSleep(0.001)
+        end
+        ths_SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
+        if ths_SysSQRT:gt("9999999999999999")
+            ths_SysSQRT:SetValue("9999999999999999")
+        endif
+        hb_MutexUnLock(s__MTXSQR)
+    endif
+
+return(ths_SysSQRT)
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Log(uBigNB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+    local aThreads_1
+    local aThreads_2
+
+
+    local oS:=s__o0:Clone()
+    local oT:=s__o0:Clone()
+    local oI:=s__o1:Clone()
+    local oX:=self:Clone()
+    local oY:=s__o0:Clone()
+    local oLT:=s__o0:Clone()
+
+    local noTcmp1
+
+    local lflag:=.F.
+
+    if oX:eq(s__o0)
+        return(s__o0:Clone())
+    endif
+
+    iif( uBigNB == NIL , hb_Default(@uBigNB,self:e()) , )
+
+    oT:SetValue(uBigNB)
+
+    noTcmp1:=oT:cmp(s__o1)
+    if noTcmp1==0
+        return(s__o0:Clone())
+    endif
+
+    if s__o0:lt(oT) .AND. noTcmp1== -1
+         lflag:= !(lflag)
+         oT:SetValue(s__o1:Div(oT))
+         noTcmp1:=oT:cmp(s__o1)
+    endif
+
+
+        tBigNthStart(2,@aThreads_1)
+        aThreads_1[1][3]:={||thAdd(oY,oI)}
+        aThreads_1[2][3]:={||thDiv(oX,oT)}
+
+
+    while oX:gt(oT) .AND. noTcmp1==1
+
+            tBigNthNotify(@aThreads_1)
+            tBigNthWait(@aThreads_1)
+            oY:SetValue(aThreads_1[1][4])
+            oX:SetValue(aThreads_1[2][4])
+
+
+
+
+    end
+
+
+        tBigNthStart(3,@aThreads_2)
+        aThreads_2[1][3]:={||thAdd(oS,oY)}
+        aThreads_2[2][3]:={||thnthRoot(oT,s__o2)}
+
+
+        aThreads_2[3][3]:={||thMult(oI,s__od2)}
+        tBigNthNotify(@aThreads_2)
+        tBigNthWait(@aThreads_2)
+        tBigNthJoin(@aThreads_2)
+        oS:SetValue(aThreads_2[1][4])
+        oT:SetValue(aThreads_2[2][4])
+        oI:SetValue(aThreads_2[3][4])
+        aSize(aThreads_2,0)
+
+
+
+
+
+
+
+
+    oY:SetValue(s__o0)
+
+    noTcmp1:=oT:cmp(s__o1)
+
+    while noTcmp1==1
+
+        while oX:gt(oT) .AND. noTcmp1==1
+
+                tBigNthNotify(@aThreads_1)
+                tBigNthWait(@aThreads_1)
+                oY:SetValue(aThreads_1[1][4])
+                oX:SetValue(aThreads_1[2][4])
+
+
+
+
+        end
+
+        oS:SetValue(oS:Add(oY))
+
+        oY:SetValue(s__o0)
+
+        oLT:SetValue(oT)
+
+        oT:SetValue(oT:nthRoot(s__o2))
+
+        if oT:eq(oLT)
+            exit
+        endif
+
+
+
+        oI:SetValue(oI:Mult(s__od2))
+
+        noTcmp1:=oT:cmp(s__o1)
+
+    end
+
+
+        tBigNthJoin(@aThreads_1)
+        aSize(aThreads_1,0)
+
+
+    if lflag
+        oS:SetValue(oS:Mult("-1"))
+    endif
+
+return(oS)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Log2() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local ob2:=s__o2:Clone()
+return(self:Log(ob2))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Log10() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local ob10:=s__o10:Clone()
+return(self:Log(ob10))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Ln() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:Log(s__o1:Exp()))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_aLog(uBigNB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oaLog:=tBigNumber():New(uBigNB)
+    local EPS:=s__o0:Clone()
+    local n:=s__nthRAcc-1
+    local s
+    s__IncS0(n)
+    s:="0."+hb_bLeft(s__cN0,n)+"1"
+    EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
+return(__Pow(oaLog,self,EPS))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_aLog2() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local ob2:=s__o2:Clone()
+return(self:aLog(ob2))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_aLog10() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local ob10:=s__o10:Clone()
+return(self:aLog(ob10))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_aLn() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:aLog(s__o1:Exp()))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_MathC(uBigN1,cOperator,uBigN2) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(MathO(uBigN1,cOperator,uBigN2,.F.))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_MathN(uBigN1,cOperator,uBigN2) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(MathO(uBigN1,cOperator,uBigN2,.T.))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Rnd(nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oRnd:=self:Clone()
+
+    local cAdd
+    local cAcc
+
+    iif( nAcc == NIL , hb_Default(@nAcc,tBIGNMax((tBIGNMin(oRnd:nDec,s__nDecSet)-1),0)) , )
+
+    if !(oRnd:eq(s__o0))
+        cAcc:=hb_bSubStr(oRnd:cDec,nAcc+1,1)
+        if cAcc==""
+            cAcc:=hb_bSubStr(oRnd:cDec,--nAcc+1,1)
+        endif
+        if cAcc>="5"
+            cAdd:="0."
+            s__IncS0(nAcc)
+            cAdd+=hb_bLeft(s__cN0,nAcc)+"5"
+            oRnd:SetValue(oRnd:Add(cAdd))
+        endif
+        oRnd:SetValue(oRnd:cInt+"."+hb_bLeft(oRnd:cDec,nAcc),NIL,oRnd:cRDiv)
+    endif
+
+return(oRnd)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_NoRnd(nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+return(self:Truncate(nAcc))
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Floor(nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oInt:=self:Int(.T.,.T.)
+    local oFloor:=self:Clone()
+    iif( nAcc == NIL , hb_Default(@nAcc,tBIGNMax((tBIGNMin(oFloor:nDec,s__nDecSet)-1),0)) , )
+    oFloor:SetValue(oFloor:Rnd(nAcc):Int(.T.,.T.))
+    oFloor:SetValue(oFloor:tBIGNMin(oInt))
+return(oFloor)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Ceiling(nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oInt:=self:Int(.T.,.T.)
+    local oCeiling:=self:Clone()
+    iif( nAcc == NIL , hb_Default(@nAcc,tBIGNMax((tBIGNMin(oCeiling:nDec,s__nDecSet)-1),0)) , )
+    oCeiling:SetValue(oCeiling:Rnd(nAcc):Int(.T.,.T.))
+    oCeiling:SetValue(oCeiling:tBIGNMax(oInt))
+return(oCeiling)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Truncate(nAcc) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oTrc:=self:Clone()
+    local cDec:=oTrc:cDec
+
+    if !(s__o0:eq(cDec))
+        iif( nAcc == NIL , hb_Default(@nAcc,tBIGNMin(oTrc:nDec,s__nDecSet)) , )
+        cDec:=hb_bLeft(cDec,nAcc)
+        oTrc:SetValue(oTrc:cInt+"."+cDec)
+    endif
+
+return(oTrc)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Normalize(oBigN) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
+
+return(self)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_D2H(cHexB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local otH:=s__o0:Clone()
+    local otN:=tBigNumber():New(self:cInt)
+
+    local cHexN:=""
+    local cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
+
+    local cInt
+    local cDec
+    local cSig:=self:cSig
+
+    local oHexN
+
+    local nAT
+
+    iif( cHexB == NIL , hb_Default(@cHexB,"16") , )
+
+    otH:SetValue(cHexB)
+
+    while otN:gt(s__o0)
+        otN:SetValue(otN:Div(otH,.F.))
+        nAT:=Val(otN:cRDiv)+1
+        cHexN:=hb_bSubStr(cHexC,nAT,1)+cHexN
+    end
+
+    if cHexN==""
+        cHexN:="0"
+    endif
+
+    cInt:=cHexN
+
+    cHexN:=""
+    otN:=tBigNumber():New(self:Dec(NIL,NIL,.T.))
+
+    while otN:gt(s__o0)
+        otN:SetValue(otN:Div(otH,.F.))
+        nAT:=Val(otN:cRDiv)+1
+        cHexN:=hb_bSubStr(cHexC,nAT,1)+cHexN
+    end
+
+    if cHexN==""
+        cHexN:="0"
+    endif
+
+    cDec:=cHexN
+
+    oHexN:=tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
+
+return(oHexN)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_H2D() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local otH:=s__o0:Clone()
+    local otNR:=s__o0:Clone()
+    local otLN:=s__o0:Clone()
+    local otPw:=s__o0:Clone()
+    local otNI:=s__o0:Clone()
+    local otAT:=s__o0:Clone()
+
+    local cHexB:=hb_ntos(self:nBase)
+    local cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
+    local cHexN:=self:cInt
+
+    local cInt
+    local cDec
+    local cSig:=self:cSig
+
+    local nLn:=hb_bLen(cHexN)
+    local nI:=nLn
+
+    otH:SetValue(cHexB)
+    otLN:SetValue(hb_ntos(nLn))
+
+    while nI>0
+        otNI:SetValue(hb_ntos(--nI))
+        otAT:SetValue(hb_ntos((hb_bAT(hb_bSubStr(cHexN,nI+1,1),cHexC)-1)))
+        otPw:SetValue(otLN:Sub(otNI))
+        otPw:OpDec()
+        otPw:SetValue(otH:Pow(otPw))
+        otAT:SetValue(otAT:Mult(otPw))
+        otNR:SetValue(otNR:Add(otAT))
+    end
+
+    cInt:=otNR:cInt
+
+    cHexN:=self:cDec
+    nLn:=self:nDec
+    nI:=nLn
+
+    otLN:SetValue(hb_ntos(nLn))
+
+    while nI>0
+        otNI:SetValue(hb_ntos(--nI))
+        otAT:SetValue(hb_ntos((hb_bAT(hb_bSubStr(cHexN,nI+1,1),cHexC)-1)))
+        otPw:SetValue(otLN:Sub(otNI))
+        otPw:OpDec()
+        otPw:SetValue(otH:Pow(otPw))
+        otAT:SetValue(otAT:Mult(otPw))
+        otNR:SetValue(otNR:Add(otAT))
+    end
+
+    cDec:=otNR:cDec
+
+    otNR:SetValue(cSig+cInt+"."+cDec)
+
+return(otNR)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_H2B() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    local aH2B:={ {"0","00000"}, {"1","00001"}, {"2","00010"}, {"3","00011"}, {"4","00100"}, {"5","00101"}, {"6","00110"}, {"7","00111"}, {"8","01000"}, {"9","01001"}, {"A","01010"}, {"B","01011"}, {"C","01100"}, {"D","01101"}, {"E","01110"}, {"F","01111"}, {"G","10000"}, {"H","10001"}, {"I","10010"}, {"J","10011"}, {"K","10100"}, {"L","10101"}, {"M","10110"}, {"N","10111"}, {"O","11000"}, {"P","11001"}, {"Q","11010"}, {"R","11011"}, {"S","11100"}, {"T","11101"}, {"U","11110"}, {"V","11111"} }
+
+    local cChr
+    local cBin:=""
+
+    local cInt
+    local cDec
+
+    local cSig:=self:cSig
+    local cHexB:=hb_ntos(self:nBase)
+    local cHexN:=self:cInt
+
+    local oBin:=tBigNumber():New(NIL,2)
+
+    local nI:=0
+    local nLn:=hb_bLen(cHexN)
+    local nAT
+
+    local l16
+
+    begin sequence
+
+        if Empty(cHexB)
+             break
+        endif
+
+        if !(cHexB $ "[16][32]")
+            break
+        endif
+
+        l16:=cHexB=="16"
+
+        while ++nI<=nLn
+            cChr:=hb_bSubStr(cHexN,nI,1)
+            nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
+            if nAT>0
+                cBin+=if(l16,hb_bSubStr(aH2B[nAT][2],2),aH2B[nAT][2])
+            endif
+        end
+
+        cInt:=cBin
+
+        nI:=0
+        cBin:=""
+        cHexN:=self:cDec
+        nLn:=self:nDec
+
+        while ++nI<=nLn
+            cChr:=hb_bSubStr(cHexN,nI,1)
+            nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
+            if nAT>0
+                cBin+=if(l16,hb_bSubStr(aH2B[nAT][2],2),aH2B[nAT][2])
+            endif
+        end
+
+        cDec:=cBin
+
+        oBin:SetValue(cSig+cInt+"."+cDec)
+
+    end
+
+return(oBin)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_B2H(cHexB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    local aH2B:={ {"0","00000"}, {"1","00001"}, {"2","00010"}, {"3","00011"}, {"4","00100"}, {"5","00101"}, {"6","00110"}, {"7","00111"}, {"8","01000"}, {"9","01001"}, {"A","01010"}, {"B","01011"}, {"C","01100"}, {"D","01101"}, {"E","01110"}, {"F","01111"}, {"G","10000"}, {"H","10001"}, {"I","10010"}, {"J","10011"}, {"K","10100"}, {"L","10101"}, {"M","10110"}, {"N","10111"}, {"O","11000"}, {"P","11001"}, {"Q","11010"}, {"R","11011"}, {"S","11100"}, {"T","11101"}, {"U","11110"}, {"V","11111"} }
+
+    local cChr
+    local cInt
+    local cDec
+    local cSig:=self:cSig
+    local cBin:=self:cInt
+    local cHexN:=""
+
+    local oHexN
+
+    local nI:=1
+    local nLn:=hb_bLen(cBin)
+    local nAT
+
+    local l16
+
+    begin sequence
+
+        if Empty(cHexB)
+            break
+        endif
+
+        if !(cHexB $ "[16][32]")
+            oHexN:=tBigNumber():New(NIL,16)
+            break
+        endif
+
+        l16:=cHexB=="16"
+
+        while nI<=nLn
+            cChr:=hb_bSubStr(cBin,nI,if(l16,4,5))
+            nAT:=aScan(aH2B,{|aE|(if(l16,hb_bSubStr(aE[2],2),aE[2])==cChr)})
+            if nAT>0
+                cHexN+=aH2B[nAT][1]
+            endif
+            nI+=if(l16,4,5)
+        end
+
+        cInt:=cHexN
+
+        nI:=1
+        cBin:=self:cDec
+        nLn:=self:nDec
+        cHexN:=""
+
+        while nI<=nLn
+            cChr:=hb_bSubStr(cBin,nI,if(l16,4,5))
+            nAT:=aScan(aH2B,{|aE|(if(l16,hb_bSubStr(aE[2],2),aE[2])==cChr)})
+            if nAT>0
+                cHexN+=aH2B[nAT][1]
+            endif
+            nI+=if(l16,4,5)
+        end
+
+        cDec:=cHexN
+
+        oHexN:=tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
+
+    end
+
+return(oHexN)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_D2B(cHexB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oHex:=self:D2H(cHexB)
+    local oBin:=oHex:H2B()
+return(oBin)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_B2D(cHexB) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oHex:=self:B2H(cHexB)
+    local oDec:=oHex:H2D()
+return(oDec)
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Randomize(uB,uE,nExit) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local aE
+
+    local oB:=s__o0:Clone()
+    local oE:=s__o0:Clone()
+    local oT:=s__o0:Clone()
+    local oM:=s__o0:Clone()
+    local oR:=s__o0:Clone()
+
+    local cR:=""
+
+    local nB
+    local nE
+    local nR
+    local nS
+    local nT
+
+    local lI
+
+
+        oM:SetValue("9999999999999999999999999999")
+
+
+
+
+    iif( uB == NIL , hb_Default(@uB,"1") , )
+    iif( uE == NIL , hb_Default(@uE,oM:ExactValue()) , )
+
+    oB:SetValue(uB)
+    oE:SetValue(uE)
+
+    oB:SetValue(oB:Int(.T.):Abs(.T.))
+    oE:SetValue(oE:Int(.T.):Abs(.T.))
+
+    oT:SetValue(oB:tBIGNMin(oE))
+    oE:SetValue(oB:tBIGNMax(oE))
+    oB:SetValue(oT)
+
+    begin sequence
+
+        if oB:gt(oM)
+
+            nE:=Val(oM:ExactValue())
+            nB:=Int(nE/2)
+            nR:=__Random(nB,nE)
+            cR:=hb_ntos(nR)
+
+            oR:SetValue(cR)
+
+            lI:=.F.
+            nS:=oE:nInt
+
+            while oR:lt(oM)
+                nR:=__Random(nB,nE)
+                cR+=hb_ntos(nR)
+                nT:=nS
+                if lI
+                    while nT>0
+                        nR:= -(__Random(1,nS))
+                        oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                        if oR:gte(oE)
+                            exit
+                        endif
+                        nT+=nR
+                    end
+                else
+                    while nT>0
+                        nR:=__Random(1,nS)
+                        oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                        if oR:gte(oE)
+                            exit
+                        endif
+                        nT-=nR
+                    end
+                endif
+                lI:= !(lI)
+            end
+
+            iif( nExit == NIL , hb_Default(@nExit,50) , )
+            aE:=Array(0)
+
+            nS:=oE:nInt
+
+            while oR:lt(oE)
+                nR:=__Random(nB,nE)
+                cR+=hb_ntos(nR)
+                nT:=nS
+                if lI
+                    while  nT>0
+                        nR:= -(__Random(1,nS))
+                        oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                        if oR:gte(oE)
+                            exit
+                        endif
+                        nT+=nR
+                    end
+                else
+                    while nT>0
+                        nR:=__Random(1,nS)
+                        oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                        if oR:gte(oE)
+                            exit
+                        endif
+                        nT-=nR
+                    end
+                endif
+                lI:= !(lI)
+                nT:=0
+                if aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
+                    exit
+                endif
+                if nT<=5
+                    aAdd(aE,__Random(1,nExit))
+                endif
+            end
+
+            break
+
+        endif
+
+        if oE:lte(oM)
+            nB:=Val(oB:ExactValue())
+            nE:=Val(oE:ExactValue())
+            nR:=__Random(nB,nE)
+            cR+=hb_ntos(nR)
+            oR:SetValue(cR)
+            break
+        endif
+
+        iif( nExit == NIL , hb_Default(@nExit,50) , )
+        aE:=Array(0)
+
+        lI:=.F.
+        nS:=oE:nInt
+
+        while oR:lt(oE)
+            nB:=Val(oB:ExactValue())
+            nE:=Val(oM:ExactValue())
+            nR:=__Random(nB,nE)
+            cR+=hb_ntos(nR)
+            nT:=nS
+            if lI
+                while nT>0
+                    nR:= -(__Random(1,nS))
+                    oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                    if oR:gte(oE)
+                        exit
+                    endif
+                    nT+=nR
+                end
+            else
+                while nT>0
+                    nR:=__Random(1,nS)
+                    oR:SetValue(oR:Add(hb_bLeft(cR,nR)))
+                    if oR:gte(oE)
+                        exit
+                    endif
+                    nT-=nR
+                end
+            endif
+            lI:= !(lI)
+            nT:=0
+            if aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
+                exit
+            endif
+            if nT<=5
+                aAdd(aE,__Random(1,nExit))
+            endif
+        end
+
+    end
+
+    if oR:lt(oB) .OR. oR:gt(oE)
+
+        nT:=tBIGNMin(oE:nInt,oM:nInt)
+        s__IncS9(nT)
+        cR:=hb_bLeft(s__cN9,nT)
+        oT:SetValue(cR)
+        cR:=oM:tBIGNMin(oE:tBIGNMin(oT)):ExactValue()
+        nT:=Val(cR)
+
+
+
+        oT:SetValue(oE:Sub(oB):Mult(s__od2):Int(.T.))
+
+        while oR:lt(oB)
+            oR:SetValue(oR:Add(oT))
+            nR:=__Random(1,nT)
+            cR:=hb_ntos(nR)
+            oR:SetValue(oR:Sub(cR))
+        end
+
+        while oR:gt(oE)
+            oR:SetValue(oR:Sub(oT))
+            nR:=__Random(1,nT)
+            cR:=hb_ntos(nR)
+            oR:SetValue(oR:Add(cR))
+        end
+
+    endif
+
+return(oR)
+
+
+
+
+
+
+
+
+static function __Random(nB,nE)
+
+    local nR
+
+    if nB==0
+        nB:=1
+    endif
+
+    if nB==nE
+        ++nE
+    endif
+
+
+        nR:=Abs(HB_RandomInt(nB,nE))
+
+
+
+
+return(nR)
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_millerRabin(uI) ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oN:=self:Clone()
+    local oD:=tBigNumber():New(oN:Sub(s__o1))
+    local oS:=s__o0:Clone()
+    local oI:=s__o0:Clone()
+    local oA:=s__o0:Clone()
+
+    local lPrime:=.T.
+
+    begin sequence
+
+        if oN:lte(s__o1)
+            lPrime:=.F.
+            break
+        endif
+
+        while oD:Mod(s__o2):eq(s__o0)
+
+
+            oD:SetValue(oD:Mult(s__od2))
+            oS:OpInc()
+        end
+
+        iif( uI == NIL , hb_Default(@uI,s__o2:Clone()) , )
+
+        oI:SetValue(uI)
+        while oI:gt(s__o0)
+            oA:SetValue(oA:Randomize(s__o1,oN))
+            lPrime:=mrPass(oA,oS,oD,oN)
+            if !(lPrime)
+                break
+            endif
+            oI:OpDec()
+        end
+
+    end
+
+return(lPrime)
+
+
+
+
+
+
+
+
+
+static function mrPass(uA,uS,uD,uN)
+
+    local oA:=tBigNumber():New(uA)
+    local oS:=tBigNumber():New(uS)
+    local oD:=tBigNumber():New(uD)
+    local oN:=tBigNumber():New(uN)
+    local oM:=tBigNumber():New(oN:Sub(s__o1))
+
+    local oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
+    local oW:=tBigNumber():New(oS:Sub(s__o1))
+
+    local lmrP:=.T.
+
+    begin sequence
+
+        if oP:eq(s__o1)
+            break
+        endif
+
+        while oW:gt(s__o0)
+            lmrP:=oP:eq(oM)
+            if lmrP
+                break
+            endif
+            oP:SetValue(oP:Mult(oP):Mod(oN))
+            oW:OpDec()
+        end
+
+        lmrP:=oP:eq(oM)
+
+    end
+
+return(lmrP)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_FI() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local oC:=self:Clone()
+    local oT:=tBigNumber():New(oC:Int(.T.))
+
+    local oI
+    local oN
+
+    if oT:lte(s__oMinFI)
+        oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
+    else
+        oI:=s__o2:Clone()
+        oN:=oT:Clone()
+        while oI:Mult(oI):lte(oC)
+            if oN:Mod(oI):eq(s__o0)
+                oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
+            endif
+            while oN:Mod(oI):eq(s__o0)
+                oN:SetValue(oN:Div(oI,.F.))
+            end
+            oI:OpInc()
+        end
+        if oN:gt(s__o1)
+            oT:SetValue(oT:Sub(oT:Div(oN,.F.)))
+        endif
+    endif
+
+return(oT)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_PFactors() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+
+    local aPFactors:=Array(0)
+
+    local cP:=""
+
+    local oN:=self:Clone()
+    local oP:=s__o0:Clone()
+    local oT:=s__o0:Clone()
+
+    local otP:=tPrime():New()
+
+    local nP
+    local nC:=0
+
+    local lPrime:=.T.
+
+    otP:IsPReset()
+    otP:nextPReset()
+
+    while otP:nextPrime(cP)
+        cP:=LTrim(otP:cPrime)
+        oP:SetValue(cP)
+        if oP:gte(oN) .OR. if(lPrime,lPrime:=otP:IsPrime(oN:cInt),lPrime .OR. (++nC>1 .AND. oN:gte(otP:cLPrime)))
+            aAdd(aPFactors,{oN:cInt,"1"})
+            exit
+        endif
+        while oN:Mod(oP):eq(s__o0)
+            nP:=aScan(aPFactors,{|e|e[1]==cP})
+            if nP==0
+                aAdd(aPFactors,{cP,"1"})
+            else
+                oT:SetValue(aPFactors[nP][2])
+                aPFactors[nP][2]:=oT:OpInc():ExactValue()
+            endif
+            oN:SetValue(oN:Div(oP,.F.))
+            nC:=0
+            lPrime:=.T.
+        end
+        if oN:lte(s__o1)
+            exit
+        endif
+    end
+
+return(aPFactors)
+
+
+
+
+
+
+
+
+
+
+
+static FUNCTION tBigNumber_Factorial() ; local Self AS CLASS tBigNumber := QSelf() AS CLASS tBigNumber
+    local oN:=self:Clone():Int(.T.,.F.)
+    if oN:eq(s__o0)
+        return(s__o1:Clone())
+    endif
+return(recFact(s__o1:Clone(),oN))
+
+
+
+
+
+
+
+
+
+static function recFact(oS,oN)
+
+
+    local aThreads
+
+
+    local oI
+    local oR:=s__o0:Clone()
+    local oSN
+    local oSI
+    local oNI
+
+
+    static s__recFact:=0
+
+
+
+
+
+
+
+    ++s__recFact
+    if oN:lte(s__o20)
+
+        oR:SetValue(oS)
+        oI:=oS:Clone()
+        oI:OpInc()
+        oSN:=oS:Clone()
+        oSN:SetValue(oSN:Add(oN))
+        while oI:lt(oSN)
+            oR:SetValue(oR:Mult(oI))
+            oI:OpInc()
+        end
+
+            --s__recFact
+
+        return(oR)
+    endif
+
+    oI:=oN:Clone()
+
+
+    oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
+
+    oSI:=oS:Clone()
+    oSI:SetValue(oSI:Add(oI))
+
+    oNI:=oN:Clone()
+    oNI:SetValue(oNI:Sub(oI))
+
+
+    if s__RecFact>100
+        aThreads:=Array(2,5)
+        aThreads[1][2]:=hb_threadStart(@recFact(),oS,oI)
+        hb_threadJoin(aThreads[1][2],@aThreads[1][4])
+        aThreads[2][2]:=hb_threadStart(@recFact(),oSI,oNI)
+        hb_threadJoin(aThreads[2][2],@aThreads[2][4])
+    else
+        tBigNthStart(2,@aThreads)
+        aThreads[1][3]:={||recFact(oS,oI)}
+        aThreads[2][3]:={||recFact(oSI,oNI)}
+        tBigNthNotify(@aThreads)
+        tBigNthWait(@aThreads)
+        tBigNthJoin(@aThreads)
+    endif
+return(aThreads[1][4]:Mult(aThreads[2][4]))
+
+
+
+
+
+
+
+
+
+
+
+
+static function egMult(cN1,cN2,nBase,nAcc)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    local oMTP:=s__o0:Clone()
+
+
+
+
+
+ oMTP:SetValue(TBIGNegMult(cN1,cN2,hb_bLen(cN1),nBase),nBase,"0",NIL,nAcc)
+
+
+
+
+return(oMTP)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+static function rMult(cA,cB,nBase,nAcc)
+
+
+    local aThreads
+
+
+    local oa:=tBigNumber():New(cA)
+    local ob:=tBigNumber():New(cB)
+    local oR:=s__o0:Clone()
+
+
+    tBigNthStart(2,@aThreads)
+    aThreads[1][3]:={||thMult(oa,s__oD2)}
+    aThreads[2][3]:={||th2Mult(ob)}
+
+
+    while oa:ne(s__o0)
+        if oa:Mod(s__o2):gt(s__o0)
+            oR:SetValue(oR:Add(ob),nBase,"0",NIL,nAcc)
+            oa:OpDec()
+        endif
+
+            tBigNthNotify(@aThreads)
+            tBigNthWait(@aThreads)
+            oa:SetValue(aThreads[1][4],nBase,"0",NIL,nAcc)
+            ob:SetValue(aThreads[2][4],nBase,"0",NIL,nAcc)
+
+
+
+
+    end
+
+
+    tBigNthJoin(@aThreads)
+    aSize(aThreads,0)
+
+
+return(oR)
+
+
+
+
+
+
+
+
+static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
+
+
+
+
+
+
+
+
+    local cRDiv
+    local oeDivR
+    local oeDivQ
+
+
+    local cQDiv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    cQDiv:=tBIGNegDiv(cN,cD,@cRDiv,nSize,nBase)
+
+    oeDivQ:=s__o0:Clone()
+    oeDivQ:SetValue(cQDiv,NIL,"0",NIL,nAcc)
+    oeDivR:=s__o0:Clone()
+    oeDivR:SetValue(cRDiv,NIL,"0",NIL,nAcc)
+
+
+
+    cRDiv:=oeDivR:Int(.F.,.F.)
+
+    oeDivQ:SetValue(oeDivQ,nBase,cRDiv,NIL,nAcc)
+
+    if !(lFloat) .AND. hb_bRight(cRDiv,1)=="0"
+        cRDiv:=hb_bLeft(cRDiv,oeDivR:__nInt()-1)
+        if Empty(cRDiv)
+            cRDiv:="0"
+        endif
+        oeDivQ:SetValue(oeDivQ,nBase,cRDiv,NIL,nAcc)
+    endif
+
+return(oeDivQ)
+
+
+
+
+
+
+
+
+static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
+
+
+
+
+
+
+
+
+
+    local r:=s__o0:Clone()
+
+
+
+   local q:=s__o0:Clone()
+
+
+
+
+
+
+
+
+
+
+   local cRDiv
+
+
+    local cQDiv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    cQDiv:=tBIGNecDiv(pA,pB,@cRDiv,nSize,nBase)
+
+    q:SetValue(cQDiv,NIL,"0",NIL,nAcc)
+    r:SetValue(cRDiv,NIL,"0",NIL,nAcc)
+
+
+
+    cRDiv:=r:Int(.F.,.F.)
+    q:SetValue(q,nBase,cRDiv,NIL,nAcc)
+
+    if !(lFloat) .AND. hb_bRight(cRDiv,1)=="0"
+        cRDiv:=hb_bLeft(cRDiv,r:__nInt()-1)
+        if Empty(cRDiv)
+            cRDiv:="0"
+        endif
+        q:SetValue(q,nBase,cRDiv,NIL,nAcc)
+    endif
+
+return(q)
+
+
+
+
+
+
+
+
+static function nthRoot(oRootB,oRootE,oAcc)
+return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
+
+
+
+
+
+
+
+
+
+
+static function __Pow(base,expR,EPS)
+
+    local acc
+    local sqr
+    local tmp
+
+    local low
+    local mid
+    local lst
+    local high
+
+    local exp:=expR:Clone()
+
+    if base:eq(s__o1) .OR. exp:eq(s__o0)
+        return(s__o1:Clone())
+    elseif base:eq(s__o0)
+        return(s__o0:Clone())
+    elseif exp:lt(s__o0)
+        acc:=__pow(base,exp:Abs(.T.),EPS)
+        return(s__o1:Div(acc))
+    elseif exp:Mod(s__o2):eq(s__o0)
+
+
+        acc:=__pow(base,exp:Mult(s__od2),EPS)
+        return(acc:Mult(acc))
+    elseif exp:Dec(.T.):gt(s__o0) .AND. exp:Int(.T.):gt(s__o0)
+        acc:=base:Pow(exp)
+        return(acc)
+    elseif exp:gt(s__o1)
+        acc:=base:Pow(exp)
+        return(acc)
+    else
+        low:=s__o0:Clone()
+        high:=s__o1:Clone()
+        sqr:=__SQRT(base)
+        acc:=sqr:Clone()
+
+
+        mid:=high:Mult(s__od2)
+        tmp:=mid:Sub(exp):Abs(.T.)
+        lst:=s__o0:Clone()
+        while tmp:gte(EPS)
+            sqr:SetValue(__SQRT(sqr))
+            if mid:lte(exp)
+                low:SetValue(mid)
+                acc:SetValue(acc:Mult(sqr))
+            else
+                high:SetValue(mid)
+                acc:SetValue(s__o1:Div(sqr))
+            endif
+
+
+            mid:SetValue(low:Add(high):Mult(s__od2))
+            tmp:SetValue(mid:Sub(exp):Abs(.T.))
+            if tmp:eq(lst)
+                exit
+            endif
+            lst:SetValue(tmp)
+        end
+    endif
+
+return(acc)
+
+
+
+
+
+
+
+
+static function __SQRT(p)
+
+
+
+
+
+
+
+
+
+    local l
+    local r
+    local t
+    local s
+    local n
+    local x
+    local y
+    local EPS
+    local q:=tBigNumber():New(p)
+    if q:lte(q:SysSQRT())
+        r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+    else
+        n:=s__nthRAcc-1
+        s__IncS0(n)
+        s:="0."+hb_bLeft(s__cN0,n)+"1"
+        EPS:=s__o0:Clone()
+        EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
+
+
+        r:=q:Mult(s__od2)
+        t:=r:Pow(s__o2):Sub(q):Abs(.T.)
+        l:=s__o0:Clone()
+
+
+
+
+
+
+
+        while t:gte(EPS)
+
+
+
+
+
+
+
+
+
+
+
+                x:=r:pow(s__o2)
+                y:=s__o2:Mult(r)
+
+            r:SetValue(x:Add(q):Div(y))
+            t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
+            if t:eq(l)
+                exit
+            endif
+            l:SetValue(t)
+        end
+
+
+
+
+
+    endif
+return(r)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            static function Add(a,b,n,nB)
+            return(tBIGNADD(a,b,n,n,nB))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            static function Sub(a,b,n,nB)
+            return(tBIGNSUB(a,b,n,nB))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            static function Mult(a,b,n,nB)
+            return(tBIGNMULT(a,b,n,n,nB))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static function thAdd(oN,oP)
+        local othAdd:=s__o0:Clone()
+        othAdd:SetValue(oN:Add(oP))
+    return(othAdd)
+    static function thDiv(oN,oD,lFloat)
+        local othDiv:=s__o0:Clone()
+        othDiv:SetValue(oN:Div(oD,lFloat))
+    return(othDiv)
+    static function thMod0(oN,oD)
+        local othMod0:=s__o0:Clone()
+        othMod0:SetValue(oN:Mod(oD))
+    return(othMod0:eq(s__o0))
+    static function thnthRoot(oN,oE)
+        local othnthRoot:=s__o0:Clone()
+        othnthRoot:SetValue(oN:nthRoot(oE))
+    return(othnthRoot)
+    static function thMult(oN,oM)
+        local othMult:=s__o0:Clone()
+        othMult:SetValue(oN:Mult(oM))
+    return(othMult)
+    static function th2Mult(oN)
+        local othMult:=s__o0:Clone()
+        othMult:SetValue(TBIGN2MULT(oN:__cInt(),oN:__nBase()))
+    return(othMult)
+
+
+
+
+
+
+
+
+
+static function Power(oB,oE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    local oR:=oB:Clone()
+    local oI:=oE:Clone()
+    while oI:gt(s__o1)
+        oR:SetValue(oR:Mult(oB))
+        oI:OpDec()
+    end
+return(oR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static function tBigNInvert(c,n)
+    return(tBigNReverse(c,n))
+
+
+
+
+
+
+
+
+
+static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
+
+    local oBigNR:=s__o0:Clone()
+
+    local oBigN1:=tBigNumber():New(uBigN1)
+    local oBigN2:=tBigNumber():New(uBigN2)
+
+    do case
+        case (aScan({ "+" , "add" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Add(oBigN2))
+        case (aScan({ "-" , "sub" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Sub(oBigN2))
+        case (aScan({ "*" , "x" , "mult" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Mult(oBigN2))
+        case (aScan({ "/" , ":" , "div"  },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Div(oBigN2))
+        case (aScan({ "^" , "**" , "xx" , "pow" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Pow(oBigN2))
+        case (aScan({ "%" , "mod" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:Mod(oBigN2))
+        case (aScan({ "root" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:nthRoot(oBigN2))
+        case (aScan({ "sqrt" },{|cOp|cOperator==cOp})>0)
+            oBigNR:SetValue(oBigN1:SQRT())
+    endcase
+
+    iif( lRetObject == NIL , hb_Default(@lRetObject,.T.) , )
+
+return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
+
+
+static procedure __Initsthd(nBase)
+
+    ths_lsdSet:=.F.
+
+
+
+
+
+
+
+
+
+
+
+
+
+    while !(hb_mutexLock(s__MTXSQR))
+        tBigNSleep(0.001)
+    end
+    ths_SysSQRT:=tBigNumber():New("0",nBase)
+    hb_mutexUnLock(s__MTXSQR)
+
+    ths_lsdSet:=.T.
+
+return
+
+
+static procedure __InitstbN(nBase)
+    s__lstbNSet:=.F.
+    s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__nN0:=150
+    s__cN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__nN9:=150
+    s__o0:=tBigNumber():New("0",nBase)
+    s__o1:=tBigNumber():New("1",nBase)
+    s__o2:=tBigNumber():New("2",nBase)
+    s__o10:=tBigNumber():New("10",nBase)
+    s__o20:=tBigNumber():New("20",nBase)
+    s__od2:=tBigNumber():New("0.5",nBase)
+    s__oMinFI:=tBigNumber():New("999999999999999999",nBase)
+    s__oMinGCD:=tBigNumber():New("999999999999999999",nBase)
+    s__nMinLCM:=Int(hb_bLen("999999999999999999")/2)
+
+
+
+    s__lstbNSet:=.T.
+return
+
+static procedure tBigNSleep(nSleep)
+
+
+
+        Local nTime
+        nTime := (hb_MilliSeconds()+(nSleep*1000))
+        while (hb_MilliSeconds()<nTime)
+        end
+
+Return
+
+static procedure s__IncS0(n)
+    while n>s__nN0
+        while !(hb_mutexLock(s__MTXcN0))
+            tBigNSleep(0.001)
+        end
+        s__cN0+=s__cN0
+        s__nN0+=s__nN0
+        hb_mutexUnLock(s__MTXcN0)
+    end
+return
+
+static procedure s__IncS9(n)
+    while n>s__nN9
+        while !(hb_mutexLock(s__MTXcN9))
+            tBigNSleep(0.001)
+        end
+        s__cN9+=s__cN9
+        s__nN9+=s__nN9
+        hb_mutexUnLock(s__MTXcN9)
+    end
+return
+
+
+
+
+
+
+
+
+
+
+    static function __eTthD()
+    return(__hbeTthD())
+    static function __PITthD()
+    return(__hbPITthD())
+
+    static procedure tBigNthStart(nThreads,aThreads)
+        local nThread
+        iif( nThreads == NIL , hb_Default(@nThreads,1) , )
+        aThreads:=Array(nThreads,5)
+        for nThread:=1 To nThreads
+            aThreads[nThread][1]:=hb_mutexCreate()
+            aThreads[nThread][3]:=NIL
+            aThreads[nThread][4]:=NIL
+            aThreads[nThread][5]:=.F.
+            aThreads[nThread][2]:=hb_threadStart(@tbigNthRun(),aThreads[nThread][1],@aThreads)
+            while (aThreads[nThread][2]==NIL)
+                tBigNSleep(0.001)
+                aThreads[nThread][2]:=hb_threadStart(@tbigNthRun(),aThreads[nThread][1],@aThreads)
+            end
+        next
+    return
+
+    static procedure tBigNthNotify(aThreads)
+        aEval(aThreads,{|ath,nTh|ath[4]:=NIL,ath[5]:=.F.,hb_mutexNotify(ath[1],nTh)})
+    return
+
+    static procedure tBigNthWait(aThreads)
+        local nThread
+        local nThreads:=tBIGNaLen(aThreads)
+        local nThCount:=0
+        while .T.
+            for nThread:=1 to nThreads
+                if hb_mutexLock(aThreads[nThread][1])
+                    if aThreads[nThread][5]
+                        ++nThCount
+                    endif
+                    hb_MutexUnLock(aThreads[nThread][1])
+                endif
+            next
+            if nThCount==nThreads
+                exit
+            endif
+            nThCount:=0
+        end
+    return
+
+    static procedure tBigNthJoin(aThreads)
+        aEval(aThreads,{|ath|hb_mutexNotify(ath[1],{||break()}),if(!(ath[2]==NIL),hb_threadJoin(ath[2]),NIL)})
+    return
+
+    static procedure tbigNthRun(mtxJob,aThreads)
+        local cTyp
+        local xJob
+        begin sequence
+            while .T.
+                if hb_mutexSubscribe(mtxJob,NIL,@xJob)
+                    cTyp := ValType(xJob)
+                    switch cTyp
+                    case "B"
+                        Eval(xJob)
+                        exit
+                    case "N"
+                        while !(hb_mutexLock(aThreads[xJob][1]))
+                        end
+                        if (ValType(aThreads[xJob][3])=="B")
+                            aThreads[xJob][4]:=Eval(aThreads[xJob][3])
+                            aThreads[xJob][5]:=.T.
+                        else
+                            aThreads[xJob][4]:=NIL
+                            aThreads[xJob][5]:=.T.
+                        endif
+                        hb_MutexUnLock(aThreads[xJob][1])
+                        exit
+                    endswitch
+                endif
+            end
+        end
+    return
+
+
+    static function __Dummy(lDummy)
+        lDummy:=.F.
+        if (lDummy)
+            __Dummy()
+            EGDIV()
+            ECDIV()
+            TBIGNPADL()
+            TBIGNPADR()
+            TBIGNINVERT()
+            TBIGNREVERSE()
+            TBIGNADD()
+            TBIGNSUB()
+            TBIGNMULT()
+            TBIGNEGMULT()
+            TBIGNEGDIV()
+            TBIGNECDIV()
+            TBIGNGCD()
+            TBIGNLCM()
+            TBIGNFI()
+            TBIGNALEN()
+            TBIGNMEMCMP()
+            TBIGN2MULT()
+            TBIGNIMULT()
+            TBIGNIADD()
+            TBIGNISUB()
+            TBIGNLMULT()
+            TBIGNLADD()
+            TBIGNLSUB()
+            TBIGNNORMALIZE()
+            THADD()
+            THDIV()
+            THMOD0()
+            THNTHROOT()
+            THMULT()
+            TH2MULT()
+        endif
+    return(lDummy)
+#line 11 "D:\GitHub\tbigNumber\src\tbignumber.c"
+    EXTERNAL HB_MT
+
+
+
+
+
+
+
+
+#pragma BEGINDUMP
+
+        #include <stdio.h>
+        #include <string.h>
+        #include <hbapi.h>
+        #include <hbdefs.h>
+        #include <hbstack.h>
+        #include <hbapiitm.h>
+        
+        typedef struct{
+            char * cMultM;
+            char * cMultP;
+        } stBIGNeMult,* ptBIGNeMult;
+        
+        typedef struct{
+            char * cDivQ;
+            char * cDivR;
+        } stBIGNeDiv,* ptBIGNeDiv;
+
+        static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes);
+        static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad);
+        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad);
+        static char * tBIGNReverse(const char * szF,const HB_SIZE s);
+        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB);
+        static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB);
+        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB);        
+        static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB); 
+        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB);
+        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult);        
+        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXUINT nB);
+        static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB);
+        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv);        
+        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv);        
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v);
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y);
+        static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
+
+        static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
+            HB_SIZE nLen    = strlen(szText);       
+            HB_ISIZ nRLen   = (nLen*nTimes);
+            char * szResult = (char*)hb_xgrab(nRLen+1);
+            char * szPtr    = szResult;
+            HB_ISIZ n;
+            for(n=0;n<nTimes;++n)
+            {
+                hb_xmemcpy(szPtr,szText,nLen);
+                szPtr+=nLen;
+            }
+            return szResult;
+        }
+
+        static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad){
+            int itmLen = strlen(szItem);
+            int padLen = nLen-itmLen;
+            char * pbuffer;
+            if((padLen)>0){
+                if(szPad==NULL){szPad="0";}
+                char *padding  = TBIGNReplicate(szPad,nLen); 
+                pbuffer = (char*)hb_xgrab(nLen+1);
+                sprintf(pbuffer,"%*.*s%s",padLen,padLen,padding,szItem);
+                hb_xfree(padding);
+            }else{
+                pbuffer = hb_strdup(szItem);
+            }
+            return pbuffer;
+        }
+
+        HB_FUNC_STATIC( TBIGNPADL ){      
+            const char * szItem = hb_parc(1);
+            HB_ISIZ nLen        = hb_parns(2);
+            const char * szPad  = hb_parc(3);
+            char * szRet        = tBIGNPadL(szItem,nLen,szPad);
+            hb_retclen(szRet,(HB_SIZE)nLen);
+            hb_xfree(szRet);
+        }
+
+        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad){    
+            int itmLen = strlen(szItem);
+            int padLen = nLen-itmLen;
+            char * pbuffer;
+            if((padLen)>0){
+                if(szPad==NULL){szPad="0";}
+                char *padding  = TBIGNReplicate(szPad,nLen); 
+                pbuffer = (char*)hb_xgrab(nLen+1);
+                sprintf(pbuffer,"%s%*.*s",szItem,padLen,padLen,padding);
+                hb_xfree(padding);
+            }else{
+                pbuffer = hb_strdup(szItem);
+            }
+            return pbuffer;
+        }
+       
+        HB_FUNC_STATIC( TBIGNPADR ){
+            const char * szItem = hb_parc(1);
+            HB_ISIZ nLen        = hb_parns(2);
+            const char * szPad  = hb_parc(3);
+            char * szRet        = tBIGNPadR(szItem,nLen,szPad);
+            hb_retclen(szRet,(HB_SIZE)nLen);
+            hb_xfree(szRet);
+        }
+
+        static char * tBIGNReverse(const char * szF,const HB_SIZE s){
+            HB_SIZE f  = s;
+            HB_SIZE t  = 0;
+            char * szT = (char*)hb_xgrab(s+1);
+            for(;f;){
+                szT[t++]=szF[--f];
+            }
+            szT[t]=szF[t];
+            return szT;
+        }
+
+        HB_FUNC_STATIC( TBIGNREVERSE ){
+            const char * szF = hb_parc(1);
+            const HB_SIZE s  = (HB_SIZE)hb_parnint(2);
+            char * szR       = tBIGNReverse(szF,s);
+            hb_retclen(szR,s);
+            hb_xfree(szR);
+        }
+
+        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){    
+            char * c         = (char*)hb_xgrab(y+1);
+            HB_SIZE k        = y-1;
+            HB_MAXUINT v     = 0;
+            HB_MAXUINT v1;
+            while (--n>=0){
+                v+=(*(&a[n])-'0')+(*(&b[n])-'0');
+                if ( v>=nB ){
+                    v  -= nB;
+                    v1 = 1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                c[k]   = "0123456789"[v];
+                c[k-1] = "0123456789"[v1];
+                v = v1;
+                --k;
+            }
+            return c;
+        }
+
+        HB_FUNC_STATIC( TBIGNADD ){    
+            const char * a      = hb_parc(1);
+            const char * b      = hb_parc(2);
+            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)+1);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
+            char * szRet        = tBIGNAdd(a,b,(int)n,y,nB);
+            hb_retclen(szRet,y);
+            hb_xfree(szRet);
+        }
+        
+        static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB){
+            HB_BOOL bAdd  = HB_TRUE;
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i         = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                if (bAdd){
+                    v    += a;
+                    bAdd =  HB_FALSE;
+                }    
+                v += v1;
+                if ( v>=nB ){
+                    v  -= nB;
+                    v1 = 1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNIADD ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            HB_MAXUINT a        = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLADD ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)+(HB_MAXUINT)hb_parnint(2));
+        }
+   
+        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){
+            char * c      = (char*)hb_xgrab(y+1);
+            HB_SIZE k     = y-1;
+            int v         = 0;
+            int v1;
+            while (--n>=0){
+                v+=(*(&a[n])-'0')-(*(&b[n])-'0');
+                if ( v<0 ){
+                    v+=nB;
+                    v1 = -1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                c[k]   = "0123456789"[v];
+                c[k-1] = "0123456789"[v1];
+                v = v1;
+                --k;
+            }
+            return c;
+        }
+
+        HB_FUNC_STATIC( TBIGNSUB ){    
+            const char * a      = hb_parc(1);
+            const char * b      = hb_parc(2);
+            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+            const HB_SIZE y     = n;
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
+            char * szRet        = tBIGNSub(a,b,(int)n,y,nB);
+            hb_retclen(szRet,y);
+            hb_xfree(szRet);
+        }
+        
+        static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB){
+            HB_BOOL bSub  = HB_TRUE;
+            int v;
+            int v1        = 0;
+            int i         = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                if (bSub){
+                    v    -= s;
+                    bSub =  HB_FALSE;
+                }                
+                v += v1;
+                if ( v<0 ){
+                    v+=nB;
+                    v1 = -1;
+                }    
+                else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNISUB ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1));
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            int s               = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiSUB(szRet,s,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLSUB ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)-(HB_MAXUINT)hb_parnint(2));
+        }
+ 
+        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB){
+            
+            char * c     = (char*)hb_xgrab(y+1);
+            
+            HB_SIZE i    = 0;
+            HB_SIZE k    = 0;
+            HB_SIZE l    = 1;
+            HB_SIZE s;
+            HB_SIZE j;
+            
+            HB_MAXUINT v = 0;
+            HB_MAXUINT v1;
+            
+            n-=1;
+            
+            while (i<=n){
+                s = 0;
+                j = i;
+                while (s<=i){
+                    v+=(*(&a[s++])-'0')*(*(&b[j--])-'0');
+                }
+                if (v>=nB){
+                    v1 = v/nB;
+                    v %= nB;
+               }else{
+                    v1 = 0;
+                 };
+                c[k]   = "0123456789"[v];
+                c[k+1] = "0123456789"[v1];
+                v = v1;
+                k++;
+                i++;
+            }
+        
+            while (l<=n){
+                s = n;
+                j = l;
+                while (s>=l){
+                    v+=(*(&a[s--])-'0')*(*(&b[j++])-'0');
+                }
+                if (v>=nB){
+                    v1 = v/nB;
+                    v %= nB;
+                }else{
+                    v1     = 0;                    
+                }
+                c[k]   = "0123456789"[v];
+                c[k+1] = "0123456789"[v1];
+                v = v1;
+                if (++k>=y){
+                    break;
+                }
+                l++;
+            }        
+            
+            char * r = tBIGNReverse(c,y);
+            hb_xfree(c);
+    
+            return r;
+        }
+    
+        HB_FUNC_STATIC( TBIGNMULT ){
+            HB_SIZE n           = (HB_SIZE)hb_parnint(3);
+            char * a            = tBIGNReverse(hb_parc(1),n);
+            char * b            = tBIGNReverse(hb_parc(2),n);
+            const HB_SIZE y     = (HB_SIZE)(hb_parnint(4)*2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
+            char * szRet        = tBIGNMult(a,b,n,y,nB);
+            hb_retclen(szRet,y);
+            hb_xfree(a);
+            hb_xfree(b);
+            hb_xfree(szRet);
+        }
+
+        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult){
+    
+            HB_MAXUINT szptBIGNeMult = sizeof(ptBIGNeMult*);
+            HB_MAXUINT szstBIGNeMult = sizeof(stBIGNeMult);            
+            
+            ptBIGNeMult *peMTArr     = (ptBIGNeMult*)hb_xgrab(szptBIGNeMult);        
+            ptBIGNeMult pegMultTmp   = (ptBIGNeMult)hb_xgrab(szstBIGNeMult);
+            
+            char * Tmp               = tBIGNPadL("1",n,"0");
+            pegMultTmp->cMultM       = hb_strdup(Tmp);
+            hb_xfree(Tmp);
+            
+            pegMultTmp->cMultP       = hb_strdup(pD);
+    
+            Tmp                      = tBIGNPadL("0",n,"0");
+            pegMult->cMultM          = hb_strdup(Tmp);
+            pegMult->cMultP          = hb_strdup(Tmp);
+            hb_xfree(Tmp);
+            
+            int nI                   = 0;
+
+            do {
+            
+                peMTArr     = (ptBIGNeMult*)hb_xrealloc(peMTArr,(nI+1)*szptBIGNeMult);
+                peMTArr[nI] = (ptBIGNeMult)hb_xgrab(szstBIGNeMult);
+                
+                peMTArr[nI]->cMultM = hb_strdup(pegMultTmp->cMultM);
+                peMTArr[nI]->cMultP = hb_strdup(pegMultTmp->cMultP);  
+
+                char * tmp = tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
+                hb_xmemcpy(pegMultTmp->cMultM,tmp,n);
+                hb_xfree(tmp);
+                    
+                tmp        = tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
+                hb_xmemcpy(pegMultTmp->cMultP,tmp,n);
+                hb_xfree(tmp);
+                
+                if (memcmp(pegMultTmp->cMultM,pN,n)==1){
+                    break;
+                }
+                
+                ++nI;
+
+            } while (HB_TRUE);
+            
+            hb_xfree(pegMultTmp->cMultM);
+            hb_xfree(pegMultTmp->cMultP);
+            
+            int nF = nI;
+
+            do {
+               
+                pegMultTmp->cMultM = tBIGNAdd(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
+                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                hb_xfree(pegMultTmp->cMultM);
+    
+                pegMultTmp->cMultP = tBIGNAdd(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
+                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                hb_xfree(pegMultTmp->cMultP);
+                
+                int iCmp = memcmp(pegMult->cMultM,pN,n);
+
+                if (iCmp==0){
+                    break;
+                } else{
+                        if (iCmp==1){
+    
+                            pegMultTmp->cMultM = tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
+                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                            hb_xfree(pegMultTmp->cMultM);
+    
+                            pegMultTmp->cMultP = tBIGNSub(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
+                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                            hb_xfree(pegMultTmp->cMultP);
+    
+                    }
+                }  
+                
+            } while (--nI>=0);
+            
+            for(nI=nF;nI>=0;nI--){
+                hb_xfree(peMTArr[nI]->cMultM);
+                hb_xfree(peMTArr[nI]->cMultP);
+                hb_xfree(peMTArr[nI]);
+            }
+            hb_xfree(peMTArr);
+            peMTArr = NULL;
+
+            hb_xfree(pegMultTmp);
+                
+        }
+        
+        HB_FUNC_STATIC( TBIGNEGMULT ){
+            
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(3)*2);            
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(4);
+            
+            ptBIGNeMult pegMult = (ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+            
+            tBIGNegMult(pN,pD,(int)n,nB,pegMult);
+        
+            hb_retclen(pegMult->cMultP,n);
+
+            hb_xfree(pN);
+            hb_xfree(pD);
+            hb_xfree(pegMult->cMultM);
+            hb_xfree(pegMult->cMultP);
+            hb_xfree(pegMult);
+        }
+        
+        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXUINT nB){
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                v <<= 1;
+                v += v1;
+                if (v>=nB){
+                    v1 = v/nB;
+                    v  %= nB;
+                }else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGN2MULT ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)+1);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(2);
+            hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB){
+            HB_MAXUINT v;
+            HB_MAXUINT v1 = 0;
+            int i = isN;
+            while(--i>=0){
+                v = (*(&sN[i])-'0');
+                v *= m;
+                v += v1;
+                if (v>=nB){
+                    v1 = v/nB;
+                    v  %= nB;
+                }else{
+                    v1 = 0;
+                }
+                sN[i] = "0123456789"[v];
+            }
+            return sN;
+        }
+        
+        HB_FUNC_STATIC( TBIGNIMULT ){
+            HB_SIZE n           = (HB_SIZE)(hb_parclen(1)*2);
+            char * szRet        = tBIGNPadL(hb_parc(1),n,"0");
+            HB_MAXUINT m        = (HB_MAXUINT)hb_parnint(2);
+            const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(3);
+            hb_retclen(tBigNiMult(szRet,m,n,nB),n);
+            hb_xfree(szRet);
+        }
+        
+        HB_FUNC_STATIC( TBIGNLMULT ){
+            hb_retnint((HB_MAXUINT)hb_parnint(1)*(HB_MAXUINT)hb_parnint(2));
+        }
+
+        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv){
+    
+            HB_MAXUINT szptBIGNeDiv = sizeof(ptBIGNeDiv*);
+            HB_MAXUINT szstBIGNeDiv = sizeof(stBIGNeDiv);
+    
+            ptBIGNeDiv *peDVArr     = (ptBIGNeDiv*)hb_xgrab(szptBIGNeDiv);
+            ptBIGNeDiv pegDivTmp    = (ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
+            
+            char * Tmp              = tBIGNPadL("1",n,"0");
+            pegDivTmp->cDivQ        = hb_strdup(Tmp);
+            hb_xfree(Tmp);
+            
+            pegDivTmp->cDivR        = hb_strdup(pD);
+            
+            int nI = 0;
+ 
+            do {
+
+                peDVArr     = (ptBIGNeDiv*)hb_xrealloc(peDVArr,(nI+1)*szptBIGNeDiv);
+                peDVArr[nI] = (ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
+                
+                peDVArr[nI]->cDivQ = hb_strdup(pegDivTmp->cDivQ);
+                peDVArr[nI]->cDivR = hb_strdup(pegDivTmp->cDivR);  
+
+                char * tmp = tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
+                hb_xmemcpy(pegDivTmp->cDivQ,tmp,n);
+                hb_xfree(tmp);
+                    
+                tmp        = tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);
+                hb_xmemcpy(pegDivTmp->cDivR,tmp,n);
+                hb_xfree(tmp);
+
+                if (memcmp(pegDivTmp->cDivR,pN,n)==1){
+                    break;
+                }
+                
+                ++nI;
+
+            } while (HB_TRUE);
+  
+            hb_xfree(pegDivTmp->cDivQ);
+            hb_xfree(pegDivTmp->cDivR);
+
+            int nF = nI;
+  
+            Tmp                     = tBIGNPadL("0",n,"0");
+            pegDiv->cDivQ           = hb_strdup(Tmp);
+            pegDiv->cDivR           = hb_strdup(Tmp);
+            hb_xfree(Tmp);
+  
+            do {
+                
+                pegDivTmp->cDivQ = tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
+                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                hb_xfree(pegDivTmp->cDivQ);
+    
+                pegDivTmp->cDivR = tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
+                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                hb_xfree(pegDivTmp->cDivR);
+                
+                int iCmp = memcmp(pegDiv->cDivR,pN,n);
+
+                if (iCmp==0){
+                    break;
+                } else{
+                        if (iCmp==1){
+    
+                            pegDivTmp->cDivQ = tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
+                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                            hb_xfree(pegDivTmp->cDivQ);
+    
+                            pegDivTmp->cDivR = tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
+                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                            hb_xfree(pegDivTmp->cDivR);
+    
+                    }
+                }  
+                
+            } while (--nI>=0);
+            
+            for(nI=nF;nI>=0;nI--){
+                hb_xfree(peDVArr[nI]->cDivQ);
+                hb_xfree(peDVArr[nI]->cDivR);
+                hb_xfree(peDVArr[nI]);
+            }
+            hb_xfree(peDVArr);
+            peDVArr = NULL;
+   
+            pegDivTmp->cDivR = tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
+            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+            hb_xfree(pegDivTmp->cDivR);
+            hb_xfree(pegDivTmp);
+                
+        }
+        
+        HB_FUNC_STATIC( TBIGNEGDIV ){
+ 
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1); 
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
+            ptBIGNeDiv pegDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            int iCmp            = memcmp(pN,pD,n);
+          
+            switch(iCmp){
+                case -1:{
+                    pegDiv->cDivQ = tBIGNPadL("0",n,"0");
+                    pegDiv->cDivR = hb_strdup(pN);
+                    break;
+                }
+                case 0:{
+                    pegDiv->cDivQ = tBIGNPadL("1",n,"0");
+                    pegDiv->cDivR = tBIGNPadL("0",n,"0");
+                    break;
+                }
+                default:{
+                    const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
+                    tBIGNegDiv(pN,pD,(int)n,nB,pegDiv);
+                }
+            }
+            
+            hb_storclen(pegDiv->cDivR,n,3);
+            hb_retclen(pegDiv->cDivQ,n);
+
+            hb_xfree(pN);
+            hb_xfree(pD);
+            hb_xfree(pegDiv->cDivR);
+            hb_xfree(pegDiv->cDivQ);
+            hb_xfree(pegDiv);
+        }
+        
+        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv){
+            
+            int n                   = 0;
+            
+            pecDiv->cDivR           = hb_strdup(pA);
+            char * aux              = hb_strdup(pB);
+             
+            HB_MAXUINT v1;
+          
+            ptBIGNeDiv  pecDivTmp   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+
+            HB_MAXUINT szHB_MAXUINT = sizeof(HB_MAXUINT);
+            HB_MAXUINT snHB_MAXUINT = ipN*szHB_MAXUINT;
+            
+            HB_MAXUINT *ipA         = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
+            HB_MAXUINT *iaux        = (HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
+                        
+            int i = ipN;
+            while(--i>=0){
+                ipA[i]  = (*(&pecDiv->cDivR[i])-'0');
+                iaux[i] = (*(&aux[i])-'0');
+            }
+ 
+            while (memcmp(iaux,ipA,ipN)<=0){
+                n++;
+                v1 = 0;
+                i = ipN;
+                while(--i>=0){
+                    iaux[i] <<= 1;
+                    iaux[i] += v1;
+                    if (iaux[i]>=nB){
+                        v1 = iaux[i]/nB;
+                        iaux[i] %= nB;
+                    }else{
+                        v1 = 0;
+                    }
+                }
+            }
+
+            hb_xfree(ipA);
+            ipA = NULL;
+ 
+            i = ipN;
+            while(--i>=0){
+                aux[i]   = "0123456789"[iaux[i]];
+            }
+            
+            hb_xfree(iaux);
+            iaux = NULL;
+            
+            HB_MAXUINT *idivQ = (HB_MAXUINT*)calloc(ipN,szHB_MAXUINT);
+            char * sN2        = tBIGNPadL("2",ipN,"0");
+ 
+            while (n--){            
+                tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
+                hb_xmemcpy(aux,pecDivTmp->cDivQ,ipN);
+                hb_xfree(pecDivTmp->cDivQ);
+                hb_xfree(pecDivTmp->cDivR);    
+                v1 = 0;
+                i = ipN;
+                while(--i>=0){
+                    idivQ[i] <<= 1;
+                    idivQ[i] += v1;
+                    if (idivQ[i]>=nB){
+                        v1 = idivQ[i]/nB;
+                        idivQ[i] %= nB;
+                    }else{
+                        v1 = 0;
+                    }
+                }
+                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
+                    char * tmp = tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
+                    hb_xmemcpy(pecDiv->cDivR,tmp,ipN);
+                    hb_xfree(tmp);
+                    v1 = 0;
+                    i  = ipN;
+                    HB_BOOL bAdd = HB_TRUE;
+                    while(--i>=0){
+                        if (bAdd){
+                            idivQ[i]++;
+                            bAdd = HB_FALSE;
+                        }    
+                        idivQ[i] += v1;
+                        if (idivQ[i]>=nB){
+                            idivQ[i] -= nB;
+                            v1 = 1;
+                        }else{
+                            v1 = 0;
+                        }
+                    } 
+                }
+            }
+            
+            hb_xfree(aux);
+            hb_xfree(sN2);
+            hb_xfree(pecDivTmp);
+            
+            pecDiv->cDivQ = (char*)hb_xgrab(ipN+1);
+
+            i = ipN;
+            while(--i>=0){
+                pecDiv->cDivQ[i] = "0123456789"[idivQ[i]];
+            }
+            
+            free(idivQ);
+            idivQ = NULL;
+            
+        }
+        
+        HB_FUNC_STATIC( TBIGNECDIV ){
+            
+            HB_SIZE n           = (HB_SIZE)(hb_parnint(4)+1);
+            char * pN           = tBIGNPadL(hb_parc(1),n,"0");
+            char * pD           = tBIGNPadL(hb_parc(2),n,"0");
+            ptBIGNeDiv pecDiv   = (ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            int iCmp            = memcmp(pN,pD,n);
+          
+            switch(iCmp){
+                case -1:{
+                    pecDiv->cDivQ = tBIGNPadL("0",n,"0");
+                    pecDiv->cDivR = hb_strdup(pN);
+                    break;
+                }
+                case 0:{
+                    pecDiv->cDivQ = tBIGNPadL("1",n,"0");
+                    pecDiv->cDivR = tBIGNPadL("0",n,"0");
+                    break;
+                }
+                default:{
+                    const HB_MAXUINT nB = (HB_MAXUINT)hb_parnint(5);
+                    tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
+                }
+            }
+            
+            hb_storclen(pecDiv->cDivR,n,3);
+            hb_retclen(pecDiv->cDivQ,n);
+
+            hb_xfree(pN);
+            hb_xfree(pD);
+            hb_xfree(pecDiv->cDivR);
+            hb_xfree(pecDiv->cDivQ);
+            hb_xfree(pecDiv);
+        }
+                
+        /*
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT x,HB_MAXUINT y){
+            HB_MAXUINT nGCD = x;  
+            x = HB_MAX(y,nGCD);
+            y = HB_MIN(nGCD,y);
+            if (y==0){
+               nGCD = x;
+            } else {
+                  nGCD = y;
+                  while (HB_TRUE){
+                      if ((y=(x%y))==0){
+                          break;
+                      }
+                      x    = nGCD;
+                      nGCD = y;
+                  }
+            }
+            return nGCD;
+        }*/
+        
+        //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
+        static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v){
+          int shift;
+         
+          /* GCD(0,v) == v; GCD(u,0) == u,GCD(0,0) == 0 */
+          if (u == 0) return v;
+          if (v == 0) return u;
+         
+          /* Let shift:=lg K,where K is the greatest power of 2
+                dividing both u and v. */
+          for (shift = 0; ((u | v) & 1) == 0; ++shift) {
+                 u >>= 1;
+                 v >>= 1;
+          }
+         
+          while ((u & 1) == 0)
+            u >>= 1;
+         
+          /* From here on,u is always odd. */
+          do {
+               /* remove all factors of 2 in v -- they are not common */
+               /*   note: v is not zero,so while will terminate */
+               while ((v & 1) == 0)  /* Loop X */
+                   v >>= 1;
+         
+               /* Now u and v are both odd. Swap if necessary so u <= v,
+                  then set v = v - u (which is even). for bignums,the
+                  swapping is just pointer movement,and the subtraction
+                  can be done in-place. */
+               if (u > v) {
+                 unsigned int t = v; v = u; u = t;}  // Swap u and v.
+               v = v - u;                            // Here v >= u.
+             } while (v != 0);
+         
+          /* restore common factors of 2 */
+          return u << shift;
+        }
+
+        HB_FUNC_STATIC( TBIGNGCD ){
+            hb_retnint(tBIGNGCD((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
+        }
+
+        /*
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
+             
+            HB_MAXUINT nLCM = 1;
+            HB_MAXUINT i    = 2;
+        
+            HB_BOOL lMx;
+            HB_BOOL lMy;
+        
+            while (HB_TRUE){
+                lMx = ((x%i)==0);
+                lMy = ((y%i)==0);
+                while (lMx||lMy){
+                    nLCM *= i;
+                    if (lMx){
+                        x   /= i;
+                        lMx = ((x%i)==0);
+                    }
+                    if (lMy){
+                        y   /= i;
+                        lMy = ((y%i)==0);
+                    }
+                }
+                if ((x==1)&&(y==1)){
+                    break;
+                }
+                ++i;
+            }
+            
+            return nLCM;
+
+        }
+        */
+
+        static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
+            return ((y/tBIGNGCD(x,y))*x);
+        }    
+        
+        HB_FUNC_STATIC( TBIGNLCM ){
+            hb_retnint(tBIGNLCM((HB_MAXUINT)hb_parnint(1),(HB_MAXUINT)hb_parnint(2)));
+        }
+
+        static HB_MAXUINT tBIGNFI(HB_MAXUINT n){
+            HB_MAXUINT i;
+            HB_MAXUINT fi = n;
+            for(i=2;((i*i)<=n);i++){
+                if ((n%i)==0){
+                    fi -= fi/i;
+                }    
+                while ((n%i)==0){
+                    n /= i;
+                }    
+            } 
+               if (n>1){
+                   fi -= fi/n;
+               }     
+               return fi; 
+        }
+        
+        HB_FUNC_STATIC( TBIGNFI ){
+            hb_retnint(tBIGNFI((HB_MAXUINT)hb_parnint(1)));
+        }
+        
+        HB_FUNC_STATIC( TBIGNALEN ){
+           hb_retns(hb_arrayLen(hb_param(1,HB_IT_ARRAY)));
+        }
+      
+        HB_FUNC_STATIC( TBIGNMEMCMP ){
+           hb_retnint(memcmp(hb_parc(1),hb_parc(2),hb_parclen(1)));
+        }
+
+        HB_FUNC_STATIC( TBIGNMAX ){
+           hb_retnint(HB_MAX(hb_parnint(1),hb_parnint(2)));
+        }
+        
+        HB_FUNC_STATIC( TBIGNMIN ){
+           hb_retnint(HB_MIN(hb_parnint(1),hb_parnint(2)));
+        }
+         
+        HB_FUNC_STATIC( TBIGNNORMALIZE ){
+            
+            HB_SIZE nInt1 = (HB_SIZE)hb_parnint(2);
+            HB_SIZE nInt2 = (HB_SIZE)hb_parnint(7);
+            HB_SIZE nPadL = HB_MAX(nInt1,nInt2);
+ 
+            HB_SIZE nDec1 = (HB_SIZE)hb_parnint(4);
+            HB_SIZE nDec2 = (HB_SIZE)hb_parnint(9);            
+            HB_SIZE nPadR = HB_MAX(nDec1,nDec2);
+    
+            HB_BOOL lPadL = nPadL!=nInt1;
+            HB_BOOL lPadR = nPadR!=nDec1;
+        
+            char * tmpPad;
+    
+            if (lPadL || lPadR){
+                if (lPadL){
+                    tmpPad = tBIGNPadL(hb_parc(1),nPadL,"0");
+                    hb_storclen(tmpPad,nPadL,1);
+                    hb_stornint(nPadL,2);
+                    hb_xfree(tmpPad);
+                }
+                if (lPadR){
+                    tmpPad = tBIGNPadR(hb_parc(3),nPadR,"0");
+                    hb_storclen(tmpPad,nPadR,3);
+                    hb_stornint(nPadR,4);
+                    hb_xfree(tmpPad);
+                }
+                hb_stornint(nPadL+nPadR,5);
+            }
+
+            lPadL = nPadL!=nInt2;
+            lPadR = nPadR!=nDec2;
+           
+            if (lPadL || lPadR){
+                if (lPadL){
+                    tmpPad = tBIGNPadL(hb_parc(6),nPadL,"0");
+                    hb_storclen(tmpPad,nPadL,6);
+                    hb_stornint(nPadL,7);
+                    hb_xfree(tmpPad);
+                }
+                if (lPadR){
+                    tmpPad = tBIGNPadR(hb_parc(8),nPadR,"0");
+                    hb_storclen(tmpPad,nPadR,8);
+                    hb_stornint(nPadR,9);
+                    hb_xfree(tmpPad);
+                }
+                hb_stornint(nPadL+nPadR,10);
+            }
+       
+        }
+        
+#pragma ENDDUMP

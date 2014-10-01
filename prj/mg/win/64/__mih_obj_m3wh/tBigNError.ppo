@@ -1,0 +1,720 @@
+#line 203 "D:\marinas-ide(64bits)\harbour\include\hbclass.ch"
+DECLARE HBClass  New( cName AS STRING, OPTIONAL SuperParams ) AS CLASS HBClass  Create() AS OBJECT  Instance() AS OBJECT  AddClsMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC, n2 AS NUMERIC, n3 AS NUMERIC )  AddMultiClsData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING )  AddMultiData( cType AS STRING, uVal, nScope AS NUMERIC, aDatas AS ARRAY OF STRING, x AS LOGICAL, lPer AS LOGICAL )  AddMethod( cName AS STRING, @MethodName(), nScope AS NUMERIC )  AddInLine( cName AS STRING, bBlock AS CODEBLOCK, nScope AS NUMERIC )  AddVirtual( cName AS STRING )
+#line 58 "D:\GitHub\core\contrib\xhb\xhb.ch"
+   EXTERNAL xhb_Lib
+#line 72 "D:\GitHub\tbigNumber\src\tBigNError.prg"
+EXTERNAL Select, Alias, RecNo, DbFilter, DbRelation, IndexOrd, IndexKey
+
+STATIC s_cErrorLog          := "error.log"
+STATIC s_lErrorLogAppend := .F.
+
+FUNCTION tBNErrorLog( cErrorLog, lErrorLogAppend )
+
+   LOCAL aValueOld := { s_cErrorLog, s_lErrorLogAppend }
+
+   IF HB_ISSTRING( cErrorLog )
+      s_cErrorLog := cErrorLog
+   ENDIF
+   IF HB_ISLOGICAL( lErrorLogAppend )
+      s_lErrorLogAppend := lErrorLogAppend
+   ENDIF
+
+RETURN aValueOld
+
+PROCEDURE tBNErrorSys()
+
+    Local cPathErr := (hb_CurDrive()+hb_osDriveSeparator()+hb_osPathSeparator()+CurDir())+hb_osPathSeparator()+"tbigN_err"+hb_osPathSeparator()
+    Local cFileErr := cPathErr+"tbNErrorLog.log"
+
+    s_cErrorLog := cFileErr
+
+    MakeDir(cPathErr)
+
+    ErrorBlock( {| oError | tBNDefError( oError ) } )
+
+
+        Set(112,cPathErr+"tbN.Log")
+        Set(113,"tBigNumber")
+
+
+RETURN
+
+STATIC FUNCTION err_ModuleName( oError, n )
+
+
+RETURN iif( __objHasMsg( oError, "MODULENAME" ), oError:ModuleName,  iif( n <> NIL, ProcFile( n ), NIL ) )
+
+STATIC FUNCTION err_ProcName( oError, n )
+
+
+RETURN iif( __objHasMsg( oError, "PROCNAME" ), oError:ProcName,  iif( n <> NIL, ProcName( n ), NIL ) )
+
+STATIC FUNCTION err_ProcLine( oError, n )
+
+
+RETURN iif( __objHasMsg( oError, "PROCLINE" ), oError:ProcLine,  iif( n <> NIL, ProcLine( n ), NIL ) )
+
+STATIC FUNCTION tBNDefError( oError )
+
+   LOCAL cMessage
+   LOCAL cDOSError
+
+   LOCAL aOptions
+   LOCAL nChoice
+
+   LOCAL n
+
+   n := 0
+   WHILE ! Empty( ProcName( ++n ) )
+      IF ProcName( n ) == ProcName()
+         n := 3
+         TraceLog( "Error system failure!", err_ProcName( oError, n ), err_ProcLine( oError, n ), err_ModuleName( oError, n ), oError:description )
+         Alert( "Error system failure!;Please correct error handler:;" + err_ProcName( oError, n ) + "(" + hb_ntos( err_ProcLine( oError, n ) ) +  ") in module: " + err_ModuleName( oError, n ) )
+         ErrorLevel( 1 )
+            IF hb_mtvm()
+            hb_threadTerminateAll()
+            EndIF
+         __Quit()
+      ENDIF
+   ENDDO
+
+
+   IF oError:genCode == 5
+   RETURN 0
+   ENDIF
+
+
+
+   IF oError:genCode == 41 .AND.  oError:canRetry
+
+   RETURN .T.
+   ENDIF
+
+
+
+
+   IF oError:genCode == 21 .AND.  oError:osCode == 32 .AND.  oError:canDefault
+      NetErr( .T. )
+   RETURN .F.
+   ENDIF
+
+
+
+   IF oError:genCode == 40 .AND.  oError:canDefault
+      NetErr( .T. )
+   RETURN .F.
+   ENDIF
+
+
+   while DispCount() > 0
+      DispEnd()
+   ENDDO
+
+   cMessage := ErrorMessage( oError )
+   IF ! Empty( oError:osCode )
+      cDOSError := "(DOS Error " + hb_ntos( oError:osCode ) + ")"
+   ENDIF
+
+
+   IF HB_ISARRAY( oError:Args )
+      cMessage += " Arguments: (" + Arguments( oError ) + ")"
+   ENDIF
+
+
+
+   IF MaxCol() > 0
+      aOptions := {}
+
+
+      AAdd( aOptions, "Quit" )
+
+      IF oError:canRetry
+         AAdd( aOptions, "Retry" )
+      ENDIF
+
+      IF oError:canDefault
+         AAdd( aOptions, "Default" )
+      ENDIF
+
+
+
+
+      nChoice := 0
+      while nChoice == 0
+
+         IF Empty( oError:osCode )
+            nChoice := Alert( cMessage, aOptions )
+         ELSE
+            nChoice := Alert( cMessage + ";" + cDOSError, aOptions )
+         ENDIF
+
+      ENDDO
+
+      IF ! Empty( nChoice )
+         DO CASE
+         CASE aOptions[ nChoice ] == "Break"
+            Break( oError )
+         CASE aOptions[ nChoice ] == "Retry"
+         RETURN .T.
+         CASE aOptions[ nChoice ] == "Default"
+         RETURN .F.
+         ENDCASE
+      ENDIF
+   ELSE
+      IF Empty( oError:osCode )
+         Alert( cMessage + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) +  ") in module: " + err_ModuleName( oError, 3 ) )
+      ELSE
+         Alert( cMessage + ";" + cDOSError + ";" + err_ProcName( oError, 3 ) + "(" + hb_ntos( err_ProcLine( oError, 3 ) ) +  ") in module: " + err_ModuleName( oError, 3 ) )
+      ENDIF
+   ENDIF
+
+
+
+   IF ! Empty( oError:osCode )
+      cMessage += " " + cDOSError
+   ENDIF
+
+   QOut( cMessage )
+
+   QOut( )
+   QOut( "Error at ...:", ProcName() + "(" + hb_ntos( ProcLine() ) + ") in Module:", ProcFile() )
+   n := 2
+   WHILE ! Empty( ProcName( ++n ) )
+
+      QOut( "Called from :", ProcName( n ) +  "(" + hb_ntos( ProcLine( n ) ) + ") in Module:", ProcFile( n ) )
+   ENDDO
+
+
+
+
+   LogError( oError )
+
+   ErrorLevel( 1 )
+   QOut( )
+   IF hb_mtvm()
+        hb_threadTerminateAll()
+   EndIF
+   __Quit()
+
+RETURN .F.
+
+
+
+STATIC FUNCTION ErrorMessage( oError )
+
+   LOCAL cMessage
+
+
+   cMessage := iif( oError:severity > 1, "Error", "Warning" ) + " "
+
+
+   IF HB_ISSTRING( oError:subsystem )
+      cMessage += oError:subsystem()
+   ELSE
+      cMessage += "???"
+   ENDIF
+
+
+   IF HB_ISNUMERIC( oError:subCode )
+      cMessage += "/" + hb_ntos( oError:subCode )
+   ELSE
+      cMessage += "/???"
+   ENDIF
+
+
+   IF HB_ISSTRING( oError:description )
+      cMessage += "  " + oError:description
+   ENDIF
+
+
+   DO CASE
+   CASE ! Empty( oError:filename )
+      cMessage += ": " + oError:filename
+   CASE ! Empty( oError:operation )
+      cMessage += ": " + oError:operation
+   ENDCASE
+
+RETURN cMessage
+
+STATIC FUNCTION LogError( oerr )
+
+   LOCAL cScreen
+   LOCAL cLogFile    := s_cErrorLog
+   LOCAL lAppendLog  := s_lErrorLogAppend
+   LOCAL nCols
+   LOCAL nRows
+
+   LOCAL nCount
+
+   LOCAL nForLoop
+   LOCAL cOutString
+
+   LOCAL nHandle
+   LOCAL nBytes
+
+   LOCAL nHandle2   := ( -1 )
+   LOCAL cLogFile2  := "_"+s_cErrorLog
+   LOCAL cBuff      := ""
+   LOCAL nRead
+
+   nCols := MaxCol()
+   IF nCols > 0
+      nRows := MaxRow()
+      cScreen := xhb_SaveScreen( )
+   ENDIF
+
+
+
+   IF ! lAppendLog
+      nHandle := FCreate( cLogFile, 0 )
+   ELSE
+      IF ! hb_FileExists( cLogFile )
+         nHandle := FCreate( cLogFile, 0 )
+      ELSE
+         nHandle  := FCreate( cLogFile2, 0 )
+         nHandle2 := FOpen( cLogFile, 0 )
+      ENDIF
+   ENDIF
+
+   IF nHandle < 3 .AND. !( Lower( cLogFile ) == "error.log" )
+
+
+      cLogFile := "error.log"
+      nHandle := FCreate( cLogFile, 0 )
+   ENDIF
+
+   IF nHandle < 3
+   ELSE
+
+      FWriteLine( nHandle, PadC( " Harbour tBigNumber Errorlog File ", 79, "-" ) )
+      FWriteLine( nHandle, PadC( " [BlackTDN :: http://www.blacktdn.com.br] ", 79, "-" ) )
+      FWriteLine( nHandle, "" )
+
+      FWriteLine( nHandle, "Date...............: " + DToC( Date() )  )
+      FWriteLine( nHandle, "Time...............: " + Time()          )
+
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, "Application name...: " + hb_argv( ) )
+      FWriteLine( nHandle, "Workstation name...: " + xhb_NetName( ) )
+      FWriteLine( nHandle, "Available memory...: " + strvalue( Memory( 0 ) )  )
+      FWriteLine( nHandle, "Current disk.......: " + DiskName() )
+      FWriteLine( nHandle, "Current directory..: " + CurDir() )
+      FWriteLine( nHandle, "Free disk space....: " + strvalue( DiskSpace() ) )
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, "Operating system...: " + OS() )
+
+
+
+
+      FWriteLine( nHandle, "Harbour version....:  " + Version() )
+      FWriteLine( nHandle, "Harbour built on...:  " + hb_BuildDate() )
+
+      FWriteLine( nHandle, "C/C++ compiler.....: " + hb_Compiler() )
+
+      FWriteLine( nHandle, "Multi Threading....: " + iif( hb_mtvm(), "YES", "NO" ) )
+      FWriteLine( nHandle, "VM Optimization....: " + strvalue( hb_VMMode() ) )
+
+      IF hb_IsFunction( "Select" )
+         FWriteLine( nHandle, "" )
+         FWriteLine( nHandle, "Current Area ......:" + strvalue( Eval( hb_macroBlock( "Select()" ) ) ) )
+      ENDIF
+
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, PadC( " Environmental Information ", 79, "-" ) )
+      FWriteLine( nHandle, "" )
+
+      FWriteLine( nHandle, "SET ALTERNATE......: " + strvalue( Set( 18 ), .T. ) )
+      FWriteLine( nHandle, "SET ALTFILE........: " + strvalue( Set( 19 ) ) )
+      FWriteLine( nHandle, "SET AUTOPEN........: " + strvalue( Set( 45 ), .T. ) )
+      FWriteLine( nHandle, "SET AUTORDER.......: " + strvalue( Set( 46 ) ) )
+      FWriteLine( nHandle, "SET AUTOSHARE......: " + strvalue( Set( 47 ) ) )
+
+
+
+
+
+      FWriteLine( nHandle, "SET BELL...........: " + strvalue( Set( 26 ), .T. ) )
+      FWriteLine( nHandle, "SET BLINK..........: " + strvalue( SetBlink() ) )
+
+      FWriteLine( nHandle, "SET CANCEL.........: " + strvalue( Set( 12 ), .T. ) )
+      FWriteLine( nHandle, "SET CENTURY........: " + strvalue( __SetCentury(), .T. ) )
+      FWriteLine( nHandle, "SET COLOR..........: " + strvalue( Set( 15 ) ) )
+      FWriteLine( nHandle, "SET CONFIRM........: " + strvalue( Set( 27 ), .T. ) )
+      FWriteLine( nHandle, "SET CONSOLE........: " + strvalue( Set( 17 ), .T. ) )
+      FWriteLine( nHandle, "SET COUNT..........: " + strvalue( Set( 47 ) ) )
+      FWriteLine( nHandle, "SET CURSOR.........: " + strvalue( Set( 16 ) ) )
+
+      FWriteLine( nHandle, "SET DATE FORMAT....: " + strvalue( Set( 4 ) ) )
+      FWriteLine( nHandle, "SET DBFLOCKSCHEME..: " + strvalue( Set( 108 ) ) )
+      FWriteLine( nHandle, "SET DEBUG..........: " + strvalue( Set( 13 ), .T. ) )
+      FWriteLine( nHandle, "SET DECIMALS.......: " + strvalue( Set( 3 ) ) )
+      FWriteLine( nHandle, "SET DEFAULT........: " + strvalue( Set( 7 ) ) )
+      FWriteLine( nHandle, "SET DEFEXTENSIONS..: " + strvalue( Set( 109 ), .T. ) )
+      FWriteLine( nHandle, "SET DELETED........: " + strvalue( Set( 11 ), .T. ) )
+      FWriteLine( nHandle, "SET DELIMCHARS.....: " + strvalue( Set( 34 ) ) )
+      FWriteLine( nHandle, "SET DELIMETERS.....: " + strvalue( Set( 33 ), .T. ) )
+      FWriteLine( nHandle, "SET DEVICE.........: " + strvalue( Set( 20 ) ) )
+      FWriteLine( nHandle, "SET DIRCASE........: " + strvalue( Set( 103 ) ) )
+      FWriteLine( nHandle, "SET DIRSEPARATOR...: " + strvalue( Set( 104 ) ) )
+
+      FWriteLine( nHandle, "SET EOL............: " + strvalue( Asc( Set( 110 ) ) ) )
+      FWriteLine( nHandle, "SET EPOCH..........: " + strvalue( Set( 5 ) ) )
+      FWriteLine( nHandle, "SET ERRORLOG.......: " + strvalue( cLogFile ) + "," + strvalue( lAppendLog ) )
+
+
+
+      FWriteLine( nHandle, "SET ESCAPE.........: " + strvalue( Set( 28 ), .T. ) )
+      FWriteLine( nHandle, "SET EVENTMASK......: " + strvalue( Set( 39 ) ) )
+      FWriteLine( nHandle, "SET EXACT..........: " + strvalue( Set( 1 ), .T. ) )
+      FWriteLine( nHandle, "SET EXCLUSIVE......: " + strvalue( Set( 8 ), .T. ) )
+      FWriteLine( nHandle, "SET EXIT...........: " + strvalue( Set( 30 ), .T. ) )
+      FWriteLine( nHandle, "SET EXTRA..........: " + strvalue( Set( 21 ), .T. ) )
+      FWriteLine( nHandle, "SET EXTRAFILE......: " + strvalue( Set( 22 ) ) )
+
+      FWriteLine( nHandle, "SET FILECASE.......: " + strvalue( Set( 102 ) ) )
+      FWriteLine( nHandle, "SET FIXED..........: " + strvalue( Set( 2 ), .T. ) )
+      FWriteLine( nHandle, "SET FORCEOPT.......: " + strvalue( Set( 107 ), .T. ) )
+
+      FWriteLine( nHandle, "SET HARDCOMMIT.....: " + strvalue( Set( 106 ), .T. ) )
+
+      FWriteLine( nHandle, "SET IDLEREPEAT.....: " + strvalue( Set( 101 ), .T. ) )
+      FWriteLine( nHandle, "SET INSERT.........: " + strvalue( Set( 29 ), .T. ) )
+      FWriteLine( nHandle, "SET INTENSITY......: " + strvalue( Set( 31 ), .T. ) )
+
+      FWriteLine( nHandle, "SET LANGUAGE.......: " + strvalue( Set( 100 ) ) )
+
+      FWriteLine( nHandle, "SET MARGIN.........: " + strvalue( Set( 25 ) ) )
+      FWriteLine( nHandle, "SET MBLOCKSIZE.....: " + strvalue( Set( 41 ) ) )
+      FWriteLine( nHandle, "SET MCENTER........: " + strvalue( Set( 37 ), .T. ) )
+      FWriteLine( nHandle, "SET MESSAGE........: " + strvalue( Set( 36 ) ) )
+      FWriteLine( nHandle, "SET MFILEEXT.......: " + strvalue( Set( 42 ) ) )
+
+      FWriteLine( nHandle, "SET OPTIMIZE.......: " + strvalue( Set( 44 ), .T. ) )
+
+
+
+
+      FWriteLine( nHandle, "SET PATH...........: " + strvalue( Set( 6 ) ) )
+      FWriteLine( nHandle, "SET PRINTER........: " + strvalue( Set( 23 ), .T. ) )
+
+
+
+      FWriteLine( nHandle, "SET PRINTFILE......: " + strvalue( Set( 24 ) ) )
+
+      FWriteLine( nHandle, "SET SCOREBOARD.....: " + strvalue( Set( 32 ), .T. ) )
+      FWriteLine( nHandle, "SET SCROLLBREAK....: " + strvalue( Set( 38 ), .T. ) )
+      FWriteLine( nHandle, "SET SOFTSEEK.......: " + strvalue( Set( 9 ), .T. ) )
+      FWriteLine( nHandle, "SET STRICTREAD.....: " + strvalue( Set( 43 ), .T. ) )
+
+
+
+
+
+
+      FWriteLine( nHandle, "SET TRIMFILENAME...: " + strvalue( Set( 111 ) ) )
+
+      FWriteLine( nHandle, "SET TYPEAHEAD......: " + strvalue( Set( 14 ) ) )
+
+      FWriteLine( nHandle, "SET UNIQUE.........: " + strvalue( Set( 10 ), .T. ) )
+
+      FWriteLine( nHandle, "SET VIDEOMODE......: " + strvalue( Set( 40 ) ) )
+
+      FWriteLine( nHandle, "SET WRAP...........: " + strvalue( Set( 35 ), .T. ) )
+
+
+      FWriteLine( nHandle, "" )
+
+      IF nCols > 0
+         FWriteLine( nHandle, PadC( "Detailed Work Area Items", nCols, "-" ) )
+      ELSE
+         FWriteLine( nHandle, "Detailed Work Area Items " )
+      ENDIF
+      FWriteLine( nHandle, "" )
+
+      hb_WAEval( {||
+         IF hb_IsFunction( "Select" )
+            FWriteLine( nHandle, "Work Area No ......: " + strvalue( Do( "Select" ) ) )
+         ENDIF
+         IF hb_IsFunction( "Alias" )
+            FWriteLine( nHandle, "Alias .............: " + Do( "Alias" ) )
+         ENDIF
+         IF hb_IsFunction( "RecNo" )
+            FWriteLine( nHandle, "Current Recno .....: " + strvalue( Do( "RecNo" ) ) )
+         ENDIF
+         IF hb_IsFunction( "dbFilter" )
+            FWriteLine( nHandle, "Current Filter ....: " + Do( "dbFilter" ) )
+         ENDIF
+         IF hb_IsFunction( "dbRelation" )
+            FWriteLine( nHandle, "Relation Exp. .....: " + Do( "dbRelation" ) )
+         ENDIF
+         IF hb_IsFunction( "IndexOrd" )
+            FWriteLine( nHandle, "Index Order .......: " + strvalue( Do( "IndexOrd" ) ) )
+         ENDIF
+         IF hb_IsFunction( "IndexKey" )
+            FWriteLine( nHandle, "Active Key ........: " + strvalue( Eval( hb_macroBlock( "IndexKey( 0 )" ) ) ) )
+         ENDIF
+         FWriteLine( nHandle, "" )
+      RETURN .T.
+         } )
+
+      FWriteLine( nHandle, "" )
+      IF nCols > 0
+         FWriteLine( nHandle, PadC( " Internal Error Handling Information  ", nCols, "-" ) )
+      ELSE
+         FWriteLine( nHandle, " Internal Error Handling Information  " )
+      ENDIF
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, "Subsystem Call ....: " + oErr:subsystem() )
+      FWriteLine( nHandle, "System Code .......: " + strvalue( oErr:suBcode() ) )
+      FWriteLine( nHandle, "Default Status ....: " + strvalue( oerr:candefault() ) )
+      FWriteLine( nHandle, "Description .......: " + oErr:description() )
+      FWriteLine( nHandle, "Operation .........: " + oErr:operation() )
+      FWriteLine( nHandle, "Arguments .........: " + Arguments( oErr ) )
+      FWriteLine( nHandle, "Involved File .....: " + oErr:filename() )
+      FWriteLine( nHandle, "Dos Error Code ....: " + strvalue( oErr:oscode() ) )
+
+
+
+
+
+
+
+
+
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, " Trace Through:" )
+      FWriteLine( nHandle, "----------------" )
+
+      FWriteLine( nHandle, PadR( ProcName(), 21 ) + " : " + Transform( ProcLine(), "999,999" ) + " in Module: " + ProcFile() )
+
+      nCount := 3
+      WHILE ! Empty( ProcName( ++nCount ) )
+         FWriteLine( nHandle, PadR( ProcName( nCount ), 21 ) + " : " + Transform( ProcLine( nCount ), "999,999" ) + " in Module: " + ProcFile( nCount ) )
+      ENDDO
+
+      FWriteLine( nHandle, "" )
+      FWriteLine( nHandle, "" )
+
+
+
+
+
+
+
+
+
+
+
+
+      IF HB_ISSTRING( cScreen )
+         FWriteLine( nHandle, PadC( " Video Screen Dump ", nCols, "#" ) )
+         FWriteLine( nHandle, "" )
+         FWriteLine( nHandle, "+" + Replicate( "-", nCols + 1 ) + "+" )
+         FOR nCount := 0 TO nRows
+            cOutString := ""
+            FOR nForLoop := 0 TO nCols
+               cOutString += __XSaveGetChar( cScreen, nCount * ( nCols + 1 ) + nForLoop )
+            NEXT
+            FWriteLine( nHandle, "|" + cOutString + "|" )
+         NEXT
+         FWriteLine( nHandle, "+" + Replicate( "-", nCols + 1 ) + "+" )
+         FWriteLine( nHandle, "" )
+         FWriteLine( nHandle, "" )
+      ELSE
+         FWriteLine( nHandle, " Video Screen Dump not available" )
+      ENDIF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      IF lAppendLog .AND. nHandle2 <> ( -1 )
+
+         nBytes := FSeek( nHandle2, 0, 2 )
+
+         cBuff := Space( 10 )
+         FSeek( nHandle2, 0, 0 )
+
+         WHILE nBytes > 0
+            nRead := FRead( nHandle2, @cBuff, hb_BLen( cBuff ) )
+            FWrite( nHandle, cBuff, nRead )
+            nBytes -= nRead
+            cBuff := Space( 10 )
+         ENDDO
+
+         FClose( nHandle2 )
+         FClose( nHandle )
+
+         FErase( cLogFile )
+         FRename( cLogFile2, cLogFile )
+      ELSE
+         FClose( nHandle )
+      ENDIF
+
+   ENDIF
+
+RETURN .F.
+
+STATIC FUNCTION strvalue( c, l )
+
+   LOCAL cr := ""
+
+   __defaultNIL( @l, .F. )
+
+   SWITCH ValType( c )
+   CASE "C"
+      cr := c
+      EXIT
+   CASE "N"
+      cr := hb_ntos( c )
+      EXIT
+   CASE "M"
+      cr := c
+      EXIT
+   CASE "D"
+      cr := DToC( c )
+      EXIT
+   CASE "L"
+      cr := iif( l, iif( c, "On", "Off" ), iif( c, ".T.", ".F." ) )
+      EXIT
+   ENDSWITCH
+
+RETURN Upper( cr )
+
+STATIC PROCEDURE FWriteLine( nh, c )
+
+   FWrite( nh, c + hb_osNewLine() )
+   hb_OutDebug( c + hb_osNewLine() )
+
+RETURN
+
+STATIC FUNCTION Arguments( oErr )
+
+   LOCAL xArg, cArguments := ""
+
+   IF HB_ISARRAY( oErr:Args )
+      FOR EACH xArg IN oErr:Args
+         cArguments += " [" + Str( xArg:__EnumIndex(), 2 ) + "] = Type: " + ValType( xArg )
+
+         IF xArg <> NIL
+            cArguments +=  " Val: " + hb_CStr( xArg )
+         ENDIF
+      NEXT
+   ENDIF
+
+RETURN cArguments
+
+FUNCTION __BreakBlock()
+
+RETURN {| e | Break( e ) }
+
+FUNCTION __ErrorBlock()
+
+RETURN {| e | __MinimalErrorHandler( e ) }
+
+PROCEDURE __MinimalErrorHandler( oError )
+
+   LOCAL cError
+   LOCAL xData
+
+   cError := "Error"
+   IF HB_ISNUMERIC( oError:SubCode )
+      cError += ": " + hb_ntos( oError:SubCode )
+   ENDIF
+   cError += "!" + hb_osNewLine()
+
+   IF HB_ISSTRING( oError:Operation )
+      cError += "Operation: " + oError:Operation + hb_osNewLine()
+   ENDIF
+   IF HB_ISSTRING( oError:Description )
+      cError += "Description: " + oError:Description + hb_osNewLine()
+   ENDIF
+   IF HB_ISSTRING( xData := err_ModuleName( oError ) )
+      cError += "Source: " + xData + hb_osNewLine()
+   ENDIF
+   IF HB_ISSTRING( xData := err_ProcName( oError ) )
+      cError += "Procedure: " + xData + hb_osNewLine()
+   ENDIF
+   IF HB_ISNUMERIC( xData := err_ProcLine( oError ) )
+      cError += "Line: " + hb_ntos( xData ) + hb_osNewLine()
+   ENDIF
+
+   OutStd( cError )
+
+   __Quit()
+
+RETURN
+
+FUNCTION tBNErrorNew(cSubSystem,nGenCode,nSubCode,cOperation,cDescription,aArgs,cModuleName,cProcName,nProcLine)
+
+   LOCAL oError := ErrorNew()
+   LOCAL aStack, n
+
+   IF HB_ISSTRING( cSubSystem )
+      oError:SubSystem := cSubSystem
+   ENDIF
+   IF HB_ISNUMERIC( nGenCode )
+      oError:GenCode := nGenCode
+   ENDIF
+   IF HB_ISNUMERIC( nSubCode )
+      oError:SubCode := nSubCode
+   ENDIF
+   IF HB_ISSTRING( cOperation )
+      oError:Operation := cOperation
+   ENDIF
+   IF HB_ISSTRING( cDescription )
+      oError:Description := cDescription
+   ENDIF
+   IF HB_ISARRAY( aArgs )
+      oError:Args := aArgs
+   ENDIF
+
+   IF __objHasMsg( oError, "MODULENAME" )
+      IF HB_ISSTRING( cModuleName )
+         oError:ModuleName := cModuleName
+      ELSE
+         oError:ModuleName := ProcFile( 1 )
+      ENDIF
+   ENDIF
+
+   IF __objHasMsg( oError, "PROCNAME" )
+      IF HB_ISSTRING( cProcName )
+         oError:ProcName := cProcName
+      ELSE
+         oError:ProcName := ProcName( 1 )
+      ENDIF
+   ENDIF
+
+   IF __objHasMsg( oError, "PROCLINE" )
+      IF HB_ISNUMERIC( nProcLine )
+         oError:ProcLine := nProcLine
+      ELSE
+         oError:ProcLine := ProcLine( 1 )
+      ENDIF
+   ENDIF
+
+   IF __objHasMsg( oError, "AASTACK" )
+      aStack := {}
+      n := 0
+      WHILE ! Empty( ProcName( ++n ) )
+         AAdd( aStack, { ProcFile( n ), ProcName( n ), ProcLine( n ) } )
+      ENDDO
+      oError:aAStack := aStack
+   ENDIF
+
+RETURN oError
