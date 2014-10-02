@@ -1,6 +1,12 @@
 #ifndef _pt_TBigNumber_CH
 
-    #define _pt_TBigNumber_CH
+    #define _pt_TBigNumber_CH   
+    
+    #ifdef PROTHEUS
+        #ifndef __PROTHEUS__
+            #define __PROTHEUS__        
+        #endif
+	#endif 
 
     #ifdef __PROTHEUS__
     

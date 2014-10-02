@@ -16,7 +16,7 @@ Group git_tBigNumber
       FoldersCount=2
       Folder Definições
          VSSPath=Definições
-         FilesCount=4
+         FilesCount=6
          File \GitHub\tBigNumber\include\directry.ch
              Type=T
          End
@@ -27,6 +27,12 @@ Group git_tBigNumber
              Type=T
          End
          File \GitHub\tBigNumber\include\tBigNumber.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\pt_tBigNtst.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tBigNtst.ch
              Type=T
          End
       End

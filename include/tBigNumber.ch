@@ -25,7 +25,9 @@
                                     }
 
     #ifdef PROTHEUS
-        #define __PROTHEUS__        
+        #ifndef __PROTHEUS__
+            #define __PROTHEUS__        
+        #endif
         #include "pt_tBigNumber.ch"
     #ELSE
         #ifdef __HARBOUR__
@@ -41,7 +43,7 @@
     /* by default create ST version */
     #ifndef __ST__
         #ifndef __MT__
-          #define __ST__
+			#define __ST__
        #endif
     #endif
 

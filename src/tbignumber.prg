@@ -65,13 +65,6 @@
     #xtranslate method <methodName> SETGET  => method <methodName>
 #else // __HARBOUR__
     //-------------------------------------------------------------------------------------
-    #define TH_MTX 1
-    #define TH_NUM 2
-    #define TH_EXE 3
-    #define TH_RES 4
-    #define TH_END 5
-    #define SIZ_TH 5
-    //-------------------------------------------------------------------------------------
     #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
     #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
     #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
@@ -5575,7 +5568,7 @@ return
         aEval(aThreads,{|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)})
     return
 
-    static procedure tbigNthRun(mtxJob,aThreads)
+     static procedure tbigNthRun(mtxJob,aThreads)
         local cTyp
         local xJob
         begin sequence
@@ -5586,16 +5579,24 @@ return
                     case "B"
                         Eval(xJob)
                         exit
+                    case "A"
+                        hb_ExecFromArray(xJob)
+                        exit
                     case "N"
                         while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
                         end while
-                        if (ValType(aThreads[xJob][TH_EXE])=="B")
-                            aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
-                            aThreads[xJob][TH_END]:=.T.
-                        else
+                        cTyp := ValType(aThreads[xJob][TH_EXE])
+                        switch cTyp
+                        case "A"
+                            aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
+                            exit
+                        case "B"
+                            aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])                    
+                            exit
+                        otherwise
                             aThreads[xJob][TH_RES]:=NIL
-                            aThreads[xJob][TH_END]:=.T.
-                        endif
+                        endswitch
+                        aThreads[xJob][TH_END]:=.T.
                         hb_MutexUnLock(aThreads[xJob][TH_MTX])
                         exit
                     endswitch

@@ -1,4 +1,16 @@
-//TODO: core/tests/gtwin.prg
+//--------------------------------------------------------------------------------------------------------
+    /*
+        TODO:
+        (1) core/tests/gtwin.prg         (1/2)
+        (2) Main thread GT/Tests Monitor (0/0)
+        (3) Configure tests              (0/0)
+        (4) tBigNThreads.prg             (0/0)
+        (4.1) hb_ExecFromArray()         (0/0)
+        (5) tBigNSleep.prg               (0/0)    
+        (6) log file name                (0/0)           
+    */    
+//--------------------------------------------------------------------------------------------------------
+#include "tBigNtst.ch"
 #include "tBigNumber.ch"
 #include "paramtypex.ch"
 
@@ -16,11 +28,6 @@
 #define __SETDEC__          8
 #define __NRTTST__         35
 
-#ifdef __PROTHEUS__
-    #xcommand ? <e> => ConOut(<e>)
-    #xcommand MEMVAR <m> =>
-#endif
-
 #ifdef __HARBOUR__
 #pragma -w2
 #require "hbvmmt"
@@ -29,12 +36,15 @@ request HB_MT
 #include "setcurs.ch"
 #include "hbgtinfo.ch"
 Function Main()
-    Local aTBigNTst:=GettBigNTst()
-    Local cIni    := "tbigNtst.ini"
+    Local aThreads
+    Local atBigNtst:=GettBigNtst()
+    Local cIni    := "tBigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
     Local cKey
     Local aSect
     Local cSection
+    Local nThread
+    Local nThreads := 0
     Local nMaxScrRow
     Local nMaxScrCol
     MEMVAR nACC_SET
@@ -63,6 +73,9 @@ Function Main()
     Private lL_OOPROGRAND
     Private lL_ROPROGRESS
     Private lL_LOGPROCESS
+    #ifdef __HBSHELL_USR_DEF_GT
+        hbshell_gtSelect(HBSHELL_GTSELECT)
+    #endif   
     IF .NOT.(File(cIni) ) .or. Empty(hIni)
         hIni["GENERAL"] := hb_Hash()
         hIni["GENERAL"]["ACC_SET"]      := ACC_SET
@@ -75,7 +88,7 @@ Function Main()
         hIni["GENERAL"]["L_OOPROGRAND"] := L_OOPROGRAND
         hIni["GENERAL"]["L_ROPROGRESS"] := L_ROPROGRESS
         hIni["GENERAL"]["L_LOGPROCESS"] := L_LOGPROCESS
-        hb_iniWrite(cIni,hIni,"#tbigNtst.ini","#End of file")
+        hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
             aSect := hIni[ cSection ]
@@ -147,17 +160,126 @@ Function Main()
     SetMode(nMaxScrRow,nMaxScrCol)
     /* set window title */
     hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
-Return(tBigNTst(@aTBigNTst))
-Static Procedure tBigNTst(aTBigNTst)
+    nThreads := Len(atBigNtst)
+    tBigNthStart(nThreads,@aThreads)
+    For nThread := 1 To nThreads
+        IF atBigNtst[nThread][2]
+            atBigNtst[nThread][3]:=hb_gtCreate(THREAD_GT) 
+            aThreads[nThread][TH_EXE]:={@tBigtstEval(),atBigNtst[nThread],nMaxScrRow,nMaxScrCol}
+        Else
+            aThreads[nThread][TH_EXE]:={||.T.}
+        EndIF    
+    Next nThread
+    tBigNthNotify(@aThreads)
+    tBigNthWait(@aThreads)
+    tBigNthJoin(@aThreads)
+Return(0)
+static procedure tBigNthStart(nThreads,aThreads)
+    local nThread
+    DEFAULT nThreads:=1
+    aThreads:=Array(nThreads,SIZ_TH)
+    for nThread:=1 To nThreads
+        aThreads[nThread][TH_MTX]:=hb_mutexCreate()
+        aThreads[nThread][TH_EXE]:=NIL
+        aThreads[nThread][TH_RES]:=NIL
+        aThreads[nThread][TH_END]:=.F.
+        aThreads[nThread][TH_NUM]:=hb_threadStart(HB_THREAD_INHERIT_PRIVATE,@tbigNthRun(),aThreads[nThread][TH_MTX],@aThreads)
+        while (aThreads[nThread][TH_NUM]==NIL)
+            __tbnSleep(0.001)
+            aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),aThreads[nThread][TH_MTX],@aThreads)
+        end while
+    next nThread
+return
+static procedure tBigNthNotify(aThreads)
+    aEval(aThreads,{|ath,nTh|ath[TH_RES]:=NIL,ath[TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
+return
+static procedure tBigNthWait(aThreads)
+    local nThread
+    local nThreads:=Len(aThreads)
+    local nThCount:=0
+    while .t.
+        for nThread:=1 to nThreads
+            if hb_mutexLock(aThreads[nThread][TH_MTX])
+                if aThreads[nThread][TH_END]
+                    ++nThCount
+                endif
+                hb_MutexUnLock(aThreads[nThread][TH_MTX])
+            endif
+        next nThread
+        if nThCount==nThreads
+            exit
+        endif
+        nThCount:=0
+    end while
+return
+static procedure tBigNthJoin(aThreads)
+    aEval(aThreads,{|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)})
+return
+static procedure tbigNthRun(mtxJob,aThreads)
+    local cTyp
+    local xJob
+    begin sequence
+        while .T.
+            if hb_mutexSubscribe(mtxJob,NIL,@xJob)
+                cTyp := ValType(xJob)
+                switch cTyp
+                case "B"
+                    Eval(xJob)
+                    exit
+                case "A"
+                    hb_ExecFromArray(xJob)
+                    exit
+                case "N"
+                    while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
+                    end while
+                    cTyp := ValType(aThreads[xJob][TH_EXE])
+                    switch cTyp
+                    case "A"
+                        aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
+                        exit
+                    case "B"
+                        aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])                    
+                        exit
+                    otherwise
+                        aThreads[xJob][TH_RES]:=NIL
+                    endswitch
+                    aThreads[xJob][TH_END]:=.T.
+                    hb_MutexUnLock(aThreads[xJob][TH_MTX])
+                    exit
+                endswitch
+            endif
+        end while
+    end sequence
+return
+Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
+    Local pGT := hb_gtSelect(atBigNtst[3])
+    /* set OEM font encoding for non unicode modes */
+    hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+    /* set EN CP-437 encoding */
+    hb_cdpSelect( "EN" )
+    hb_setTermCP( "EN" )
+    /* set font size */
+    hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
+    hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
+    /* resize console window to the screen size */
+    SetMode(nMaxScrRow,nMaxScrCol)
+    /* set window title */
+    hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
+    tBigNtst({atBigNtst})
+    hb_gtSelect(pGT)
+    atBigNtst[3]:=NIL
+    hb_gcAll(.T.)
+Return(.T.)
+Static Procedure tBigNtst(atBigNtst)
 #else
 #xtranslate ExeName() => ProcName()
 //----------------------------------------------------------
 //Obs.: TAMANHO MÁXIMO DE UMA STRING NO PROTHEUS 1.048.575
 //      (1.048.575+1)->String size overflow!
 //      Harbour -> no upper limit
-User Function tBigNTst()
-    Local aTBigNTst:=GettBigNTst()
-    Local cIni:= "tbigNtst.ini"
+User Function tBigNtst()
+    Local atBigNtst:=GettBigNtst()
+    Local cIni:= "tBigNtst.ini"
     Local otFIni
     Private nACC_SET
     Private nROOT_ACC_SET
@@ -211,8 +333,8 @@ User Function tBigNTst()
     IF ((__nSLEEP)<10)
         __nSLEEP *= 10
     EndIF
-Return(tBigNTst(@aTBigNTst))
-Static Procedure tBigNTst(aTBigNTst)
+Return(tBigNtst(@atBigNtst))
+Static Procedure tBigNtst(atBigNtst)
 #endif
 
 #ifdef __HARBOUR__
@@ -227,13 +349,13 @@ Static Procedure tBigNTst(aTBigNTst)
  
 #ifdef __HARBOUR__
     Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
-    Local cLog       AS CHARACTER VALUE cFld+"tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+    Local cLog       AS CHARACTER VALUE cFld+"tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
     Local ptProgress   := @Progress()
     Local ptthProgress
     Local ptftProgress := @ftProgress()
     Local ptthftProgress
 #else
-    Local cLog       AS CHARACTER VALUE GetTempPath()+"\tBigNTst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
+    Local cLog       AS CHARACTER VALUE GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 #endif
 
     Local cN         AS CHARACTER
@@ -376,9 +498,10 @@ Static Procedure tBigNTst(aTBigNTst)
         ptthftProgress  := hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
                                                HB_THREAD_INHERIT_MEMVARS),;
         ptftProgress,__nSLEEP,__nMaxCol,__nMaxRow)
+        aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
+    #else
+        aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
     #endif
-
-    aEval(aTBigNTst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
 
 #ifdef __HARBOUR__
     __nRow := __nMaxRow
@@ -435,7 +558,7 @@ Static Procedure tBigNTst(aTBigNTst)
     hb_ThreadWait(ptthftProgress)
     hb_gcAll(.T.)
     SET COLOR TO "r+/n"
-    WAIT "Press any key to end"
+*    WAIT "Press any key to end"
     CLS
 #endif
 
@@ -961,7 +1084,7 @@ Return(lHarbour)
     #endif
 #endif
 
-static procedure tBigNTst01(fhLog)
+static procedure tBigNtst01(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1051,7 +1174,7 @@ static procedure tBigNTst01(fhLog)
     
 return
 
-static procedure tBigNTst02(fhLog)
+static procedure tBigNtst02(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1196,7 +1319,7 @@ static procedure tBigNTst02(fhLog)
 
 return
 
-static procedure tBigNTst03(fhLog)
+static procedure tBigNtst03(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1305,7 +1428,7 @@ static procedure tBigNTst03(fhLog)
     
 return
 
-static procedure tBigNTst04(fhLog)
+static procedure tBigNtst04(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1410,7 +1533,7 @@ static procedure tBigNTst04(fhLog)
 
 return
 
-static procedure tBigNTst05(fhLog)
+static procedure tBigNtst05(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1510,7 +1633,7 @@ static procedure tBigNTst05(fhLog)
     
  return
  
- static procedure tBigNTst06(fhLog)
+ static procedure tBigNtst06(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1610,7 +1733,7 @@ static procedure tBigNTst05(fhLog)
     
  return
  
- static procedure tBigNTst07(fhLog)
+ static procedure tBigNtst07(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1711,7 +1834,7 @@ static procedure tBigNTst05(fhLog)
     
  return
  
- static procedure tBigNTst08(fhLog)
+ static procedure tBigNtst08(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1807,7 +1930,7 @@ static procedure tBigNTst05(fhLog)
     
  return
  
- static procedure tBigNTst09(fhLog)
+ static procedure tBigNtst09(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1899,7 +2022,7 @@ static procedure tBigNTst05(fhLog)
     
  return
  
- static procedure tBigNTst10(fhLog)
+ static procedure tBigNtst10(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1991,7 +2114,7 @@ static procedure tBigNTst05(fhLog)
     
 return
 
-static procedure tBigNTst11(fhLog)
+static procedure tBigNtst11(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2081,7 +2204,7 @@ static procedure tBigNTst11(fhLog)
 
 return    
 
-static procedure tBigNTst12(fhLog)
+static procedure tBigNtst12(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2171,7 +2294,7 @@ static procedure tBigNTst12(fhLog)
     
 return
 
-static procedure tBigNTst13(fhLog)
+static procedure tBigNtst13(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2278,7 +2401,7 @@ static procedure tBigNTst13(fhLog)
     
  return
  
- static procedure tBigNTst14(fhLog)
+ static procedure tBigNtst14(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2382,7 +2505,7 @@ static procedure tBigNTst13(fhLog)
      
 return
 
-static procedure tBigNTst15(fhLog)
+static procedure tBigNtst15(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2482,7 +2605,7 @@ static procedure tBigNTst15(fhLog)
 
 return
 
-static procedure tBigNTst16(fhLog)
+static procedure tBigNtst16(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2591,7 +2714,7 @@ static procedure tBigNTst16(fhLog)
     
 return
 
-static procedure tBigNTst17(fhLog)
+static procedure tBigNtst17(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2696,7 +2819,7 @@ static procedure tBigNTst17(fhLog)
    
  return
  
- static procedure tBigNTst18(fhLog)
+ static procedure tBigNtst18(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2803,7 +2926,7 @@ static procedure tBigNTst17(fhLog)
     
 return
 
-static procedure tBigNTst19(fhLog)
+static procedure tBigNtst19(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2892,7 +3015,7 @@ static procedure tBigNTst19(fhLog)
     
  return
  
- static procedure tBigNTst20(fhLog)
+ static procedure tBigNtst20(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2981,7 +3104,7 @@ static procedure tBigNTst19(fhLog)
    
  return
  
- static procedure tBigNTst21(fhLog)
+ static procedure tBigNtst21(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3086,7 +3209,7 @@ static procedure tBigNTst19(fhLog)
     
 return
 
-static procedure tBigNTst22(fhLog)
+static procedure tBigNtst22(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3181,7 +3304,7 @@ static procedure tBigNTst22(fhLog)
 
  return
 
-static procedure tBigNTst23(fhLog)
+static procedure tBigNtst23(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3274,7 +3397,7 @@ static procedure tBigNTst23(fhLog)
 
 return
 
-static procedure tBigNTst24(fhLog)
+static procedure tBigNtst24(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3355,7 +3478,7 @@ static procedure tBigNTst24(fhLog)
 
 return
 
-static procedure tBigNTst25(fhLog)
+static procedure tBigNtst25(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3450,7 +3573,7 @@ static procedure tBigNTst25(fhLog)
 
 return
 
-static procedure tBigNTst26(fhLog)
+static procedure tBigNtst26(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3550,7 +3673,7 @@ static procedure tBigNTst26(fhLog)
 
 return
 
-static procedure tBigNTst27(fhLog)
+static procedure tBigNtst27(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3648,7 +3771,7 @@ static procedure tBigNTst27(fhLog)
     
 return
 
-static procedure tBigNTst28(fhLog)
+static procedure tBigNtst28(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3758,7 +3881,7 @@ static procedure tBigNTst28(fhLog)
 
 return
 
-static procedure tBigNTst29(fhLog)
+static procedure tBigNtst29(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3864,7 +3987,7 @@ static procedure tBigNTst29(fhLog)
 
 return
 
-static procedure tBigNTst30(fhLog)
+static procedure tBigNtst30(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3954,7 +4077,7 @@ static procedure tBigNTst30(fhLog)
 
 return
 
-static procedure tBigNTst31(fhLog)
+static procedure tBigNtst31(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4254,7 +4377,7 @@ static procedure tBigNTst31(fhLog)
 
 return
 
-static procedure tBigNTst32(fhLog)
+static procedure tBigNtst32(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4371,7 +4494,7 @@ static procedure tBigNTst32(fhLog)
 
 return
 
-static procedure tBigNTst33(fhLog)
+static procedure tBigNtst33(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4463,7 +4586,7 @@ static procedure tBigNTst33(fhLog)
 
 return
 
-static procedure tBigNTst34(fhLog)
+static procedure tBigNtst34(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4571,7 +4694,7 @@ static procedure tBigNTst34(fhLog)
 
 return
 
-static procedure tBigNTst35(fhLog)
+static procedure tBigNtst35(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4659,48 +4782,47 @@ static procedure tBigNTst35(fhLog)
 
 return
 
-static function GettBigNTst()
+static function GettBigNtst()
 
-    local aTBigNTst:=Array(__NRTTST__,2)
+    local atBigNtst:=Array(__NRTTST__,3)
 
-    aTBigNTst[1][1]:={|p|tBigNTst01(p)};aTBigNTst[1][2]:=.T.
-    aTBigNTst[2][1]:={|p|tBigNTst02(p)};aTBigNTst[2][2]:=.T.
-    aTBigNTst[3][1]:={|p|tBigNTst03(p)};aTBigNTst[3][2]:=.T.
-    aTBigNTst[4][1]:={|p|tBigNTst04(p)};aTBigNTst[4][2]:=.T.
-    aTBigNTst[5][1]:={|p|tBigNTst05(p)};aTBigNTst[5][2]:=.T.
-    aTBigNTst[6][1]:={|p|tBigNTst06(p)};aTBigNTst[6][2]:=.T.
-    aTBigNTst[7][1]:={|p|tBigNTst07(p)};aTBigNTst[7][2]:=.T.
-    aTBigNTst[8][1]:={|p|tBigNTst08(p)};aTBigNTst[8][2]:=.T.
-    aTBigNTst[9][1]:={|p|tBigNTst09(p)};aTBigNTst[9][2]:=.T.
+    atBigNtst[1][1]:={|p|tBigNtst01(p)};atBigNtst[1][2]:=.T.
+    atBigNtst[2][1]:={|p|tBigNtst02(p)};atBigNtst[2][2]:=.T.
+    atBigNtst[3][1]:={|p|tBigNtst03(p)};atBigNtst[3][2]:=.T.
+    atBigNtst[4][1]:={|p|tBigNtst04(p)};atBigNtst[4][2]:=.T.
+    atBigNtst[5][1]:={|p|tBigNtst05(p)};atBigNtst[5][2]:=.T.
+    atBigNtst[6][1]:={|p|tBigNtst06(p)};atBigNtst[6][2]:=.T.
+    atBigNtst[7][1]:={|p|tBigNtst07(p)};atBigNtst[7][2]:=.T.
+    atBigNtst[8][1]:={|p|tBigNtst08(p)};atBigNtst[8][2]:=.T.
+    atBigNtst[9][1]:={|p|tBigNtst09(p)};atBigNtst[9][2]:=.T.
  
-
-    aTBigNTst[10][1]:={|p|tBigNTst10(p)};aTBigNTst[10][2]:=.T.
-    aTBigNTst[11][1]:={|p|tBigNTst11(p)};aTBigNTst[11][2]:=.T.
-    aTBigNTst[12][1]:={|p|tBigNTst12(p)};aTBigNTst[12][2]:=.T.
-    aTBigNTst[13][1]:={|p|tBigNTst13(p)};aTBigNTst[13][2]:=.T.
-    aTBigNTst[14][1]:={|p|tBigNTst14(p)};aTBigNTst[14][2]:=.T.
-    aTBigNTst[15][1]:={|p|tBigNTst15(p)};aTBigNTst[15][2]:=.T.
-    aTBigNTst[16][1]:={|p|tBigNTst16(p)};aTBigNTst[16][2]:=.T.
-    aTBigNTst[17][1]:={|p|tBigNTst17(p)};aTBigNTst[17][2]:=.T.
-    aTBigNTst[18][1]:={|p|tBigNTst18(p)};aTBigNTst[18][2]:=.T.
-    aTBigNTst[19][1]:={|p|tBigNTst19(p)};aTBigNTst[19][2]:=.T.
+    atBigNtst[10][1]:={|p|tBigNtst10(p)};atBigNtst[10][2]:=.T.
+    atBigNtst[11][1]:={|p|tBigNtst11(p)};atBigNtst[11][2]:=.T.
+    atBigNtst[12][1]:={|p|tBigNtst12(p)};atBigNtst[12][2]:=.T.
+    atBigNtst[13][1]:={|p|tBigNtst13(p)};atBigNtst[13][2]:=.T.
+    atBigNtst[14][1]:={|p|tBigNtst14(p)};atBigNtst[14][2]:=.T.
+    atBigNtst[15][1]:={|p|tBigNtst15(p)};atBigNtst[15][2]:=.T.
+    atBigNtst[16][1]:={|p|tBigNtst16(p)};atBigNtst[16][2]:=.T.
+    atBigNtst[17][1]:={|p|tBigNtst17(p)};atBigNtst[17][2]:=.T.
+    atBigNtst[18][1]:={|p|tBigNtst18(p)};atBigNtst[18][2]:=.T.
+    atBigNtst[19][1]:={|p|tBigNtst19(p)};atBigNtst[19][2]:=.T.
  
-    aTBigNTst[20][1]:={|p|tBigNTst20(p)};aTBigNTst[20][2]:=.T.
-    aTBigNTst[21][1]:={|p|tBigNTst21(p)};aTBigNTst[21][2]:=.T.
-    aTBigNTst[22][1]:={|p|tBigNTst22(p)};aTBigNTst[22][2]:=.T.
-    aTBigNTst[23][1]:={|p|tBigNTst23(p)};aTBigNTst[23][2]:=.T.
-    aTBigNTst[24][1]:={|p|tBigNTst24(p)};aTBigNTst[24][2]:=.T.
-    aTBigNTst[25][1]:={|p|tBigNTst25(p)};aTBigNTst[25][2]:=.T.
-    aTBigNTst[26][1]:={|p|tBigNTst26(p)};aTBigNTst[26][2]:=.T.
-    aTBigNTst[27][1]:={|p|tBigNTst27(p)};aTBigNTst[27][2]:=.T.
-    aTBigNTst[28][1]:={|p|tBigNTst28(p)};aTBigNTst[28][2]:=.T.
-    aTBigNTst[29][1]:={|p|tBigNTst29(p)};aTBigNTst[29][2]:=.T.
+    atBigNtst[20][1]:={|p|tBigNtst20(p)};atBigNtst[20][2]:=.T.
+    atBigNtst[21][1]:={|p|tBigNtst21(p)};atBigNtst[21][2]:=.T.
+    atBigNtst[22][1]:={|p|tBigNtst22(p)};atBigNtst[22][2]:=.T.
+    atBigNtst[23][1]:={|p|tBigNtst23(p)};atBigNtst[23][2]:=.T.
+    atBigNtst[24][1]:={|p|tBigNtst24(p)};atBigNtst[24][2]:=.T.
+    atBigNtst[25][1]:={|p|tBigNtst25(p)};atBigNtst[25][2]:=.T.
+    atBigNtst[26][1]:={|p|tBigNtst26(p)};atBigNtst[26][2]:=.T.
+    atBigNtst[27][1]:={|p|tBigNtst27(p)};atBigNtst[27][2]:=.T.
+    atBigNtst[28][1]:={|p|tBigNtst28(p)};atBigNtst[28][2]:=.T.
+    atBigNtst[29][1]:={|p|tBigNtst29(p)};atBigNtst[29][2]:=.T.
 
-    aTBigNTst[30][1]:={|p|tBigNTst30(p)};aTBigNTst[30][2]:=.T.
-    aTBigNTst[31][1]:={|p|tBigNTst31(p)};aTBigNTst[31][2]:=.T.
-    aTBigNTst[32][1]:={|p|tBigNTst32(p)};aTBigNTst[32][2]:=.T.
-    aTBigNTst[33][1]:={|p|tBigNTst33(p)};aTBigNTst[33][2]:=.T.
-    aTBigNTst[34][1]:={|p|tBigNTst34(p)};aTBigNTst[34][2]:=.T.
-    aTBigNTst[35][1]:={|p|tBigNTst35(p)};aTBigNTst[35][2]:=.T.    
+    atBigNtst[30][1]:={|p|tBigNtst30(p)};atBigNtst[30][2]:=.T.
+    atBigNtst[31][1]:={|p|tBigNtst31(p)};atBigNtst[31][2]:=.T.
+    atBigNtst[32][1]:={|p|tBigNtst32(p)};atBigNtst[32][2]:=.T.
+    atBigNtst[33][1]:={|p|tBigNtst33(p)};atBigNtst[33][2]:=.T.
+    atBigNtst[34][1]:={|p|tBigNtst34(p)};atBigNtst[34][2]:=.T.
+    atBigNtst[35][1]:={|p|tBigNtst35(p)};atBigNtst[35][2]:=.T.    
  
-return(aTBigNTst)    
+return(atBigNtst)    
