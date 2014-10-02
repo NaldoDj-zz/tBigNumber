@@ -33,11 +33,12 @@ mg_error_log.htm
 /exe/mg/mingw/*
 /exe/wce/mingwarm/*.exe
 /exe/cygwin
-/prj/mg/win/32/__mih_obj_m2wh
+/prj/mg/win/32/__mih_obj_*
 /prj/mg/win/32/*.txt
-/prj/mg/win/64/__mih_obj_m2wh
-/prj/mg/win/64/__mih_obj_m3wh
+/prj/mg/win/32/*.hot
+/prj/mg/win/64/__mih_obj_*
 /prj/mg/win/64/*.txt
+/prj/mg/win/64/*.hot
 /PrimesTables/*.txt
 /mk/ERROR
 /mk/cmp.txt
