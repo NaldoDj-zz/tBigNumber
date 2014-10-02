@@ -1,11 +1,10 @@
 #ifndef _tBigNtst_CH
 
     #define _tBigNtst_CH
+    
+    #include "tBigndef.ch"
 
     #ifdef PROTHEUS
-        #ifndef __PROTHEUS__
-            #define __PROTHEUS__        
-        #endif
         #include "pt_tBigNtst.ch"
     #else
         #ifdef __HARBOUR__
@@ -13,4 +12,4 @@
         #endif
     #endif
 
-#endif
+#endif /*_tBigNtst_CH*/

@@ -4,9 +4,9 @@
         (1) core/tests/gtwin.prg         (1/2)
         (2) Main thread GT/Tests Monitor (0/0)
         (3) Configure tests              (0/0)
-        (4) tBigNThreads.prg             (0/0)
-        (4.1) hb_ExecFromArray()         (0/0)
-        (5) tBigNSleep.prg               (0/0)    
+        (4) tBigNThreads.prg             (1/1)
+        (4.1) hb_ExecFromArray()         (1/1)
+        (5) tBigNSleep.prg               (1/1)    
         (6) log file name                (0/0)           
     */    
 //--------------------------------------------------------------------------------------------------------
@@ -161,7 +161,8 @@ Function Main()
     /* set window title */
     hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
     nThreads := Len(atBigNtst)
-    tBigNthStart(nThreads,@aThreads)
+    //"Share publics and privates with child threads."
+    tBigNthStart(nThreads,@aThreads,HB_THREAD_INHERIT_MEMVARS)
     For nThread := 1 To nThreads
         IF atBigNtst[nThread][2]
             atBigNtst[nThread][3]:=hb_gtCreate(THREAD_GT) 
@@ -174,83 +175,6 @@ Function Main()
     tBigNthWait(@aThreads)
     tBigNthJoin(@aThreads)
 Return(0)
-static procedure tBigNthStart(nThreads,aThreads)
-    local nThread
-    DEFAULT nThreads:=1
-    aThreads:=Array(nThreads,SIZ_TH)
-    for nThread:=1 To nThreads
-        aThreads[nThread][TH_MTX]:=hb_mutexCreate()
-        aThreads[nThread][TH_EXE]:=NIL
-        aThreads[nThread][TH_RES]:=NIL
-        aThreads[nThread][TH_END]:=.F.
-        aThreads[nThread][TH_NUM]:=hb_threadStart(HB_THREAD_INHERIT_PRIVATE,@tbigNthRun(),aThreads[nThread][TH_MTX],@aThreads)
-        while (aThreads[nThread][TH_NUM]==NIL)
-            __tbnSleep(0.001)
-            aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),aThreads[nThread][TH_MTX],@aThreads)
-        end while
-    next nThread
-return
-static procedure tBigNthNotify(aThreads)
-    aEval(aThreads,{|ath,nTh|ath[TH_RES]:=NIL,ath[TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
-return
-static procedure tBigNthWait(aThreads)
-    local nThread
-    local nThreads:=Len(aThreads)
-    local nThCount:=0
-    while .t.
-        for nThread:=1 to nThreads
-            if hb_mutexLock(aThreads[nThread][TH_MTX])
-                if aThreads[nThread][TH_END]
-                    ++nThCount
-                endif
-                hb_MutexUnLock(aThreads[nThread][TH_MTX])
-            endif
-        next nThread
-        if nThCount==nThreads
-            exit
-        endif
-        nThCount:=0
-    end while
-return
-static procedure tBigNthJoin(aThreads)
-    aEval(aThreads,{|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)})
-return
-static procedure tbigNthRun(mtxJob,aThreads)
-    local cTyp
-    local xJob
-    begin sequence
-        while .T.
-            if hb_mutexSubscribe(mtxJob,NIL,@xJob)
-                cTyp := ValType(xJob)
-                switch cTyp
-                case "B"
-                    Eval(xJob)
-                    exit
-                case "A"
-                    hb_ExecFromArray(xJob)
-                    exit
-                case "N"
-                    while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
-                    end while
-                    cTyp := ValType(aThreads[xJob][TH_EXE])
-                    switch cTyp
-                    case "A"
-                        aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
-                        exit
-                    case "B"
-                        aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])                    
-                        exit
-                    otherwise
-                        aThreads[xJob][TH_RES]:=NIL
-                    endswitch
-                    aThreads[xJob][TH_END]:=.T.
-                    hb_MutexUnLock(aThreads[xJob][TH_MTX])
-                    exit
-                endswitch
-            endif
-        end while
-    end sequence
-return
 Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
     Local pGT := hb_gtSelect(atBigNtst[3])
     /* set OEM font encoding for non unicode modes */
@@ -492,11 +416,9 @@ Static Procedure tBigNtst(atBigNtst)
     #define __NROWAT    15
 
     #ifdef __HARBOUR__
-        ptthProgress    := hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
-                                               HB_THREAD_INHERIT_MEMVARS),;
+        ptthProgress    := hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
         ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
-        ptthftProgress  := hb_threadStart(HB_BITOR(HB_THREAD_INHERIT_PRIVATE,;
-                                               HB_THREAD_INHERIT_MEMVARS),;
+        ptthftProgress  := hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
         ptftProgress,__nSLEEP,__nMaxCol,__nMaxRow)
         aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
     #else

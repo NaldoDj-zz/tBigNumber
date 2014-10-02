@@ -26,26 +26,9 @@
             #define __PTCOMPAT__        //Forco o modo de Compatibilidade com o Protheus
         #endif
 
-        #xcommand DEFAULT =>
-        //-------------------------------------------------------------------------------------
-        /* Default parameters management */
-        #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-                        => ;
-                        iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
-                        [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
-        
         #ifndef CRLF
             #define CRLF hb_eol()
         #endif
-        
-        //-------------------------------------------------------------------------------------
-        /* Thread Control */
-        #define TH_MTX 1
-        #define TH_NUM 2
-        #define TH_EXE 3
-        #define TH_RES 4
-        #define TH_END 5
-        #define SIZ_TH 5
 
     #endif
     

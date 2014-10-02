@@ -1,24 +1,14 @@
 #ifndef _pt_TBigNumber_CH
 
     #define _pt_TBigNumber_CH   
-    
-    #ifdef PROTHEUS
-        #ifndef __PROTHEUS__
-            #define __PROTHEUS__        
-        #endif
-	#endif 
 
     #ifdef __PROTHEUS__
-    
-    	#ifndef __PTCOMPAT__
-    		#define __PTCOMPAT__
-    	#endif	
 
         #include "protheus.ch"
 
-        #xtranslate thread static      => static
+        #xtranslate thread static       => static
         #xtranslate hb_ntos([<n,...>]) => LTrim(Str([<n>]))
-        #xtranslate user procedure     => user function
+        #xtranslate user procedure      => user function
 
         #xcommand DEFAULT =>
         /* Default parameters management */
@@ -34,4 +24,4 @@
     
     #endif
     
-#endif
+#endif /*_pt_TBigNumber_CH*/

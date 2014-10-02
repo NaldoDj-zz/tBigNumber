@@ -14,28 +14,6 @@ Group git_tBigNumber
    ProjectsCount=2
    Project tBigNumber
       FoldersCount=2
-      Folder Definições
-         VSSPath=Definições
-         FilesCount=6
-         File \GitHub\tBigNumber\include\directry.ch
-             Type=T
-         End
-         File \GitHub\tBigNumber\include\paramtypex.ch
-             Type=T
-         End
-         File \GitHub\tBigNumber\include\pt_tBigNumber.ch
-             Type=T
-         End
-         File \GitHub\tBigNumber\include\tBigNumber.ch
-             Type=T
-         End
-         File \GitHub\tBigNumber\include\pt_tBigNtst.ch
-             Type=T
-         End
-         File \GitHub\tBigNumber\include\tBigNtst.ch
-             Type=T
-         End
-      End
       Folder Fontes
          VSSPath=Nova Pasta2
          FilesCount=9
@@ -64,6 +42,34 @@ Group git_tBigNumber
              Type=T
          End
          File \GitHub\tBigNumber\src\tTimeCalc.prg
+             Type=T
+         End
+      End
+      Folder include
+         VSSPath=Nova Pasta2
+         FilesCount=8
+         File \GitHub\tBigNumber\include\directry.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\paramtypex.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\pt_tBigNtst.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\pt_tBigNumber.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tBigNDef.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tbigNThread.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tBigNtst.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tBigNumber.ch
              Type=T
          End
       End
