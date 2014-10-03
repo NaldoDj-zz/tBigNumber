@@ -1,8 +1,29 @@
 @echo off
 echo BATCH FILE FOR Harbour tBigNumber
 rem ============================================================================
-SET _PATH=%PATH%
+SET > env_mkallLIB.txt
+    SET HB_CPU=
+    SET HB_PLATFORM=
+    SET HB_COMPILER=
+    SET HB_CCPATH=
 	call mkLib.bat
+    for /f %%e in (env_mkallLIB.txt) do (
+        SET %%e
+    )
+    SET HB_CPU=
+    SET HB_PLATFORM=
+    SET HB_COMPILER=
+    SET HB_CCPATH=
 	call mkLib64.bat
-	call mkLibARM.bat
-SET PATH=%_PATH%
+    SET HB_CPU=
+    SET HB_PLATFORM=
+    SET HB_COMPILER=
+    SET HB_CCPATH=
+    for /f %%e in (env_mkallLIB.txt) do (
+        SET %%e
+    )
+	rem call mkLibARM.bat
+for /f %%e in (env_mkallLIB.txt) do (
+    SET %%e
+)
+DEL env_mkallLIB.txt
