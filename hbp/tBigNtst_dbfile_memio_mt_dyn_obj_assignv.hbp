@@ -18,7 +18,7 @@
 -i../include
 -i../../core/contrib/xhb
 
-../src/tBigNtst.prg
+../src/tBigNtst.prg ../rc/tBigNtst.rc
 ../src/tBigNumber.prg
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

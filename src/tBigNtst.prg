@@ -1,13 +1,13 @@
 //--------------------------------------------------------------------------------------------------------
     /*
         TODO:
-        (1) core/tests/gtwin.prg         (1/2)
-        (2) Main thread GT/Tests Monitor (0/0)
-        (3) Configure tests              (0/0)
+        (1) core/tests/gtwin.prg         (1/1)
+        (2) Main thread GT/Tests Monitor (0/1)
+        (3) Configure tests              (1/1)
         (4) tBigNThreads.prg             (1/1)
         (4.1) hb_ExecFromArray()         (1/1)
         (5) tBigNSleep.prg               (1/1)    
-        (6) log file name                (0/0)           
+        (6) log file name                (0/1)           
     */    
 //--------------------------------------------------------------------------------------------------------
 #include "tBigNtst.ch"
@@ -24,6 +24,8 @@
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
 #define L_LOGPROCESS       "0"
+#define C_GT_MODE          "MT"
+#define AC_TSTEXEC        "*"
 
 #define __SETDEC__          8
 #define __NRTTST__         35
@@ -37,12 +39,13 @@ request HB_MT
 #include "hbgtinfo.ch"
 Function Main()
     Local aThreads
-    Local atBigNtst:=GettBigNtst()
+    Local atBigNtst
     Local cIni    := "tBigNtst.ini"
     Local hIni    := hb_iniRead(cIni)
     Local cKey
     Local aSect
     Local cSection
+    Local nThAT:=0
     Local nThread
     Local nThreads := 0
     Local nMaxScrRow
@@ -57,6 +60,8 @@ Function Main()
     MEMVAR lL_OOPROGRAND
     MEMVAR lL_ROPROGRESS
     MEMVAR lL_LOGPROCESS
+    MEMVAR cC_GT_MODE
+    MEMVAR aAC_TSTEXEC
     #ifdef __HARBOUR__
         #ifdef __ALT_D__    // Compile with -b
            AltD(1)          // Enables the debugger. Press F5 to go.
@@ -73,6 +78,8 @@ Function Main()
     Private lL_OOPROGRAND
     Private lL_ROPROGRESS
     Private lL_LOGPROCESS
+    Private cC_GT_MODE
+    Private aAC_TSTEXEC
     #ifdef __HBSHELL_USR_DEF_GT
         hbshell_gtSelect(HBSHELL_GTSELECT)
     #endif   
@@ -88,6 +95,8 @@ Function Main()
         hIni["GENERAL"]["L_OOPROGRAND"] := L_OOPROGRAND
         hIni["GENERAL"]["L_ROPROGRESS"] := L_ROPROGRESS
         hIni["GENERAL"]["L_LOGPROCESS"] := L_LOGPROCESS
+        hIni["GENERAL"]["C_GT_MODE"]    := C_GT_MODE
+        hIni["GENERAL"]["AC_TSTEXEC"]  := AC_TSTEXEC
         hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
     Else
         FOR EACH cSection IN hIni:Keys
@@ -113,7 +122,7 @@ Function Main()
                         lL_ALOG         := (aSect[cKey]=="1")
                         EXIT
                     CASE "C_OOPROGRESS"
-                        aC_OOPROGRESS   := hb_aTokens(Upper(AllTrim(aSect[cKey])),",")
+                        aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(aSect[cKey])),",")
                         EXIT
                     CASE "L_OOPROGRAND"
                         lL_OOPROGRAND   := (aSect[cKey]=="1")
@@ -123,6 +132,13 @@ Function Main()
                         EXIT
                     CASE "L_LOGPROCESS"
                         lL_LOGPROCESS   := (aSect[cKey]=="1")
+                        EXIT
+                    CASE "C_GT_MODE"
+                        cC_GT_MODE      := Upper(AllTrim(aSect[cKey]))
+                        EXIT
+                    CASE "AC_TSTEXEC"
+                        aAC_TSTEXEC     := _StrToKArr(AllTrim(aSect[cKey]),",")
+                        EXIT
                 ENDSWITCH
             NEXT cKey
         NEXT cSection
@@ -133,10 +149,12 @@ Function Main()
     __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
     nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
     lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
-    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),hb_aTokens(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
     lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
     lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
     lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
+    cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
+    aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
     __SetCentury("ON")
     SET DATE TO BRITISH
     __nSLEEP        := Min(__nSLEEP,10)
@@ -160,23 +178,28 @@ Function Main()
     SetMode(nMaxScrRow,nMaxScrCol)
     /* set window title */
     hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
-    nThreads := Len(atBigNtst)
-    //"Share publics and privates with child threads."
-    tBigNthStart(nThreads,@aThreads,HB_THREAD_INHERIT_MEMVARS)
-    For nThread := 1 To nThreads
-        IF atBigNtst[nThread][2]
-            atBigNtst[nThread][3]:=hb_gtCreate(THREAD_GT) 
-            aThreads[nThread][TH_EXE]:={@tBigtstEval(),atBigNtst[nThread],nMaxScrRow,nMaxScrCol}
-        Else
-            aThreads[nThread][TH_EXE]:={||.T.}
-        EndIF    
-    Next nThread
-    tBigNthNotify(@aThreads)
-    tBigNthWait(@aThreads)
-    tBigNthJoin(@aThreads)
+    atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
+    IF (cC_GT_MODE=="MT")
+        aEval(atBigNtst,{|e|if(e[2],++nThreads,NIL)})
+        IF nThreads>0
+            //"Share publics and privates with child threads."
+            tBigNthStart(nThreads,@aThreads,HB_THREAD_INHERIT_MEMVARS)
+            While ((nThAT:=aScan(atBigNtst,{|e|e[2]},nThAT+1))>0)
+                nThread:=nThreads
+                aThreads[nThread][TH_EXE]:={@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol}
+                --nThreads
+            End While
+            tBigNthNotify(@aThreads)
+            tBigNthWait(@aThreads)
+            tBigNthJoin(@aThreads)
+        EndIF
+    Else
+        tBigNtst(atBigNtst)
+    EndIF
 Return(0)
 Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
     Local pGT := hb_gtSelect(atBigNtst[3])
+    hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
     /* set OEM font encoding for non unicode modes */
     hb_gtInfo( HB_GTI_CODEPAGE, 255 )
     /* set EN CP-437 encoding */
@@ -191,6 +214,7 @@ Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
     hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
     tBigNtst({atBigNtst})
     hb_gtSelect(pGT)
+    hb_gtInfo(HB_GTI_ICONFILE,"Main")
     atBigNtst[3]:=NIL
     hb_gcAll(.T.)
 Return(.T.)
@@ -202,7 +226,7 @@ Static Procedure tBigNtst(atBigNtst)
 //      (1.048.575+1)->String size overflow!
 //      Harbour -> no upper limit
 User Function tBigNtst()
-    Local atBigNtst:=GettBigNtst()
+    Local atBigNtst
     Local cIni:= "tBigNtst.ini"
     Local otFIni
     Private nACC_SET
@@ -215,6 +239,8 @@ User Function tBigNtst()
     Private lL_OOPROGRAND
     Private lL_ROPROGRESS
     Private lL_LOGPROCESS
+    Private cC_GT_MODE
+    Private aAC_TSTEXEC
     IF FindFunction("U_TFINI") //NDJLIB020.PRG
         otFIni := U_TFINI(cIni)
         IF .NOT.File(cIni)
@@ -229,6 +255,8 @@ User Function tBigNtst()
             otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
             otFIni:AddNewProperty("GENERAL","L_ROPROGRESS",L_ROPROGRESS)
             otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
+            otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
+            otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
             otFIni:SaveAs(cIni)
         Else
             nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -237,10 +265,12 @@ User Function tBigNtst()
             __nSLEEP        := Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
             nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
             lL_ALOG         := (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
-            aC_OOPROGRESS   := StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
+            aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
             lL_OOPROGRAND   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
             lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
             lL_LOGPROCESS   := (oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
+            cC_GT_MODE      := Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
+            aAC_TSTEXEC     := _StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC ",AC_TSTEXEC)),",")
         EndIF
     EndIF
     nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
@@ -249,14 +279,17 @@ User Function tBigNtst()
     __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
     nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
     lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
-    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
     lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
     lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
     lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
+    cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
+    aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
     __nSLEEP        := Max(__nSLEEP,10)
     IF ((__nSLEEP)<10)
         __nSLEEP *= 10
     EndIF
+    atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 Return(tBigNtst(@atBigNtst))
 Static Procedure tBigNtst(atBigNtst)
 #endif
@@ -306,6 +339,7 @@ Static Procedure tBigNtst(atBigNtst)
     MEMVAR lL_OOPROGRAND
     MEMVAR lL_ROPROGRESS
     MEMVAR lL_LOGPROCESS
+    MEMVAR cC_GT_MODE
 
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -480,12 +514,95 @@ Static Procedure tBigNtst(atBigNtst)
     hb_ThreadWait(ptthftProgress)
     hb_gcAll(.T.)
     SET COLOR TO "r+/n"
-*    WAIT "Press any key to end"
+    IF .NOT.(cC_GT_MODE=="MT")
+        WAIT "Press any key to end"
+    EndIF
     CLS
 #endif
 
 Return
 
+static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
+
+    local nD
+    local nJ:= __NRTTST__
+    #ifndef __PTCOMPAT__
+        local pGT
+    #endif    
+    
+    local lAll:=(aScan(aAC_TSTEXEC,{|c|(c=="*")})>0)
+
+    local atBigNtst:=Array(nJ,IF((cC_GT_MODE=="MT"),5,2))
+
+    atBigNtst[1][1]:={|p|tBigNtst01(p)}
+    atBigNtst[2][1]:={|p|tBigNtst02(p)}
+    atBigNtst[3][1]:={|p|tBigNtst03(p)}
+    atBigNtst[4][1]:={|p|tBigNtst04(p)}
+    atBigNtst[5][1]:={|p|tBigNtst05(p)}
+    atBigNtst[6][1]:={|p|tBigNtst06(p)}
+    atBigNtst[7][1]:={|p|tBigNtst07(p)}
+    atBigNtst[8][1]:={|p|tBigNtst08(p)}
+    atBigNtst[9][1]:={|p|tBigNtst09(p)}
+ 
+    atBigNtst[10][1]:={|p|tBigNtst10(p)}
+    atBigNtst[11][1]:={|p|tBigNtst11(p)}
+    atBigNtst[12][1]:={|p|tBigNtst12(p)}
+    atBigNtst[13][1]:={|p|tBigNtst13(p)}
+    atBigNtst[14][1]:={|p|tBigNtst14(p)}
+    atBigNtst[15][1]:={|p|tBigNtst15(p)}
+    atBigNtst[16][1]:={|p|tBigNtst16(p)}
+    atBigNtst[17][1]:={|p|tBigNtst17(p)}
+    atBigNtst[18][1]:={|p|tBigNtst18(p)}
+    atBigNtst[19][1]:={|p|tBigNtst19(p)}
+ 
+    atBigNtst[20][1]:={|p|tBigNtst20(p)}
+    atBigNtst[21][1]:={|p|tBigNtst21(p)}
+    atBigNtst[22][1]:={|p|tBigNtst22(p)}
+    atBigNtst[23][1]:={|p|tBigNtst23(p)}
+    atBigNtst[24][1]:={|p|tBigNtst24(p)}
+    atBigNtst[25][1]:={|p|tBigNtst25(p)}
+    atBigNtst[26][1]:={|p|tBigNtst26(p)}
+    atBigNtst[27][1]:={|p|tBigNtst27(p)}
+    atBigNtst[28][1]:={|p|tBigNtst28(p)}
+    atBigNtst[29][1]:={|p|tBigNtst29(p)}
+
+    atBigNtst[30][1]:={|p|tBigNtst30(p)}
+    atBigNtst[31][1]:={|p|tBigNtst31(p)}
+    atBigNtst[32][1]:={|p|tBigNtst32(p)}
+    atBigNtst[33][1]:={|p|tBigNtst33(p)}
+    atBigNtst[34][1]:={|p|tBigNtst34(p)}
+    atBigNtst[35][1]:={|p|tBigNtst35(p)}
+
+    for nD:=1 to nJ
+        atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,{|c|(nD==Val(c))})>0)
+        IF atBigNtst[nD][2].and.(cC_GT_MODE=="MT")
+            #ifndef __PTCOMPAT__
+                atBigNtst[nD][3]:=hb_gtCreate(THREAD_GT)
+                pGT:=hb_gtSelect(atBigNtst[nD][3])
+                hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
+                hb_gtSelect(pGT)
+                atBigNtst[nD][4]:=nD
+                atBigNtst[nD][5]:=hb_ntos(nD)
+            #endif
+        EndIF
+    next nD
+ 
+return(atBigNtst)
+
+Static Function _StrToKArr(cStr,cToken)
+	Local cDToken
+	DEFAULT cStr   := ""
+	DEFAULT cToken := ";"
+	cDToken := (cToken+cToken)
+	While (cDToken$cStr)
+		cStr := StrTran(cStr,cDToken,cToken+" "+cToken)
+	End While
+#ifdef PROTHEUS
+Return(StrToKArr(cStr,cToken))
+#else
+Return(hb_aTokens(cStr,cToken))
+#endif
+    
 Static Procedure __tbnSleep(nSleep)
     #ifdef __HARBOUR__
         #ifdef TBN_DBFILE
@@ -964,7 +1081,7 @@ Return(lHarbour)
 
             For nAnim := 1 To nAnimes
                 cAnim := aAnim[nAnim]
-                FOR EACH cRow IN hb_aTokens(cAnim,"@")
+                FOR EACH cRow IN _StrToKArr(cAnim,"@")
                     lBreak := (";"$cRow)
                     IF (lBreak)
                         IF ((nRowC==0).and..NOT.(nRow==0))
@@ -4703,48 +4820,3 @@ static procedure tBigNtst35(fhLog)
     __ConOut(fhLog,__cSep)
 
 return
-
-static function GettBigNtst()
-
-    local atBigNtst:=Array(__NRTTST__,3)
-
-    atBigNtst[1][1]:={|p|tBigNtst01(p)};atBigNtst[1][2]:=.T.
-    atBigNtst[2][1]:={|p|tBigNtst02(p)};atBigNtst[2][2]:=.T.
-    atBigNtst[3][1]:={|p|tBigNtst03(p)};atBigNtst[3][2]:=.T.
-    atBigNtst[4][1]:={|p|tBigNtst04(p)};atBigNtst[4][2]:=.T.
-    atBigNtst[5][1]:={|p|tBigNtst05(p)};atBigNtst[5][2]:=.T.
-    atBigNtst[6][1]:={|p|tBigNtst06(p)};atBigNtst[6][2]:=.T.
-    atBigNtst[7][1]:={|p|tBigNtst07(p)};atBigNtst[7][2]:=.T.
-    atBigNtst[8][1]:={|p|tBigNtst08(p)};atBigNtst[8][2]:=.T.
-    atBigNtst[9][1]:={|p|tBigNtst09(p)};atBigNtst[9][2]:=.T.
- 
-    atBigNtst[10][1]:={|p|tBigNtst10(p)};atBigNtst[10][2]:=.T.
-    atBigNtst[11][1]:={|p|tBigNtst11(p)};atBigNtst[11][2]:=.T.
-    atBigNtst[12][1]:={|p|tBigNtst12(p)};atBigNtst[12][2]:=.T.
-    atBigNtst[13][1]:={|p|tBigNtst13(p)};atBigNtst[13][2]:=.T.
-    atBigNtst[14][1]:={|p|tBigNtst14(p)};atBigNtst[14][2]:=.T.
-    atBigNtst[15][1]:={|p|tBigNtst15(p)};atBigNtst[15][2]:=.T.
-    atBigNtst[16][1]:={|p|tBigNtst16(p)};atBigNtst[16][2]:=.T.
-    atBigNtst[17][1]:={|p|tBigNtst17(p)};atBigNtst[17][2]:=.T.
-    atBigNtst[18][1]:={|p|tBigNtst18(p)};atBigNtst[18][2]:=.T.
-    atBigNtst[19][1]:={|p|tBigNtst19(p)};atBigNtst[19][2]:=.T.
- 
-    atBigNtst[20][1]:={|p|tBigNtst20(p)};atBigNtst[20][2]:=.T.
-    atBigNtst[21][1]:={|p|tBigNtst21(p)};atBigNtst[21][2]:=.T.
-    atBigNtst[22][1]:={|p|tBigNtst22(p)};atBigNtst[22][2]:=.T.
-    atBigNtst[23][1]:={|p|tBigNtst23(p)};atBigNtst[23][2]:=.T.
-    atBigNtst[24][1]:={|p|tBigNtst24(p)};atBigNtst[24][2]:=.T.
-    atBigNtst[25][1]:={|p|tBigNtst25(p)};atBigNtst[25][2]:=.T.
-    atBigNtst[26][1]:={|p|tBigNtst26(p)};atBigNtst[26][2]:=.T.
-    atBigNtst[27][1]:={|p|tBigNtst27(p)};atBigNtst[27][2]:=.T.
-    atBigNtst[28][1]:={|p|tBigNtst28(p)};atBigNtst[28][2]:=.T.
-    atBigNtst[29][1]:={|p|tBigNtst29(p)};atBigNtst[29][2]:=.T.
-
-    atBigNtst[30][1]:={|p|tBigNtst30(p)};atBigNtst[30][2]:=.T.
-    atBigNtst[31][1]:={|p|tBigNtst31(p)};atBigNtst[31][2]:=.T.
-    atBigNtst[32][1]:={|p|tBigNtst32(p)};atBigNtst[32][2]:=.T.
-    atBigNtst[33][1]:={|p|tBigNtst33(p)};atBigNtst[33][2]:=.T.
-    atBigNtst[34][1]:={|p|tBigNtst34(p)};atBigNtst[34][2]:=.T.
-    atBigNtst[35][1]:={|p|tBigNtst35(p)};atBigNtst[35][2]:=.T.    
- 
-return(atBigNtst)    
