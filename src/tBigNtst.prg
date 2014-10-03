@@ -2,7 +2,7 @@
     /*
         TODO:
         (1) core/tests/gtwin.prg         (1/1)
-        (2) Main thread GT/Tests Monitor (0/1)
+        (2) Main thread GT/Tests Monitor (1/9)
         (3) Configure tests              (1/1)
         (4) tBigNThreads.prg             (1/1)
         (4.1) hb_ExecFromArray()         (1/1)
