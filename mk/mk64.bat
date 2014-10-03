@@ -15,10 +15,6 @@ SET > env_mk64.txt
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_assignv.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_dyn_obj.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_mt.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_mt_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_mt_assignv_dyn_obj.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_mt_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_assignv.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_assignv_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile.hbp
@@ -28,18 +24,7 @@ SET > env_mk64.txt
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_assignv.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_mt.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_mt_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_mt_dyn_obj.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_mt_dyn_obj_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_mt.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_mt_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_mt_assignv_dyn_obj.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_mt_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dyn_obj.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt_assignv.hbp
-    %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt_dyn_obj.hbp
 for /f %%e in (env_mk64.txt) do (
     SET %%e
 )
