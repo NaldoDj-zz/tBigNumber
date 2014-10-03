@@ -1,16 +1,15 @@
 @echo off
 echo BATCH FILE FOR Harbour MinGW64
 rem ============================================================================
-SET _PATH=%PATH%
-SET _HB_PATH=%HB_PATH%
-SET HB_PATH=D:\GitHub\core\
-SET MinGW64_PATH=D:\MinGW64\BIN\
-SET PATH=%PATH%;%HB_PATH%
-SET PATH=%PATH%;%MinGW64_PATH%
-SET HB_CPU=x86_64
-SET HB_PLATFORM=win
-SET HB_COMPILER=mingw64
-SET HB_CCPATH=%MinGW64_PATH%
+SET > env_mk64.txt
+    SET HB_PATH=D:\GitHub\core\
+    SET MinGW64_PATH=D:\MinGW64\BIN\
+    SET PATH=%PATH%;%HB_PATH%
+    SET PATH=%PATH%;%MinGW64_PATH%
+    SET HB_CPU=x86_64
+    SET HB_PLATFORM=win
+    SET HB_COMPILER=mingw64
+    SET HB_CCPATH=%MinGW64_PATH%
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst.hbp 
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_array_assignv.hbp
@@ -41,5 +40,7 @@ SET HB_CCPATH=%MinGW64_PATH%
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt_assignv.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_mt_dyn_obj.hbp
-SET HB_PATH=%_HB_PATH%
-SET PATH=%_PATH%
+for /f %%e in (env_mk64.txt) do (
+    SET %%e
+)
+DEL env_mk64.txt

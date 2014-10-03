@@ -25,6 +25,8 @@ mg_error_log.htm
 /lib/win/mingw64/.hbmk
 /mk/tbigN_log
 /mk/*.ini
+/mk/ERROR
+/mk/*.txt
 /tbigN_err
 /tbigN_log
 /tbigN_tmp
@@ -40,5 +42,3 @@ mg_error_log.htm
 /prj/mg/win/64/*.txt
 /prj/mg/win/64/*.hot
 /PrimesTables/*.txt
-/mk/ERROR
-/mk/cmp.txt
