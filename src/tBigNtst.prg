@@ -31,175 +31,223 @@
 #define __NRTTST__         35
 
 #ifdef __HARBOUR__
-#pragma -w2
-#require "hbvmmt"
-request HB_MT
-#include "inkey.ch"
-#include "setcurs.ch"
-#include "hbgtinfo.ch"
-Function Main()
-    
-    Local aThreads
-    Local atBigNtst
-  
-    Local cIni    := "tBigNtst.ini"
-    Local hIni    := hb_iniRead(cIni)
-    Local cKey
-    Local aSect
-    Local cSection
-    Local nThAT:=0
-    Local nThread
-    Local nThreads := 0
-    Local nMaxScrRow
-    Local nMaxScrCol
-  
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR __nSLEEP
-    MEMVAR nN_TEST
-    MEMVAR lL_ALOG
-    MEMVAR aC_OOPROGRESS
-    MEMVAR lL_OOPROGRAND
-    MEMVAR lL_ROPROGRESS
-    MEMVAR lL_LOGPROCESS
-    MEMVAR cC_GT_MODE
-    MEMVAR aAC_TSTEXEC
-  
-    CLS
-  
-    #ifdef __ALT_D__    // Compile with -b
-        AltD(1)         // Enables the debugger. Press F5 to go.
-        AltD()          // Invokes the debugger
-    #endif
-  
-    Private nACC_SET
-    Private nROOT_ACC_SET
-    Private nACC_ALOG
-    Private __nSLEEP
-    Private nN_TEST
-    Private lL_ALOG
-    Private aC_OOPROGRESS
-    Private lL_OOPROGRAND
-    Private lL_ROPROGRESS
-    Private lL_LOGPROCESS
-    Private cC_GT_MODE
-    Private aAC_TSTEXEC
+    #pragma -w2
+    #require "hbvmmt"
+    request HB_MT
+    #include "inkey.ch"
+    #include "setcurs.ch"
+    #include "hbgtinfo.ch"
+    Function Main()
+        
+        Local atBigNtst
+      
+        Local cIni    := "tBigNtst.ini"
+        Local hIni    := hb_iniRead(cIni)
+        Local cKey
+        Local aSect
+        Local cSection
+        
+        Local nRow
+        Local nCol
+        Local nMaxScrRow
+        Local nMaxScrCol
+        
+        Local lFinalize
+        Local ptftBigtstThread
+        Local ptttBigtstThread
+      
+        MEMVAR nACC_SET
+        MEMVAR nROOT_ACC_SET
+        MEMVAR nACC_ALOG
+        MEMVAR __nSLEEP
+        MEMVAR nN_TEST
+        MEMVAR lL_ALOG
+        MEMVAR aC_OOPROGRESS
+        MEMVAR lL_OOPROGRAND
+        MEMVAR lL_ROPROGRESS
+        MEMVAR lL_LOGPROCESS
+        MEMVAR cC_GT_MODE
+        MEMVAR aAC_TSTEXEC
+      
+        CLS
+      
+        #ifdef __ALT_D__    // Compile with -b
+            AltD(1)         // Enables the debugger. Press F5 to go.
+            AltD()          // Invokes the debugger
+        #endif
+      
+        Private nACC_SET
+        Private nROOT_ACC_SET
+        Private nACC_ALOG
+        Private __nSLEEP
+        Private nN_TEST
+        Private lL_ALOG
+        Private aC_OOPROGRESS
+        Private lL_OOPROGRAND
+        Private lL_ROPROGRESS
+        Private lL_LOGPROCESS
+        Private cC_GT_MODE
+        Private aAC_TSTEXEC
 
-    #ifdef __HBSHELL_USR_DEF_GT
-        hbshell_gtSelect(HBSHELL_GTSELECT)
-    #endif   
+        #ifdef __HBSHELL_USR_DEF_GT
+            hbshell_gtSelect(HBSHELL_GTSELECT)
+        #endif   
 
-    IF .NOT.(File(cIni) ) .or. Empty(hIni)
-        hIni["GENERAL"] := hb_Hash()
-        hIni["GENERAL"]["ACC_SET"]      := ACC_SET
-        hIni["GENERAL"]["ROOT_ACC_SET"] := ROOT_ACC_SET
-        hIni["GENERAL"]["ACC_ALOG"]     := ACC_ALOG
-        hIni["GENERAL"]["__SLEEP"]      := __SLEEP
-        hIni["GENERAL"]["N_TEST"]       := N_TEST
-        hIni["GENERAL"]["L_ALOG"]       := L_ALOG
-        hIni["GENERAL"]["C_OOPROGRESS"] := C_OOPROGRESS
-        hIni["GENERAL"]["L_OOPROGRAND"] := L_OOPROGRAND
-        hIni["GENERAL"]["L_ROPROGRESS"] := L_ROPROGRESS
-        hIni["GENERAL"]["L_LOGPROCESS"] := L_LOGPROCESS
-        hIni["GENERAL"]["C_GT_MODE"]    := C_GT_MODE
-        hIni["GENERAL"]["AC_TSTEXEC"]   := AC_TSTEXEC
-        hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
-    Else
-        FOR EACH cSection IN hIni:Keys
-            aSect := hIni[ cSection ]
-            FOR EACH cKey IN aSect:Keys
-                SWITCH Upper(cKey)
-                    CASE "ACC_SET"
-                        nACC_SET        := Val(aSect[cKey])
-                        EXIT
-                    CASE "ROOT_ACC_SET"
-                        nROOT_ACC_SET   := Val(aSect[cKey])
-                        EXIT
-                    CASE "ACC_ALOG"
-                        nACC_ALOG       := Val(aSect[cKey])
-                        EXIT
-                    CASE "__SLEEP"
-                        __nSLEEP        := Val(aSect[cKey])
-                        EXIT
-                    CASE "N_TEST"
-                        nN_TEST         := Val(aSect[cKey])
-                        EXIT
-                    CASE "L_ALOG"
-                        lL_ALOG         := (aSect[cKey]=="1")
-                        EXIT
-                    CASE "C_OOPROGRESS"
-                        aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(aSect[cKey])),",")
-                        EXIT
-                    CASE "L_OOPROGRAND"
-                        lL_OOPROGRAND   := (aSect[cKey]=="1")
-                        EXIT
-                    CASE "L_ROPROGRESS"
-                        lL_ROPROGRESS   := (aSect[cKey]=="1")
-                        EXIT
-                    CASE "L_LOGPROCESS"
-                        lL_LOGPROCESS   := (aSect[cKey]=="1")
-                        EXIT
-                    CASE "C_GT_MODE"
-                        cC_GT_MODE      := Upper(AllTrim(aSect[cKey]))
-                        EXIT
-                    CASE "AC_TSTEXEC"
-                        aAC_TSTEXEC     := _StrToKArr(AllTrim(aSect[cKey]),",")
-                        EXIT
-                ENDSWITCH
-            NEXT cKey
-        NEXT cSection
-    EndIF
+        IF .NOT.(File(cIni) ) .or. Empty(hIni)
+            hIni["GENERAL"] := hb_Hash()
+            hIni["GENERAL"]["ACC_SET"]      := ACC_SET
+            hIni["GENERAL"]["ROOT_ACC_SET"] := ROOT_ACC_SET
+            hIni["GENERAL"]["ACC_ALOG"]     := ACC_ALOG
+            hIni["GENERAL"]["__SLEEP"]      := __SLEEP
+            hIni["GENERAL"]["N_TEST"]       := N_TEST
+            hIni["GENERAL"]["L_ALOG"]       := L_ALOG
+            hIni["GENERAL"]["C_OOPROGRESS"] := C_OOPROGRESS
+            hIni["GENERAL"]["L_OOPROGRAND"] := L_OOPROGRAND
+            hIni["GENERAL"]["L_ROPROGRESS"] := L_ROPROGRESS
+            hIni["GENERAL"]["L_LOGPROCESS"] := L_LOGPROCESS
+            hIni["GENERAL"]["C_GT_MODE"]    := C_GT_MODE
+            hIni["GENERAL"]["AC_TSTEXEC"]   := AC_TSTEXEC
+            hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
+        Else
+            FOR EACH cSection IN hIni:Keys
+                aSect := hIni[ cSection ]
+                FOR EACH cKey IN aSect:Keys
+                    SWITCH Upper(cKey)
+                        CASE "ACC_SET"
+                            nACC_SET        := Val(aSect[cKey])
+                            EXIT
+                        CASE "ROOT_ACC_SET"
+                            nROOT_ACC_SET   := Val(aSect[cKey])
+                            EXIT
+                        CASE "ACC_ALOG"
+                            nACC_ALOG       := Val(aSect[cKey])
+                            EXIT
+                        CASE "__SLEEP"
+                            __nSLEEP        := Val(aSect[cKey])
+                            EXIT
+                        CASE "N_TEST"
+                            nN_TEST         := Val(aSect[cKey])
+                            EXIT
+                        CASE "L_ALOG"
+                            lL_ALOG         := (aSect[cKey]=="1")
+                            EXIT
+                        CASE "C_OOPROGRESS"
+                            aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(aSect[cKey])),",")
+                            EXIT
+                        CASE "L_OOPROGRAND"
+                            lL_OOPROGRAND   := (aSect[cKey]=="1")
+                            EXIT
+                        CASE "L_ROPROGRESS"
+                            lL_ROPROGRESS   := (aSect[cKey]=="1")
+                            EXIT
+                        CASE "L_LOGPROCESS"
+                            lL_LOGPROCESS   := (aSect[cKey]=="1")
+                            EXIT
+                        CASE "C_GT_MODE"
+                            cC_GT_MODE      := Upper(AllTrim(aSect[cKey]))
+                            EXIT
+                        CASE "AC_TSTEXEC"
+                            aAC_TSTEXEC     := _StrToKArr(AllTrim(aSect[cKey]),",")
+                            EXIT
+                    ENDSWITCH
+                NEXT cKey
+            NEXT cSection
+        EndIF
 
-    nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
-    nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
-    nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
-    __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
-    nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-    lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
-    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
-    lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
-    lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
-    lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
-    cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
-    aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
+        nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
+        nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
+        nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
+        __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
+        nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+        lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
+        aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+        lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
+        lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
+        lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
+        cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
+        aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
 
-    __SetCentury("ON")
-    SET DATE TO BRITISH
+        __SetCentury("ON")
+        SET DATE TO BRITISH
 
-    __nSLEEP        := Min(__nSLEEP,10)
-    IF ((__nSLEEP)>10)
-        __nSLEEP /= 10
-    EndIF
+        __nSLEEP        := Min(__nSLEEP,10)
+        IF ((__nSLEEP)>10)
+            __nSLEEP /= 10
+        EndIF
 
-    /* set OEM font encoding for non unicode modes */
-    hb_gtInfo( HB_GTI_CODEPAGE, 255 )
-    /* set EN CP-437 encoding */
-    hb_cdpSelect( "EN" )
-    hb_setTermCP( "EN" )
-    /* set font size */
-    hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
-    hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
-    /* resize console window using new font size */
-    SetMode(MaxRow()+1,MaxCol()+1)
-    /* get screen dimensions */
-    nMaxScrRow := hb_gtInfo( HB_GTI_DESKTOPROWS )
-    nMaxScrCol := hb_gtInfo( HB_GTI_DESKTOPCOLS )
-    /* resize console window to the screen size */
-    SetMode(nMaxScrRow,nMaxScrCol)
-    /* set window title */
-    hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
-    hb_gtInfo(HB_GTI_ICONRES,"Main")
+        /* set OEM font encoding for non unicode modes */
+        hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+        /* set EN CP-437 encoding */
+        hb_cdpSelect( "EN" )
+        hb_setTermCP( "EN" )
+        /* set font size */
+        hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
+        hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
+        /* resize console window using new font size */
+        SetMode(MaxRow()+1,MaxCol()+1)
+        /* get screen dimensions */
+        nMaxScrRow := hb_gtInfo( HB_GTI_DESKTOPROWS )
+        nMaxScrCol := hb_gtInfo( HB_GTI_DESKTOPCOLS )
+        /* resize console window to the screen size */
+        SetMode(nMaxScrRow,nMaxScrCol)
+        /* set window title */
+        hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
+        hb_gtInfo(HB_GTI_ICONRES,"Main")
 
-    atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
-    
-    IF (cC_GT_MODE=="MT")
+        atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
+        
+        IF (cC_GT_MODE=="MT")
+        
+            lFinalize := .F.
+            
+            ptftBigtstThread:=@tBigtstThread()
+
+            ptttBigtstThread:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
+            ptftBigtstThread,@lFinalize,atBigNtst,nMaxScrRow,nMaxScrCol)
+            
+            nRow:=Row()
+            nCol:=Col()
+            
+            While .NOT.(lFinalize)
+                DispOut("*")
+                IF(++nCol>=nMaxScrCol)
+                    IF (++nRow>=nMaxScrRow)
+                        nRow:=0
+                        CLS
+                    EndIF
+                    nCol:=0
+                EndIF
+                SetPos(nRow,nCol)
+                __tbnSleep()
+            End While
+            
+            hb_threadQuitRequest(ptttBigtstThread)
+            hb_ThreadWait(ptttBigtstThread)
+            hb_gcAll(.T.)
+            
+        Else
+        
+            tBigNtst(atBigNtst)
+        
+        EndIF
+
+    Return(0)
+
+    static procedure tBigtstThread(lFinalize,atBigNtst,nMaxScrRow,nMaxScrCol)
+
+        Local aThreads
+        
+        Local nThAT
+        Local nThread
+        
+        Local nThreads:=0
 
         aEval(atBigNtst,{|e|if(e[2],++nThreads,NIL)})
-  
-        IF nThreads>0
+      
+        IF (nThreads>0)
             //"Share publics and privates with child threads."
             tBigNthStart(nThreads,@aThreads,HB_THREAD_INHERIT_MEMVARS)
+            nThAT:=0
             While ((nThAT:=aScan(atBigNtst,{|e|e[2]},nThAT+1))>0)
                 nThread:=nThreads
                 aThreads[nThread][TH_EXE]:={@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol}
@@ -209,339 +257,347 @@ Function Main()
             tBigNthWait(@aThreads)
             tBigNthJoin(@aThreads)
         EndIF
-    
-    Else
-    
-        tBigNtst(atBigNtst)
-    
-    EndIF
+        
+        lFinalize := .T.
 
-Return(0)
+    Return 
 
-Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
-    Local pGT := hb_gtSelect(atBigNtst[3])
-    hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
-    /* set OEM font encoding for non unicode modes */
-    hb_gtInfo( HB_GTI_CODEPAGE, 255 )
-    /* set EN CP-437 encoding */
-    hb_cdpSelect( "EN" )
-    hb_setTermCP( "EN" )
-    /* set font size */
-    hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
-    hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
-    /* resize console window to the screen size */
-    SetMode(nMaxScrRow,nMaxScrCol)
-    /* set window title */
-    hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
-    tBigNtst({atBigNtst})
-    hb_gtSelect(pGT)
-    hb_gtInfo(HB_GTI_ICONRES,"Main")
-    atBigNtst[3]:=NIL
-    hb_gcAll(.T.)
-Return(.T.)
-Static Procedure tBigNtst(atBigNtst)
-#else
-#xtranslate ExeName() => ProcName()
-//----------------------------------------------------------
-//Obs.: TAMANHO MAXIMO DE UMA STRING NO PROTHEUS 1.048.575
-//      (1.048.575+1)->String size overflow!
-//      Harbour -> no upper limit
-User Function tBigNtst()
-    Local atBigNtst
-    Local cIni:= "tBigNtst.ini"
-    Local otFIni
-    Private nACC_SET
-    Private nROOT_ACC_SET
-    Private nACC_ALOG
-    Private __nSLEEP
-    Private nN_TEST
-    Private lL_ALOG
-    Private aC_OOPROGRESS
-    Private lL_OOPROGRAND
-    Private lL_ROPROGRESS
-    Private lL_LOGPROCESS
-    Private cC_GT_MODE
-    Private aAC_TSTEXEC
-    IF FindFunction("U_TFINI") //NDJLIB020.PRG
-        otFIni := U_TFINI(cIni)
-        IF .NOT.File(cIni)
-            otFIni:AddNewSession("GENERAL")
-            otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
-            otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET)
-            otFIni:AddNewProperty("GENERAL","ACC_ALOG",ACC_ALOG)
-            otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
-            otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
-            otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
-            otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
-            otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
-            otFIni:AddNewProperty("GENERAL","L_ROPROGRESS",L_ROPROGRESS)
-            otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
-            otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
-            otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
-            otFIni:SaveAs(cIni)
-        Else
-            nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
-            nROOT_ACC_SET   := Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
-            nACC_ALOG       := Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
-            __nSLEEP        := Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
-            nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
-            lL_ALOG         := (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
-            aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
-            lL_OOPROGRAND   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
-            lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
-            lL_LOGPROCESS   := (oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
-            cC_GT_MODE      := Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
-            aAC_TSTEXEC     := _StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC ",AC_TSTEXEC)),",")
+    Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
+        Local pGT := hb_gtSelect(atBigNtst[3])
+        hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
+        /* set OEM font encoding for non unicode modes */
+        hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+        /* set EN CP-437 encoding */
+        hb_cdpSelect( "EN" )
+        hb_setTermCP( "EN" )
+        /* set font size */
+        hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
+        hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
+        /* resize console window to the screen size */
+        SetMode(nMaxScrRow,nMaxScrCol)
+        /* set window title */
+        hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
+        tBigNtst({atBigNtst})
+        hb_gtSelect(pGT)
+        hb_gtInfo(HB_GTI_ICONRES,"Main")
+        atBigNtst[3]:=NIL
+        hb_gcAll(.T.)
+    Return(.T.)
+
+    Static Procedure tBigNtst(atBigNtst)
+    
+#else /* __PROTHEUS__*/
+
+    #xtranslate ExeName() => ProcName()
+    //----------------------------------------------------------
+    //Obs.: TAMANHO MAXIMO DE UMA STRING NO PROTHEUS 1.048.575
+    //      (1.048.575+1)->String size overflow!
+    //      Harbour -> no upper limit
+    
+    User Function tBigNtst()
+        
+        Local atBigNtst
+        Local cIni:= "tBigNtst.ini"
+        Local otFIni
+        
+        Private nACC_SET
+        Private nROOT_ACC_SET
+        Private nACC_ALOG
+        Private __nSLEEP
+        Private nN_TEST
+        Private lL_ALOG
+        Private aC_OOPROGRESS
+        Private lL_OOPROGRAND
+        Private lL_ROPROGRESS
+        Private lL_LOGPROCESS
+        Private cC_GT_MODE
+        Private aAC_TSTEXEC
+        
+        IF FindFunction("U_TFINI") //NDJLIB020.PRG
+            otFIni := U_TFINI(cIni)
+            IF .NOT.File(cIni)
+                otFIni:AddNewSession("GENERAL")
+                otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
+                otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET)
+                otFIni:AddNewProperty("GENERAL","ACC_ALOG",ACC_ALOG)
+                otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
+                otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
+                otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
+                otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
+                otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
+                otFIni:AddNewProperty("GENERAL","L_ROPROGRESS",L_ROPROGRESS)
+                otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
+                otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
+                otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
+                otFIni:SaveAs(cIni)
+            Else
+                nACC_SET        := Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
+                nROOT_ACC_SET   := Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
+                nACC_ALOG       := Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
+                __nSLEEP        := Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
+                nN_TEST         := Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
+                lL_ALOG         := (oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
+                aC_OOPROGRESS   := _StrToKArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
+                lL_OOPROGRAND   := (oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
+                lL_ROPROGRESS   := (oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
+                lL_LOGPROCESS   := (oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
+                cC_GT_MODE      := Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
+                aAC_TSTEXEC     := _StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC ",AC_TSTEXEC)),",")
+            EndIF
         EndIF
-    EndIF
-    nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
-    nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
-    nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
-    __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
-    nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-    lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
-    aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
-    lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
-    lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
-    lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
-    cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
-    aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-    __nSLEEP        := Max(__nSLEEP,10)
-    IF ((__nSLEEP)<10)
-        __nSLEEP *= 10
-    EndIF
-    atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
-Return(tBigNtst(@atBigNtst))
-Static Procedure tBigNtst(atBigNtst)
-#endif
-
-#ifdef __HARBOUR__
-    Local tsBegin    := HB_DATETIME()
-    Local nsElapsed
-#endif
-
-    Local dStartDate AS DATE      VALUE Date()
-    Local dEndDate
-    Local cStartTime AS CHARACTER VALUE Time()
-    Local cEndTime   AS CHARACTER
- 
-#ifdef __HARBOUR__
-    Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
-    Local cLog       AS CHARACTER VALUE cFld+"tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
-    Local ptProgress   := @Progress()
-    Local ptthProgress
-    Local ptftProgress := @ftProgress()
-    Local ptthftProgress
-#else
-    Local cLog       AS CHARACTER VALUE GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
-#endif
-
-    Local cN         AS CHARACTER
-    Local cW         AS CHARACTER
-    Local cX         AS CHARACTER
-    Local cHex       AS CHARACTER
-
-    Local n          AS NUMBER
-    Local w          AS NUMBER
-    Local x          AS NUMBER
-    Local z          AS NUMBER
-
-    Local fhLog      AS NUMBER
-
-#ifdef __HARBOUR__
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR __nSLEEP
-    MEMVAR nN_TEST
-    MEMVAR lL_ALOG
-    MEMVAR aC_OOPROGRESS
-    MEMVAR lL_OOPROGRAND
-    MEMVAR lL_ROPROGRESS
-    MEMVAR lL_LOGPROCESS
-    MEMVAR cC_GT_MODE
-
-    MEMVAR __CRLF
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    MEMVAR __nMaxRow
-    MEMVAR __nMaxCol
-    MEMVAR __nCol
-    MEMVAR __nRow
-    MEMVAR __noProgress
-
-    MEMVAR __lKillProgress
-    MEMVAR __oRTimeProc
-    MEMVAR __phMutex
+        
+        nACC_SET        := IF(Empty(nACC_SET),Val(ACC_SET),nACC_SET)
+        nROOT_ACC_SET   := IF(Empty(nROOT_ACC_SET),Val(ROOT_ACC_SET),nROOT_ACC_SET)
+        nACC_ALOG       := IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
+        __nSLEEP        := IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
+        nN_TEST         := IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
+        lL_ALOG         := IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
+        aC_OOPROGRESS   := IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+        lL_OOPROGRAND   := IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
+        lL_ROPROGRESS   := IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
+        lL_LOGPROCESS   := IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
+        cC_GT_MODE      := IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
+        aAC_TSTEXEC     := IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
+        __nSLEEP        := Max(__nSLEEP,10)
+        
+        IF ((__nSLEEP)<10)
+            __nSLEEP *= 10
+        EndIF
     
-    MEMVAR nISQRT
+    atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
+    
+    Return(tBigNtst(@atBigNtst))
 
-    Private __nMaxRow       AS NUMBER VALUE (MaxRow()-8)
-    Private __nMaxCol       AS NUMBER VALUE MaxCol()
-    Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
-    Private __nRow          AS NUMBER VALUE 0
-    Private __noProgress    AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
+    Static Procedure tBigNtst(atBigNtst)
 
-    Private __cSep          AS CHARACTER VALUE Replicate("-",__nMaxCol)
-
-#ifdef __ALT_D__
-    Private __lKillProgress AS LOGICAL VALUE .T.
-#else
-    Private __lKillProgress AS LOGICAL VALUE .F.
-#endif
-
-    Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
-
-    Private __phMutex := hb_mutexCreate()
-
-    MakeDir(cFld)
-
-#else
-
-    Private __cSep          AS CHARACTER VALUE "---------------------------------------------------------"
-    Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(1)
-
-#endif
-
-    Private __CRLF          AS CHARACTER VALUE CRLF
-    Private __oRTime1       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
-    Private __oRTime2       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
-
-    ASSIGN fhLog := if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),-1)
-    if (lL_LOGPROCESS)
-        fClose(fhLog)
-        ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
-    endif
-
-    Private nISQRT := Int(SQRT(nN_TEST))
-
-#ifdef __HARBOUR__
-    SetColor("w+/n")
-    SetCursor(SC_NONE)
-    BuildScreen(fhLog,__nMaxCol)
-#endif
-
-    __ConOut(fhLog,__cSep)                           //3
-    #ifdef __HARBOUR__
-        DispOutAT(3,(__nCol-1),"[ ]")
-    #endif
-
-    __ConOut(fhLog,"START ")                         //4
-    __ConOut(fhLog,"DATE        : " , dStartDate)    //5
-    __ConOut(fhLog,"TIME        : " , cStartTime)    //6
+#endif /* __PROTHEUS__*/
 
     #ifdef __HARBOUR__
-        __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))    //7
+        Local tsBegin    := HB_DATETIME()
+        Local nsElapsed
     #endif
 
-    #ifdef TBN_DBFILE
-        #ifndef TBN_MEMIO
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")   //8
-        #else
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")  //8
-        #endif
+        Local dStartDate AS DATE      VALUE Date()
+        Local dEndDate
+        Local cStartTime AS CHARACTER VALUE Time()
+        Local cEndTime   AS CHARACTER
+     
+    #ifdef __HARBOUR__
+        Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
+        Local cLog       AS CHARACTER VALUE cFld+"tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+        Local ptfProgress   := @Progress()
+        Local pttProgress
+        Local ptfftProgress := @ftProgress()
+        Local pttftProgress
     #else
-        #ifdef TBN_ARRAY
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")    //8
+        Local cLog       AS CHARACTER VALUE GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
+    #endif
+
+        Local cN         AS CHARACTER
+        Local cW         AS CHARACTER
+        Local cX         AS CHARACTER
+        Local cHex       AS CHARACTER
+
+        Local n          AS NUMBER
+        Local w          AS NUMBER
+        Local x          AS NUMBER
+        Local z          AS NUMBER
+
+        Local fhLog      AS NUMBER
+
+    #ifdef __HARBOUR__
+    
+        #ifdef __ALT_D__
+            Local lKillProgress AS LOGICAL VALUE .T.
         #else
-            __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")   //8
+            Local lKillProgress AS LOGICAL VALUE .F.
+        #endif
+
+        MEMVAR nACC_SET
+        MEMVAR nROOT_ACC_SET
+        MEMVAR nACC_ALOG
+        MEMVAR __nSLEEP
+        MEMVAR nN_TEST
+        MEMVAR lL_ALOG
+        MEMVAR aC_OOPROGRESS
+        MEMVAR lL_OOPROGRAND
+        MEMVAR lL_ROPROGRESS
+        MEMVAR lL_LOGPROCESS
+        MEMVAR cC_GT_MODE
+
+        MEMVAR __CRLF
+        MEMVAR __cSep
+
+        MEMVAR __oRTime1
+        MEMVAR __oRTime2
+        MEMVAR __nMaxRow
+        MEMVAR __nMaxCol
+        MEMVAR __nCol
+        MEMVAR __nRow
+        MEMVAR __noProgress
+
+        MEMVAR __oRTimeProc
+        MEMVAR __phMutex
+        
+        MEMVAR nISQRT
+
+        Private __nMaxRow       AS NUMBER VALUE (MaxRow()-8)
+        Private __nMaxCol       AS NUMBER VALUE MaxCol()
+        Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
+        Private __nRow          AS NUMBER VALUE 0
+        Private __noProgress    AS NUMBER VALUE Int(((__nMaxCol)/3)-(__nCol/6))
+
+        Private __cSep          AS CHARACTER VALUE Replicate("-",__nMaxCol)
+
+        Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
+
+        Private __phMutex := hb_mutexCreate()
+
+        MakeDir(cFld)
+
+    #else
+
+        Private __cSep          AS CHARACTER VALUE "---------------------------------------------------------"
+        Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(1)
+
+    #endif
+
+        Private __CRLF          AS CHARACTER VALUE CRLF
+        Private __oRTime1       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
+        Private __oRTime2       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
+
+        ASSIGN fhLog := if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),-1)
+        if (lL_LOGPROCESS)
+            fClose(fhLog)
+            ASSIGN fhLog := fOpen(cLog,FO_READWRITE+FO_SHARED)
+        endif
+
+        Private nISQRT := Int(SQRT(nN_TEST))
+
+    #ifdef __HARBOUR__
+        SetColor("w+/n")
+        SetCursor(SC_NONE)
+        BuildScreen(fhLog,__nMaxCol)
+    #endif
+
+        __ConOut(fhLog,__cSep)                           //3
+        #ifdef __HARBOUR__
+            DispOutAT(3,(__nCol-1),"[ ]")
+        #endif
+
+        __ConOut(fhLog,"START ")                         //4
+        __ConOut(fhLog,"DATE        : " , dStartDate)    //5
+        __ConOut(fhLog,"TIME        : " , cStartTime)    //6
+
+        #ifdef __HARBOUR__
+            __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))    //7
+        #endif
+
+        #ifdef TBN_DBFILE
+            #ifndef TBN_MEMIO
+                __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")   //8
+            #else
+                __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")  //8
+            #endif
+        #else
+            #ifdef TBN_ARRAY
+                __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")    //8
+            #else
+                __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")   //8
+            #endif
+        #endif
+
+        #ifdef __HARBOUR__
+            __ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
+            __ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
+            __ConOut(fhLog,"")                                                //11
+            __ConOut(fhLog,"")                                                //12
+            DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
+        #endif
+
+        __ConOut(fhLog,"")    //13
+
+        #ifdef __HARBOUR__
+            DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") 		 //14
+            DispOutAT(__nMaxRow+1,0,Replicate("*",__nMaxCol),"w+/n") //14
+        #endif
+
+        __ConOut(fhLog,"")    //15
+
+        #define __NROWAT    15
+
+        #ifdef __HARBOUR__
+            pttProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
+            ptfProgress,@lKillProgress,@__oRTimeProc,@__phMutex,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
+            pttftProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
+            ptfftProgress,@lKillProgress,__nSLEEP,__nMaxCol,__nMaxRow)
+         #endif
+        
+        aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
+     
+    #ifdef __HARBOUR__
+        __nRow := __nMaxRow
+    #endif
+
+        __ConOut(fhLog,"END ")
+
+        dEndDate := Date()
+        __ConOut(fhLog,"DATE    :" , dEndDate )
+
+        ASSIGN cEndTime    := Time()
+        __ConOut(fhLog,"TIME    :" , cEndTime )
+
+    #ifdef __PROTHEUS__
+        __oRTimeProc:Calcule()
+        __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcEndTime() )
+    #else
+        #ifdef __HARBOUR__
+            nsElapsed     := (HB_DATETIME()-tsBegin)
+            __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
         #endif
     #endif
 
-    #ifdef __HARBOUR__
-        __ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcMediumTime()+"]") //9
-        __ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcMediumTime()+"]") //10
-        __ConOut(fhLog,"")                                                //11
-        __ConOut(fhLog,"")                                                //12
-        DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
+        __ConOut(fhLog,__cSep)
+
+        __ConOut(fhLog,__cSep)
+        __ConOut(fhLog,"MEDIUM TIME: "+__oRTimeProc:GetcMediumTime())
+        __ConOut(fhLog,__cSep)
+
+        __ConOut(fhLog,__cSep)
+
+        __ConOut(fhLog,"ACC_SET     :",nACC_SET)
+        __ConOut(fhLog,"ROOT_ACC_SET:",nROOT_ACC_SET)
+        __ConOut(fhLog,"ACC_ALOG    :",nACC_ALOG)
+        __ConOut(fhLog,"__SLEEP     :",__nSLEEP)
+        __ConOut(fhLog,"N_TEST      :",nN_TEST)
+        __ConOut(fhLog,"L_ALOG      :",lL_ALOG)
+
+        __ConOut(fhLog,__cSep)
+
+        if (lL_LOGPROCESS)
+            fClose(fhLog)
+        endif
+
+    #ifdef __PROTHEUS__
+        #ifdef TBN_DBFILE
+            tBigNGC()
+        #endif
+    #else// __HARBOUR__
+        lKillProgress := .T.
+        hb_threadQuitRequest(pttProgress)
+        hb_threadQuitRequest(pttftProgress)
+        hb_ThreadWait(pttProgress)
+        hb_ThreadWait(pttftProgress)
+        hb_gcAll(.T.)
+        SET COLOR TO "r+/n"
+        IF .NOT.(cC_GT_MODE=="MT")
+            WAIT "Press any key to end"
+        EndIF
+        CLS
     #endif
 
-    __ConOut(fhLog,"")    //13
-
-    #ifdef __HARBOUR__
-        DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") 		 //14
-        DispOutAT(__nMaxRow+1,0,Replicate("*",__nMaxCol),"w+/n") //14
-    #endif
-
-    __ConOut(fhLog,"")    //15
-
-    #define __NROWAT    15
-
-    #ifdef __HARBOUR__
-        ptthProgress    := hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-        ptProgress,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
-        ptthftProgress  := hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-        ptftProgress,__nSLEEP,__nMaxCol,__nMaxRow)
-        aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
-    #else
-        aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
-    #endif
-
-#ifdef __HARBOUR__
-    __nRow := __nMaxRow
-#endif
-
-    __ConOut(fhLog,"END ")
-
-    dEndDate := Date()
-    __ConOut(fhLog,"DATE    :" , dEndDate )
-
-    ASSIGN cEndTime    := Time()
-    __ConOut(fhLog,"TIME    :" , cEndTime )
-
-#ifdef __PROTHEUS__
-    __oRTimeProc:Calcule()
-    __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcEndTime() )
-#else
-    #ifdef __HARBOUR__
-        nsElapsed     := (HB_DATETIME()-tsBegin)
-        __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
-    #endif
-#endif
-
-    __ConOut(fhLog,__cSep)
-
-    __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"MEDIUM TIME: "+__oRTimeProc:GetcMediumTime())
-    __ConOut(fhLog,__cSep)
-
-    __ConOut(fhLog,__cSep)
-
-    __ConOut(fhLog,"ACC_SET     :",nACC_SET)
-    __ConOut(fhLog,"ROOT_ACC_SET:",nROOT_ACC_SET)
-    __ConOut(fhLog,"ACC_ALOG    :",nACC_ALOG)
-    __ConOut(fhLog,"__SLEEP     :",__nSLEEP)
-    __ConOut(fhLog,"N_TEST      :",nN_TEST)
-    __ConOut(fhLog,"L_ALOG      :",lL_ALOG)
-
-    __ConOut(fhLog,__cSep)
-
-    if (lL_LOGPROCESS)
-        fClose(fhLog)
-    endif
-
-#ifdef __PROTHEUS__
-    #ifdef TBN_DBFILE
-        tBigNGC()
-    #endif
-#else// __HARBOUR__
-    __lKillProgress := .T.
-    hb_threadQuitRequest(ptthProgress)
-    hb_threadQuitRequest(ptthftProgress)
-    hb_ThreadWait(ptthProgress)
-    hb_ThreadWait(ptthftProgress)
-    hb_gcAll(.T.)
-    SET COLOR TO "r+/n"
-    IF .NOT.(cC_GT_MODE=="MT")
-        WAIT "Press any key to end"
-    EndIF
-    CLS
-#endif
-
-Return
+    Return
+/*tBigNtst*/
 
 static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
@@ -790,7 +846,7 @@ Return(lHarbour)
             ASSIGN s := ""
         ENDSWITCH
     Return(s)
-    Static Procedure Progress(nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom,lPRandom)
+    Static Procedure Progress(lKillProgress,__oRTimeProc,__phMutex,nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom,lPRandom)
 
         Local aRdnPG     AS ARRAY                        VALUE Array(0)
         Local aRdnAn     AS ARRAY                        VALUE Array(0)
@@ -818,10 +874,6 @@ Return(lHarbour)
 
         Local oProgress1 AS OBJECT CLASS "TSPROGRESS"     VALUE tSProgress():New()
         Local oProgress2 AS OBJECT CLASS "TSPROGRESS"     VALUE tSProgress():New()
-
-        MEMVAR __lKillProgress
-        MEMVAR __oRTimeProc
-        MEMVAR __phMutex
 
         ASSIGN aSAnim[01] := Replicate(Chr(7)+";",nSizeP2-1)
         ASSIGN aSAnim[01] := SubStr(aSAnim[01],1,nSizeP2-1)
@@ -1001,7 +1053,7 @@ Return(lHarbour)
         oProgress2:SetProgress(aSAnim[nSAnim])
         cProgress := aProgress2[nProgress]
 
-        While .NOT.(__lKillProgress)
+        While .NOT.(lKillProgress)
 
             DispOutAT(3,nCol,oProgress1:Eval(),"r+/n")
 
@@ -1080,7 +1132,7 @@ Return(lHarbour)
         End While
 
     Return
-    Static Procedure ftProgress(nSLEEP,nMaxCol,nMaxRow)
+    Static Procedure ftProgress(lKillProgress,nSLEEP,nMaxCol,nMaxRow)
 
         Local aAnim    AS ARRAY     VALUE GetBigNAnim()
 
@@ -1096,9 +1148,7 @@ Return(lHarbour)
         Local nAnimes  AS NUMBER    VALUE Len(aAnim)
         Local nRowAnim AS NUMBER    VALUE (nMaxRow+2)
 
-        MEMVAR __lKillProgress
-
-        While .NOT.(__lKillProgress)
+        While .NOT.(lKillProgress)
 
             For nAnim := 1 To nAnimes
                 cAnim := aAnim[nAnim]
