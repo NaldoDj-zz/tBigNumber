@@ -1,6 +1,8 @@
 @echo off
 echo BATCH FILE FOR Harbour MinGW64
 rem ============================================================================
+D:
+CD D:\GitHub\tBigNumber\mk\
 SET > env_mk64.txt
     SET HB_PATH=D:\GitHub\core\
     SET MinGW64_PATH=D:\MinGW64\BIN\
@@ -25,6 +27,8 @@ SET > env_mk64.txt
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
     %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=mingw64 ..\hbp\tBigNtst_dyn_obj.hbp
+D:
+CD D:\GitHub\tBigNumber\mk\
 for /f %%e in (env_mk64.txt) do (
     SET %%e
 )

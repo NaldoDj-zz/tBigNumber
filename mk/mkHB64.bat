@@ -3,7 +3,7 @@ echo BATCH FILE FOR Harbour MinGW64
 rem ============================================================================
 D:
 CD D:\GitHub\tBigNumber\mk\
-SET > env_mkLib64.txt
+SET > env_mkHB64.txt
     SET HB_PATH=D:\GitHub\core\
     SET MinGW64_PATH=D:\MinGW64\BIN\
     SET PATH=%PATH%;%HB_PATH%
@@ -12,10 +12,12 @@ SET > env_mkLib64.txt
     SET HB_PLATFORM=win
     SET HB_COMPILER=mingw64
     SET HB_CCPATH=%MinGW64_PATH%
-       %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 ..\hbp\_tbigNumber.hbp	
+       D:
+       CD %HB_PATH%
+       %HB_PATH%\win-make.exe -f MakeFile %1
 D:
 CD D:\GitHub\tBigNumber\mk\
-for /f %%e in (env_mkLib64.txt) do (
+for /f %%e in (env_mkHB64.txt) do (
     SET %%e
 )
-DEL env_mkLib64.txt
+DEL env_mkHB64.txt

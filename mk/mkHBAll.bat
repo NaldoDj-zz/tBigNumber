@@ -3,31 +3,31 @@ echo BATCH FILE FOR Harbour tBigNumber
 rem ============================================================================
 D:
 CD D:\GitHub\tBigNumber\mk\
-SET > env_mkallLib.txt
+SET > env_mkHBall.txt
     SET HB_CPU=
     SET HB_PLATFORM=
     SET HB_COMPILER=
     SET HB_CCPATH=
-	call mkLib.bat
-    for /f %%e in (env_mkallLib.txt) do (
+	call mkHB.bat %1
+    for /f %%e in (env_mkHBall.txt) do (
         SET %%e
     )
     SET HB_CPU=
     SET HB_PLATFORM=
     SET HB_COMPILER=
     SET HB_CCPATH=
-	call mkLib64.bat
+	call mkHB64.bat %1
     SET HB_CPU=
     SET HB_PLATFORM=
     SET HB_COMPILER=
     SET HB_CCPATH=
-    for /f %%e in (env_mkallLib.txt) do (
+    for /f %%e in (env_mkHBall.txt) do (
         SET %%e
     )
-	rem call mkLibARM.bat
+	rem call mkHBARM.bat %1
 D:
-CD D:\GitHub\tBigNumber\mk\    
-for /f %%e in (env_mkallLib.txt) do (
+CD D:\GitHub\tBigNumber\mk\
+for /f %%e in (env_mkHBall.txt) do (
     SET %%e
 )
-DEL env_mkallLib.txt
+DEL env_mkHBall.txt
