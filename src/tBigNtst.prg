@@ -194,6 +194,7 @@
         hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
         hb_gtInfo(HB_GTI_ICONRES,"Main")
 
+        ChkIntTstExec(@aAC_TSTEXEC,2)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
         
         IF (cC_GT_MODE=="MT")
@@ -363,7 +364,8 @@
         IF ((__nSLEEP)<10)
             __nSLEEP *= 10
         EndIF
-    
+
+    ChkIntTstExec(@aAC_TSTEXEC,2)
     atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     
     Return(tBigNtst(@atBigNtst))
@@ -518,7 +520,7 @@
         __ConOut(fhLog,"")    //13
 
         #ifdef __HARBOUR__
-            DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n") 		 //14
+            DispOutAT(14,0,Replicate("*",__nMaxCol),"w+/n")          //14
             DispOutAT(__nMaxRow+1,0,Replicate("*",__nMaxCol),"w+/n") //14
         #endif
 
@@ -547,15 +549,13 @@
         ASSIGN cEndTime    := Time()
         __ConOut(fhLog,"TIME    :" , cEndTime )
 
-    #ifdef __PROTHEUS__
         __oRTimeProc:Calcule()
-        __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcEndTime() )
-    #else
+        __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcTimeDiff() )
+
         #ifdef __HARBOUR__
             nsElapsed     := (HB_DATETIME()-tsBegin)
             __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
         #endif
-    #endif
 
         __ConOut(fhLog,__cSep)
 
@@ -598,6 +598,38 @@
 
     Return
 /*tBigNtst*/
+
+static procedure ChkIntTstExec(aAC_TSTEXEC,nPad)
+
+    Local aTmp
+
+    Local nD
+    Local nJ:=Len(aAC_TSTEXEC)
+    Local nTmp
+
+    For nD:=1 To nJ
+        IF (":"$aAC_TSTEXEC[nD])
+            aTmp:=_StrToKArr(AllTrim(aAC_TSTEXEC[nD]),":")
+            nTmp:=Len(aTmp)
+            IF (nTmp>=1)
+                IF (nTmp==1)
+                    aAC_TSTEXEC[nD]:=aTmp[1]
+                Else
+                    For nTmp:=Val(aTmp[1]) To Val(aTmp[2])
+                        aAdd(aAC_TSTEXEC,hb_NtoS(nTmp))
+                    Next nTmp
+                EndIF
+            EndIF
+        EndIF
+    Next nD
+    nJ:=Len(aAC_TSTEXEC)
+    nTmp:=0
+    While ((nTmp:=aScan(aAC_TSTEXEC,{|e|":"$e}))>0)
+        aSize(aDel(aAC_TSTEXEC,nTmp),--nJ)
+    End While
+    aSort(aAC_TSTEXEC,NIL,NIL,{|x,y|PadL(x,nPad)<PadL(y,nPad)})
+
+return
 
 static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
@@ -667,13 +699,13 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 return(atBigNtst)
 
 Static Function _StrToKArr(cStr,cToken)
-	Local cDToken
-	DEFAULT cStr   := ""
-	DEFAULT cToken := ";"
-	cDToken := (cToken+cToken)
-	While (cDToken$cStr)
-		cStr := StrTran(cStr,cDToken,cToken+" "+cToken)
-	End While
+    Local cDToken
+    DEFAULT cStr   := ""
+    DEFAULT cToken := ";"
+    cDToken := (cToken+cToken)
+    While (cDToken$cStr)
+        cStr := StrTran(cStr,cDToken,cToken+" "+cToken)
+    End While
 #ifdef PROTHEUS
 Return(StrToKArr(cStr,cToken))
 #else
@@ -1184,7 +1216,7 @@ Return(lHarbour)
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",nMaxCol))            //2
     Return
     Static Function FreeObj(oObj)
-    	oObj := NIL
+        oObj := NIL
     Return(hb_gcAll(.T.))
     #include "tBigNAnim.prg"
 #else
