@@ -1,2 +1,9 @@
-Main    ICON    ico/tBigNCalc.ico
-AppIcon ICON    ico/tBigNCalc.ico
+#if defined( OS2 ) || defined( __OS2__ ) || defined( OS_2 )
+#else
+#if ! defined( __BORLANDC__ )
+    Main    ICON "./ico/tBigNCalc_win.ico"
+    AppIcon ICON "./ico/tBigNCalc_win.ico"
+#endif
+#include "tBigNtst_win.rc"
+    __HB_CREATEPROCESS_MANIFEST_RESOURCE_ID __HB_RT_MANIFEST "./mft/tBigNtst_win.mft"
+#endif
