@@ -13,7 +13,7 @@
 #define HB_VER_FILEVERSION             HB_VER_PRODUCTVERSION
 #define HB_VER_FILEVERSION_STR         HB_VER_PRODUCTVERSION_STR
 
-#define HB_NAME                        "Harbour :: BlackTDN :: tBgNtst\0"
+#define HB_NAME                        "Harbour :: BlackTDN :: tBigNtst\0"
 #define HB_COPYRIGHT                   "Copyright \xA9 2013-2014 Marinaldo de Jesus\0"
 
 /* Version info */
