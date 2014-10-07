@@ -13,7 +13,7 @@ Class tRemaining FROM tTimeCalc
 	PROTECTED:
 #endif
 	
-	DATA cMediumTime	AS CHARACTER INIT "00:00:00:000" HIDDEN
+	DATA cAverageTime	AS CHARACTER INIT "00:00:00:000" HIDDEN
 	DATA cEndTime  		AS CHARACTER INIT "00:00:00" 	 HIDDEN
 	DATA cStartTime  	AS CHARACTER INIT "00:00:00"     HIDDEN
 	DATA cTimeDiff  	AS CHARACTER INIT "00:00:00"     HIDDEN
@@ -36,7 +36,7 @@ Class tRemaining FROM tTimeCalc
 
 	Method Calcule(lProgress)
 	
-	Method GetcMediumTime()
+	Method GetcAverageTime()
 	Method GetcEndTime()
 	Method GetcStartTime()
 	Method GetcTimeDiff()
@@ -63,7 +63,7 @@ Return("TREMAINING")
 
 Method SetRemaining(nTotal) Class tRemaining
 	DEFAULT nTotal 		:= 1
-	self:cMediumTime	:= "00:00:00:000"	
+	self:cAverageTime	:= "00:00:00:000"	
 	self:cEndTime		:= "00:00:00"
 	self:cStartTime		:= Time()
 	self:cTimeDiff		:= "00:00:00"
@@ -107,7 +107,7 @@ Method Calcule(lProgress) Class tRemaining
 		++self:nProgress
 	EndIF
 
-	self:cMediumTime		:= self:MediumTime(self:cTimeDiff,self:nProgress,.T.)
+	self:cAverageTime		:= self:AverageTime(self:cTimeDiff,self:nProgress,.T.)
 
 	IF self:nTotal<self:nProgress
 		nTimeEnd       := self:nTotal
@@ -123,8 +123,8 @@ Method Calcule(lProgress) Class tRemaining
 
 Return(self)
 
-Method GetcMediumTime() Class tRemaining
-Return(self:cMediumTime)
+Method GetcAverageTime() Class tRemaining
+Return(self:cAverageTime)
 
 Method GetcEndTime() Class tRemaining
 Return(self:cEndTime)

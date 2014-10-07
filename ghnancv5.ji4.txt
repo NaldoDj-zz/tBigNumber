@@ -1,0 +1,18 @@
+﻿por sujestao de Gustavo [O Mago] Sorares da IT Advanced,substituir [medium] por [Average]
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 1 different commit each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# Changes to be committed:
+#	modified:   src/tBigNtst.prg
+#	modified:   src/tRemaining.prg
+#	modified:   src/tTimeCalc.prg
+#
+# Untracked files:
+#	sktieau4.pn1.txt
+#
+

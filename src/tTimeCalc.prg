@@ -25,7 +25,7 @@ Class tTimeCalc
 	Method DecTime(cTime,nDecHours,nDecMinuts,nDecSeconds)
 	Method Time2NextDay(cTime,dDate)
 	Method ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet)
-	Method MediumTime(cTime,nDividendo,lMiliSecs)
+	Method AverageTime(cTime,nDividendo,lMiliSecs)
 EndClass
 
 Method New() Class tTimeCalc
@@ -199,12 +199,12 @@ Method ExtractTime(cTime,nHours,nMinutes,nSeconds,cRet) Class tTimeCalc
 
 Return(nRet)
 
-Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
+Method AverageTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 
-	Local cMediumTime	:= "00:00:00:000"
+	Local cAverageTime	:= "00:00:00:000"
 	
 	Local nSeconds
-	Local nMediumTime
+	Local nAverageTime
 	Local nMiliSecs
 	
 	DEFAULT nDividendo := 0
@@ -213,20 +213,20 @@ Method MediumTime(cTime,nDividendo,lMiliSecs) Class tTimeCalc
 	
 		nSeconds	:= self:TimeToSecs(cTime)
 		nSeconds	:= (nSeconds/nDividendo)
-		nMediumTime	:= Int(nSeconds)
+		nAverageTime	:= Int(nSeconds)
 	
-		nMiliSecs	:= (nSeconds-nMediumTime)
+		nMiliSecs	:= (nSeconds-nAverageTime)
 		nMiliSecs	*= 1000
 		nMiliSecs	:= Int(nMiliSecs)
 	
-		cMediumTime	:= self:SecsToTime(nMediumTime)
+		cAverageTime	:= self:SecsToTime(nAverageTime)
 
 	EndIF
 	
 	DEFAULT lMiliSecs		:= .T.
 	IF (lMiliSecs)
 		DEFAULT nMiliSecs	:= 0
- 		cMediumTime += (":"+StrZero(nMiliSecs,IF(nMiliSecs>999,4,3)))
+ 		cAverageTime += (":"+StrZero(nMiliSecs,IF(nMiliSecs>999,4,3)))
 	EndIF
 
-Return(cMediumTime)
+Return(cAverageTime)
