@@ -406,6 +406,8 @@
         Local z          AS NUMBER
 
         Local fhLog      AS NUMBER
+        
+        Local ntBigNtst  AS NUMBER
 
     #ifdef __HARBOUR__
     
@@ -451,7 +453,8 @@
 
         Private __cSep          AS CHARACTER VALUE Replicate("-",__nMaxCol)
 
-        Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(__NRTTST__)
+        aEval(atBigNtst,{|e|if(e[2],++ntBigNtst,NIL)})
+        Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(ntBigNtst)
 
         Private __phMutex:=hb_mutexCreate()
 
