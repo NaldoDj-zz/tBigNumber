@@ -4,6 +4,7 @@
 
     #ifdef __PLATFORM__WINDOWS
        #if !defined( __HBSCRIPT__HBSHELL )
+          ANNOUNCE HB_GTSYS
           REQUEST HB_GT_WVT_DEFAULT
        #endif
        #define THREAD_GT "WVT"

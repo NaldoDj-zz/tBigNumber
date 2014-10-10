@@ -4831,169 +4831,169 @@ return(r)
 
     #ifdef TBN_ARRAY
 
-    /*
-        function    : Add
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Adicao
-        Sintaxe     : Add(a,b,n,nBase) -> cNR
-    */
-    static function Add(a,b,n,nBase)
+        /*
+            function    : Add
+            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data        : 04/02/2013
+            Descricao   : Adicao
+            Sintaxe     : Add(a,b,n,nBase) -> cNR
+        */
+        static function Add(a,b,n,nBase)
 
-        local y:=n+1
-        local c:=aFill(aSize(ths_aZAdd,y),0)
-        local k:=y
-        local s:=""
+            local y:=n+1
+            local c:=aFill(aSize(ths_aZAdd,y),0)
+            local k:=y
+            local s:=""
 
-        while n>0
-        #ifdef __PROTHEUS__
-            c[k]+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
-        #else
-            c[k]+=Val(a[n])+Val(b[n])
-        #endif
-            if c[k]>=nBase
-                c[k-1]+=1
-                c[k]-=nBase
-            endif
-            --k
-            --n
-        end while
-
-        aEval(c,{|v|s+=hb_ntos(v)})
-
-    return(s)
-
-    /*
-        function    : Sub
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Subtracao
-        Sintaxe     : Sub(a,b,n,nBase) -> cNR
-    */
-    static function Sub(a,b,n,nBase)
-
-        local y:=n
-        local c:=aFill(aSize(ths_aZSub,y),0)
-        local k:=y
-        local s:=""
-
-        while n>0
-        #ifdef __PROTHEUS__
-            c[k]+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
-        #else
-            c[k]+=Val(a[n])-Val(b[n])
-        #endif
-            if c[k]<0
-                c[k-1]-=1
-                c[k]+=nBase
-            endif
-            --k
-            --n
-        end while
-
-        aEval(c,{|v|s+=hb_ntos(v)})
-
-    return(s)
-
-    /*
-        function    : Mult
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Multiplicacao de Inteiros
-        Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
-        Obs.        : Mais rapida,usa a multiplicacao nativa
-    */
-    static function Mult(cN1,cN2,n,nBase)
-
-        local a:=tBigNInvert(cN1,n)
-        local b:=tBigNInvert(cN2,n)
-
-        local y:=n+n
-        local c:=aFill(aSize(ths_aZMult,y),0)
-
-        local i:=1
-        local k:=1
-        local l:=2
-
-        local s
-        local x
-        local j
-
-        while i<=n
-            s:=1
-            j:=i
-            while s<=i
+            while n>0
             #ifdef __PROTHEUS__
-                c[k]+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+                c[k]+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
             #else
-                c[k]+=Val(a[s++])*Val(b[j--])
+                c[k]+=Val(a[n])+Val(b[n])
             #endif
+                if c[k]>=nBase
+                    c[k-1]+=1
+                    c[k]-=nBase
+                endif
+                --k
+                --n
             end while
-            if c[k]>=nBase
-                x:=k+1
-                c[x]:=Int(c[k]/nBase)
-                c[k]-=(c[x]*nBase)
-            endif
-            k++
-            i++
-        end while
 
-        while l<=n
-            s:=n
-            j:=l
-            while s>=l
+            aEval(c,{|v|s+=hb_ntos(v)})
+
+        return(s)
+
+        /*
+            function    : Sub
+            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data        : 04/02/2013
+            Descricao   : Subtracao
+            Sintaxe     : Sub(a,b,n,nBase) -> cNR
+        */
+        static function Sub(a,b,n,nBase)
+
+            local y:=n
+            local c:=aFill(aSize(ths_aZSub,y),0)
+            local k:=y
+            local s:=""
+
+            while n>0
             #ifdef __PROTHEUS__
-                c[k]+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
+                c[k]+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
             #else
-                c[k]+=Val(a[s--])*Val(b[j++])
+                c[k]+=Val(a[n])-Val(b[n])
             #endif
+                if c[k]<0
+                    c[k-1]-=1
+                    c[k]+=nBase
+                endif
+                --k
+                --n
             end while
-            if c[k]>=nBase
-                x:=k+1
-                c[x]:=Int(c[k]/nBase)
-                c[k]-=(c[x]*nBase)
-            endif
-            if ++k>=y
-                exit
-            endif
-            l++
-        end while
 
-    return(aGetcN(c,y))
+            aEval(c,{|v|s+=hb_ntos(v)})
 
-    /*
-        function    : aGetcN
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Montar a String de Retorno
-        Sintaxe     : aGetcN(a,x) -> s
-    */
-    static function aGetcN(a,n)
+        return(s)
 
-        local s:=""
-        local y:=n
+        /*
+            function    : Mult
+            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data        : 04/02/2013
+            Descricao   : Multiplicacao de Inteiros
+            Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
+            Obs.        : Mais rapida,usa a multiplicacao nativa
+        */
+        static function Mult(cN1,cN2,n,nBase)
 
-        while y>=1
-            while y>=1 .and. a[y]==0
-                y--
+            local a:=tBigNInvert(cN1,n)
+            local b:=tBigNInvert(cN2,n)
+
+            local y:=n+n
+            local c:=aFill(aSize(ths_aZMult,y),0)
+
+            local i:=1
+            local k:=1
+            local l:=2
+
+            local s
+            local x
+            local j
+
+            while i<=n
+                s:=1
+                j:=i
+                while s<=i
+                #ifdef __PROTHEUS__
+                    c[k]+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
+                #else
+                    c[k]+=Val(a[s++])*Val(b[j--])
+                #endif
+                end while
+                if c[k]>=nBase
+                    x:=k+1
+                    c[x]:=Int(c[k]/nBase)
+                    c[k]-=(c[x]*nBase)
+                endif
+                k++
+                i++
             end while
+
+            while l<=n
+                s:=n
+                j:=l
+                while s>=l
+                #ifdef __PROTHEUS__
+                    c[k]+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
+                #else
+                    c[k]+=Val(a[s--])*Val(b[j++])
+                #endif
+                end while
+                if c[k]>=nBase
+                    x:=k+1
+                    c[x]:=Int(c[k]/nBase)
+                    c[k]-=(c[x]*nBase)
+                endif
+                if ++k>=y
+                    exit
+                endif
+                l++
+            end while
+
+        return(aGetcN(c,y))
+
+        /*
+            function    : aGetcN
+            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data        : 04/02/2013
+            Descricao   : Montar a String de Retorno
+            Sintaxe     : aGetcN(a,x) -> s
+        */
+        static function aGetcN(a,n)
+
+            local s:=""
+            local y:=n
+
             while y>=1
-                s+=hb_ntos(a[y])
-                y--
+                while y>=1 .and. a[y]==0
+                    y--
+                end while
+                while y>=1
+                    s+=hb_ntos(a[y])
+                    y--
+                end while
             end while
-        end while
 
-        if s==""
-            s:="0"
-        endif
+            if s==""
+                s:="0"
+            endif
 
-        if hb_bLen(s)<n
-            s:=PadL(s,n,"0")
-        endif
+            if hb_bLen(s)<n
+                s:=PadL(s,n,"0")
+            endif
 
-    return(s)
+        return(s)
 
-    #else
+    #else /*String*/
 
         /*
             function    : Add
@@ -5231,7 +5231,7 @@ return(r)
             return(s)
         #endif //__PTCOMPAT__
 
-    #endif
+    #endif /*String*/
 
 #endif
 
