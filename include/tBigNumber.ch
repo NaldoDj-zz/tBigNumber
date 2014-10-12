@@ -14,6 +14,6 @@
     #include "fileio.ch"
     #include "tbignthread.ch"
 
-    #define MAX_DECIMAL_PRECISION    999999999999999 //999.999.999.999.999
+    #define MAX_DECIMAL_PRECISION    99999999999999999999999999999 //99.999.999.999.999.999.999.999.999.999
 
 #endif /*_TBigNumber_CH*/

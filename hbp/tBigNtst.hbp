@@ -2,6 +2,7 @@
 #-d__PTCOMPAT__
 #-d__ALT_D__
 #-b
+#-dTBIGN_RECPOWER
 
 -mt
 

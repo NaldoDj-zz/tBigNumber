@@ -63,6 +63,7 @@
     #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
     #xtranslate method <methodName> SETGET  => method <methodName>
+    //-------------------------------------------------------------------------------------
 #else // __HARBOUR__
     //-------------------------------------------------------------------------------------
     #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
@@ -73,8 +74,6 @@
     #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
-    //-------------------------------------------------------------------------------------
-*   #define TBIGN_RECPOWER
     //-------------------------------------------------------------------------------------
 #endif //__PROTHEUS__
 
@@ -828,12 +827,14 @@ method SetDecimals(nSet) class tBigNumber
     nLastSet:=s__nDecSet
 
     DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
-    DEFAULT nSet :=s__nDecSet
+    DEFAULT nSet:=s__nDecSet
     DEFAULT nLastSet:=nSet
 
-    if nSet>MAX_DECIMAL_PRECISION
-        nSet:=MAX_DECIMAL_PRECISION
-    endif
+    #ifdef _0
+        if nSet>MAX_DECIMAL_PRECISION
+            nSet:=MAX_DECIMAL_PRECISION
+        endif
+    #endif    
 
     s__nDecSet:=nSet
 
@@ -1416,7 +1417,7 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
         oibtwE:=s__o0:Clone()
         oibtwE:SetValue(uiBigE)
         if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0) .and. oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
-            lbtw := self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
+            lbtw:= self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
         endif
     endif
 return(lbtw)
@@ -1499,7 +1500,7 @@ method Add(uBigN) class tBigNumber
     if lNeg
         lAdd:=.F.
         #ifdef __HARBOUR__
-            lInv := tBIGNmemcmp(cN1,cN2)==-1
+            lInv:= tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
@@ -1589,7 +1590,7 @@ method Sub(uBigN) class tBigNumber
         lNeg:=osbN1:lNeg
     else
         #ifdef __HARBOUR__
-            lInv := tBIGNmemcmp(cN1,cN2)==-1
+            lInv:= tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
@@ -5481,7 +5482,7 @@ static procedure tBigNSleep(nSleep)
         sleep(nSleep*1000)
     #else
         Local nTime
-        nTime := (hb_MilliSeconds()+(nSleep*1000))
+        nTime:= (hb_MilliSeconds()+(nSleep*1000))
         while (hb_MilliSeconds()<nTime)
         end while
     #endif
@@ -5553,12 +5554,14 @@ return
             TBIGNLADD()
             TBIGNLSUB()
             TBIGNNORMALIZE()
-            THADD()
-            THDIV()
-            THMOD0()
-            THNTHROOT()
-            THMULT()
-            TH2MULT()
+            #ifndef __PTCOMPAT__
+                THADD()
+                THDIV()
+                THMOD0()
+                THNTHROOT()
+                THMULT()
+                TH2MULT()
+            #endif            
         endif
     return(lDummy)
 

@@ -557,7 +557,7 @@
 
         #ifdef __HARBOUR__
             nsElapsed:=(HB_DATETIME()-tsBegin)
-            __ConOut(fhLog,"ELAPSED :" , HB_TTOC(HB_NTOT(nsElapsed)) )
+            __ConOut(fhLog,"tELAPSED:" , StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ","") )
         #endif
 
         __ConOut(fhLog,__cSep)
