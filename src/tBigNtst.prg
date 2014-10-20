@@ -445,7 +445,7 @@
         
         MEMVAR nISQRT
 
-        Private __nMaxRow       AS NUMBER VALUE (MaxRow()-8)
+        Private __nMaxRow       AS NUMBER VALUE (MaxRow()-9)
         Private __nMaxCol       AS NUMBER VALUE MaxCol()
         Private __nCol          AS NUMBER VALUE Int((__nMaxCol)/2)
         Private __nRow          AS NUMBER VALUE 0
@@ -1187,7 +1187,7 @@ Return(lHarbour)
 
             For nAnim:=1 To nAnimes
                 cAnim:=aAnim[nAnim]
-                FOR EACH cRow IN _StrToKArr(cAnim,"@")
+                FOR EACH cRow IN _StrToKArr(cAnim,"[\n]")
                     lBreak:=(";"$cRow)
                     IF (lBreak)
                         IF ((nRowC==0).and..NOT.(nRow==0))
