@@ -93,7 +93,7 @@
             hbshell_gtSelect(HBSHELL_GTSELECT)
         #endif   
 
-        IF .NOT.(File(cIni) ) .or. Empty(hIni)
+        IF .NOT.(File(cIni)).or. Empty(hIni)
             hIni["GENERAL"]:=hb_Hash()
             hIni["GENERAL"]["ACC_SET"]:=ACC_SET
             hIni["GENERAL"]["ROOT_ACC_SET"]:=ROOT_ACC_SET
@@ -176,22 +176,24 @@
         EndIF
 
         /* set OEM font encoding for non unicode modes */
-        hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+        hb_gtInfo(HB_GTI_CODEPAGE,255)
         /* set EN CP-437 encoding */
-        hb_cdpSelect( "EN" )
-        hb_setTermCP( "EN" )
+        hb_cdpSelect("EN")
+        hb_setTermCP("EN")
+        /* set font name */
+        *hb_gtInfo(HB_GTI_FONTNAME,"Ms LineDraw"/*"Consolas"*//*"Ms LineDraw"*//*"Lucida Console"*/)
         /* set font size */
-        hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
-        hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
+        hb_gtInfo(HB_GTI_FONTWIDTH,6+4)
+        hb_gtInfo(HB_GTI_FONTSIZE,12+4)
         /* resize console window using new font size */
         SetMode(MaxRow()+1,MaxCol()+1)
         /* get screen dimensions */
-        nMaxScrRow:=hb_gtInfo( HB_GTI_DESKTOPROWS )
-        nMaxScrCol:=hb_gtInfo( HB_GTI_DESKTOPCOLS )
+        nMaxScrRow:=hb_gtInfo(HB_GTI_DESKTOPROWS)
+        nMaxScrCol:=hb_gtInfo(HB_GTI_DESKTOPCOLS)
         /* resize console window to the screen size */
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title */
-        hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
 
         ChkIntTstExec(@aAC_TSTEXEC,2)
@@ -267,17 +269,17 @@
         Local pGT:=hb_gtSelect(atBigNtst[3])
         hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
         /* set OEM font encoding for non unicode modes */
-        hb_gtInfo( HB_GTI_CODEPAGE, 255 )
+        hb_gtInfo(HB_GTI_CODEPAGE,255)
         /* set EN CP-437 encoding */
-        hb_cdpSelect( "EN" )
-        hb_setTermCP( "EN" )
+        hb_cdpSelect("EN")
+        hb_setTermCP("EN")
         /* set font size */
-        hb_gtInfo( HB_GTI_FONTWIDTH, 6+4 )
-        hb_gtInfo( HB_GTI_FONTSIZE, 12+4 )
+        hb_gtInfo(HB_GTI_FONTWIDTH,6+4)
+        hb_gtInfo(HB_GTI_FONTSIZE,12+4)
         /* resize console window to the screen size */
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title */
-        hb_gtInfo( HB_GTI_WINTITLE, "BlackTDN :: tBigNtst [http://www.blacktdn.com.br]" )
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         tBigNtst({atBigNtst})
         hb_gtSelect(pGT)
         hb_gtInfo(HB_GTI_ICONRES,"Main")
@@ -491,30 +493,30 @@
         #endif
 
         __ConOut(fhLog,"START ")                         //4
-        __ConOut(fhLog,"DATE        : " , dStartDate)    //5
-        __ConOut(fhLog,"TIME        : " , cStartTime)    //6
+        __ConOut(fhLog,"DATE        : " ,dStartDate)    //5
+        __ConOut(fhLog,"TIME        : " ,cStartTime)    //6
 
         #ifdef __HARBOUR__
-            __ConOut(fhLog,"TIMESTAMP   : " , HB_TTOC(tsBegin))    //7
+            __ConOut(fhLog,"TIMESTAMP   : " ,HB_TTOC(tsBegin))    //7
         #endif
 
         #ifdef TBN_DBFILE
             #ifndef TBN_MEMIO
-                __ConOut(fhLog,"USING       : " , ExeName() + " :: DBFILE")   //8
+                __ConOut(fhLog,"USING       : " ,ExeName() + " :: DBFILE")   //8
             #else
-                __ConOut(fhLog,"USING       : " , ExeName() + " :: DBMEMIO")  //8
+                __ConOut(fhLog,"USING       : " ,ExeName() + " :: DBMEMIO")  //8
             #endif
         #else
             #ifdef TBN_ARRAY
-                __ConOut(fhLog,"USING       : " , ExeName() + " :: ARRAY")    //8
+                __ConOut(fhLog,"USING       : " ,ExeName() + " :: ARRAY")    //8
             #else
-                __ConOut(fhLog,"USING       : " , ExeName() + " :: STRING")   //8
+                __ConOut(fhLog,"USING       : " ,ExeName() + " :: STRING")   //8
             #endif
         #endif
 
         #ifdef __HARBOUR__
-            __ConOut(fhLog,"FINAL1      : " , "["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
-            __ConOut(fhLog,"FINAL2      : " , "["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
+            __ConOut(fhLog,"FINAL1      : " ,"["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
+            __ConOut(fhLog,"FINAL2      : " ,"["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
             __ConOut(fhLog,"")                                                //11
             __ConOut(fhLog,"")                                                //12
             DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
@@ -537,7 +539,11 @@
             pttftProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
             ptfftProgress,@lKillProgress,__nSLEEP,__nMaxCol,__nMaxRow)
          #endif
-        
+
+    #ifdef __HARBOUR__
+        __nRow:=__nMaxRow
+    #endif
+         
         aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
      
     #ifdef __HARBOUR__
@@ -547,17 +553,17 @@
         __ConOut(fhLog,"END ")
 
         dEndDate:=Date()
-        __ConOut(fhLog,"DATE    :" , dEndDate )
+        __ConOut(fhLog,"DATE    :" ,dEndDate)
 
         ASSIGN cEndTime:=Time()
-        __ConOut(fhLog,"TIME    :" , cEndTime )
+        __ConOut(fhLog,"TIME    :" ,cEndTime)
 
         __oRTimeProc:Calcule()
-        __ConOut(fhLog,"ELAPSED :" , __oRTimeProc:GetcTimeDiff() )
+        __ConOut(fhLog,"ELAPSED :" ,__oRTimeProc:GetcTimeDiff())
 
         #ifdef __HARBOUR__
             nsElapsed:=(HB_DATETIME()-tsBegin)
-            __ConOut(fhLog,"tELAPSED:" , StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ","") )
+            __ConOut(fhLog,"tELAPSED:" ,StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ",""))
         #endif
 
         __ConOut(fhLog,__cSep)
@@ -751,7 +757,9 @@ Static Procedure __ConOut(fhLog,e,d)
 
 #ifdef __HARBOUR__
 
-    Local cDOAt AS CHARACTER
+    Local cDOAt  AS CHARACTER
+    Local nLines AS NUMBER
+    Local nCLine AS NUMBER
 
     MEMVAR __CRLF
     MEMVAR __cSep
@@ -784,50 +792,53 @@ Static Procedure __ConOut(fhLog,e,d)
         ASSIGN y:=""
     EndIF
 
-    ASSIGN p:=x + IF(ld , " " + y , "")
+    ASSIGN p:=x + IF(ld ," " + y ,"")
 
 #ifdef __HARBOUR__
 
     @ 09,15 CLEAR TO 09,__nMaxCol
     cDOAt:="["
-    cDOAt += StrZero(__oRTime1:GetnProgress(),10)
-    cDOAt += "/"
-    cDOAt += StrZero(__oRTime1:GetnTotal(),10)
-    cDOAt += "]|["
-    cDOAt += DtoC(__oRTime1:GetdEndTime())
-    cDOAt += "]["+__oRTime1:GetcEndTime()
-    cDOAt += "]|["
-    cDOAt += __oRTime1:GetcAverageTime()
-    cDOAt += "]["
-    cDOAt += hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
-    cDOAt += " %]"
+    cDOAt+=StrZero(__oRTime1:GetnProgress(),10)
+    cDOAt+="/"
+    cDOAt+=StrZero(__oRTime1:GetnTotal(),10)
+    cDOAt+="]|["
+    cDOAt+=DtoC(__oRTime1:GetdEndTime())
+    cDOAt+="]["+__oRTime1:GetcEndTime()
+    cDOAt+="]|["
+    cDOAt+=__oRTime1:GetcAverageTime()
+    cDOAt+="]["
+    cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
+    cDOAt+=" %]"
     DispOutAT(09,15,cDOAt,"w+/n")
 
     @ 10,15 CLEAR TO 10,__nMaxCol
     cDOAt:="["
-    cDOAt += StrZero(__oRTime2:GetnProgress(),10)
-    cDOAt += "/"
-    cDOAt += StrZero(__oRTime2:GetnTotal(),10)
-    cDOAt += "]|["
-    cDOAt += DtoC(__oRTime2:GetdEndTime())
-    cDOAt += "]["+__oRTime2:GetcEndTime()
-    cDOAt += "]|["
-    cDOAt += __oRTime2:GetcAverageTime()
-    cDOAt += "]["
-    cDOAt += hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
-    cDOAt += " %]"
+    cDOAt+=StrZero(__oRTime2:GetnProgress(),10)
+    cDOAt+="/"
+    cDOAt+=StrZero(__oRTime2:GetnTotal(),10)
+    cDOAt+="]|["
+    cDOAt+=DtoC(__oRTime2:GetdEndTime())
+    cDOAt+="]["+__oRTime2:GetcEndTime()
+    cDOAt+="]|["
+    cDOAt+=__oRTime2:GetcAverageTime()
+    cDOAt+="]["
+    cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
+    cDOAt+=" %]"
     DispOutAT(10,15,cDOAt,"w+/n")
 
     DEFAULT __nRow:=0
-    IF ++__nRow >= __nMaxRow
-        @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
-        ASSIGN __nRow:=__NROWAT
-    EndIF
-
     ASSIGN lSep:=(p==__cSep)
-    ASSIGN lMRow:=(__nRow>=__NROWAT)
 
-    DispOutAT(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+    ASSIGN nLines:=MLCount(p,__nMaxCol,NIL,.T.)
+    For nCLine:=1 TO nLines
+        ASSIGN cDOAt:=MemoLine(p,__nMaxCol,nCLine,NIL,.T.)
+        IF ++__nRow>=__nMaxRow
+            @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
+            ASSIGN __nRow:=__NROWAT
+        EndIF
+        ASSIGN lMRow:=(__nRow>=__NROWAT)
+        DispOutAT(__nRow,0,cDOAt,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+    Next nCLine
 
     IF hb_mutexLock(__phMutex)
         __oRTimeProc:Calcule("-------------- END"$p)
@@ -1149,11 +1160,11 @@ Return(lHarbour)
                     __oRTimeProc:Calcule(.F.)
                 EndIF
                 ASSIGN cRTime:="["+hb_ntos(__oRTimeProc:GetnProgress())
-                ASSIGN cRTime  += "/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
-                ASSIGN cRTime  += "["+DtoC(__oRTimeProc:GetdEndTime())+"]"
-                ASSIGN cRTime  += "["+__oRTimeProc:GetcEndTime()+"]"
-                ASSIGN cRTime  += "["+__oRTimeProc:GetcAverageTime()+"]"
-                ASSIGN cRTime  += "["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+                ASSIGN cRTime +="/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
+                ASSIGN cRTime +="["+DtoC(__oRTimeProc:GetdEndTime())+"]"
+                ASSIGN cRTime +="["+__oRTimeProc:GetcEndTime()+"]"
+                ASSIGN cRTime +="["+__oRTimeProc:GetcAverageTime()+"]"
+                ASSIGN cRTime +="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
                 ASSIGN cLRTime:=cRTime
                 hb_mutexUnLock(__phMutex)
             EndIF
@@ -1216,7 +1227,7 @@ Return(lHarbour)
     Static Procedure BuildScreen(fhLog,nMaxCol)
         CLEAR SCREEN
         __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",nMaxCol)) //1
-        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+", "+OS()+")",nMaxCol))            //2
+        __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
     Return
     Static Function FreeObj(oObj)
         oObj:=NIL
@@ -1346,7 +1357,7 @@ static procedure tBigNtst02(fhLog)
 
         Set(_SET_DECIMALS,__SETDEC__)
         
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H, CLASSES.C AND HVM.C */
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C */
         __oRTime1:SetRemaining(5+1)
         For w:=0 To 5
             ASSIGN cW:=hb_ntos(w)
@@ -1542,12 +1553,12 @@ static procedure tBigNtst04(fhLog)
     Local z         AS NUMBER
 
     Local aPrimes   AS ARRAY  VALUE {;
-                                         "15485783",  "15485801",  "15485807",  "15485837",  "15485843",  "15485849",  "15485857",  "15485863",;
-                                         "15487403",  "15487429",  "15487457",  "15487469",  "15487471",  "15487517",  "15487531",  "15487541",;
-                                         "32458051",  "32458057",  "32458073",  "32458079",  "32458091",  "32458093",  "32458109",  "32458123",;
-                                         "49981171",  "49981199",  "49981219",  "49981237",  "49981247",  "49981249",  "49981259",  "49981271",;
-                                         "67874921",  "67874959",  "67874969",  "67874987",  "67875007",  "67875019",  "67875029",  "67875061",;
-                                        "982451501", "982451549", "982451567", "982451579", "982451581", "982451609", "982451629", "982451653";
+                                         "15485783", "15485801", "15485807", "15485837", "15485843", "15485849", "15485857", "15485863",;
+                                         "15487403", "15487429", "15487457", "15487469", "15487471", "15487517", "15487531", "15487541",;
+                                         "32458051", "32458057", "32458073", "32458079", "32458091", "32458093", "32458109", "32458123",;
+                                         "49981171", "49981199", "49981219", "49981237", "49981247", "49981249", "49981259", "49981271",;
+                                         "67874921", "67874959", "67874969", "67874987", "67875007", "67875019", "67875029", "67875061",;
+                                        "982451501","982451549","982451567","982451579","982451581","982451609","982451629","982451653";
                                     }
 
     Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New()
@@ -1587,7 +1598,7 @@ static procedure tBigNtst04(fhLog)
     __oRTime1:SetRemaining(Len(aPrimes))
     For n:=1 To Len(aPrimes)
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=PadL( aPrimes[n] , oPrime:nSize )
+        ASSIGN cN:=PadL(aPrimes[n] ,oPrime:nSize)
         __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))
         __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)
         __ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
@@ -1839,11 +1850,11 @@ static procedure tBigNtst05(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n    += 9999.9999999999
+        ASSIGN n   +=9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN += "9999.9999999999"
+        otBigN+="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #endif
@@ -1919,11 +1930,11 @@ static procedure tBigNtst05(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n    += 9999.9999999999
+        ASSIGN n   +=9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN += "9999.9999999999"
+        otBigN+="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
 #endif
@@ -1995,11 +2006,11 @@ static procedure tBigNtst05(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n    += -9999.9999999999
+        ASSIGN n   +=-9999.9999999999
         __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN += "-9999.9999999999"
+        otBigN+="-9999.9999999999"
 #else
         otBigN:SetValue(otBigN:add("-9999.9999999999"))
 #endif
@@ -2302,11 +2313,11 @@ static procedure tBigNtst13(fhLog)
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n    *= 1.5
@@ -2393,11 +2404,11 @@ static procedure tBigNtst13(fhLog)
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n    *= 1.5
@@ -2481,11 +2492,11 @@ static procedure tBigNtst15(fhLog)
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n    *= 1.5
@@ -2565,11 +2576,11 @@ static procedure tBigNtst16(fhLog)
         ASSIGN cN:=hb_ntos(w)
         ASSIGN w    *= 3.555
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
@@ -2658,11 +2669,11 @@ static procedure tBigNtst17(fhLog)
         ASSIGN cN:=hb_ntos(w)
         ASSIGN w    *= 3.555
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
@@ -2747,11 +2758,11 @@ static procedure tBigNtst17(fhLog)
         ASSIGN cN:=hb_ntos(w)
         ASSIGN w    *= 3.555
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "0") .and. (z>1))
+        While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN z:=Len(cN)
-        While ((SubStr(cN,-1) == "*") .and. (z>1))
+        While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
@@ -2829,7 +2840,7 @@ static procedure tBigNtst19(fhLog)
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
     ASSIGN n:=0
-    While ( n <= nN_TEST )
+    While (n <= nN_TEST)
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
         #ifdef __PROTHEUS__
@@ -2843,7 +2854,7 @@ static procedure tBigNtst19(fhLog)
         __ConOut(fhLog,__cSep)
         __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
-        ASSIGN n += nISQRT
+        ASSIGN n+=nISQRT
     End While
     __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
@@ -3714,7 +3725,7 @@ static procedure tBigNtst30(fhLog)
     __oRTime1:SetRemaining(2)
     For n:=1 To 2
         __oRTime2:SetRemaining(1)
-        IF ( n == 1 )
+        IF (n==1)
             otBigN:SetValue("1.5")
             __ConOut(fhLog,"otBigN","RESULT: "+otBigN:ExactValue())
             __ConOut(fhLog,"otBigN:Pow('0.5')","RESULT: "+otBigN:SetValue(otBigN:Pow("0.5")):ExactValue())
@@ -3810,7 +3821,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Ln():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Ln()',"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:aLn():ExactValue())
         otBigW:SetValue(otBigW:e())
@@ -3828,7 +3839,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log2():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log2()',"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:aLog2():ExactValue())
     EndIF
@@ -3843,7 +3854,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log10():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log10()',"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
            otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:aLog10():ExactValue())
     EndIF
@@ -3858,7 +3869,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o1):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:aLog(o1):ExactValue())
     EndIF
@@ -3873,7 +3884,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o2):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:aLog(o2):ExactValue())
     EndIF
@@ -3888,7 +3899,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o3):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         __ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(o3):ExactValue())
     EndIF
     __oRTime2:Calcule()
@@ -3902,7 +3913,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o4):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:aLog(o4):ExactValue())
     EndIF
@@ -3917,7 +3928,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o5):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:aLog(o5):ExactValue())
     EndIF
@@ -3932,7 +3943,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o6):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:aLog(o6):ExactValue())
     EndIF
@@ -3947,7 +3958,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o7):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:aLog(o7):ExactValue())
     EndIF
@@ -3962,7 +3973,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o8):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:aLog(o8):ExactValue())
     EndIF
@@ -3977,7 +3988,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o9):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")'  ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:aLog(o9):ExactValue())
     EndIF
@@ -3992,7 +4003,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o10):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("10")' ,"RESULT: "+cX)
-    IF ( laLog )
+    IF (laLog)
         otBigW:SetValue(cX)
         __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):ExactValue())
     EndIF
@@ -4106,7 +4117,7 @@ static procedure tBigNtst32(fhLog)
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             ASSIGN cX:=otBigN:Rnd(__SETDEC__):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
-            IF ( laLog )
+            IF (laLog)
                 __ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):ExactValue())
             EndIF
             __oRTime2:Calcule()
@@ -4188,7 +4199,7 @@ static procedure tBigNtst33(fhLog)
         ASSIGN cW:=hb_ntos(w)
         ASSIGN cX:=otBigW:SetValue(cW):Ln():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
-        IF ( laLog )
+        IF (laLog)
             __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():ExactValue())
         EndIF
         __oRTime2:Calcule()
@@ -4262,15 +4273,15 @@ static procedure tBigNtst34(fhLog)
     ASSIGN n:=0
     __oRTime1:SetRemaining((nISQRT/2)+1)
     __oRTime2:SetRemaining(1)
-    While ( n <= nISQRT )
-        IF ( n < 3 )
-            ASSIGN n += 1
+    While (n <= nISQRT)
+        IF (n < 3)
+            ASSIGN n+=1
         Else
-            ASSIGN n += 2
+            ASSIGN n+=2
         EndIF
         ASSIGN cN:=hb_ntos(n)
         ASSIGN lPn:=oPrime:IsPrime(cN,.T.)
-        ASSIGN lMR:=IF( lPn , lPn , otBigN:SetValue(cN):millerRabin(o2) )
+        ASSIGN lMR:=IF(lPn ,lPn ,otBigN:SetValue(cN):millerRabin(o2))
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
         __ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
         __oRTime2:Calcule()
