@@ -24,7 +24,7 @@
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
 #define L_LOGPROCESS       "0"
-#define C_GT_MODE          "MT"
+#define C_GT_MODE          "ST"
 #define AC_TSTEXEC        "*"
 
 #define __SETDEC__          8
