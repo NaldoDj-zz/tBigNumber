@@ -4013,22 +4013,22 @@ static function egMult(cN1,cN2,nBase)
     while oMTM:lte(oN1)
         ++nI
         aAdd(aeMT,{oMTM:Int(.F.,.F.),oMTP:Int(.F.,.F.)})
-        oMTM:__cInt(oMTM:Add(oMTM))
-        oMTP:__cInt(oMTP:Add(oMTP))
+        oMTM:__cInt(oMTM:Add(oMTM):__cInt())
+        oMTP:__cInt(oMTP:Add(oMTP):__cInt())
     end while
 
     oMTM:__cInt("0")
     oMTP:__cInt("0")
 
     while nI>0
-        oMTM:__cInt(oMTM:Add(aeMT[nI][1]))
-        oMTP:__cInt(oMTP:Add(aeMT[nI][2]))
+        oMTM:__cInt(oMTM:Add(aeMT[nI][1]):__cInt())
+        oMTP:__cInt(oMTP:Add(aeMT[nI][2]):__cInt())
         nCmp:=oMTM:cmp(oN1)
         if nCmp==0
             exit
         elseif nCmp==1
-            oMTM:__cInt(oMTM:Sub(aeMT[nI][1]))
-            oMTP:__cInt(oMTP:Sub(aeMT[nI][2]))
+            oMTM:__cInt(oMTM:Sub(aeMT[nI][1]):__cInt())
+            oMTP:__cInt(oMTP:Sub(aeMT[nI][2]):__cInt())
         endif
         --nI
     end while
