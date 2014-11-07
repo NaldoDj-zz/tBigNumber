@@ -30,11 +30,11 @@
         #include <hbdefs.h>
         #include <hbstack.h>
         #include <hbapiitm.h>
-        
+
         #include <hbmather.h>
         #include <hbapierr.h>
-		
-		template <typename TO_STRING>
+
+        template <typename TO_STRING>
         std::string to_string(TO_STRING const& value){
             std::stringstream sstr;
             sstr.precision(std::numeric_limits<long double>::digits10+1);
@@ -1040,7 +1040,7 @@
                  } 
                  else
                  { 
-					std::string str=to_string(ldResult);
+                    std::string str=to_string(ldResult);
                     char * cstr=(char*)hb_xgrab(str.length()+1);
                     std::strcpy(cstr,str.c_str());
                     hb_retclen(cstr,strlen(cstr));
@@ -1050,7 +1050,7 @@
            }
            else 
            {
-				std::string str=to_string(0.0);
+                std::string str=to_string(0.0);
                 char * cstr=(char*)hb_xgrab(str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 hb_retclen(cstr,strlen(cstr));
