@@ -75,7 +75,7 @@ procedure tbigNthRun(mtxJob,aThreads)
                         aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
                         exit
                     case "B"
-                        aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])                    
+                        aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
                         exit
                     otherwise
                         aThreads[xJob][TH_RES]:=NIL

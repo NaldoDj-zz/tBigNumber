@@ -23,11 +23,11 @@
 #define C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
-#define L_LOGPROCESS       "0"
+#define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
 #define AC_TSTEXEC        "*"
 
-#define __SETDEC__          8
+#define __SETDEC__         16
 #define __NRTTST__         35
 
 #ifdef __HARBOUR__
@@ -569,7 +569,7 @@
         __ConOut(fhLog,__cSep)
 
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTimeProc:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTimeProc:GetcAverageTime())
         __ConOut(fhLog,__cSep)
 
         __ConOut(fhLog,__cSep)
@@ -1276,14 +1276,9 @@ static procedure tBigNtst01(fhLog)
 
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     __ConOut(fhLog,"")
 
@@ -1298,11 +1293,11 @@ static procedure tBigNtst01(fhLog)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next n
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
@@ -1348,14 +1343,9 @@ static procedure tBigNtst02(fhLog)
         __ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
 
         otBigN:SetDecimals(nACC_SET)
-        otBigN:nthRootAcc(nROOT_ACC_SET)
-        otBigN:SysSQRT(0)
-
         otBigW:SetDecimals(nACC_SET)
-        otBigW:nthRootAcc(nROOT_ACC_SET)
-        otBigW:SysSQRT(0)
 
-        Set(_SET_DECIMALS,__SETDEC__)
+        Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
         
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C */
         __oRTime1:SetRemaining(5+1)
@@ -1429,11 +1419,11 @@ static procedure tBigNtst02(fhLog)
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,__cSep)
-                __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+                __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
                 __ConOut(fhLog,__cSep)
             Next n
             __oRTime1:Calcule()
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next w
         otBigX:=NIL
@@ -1484,14 +1474,9 @@ static procedure tBigNtst03(fhLog)
 
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     __ConOut(fhLog,"")
 
@@ -1516,10 +1501,10 @@ static procedure tBigNtst03(fhLog)
             __oRTime1:Calcule(.F.)
         Next x
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
     aSize(aPFact,0)
@@ -1581,14 +1566,9 @@ static procedure tBigNtst04(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste Prime 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
    
     __ConOut(fhLog,"")
 
@@ -1605,7 +1585,7 @@ static procedure tBigNtst04(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
     aSize(aPrimes,0)
@@ -1614,7 +1594,7 @@ static procedure tBigNtst04(fhLog)
         hb_gcAll(.T.)
     #endif //__PROTHEUS__
 
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -1661,14 +1641,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste HEX16 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     __ConOut(fhLog,"")
 
@@ -1690,13 +1665,13 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
     otBH16:=FreeObj(otBH16)
 
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -1745,14 +1720,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste HEX32 0 -------------- ")
         
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1773,14 +1743,14 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
     otBH32:=FreeObj(otBH32)
 
     __oRTime1:Calcule()
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -1828,14 +1798,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ ADD Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1862,10 +1827,10 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -1911,14 +1876,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ ADD Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1942,10 +1902,10 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -1991,14 +1951,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ ADD Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2018,10 +1973,10 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2067,14 +2022,9 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ SUB Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,__SETDEC__)
+ 
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2094,10 +2044,10 @@ static procedure tBigNtst05(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2143,14 +2093,9 @@ static procedure tBigNtst11(fhLog)
    __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
     For x:=1 TO nN_TEST Step nISQRT
@@ -2168,10 +2113,10 @@ static procedure tBigNtst11(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2217,14 +2162,9 @@ static procedure tBigNtst12(fhLog)
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
     For x:=1 TO nN_TEST Step nISQRT
@@ -2242,10 +2182,10 @@ static procedure tBigNtst12(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2293,14 +2233,9 @@ static procedure tBigNtst13(fhLog)
    __ConOut(fhLog," BEGIN ------------ MULT Teste 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2335,10 +2270,10 @@ static procedure tBigNtst13(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2384,14 +2319,9 @@ static procedure tBigNtst13(fhLog)
     __ConOut(fhLog," BEGIN ------------ MULT Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,__SETDEC__)
+ 
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2423,10 +2353,10 @@ static procedure tBigNtst13(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2472,14 +2402,9 @@ static procedure tBigNtst15(fhLog)
    __ConOut(fhLog," BEGIN ------------ MULT Teste 3 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2507,10 +2432,10 @@ static procedure tBigNtst15(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2556,14 +2481,9 @@ static procedure tBigNtst16(fhLog)
    __ConOut(fhLog," BEGIN ------------ MULT Teste 4 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2593,17 +2513,17 @@ static procedure tBigNtst16(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+otBigW:ExactValue())
         ASSIGN cW:=otBigW:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2649,14 +2569,9 @@ static procedure tBigNtst17(fhLog)
    __ConOut(fhLog," BEGIN ------------ MULT Teste 5 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2682,17 +2597,17 @@ static procedure tBigNtst17(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+otBigW:ExactValue())
         ASSIGN cW:=otBigW:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2738,14 +2653,9 @@ static procedure tBigNtst17(fhLog)
    __ConOut(fhLog," BEGIN ------------ MULT Teste 6 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
  
@@ -2771,17 +2681,17 @@ static procedure tBigNtst17(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+otBigW:ExactValue())
         ASSIGN cW:=otBigW:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2827,14 +2737,9 @@ static procedure tBigNtst19(fhLog)
    __ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2852,11 +2757,11 @@ static procedure tBigNtst19(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
         ASSIGN n+=nISQRT
     End While
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -2900,14 +2805,9 @@ static procedure tBigNtst19(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste GCD/LCM 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
  
@@ -2924,11 +2824,11 @@ static procedure tBigNtst19(fhLog)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next n
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
@@ -2973,14 +2873,9 @@ static procedure tBigNtst19(fhLog)
    __ConOut(fhLog," BEGIN ------------ DIV Teste 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
  
@@ -3002,18 +2897,18 @@ static procedure tBigNtst19(fhLog)
 #endif
             ASSIGN cW:=otBigW:Rnd(nACC_SET):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
-            ASSIGN cW:=otBigW:NoRnd(__SETDEC__):ExactValue()
+            ASSIGN cW:=otBigW:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
-            ASSIGN cW:=otBigW:Rnd(__SETDEC__):ExactValue()
+            ASSIGN cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next x
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
 
@@ -3062,14 +2957,9 @@ static procedure tBigNtst22(fhLog)
    __ConOut(fhLog," BEGIN ------------ DIV Teste 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3092,10 +2982,10 @@ static procedure tBigNtst22(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
          __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3144,14 +3034,9 @@ static procedure tBigNtst23(fhLog)
    __ConOut(fhLog," BEGIN ------------ DIV Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3171,10 +3056,10 @@ static procedure tBigNtst23(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
           __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3218,14 +3103,9 @@ static procedure tBigNtst24(fhLog)
    __ConOut(fhLog," BEGIN ------------ Teste FI 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     //http://www.javascripter.net/math/calculators/eulertotientfunction.htm
 
     __ConOut(fhLog,"")
@@ -3238,10 +3118,10 @@ static procedure tBigNtst24(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3292,7 +3172,7 @@ static procedure tBigNtst25(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3307,17 +3187,17 @@ static procedure tBigNtst25(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigW:ExactValue())
         ASSIGN cW:=otBigW:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-        ASSIGN cW:=otBigW:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3370,7 +3250,7 @@ static procedure tBigNtst26(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3391,17 +3271,17 @@ static procedure tBigNtst26(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         ASSIGN cW:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-        ASSIGN cW:=otBigN:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
-        ASSIGN cW:=otBigN:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3452,7 +3332,7 @@ static procedure tBigNtst27(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3471,17 +3351,17 @@ static procedure tBigNtst27(fhLog)
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:ExactValue())
         ASSIGN cW:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
-        ASSIGN cW:=otBigN:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
-        ASSIGN cW:=otBigN:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cW:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3534,7 +3414,7 @@ static procedure tBigNtst28(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3563,18 +3443,18 @@ static procedure tBigNtst28(fhLog)
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
             ASSIGN cX:=otBigN:Rnd(nACC_SET):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:NoRnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:Rnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next w
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
@@ -3628,7 +3508,7 @@ static procedure tBigNtst29(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3655,18 +3535,18 @@ static procedure tBigNtst29(fhLog)
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
             ASSIGN cX:=otBigN:Rnd(nACC_SET):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:NoRnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:Rnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next w
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next x
 
@@ -3718,7 +3598,7 @@ static procedure tBigNtst30(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3738,10 +3618,10 @@ static procedure tBigNtst30(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3810,7 +3690,7 @@ static procedure tBigNtst31(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     laLog:=lL_ALOG
     otBigW:SetDecimals(nACC_ALOG)
@@ -3831,7 +3711,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3846,7 +3726,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3861,7 +3741,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3876,7 +3756,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3891,7 +3771,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3905,7 +3785,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3920,7 +3800,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3935,7 +3815,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3950,7 +3830,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3965,7 +3845,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3980,7 +3860,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -3995,7 +3875,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -4023,9 +3903,9 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
     __ConOut(fhLog,__cSep)
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -4084,7 +3964,7 @@ static procedure tBigNtst32(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4100,9 +3980,9 @@ static procedure tBigNtst32(fhLog)
          otBigN:SetValue(cX)
         ASSIGN cX:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
-        ASSIGN cX:=otBigN:NoRnd(__SETDEC__):ExactValue()
+        ASSIGN cX:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
-        ASSIGN cX:=otBigN:Rnd(__SETDEC__):ExactValue()
+        ASSIGN cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
         __ConOut(fhLog,__cSep)
         __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5)+1)
@@ -4113,9 +3993,9 @@ static procedure tBigNtst32(fhLog)
             otBigN:SetValue(cX)
             ASSIGN cX:=otBigN:Rnd(nACC_SET):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:NoRnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
-            ASSIGN cX:=otBigN:Rnd(__SETDEC__):ExactValue()
+            ASSIGN cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             IF (laLog)
                 __ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):ExactValue())
@@ -4123,11 +4003,11 @@ static procedure tBigNtst32(fhLog)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             __ConOut(fhLog,__cSep)
         Next n
         __oRTime1:Calcule()
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next w
 
@@ -4187,7 +4067,7 @@ static procedure tBigNtst33(fhLog)
     otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4205,10 +4085,10 @@ static procedure tBigNtst33(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next w
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -4259,14 +4139,9 @@ static procedure tBigNtst34(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4287,7 +4162,7 @@ static procedure tBigNtst34(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     End While
     oPrime:IsPReset()
@@ -4295,7 +4170,7 @@ static procedure tBigNtst34(fhLog)
 
     oPrime:=FreeObj(oPrime)
 
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")
@@ -4346,14 +4221,9 @@ static procedure tBigNtst35(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
     otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
-    Set(_SET_DECIMALS,__SETDEC__)
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4366,10 +4236,10 @@ static procedure tBigNtst35(fhLog)
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVERAGE TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
     Next n
-    __ConOut(fhLog,"AVERAGE TIME: "+__oRTime1:GetcAverageTime())
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)
 
     __ConOut(fhLog,"")

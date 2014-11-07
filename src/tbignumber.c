@@ -19,12 +19,28 @@
 
     #pragma BEGINDUMP
 
+        #include <string>
+        #include <limits>
+        #include <cstring>
+        #include <sstream>
+
         #include <stdio.h>
         #include <string.h>
         #include <hbapi.h>
         #include <hbdefs.h>
         #include <hbstack.h>
         #include <hbapiitm.h>
+        
+        #include <hbmather.h>
+        #include <hbapierr.h>
+		
+		template <typename TO_STRING>
+        std::string to_string(TO_STRING const& value){
+            std::stringstream sstr;
+            sstr.precision(std::numeric_limits<long double>::digits10+1);
+            sstr << std::fixed << value;
+            return sstr.str();
+        }
         
         typedef struct{
             char * cMultM;
@@ -994,6 +1010,53 @@
             }
        
         }
+        
+        HB_FUNC_STATIC( TBIGNSQRT )
+        {
+           if (HB_ISCHAR(1))
+           {
+              HB_MATH_EXCEPTION hb_exc;
+              long double ldResult;
+              long double ldArg=strtold(hb_parc(1),NULL);
+              if (ldArg<=0)
+              {
+                 std::string str=to_string(0.0);
+                 char * cstr=(char*)hb_xgrab(str.length()+1);
+                 std::strcpy(cstr,str.c_str());
+                 hb_retclen(cstr,strlen(cstr));
+                 hb_xfree(cstr);
+              } 
+              else
+              {
+                 hb_mathResetError(&hb_exc);
+                 ldResult=sqrtl(ldArg);
+                 if( hb_mathGetError(&hb_exc,"SQRTL",ldArg,0.0,ldResult))
+                 {
+                    std::string str=to_string(0.0);
+                    char * cstr=(char*)hb_xgrab(str.length()+1);
+                    std::strcpy(cstr,str.c_str());
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                 } 
+                 else
+                 { 
+					std::string str=to_string(ldResult);
+                    char * cstr=(char*)hb_xgrab(str.length()+1);
+                    std::strcpy(cstr,str.c_str());
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                 }
+              }
+           }
+           else 
+           {
+				std::string str=to_string(0.0);
+                char * cstr=(char*)hb_xgrab(str.length()+1);
+                std::strcpy(cstr,str.c_str());
+                hb_retclen(cstr,strlen(cstr));
+                hb_xfree(cstr);
+            }
+        }       
         
     #pragma ENDDUMP
 

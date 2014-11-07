@@ -2677,7 +2677,6 @@ method SQRT() class tBigNumber
         endif
 
         if oSQRT:eq(s__o0)
-            oSQRT:SetValue(s__o0)
             break
         endif
 
@@ -4420,9 +4419,28 @@ static function __SQRT(p)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
-        //-------------------------------------------------------------------------------------
-        //(Div(2)==Mult(.5)
-        r:=q:Mult(s__od2)
+        #ifdef __PROTEUS__
+            r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+        #else //__HARBOUR__
+            #ifdef __PTCOMPAT__
+                r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+            #else
+                r:=tBigNumber():New(TBIGNSQRT(q:ExactValue()))
+            #endif //__PTCOMPAT__    
+        #endif //__PROTEUS__
+#ifdef __PROTEUS__
+        if r:eq(s__o0).or."*"$r:GetValue()
+#else //__HARBOUR__
+    #ifdef __PTCOMPAT__
+        if r:eq(s__o0).or."*"$r:GetValue()
+    #else
+        if r:eq(s__o0)
+    #endif    
+#endif        
+            //-------------------------------------------------------------------------------------
+            //(Div(2)==Mult(.5)
+            r:=q:Mult(s__od2)
+        endif
         t:=r:Pow(s__o2):Sub(q):Abs(.T.)
         l:=s__o0:Clone()
         #ifdef TBIGN_RECPOWER
@@ -4451,7 +4469,7 @@ static function __SQRT(p)
             t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
             if t:eq(l)
                 exit
-            endif
+            endif                                                                                                                                                           
             l:SetValue(t)
         end while
         #ifdef TBIGN_RECPOWER
@@ -5532,6 +5550,7 @@ return
             TBIGNLADD()
             TBIGNLSUB()
             TBIGNNORMALIZE()
+            TBIGNSQRT()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()
@@ -5539,7 +5558,7 @@ return
                 THNTHROOT()
                 THMULT()
                 TH2MULT()
-                thPow()
+                THPOW()
             #endif            
         endif
     return(lDummy)
