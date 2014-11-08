@@ -303,9 +303,15 @@ class tBigNumber from hbClass
     method SQRT()
     method SysSQRT(uSet)
 
-    method Log(uBigNB)    //TODO: Validar Calculo.
+    method Log(uBigNB)
+    method LogN(uBigNB)
+
+    method __Log(uBigNB)
+    method __LogN(uBigNB)   //TODO: Validar Calculo.
+    
     method Log2()         //TODO: Validar Calculo.
     method Log10()        //TODO: Validar Calculo.
+
     method Ln()           //TODO: Validar Calculo.
 
     method aLog(uBigNB)   //TODO: Validar Calculo.
@@ -2715,11 +2721,74 @@ return(ths_SysSQRT)
     method      : Log
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo na Base N DEFAULT 10
+    Descricao   : Retorna o logaritmo na Base N DEFAULT e
     Sintaxe     : tBigNumber():Log(BigNB) -> oBigNR
-    Referencia  : //http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
 */
 method Log(uBigNB) class tBigNumber
+return(self:LogN(uBigNB))
+
+/*
+    method      : LogN
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 20/02/2013
+    Descricao   : Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe     : tBigNumber():LogN(BigNB) -> oBigNR
+*/
+method LogN(uBigNB) class tBigNumber
+    local oB:=s__o0:Clone()
+    local oR:=s__o0:Clone()
+    DEFAULT uBigNB:=self:e()
+    oB:SetValue(uBigNB)
+#ifndef __PTCOMPAT__
+    oR:SetValue(TBIGNLOG(self:GetValue(),oB:GetValue()))
+#else
+    oR:SetValue(self:__Log(oB))
+#endif
+return(oR)
+
+/*
+    method      : __Log
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 20/02/2013
+    Descricao   : Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe     : tBigNumber():__Log(BigNB) -> oBigNR
+*/
+method __Log(uBigNB) class tBigNumber
+return(self:LogN(uBigNB))
+/*
+#ifndef __PTCOMPAT__
+    local aThreads
+#endif
+    local ob10:=s__o10:Clone()
+    local oN:=self:Clone()
+    local oB:=s__o0:Clone()
+    oB:SetValue(uBigNB)
+    #ifndef __PTCOMPAT__
+        tBigNthStart(2,@aThreads)
+        aThreads[1][TH_EXE]:={@thLogN(),oN,ob10}
+        aThreads[2][TH_EXE]:={@thLogN(),oB,ob10}
+        tBigNthNotify(@aThreads)
+        tBigNthWait(@aThreads)
+        tBigNthJoin(@aThreads)
+        oN:SetValue(aThreads[1][TH_RES])
+        oB:SetValue(aThreads[2][TH_RES])
+        aSize(aThreads,0)
+    #else
+        oN:SetValue(oN:LogN(ob10))
+        oB:SetValue(oB:LogN(ob10))
+    #endif
+return(oN:Div(oB))
+*/
+
+/*
+    method      : __LogN
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 20/02/2013
+    Descricao   : Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe     : tBigNumber():__LogN(BigNB) -> oBigNR
+    Referencia  : //http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
+*/
+method __LogN(uBigNB) class tBigNumber
 
 #ifndef __PTCOMPAT__
     local aThreads_1
@@ -2744,18 +2813,19 @@ method Log(uBigNB) class tBigNumber
     DEFAULT uBigNB:=self:e()
 
     oT:SetValue(uBigNB)
-
+    
     noTcmp1:=oT:cmp(s__o1)
     if noTcmp1==0
         return(s__o0:Clone())
     endif
-
+    
     if s__o0:lt(oT).and.noTcmp1==-1
          lflag:=.not.(lflag)
+         oT:__cSig("")
          oT:SetValue(s__o1:Div(oT))
          noTcmp1:=oT:cmp(s__o1)
     endif
-
+    
     #ifndef __PTCOMPAT__
         tBigNthStart(2,@aThreads_1)
         aThreads_1[1][TH_EXE]:={@thAdd(),oY,oI}
@@ -2840,7 +2910,7 @@ method Log(uBigNB) class tBigNumber
     #endif
 
     if lflag
-        oS:SetValue(oS:Mult("-1"))
+        oS:__cSig("-")
     endif
 
 return(oS)
@@ -2854,7 +2924,7 @@ return(oS)
 */
 method Log2() class tBigNumber
     local ob2:=s__o2:Clone()
-return(self:Log(ob2))
+return(self:LogN(ob2))
 
 /*
     method      : Log10
@@ -2865,7 +2935,7 @@ return(self:Log(ob2))
 */
 method Log10() class tBigNumber
     local ob10:=s__o10:Clone()
-return(self:Log(ob10))
+return(self:LogN(ob10))
 
 /*
     method      : Ln
@@ -2875,14 +2945,14 @@ return(self:Log(ob10))
     Sintaxe     : tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
-return(self:Log(s__o1:Exp()))
+return(self:LogN(s__o1:Exp()))
 
 /*
     method      : aLog
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 20/02/2013
     Descricao   : Retorna o Antilogaritmo
-    Sintaxe     : tBigNumber():aLog(Log(uBigNB) -> oBigNR
+    Sintaxe     : tBigNumber():aLog(uBigNB) -> oBigNR
 */
 method aLog(uBigNB) class tBigNumber
     local oaLog:=tBigNumber():New(uBigNB)
@@ -4364,8 +4434,8 @@ static function __Pow(base,expR,EPS)
         lst:=s__o0:Clone()
         lDo:=tmp:gte(EPS)
         while lDo
-			sqr:SetValue(__SQRT(sqr))
-			if mid:lte(exp)
+            sqr:SetValue(__SQRT(sqr))
+            if mid:lte(exp)
                 low:SetValue(mid)
                 acc:SetValue(acc:Mult(sqr))
             else
@@ -5266,6 +5336,8 @@ return(r)
     return(oN:Pow(oB))
     static function th2Mult(oN)
     return(s__o2:Mult(oN))
+    static function thLogN(oN,oB)
+    return(oN:LogN(oB))
 #endif //__PTCOMPAT__
 
 /*
@@ -5560,6 +5632,7 @@ return
             TBIGNLSUB()
             TBIGNNORMALIZE()
             TBIGNSQRT()
+            TBIGNLOG()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()
@@ -5568,6 +5641,7 @@ return
                 THMULT()
                 TH2MULT()
                 THPOW()
+                THLOGN()
             #endif            
         endif
     return(lDummy)
