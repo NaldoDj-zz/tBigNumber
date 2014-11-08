@@ -4364,7 +4364,8 @@ static function __Pow(base,expR,EPS)
         lst:=s__o0:Clone()
         lDo:=tmp:gte(EPS)
         while lDo
-            if mid:lte(exp)
+			sqr:SetValue(__SQRT(sqr))
+			if mid:lte(exp)
                 low:SetValue(mid)
                 acc:SetValue(acc:Mult(sqr))
             else
