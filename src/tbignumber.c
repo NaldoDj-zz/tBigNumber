@@ -33,14 +33,6 @@
 
         #include <hbmather.h>
         #include <hbapierr.h>
-
-        template <typename TO_STRING>
-        std::string to_string(TO_STRING const& value){
-            std::stringstream sstr;
-            sstr.precision(std::numeric_limits<long double>::digits10+1);
-            sstr << std::fixed << value;
-            return sstr.str();
-        }
         
         typedef struct{
             char * cMultM;
@@ -69,6 +61,14 @@
         static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v);
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y);
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
+
+        template <typename TO_STRING>
+		static std::string to_string(TO_STRING const& value){
+            std::stringstream sstr;
+            sstr.precision(std::numeric_limits<long double>::digits10+45);
+            sstr << std::fixed << value;
+            return sstr.str();
+        }
 
         static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
             HB_SIZE nLen    = strlen(szText);       

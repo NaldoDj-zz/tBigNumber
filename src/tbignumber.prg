@@ -4413,7 +4413,15 @@ static function __SQRT(p)
     local EPS
     local q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
-        r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+        #ifdef __PROTEUS__
+            r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+        #else //__HARBOUR__
+            #ifdef __PTCOMPAT__
+                r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+            #else
+                r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
+            #endif //__PTCOMPAT__    
+        #endif //__PROTEUS__
     else
         n:=s__nthRAcc-1
         s__IncS0(n)
@@ -4426,7 +4434,7 @@ static function __SQRT(p)
             #ifdef __PTCOMPAT__
                 r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
             #else
-                r:=tBigNumber():New(TBIGNSQRT(q:ExactValue()))
+                r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__    
         #endif //__PROTEUS__
 #ifdef __PROTEUS__
@@ -4435,7 +4443,7 @@ static function __SQRT(p)
     #ifdef __PTCOMPAT__
         if r:eq(s__o0).or."*"$r:GetValue()
     #else
-        if r:eq(s__o0)
+        if r:lte(s__o1)
     #endif    
 #endif        
             //-------------------------------------------------------------------------------------
