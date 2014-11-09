@@ -13,38 +13,7 @@ Group git_tBigNumber
    End
    ProjectsCount=2
    Project tBigNumber
-      FoldersCount=2
-      Folder Fontes
-         VSSPath=Nova Pasta2
-         FilesCount=9
-         File \GitHub\tBigNumber\src\__pteTthD.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\__ptPITthD.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tBigNtst.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tbignumber.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tfRead.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tPrime.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tSProgress.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tRemaining.prg
-             Type=T
-         End
-         File \GitHub\tBigNumber\src\tTimeCalc.prg
-             Type=T
-         End
-      End
+      FoldersCount=4
       Folder include
          VSSPath=Nova Pasta2
          FilesCount=8
@@ -73,6 +42,45 @@ Group git_tBigNumber
              Type=T
          End
       End
+      Folder common
+         VSSPath=Nova Pasta2
+         FilesCount=6
+         File \GitHub\tBigNumber\src\common\tbignumber.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\common\tfRead.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\common\tPrime.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\common\tRemaining.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\common\tSProgress.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\common\tTimeCalc.prg
+             Type=T
+         End
+      End
+      Folder pt
+         VSSPath=Nova Pasta3
+         FilesCount=2
+         File \GitHub\tBigNumber\src\pt\__pteTthD.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\pt\__ptPITthD.prg
+             Type=T
+         End
+      End
+      Folder tests
+         VSSPath=Nova Pasta4
+         FilesCount=1
+         File \GitHub\tBigNumber\src\tests\tBigNtst.prg
+             Type=T
+         End
+      End
    End
    Project NPerfeitos
       FoldersCount=2
@@ -83,7 +91,7 @@ Group git_tBigNumber
              Type=T
          End
       End
-      Folder Definições
+      Folder include
          VSSPath=Nova Pasta2
          FilesCount=1
          File \GitHub\tBigNumber\nPerfeitos\totvs_protheus\tryexception.ch
