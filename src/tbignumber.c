@@ -62,8 +62,8 @@
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y);
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
 
-        template <typename TO_STRING>
-		static std::string to_string(TO_STRING const& value){
+        template <typename tTO_STRING>
+		static std::string to_string(tTO_STRING const& value){
             std::stringstream sstr;
             sstr.precision(std::numeric_limits<long double>::digits10+100);
             sstr << std::fixed << value;
