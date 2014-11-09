@@ -308,7 +308,7 @@ class tBigNumber from hbClass
 
     method __Log(uBigNB)
     method __LogN(uBigNB)   //TODO: Validar Calculo.
-    
+
     method Log2()         //TODO: Validar Calculo.
     method Log10()        //TODO: Validar Calculo.
 
@@ -835,7 +835,7 @@ method SetDecimals(nSet) class tBigNumber
         if nSet>MAX_DECIMAL_PRECISION
             nSet:=MAX_DECIMAL_PRECISION
         endif
-    #endif    
+    #endif
 
     s__nDecSet:=nSet
 
@@ -2749,7 +2749,7 @@ return(oR)
     Sintaxe     : tBigNumber():__Log(BigNB) -> oBigNR
 */
 method __Log(uBigNB) class tBigNumber
-return(self:LogN(uBigNB))
+return(self:__LogN(uBigNB))
 /*
 #ifndef __PTCOMPAT__
     local aThreads
@@ -2808,19 +2808,19 @@ method __LogN(uBigNB) class tBigNumber
     DEFAULT uBigNB:=self:e()
 
     oT:SetValue(uBigNB)
-    
+
     noTcmp1:=oT:cmp(s__o1)
     if noTcmp1==0
         return(s__o0:Clone())
     endif
-    
+
     if s__o0:lt(oT).and.noTcmp1==-1
          lflag:=.not.(lflag)
          oT:__cSig("")
          oT:SetValue(s__o1:Div(oT))
          noTcmp1:=oT:cmp(s__o1)
     endif
-    
+
     #ifndef __PTCOMPAT__
         tBigNthStart(2,@aThreads_1)
         aThreads_1[1][TH_EXE]:={@thAdd(),oY,oI}
@@ -2918,8 +2918,7 @@ return(oS)
     Sintaxe     : tBigNumber():Log2() -> oBigNR
 */
 method Log2() class tBigNumber
-    local ob2:=s__o2:Clone()
-return(self:LogN(ob2))
+return(self:LogN(s__o2))
 
 /*
     method      : Log10
@@ -2929,8 +2928,7 @@ return(self:LogN(ob2))
     Sintaxe     : tBigNumber():Log10() -> oBigNR
 */
 method Log10() class tBigNumber
-    local ob10:=s__o10:Clone()
-return(self:LogN(ob10))
+return(self:LogN(s__o10))
 
 /*
     method      : Ln
@@ -2940,7 +2938,7 @@ return(self:LogN(ob10))
     Sintaxe     : tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
-return(self:LogN(s__o1:Exp()))
+return(self:LogN(self:Exp()))
 
 /*
     method    : MathC
@@ -4345,7 +4343,7 @@ static function __Pow(base,expR,EPS)
     local mid
     local lst
     local high
-    
+
     local lDo
 
     local exp:=expR:Clone()
@@ -4436,7 +4434,7 @@ static function __SQRT(p)
                 r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
-            #endif //__PTCOMPAT__    
+            #endif //__PTCOMPAT__
         #endif //__PROTEUS__
     else
         n:=s__nthRAcc-1
@@ -4451,7 +4449,7 @@ static function __SQRT(p)
                 r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
-            #endif //__PTCOMPAT__    
+            #endif //__PTCOMPAT__
         #endif //__PROTEUS__
 #ifdef __PROTEUS__
         if r:eq(s__o0).or."*"$r:GetValue()
@@ -4460,8 +4458,8 @@ static function __SQRT(p)
         if r:eq(s__o0).or."*"$r:GetValue()
     #else
         if r:lte(s__o1)
-    #endif    
-#endif        
+    #endif
+#endif
             //-------------------------------------------------------------------------------------
             //(Div(2)==Mult(.5)
             r:=q:Mult(s__od2)
@@ -4494,7 +4492,7 @@ static function __SQRT(p)
             t:SetValue(r:Pow(s__o2):Sub(q):Abs(.T.))
             if t:eq(l)
                 exit
-            endif                                                                                                                                                           
+            endif
             l:SetValue(t)
         end while
         #ifdef TBIGN_RECPOWER
@@ -5588,7 +5586,7 @@ return
                 TH2MULT()
                 THPOW()
                 THLOGN()
-            #endif            
+            #endif
         endif
     return(lDummy)
 
