@@ -19,7 +19,6 @@
 #define ACC_ALOG          "50"
 #define __SLEEP         "0.05"
 #define N_TEST          "1000"
-#define L_ALOG             "0"
 #define C_OOPROGRESS    "RANDOM,INCREMENT,DECREMENT,DISJUNCTION,UNION,DISPERSION,SHUTTLE,JUNCTION,OCCULT"
 #define L_OOPROGRAND       "0"
 #define L_ROPROGRESS       "0"
@@ -61,7 +60,6 @@
         MEMVAR nACC_ALOG
         MEMVAR __nSLEEP
         MEMVAR nN_TEST
-        MEMVAR lL_ALOG
         MEMVAR aC_OOPROGRESS
         MEMVAR lL_OOPROGRAND
         MEMVAR lL_ROPROGRESS
@@ -81,7 +79,6 @@
         Private nACC_ALOG
         Private __nSLEEP
         Private nN_TEST
-        Private lL_ALOG
         Private aC_OOPROGRESS
         Private lL_OOPROGRAND
         Private lL_ROPROGRESS
@@ -100,7 +97,6 @@
             hIni["GENERAL"]["ACC_ALOG"]:=ACC_ALOG
             hIni["GENERAL"]["__SLEEP"]:=__SLEEP
             hIni["GENERAL"]["N_TEST"]:=N_TEST
-            hIni["GENERAL"]["L_ALOG"]:=L_ALOG
             hIni["GENERAL"]["C_OOPROGRESS"]:=C_OOPROGRESS
             hIni["GENERAL"]["L_OOPROGRAND"]:=L_OOPROGRAND
             hIni["GENERAL"]["L_ROPROGRESS"]:=L_ROPROGRESS
@@ -127,9 +123,6 @@
                             EXIT
                         CASE "N_TEST"
                             nN_TEST:=Val(aSect[cKey])
-                            EXIT
-                        CASE "L_ALOG"
-                            lL_ALOG:=(aSect[cKey]=="1")
                             EXIT
                         CASE "C_OOPROGRESS"
                             aC_OOPROGRESS:=_StrToKArr(Upper(AllTrim(aSect[cKey])),",")
@@ -159,7 +152,6 @@
         nACC_ALOG:=IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
         __nSLEEP:=IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
         nN_TEST:=IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-        lL_ALOG:=IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
         aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
         lL_OOPROGRAND:=IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
         lL_ROPROGRESS:=IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
@@ -308,7 +300,6 @@
         Private nACC_ALOG
         Private __nSLEEP
         Private nN_TEST
-        Private lL_ALOG
         Private aC_OOPROGRESS
         Private lL_OOPROGRAND
         Private lL_ROPROGRESS
@@ -325,7 +316,6 @@
                 otFIni:AddNewProperty("GENERAL","ACC_ALOG",ACC_ALOG)
                 otFIni:AddNewProperty("GENERAL","__SLEEP",__SLEEP)
                 otFIni:AddNewProperty("GENERAL","N_TEST",N_TEST)
-                otFIni:AddNewProperty("GENERAL","L_ALOG",L_ALOG)
                 otFIni:AddNewProperty("GENERAL","C_OOPROGRESS",C_OOPROGRESS)
                 otFIni:AddNewProperty("GENERAL","L_OOPROGRAND",L_OOPROGRAND)
                 otFIni:AddNewProperty("GENERAL","L_ROPROGRESS",L_ROPROGRESS)
@@ -339,7 +329,6 @@
                 nACC_ALOG:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
                 __nSLEEP:=Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
                 nN_TEST:=Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
-                lL_ALOG:=(oTFINI:GetPropertyValue("GENERAL","L_ALOG",L_ALOG)=="1")
                 aC_OOPROGRESS:=_StrToKArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
                 lL_OOPROGRAND:=(oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
                 lL_ROPROGRESS:=(oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
@@ -354,7 +343,6 @@
         nACC_ALOG:=IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
         __nSLEEP:=IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
         nN_TEST:=IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-        lL_ALOG:=IF(Empty(lL_ALOG),L_ALOG=="1",lL_ALOG)
         aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
         lL_OOPROGRAND:=IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
         lL_ROPROGRESS:=IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
@@ -424,7 +412,6 @@
         MEMVAR nACC_ALOG
         MEMVAR __nSLEEP
         MEMVAR nN_TEST
-        MEMVAR lL_ALOG
         MEMVAR aC_OOPROGRESS
         MEMVAR lL_OOPROGRAND
         MEMVAR lL_ROPROGRESS
@@ -579,7 +566,6 @@
         __ConOut(fhLog,"ACC_ALOG    :",nACC_ALOG)
         __ConOut(fhLog,"__SLEEP     :",__nSLEEP)
         __ConOut(fhLog,"N_TEST      :",nN_TEST)
-        __ConOut(fhLog,"L_ALOG      :",lL_ALOG)
 
         __ConOut(fhLog,__cSep)
 
@@ -3648,8 +3634,6 @@ static procedure tBigNtst31(fhLog)
     Local x         AS NUMBER
     Local z         AS NUMBER
 
-    Local laLog     AS LOGICAL
-
     Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
     Local o2        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
@@ -3674,8 +3658,6 @@ static procedure tBigNtst31(fhLog)
     
     MEMVAR nISQRT
     
-    MEMVAR lL_ALOG
-    
     PARAMTYPE 1 VAR fhLog AS NUMBER
   
     __ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
@@ -3692,7 +3674,6 @@ static procedure tBigNtst31(fhLog)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    laLog:=lL_ALOG
     otBigW:SetDecimals(nACC_ALOG)
     otBigW:nthRootAcc(nACC_ALOG-1)
     
@@ -3701,13 +3682,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Ln():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Ln()',"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:aLn():ExactValue())
-        otBigW:SetValue(otBigW:e())
-        otBigW:SetValue(otBigW:Pow(cX))
-        __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3719,10 +3694,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log2():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log2()',"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog2()',"RESULT: "+otBigW:aLog2():ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3734,10 +3706,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log10():ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log10()',"RESULT: "+cX)
-    IF (laLog)
-           otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog10()',"RESULT: "+otBigW:aLog10():ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3749,10 +3718,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o1):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("1")'  ,"RESULT: "+otBigW:aLog(o1):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3764,10 +3730,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o2):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("2")'  ,"RESULT: "+otBigW:aLog(o2):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3779,9 +3742,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o3):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")'  ,"RESULT: "+cX)
-    IF (laLog)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("3")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(o3):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3793,10 +3754,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o4):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("4")'  ,"RESULT: "+otBigW:aLog(o4):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3808,10 +3766,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o5):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("5")'  ,"RESULT: "+otBigW:aLog(o5):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3823,10 +3778,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o6):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("6")'  ,"RESULT: "+otBigW:aLog(o6):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3838,10 +3790,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o7):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("7")'  ,"RESULT: "+otBigW:aLog(o7):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3853,10 +3802,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o8):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("8")'  ,"RESULT: "+otBigW:aLog(o8):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3868,10 +3814,7 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o9):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")'  ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("9")'  ,"RESULT: "+otBigW:aLog(o9):ExactValue())
-    EndIF
+
     __oRTime2:Calcule()
     __oRTime1:Calcule()
     __ConOut(fhLog,__cSep)
@@ -3883,10 +3826,6 @@ static procedure tBigNtst31(fhLog)
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o10):ExactValue()
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("10")' ,"RESULT: "+cX)
-    IF (laLog)
-        otBigW:SetValue(cX)
-        __ConOut(fhLog,cX+':tBigNumber():aLog("10")' ,"RESULT: "+otBigW:aLog(o10):ExactValue())
-    EndIF
 
     o0:=FreeObj(o0)
     o1:=FreeObj(o1)
@@ -3933,8 +3872,6 @@ static procedure tBigNtst32(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    Local laLog     AS LOGICAL
     
     MEMVAR nACC_SET
     MEMVAR nROOT_ACC_SET
@@ -3948,13 +3885,9 @@ static procedure tBigNtst32(fhLog)
     
     MEMVAR nISQRT
     
-    MEMVAR lL_ALOG
-    
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
    __ConOut(fhLog," BEGIN ------------ Teste LOG 1 -------------- ")
-   
-    laLog:=lL_ALOG
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3997,9 +3930,6 @@ static procedure tBigNtst32(fhLog)
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             ASSIGN cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
-            IF (laLog)
-                __ConOut(fhLog,cX+':tBigNumber():aLog("'+cN+'")'  ,"RESULT: "+otBigW:SetValue(cX):aLog(cN):ExactValue())
-            EndIF
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
             __ConOut(fhLog,__cSep)
@@ -4036,8 +3966,6 @@ static procedure tBigNtst33(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    Local laLog     AS LOGICAL
  
     MEMVAR nACC_SET
     MEMVAR nROOT_ACC_SET
@@ -4051,13 +3979,9 @@ static procedure tBigNtst33(fhLog)
     
     MEMVAR nISQRT
     
-    MEMVAR lL_ALOG
- 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     __ConOut(fhLog," BEGIN ------------ Teste LN 1 -------------- ")
-    
-    laLog:=lL_ALOG
     
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -4079,9 +4003,6 @@ static procedure tBigNtst33(fhLog)
         ASSIGN cW:=hb_ntos(w)
         ASSIGN cX:=otBigW:SetValue(cW):Ln():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
-        IF (laLog)
-            __ConOut(fhLog,cX+':tBigNumber():aLn()',"RESULT: "+otBigW:SetValue(cX):aLn():ExactValue())
-        EndIF
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,__cSep)

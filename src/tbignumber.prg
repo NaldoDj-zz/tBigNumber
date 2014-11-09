@@ -314,11 +314,6 @@ class tBigNumber from hbClass
 
     method Ln()           //TODO: Validar Calculo.
 
-    method aLog(uBigNB)   //TODO: Validar Calculo.
-    method aLog2()        //TODO: Validar Calculo.
-    method aLog10()       //TODO: Validar Calculo.
-    method aLn()          //TODO: Validar Calculo.
-
     method MathC(uBigN1,cOperator,uBigN2)
     method MathN(uBigN1,cOperator,uBigN2)
 
@@ -2946,55 +2941,6 @@ return(self:LogN(ob10))
 */
 method Ln() class tBigNumber
 return(self:LogN(s__o1:Exp()))
-
-/*
-    method      : aLog
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o Antilogaritmo
-    Sintaxe     : tBigNumber():aLog(uBigNB) -> oBigNR
-*/
-method aLog(uBigNB) class tBigNumber
-    local oaLog:=tBigNumber():New(uBigNB)
-    local EPS:=s__o0:Clone()
-    local n:=s__nthRAcc-1
-    local s
-    s__IncS0(n)
-    s:="0."+Left(s__cN0,n)+"1"
-    EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
-return(__Pow(oaLog,self,EPS))
-
-/*
-    method      : aLog2
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o Antilogaritmo Base 2
-    Sintaxe     : tBigNumber():aLog2() -> oBigNR
-*/
-method aLog2() class tBigNumber
-    local ob2:=s__o2:Clone()
-return(self:aLog(ob2))
-
-/*
-    method      : aLog10
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o Antilogaritmo Base 10
-    Sintaxe     : tBigNumber():aLog10() -> oBigNR
-*/
-method aLog10() class tBigNumber
-    local ob10:=s__o10:Clone()
-return(self:aLog(ob10))
-
-/*
-    method      : aLn
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o AntiLogaritmo Natural
-    Sintaxe     : tBigNumber():aLn() -> oBigNR
-*/
-method aLn() class tBigNumber
-return(self:aLog(s__o1:Exp()))
 
 /*
     method    : MathC
