@@ -8,7 +8,7 @@ static function GetBigNAnim()
     aAdd(aAnim,aBicycling())
     aAdd(aAnim,aMararena())
     aAdd(aAnim,aBaseball())
-    aEval(aAnim,{|s,n|s:=StrTran(StrTran(StrTran(s,cCR,""),cLF,""),cEoL),aAnim[n]:=s})
+    aEval(aAnim,{|s,n|s:=StrTran(StrTran(StrTran(s,cCR,""),cLF,""),cEoL,""),aAnim[n]:=s})
 return(aAnim)    
 static function aSwimming()
     /* http://www.incredibleart.org/links/ascii.html (ASCII Animated Art by Joan Stark) */

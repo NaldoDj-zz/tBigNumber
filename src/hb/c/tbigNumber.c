@@ -63,7 +63,7 @@
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n);
 
         template <typename tTO_STRING>
-		static std::string to_string(tTO_STRING const& value){
+        static std::string to_string(tTO_STRING const& value){
             std::stringstream sstr;
             sstr.precision(std::numeric_limits<long double>::digits10+100);
             sstr << std::fixed << value;
@@ -1062,32 +1062,32 @@
         {
            if (HB_ISCHAR(1)&HB_ISCHAR(2))
            {
-				HB_MATH_EXCEPTION hb_exc;
-				long double ldResult;
-				long double ldArgN=strtold(hb_parc(1),NULL);
-				long double ldArgB=strtold(hb_parc(2),NULL);
-				hb_mathResetError(&hb_exc);
-				ldResult=(log10l(ldArgN)/log10l(ldArgB));
-				if( hb_mathGetError(&hb_exc,"LOG10L",ldArgN,ldArgB,ldResult))
-				{
-					std::string str=to_string(0.0);
-					char * cstr=(char*)hb_xgrab(str.length()+1);
-					std::strcpy(cstr,str.c_str());
-					hb_retclen(cstr,strlen(cstr));
-					hb_xfree(cstr);
-				} 
-				else
-				{ 
-					std::string str=to_string(ldResult);
-					if (str.find("inf")!=std::string::npos||str.find("nan")!=std::string::npos)
+                HB_MATH_EXCEPTION hb_exc;
+                long double ldResult;
+                long double ldArgN=strtold(hb_parc(1),NULL);
+                long double ldArgB=strtold(hb_parc(2),NULL);
+                hb_mathResetError(&hb_exc);
+                ldResult=(log10l(ldArgN)/log10l(ldArgB));
+                if( hb_mathGetError(&hb_exc,"LOG10L",ldArgN,ldArgB,ldResult))
+                {
+                    std::string str=to_string(0.0);
+                    char * cstr=(char*)hb_xgrab(str.length()+1);
+                    std::strcpy(cstr,str.c_str());
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                } 
+                else
+                { 
+                    std::string str=to_string(ldResult);
+                    if (str.find("inf")!=std::string::npos||str.find("nan")!=std::string::npos)
                     {
                         str=to_string(0.0);
                     }
                     char * cstr=(char*)hb_xgrab(str.length()+1);
                     std::strcpy(cstr,str.c_str());
-					hb_retclen(cstr,strlen(cstr));
-					hb_xfree(cstr);
-				}
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                }
            }
            else 
            {
@@ -1098,7 +1098,7 @@
                 hb_xfree(cstr);
             }
         }
-		
+        
     #pragma ENDDUMP
 
 #endif // __HARBOUR__
