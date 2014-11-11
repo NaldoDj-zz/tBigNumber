@@ -2918,7 +2918,8 @@ return(oS)
     Sintaxe     : tBigNumber():Log2() -> oBigNR
 */
 method Log2() class tBigNumber
-return(self:LogN(s__o2))
+    local ob2:=s__o2:Clone()
+return(self:LogN(ob2))
 
 /*
     method      : Log10
@@ -2928,7 +2929,8 @@ return(self:LogN(s__o2))
     Sintaxe     : tBigNumber():Log10() -> oBigNR
 */
 method Log10() class tBigNumber
-return(self:LogN(s__o10))
+    local ob10:=s__o10:Clone()
+return(self:LogN(ob10))
 
 /*
     method      : Ln
@@ -2938,7 +2940,7 @@ return(self:LogN(s__o10))
     Sintaxe     : tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
-return(self:LogN(self:Exp()))
+return(self:LogN(s__o1:Exp()))
 
 /*
     method    : MathC
