@@ -9,8 +9,8 @@
 
     #DEFINE NP_GRID             "100"           //Informe um Numero Par
     #DEFINE NP_THREAD           5               //Numero de Threads Concorrentes
-    #DEFINE NP_MAXZERO          25              //0000000000000000000000000  |How big do you want?
-    #DEFINE NP_MAXNUMP          (NP_MAXZERO+1)  //10000000000000000000000000 |MASK: 10.000.000.000.000.000.000.000.000
+    #DEFINE NP_MAXZERO          25              //0000000000000000000000000  | How big do you want?
+    #DEFINE NP_MAXNUMP          (NP_MAXZERO+1)  //10000000000000000000000000 | MASK: 10.000.000.000.000.000.000.000.000
     #DEFINE NP_PATHLCK          "\np_semaforo\"
     #DEFINE NP_FILELCK          NP_PATHLCK+"execute_np_number.nplck"
     #DEFINE NP_LOCKBYFNAME      NP_PATHLCK+"waitrun_np_number.nplck"
@@ -226,8 +226,8 @@
                 ASSIGN nWait:=0
                 While ((++nWait)<=nSL)
                     ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
-                    ASSIGN cIncRegua+=" |"+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-                    ASSIGN cIncRegua+=" |"+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
                     oProcess:IncRegua1(cIncRegua)
                     oRTime1:Calcule()
                     IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
@@ -246,8 +246,8 @@
 
                 IF (lProcessa)
                     ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
-                    ASSIGN cIncRegua+=" |"+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-                    ASSIGN cIncRegua+=" |"+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
                     oProcess:IncRegua1(cIncRegua)
                     IF (oProcess:lEnd)
                         UnLockNPFile(@NP_FILELCK)
@@ -438,9 +438,9 @@
         ASSIGN cNI:=aGPPEnv[1]
         ASSIGN cNF:=aGPPEnv[2]
 
-        ASSIGN cInterval:=(cNI+"|"+cNF)
+        ASSIGN cInterval:=(cNI+":"+cNF)
 
-        PTInternal(1,"[NP][U_GMathPEnv][Interval: "+cInterval+"][Start][BEGIN PREPENV]")
+        PTInternal(1,"[NP][U_GMathPEnv][Interval]["+cInterval+"][Start][BEGIN PREPENV]")
 
         TRYEXCEPTION
 
@@ -457,11 +457,11 @@
 
             ASSIGN &(NP_PRVT_NPLPENV):=.T.
 
-            PTInternal(1,"[NP][U_GMathPEnv][Interval: "+cInterval+"][Start][BEGIN PREPENV][True]")
+            PTInternal(1,"[NP][U_GMathPEnv][Interval]["+cInterval+"][Start][BEGIN PREPENV][True]")
 
         CATCHEXCEPTION
 
-            PTInternal(1,"[NP][U_GMathPEnv][Interval: "+cInterval+"][Start][BEGIN PREPENV][False]")
+            PTInternal(1,"[NP][U_GMathPEnv][Interval]["+cInterval+"][Start][BEGIN PREPENV][False]")
 
             ConOut("","","[NP_ERROR]"+CaptureError(.T.))
 
@@ -493,14 +493,14 @@
         ASSIGN cNF:=aGPCall[2]
         ASSIGN lGridC:=aGPCall[3]
 
-        ASSIGN cInterval:=(cNI+"|"+cNF)
+        ASSIGN cInterval:=(cNI+":"+cNF)
 
-        PTInternal(1,"[NP][U_GMathCall][Interval: "+cInterval+"][Start]")
+        PTInternal(1,"[NP][U_GMathCall][Interval]["+cInterval+"][Start]")
         Sleep(NP_SLEEP_MIN)
 
         ASSIGN lRet:=MathIPNum(@cNI,@cNF,@lGridC)
 
-        PTInternal(1,"[NP][U_GMathCall][Interval: "+cInterval+"][Finish]")
+        PTInternal(1,"[NP][U_GMathCall][Interval]["+cInterval+"][Finish]")
         Sleep(NP_SLEEP_MIN)
 
     Return(lRet)
@@ -555,7 +555,7 @@
         ASSIGN cPort:=GetPvProfString("TCP","PORT","",GetSrvIniName())
         ASSIGN cThread:=NToS(ThreadID())
         ASSIGN cEnvServer:=GetEnvServer()
-        ASSIGN cInterval:=(cN+"|"+cM)
+        ASSIGN cInterval:=(cN+":"+cM)
 
         TRYEXCEPTION
 
@@ -563,7 +563,7 @@
                 ASSIGN cIP:="This"
             EndIF
 
-            PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Start]")
+            PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Start]")
 
             While (oN:lte(@oM))
                 IKillApp(.F.)
@@ -639,9 +639,9 @@
 
                 Next nID
 
-                ASSIGN cIntExec:=(aThread[1][2]+"|"+aThread[nFinal][2])
+                ASSIGN cIntExec:=(aThread[1][2]+" | "+aThread[nFinal][2])
 
-                PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Start]")
+                PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Start]")
                 Sleep(NP_SLEEP_MIN)
 
                 For nID:=1 To nFinal
@@ -652,10 +652,10 @@
                     EndIF
                 Next nID
 
-                PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Sleep]")
+                PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Sleep]")
                 Sleep(NP_SLEEP_MAX*2)
 
-                PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Wait]")
+                PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Wait]")
                 Sleep(NP_SLEEP_MIN)
 
                 While .NOT.(KillApp())
@@ -731,20 +731,20 @@
                         Exit
                     EndIF
 
-                    PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Sleep]")
+                    PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Sleep]")
                     Sleep(NP_SLEEP_MAX)
 
-                    PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Wait]")
+                    PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][Wait]")
                     Sleep(NP_SLEEP_MED)
 
                 End While
 
-                PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][End]")
+                PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+cIntExec+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][End]")
                 Sleep(NP_SLEEP_MIN)
 
             End While
 
-            PTInternal(1,"[NP][MathIPNum][Interval: "+cInterval+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][End]")
+            PTInternal(1,"[NP][MathIPNum][Interval]["+cInterval+"]["+(cEnvServer+"_IP_"+cIP+"_Port_"+cPort+"_Thread_"+cThread)+"][End]")
             Sleep(NP_SLEEP_MIN)
 
         CATCHEXCEPTION
@@ -1876,10 +1876,10 @@
         //----------------------------------------------------------------------------------------------
         oRTime2:Calcule(.T.)
         ASSIGN cIncRegua:="["+oProgress2:Eval("RANDOM")+"]"
-        ASSIGN cIncRegua+=" |"+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
-        ASSIGN cIncRegua+=" |"+"Média"+":["+oRTime2:GetcAverageTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime2:GetcAverageTime()+"]"
         IF .NOT.(Empty(aGPCall))
-            ASSIGN cIncRegua+=" |[Interval]["+aGPCall[1][1]+"|"+aGPCall[Len(aGPCall)][2]+"]"
+            ASSIGN cIncRegua+=" | [Interval]["+aGPCall[1][1]+":"+aGPCall[Len(aGPCall)][2]+"]"
         EndIF
         //----------------------------------------------------------------------------------------------
         oProcess:cMsg2:=cIncRegua
@@ -1887,8 +1887,8 @@
         //----------------------------------------------------------------------------------------------
         oRTime1:Calcule(.F.)
         ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
-        ASSIGN cIncRegua+=" |"+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-        ASSIGN cIncRegua+=" |"+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
         //----------------------------------------------------------------------------------------------
         oProcess:cMsg1:=cIncRegua
         oProcess:oMsg1:Refresh(.T.)
