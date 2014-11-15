@@ -30,7 +30,7 @@
         #DEFINE _SET_DELETED    11
     #ENDIF
 
-    #xtranslate NToS([<prm,...>]) => LTrim(Str([<prm>]))
+    #xtranslate NToS([<prm,...>])=>LTrim(Str([<prm>]))
 
     Static __aLockNPFile        AS ARRAY
     Static __nPMaxNumP          AS NUMBER       VALUE NP_MAXNUMP
@@ -67,14 +67,14 @@
         Uso     : Verificar os Numeros Perfeitos em um Determinado Intervalo (Usando Grid)
 
         Formula para Obter um Numero Perfeito
-       <x> Representa a Ordem do Numero Perfeito
+       <x>Representa a Ordem do Numero Perfeito
 
         2^(<x>-1)*(2^<x>-1)
 
-        para<x> =2: 2^1(2^2 - 1) =6
-        para<x> =3: 2^2(2^3 - 1) =28
-        para<x> =5: 2^4(2^5 - 1) =496
-        para<x> =7: 2^6(2^7 - 1) =8128
+        para<x>=2: 2^1(2^2 - 1)=6
+        para<x>=3: 2^2(2^3 - 1)=28
+        para<x>=5: 2^4(2^5 - 1)=496
+        para<x>=7: 2^6(2^7 - 1)=8128
 
     */
     User Function NPerfeitos()
@@ -175,7 +175,7 @@
             While .NOT.(lIsDir(NP_PATHLCK))
                 ASSIGN nWait:=0
                 MakeDir(NP_PATHLCK)
-                IF (++nWait> NP_GRIDBMAXWAIT)
+                IF (++nWait>NP_GRIDBMAXWAIT)
                     UserException(OemToAnsi("[NP_EXCEPTION][NPerfeitos][Impossível Criar Diretório: "+NP_PATHLCK+"]"))
                 EndIF
             End While
@@ -212,13 +212,13 @@
             ASSIGN oN2:=tBigNumber():New("2")
             ASSIGN oNS:=tBigNumber():New()
 
-            ASSIGN cNI:=GetStartNumber(.F.)
-            ASSIGN nSL:=Len(cNI)
-
             ASSIGN oProgress1:=tSProgress():New(ctPAnim1,";")
             ASSIGN oProgress2:=tSProgress():New(ctPAnim2,";")
             ASSIGN oRTime1:=tRemaining():New(nEL)
             ASSIGN oRTime2:=tRemaining():New(NP_MAXINCREGUA2)
+
+            ASSIGN cNI:=GetStartNumber(.F.,@lProcessa,@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+            ASSIGN nSL:=Len(cNI)
 
             IF (lProcessa)
                 oProcess:SetRegua1(nEL)
@@ -346,8 +346,9 @@
 
                 End While
 
-                ASSIGN cNS:=GetStartNumber(.T.)
-                IF .NOT.(cNS =="6")
+                ASSIGN cNS:=GetStartNumber(.T.,@lProcessa,@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+
+                IF .NOT.(cNS=="6")
                     oNS:SetValue(cNS)
                     IF oNS:lt(oNI)
                         oNI:SetValue(oNS)
@@ -381,7 +382,7 @@
 
         CATCHEXCEPTION
 
-            IF (Select(__cAliasNP)> 0)
+            IF (Select(__cAliasNP)>0)
 
                 IF (__ldbfCDXAds)
                     (__cAliasNP)->(dbSetOrder(OrdNumber("NP_NUMBER2")))
@@ -603,7 +604,7 @@
 
                     IKillApp(.F.)
 
-                    IF (++nNumber> nNumbers)
+                    IF (++nNumber>nNumbers)
                         Loop
                     EndIF
 
@@ -766,7 +767,7 @@
         Local aDbs      AS ARRAY    VALUE &(NP_PRVT_NPDBS)
         Local lPrepEnv  AS LOGICAL  VALUE &(NP_PRVT_NPLPENV)
         PTInternal(1,"[NP][U_GMathEnd][Start]")
-        IF ((ValType(lPrepEnv) =="L") .and. lPrepEnv)
+        IF ((ValType(lPrepEnv)=="L") .and. lPrepEnv)
             PTInternal(1,"[NP][U_GMathEnd][Exec]")
             CloseDBs(@aDBs)
         EndIF
@@ -1013,28 +1014,28 @@
                 ASSIGN nfhNPFile:=fCreate(cFLock)
                 IF (File(cFLock))
                     fClose(nfhNPFile)
-                    IF (nMode ==0)
+                    IF (nMode==0)
                         ASSIGN lLock:=.T.
                         BREAK
                     EndIF
                     ASSIGN nfhNPFile:=fOpen(cFLock,nMode)
-                    ASSIGN lLock:=(fError() ==0)
+                    ASSIGN lLock:=(fError()==0)
                     ASSIGN nWaitErr:=0
                     While .NOT.(lLock)
                         ASSIGN nfhNPFile:=fOpen(cFLock,nMode)
-                        IF (ASSIGN lLock:=(fError() ==0))
+                        IF (ASSIGN lLock:=(fError()==0))
                             Exit
                         EndIF
-                        IF ((++nWaitErr)> NP_GRIDBMAXWAIT)
+                        IF ((++nWaitErr)>NP_GRIDBMAXWAIT)
                             BREAK
                         EndIF
                         Sleep(NP_SLEEP_MIN)
                     End While
                 EndIF
                 IF File(cFLock)
-                    ASSIGN nLockNPFile:=aScan(__aLockNPFile,{|aLock|(aLock[2] ==-1)})
-                    IF (nLockNPFile> 0)
-                        IF .NOT.(cFLock ==__aLockNPFile[nLockNPFile][1])
+                    ASSIGN nLockNPFile:=aScan(__aLockNPFile,{|aLock|(aLock[2]==-1)})
+                    IF (nLockNPFile>0)
+                        IF .NOT.(cFLock==__aLockNPFile[nLockNPFile][1])
                             IF File(__aLockNPFile[nLockNPFile][1])
                                 fErase(__aLockNPFile[nLockNPFile][1])
                             EndIF
@@ -1047,7 +1048,7 @@
                     Exit
                 EndIF
                 Sleep(NP_SLEEP_MIN)
-                IF ((++nWait)> NP_GRIDBMAXWAIT)
+                IF ((++nWait)>NP_GRIDBMAXWAIT)
                     Exit
                 EndIF
             End While
@@ -1075,14 +1076,14 @@
         PARAMTYPE 1 VAR cNPFile AS CHARACTER
 
         ASSIGN cFUNLock:=Lower(cNPFile)
-        ASSIGN nLockNPFile:=aScan(__aLockNPFile,{|aLock|(aLock[1] ==cFUNLock)})
+        ASSIGN nLockNPFile:=aScan(__aLockNPFile,{|aLock|(aLock[1]==cFUNLock)})
 
         BEGIN SEQUENCE
 
-            IF (nLockNPFile> 0)
+            IF (nLockNPFile>0)
                 ASSIGN nfhNPFile:=__aLockNPFile[nLockNPFile][2]
                 ASSIGN __aLockNPFile[nLockNPFile][2]:=-1
-                IF (nfhNPFile> 0)
+                IF (nfhNPFile>0)
                     fClose(nfhNPFile)
                 EndIF
             EndIF
@@ -1094,7 +1095,7 @@
                     BREAK
                 EndIF
                 Sleep(NP_SLEEP_MIN)
-                IF ((++nWait)> NP_GRIDBMAXWAIT)
+                IF ((++nWait)>NP_GRIDBMAXWAIT)
                     Exit
                 EndIF
             End While
@@ -1152,7 +1153,7 @@
 
             RddSetDefault(@__cNPRDD)
 
-            IF .NOT.(Type("__cRDD") =="C")
+            IF .NOT.(Type("__cRDD")=="C")
                 Private __cRDD AS CHARACTER VALUE __cNPRDD
             EndIF
 
@@ -1162,7 +1163,7 @@
                     Connect(NIL,.T.,NIL,NIL,4,)
                     ASSIGN nTcLink:=AdvConnection()
                     IF .NOT.(Empty(nTcLink))
-                        IF (nTcLink ==-1)
+                        IF (nTcLink==-1)
                             UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível conectar ao DBMS]"))
                         EndIF
                     EndIF
@@ -1173,15 +1174,15 @@
                 ASSIGN cIDNP:=RetFileName(cIDNP)
             EndIF
 
-            IF .NOT.(Type(NP_PRVT_IPALIAS) =="C")
+            IF .NOT.(Type(NP_PRVT_IPALIAS)=="C")
                 _SetOwnerPrvt(NP_PRVT_IPALIAS,GetNextAlias())
             EndIF
 
-            IF .NOT.(Type(NP_PRVT_NPALIAS) =="C")
+            IF .NOT.(Type(NP_PRVT_NPALIAS)=="C")
                 _SetOwnerPrvt(NP_PRVT_NPALIAS,GetNextAlias())
             EndIF
 
-            IF .NOT.(Type(NP_PRVT_NPDBS) =="A")
+            IF .NOT.(Type(NP_PRVT_NPDBS)=="A")
                 _SetOwnerPrvt(NP_PRVT_NPDBS,{})
             EndIF
 
@@ -1215,7 +1216,7 @@
 
             ASSIGN lPMaxNumP:=(Len((__cAliasIP)->IP_NUMBER)< __nPMaxNumP)
 
-            IF (Len((__cAliasIP)->IP_NUMBER)> __nPMaxNumP)
+            IF (Len((__cAliasIP)->IP_NUMBER)>__nPMaxNumP)
                 ASSIGN lPMaxNumP:=.T.
                 ASSIGN __nPMaxNumP:=Max(__nPMaxNumP,Len((__cAliasIP)->IP_NUMBER))
                 ASSIGN aDBIP[1][DBS_LEN]:=__nPMaxNumP
@@ -1263,7 +1264,7 @@
                 (__cAliasIP)->(dbCloseArea())
                 IF .NOT.(MsErase(cDBIP,NIL,__cNPRDD))
                     IF File(cDBIP)
-                        IF .NOT.(fErase(cDBIP) ==0)
+                        IF .NOT.(fErase(cDBIP)==0)
                             UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível dropar tabela "+ cDBIP+" para Recriacao]"))
                         EndIF
                     EndIF
@@ -1320,7 +1321,7 @@
 
             ASSIGN lPMaxNumP:=(Len((__cAliasNP)->NP_NUMBER)< __nPMaxNumP)
 
-            IF (Len((__cAliasNP)->NP_NUMBER)> __nPMaxNumP)
+            IF (Len((__cAliasNP)->NP_NUMBER)>__nPMaxNumP)
                 ASSIGN lPMaxNumP:=.T.
                 ASSIGN __nPMaxNumP:=Max(__nPMaxNumP,Len((__cAliasNP)->NP_NUMBER))
                 ASSIGN aDBNP[1][DBS_LEN]:=__nPMaxNumP
@@ -1368,7 +1369,7 @@
                 (__cAliasNP)->(dbCloseArea())
                 IF .NOT.(MsErase(cDBNP,NIL,__cNPRDD))
                     IF File(cDBNP)
-                        IF .NOT.(fErase(cDBNP) ==0)
+                        IF .NOT.(fErase(cDBNP)==0)
                             UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível dropar tabela "+ cDBNP+" para Recriacao]"))
                         EndIF
                     EndIF
@@ -1419,8 +1420,8 @@
                 ASSIGN cEmpty:=Space(__nPMaxNumP)
 
                 (__cAliasIP)->(dbGotop())
-                ASSIGN lPack:=(__cAliasIP)->((IP_NUMBER ==cEmpty) .or. dbSeek(cEmpty,.F.))
-                While (__cAliasIP)->(.NOT.(Eof()) .and. (IP_NUMBER ==cEmpty))
+                ASSIGN lPack:=(__cAliasIP)->((IP_NUMBER==cEmpty) .or. dbSeek(cEmpty,.F.))
+                While (__cAliasIP)->(.NOT.(Eof()) .and. (IP_NUMBER==cEmpty))
                     (__cAliasIP)->(dbDelete())
                     (__cAliasIP)->(dbSkip())
                 End While
@@ -1430,8 +1431,8 @@
                 (__cAliasIP)->(dbCloseArea())
 
                 (__cAliasNP)->(dbGotop())
-                ASSIGN lPack:=(__cAliasNP)->((NP_NUMBER ==cEmpty) .or. dbSeek(cEmpty,.F.))
-                While (__cAliasNP)->(.NOT.(Eof()) .and. (NP_NUMBER ==cEmpty))
+                ASSIGN lPack:=(__cAliasNP)->((NP_NUMBER==cEmpty) .or. dbSeek(cEmpty,.F.))
+                While (__cAliasNP)->(.NOT.(Eof()) .and. (NP_NUMBER==cEmpty))
                     (__cAliasNP)->(dbDelete())
                     (__cAliasNP)->(dbSkip())
                 End While
@@ -1513,7 +1514,7 @@
     */
     Static Function CloseDBs(aDBs)
         PARAMTYPE 1 VAR aDBs AS ARRAY
-        aEval(aDBs,{|cAlias|IF(Select(cAlias)> 0,(cAlias)->(dbCloseArea()),NIL)})
+        aEval(aDBs,{|cAlias|IF(Select(cAlias)>0,(cAlias)->(dbCloseArea()),NIL)})
         aSize(aDBs,0)
     Return(.T.)
 
@@ -1523,7 +1524,7 @@
         Data    : 13/07/2011
         Uso     : Obtem o Numero Inicial
     */
-    Static Function GetStartNumber(lBegin)
+    Static Function GetStartNumber(lBegin,lProcessa,oProcess,oProgress1,oProgress2,oRTime1,oRTime2,nIncRegua,aGPCall)
 
         Local cN        AS CHARACTER
         Local cM        AS CHARACTER
@@ -1535,7 +1536,7 @@
         IF (lBegin)
 
             BEGIN SEQUENCE
-                IF (__cAliasNP)->(.NOT.(RecCount() ==0))
+                IF (__cAliasNP)->(.NOT.(RecCount()==0))
                     (__cAliasNP)->(dbGoTop())
                     IF (__ldbfCDXAds)
                         (__cAliasIP)->(dbSetOrder(OrdNumber("IP_NUMBER2")))
@@ -1547,6 +1548,9 @@
                                 BREAK
                             EndIF
                             (__cAliasNP)->(dbSkip())
+                            IF (lProcessa)
+                                IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+                            EndIF
                         End While
                     Else
                         IF (__lCtreeCDX)
@@ -1561,7 +1565,7 @@
                                 BREAK
                             EndIF
                             While (__cAliasIP)->(.NOT.(Eof()))
-                                lFound:=(cN ==(__cAliasIP)->(IP_NUMBER))
+                                lFound:=(cN==(__cAliasIP)->(IP_NUMBER))
                                 IF (lFound)
                                     EXIT
                                 EndIF
@@ -1571,6 +1575,9 @@
                                 BREAK
                             EndIF
                             (__cAliasNP)->(dbSkip())
+                            IF (lProcessa)
+                                IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+                            EndIF
                         End While
                     EndIF
                     (__cAliasIP)->(dbSetFilter({||IP_TTS==.F.},"IP_TTS==.F."))
@@ -1583,10 +1590,13 @@
                     While (__cAliasIP)->(.NOT.(Eof()))
                         ASSIGN cM:=(__cAliasIP)->IP_NUMBER
                         ASSIGN cM:=PadL(RTrim(AllTrim(cM)),__nPMaxNumP)
-                        IF (cN> cM)
+                        IF (cN>cM)
                             cN:=cM
                         EndIF
                         (__cAliasIP)->(dbSkip())
+                        IF (lProcessa)
+                            IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
+                        EndIF
                     End While
                 EndIF
             END SEQUENCE
@@ -1645,7 +1655,7 @@
             EndIF
 
             ASSIGN nInstances:=Val(GetPvProfString("GridAgent","Instances",GetEnvServer(),GetSrvIniName()))
-            While (nInstances> 0)
+            While (nInstances>0)
                 --nInstances
                 StartJob("GridAgent",cAEnv,.F.)
                 ASSIGN nWait:=0
@@ -1654,7 +1664,7 @@
                 End While
             End While
 
-            IF .NOT.(ValType(oGClient) =="O")
+            IF .NOT.(ValType(oGClient)=="O")
                 ASSIGN oGClient:=GridClient():New()
                 ASSIGN oGClient:lBlind:=.T.    //Nao Executa a Processa
             EndIF
@@ -1786,7 +1796,7 @@
         Local cTcSrvType    AS CHARACTER    VALUE Upper(AllTrim(TcSrvType()))
 
         Local lDropped      AS LOGICAL      VALUE .T.
-        Local lAS400        AS LOGICAL      VALUE (cTcSrvType =="AS/400")
+        Local lAS400        AS LOGICAL      VALUE (cTcSrvType=="AS/400")
 
         Local nBag          AS NUMBER
         Local nBags         AS NUMBER
@@ -1805,7 +1815,7 @@
                     Else
                         ASSIGN cQuery:=("Drop Index "+aOrdBag[nBag][3])
                     EndIF
-                       ASSIGN lDropped:=(TcSqlExec(cQuery) ==0)
+                       ASSIGN lDropped:=(TcSqlExec(cQuery)==0)
                 Else
                     ASSIGN lDropped:=MsErase(cTable,aOrdBag[nBag][3],"TOPCONN")
                 EndIF
@@ -1839,6 +1849,7 @@
                     Next nObj
                 Next nMeter
             Else
+                oProcess:oDlg:Hide()
                 DEFAULT oFont:=TFont():New("Lucida Console",NIL,18,NIL,.T.)
                 DEFAULT lODlgF:=.T.
                 DEFAULT lODlgW:=.F.
@@ -1866,6 +1877,7 @@
                     oProcess:oDlg:oCTLFocus:nLeft+=nCTLFLeft
                 EndIF
                 oProcess:oDlg:Refresh(.T.)
+                oProcess:oDlg:Show()
             EndIF
             lProcRedefine:=.T.
         EndIF
