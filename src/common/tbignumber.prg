@@ -372,7 +372,7 @@ class tBigNumber from hbClass
              "[]"    = __OpArrayIndex
         */
 
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H, CLASSES.C AND HVM.C */
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: hb_APICLS.H, CLASSES.C AND HVM.C */
 
         OPERATOR "=="  ARG uBigN INLINE __OpEqual(self,uBigN)
         OPERATOR "="   ARG uBigN INLINE __OpEqual(self,uBigN)        //(same as "==")
@@ -3690,7 +3690,7 @@ static function __Random(nB,nE)
     endif
 
     #ifdef __HARBOUR__
-        nR:=Abs(HB_RandomInt(nB,nE))
+        nR:=Abs(hb_RandomInt(nB,nE))
     #else //__PROTHEUS__
         nR:=Randomize(nB,nE)
     #endif
@@ -4829,7 +4829,7 @@ return(r)
         #ifndef TBN_MEMIO
             static function CriaTrab(aStru,cRDD)
                 local cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
-                local cFile:=cFolder+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
+                local cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 local lSuccess:=.F.
                 while .not.(lSuccess)
                     Try
@@ -4837,21 +4837,21 @@ return(r)
                       dbCreate(cFile,aStru,cRDD)
                       lSuccess:=.T.
                     Catch
-                      cFile:="TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)+".dbf"
+                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                       lSuccess:=.F.
                     end
                 end while
             return(cFile)
         #else
             static function CriaTrab(aStru,cAlias)
-                local cFile:="mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)
+                local cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 local lSuccess:=.F.
                 while .not.(lSuccess)
                     Try
                       dbCreate(cFile,aStru,NIL,.T.,cAlias)
                       lSuccess:=.T.
                     Catch
-                      cFile:="mem:"+"TBN"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,9999),4)
+                      cFile:="mem:""tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                       lSuccess:=.F.
                     end
                 end while
@@ -5547,7 +5547,7 @@ return
     static function __PITthD()
     return(__hbPITthD())
 
-    /* warning: 'void HB_FUN_...()'  defined but not used [-Wunused-function]...*/
+    /* warning: 'void hb_FUN_...()'  defined but not used [-Wunused-function]...*/
     static function __Dummy(lDummy)
         lDummy:=.F.
         if (lDummy)
