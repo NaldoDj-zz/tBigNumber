@@ -1668,7 +1668,7 @@ static procedure tBigNtst05(fhLog)
 
     __ConOut(fhLog,"")
     
- return
+return
  
  static procedure tBigNtst06(fhLog)
 
@@ -2921,7 +2921,7 @@ static procedure tBigNtst22(fhLog)
     Local cX        AS CHARACTER
     Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
+    Local n         AS NUMBER VALUE 19701215
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
