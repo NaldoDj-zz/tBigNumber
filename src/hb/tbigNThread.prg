@@ -25,7 +25,7 @@ procedure tBigNthStart(nThreads,aThreads,nMemMode)
 return
 
 procedure tBigNthNotify(aThreads)
-    aEval(aThreads,{|ath,nTh|ath[TH_RES]:=NIL,ath[TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
+    aEval(aThreads,{|ath,nTh|aThreads[nTh][TH_RES]:=NIL,aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
 return
 
 procedure tBigNthWait(aThreads)
@@ -58,7 +58,7 @@ procedure tbigNthRun(mtxJob,aThreads)
     begin sequence
         while .T.
             if hb_mutexSubscribe(mtxJob,NIL,@xJob)
-                cTyp := ValType(xJob)
+                cTyp:=ValType(xJob)
                 switch cTyp
                 case "B"
                     Eval(xJob)
@@ -68,8 +68,9 @@ procedure tbigNthRun(mtxJob,aThreads)
                     exit
                 case "N"
                     while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
-                    end while
-                    cTyp := ValType(aThreads[xJob][TH_EXE])
+						tBigNSleep(0.001)
+					end while
+                    cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
                     case "A"
                         aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
