@@ -88,9 +88,9 @@ Method New(cPath,nLocal) CLASS tPrime
     IF Empty(__aPTables)
         self:nSize:=10
         #IFDEF __HARBOUR__
-            DEFAULT cPath:=hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir()+hb_ps()+"PrimesTables"+hb_ps()
+            DEFAULT cPath:=hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir()+hb_ps()+"PrimesTables"+hb_ps()+"txt"+hb_ps()
         #ELSE //__PROTHEUS__
-            DEFAULT cPath:="\PrimesTables\"
+            DEFAULT cPath:="\PrimesTables\txt\"
         #ENDIF
         aFiles:=Directory(cPath+"prime*.txt")
         nFiles:=Len(aFiles)
@@ -296,7 +296,8 @@ Method IsPrime(cN,lForce) CLASS tPrime
 
         IF .NOT.(Empty(aLine))
             aEval(aLine,{|x|aAdd(__aIPLRead,x)})
-        EndIF
+			aSize(aLine,0)
+		EndIF
 
     END SEQUENCE
 
@@ -407,7 +408,8 @@ Method NextPrime(cN,lForce) CLASS tPrime
 
         IF .NOT.(Empty(aLine))
             aEval(aLine,{|x|aAdd(__aNPLRead,x)})
-        EndIF
+			aSize(aLine,0)
+		EndIF
 
         DEFAULT cPrime:=""
         self:cPrime:=cPrime
