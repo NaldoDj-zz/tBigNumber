@@ -4837,8 +4837,8 @@ return(r)
                       dbCreate(cFile,aStru,cRDD)
                       lSuccess:=.T.
                     Catch
-                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                       lSuccess:=.F.
+					  cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
             return(cFile)
@@ -4851,8 +4851,8 @@ return(r)
                       dbCreate(cFile,aStru,NIL,.T.,cAlias)
                       lSuccess:=.T.
                     Catch
-                      cFile:="mem:""tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                       lSuccess:=.F.
+					  cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
             return(cFile)
