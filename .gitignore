@@ -41,4 +41,4 @@ mg_error_log.htm
 /prj/mg/win/64/__mih_obj_*
 /prj/mg/win/64/*.txt
 /prj/mg/win/64/*.hot
-/PrimesTables/*.txt
+/PrimesTables/txt/*.txt
