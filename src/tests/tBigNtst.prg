@@ -10,10 +10,48 @@
         (6) log file name                (0/1)           
     */    
 //--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    //--------------------------------------------------------------------------------------------------------
+        #pragma -w2
+    //--------------------------------------------------------------------------------------------------------
+        #require "hbvmmt"
+        request HB_MT
+    //--------------------------------------------------------------------------------------------------------
+        #include "inkey.ch"
+        #include "setcurs.ch"
+        #include "hbgtinfo.ch"
+    //--------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------
+        MEMVAR nACC_SET
+        MEMVAR nROOT_ACC_SET
+        MEMVAR nACC_ALOG
+        MEMVAR __nSLEEP
+        MEMVAR nN_TEST
+        MEMVAR aC_OOPROGRESS
+        MEMVAR lL_OOPROGRAND
+        MEMVAR lL_ROPROGRESS
+        MEMVAR lL_LOGPROCESS
+        MEMVAR cC_GT_MODE
+        MEMVAR aAC_TSTEXEC
+        MEMVAR __oRTime1
+        MEMVAR __oRTime2
+        MEMVAR __nMaxRow
+        MEMVAR __nMaxCol
+        MEMVAR __nCol
+        MEMVAR __nRow
+        MEMVAR __noProgress
+        MEMVAR __oRTimeProc
+        MEMVAR __phMutex
+        MEMVAR nISQRT
+        MEMVAR __CRLF
+        MEMVAR __cSep
+    //--------------------------------------------------------------------------------------------------------
+#endif __HARBOUR__
+//--------------------------------------------------------------------------------------------------------
 #include "tBigNtst.ch"
 #include "tBigNumber.ch"
 #include "paramtypex.ch"
-
+//--------------------------------------------------------------------------------------------------------
 #define ACC_SET           "50"
 #define ROOT_ACC_SET      "50"
 #define ACC_ALOG          "50"
@@ -25,17 +63,11 @@
 #define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
 #define AC_TSTEXEC        "*"
-
+//--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
 #define __NRTTST__         35
-
+//--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
-    #pragma -w2
-    #require "hbvmmt"
-    request HB_MT
-    #include "inkey.ch"
-    #include "setcurs.ch"
-    #include "hbgtinfo.ch"
     Function Main()
         
         Local atBigNtst
@@ -54,18 +86,6 @@
         Local lFinalize
         Local ptftBigtstThread
         Local ptttBigtstThread
-      
-        MEMVAR nACC_SET
-        MEMVAR nROOT_ACC_SET
-        MEMVAR nACC_ALOG
-        MEMVAR __nSLEEP
-        MEMVAR nN_TEST
-        MEMVAR aC_OOPROGRESS
-        MEMVAR lL_OOPROGRAND
-        MEMVAR lL_ROPROGRESS
-        MEMVAR lL_LOGPROCESS
-        MEMVAR cC_GT_MODE
-        MEMVAR aAC_TSTEXEC
       
         CLS
       
@@ -227,7 +247,7 @@
         EndIF
 
     Return(0)
-
+    //--------------------------------------------------------------------------------------------------------
     static procedure tBigtstThread(lFinalize,atBigNtst,nMaxScrRow,nMaxScrCol)
 
         Local aThreads
@@ -278,11 +298,11 @@
         atBigNtst[3]:=NIL
         hb_gcAll(.T.)
     Return(.T.)
-
+    //--------------------------------------------------------------------------------------------------------
     Static Procedure tBigNtst(atBigNtst)
     
 #else /* __PROTHEUS__*/
-
+    //--------------------------------------------------------------------------------------------------------
     #xtranslate ExeName() => ProcName()
     //----------------------------------------------------------
     //Obs.: TAMANHO MAXIMO DE UMA STRING NO PROTHEUS 1.048.575
@@ -359,7 +379,7 @@
     atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     
     Return(tBigNtst(@atBigNtst))
-
+    //--------------------------------------------------------------------------------------------------------
     Static Procedure tBigNtst(atBigNtst)
 
 #endif /* __PROTHEUS__*/
@@ -406,33 +426,6 @@
         #else
             Local lKillProgress AS LOGICAL VALUE .F.
         #endif
-
-        MEMVAR nACC_SET
-        MEMVAR nROOT_ACC_SET
-        MEMVAR nACC_ALOG
-        MEMVAR __nSLEEP
-        MEMVAR nN_TEST
-        MEMVAR aC_OOPROGRESS
-        MEMVAR lL_OOPROGRAND
-        MEMVAR lL_ROPROGRESS
-        MEMVAR lL_LOGPROCESS
-        MEMVAR cC_GT_MODE
-
-        MEMVAR __CRLF
-        MEMVAR __cSep
-
-        MEMVAR __oRTime1
-        MEMVAR __oRTime2
-        MEMVAR __nMaxRow
-        MEMVAR __nMaxCol
-        MEMVAR __nCol
-        MEMVAR __nRow
-        MEMVAR __noProgress
-
-        MEMVAR __oRTimeProc
-        MEMVAR __phMutex
-        
-        MEMVAR nISQRT
 
         Private __nMaxRow       AS NUMBER VALUE (MaxRow()-9)
         Private __nMaxCol       AS NUMBER VALUE MaxCol()
@@ -593,7 +586,7 @@
 
     Return
 /*tBigNtst*/
-
+//--------------------------------------------------------------------------------------------------------
 static procedure ChkIntTstExec(aAC_TSTEXEC,nPad)
 
     Local aTmp
@@ -625,7 +618,7 @@ static procedure ChkIntTstExec(aAC_TSTEXEC,nPad)
     aSort(aAC_TSTEXEC,NIL,NIL,{|x,y|PadL(x,nPad)<PadL(y,nPad)})
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
     local nD
@@ -692,7 +685,7 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     next nD
  
 return(atBigNtst)
-
+//--------------------------------------------------------------------------------------------------------
 Static Function _StrToKArr(cStr,cToken)
     Local cDToken
     DEFAULT cStr:=""
@@ -706,13 +699,12 @@ Return(StrToKArr(cStr,cToken))
 #else
 Return(hb_aTokens(cStr,cToken))
 #endif
-    
+//--------------------------------------------------------------------------------------------------------
 Static Procedure __tbnSleep(nSleep)
     #ifdef __HARBOUR__
         #ifdef TBN_DBFILE
             Local nTime
         #endif
-        MEMVAR __nSLEEP
     #endif
     PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
     #ifdef __PROTHEUS__
@@ -727,7 +719,7 @@ Static Procedure __tbnSleep(nSleep)
         #endif
     #endif
 Return
-
+//--------------------------------------------------------------------------------------------------------
 Static Procedure __ConOut(fhLog,e,d)
 
     Local ld    AS LOGICAL
@@ -746,20 +738,6 @@ Static Procedure __ConOut(fhLog,e,d)
     Local cDOAt  AS CHARACTER
     Local nLines AS NUMBER
     Local nCLine AS NUMBER
-
-    MEMVAR __CRLF
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    MEMVAR __nMaxRow
-    MEMVAR __nMaxCol
-    MEMVAR __nRow
-
-    MEMVAR __oRTimeProc
-    MEMVAR __phMutex
-
-    MEMVAR lL_LOGPROCESS
 
 #endif
 
@@ -845,7 +823,7 @@ Static Procedure __ConOut(fhLog,e,d)
     endif
 
 Return
-
+//--------------------------------------------------------------------------------------------------------
 Static Function IsHb()
     Local lHarbour AS LOGICAL
     #ifdef __HARBOUR__
@@ -854,7 +832,7 @@ Static Function IsHb()
         ASSIGN lHarbour:=.F.
     #endif
 Return(lHarbour)
-
+//--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     Static Function cValToChar(e)
         Local s AS UNDEFINED
@@ -878,6 +856,7 @@ Return(lHarbour)
             ASSIGN s:=""
         ENDSWITCH
     Return(s)
+    //--------------------------------------------------------------------------------------------------------
     Static Procedure Progress(lKillProgress,__oRTimeProc,__phMutex,nCol,aProgress2,nProgress2,nSLEEP,nMaxCol,lRandom,lPRandom)
 
         Local aRdnPG     AS ARRAY                        VALUE Array(0)
@@ -1164,6 +1143,7 @@ Return(lHarbour)
         End While
 
     Return
+    //--------------------------------------------------------------------------------------------------------
     Static Procedure ftProgress(lKillProgress,nSLEEP,nMaxCol,nMaxRow)
 
         Local aAnim    AS ARRAY     VALUE GetBigNAnim()
@@ -1210,11 +1190,13 @@ Return(lHarbour)
         End While
 
     Return
+    //--------------------------------------------------------------------------------------------------------
     Static Procedure BuildScreen(fhLog,nMaxCol)
         CLEAR SCREEN
         __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
     Return
+    //--------------------------------------------------------------------------------------------------------
     Static Function FreeObj(oObj)
         oObj:=NIL
     Return(hb_gcAll(.T.))
@@ -1225,7 +1207,7 @@ Return(lHarbour)
         Return(StaticCall(TBIGNUMBER,tBigNGC))
     #endif
 #endif
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst01(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1241,18 +1223,6 @@ static procedure tBigNtst01(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1294,7 +1264,7 @@ static procedure tBigNtst01(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst02(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1310,18 +1280,6 @@ static procedure tBigNtst02(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
- 
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1418,7 +1376,7 @@ static procedure tBigNtst02(fhLog)
     #endif
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst03(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1439,18 +1397,6 @@ static procedure tBigNtst03(fhLog)
     Local z         AS NUMBER
    
     Local aPFact    AS ARRAY
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
- 
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
- 
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1506,7 +1452,7 @@ static procedure tBigNtst03(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst04(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1533,19 +1479,6 @@ static procedure tBigNtst04(fhLog)
                                     }
 
     Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New()
-                                    
-    
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1590,7 +1523,7 @@ static procedure tBigNtst04(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst05(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1609,18 +1542,6 @@ static procedure tBigNtst05(fhLog)
     
     Local otBH16    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,16)
     Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1669,8 +1590,8 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog,"")
     
 return
- 
- static procedure tBigNtst06(fhLog)
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst06(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1688,18 +1609,6 @@ return
     
     Local otBH32    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,32)
     Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -1747,9 +1656,9 @@ return
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst07(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst07(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1766,18 +1675,6 @@ return
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -1827,9 +1724,9 @@ return
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst08(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst08(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1844,18 +1741,6 @@ return
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
   
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1902,9 +1787,9 @@ return
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst09(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst09(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1919,18 +1804,6 @@ return
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -1973,9 +1846,9 @@ return
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst10(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst10(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -1990,18 +1863,6 @@ return
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2045,7 +1906,7 @@ return
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst11(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2061,18 +1922,6 @@ static procedure tBigNtst11(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2114,7 +1963,7 @@ static procedure tBigNtst11(fhLog)
     __ConOut(fhLog,"")
 
 return    
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst12(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2130,18 +1979,6 @@ static procedure tBigNtst12(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2183,7 +2020,7 @@ static procedure tBigNtst12(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst13(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2201,18 +2038,6 @@ static procedure tBigNtst13(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2268,9 +2093,9 @@ static procedure tBigNtst13(fhLog)
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst14(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst14(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2287,18 +2112,6 @@ static procedure tBigNtst13(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2352,7 +2165,7 @@ static procedure tBigNtst13(fhLog)
      __ConOut(fhLog,"")
      
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst15(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2370,18 +2183,6 @@ static procedure tBigNtst15(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2431,7 +2232,7 @@ static procedure tBigNtst15(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst16(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2449,18 +2250,6 @@ static procedure tBigNtst16(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2519,7 +2308,7 @@ static procedure tBigNtst16(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst17(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2537,18 +2326,6 @@ static procedure tBigNtst17(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
    
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2602,9 +2379,9 @@ static procedure tBigNtst17(fhLog)
 
     __ConOut(fhLog,"")
    
- return
- 
- static procedure tBigNtst18(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst18(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2621,18 +2398,6 @@ static procedure tBigNtst17(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2689,7 +2454,7 @@ static procedure tBigNtst17(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst19(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2705,18 +2470,6 @@ static procedure tBigNtst19(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2756,9 +2509,9 @@ static procedure tBigNtst19(fhLog)
 
     __ConOut(fhLog,"")
     
- return
- 
- static procedure tBigNtst20(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst20(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2773,18 +2526,6 @@ static procedure tBigNtst19(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2824,9 +2565,9 @@ static procedure tBigNtst19(fhLog)
 
     __ConOut(fhLog,"")
    
- return
- 
- static procedure tBigNtst21(fhLog)
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst21(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2841,18 +2582,6 @@ static procedure tBigNtst19(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2909,7 +2638,7 @@ static procedure tBigNtst19(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst22(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -2925,18 +2654,6 @@ static procedure tBigNtst22(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -2982,8 +2699,8 @@ static procedure tBigNtst22(fhLog)
 
     __ConOut(fhLog,"")
 
- return
-
+return
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst23(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3002,18 +2719,6 @@ static procedure tBigNtst23(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -3055,7 +2760,7 @@ static procedure tBigNtst23(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst24(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3071,18 +2776,6 @@ static procedure tBigNtst24(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3115,7 +2808,7 @@ static procedure tBigNtst24(fhLog)
     __ConOut(fhLog," ------------ Teste FI 0 -------------- END ")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst25(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3131,18 +2824,6 @@ static procedure tBigNtst25(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
  
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3193,7 +2874,7 @@ static procedure tBigNtst25(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst26(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3209,18 +2890,6 @@ static procedure tBigNtst26(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3277,7 +2946,7 @@ static procedure tBigNtst26(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst27(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3293,18 +2962,6 @@ static procedure tBigNtst27(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -3359,7 +3016,7 @@ static procedure tBigNtst27(fhLog)
     __ConOut(fhLog,"")
     
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst28(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3375,18 +3032,6 @@ static procedure tBigNtst28(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3453,7 +3098,7 @@ static procedure tBigNtst28(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst29(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3469,18 +3114,6 @@ static procedure tBigNtst29(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3543,7 +3176,7 @@ static procedure tBigNtst29(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst30(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3559,18 +3192,6 @@ static procedure tBigNtst30(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3617,7 +3238,7 @@ static procedure tBigNtst30(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst31(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3645,18 +3266,6 @@ static procedure tBigNtst31(fhLog)
     Local o8        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("8")
     Local o9        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("9")
     Local o10       AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("10")
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
   
@@ -3856,7 +3465,7 @@ static procedure tBigNtst31(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst32(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3872,18 +3481,6 @@ static procedure tBigNtst32(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
-    
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3950,7 +3547,7 @@ static procedure tBigNtst32(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst33(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -3966,18 +3563,6 @@ static procedure tBigNtst33(fhLog)
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
- 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -4019,7 +3604,7 @@ static procedure tBigNtst33(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst34(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4042,18 +3627,6 @@ static procedure tBigNtst34(fhLog)
     
     Local lMR       AS LOGICAL
     Local lPn       AS LOGICAL
-
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
   
@@ -4105,7 +3678,7 @@ static procedure tBigNtst34(fhLog)
     __ConOut(fhLog,"")
 
 return
-
+//--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst35(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
@@ -4125,18 +3698,6 @@ static procedure tBigNtst35(fhLog)
     Local lMR       AS LOGICAL
     Local lPn       AS LOGICAL
 
-    MEMVAR nACC_SET
-    MEMVAR nROOT_ACC_SET
-    MEMVAR nACC_ALOG
-    MEMVAR nN_TEST
-
-    MEMVAR __cSep
-
-    MEMVAR __oRTime1
-    MEMVAR __oRTime2
-    
-    MEMVAR nISQRT
-    
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
@@ -4172,3 +3733,4 @@ static procedure tBigNtst35(fhLog)
     __ConOut(fhLog,__cSep)
 
 return
+//--------------------------------------------------------------------------------------------------------
