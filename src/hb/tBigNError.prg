@@ -685,7 +685,7 @@ STATIC FUNCTION Arguments( oErr )
 
 RETURN cArguments
 
-FUNCTION __BreakBlock()
+STATIC FUNCTION __BreakBlock()
 
 RETURN {| e | Break( e ) }
 
