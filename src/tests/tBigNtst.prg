@@ -45,6 +45,7 @@
         MEMVAR nISQRT
         MEMVAR __CRLF
         MEMVAR __cSep
+        MEMVAR lDispML
     //--------------------------------------------------------------------------------------------------------
 #endif __HARBOUR__
 //--------------------------------------------------------------------------------------------------------
@@ -105,6 +106,7 @@
         Private lL_LOGPROCESS
         Private cC_GT_MODE
         Private aAC_TSTEXEC
+        Private lDispML:=.T.
 
         #ifdef __HBSHELL_USR_DEF_GT
             hbshell_gtSelect(HBSHELL_GTSELECT)
@@ -793,17 +795,26 @@ Static Procedure __ConOut(fhLog,e,d)
     DEFAULT __nRow:=0
     ASSIGN lSep:=(p==__cSep)
 
-    ASSIGN nLines:=MLCount(p,__nMaxCol,NIL,.T.)
-    For nCLine:=1 TO nLines
-        ASSIGN cDOAt:=MemoLine(p,__nMaxCol,nCLine,NIL,.T.)
+    if lDispML
+        ASSIGN nLines:=MLCount(p,__nMaxCol,NIL,.T.)
+        For nCLine:=1 TO nLines
+            ASSIGN cDOAt:=MemoLine(p,__nMaxCol,nCLine,NIL,.T.)
+            IF ++__nRow>=__nMaxRow
+                @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
+                ASSIGN __nRow:=__NROWAT
+            EndIF
+            ASSIGN lMRow:=(__nRow>=__NROWAT)
+            DispOutAT(__nRow,0,cDOAt,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+        Next nCLine
+    else
         IF ++__nRow>=__nMaxRow
             @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
             ASSIGN __nRow:=__NROWAT
         EndIF
         ASSIGN lMRow:=(__nRow>=__NROWAT)
-        DispOutAT(__nRow,0,cDOAt,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
-    Next nCLine
-
+        DispOutAT(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
+    endif
+    
     IF hb_mutexLock(__phMutex)
         __oRTimeProc:Calcule("-------------- END"$p)
         hb_mutexUnLock(__phMutex)
@@ -813,6 +824,8 @@ Static Procedure __ConOut(fhLog,e,d)
     ? p
 #endif
 
+    p:=NIL
+
     if (lL_LOGPROCESS)
         IF ((ld) .and. (nATd>0))
             fWrite(fhLog,x+__CRLF)
@@ -821,7 +834,7 @@ Static Procedure __ConOut(fhLog,e,d)
             fWrite(fhLog,x+y+__CRLF)
         EndIF
     endif
-
+    
 Return
 //--------------------------------------------------------------------------------------------------------
 Static Function IsHb()

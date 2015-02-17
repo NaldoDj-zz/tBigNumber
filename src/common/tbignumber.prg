@@ -104,39 +104,52 @@ static s__nDivMTD
 static s__nthRAcc
 static s__nDecSet
 
+static s__SysSQRT
+
 static s__MTXcN0:=hb_mutexCreate()
 static s__MTXcN9:=hb_mutexCreate()
 static s__MTXACC:=hb_mutexCreate()
 static s__MTXDEC:=hb_mutexCreate()
 static s__MTXSQR:=hb_mutexCreate()
 
+#ifndef __PTCOMPAT__
+    static s__recFact:=0
+#endif
+
 #ifdef TBN_ARRAY
-    thread static ths_aZAdd
-    thread static ths_aZSub
-    thread static ths_aZMult
+    #define __THREAD_STATIC__ 1
 #else
     #ifdef TBN_DBFILE
-        thread static ths_aFiles
+        #define __THREAD_STATIC__ 1
     #endif
 #endif
 
-thread static ths_SysSQRT
-
-thread static ths_lsdSet
+#ifdef __THREAD_STATIC__
+    thread static ths_lsdSet
+    #ifdef TBN_ARRAY
+        thread static ths_aZAdd
+        thread static ths_aZSub
+        thread static ths_aZMult
+    #else
+        #ifdef TBN_DBFILE
+            thread static ths_aFiles
+        #endif
+    #endif
+#endif
 
 #define RANDOM_MAX_EXIT 5
 #define EXIT_MAX_RANDOM 50
 
-#define NTHROOT_EXIT    3
-#define MAX_SYS_SQRT    "9999999999999999"
-#define MAX_SYS_lMULT   "9999999999"
-#define MAX_SYS_lADD    "99999999999999999"
-#define MAX_SYS_lSUB    "99999999999999999"
-#define MAX_SYS_iMULT   "999999999999999999"
-#define MAX_SYS_GCD     MAX_SYS_iMULT
-#define MAX_SYS_LCM     MAX_SYS_iMULT
+#define NTHROOT_EXIT        3
+#define MAX_SYS_SQRT        "9999999999999999"
+#define MAX_SYS_lMULT       "9999999999"
+#define MAX_SYS_lADD        "99999999999999999"
+#define MAX_SYS_lSUB        "99999999999999999"
+#define MAX_SYS_iMULT       "999999999999999999"
+#define MAX_SYS_GCD         MAX_SYS_iMULT
+#define MAX_SYS_LCM         MAX_SYS_iMULT
 
-#define MAX_SYS_FI      MAX_SYS_iMULT
+#define MAX_SYS_FI          MAX_SYS_iMULT
 
 /*
 *    Alternative Compile Options: -d
@@ -560,9 +573,11 @@ method New(uBigN,nBase) class tBigNumber
     endif
 
     // -------------------- assign thread static values -------------------------
-    if ths_lsdSet==NIL
-        __Initsthd(nBase)
-    endif
+    #ifdef __THREAD_STATIC__
+        if ths_lsdSet==NIL
+            __Initsthd()
+        endif
+    #endif //__THREAD_STATIC__    
 
     DEFAULT uBigN:="0"
     self:SetValue(uBigN,nBase)
@@ -791,15 +806,33 @@ return(self:nSize)
     Sintaxe     : tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
-    if ths_lsdSet==NIL
-        return(tBigNumber():New(self))
-    endif
-#ifdef __PROTHEUS__
-return(tBigNumber():New(self))
-#else  //__HARBOUR__
-return(__objClone(self))
-#endif //__PROTHEUS__
-
+    local oClone
+    try
+        #ifdef __THREAD_STATIC__
+            if ths_lsdSet==NIL
+                oClone:=tBigNumber():New(self)
+            else
+                #ifdef __PROTHEUS__
+                    oClone:=tBigNumber():New(self)
+                #else  //__HARBOUR__
+                    oClone:=__objClone(self)
+                #endif //__PROTHEUS__
+            endif
+        #else
+            #ifdef __PROTHEUS__
+                oClone:=tBigNumber():New(self)
+            #else  //__HARBOUR__
+                oClone:=__objClone(self)
+            #endif //__PROTHEUS__
+        #endif //__THREAD_STATIC__
+    catch
+        #ifdef __THREAD_STATIC__
+            ths_lsdSet:=NIL
+        #endif //__THREAD_STATIC__
+        oClone:=tBigNumber():New(self)
+    end        
+return(oClone)
+    
 /*
     method      : className
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -822,7 +855,6 @@ method SetDecimals(nSet) class tBigNumber
     local nLastSet
 
     while .not.(hb_mutexLock(s__MTXDEC))
-        tBigNSleep(0.001)
     end while
 
     nLastSet:=s__nDecSet
@@ -857,7 +889,6 @@ method nthRootAcc(nSet) class tBigNumber
     local nLastSet
 
     while .not.(hb_mutexLock(s__MTXACC))
-        tBigNSleep(0.001)
     end while
 
     nLastSet:=s__nthRAcc
@@ -2701,16 +2732,15 @@ method SysSQRT(uSet) class tBigNumber
     cType:=ValType(uSet)
     if ( cType $ "C|N|O" )
         while .not.(hb_mutexLock(s__MTXSQR))
-            tBigNSleep(0.001)
         end while
-        ths_SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
-        if ths_SysSQRT:gt(MAX_SYS_SQRT)
-            ths_SysSQRT:SetValue(MAX_SYS_SQRT)
+        s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
+        if s__SysSQRT:gt(MAX_SYS_SQRT)
+            s__SysSQRT:SetValue(MAX_SYS_SQRT)
         endif
         hb_MutexUnLock(s__MTXSQR)
     endif
 
-return(ths_SysSQRT)
+return(s__SysSQRT)
 
 /*
     method      : Log
@@ -3941,21 +3971,18 @@ static function recFact(oS,oN)
 #endif
 
     local oI
-    local oR:=s__o0:Clone()
+    local oR
     local oSN
     local oSI
     local oNI
 
-#ifndef __PTCOMPAT__
-    static s__recFact:=0
-#endif
-
+    oR:=s__o0:Clone()
+    
 #ifdef __PTCOMPAT__
     //-------------------------------------------------------------------------------------
     //(Div(2)==Mult(.5)
     if oN:lte(s__o20:Mult(oN:Mult(s__od2):Int(.T.,.F.)))
 #else
-    ++s__recFact
     if oN:lte(s__o20)
 #endif
         oR:SetValue(oS)
@@ -3967,9 +3994,6 @@ static function recFact(oS,oN)
             oR:SetValue(oR:Mult(oI))
             oI:OpInc()
         end while
-        #ifndef __PTCOMPAT__
-            --s__recFact
-        #endif
         return(oR)
     endif
 
@@ -3985,20 +4009,14 @@ static function recFact(oS,oN)
     oNI:SetValue(oNI:Sub(oI))
 
 #ifndef __PTCOMPAT__
-    if s__RecFact>100
-        aThreads:=Array(2,SIZ_TH)
-        aThreads[1][TH_NUM]:=hb_threadStart(@recFact(),oS,oI)
-        hb_threadJoin(aThreads[1][TH_NUM],@aThreads[1][TH_RES])
-        aThreads[2][TH_NUM]:=hb_threadStart(@recFact(),oSI,oNI)
-        hb_threadJoin(aThreads[2][TH_NUM],@aThreads[2][TH_RES])
-    else
-        tBigNthStart(2,@aThreads)
-        aThreads[1][TH_EXE]:={@recFact(),oS,oI}
-        aThreads[2][TH_EXE]:={@recFact(),oSI,oNI}
-        tBigNthNotify(@aThreads)
-        tBigNthWait(@aThreads)
-        tBigNthJoin(@aThreads)
-    endif
+
+    tBigNthStart(2,@aThreads)
+    aThreads[1][TH_EXE]:={@recFact(),oS,oI}
+    aThreads[2][TH_EXE]:={@recFact(),oSI,oNI}
+    tBigNthNotify(@aThreads)
+    tBigNthWait(@aThreads)
+    tBigNthJoin(@aThreads)
+
 return(aThreads[1][TH_RES]:Mult(aThreads[2][TH_RES]))
 #else
 return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
@@ -5452,39 +5470,51 @@ static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
 
 // -------------------- assign thread static values -------------------------
-static procedure __Initsthd(nBase)
-
-    ths_lsdSet:=.F.
-
-    #ifdef TBN_ARRAY
-        ths_aZAdd:=Array(0)
-        ths_aZSub:=Array(0)
-        ths_aZMult:=Array(0)
-    #else
-        #ifdef TBN_DBFILE
-            if (ths_aFiles==NIL)
-                ths_aFiles:=Array(0)
-            endif
+#ifdef __THREAD_STATIC__
+    static procedure __Initsthd()
+        ths_lsdSet:=.F.
+        #ifdef TBN_ARRAY
+            ths_aZAdd:=Array(0)
+            ths_aZSub:=Array(0)
+            ths_aZMult:=Array(0)
+        #else
+            #ifdef TBN_DBFILE
+                if (ths_aFiles==NIL)
+                    ths_aFiles:=Array(0)
+                endif
+            #endif
         #endif
-    #endif
-
-    while .not.(hb_mutexLock(s__MTXSQR))
-        tBigNSleep(0.001)
-    end while
-    ths_SysSQRT:=tBigNumber():New("0",nBase)
-    hb_mutexUnLock(s__MTXSQR)
-
-    ths_lsdSet:=.T.
-
-return
+        ths_lsdSet:=.T.
+    return
+#endif //__THREAD_STATIC__
 
 // -------------------- assign static values --------------------------------
 static procedure __InitstbN(nBase)
     s__lstbNSet:=.F.
+    *                10        20        30        40        50        60        70        80        90       100       110       120       130       140       150      
+    *        123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
     s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-    s__nN0:=150
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    s__nN0:=150*10
     s__cN9:="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
-    s__nN9:=150
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__cN9+="999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    s__nN9:=150*10
     s__o0:=tBigNumber():New("0",nBase)
     s__o1:=tBigNumber():New("1",nBase)
     s__o2:=tBigNumber():New("2",nBase)
@@ -5494,6 +5524,7 @@ static procedure __InitstbN(nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
+    s__SysSQRT:=tBigNumber():New("0",nBase)
     #ifdef __PROTHEUS__
         DEFAULT __cEnvSrv:=GetEnvServer()
     #endif
@@ -5514,7 +5545,6 @@ Return
 static procedure s__IncS0(n)
     while n>s__nN0
         while .not.(hb_mutexLock(s__MTXcN0))
-            tBigNSleep(0.001)
         end while
         s__cN0+=s__cN0
         s__nN0+=s__nN0
@@ -5525,7 +5555,6 @@ return
 static procedure s__IncS9(n)
     while n>s__nN9
         while .not.(hb_mutexLock(s__MTXcN9))
-            tBigNSleep(0.001)
         end while
         s__cN9+=s__cN9
         s__nN9+=s__nN9
@@ -5579,6 +5608,7 @@ return
             TBIGNNORMALIZE()
             TBIGNSQRT()
             TBIGNLOG()
+            TBIGNSLEEP()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()
