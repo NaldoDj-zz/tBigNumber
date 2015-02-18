@@ -5,7 +5,7 @@
  *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
  *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
  *
- * Copyright 2013-2014 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
+ * Copyright 2013-2015 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
  * www - http://www.blacktdn.com.br
  *
  * Harbour Project license:
@@ -140,16 +140,18 @@ static s__MTXSQR:=hb_mutexCreate()
 #define RANDOM_MAX_EXIT 5
 #define EXIT_MAX_RANDOM 50
 
-#define NTHROOT_EXIT        3
-#define MAX_SYS_SQRT        "9999999999999999"
-#define MAX_SYS_lMULT       "9999999999"
-#define MAX_SYS_lADD        "99999999999999999"
-#define MAX_SYS_lSUB        "99999999999999999"
-#define MAX_SYS_iMULT       "999999999999999999"
-#define MAX_SYS_GCD         MAX_SYS_iMULT
-#define MAX_SYS_LCM         MAX_SYS_iMULT
+#define NTHROOT_EXIT    3
+#define MAX_SYS_SQRT    "9999999999999999"
+#define MAX_SYS_lMULT   "9999999999"
+#define MAX_SYS_lADD    "99999999999999999"
+#define MAX_SYS_lSUB    "99999999999999999"
+#define MAX_SYS_iMULT   "999999999999999999"
+#define MAX_SYS_GCD     MAX_SYS_iMULT
+#define MAX_SYS_LCM     MAX_SYS_iMULT
 
-#define MAX_SYS_FI          MAX_SYS_iMULT
+#define MAX_SYS_FI      MAX_SYS_iMULT
+
+#define MAX_THDRECFACT  200
 
 /*
 *    Alternative Compile Options: -d
@@ -256,6 +258,13 @@ class tBigNumber from hbClass
     method Plus(uBigN)
 #endif
 
+    method iAdd(uBigN)
+#ifndef __PROTHEUS__
+    method iPlus(uBigN) INLINE self:iAdd(uBigN)
+#else
+    method iPlus(uBigN)
+#endif
+
     method Sub(uBigN)
 #ifndef __PROTHEUS__
     method Minus(uBigN) INLINE self:Sub(uBigN)
@@ -263,11 +272,25 @@ class tBigNumber from hbClass
     method Minus(uBigN)
 #endif
 
+    method iSub(uBigN)
+#ifndef __PROTHEUS__
+    method iMinus(uBigN) INLINE self:iSub(uBigN)
+#else
+    method iMinus(uBigN)
+#endif
+
     method Mult(uBigN)
 #ifndef __PROTHEUS__
     method Multiply(uBigN) INLINE self:Mult(uBigN)
 #else
     method Multiply(uBigN)
+#endif
+
+    method iMult(uBigN)
+#ifndef __PROTHEUS__
+    method iMultiply(uBigN) INLINE self:iMult(uBigN)
+#else
+    method iMultiply(uBigN)
 #endif
 
     method egMult(uBigN)
@@ -523,12 +546,21 @@ endclass
     method Plus(uBigN) class tBigNumber
     return(self:Add(uBigN))
 
+    method iPlus(uBigN) class tBigNumber
+    return(self:iAdd(uBigN))
+    
     method Minus(uBigN) class tBigNumber
     return(self:Sub(uBigN))
 
+    method iMinus(uBigN) class tBigNumber
+    return(self:iSub(uBigN))
+    
     method Multiply(uBigN)  class tBigNumber
     return(self:Mult(uBigN))
 
+    method iMultiply(uBigN)  class tBigNumber
+    return(self:iMult(uBigN))
+    
     method egMultiply(uBigN) class tBigNumber
     return(self:egMult(uBigN))
 
@@ -1570,6 +1602,78 @@ method Add(uBigN) class tBigNumber
 return(oadNR)
 
 /*
+    method      : iAdd
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 18/02/2015
+    Descricao   : Soma de Inteiros
+    Sintaxe     : tBigNumber():iAdd(uBigN) -> oBigNR
+*/
+method iAdd(uBigN) class tBigNumber
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lInv
+    local lAdd:=.T.
+
+    local nSize
+
+    local oadNR
+
+    local oadN1
+    local oadN2
+
+    oadN1:=s__o0:Clone()
+    oadN1:SetValue(self)
+
+    oadN2:=s__o0:Clone()
+    oadN2:SetValue(uBigN)
+
+    oadN1:Normalize(@oadN2)
+
+    nSize:=oadN1:nInt
+
+    cN1:=oadN1:cInt
+    cN2:=oadN2:cInt
+
+    lNeg:=(oadN1:lNeg.and..not.(oadN2:lNeg)).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
+
+    if lNeg
+        lAdd:=.F.
+        #ifdef __HARBOUR__
+            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+        #else //__PROTEUS__
+            lInv:=cN1<cN2
+        #endif //__HARBOUR__
+        lNeg:=(oadN1:lNeg.and..not.(lInv)).or.(oadN2:lNeg.and.lInv)
+        if lInv
+            cNT:=cN1
+            cN1:=cN2
+            cN2:=cNT
+            cNT:=NIL
+        endif
+    else
+        lNeg:=oadN1:lNeg
+    endif
+
+    if lAdd
+        cNT:=Add(cN1,cN2,nSize,self:nBase)
+    else
+        cNT:=Sub(cN1,cN2,nSize,self:nBase)
+    endif
+
+    oadNR:=s__o0:Clone()
+    oadNR:SetValue(cNT)
+
+    if lNeg
+        oadNR:__cSig("-")
+    endif
+
+return(oadNR)
+
+/*
     method      : Sub
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
@@ -1657,6 +1761,78 @@ method Sub(uBigN) class tBigNumber
 return(osbNR)
 
 /*
+    method      : iSub
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 18/02/2015
+    Descricao   : Subtracao de Inteiros
+    Sintaxe     : tBigNumber():iSub(uBigN) -> oBigNR
+*/
+method iSub(uBigN) class tBigNumber
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lInv
+    local lSub:=.T.
+
+    local nSize
+
+    local osbNR
+
+    local osbN1
+    local osbN2
+
+    osbN1:=s__o0:Clone()
+    osbN1:SetValue(self)
+
+    osbN2:=s__o0:Clone()
+    osbN2:SetValue(uBigN)
+
+    osbN1:Normalize(@osbN2)
+
+    nSize:=osbN1:nInt
+
+    cN1:=osbN1:cInt
+    cN2:=osbN2:cInt
+
+    lNeg:=(osbN1:lNeg.and..not.(osbN2:lNeg)).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
+
+    if lNeg
+        lSub:=.F.
+        lNeg:=osbN1:lNeg
+    else
+        #ifdef __HARBOUR__
+            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+        #else //__PROTEUS__
+            lInv:=cN1<cN2
+        #endif //__HARBOUR__
+        lNeg:=osbN1:lNeg.or.lInv
+        if lInv
+            cNT:=cN1
+            cN1:=cN2
+            cN2:=cNT
+            cNT:=NIL
+        endif
+    endif
+
+    if lSub
+        cNT:=Sub(cN1,cN2,nSize,self:nBase)
+    else
+        cNT:=Add(cN1,cN2,nSize,self:nBase)
+    endif
+
+    osbNR:=s__o0:Clone()
+    osbNR:SetValue(cNT)
+
+    if lNeg
+        osbNR:__cSig("-")
+    endif
+
+return(osbNR)
+
+/*
     method      : Mult
     Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data        : 04/02/2013
@@ -1720,6 +1896,58 @@ method Mult(uBigN) class tBigNumber
 
     cNT:=omtNR:ExactValue()
 
+    omtNR:SetValue(cNT)
+
+    if lNeg
+        omtNR:__cSig("-")
+    endif
+
+return(omtNR)
+
+/*
+    method      : iMult
+    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data        : 18/02/2015
+    Descricao   : Multiplicacao
+    Sintaxe     : tBigNumber():iMult(uBigN) -> oBigNR
+*/
+method iMult(uBigN) class tBigNumber
+
+    local cN1
+    local cN2
+    local cNT
+
+    local lNeg
+    local lNeg1
+    local lNeg2
+
+    local nSize
+
+    local omtNR
+
+    local omtN1
+    local omtN2
+
+    omtN1:=s__o0:Clone()
+    omtN1:SetValue(self)
+
+    omtN2:=s__o0:Clone()
+    omtN2:SetValue(uBigN)
+
+    omtN1:Normalize(@omtN2)
+
+    lNeg1:=omtN1:lNeg
+    lNeg2:=omtN2:lNeg
+    lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+
+    cN1:=omtN1:cInt
+    cN2:=omtN2:cInt
+
+    nSize:=omtN1:nInt
+
+    cNT:=Mult(cN1,cN2,nSize,self:nBase)
+
+    omtNR:=s__o0:Clone()
     omtNR:SetValue(cNT)
 
     if lNeg
@@ -2179,7 +2407,7 @@ return(opwNR)
 */
 method OpInc() class tBigNumber
 #ifdef __PTCOMPAT__
-    return(self:SetValue(self:Add(s__o1)))
+    return(self:SetValue(self:iAdd(s__o1)))
 #else
     return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
 #endif
@@ -2193,7 +2421,7 @@ method OpInc() class tBigNumber
 */
 method OpDec() class tBigNumber
 #ifdef __PTCOMPAT__
-    return(self:SetValue(self:Sub(s__o1)))
+    return(self:SetValue(self:iSub(s__o1)))
 #else
     return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
 #endif
@@ -2224,9 +2452,10 @@ method e(lforce) class tBigNumber
 
         DEFAULT lforce:=.F.
 
+        oeTthD:=s__o0:Clone()
+
         if .not.(lforce)
 
-            oeTthD:=s__o0:Clone()
             oeTthD:SetValue(__eTthD())
 
             break
@@ -3968,14 +4197,18 @@ static function recFact(oS,oN)
 
 #ifndef __PTCOMPAT__
     local aThreads
+    local nB
+    local nI
+    local nSN
+#else
+    local oSN
 #endif
 
     local oI
     local oR
-    local oSN
     local oSI
     local oNI
-
+    
     oR:=s__o0:Clone()
     
 #ifdef __PTCOMPAT__
@@ -3986,14 +4219,24 @@ static function recFact(oS,oN)
     if oN:lte(s__o20)
 #endif
         oR:SetValue(oS)
-        oI:=oS:Clone()
-        oI:OpInc()
-        oSN:=oS:Clone()
-        oSN:SetValue(oSN:Add(oN))
-        while oI:lt(oSN)
-            oR:SetValue(oR:Mult(oI))
+        #ifdef __PTCOMPAT__
+            oI:=oS:Clone()
             oI:OpInc()
-        end while
+            oSN:=oS:Clone()
+            oSN:SetValue(oSN:iAdd(oN))
+            while oI:lt(oSN)
+                oR:SetValue(oR:iMult(oI))
+                oI:OpInc()
+            end while
+        #else
+            nB:=oS:__nBase()
+            nI:=Val(oS:__cInt())
+            nSN:=nI
+            nSN+=Val(oN:__cInt())
+            while ++nI<nSN
+                oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
+            end while
+        #endif //__PTCOMPAT__        
         return(oR)
     endif
 
@@ -4003,23 +4246,33 @@ static function recFact(oS,oN)
     oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
 
     oSI:=oS:Clone()
-    oSI:SetValue(oSI:Add(oI))
+    oSI:SetValue(oSI:iAdd(oI))
 
     oNI:=oN:Clone()
-    oNI:SetValue(oNI:Sub(oI))
+    oNI:SetValue(oNI:iSub(oI))
 
 #ifndef __PTCOMPAT__
 
-    tBigNthStart(2,@aThreads)
-    aThreads[1][TH_EXE]:={@recFact(),oS,oI}
-    aThreads[2][TH_EXE]:={@recFact(),oSI,oNI}
-    tBigNthNotify(@aThreads)
-    tBigNthWait(@aThreads)
-    tBigNthJoin(@aThreads)
+    if s__RecFact>MAX_THDRECFACT
+        aThreads:=Array(2,SIZ_TH)
+        aThreads[1][TH_NUM]:=hb_threadStart(@recFact(),oS,oI)
+        hb_threadJoin(aThreads[1][TH_NUM],@aThreads[1][TH_RES])
+        aThreads[2][TH_NUM]:=hb_threadStart(@recFact(),oSI,oNI)
+        hb_threadJoin(aThreads[2][TH_NUM],@aThreads[2][TH_RES])
+    else
+        s__RecFact+=2    
+        tBigNthStart(2,@aThreads)
+        aThreads[1][TH_EXE]:={@recFact(),oS,oI}
+        aThreads[2][TH_EXE]:={@recFact(),oSI,oNI}
+        tBigNthNotify(@aThreads)
+        tBigNthWait(@aThreads)
+        tBigNthJoin(@aThreads)
+        s__RecFact-=2
+    endif    
 
-return(aThreads[1][TH_RES]:Mult(aThreads[2][TH_RES]))
+return(aThreads[1][TH_RES]:iMult(aThreads[2][TH_RES]))
 #else
-return(recFact(oS,oI):Mult(recFact(oSI,oNI)))
+return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
 #endif
 
 /*

@@ -974,7 +974,7 @@
         
             char * tmpPad;
     
-            if (lPadL || lPadR){
+            if (lPadL||lPadR){
                 if (lPadL){
                     tmpPad=tBIGNPadL(hb_parc(1),nPadL,"0");
                     hb_storclen(tmpPad,nPadL,1);
@@ -993,7 +993,7 @@
             lPadL=nPadL!=nInt2;
             lPadR=nPadR!=nDec2;
            
-            if (lPadL || lPadR){
+            if (lPadL||lPadR){
                 if (lPadL){
                     tmpPad=tBIGNPadL(hb_parc(6),nPadL,"0");
                     hb_storclen(tmpPad,nPadL,6);
