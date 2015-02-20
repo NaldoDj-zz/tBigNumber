@@ -151,7 +151,7 @@ static s__MTXSQR:=hb_mutexCreate()
 
 #define MAX_SYS_FI      MAX_SYS_iMULT
 
-#define MAX_THDRECFACT  200
+#define MAX_THDRECFACT  100
 
 /*
 *    Alternative Compile Options: -d
@@ -838,9 +838,9 @@ return(self:nSize)
     Sintaxe     : tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
-    local oClone
-    try
-        #ifdef __THREAD_STATIC__
+    local oClone    
+    #ifdef __THREAD_STATIC__
+        try
             if ths_lsdSet==NIL
                 oClone:=tBigNumber():New(self)
             else
@@ -850,19 +850,17 @@ method Clone() class tBigNumber
                     oClone:=__objClone(self)
                 #endif //__PROTHEUS__
             endif
-        #else
-            #ifdef __PROTHEUS__
-                oClone:=tBigNumber():New(self)
-            #else  //__HARBOUR__
-                oClone:=__objClone(self)
-            #endif //__PROTHEUS__
-        #endif //__THREAD_STATIC__
-    catch
-        #ifdef __THREAD_STATIC__
+        catch    
             ths_lsdSet:=NIL
-        #endif //__THREAD_STATIC__
-        oClone:=tBigNumber():New(self)
-    end        
+            oClone:=tBigNumber():New(self)
+        end
+    #else
+        #ifdef __PROTHEUS__
+            oClone:=tBigNumber():New(self)
+        #else  //__HARBOUR__
+            oClone:=__objClone(self)
+        #endif //__PROTHEUS__
+    #endif //__THREAD_STATIC__    
 return(oClone)
     
 /*
@@ -4221,9 +4219,9 @@ static function recFact(oS,oN)
         oR:SetValue(oS)
         #ifdef __PTCOMPAT__
             oI:=oS:Clone()
-            oI:OpInc()
             oSN:=oS:Clone()
             oSN:SetValue(oSN:iAdd(oN))
+            oI:OpInc()
             while oI:lt(oSN)
                 oR:SetValue(oR:iMult(oI))
                 oI:OpInc()
@@ -4260,14 +4258,14 @@ static function recFact(oS,oN)
         aThreads[2][TH_NUM]:=hb_threadStart(@recFact(),oSI,oNI)
         hb_threadJoin(aThreads[2][TH_NUM],@aThreads[2][TH_RES])
     else
-        s__RecFact+=2    
+        ++s__RecFact    
         tBigNthStart(2,@aThreads)
         aThreads[1][TH_EXE]:={@recFact(),oS,oI}
         aThreads[2][TH_EXE]:={@recFact(),oSI,oNI}
         tBigNthNotify(@aThreads)
         tBigNthWait(@aThreads)
         tBigNthJoin(@aThreads)
-        s__RecFact-=2
+        s__RecFact--
     endif    
 
 return(aThreads[1][TH_RES]:iMult(aThreads[2][TH_RES]))
