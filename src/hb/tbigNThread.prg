@@ -33,8 +33,11 @@ procedure tBigNthWait(aThreads)
     local nThCount:=0
     while .T.
         for nThread:=1 to nThreads
-            if aThreads[nThread][TH_END]
-                ++nThCount
+            if hb_mutexLock(aThreads[nThread][TH_MTX])
+                if aThreads[nThread][TH_END]
+                    ++nThCount
+                endif
+                hb_MutexUnLock(aThreads[nThread][TH_MTX])
             endif
         next nThread
         if nThCount==nThreads
@@ -63,6 +66,8 @@ procedure tbigNthRun(mtxJob,aThreads)
                     hb_ExecFromArray(xJob)
                     exit
                 case "N"
+                    while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
+					end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
                     case "A"
@@ -75,6 +80,7 @@ procedure tbigNthRun(mtxJob,aThreads)
                         aThreads[xJob][TH_RES]:=NIL
                     endswitch
                     aThreads[xJob][TH_END]:=.T.
+                    hb_MutexUnLock(aThreads[xJob][TH_MTX])
                     exit
                 endswitch
             endif
