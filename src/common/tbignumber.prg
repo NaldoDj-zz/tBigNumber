@@ -955,9 +955,9 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
     #ifdef __TBN_DYN_OBJ_SET__
     local nP
         #ifdef __HARBOUR__
-            MEMVAR This
+            MEMVAR pThis
         #endif
-        private This
+        private pThis
     #endif
 
     if cType=="O"
@@ -1002,11 +1002,11 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
         #ifdef __TBN_DYN_OBJ_SET__
 
-            This:=self
+            pThis:=self
             nFP:=hb_bLen(uBigN)
 
             for nP:=1 to nFP
-                &("This:"+uBigN[nP][1]):=uBigN[nP][2]
+                &("pThis:"+uBigN[nP][1]):=uBigN[nP][2]
             next nP
 
         #else
