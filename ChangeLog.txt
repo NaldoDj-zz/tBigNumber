@@ -7,3 +7,7 @@
   + bin/commit.hb
   + bin/harbour.ucf
   * .gitattributes
+
+2015-05-02 20:35 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+  * .gitattributes
+  * prj/mg/win/64/tBigNumber64.mip

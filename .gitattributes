@@ -36,6 +36,7 @@ ChangeLog.txt ident
 *.m       text
 *.md      text
 *.mft     text
+*.mip     text
 *.mk      text
 *.nsi     text
 *.pem     text
