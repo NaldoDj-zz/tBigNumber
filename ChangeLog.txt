@@ -1,0 +1,9 @@
+
+2015-05-02 19:47 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+  - check.hb
+  - commit.hb
+  + bin/3rdpatch.hb
+  + bin/check.hb
+  + bin/commit.hb
+  + bin/harbour.ucf
+  * .gitattributes
