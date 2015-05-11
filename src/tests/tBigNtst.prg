@@ -8,7 +8,7 @@
         (4.1) hb_ExecFromArray()         (1/1)
         (5) tBigNSleep.prg               (1/1)    
         (6) log file name                (0/1)           
-    */    
+*/    
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     //--------------------------------------------------------------------------------------------------------
@@ -186,27 +186,27 @@
 
         __nSLEEP:=Min(__nSLEEP,10)
         IF ((__nSLEEP)>10)
-            __nSLEEP /= 10
+            __nSLEEP /=10
         EndIF
 
-        /* set OEM font encoding for non unicode modes */
+        /* set OEM font encoding for non unicode modes*/
         hb_gtInfo(HB_GTI_CODEPAGE,255)
-        /* set EN CP-437 encoding */
+        /* set EN CP-437 encoding*/
         hb_cdpSelect("EN")
         hb_setTermCP("EN")
-        /* set font name */
-        *hb_gtInfo(HB_GTI_FONTNAME,"Ms LineDraw"/*"Consolas"*//*"Ms LineDraw"*//*"Lucida Console"*/)
-        /* set font size */
+        /* set font name*/
+*hb_gtInfo(HB_GTI_FONTNAME,"Ms LineDraw"/*"Consolas"*//*"Ms LineDraw"*//*"Lucida Console"*/)
+        /* set font size*/
         hb_gtInfo(HB_GTI_FONTWIDTH,6+4)
         hb_gtInfo(HB_GTI_FONTSIZE,12+4)
-        /* resize console window using new font size */
+        /* resize console window using new font size*/
         SetMode(MaxRow()+1,MaxCol()+1)
-        /* get screen dimensions */
+        /* get screen dimensions*/
         nMaxScrRow:=hb_gtInfo(HB_GTI_DESKTOPROWS)
         nMaxScrCol:=hb_gtInfo(HB_GTI_DESKTOPCOLS)
-        /* resize console window to the screen size */
+        /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
-        /* set window title */
+        /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
 
@@ -282,17 +282,17 @@
     Static Function tBigtstEval(atBigNtst,nMaxScrRow,nMaxScrCol)
         Local pGT:=hb_gtSelect(atBigNtst[3])
         hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
-        /* set OEM font encoding for non unicode modes */
+        /* set OEM font encoding for non unicode modes*/
         hb_gtInfo(HB_GTI_CODEPAGE,255)
-        /* set EN CP-437 encoding */
+        /* set EN CP-437 encoding*/
         hb_cdpSelect("EN")
         hb_setTermCP("EN")
-        /* set font size */
+        /* set font size*/
         hb_gtInfo(HB_GTI_FONTWIDTH,6+4)
         hb_gtInfo(HB_GTI_FONTSIZE,12+4)
-        /* resize console window to the screen size */
+        /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
-        /* set window title */
+        /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         tBigNtst({atBigNtst})
         hb_gtSelect(pGT)
@@ -374,7 +374,7 @@
         __nSLEEP:=Max(__nSLEEP,10)
         
         IF ((__nSLEEP)<10)
-            __nSLEEP *= 10
+            __nSLEEP*=10
         EndIF
 
     ChkIntTstExec(@aAC_TSTEXEC,2)
@@ -410,7 +410,6 @@
         Local cN         AS CHARACTER
         Local cW         AS CHARACTER
         Local cX         AS CHARACTER
-        Local cHex       AS CHARACTER
 
         Local n          AS NUMBER
         Local w          AS NUMBER
@@ -475,30 +474,30 @@
         #endif
 
         __ConOut(fhLog,"START ")                         //4
-        __ConOut(fhLog,"DATE        : " ,dStartDate)    //5
-        __ConOut(fhLog,"TIME        : " ,cStartTime)    //6
+        __ConOut(fhLog,"DATE        : ",dStartDate)    //5
+        __ConOut(fhLog,"TIME        : ",cStartTime)    //6
 
         #ifdef __HARBOUR__
-            __ConOut(fhLog,"TIMESTAMP   : " ,HB_TTOC(tsBegin))    //7
+            __ConOut(fhLog,"TIMESTAMP   : ",HB_TTOC(tsBegin))    //7
         #endif
 
         #ifdef TBN_DBFILE
             #ifndef TBN_MEMIO
-                __ConOut(fhLog,"USING       : " ,ExeName() + " :: DBFILE")   //8
+                __ConOut(fhLog,"USING       : ",ExeName()+" :: DBFILE")   //8
             #else
-                __ConOut(fhLog,"USING       : " ,ExeName() + " :: DBMEMIO")  //8
+                __ConOut(fhLog,"USING       : ",ExeName()+" :: DBMEMIO")  //8
             #endif
         #else
             #ifdef TBN_ARRAY
-                __ConOut(fhLog,"USING       : " ,ExeName() + " :: ARRAY")    //8
+                __ConOut(fhLog,"USING       : ",ExeName()+" :: ARRAY")    //8
             #else
-                __ConOut(fhLog,"USING       : " ,ExeName() + " :: STRING")   //8
+                __ConOut(fhLog,"USING       : ",ExeName()+" :: STRING")   //8
             #endif
         #endif
 
         #ifdef __HARBOUR__
-            __ConOut(fhLog,"FINAL1      : " ,"["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
-            __ConOut(fhLog,"FINAL2      : " ,"["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
+            __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
+            __ConOut(fhLog,"FINAL2      : ","["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
             __ConOut(fhLog,"")                                                //11
             __ConOut(fhLog,"")                                                //12
             DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
@@ -535,17 +534,17 @@
         __ConOut(fhLog,"END ")
 
         dEndDate:=Date()
-        __ConOut(fhLog,"DATE    :" ,dEndDate)
+        __ConOut(fhLog,"DATE    :",dEndDate)
 
         ASSIGN cEndTime:=Time()
-        __ConOut(fhLog,"TIME    :" ,cEndTime)
+        __ConOut(fhLog,"TIME    :",cEndTime)
 
         __oRTimeProc:Calcule()
-        __ConOut(fhLog,"ELAPSED :" ,__oRTimeProc:GetcTimeDiff())
+        __ConOut(fhLog,"ELAPSED :",__oRTimeProc:GetcTimeDiff())
 
         #ifdef __HARBOUR__
             nsElapsed:=(HB_DATETIME()-tsBegin)
-            __ConOut(fhLog,"tELAPSED:" ,StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ",""))
+            __ConOut(fhLog,"tELAPSED:",StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ",""))
         #endif
 
         __ConOut(fhLog,__cSep)
@@ -758,7 +757,7 @@ Static Procedure __ConOut(fhLog,e,d)
         ASSIGN y:=""
     EndIF
 
-    ASSIGN p:=x + IF(ld ," " + y ,"")
+    ASSIGN p:=x+IF(ld," "+y,"")
 
 #ifdef __HARBOUR__
 
@@ -1138,11 +1137,11 @@ Return(lHarbour)
                     __oRTimeProc:Calcule(.F.)
                 EndIF
                 ASSIGN cRTime:="["+hb_ntos(__oRTimeProc:GetnProgress())
-                ASSIGN cRTime +="/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
-                ASSIGN cRTime +="["+DtoC(__oRTimeProc:GetdEndTime())+"]"
-                ASSIGN cRTime +="["+__oRTimeProc:GetcEndTime()+"]"
-                ASSIGN cRTime +="["+__oRTimeProc:GetcAverageTime()+"]"
-                ASSIGN cRTime +="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+                ASSIGN cRTime+="/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
+                ASSIGN cRTime+="["+DtoC(__oRTimeProc:GetdEndTime())+"]"
+                ASSIGN cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
+                ASSIGN cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
+                ASSIGN cRTime+="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
                 ASSIGN cLRTime:=cRTime
                 hb_mutexUnLock(__phMutex)
             EndIF
@@ -1224,18 +1223,13 @@ Return(lHarbour)
 static procedure tBigNtst01(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1245,7 +1239,6 @@ static procedure tBigNtst01(fhLog)
 
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
@@ -1286,13 +1279,9 @@ static procedure tBigNtst02(fhLog)
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -1301,78 +1290,79 @@ static procedure tBigNtst02(fhLog)
 
         otBigN:SetDecimals(nACC_SET)
         otBigW:SetDecimals(nACC_SET)
+        otBigX:SetDecimals(nACC_SET)
 
         Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
         
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C */
+/*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C*/
         __oRTime1:SetRemaining(5+1)
         For w:=0 To 5
             ASSIGN cW:=hb_ntos(w)
             otBigW:=cW
-            __ConOut(fhLog,"otBigW:="+cW ,"RESULT: "+otBigW:ExactValue())
-            __ConOut(fhLog,"otBigW=="+cW ,"RESULT: "+cValToChar(otBigW==cW))
+            __ConOut(fhLog,"otBigW:="+cW,"RESULT: "+otBigW:ExactValue())
+            __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
             __oRTime2:SetRemaining(Int(nISQRT/2))
             For n:=1 To nISQRT Step Int(nISQRT/2)
                 ASSIGN cN:=hb_ntos(n)
-                __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
-/*(*)*/            __ConOut(fhLog,"otBigW%="+cW ,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW^="+cN ,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cN ,"RESULT: "+(otBigX:=(otBigW+=cN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
-                __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW-="+cN ,"RESULT: "+(otBigX:=(otBigW-=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW*="+cN ,"RESULT: "+(otBigX:=(otBigW*=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cW ,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW++"    ,"RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
-                __ConOut(fhLog,"++otBigW"    ,"RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW--"    ,"RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
-                __ConOut(fhLog,"--otBigW"    ,"RESULT: "+(otBigX:=(--otBigW),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW=="+cN ,"RESULT: "+cValToChar(otBigW==cN))
-                __ConOut(fhLog,"otBigW>"+cN  ,"RESULT: "+cValToChar(otBigW>cN))
-                __ConOut(fhLog,"otBigW<"+cN  ,"RESULT: "+cValToChar(otBigW<cN))
-                __ConOut(fhLog,"otBigW>="+cN ,"RESULT: "+cValToChar(otBigW>=cN))
-                __ConOut(fhLog,"otBigW<="+cN ,"RESULT: "+cValToChar(otBigW<=cN))
-                __ConOut(fhLog,"otBigW!="+cN ,"RESULT: "+cValToChar(otBigW!=cN))
-                __ConOut(fhLog,"otBigW#"+cN  ,"RESULT: "+cValToChar(otBigW#cN))
-                __ConOut(fhLog,"otBigW<>"+cN ,"RESULT: "+cValToChar(otBigW<>cN))
-                __ConOut(fhLog,"otBigW+"+cN  ,"RESULT: "+(otBigX:=(otBigW+cN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW-"+cN  ,"RESULT: "+(otBigX:=(otBigW-cN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW*"+cN  ,"RESULT: "+(otBigX:=(otBigW*cN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW/"+cN  ,"RESULT: "+(otBigX:=(otBigW/cN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW%"+cN  ,"RESULT: "+(otBigX:=(otBigW%cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
+/*(*)*/            __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW^="+cN,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+="+cN,"RESULT: "+(otBigX:=(otBigW+=cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW++","RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
+                __ConOut(fhLog,"++otBigW","RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW-="+cN,"RESULT: "+(otBigX:=(otBigW-=cN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW*="+cN,"RESULT: "+(otBigX:=(otBigW*=cN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW++","RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
+                __ConOut(fhLog,"++otBigW","RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW--","RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
+                __ConOut(fhLog,"--otBigW","RESULT: "+(otBigX:=(--otBigW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
+                __ConOut(fhLog,"otBigW>"+cN,"RESULT: "+cValToChar(otBigW>cN))
+                __ConOut(fhLog,"otBigW<"+cN,"RESULT: "+cValToChar(otBigW<cN))
+                __ConOut(fhLog,"otBigW>="+cN,"RESULT: "+cValToChar(otBigW>=cN))
+                __ConOut(fhLog,"otBigW<="+cN,"RESULT: "+cValToChar(otBigW<=cN))
+                __ConOut(fhLog,"otBigW!="+cN,"RESULT: "+cValToChar(otBigW!=cN))
+                __ConOut(fhLog,"otBigW#"+cN,"RESULT: "+cValToChar(otBigW#cN))
+                __ConOut(fhLog,"otBigW<>"+cN,"RESULT: "+cValToChar(otBigW<>cN))
+                __ConOut(fhLog,"otBigW+"+cN,"RESULT: "+(otBigX:=(otBigW+cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW-"+cN,"RESULT: "+(otBigX:=(otBigW-cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW*"+cN,"RESULT: "+(otBigX:=(otBigW*cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW/"+cN,"RESULT: "+(otBigX:=(otBigW/cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW%"+cN,"RESULT: "+(otBigX:=(otBigW%cN),otBigX:ExactValue()))
                 __ConOut(fhLog,__cSep)
                 otBigN:=otBigW
-                __ConOut(fhLog,"otBigN:=otBigW"   ,"RESULT: "+otBigN:ExactValue())
-                __ConOut(fhLog,"otBigN"           ,"RESULT: "+otBigW:ExactValue())
-                __ConOut(fhLog,"otBigW"           ,"RESULT: "+otBigW:ExactValue())
-                __ConOut(fhLog,"otBigW==otBigN"   ,"RESULT: "+cValToChar(otBigW==otBigN))
-                __ConOut(fhLog,"otBigW>otBigN"    ,"RESULT: "+cValToChar(otBigW>otBigN))
-                __ConOut(fhLog,"otBigW<otBigN"    ,"RESULT: "+cValToChar(otBigW<otBigN))
-                __ConOut(fhLog,"otBigW>=otBigN"   ,"RESULT: "+cValToChar(otBigW>=otBigN))
-                __ConOut(fhLog,"otBigW<=otBigN"   ,"RESULT: "+cValToChar(otBigW<=otBigN))
-                __ConOut(fhLog,"otBigW!=otBigN"   ,"RESULT: "+cValToChar(otBigW!=otBigN))
-                __ConOut(fhLog,"otBigW#otBigN"    ,"RESULT: "+cValToChar(otBigW#otBigN))
-                __ConOut(fhLog,"otBigW<>otBigN"   ,"RESULT: "+cValToChar(otBigW<>otBigN))
-                __ConOut(fhLog,"otBigW+otBigN"    ,"RESULT: "+(otBigX:=(otBigW+otBigN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW-otBigN"    ,"RESULT: "+(otBigX:=(otBigW-otBigN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW*otBigN"    ,"RESULT: "+(otBigX:=(otBigW*otBigN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW/otBigN"    ,"RESULT: "+(otBigX:=(otBigW/otBigN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW%otBigN"    ,"RESULT: "+(otBigX:=(otBigW%otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN++" ,"RESULT: "+(otBigX:=(otBigW+=otBigN++),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=++otBigN" ,"RESULT: "+(otBigX:=(otBigW+=++otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW-=otBigN"   ,"RESULT: "+(otBigX:=(otBigW-=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW*=otBigN"   ,"RESULT: "+(otBigX:=(otBigW*=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN"   ,"RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigN:=otBigW","RESULT: "+otBigN:ExactValue())
+                __ConOut(fhLog,"otBigN","RESULT: "+otBigW:ExactValue())
+                __ConOut(fhLog,"otBigW","RESULT: "+otBigW:ExactValue())
+                __ConOut(fhLog,"otBigW==otBigN","RESULT: "+cValToChar(otBigW==otBigN))
+                __ConOut(fhLog,"otBigW>otBigN","RESULT: "+cValToChar(otBigW>otBigN))
+                __ConOut(fhLog,"otBigW<otBigN","RESULT: "+cValToChar(otBigW<otBigN))
+                __ConOut(fhLog,"otBigW>=otBigN","RESULT: "+cValToChar(otBigW>=otBigN))
+                __ConOut(fhLog,"otBigW<=otBigN","RESULT: "+cValToChar(otBigW<=otBigN))
+                __ConOut(fhLog,"otBigW!=otBigN","RESULT: "+cValToChar(otBigW!=otBigN))
+                __ConOut(fhLog,"otBigW#otBigN","RESULT: "+cValToChar(otBigW#otBigN))
+                __ConOut(fhLog,"otBigW<>otBigN","RESULT: "+cValToChar(otBigW<>otBigN))
+                __ConOut(fhLog,"otBigW+otBigN","RESULT: "+(otBigX:=(otBigW+otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW-otBigN","RESULT: "+(otBigX:=(otBigW-otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW*otBigN","RESULT: "+(otBigX:=(otBigW*otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW/otBigN","RESULT: "+(otBigX:=(otBigW/otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW%otBigN","RESULT: "+(otBigX:=(otBigW%otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN++","RESULT: "+(otBigX:=(otBigW+=otBigN++),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=++otBigN","RESULT: "+(otBigX:=(otBigW+=++otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW-=otBigN","RESULT: "+(otBigX:=(otBigW-=otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW*=otBigN","RESULT: "+(otBigX:=(otBigW*=otBigN),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
                 otBigN:=cW
-                __ConOut(fhLog,"otBigN:="+cW ,"RESULT: "+otBigN:ExactValue())
-                __ConOut(fhLog,"otBigN=="+cW ,"RESULT: "+cValToChar(otBigN==cW))
-/*(*)*/            __ConOut(fhLog,"otBigN^=otBigN"   ,"RESULT: "+(otBigX:=(otBigN^=otBigN),otBigX:ExactValue()))
-                __ConOut(fhLog,"otBigW--"         ,"RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN--" ,"RESULT: "+(otBigX:=(otBigW+=otBigN--),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=--otBigN" ,"RESULT: "+(otBigX:=(otBigW+=--otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigN:="+cW,"RESULT: "+otBigN:ExactValue())
+                __ConOut(fhLog,"otBigN=="+cW,"RESULT: "+cValToChar(otBigN==cW))
+/*(*)*/            __ConOut(fhLog,"otBigN^=otBigN","RESULT: "+(otBigX:=(otBigN^=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW--","RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN--","RESULT: "+(otBigX:=(otBigW+=otBigN--),otBigX:ExactValue()))
+/*(*)*/            __ConOut(fhLog,"otBigW+=--otBigN","RESULT: "+(otBigX:=(otBigW+=--otBigN),otBigX:ExactValue()))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,__cSep)
@@ -1394,20 +1384,15 @@ static procedure tBigNtst03(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
    
     Local aPFact    AS ARRAY
     
@@ -1434,7 +1419,7 @@ static procedure tBigNtst03(fhLog)
             ASSIGN cW:=aPFact[x][2]
 #ifndef __PROTHEUS__
             otBigW:=cW
-            While otBigW > o0
+            While otBigW>o0
 #else
             otBigW:SetValue(cW)
             While otBigW:gt(o0)
@@ -1467,20 +1452,10 @@ static procedure tBigNtst03(fhLog)
 return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst04(fhLog)
-
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
 
     Local aPrimes   AS ARRAY  VALUE {;
                                          "15485783", "15485801", "15485807", "15485837", "15485843", "15485849", "15485857", "15485863",;
@@ -1497,9 +1472,6 @@ static procedure tBigNtst04(fhLog)
     
     __ConOut(fhLog," BEGIN ------------ Teste Prime 1 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
-
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
    
     __ConOut(fhLog,"")
@@ -1510,7 +1482,7 @@ static procedure tBigNtst04(fhLog)
     __oRTime1:SetRemaining(Len(aPrimes))
     For n:=1 To Len(aPrimes)
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=PadL(aPrimes[n] ,oPrime:nSize)
+        ASSIGN cN:=PadL(aPrimes[n],oPrime:nSize)
         __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))
         __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)
         __ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
@@ -1540,18 +1512,12 @@ return
 static procedure tBigNtst05(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
     Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     Local otBH16    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,16)
     Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
@@ -1561,7 +1527,6 @@ static procedure tBigNtst05(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste HEX16 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
@@ -1607,18 +1572,12 @@ return
 static procedure tBigNtst06(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
     Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     Local otBH32    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,32)
     Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
@@ -1628,7 +1587,6 @@ static procedure tBigNtst06(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste HEX32 0 -------------- ")
         
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1674,27 +1632,19 @@ return
 static procedure tBigNtst07(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
     __ConOut(fhLog," BEGIN ------------ ADD Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1711,8 +1661,8 @@ static procedure tBigNtst07(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n   +=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n+=9999.9999999999
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="9999.9999999999"
@@ -1742,25 +1692,17 @@ return
 static procedure tBigNtst08(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
   
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
     __ConOut(fhLog," BEGIN ------------ ADD Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1774,8 +1716,8 @@ static procedure tBigNtst08(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n   +=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n+=9999.9999999999
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="9999.9999999999"
@@ -1805,25 +1747,17 @@ return
 static procedure tBigNtst09(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
     __ConOut(fhLog," BEGIN ------------ ADD Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1833,8 +1767,8 @@ static procedure tBigNtst09(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n   +=-9999.9999999999
-        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n+=-9999.9999999999
+        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="-9999.9999999999"
@@ -1864,25 +1798,17 @@ return
 static procedure tBigNtst10(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
     __ConOut(fhLog," BEGIN ------------ SUB Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
  
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1892,11 +1818,11 @@ static procedure tBigNtst10(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n    -=9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n-=9999.9999999999
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN -= "9999.9999999999"
+        otBigN-="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #endif
@@ -1923,25 +1849,17 @@ return
 static procedure tBigNtst11(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
    __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1949,11 +1867,11 @@ static procedure tBigNtst11(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n  -= 9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n-=9999.9999999999
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN -= "9999.9999999999"
+        otBigN-="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
 #endif
@@ -1980,25 +1898,17 @@ return
 static procedure tBigNtst12(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2006,11 +1916,11 @@ static procedure tBigNtst12(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
-        ASSIGN n  -= -9999.9999999999
-        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: " + hb_ntos(n))
+        ASSIGN n-=-9999.9999999999
+        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN -= "-9999.9999999999"
+        otBigN-="-9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
 #endif
@@ -2038,17 +1948,12 @@ static procedure tBigNtst13(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
     
@@ -2079,11 +1984,11 @@ static procedure tBigNtst13(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        ASSIGN n    *= 1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
+        ASSIGN n*=1.5
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN *= "1.5"
+        otBigN*="1.5"
 #else
         otBigN:SetValue(otBigN:Mult("1.5"))
 #endif
@@ -2111,18 +2016,12 @@ return
 static procedure tBigNtst14(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
     
@@ -2131,7 +2030,6 @@ static procedure tBigNtst14(fhLog)
     __ConOut(fhLog," BEGIN ------------ MULT Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
  
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2139,7 +2037,6 @@ static procedure tBigNtst14(fhLog)
 
     ASSIGN n:=1
     otBigN:SetValue(o1)
-    otBigW:SetValue(o1)
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
     For x:=1 TO nN_TEST Step nISQRT
@@ -2153,11 +2050,11 @@ static procedure tBigNtst14(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        ASSIGN n    *= 1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
+        ASSIGN n*=1.5
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN *= "1.5"
+        otBigN*="1.5"
 #else
         otBigN:SetValue(otBigN:Mult("1.5"))
 #endif
@@ -2181,19 +2078,13 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst15(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
     
@@ -2201,7 +2092,6 @@ static procedure tBigNtst15(fhLog)
 
    __ConOut(fhLog," BEGIN ------------ MULT Teste 3 -------------- ")
    
-    otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -2209,7 +2099,6 @@ static procedure tBigNtst15(fhLog)
     __ConOut(fhLog,"")
 
     ASSIGN n:=1
-    otBigN:SetValue(o1)
     otBigW:SetValue(o1)
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
@@ -2224,8 +2113,8 @@ static procedure tBigNtst15(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        ASSIGN n    *= 1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: " + hb_ntos(n))
+        ASSIGN n*=1.5
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("1.5"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+otBigW:ExactValue())
@@ -2248,18 +2137,13 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst16(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
@@ -2268,7 +2152,6 @@ static procedure tBigNtst16(fhLog)
 
    __ConOut(fhLog," BEGIN ------------ MULT Teste 4 -------------- ")
    
-    otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -2282,7 +2165,7 @@ static procedure tBigNtst16(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(w)
-        ASSIGN w    *= 3.555
+        ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2291,10 +2174,10 @@ static procedure tBigNtst16(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
         ASSIGN cN:=otBigW:ExactValue()
 #ifndef __PROTHEUS__
-        otBigW *= "3.555"
+        otBigW*="3.555"
 #else
         otBigW:SetValue(otBigW:Mult("3.555"))
 #endif
@@ -2324,18 +2207,13 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst17(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
@@ -2344,7 +2222,6 @@ static procedure tBigNtst17(fhLog)
 
    __ConOut(fhLog," BEGIN ------------ MULT Teste 5 -------------- ")
    
-    otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -2358,7 +2235,7 @@ static procedure tBigNtst17(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(w)
-        ASSIGN w    *= 3.555
+        ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2367,7 +2244,7 @@ static procedure tBigNtst17(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -2396,18 +2273,13 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst18(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
     Local w         AS NUMBER
     Local x         AS NUMBER
     Local z         AS NUMBER
@@ -2416,7 +2288,6 @@ static procedure tBigNtst18(fhLog)
  
    __ConOut(fhLog," BEGIN ------------ MULT Teste 6 -------------- ")
    
-    otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -2430,7 +2301,7 @@ static procedure tBigNtst18(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(w)
-        ASSIGN w    *= 3.555
+        ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2439,7 +2310,7 @@ static procedure tBigNtst18(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: " + hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:rMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -2471,25 +2342,16 @@ return
 static procedure tBigNtst19(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
    __ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2497,7 +2359,7 @@ static procedure tBigNtst19(fhLog)
 
     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
     ASSIGN n:=0
-    While (n <= nN_TEST)
+    While (n<=nN_TEST)
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
         #ifdef __PROTHEUS__
@@ -2527,25 +2389,19 @@ return
 static procedure tBigNtst20(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
     __ConOut(fhLog," BEGIN ------------ Teste GCD/LCM 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2584,17 +2440,13 @@ static procedure tBigNtst21(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
@@ -2613,7 +2465,7 @@ static procedure tBigNtst21(fhLog)
         __oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
         For x:=0 TO nISQRT Step nISQRT
             ASSIGN cX:=hb_ntos(x)
-            __ConOut(fhLog,cN+'/'+cX,"RESULT: " + hb_ntos(n/x))
+            __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_ntos(n/x))
 #ifndef __PROTHEUS__
             otBigN:=cN
             otBigW:=(otBigN/cX)
@@ -2655,25 +2507,18 @@ return
 static procedure tBigNtst22(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER VALUE 19701215
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
    __ConOut(fhLog," BEGIN ------------ DIV Teste 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2686,11 +2531,11 @@ static procedure tBigNtst22(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
            __oRTime2:SetRemaining(1)
         ASSIGN cW:=hb_ntos(n)
-        ASSIGN n    /= 1.5
+        ASSIGN n    /=1.5
         __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN /= "1.5"
+        otBigN /="1.5"
 #else
         otBigN:SetValue(otBigN:Div("1.5"))
 #endif
@@ -2717,28 +2562,19 @@ return
 static procedure tBigNtst23(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
     Local o3        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("3")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
    __ConOut(fhLog," BEGIN ------------ DIV Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2752,7 +2588,7 @@ static procedure tBigNtst23(fhLog)
         otBigN:SetValue(cN)
         __ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
 #ifndef __PROTHEUS__
-        otBigN /= o3
+        otBigN /=o3
 #else
         otBigN:SetValue(otBigN:Div(o3))
 #endif
@@ -2778,12 +2614,10 @@ static procedure tBigNtst24(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
@@ -2826,12 +2660,10 @@ static procedure tBigNtst25(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
@@ -2861,7 +2693,7 @@ static procedure tBigNtst25(fhLog)
            __oRTime2:SetRemaining(1)
         ASSIGN n:=x
         ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_ntos(SQRT(n)))
         otBigN:SetValue(cN)
         otBigW:SetValue(otBigN:SQRT())
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigW:ExactValue())
@@ -2891,13 +2723,10 @@ return
 static procedure tBigNtst26(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
@@ -2914,10 +2743,6 @@ static procedure tBigNtst26(fhLog)
     otBigN:nthRootAcc(nROOT_ACC_SET)
     otBigN:SysSQRT(0)
 
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
@@ -2927,7 +2752,7 @@ static procedure tBigNtst26(fhLog)
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
         ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: " + hb_ntos(SQRT(n)))
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_ntos(SQRT(n)))
 #ifndef __PROTHEUS__
         otBigN:=cN
         otBigN:=otBigN:SQRT()
@@ -2963,18 +2788,12 @@ return
 static procedure tBigNtst27(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
@@ -2983,10 +2802,6 @@ static procedure tBigNtst27(fhLog)
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
     otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -2997,7 +2812,7 @@ static procedure tBigNtst27(fhLog)
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
         ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'Exp('+cN+')',"RESULT: " + hb_ntos(Exp(n)))
+        __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_ntos(Exp(n)))
 #ifndef __PROTHEUS__
     otBigN:=cN
 #else
@@ -3033,18 +2848,14 @@ return
 static procedure tBigNtst28(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3053,10 +2864,6 @@ static procedure tBigNtst28(fhLog)
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
     otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -3071,7 +2878,7 @@ static procedure tBigNtst28(fhLog)
             ASSIGN cW:=hb_ntos(w)
             ASSIGN n:=x
             ASSIGN n:=(n^w)
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_ntos(n))
 #ifndef __PROTHEUS__
             otBigN:=cN
 #else
@@ -3080,7 +2887,7 @@ static procedure tBigNtst28(fhLog)
             ASSIGN cN:=otBigN:ExactValue()
 
 #ifndef __PROTHEUS__
-            otBigN ^= cW
+            otBigN^=cW
 #else
             otBigN:SetValue(otBigN:Pow(cW))
 #endif
@@ -3115,18 +2922,14 @@ return
 static procedure tBigNtst29(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
     Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3135,10 +2938,6 @@ static procedure tBigNtst29(fhLog)
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
     otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -3152,7 +2951,7 @@ static procedure tBigNtst29(fhLog)
             ASSIGN cW:=hb_ntos(w+.5)
             ASSIGN n:=x
             ASSIGN n:=(n^(w+.5))
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: " + hb_ntos(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_ntos(n))
             #ifndef __PROTHEUS__
                 otBigN:=cN
             #else
@@ -3160,7 +2959,7 @@ static procedure tBigNtst29(fhLog)
             #endif
             ASSIGN cN:=otBigN:ExactValue()
             #ifndef __PROTHEUS__
-                otBigN ^= cW
+                otBigN^=cW
             #else
                 otBigN:SetValue(otBigN:Pow(cW))
             #endif
@@ -3193,18 +2992,8 @@ return
 static procedure tBigNtst30(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-  
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3213,10 +3002,6 @@ static procedure tBigNtst30(fhLog)
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
     otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -3254,19 +3039,9 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst31(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-  
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
+    Local cX        AS CHARACTER
 
     Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
     Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
@@ -3284,14 +3059,8 @@ static procedure tBigNtst31(fhLog)
   
     __ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
 
-     __oRTime1:SetRemaining(13)
+    __oRTime1:SetRemaining(13)
 
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
     otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -3339,7 +3108,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o1):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3351,7 +3120,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o2):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3363,7 +3132,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o3):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3375,7 +3144,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o4):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3387,7 +3156,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o5):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3399,7 +3168,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o6):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3411,7 +3180,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o7):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3423,7 +3192,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o8):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3435,7 +3204,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o9):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")'  ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")',"RESULT: "+cX)
 
     __oRTime2:Calcule()
     __oRTime1:Calcule()
@@ -3447,7 +3216,7 @@ static procedure tBigNtst31(fhLog)
 
     __oRTime2:SetRemaining(1)
     ASSIGN cX:=otBigW:SetValue("100000000000000000000000000000"):Log(o10):ExactValue()
-    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("10")' ,"RESULT: "+cX)
+    __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("10")',"RESULT: "+cX)
 
     o0:=FreeObj(o0)
     o1:=FreeObj(o1)
@@ -3483,17 +3252,13 @@ static procedure tBigNtst32(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
     Local n         AS NUMBER
     Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
@@ -3519,7 +3284,7 @@ static procedure tBigNtst32(fhLog)
         otBigW:SetValue(cW)
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
         ASSIGN cX:=otBigW:SetValue(cW):Log():ExactValue()
-        __ConOut(fhLog,cW+':tBigNumber():Log()'  ,"RESULT: "+cX)
+        __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
          otBigN:SetValue(cX)
         ASSIGN cX:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
@@ -3563,27 +3328,16 @@ return
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst33(fhLog)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
   
-    Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
 
-    Local n         AS NUMBER
     Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     __ConOut(fhLog," BEGIN ------------ Teste LN 1 -------------- ")
-    
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
 
     otBigW:SetDecimals(nACC_SET)
     otBigW:nthRootAcc(nROOT_ACC_SET)
@@ -3621,20 +3375,12 @@ return
 static procedure tBigNtst34(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o2        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
   
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
-
+ 
     Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
     
     Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New()
     
@@ -3646,7 +3392,6 @@ static procedure tBigNtst34(fhLog)
     __ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -3655,15 +3400,15 @@ static procedure tBigNtst34(fhLog)
     ASSIGN n:=0
     __oRTime1:SetRemaining((nISQRT/2)+1)
     __oRTime2:SetRemaining(1)
-    While (n <= nISQRT)
-        IF (n < 3)
+    While (n<=nISQRT)
+        IF (n<3)
             ASSIGN n+=1
         Else
             ASSIGN n+=2
         EndIF
         ASSIGN cN:=hb_ntos(n)
         ASSIGN lPn:=oPrime:IsPrime(cN,.T.)
-        ASSIGN lMR:=IF(lPn ,lPn ,otBigN:SetValue(cN):millerRabin(o2))
+        ASSIGN lMR:=IF(lPn,lPn,otBigN:SetValue(cN):millerRabin(o2))
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
         __ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+IF(lPn,"","   "))
         __oRTime2:Calcule()
@@ -3695,28 +3440,14 @@ return
 static procedure tBigNtst35(fhLog)
 
     Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-  
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cHex      AS CHARACTER
-
+ 
     Local n         AS NUMBER
-    Local w         AS NUMBER
-    Local x         AS NUMBER
-    Local z         AS NUMBER
-
-    Local lMR       AS LOGICAL
-    Local lPn       AS LOGICAL
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
