@@ -252,7 +252,7 @@
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigtstThread(lFinalize,atBigNtst,nMaxScrRow,nMaxScrCol)
 
-        Local aThreads
+        Local oThreads
         
         Local nThAT
         Local nThread
@@ -263,16 +263,17 @@
       
         IF (nThreads>0)
             //"Share publics and privates with child threads."
-            tBigNthStart(nThreads,@aThreads,HB_THREAD_INHERIT_MEMVARS)
+            oThreads:=tBigNThreads():New()
+            oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
             nThAT:=0
             While ((nThAT:=aScan(atBigNtst,{|e|e[2]},nThAT+1))>0)
                 nThread:=nThreads
-                aThreads[nThread][TH_EXE]:={@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol}
+                oThreads:setEvent(nThread,{@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol})
                 --nThreads
             End While
-            tBigNthNotify(@aThreads)
-            tBigNthWait(@aThreads)
-            tBigNthJoin(@aThreads)
+            oThreads:Notify()
+            oThreads:Wait()
+            oThreads:Join()
         EndIF
         
         lFinalize:=.T.
