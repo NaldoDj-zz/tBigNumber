@@ -164,11 +164,11 @@ static s__MTXSQR:=hb_mutexCreate()
 */
 
 /*
-    class       : tBigNumber
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Instancia um novo objeto do tipo BigNumber
-    Sintaxe     : tBigNumber():New(uBigN) -> self
+    class:tBigNumber
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Instancia um novo objeto do tipo BigNumber
+    Sintaxe:tBigNumber():New(uBigN) -> self
 */
 #ifdef __PROTHEUS__
 class tBigNumber from LongClassName
@@ -567,11 +567,11 @@ endclass
 #endif //__PROTHEUS__
 
 /*
-    function    : tBigNumber():New
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Instancia um novo Objeto tBigNumber
-    Sintaxe     : tBigNumber():New(uBigN,nBase) -> self
+    function:tBigNumber():New
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Instancia um novo Objeto tBigNumber
+    Sintaxe:tBigNumber():New(uBigN,nBase) -> self
 */
 #ifdef __PROTHEUS__
     user function tBigNumber(uBigN,nBase)
@@ -579,11 +579,11 @@ endclass
 #endif
 
 /*
-    method      : New
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : CONSTRUCTOR
-    Sintaxe     : tBigNumber():New(uBigN,nBase) -> self
+    method:New
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:CONSTRUCTOR
+    Sintaxe:tBigNumber():New(uBigN,nBase) -> self
 */
 method New(uBigN,nBase) class tBigNumber
 
@@ -617,10 +617,10 @@ method New(uBigN,nBase) class tBigNumber
 return(self)
 
 /*
-    method      : tBigNGC
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 03/03/2013
-    Descricao   : DESTRUCTOR
+    method:tBigNGC
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:03/03/2013
+    Descricao:DESTRUCTOR
 */
 #ifdef TBN_DBFILE
     #ifdef __HARBOUR__
@@ -651,11 +651,11 @@ return(self)
 #endif
 
 /*
-    method      : __cDec
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __cDec
-    Sintaxe     : tBigNumber():__cDec() -> cDec
+    method:__cDec
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__cDec
+    Sintaxe:tBigNumber():__cDec() -> cDec
 */
 method __cDec(cDec) class tBigNumber
     if .not.(cDec==NIL)
@@ -674,11 +674,11 @@ method __cDec(cDec) class tBigNumber
 return(self:cDec)
 
 /*
-    method      : __cInt
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __cDec
-    Sintaxe     : tBigNumber():__cInt() -> cInt
+    method:__cInt
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__cDec
+    Sintaxe:tBigNumber():__cInt() -> cInt
 */
 method __cInt(cInt) class tBigNumber
     if .not.(cInt==NIL)
@@ -697,11 +697,11 @@ method __cInt(cInt) class tBigNumber
 return(self:cInt)
 
 /*
-    method      : __cRDiv
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 30/03/2014
-    Descricao   : __cRDiv
-    Sintaxe     : tBigNumber():__cRDiv() -> __cRDiv
+    method:__cRDiv
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/03/2014
+    Descricao:__cRDiv
+    Sintaxe:tBigNumber():__cRDiv() -> __cRDiv
 */
 method __cRDiv(cRDiv) class tBigNumber
     if .not.(cRDiv==NIL)
@@ -713,11 +713,11 @@ method __cRDiv(cRDiv) class tBigNumber
 return(self:cRDiv)
 
 /*
-    method      : __cSig
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __cSig
-    Sintaxe     : tBigNumber():__cSig() -> cSig
+    method:__cSig
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__cSig
+    Sintaxe:tBigNumber():__cSig() -> cSig
 */
 method __cSig(cSig) class tBigNumber
     if .not.(cSig==NIL)
@@ -734,11 +734,11 @@ method __cSig(cSig) class tBigNumber
 return(self:cSig)
 
 /*
-    method      : __lNeg
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __lNeg
-    Sintaxe     : tBigNumber():__lNeg() -> lNeg
+    method:__lNeg
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__lNeg
+    Sintaxe:tBigNumber():__lNeg() -> lNeg
 */
 method __lNeg(lNeg) class tBigNumber
     if .not.(lNeg==NIL)
@@ -754,11 +754,11 @@ method __lNeg(lNeg) class tBigNumber
 return(self:lNeg)
 
 /*
-    method      : __nBase
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __nBase
-    Sintaxe     : tBigNumber():__nBase() -> nBase
+    method:__nBase
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__nBase
+    Sintaxe:tBigNumber():__nBase() -> nBase
 */
 method __nBase(nBase) class tBigNumber
     if .not.(nBase==NIL)
@@ -767,11 +767,11 @@ method __nBase(nBase) class tBigNumber
 return(self:nBase)
 
 /*
-    method      : __nDec
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __nDec
-    Sintaxe     : tBigNumber():__nDec() -> nDec
+    method:__nDec
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__nDec
+    Sintaxe:tBigNumber():__nDec() -> nDec
 */
 method __nDec(nDec) class tBigNumber
     if .not.(nDec==NIL)
@@ -786,11 +786,11 @@ method __nDec(nDec) class tBigNumber
 return(self:nDec)
 
 /*
-    method      : __nInt
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : __nInt
-    Sintaxe     : tBigNumber():__nInt() -> nInt
+    method:__nInt
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:__nInt
+    Sintaxe:tBigNumber():__nInt() -> nInt
 */
 method __nInt(nInt) class tBigNumber
     if .not.(nInt==NIL)
@@ -803,11 +803,11 @@ method __nInt(nInt) class tBigNumber
 return(self:nInt)
 
 /*
-    method      : __nSize
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 17/02/2014
-    Descricao   : nSize
-    Sintaxe     : tBigNumber():__nSize() -> nSize
+    method:__nSize
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:17/02/2014
+    Descricao:nSize
+    Sintaxe:tBigNumber():__nSize() -> nSize
 */
 method __nSize(nSize) class tBigNumber
     if .not.(nSize==NIL)
@@ -825,11 +825,11 @@ method __nSize(nSize) class tBigNumber
 return(self:nSize)
 
 /*
-    method      : Clone
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 27/03/2013
-    Descricao   : Clone
-    Sintaxe     : tBigNumber():Clone() -> oClone
+    method:Clone
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:27/03/2013
+    Descricao:Clone
+    Sintaxe:tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
     local oClone    
@@ -858,21 +858,21 @@ method Clone() class tBigNumber
 return(oClone)
     
 /*
-    method      : className
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : className
-    Sintaxe     : tBigNumber():className() -> cclassName
+    method:className
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:className
+    Sintaxe:tBigNumber():className() -> cclassName
 */
 method className() class tBigNumber
 return("TBIGNUMBER")
 
 /*
-    method    : SetDecimals
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 04/02/2013
-    Descricao : Setar o Numero de Casas Decimais
-    Sintaxe   : tBigNumber():SetDecimals(nSet) -> nLastSet
+    method:SetDecimals
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Setar o Numero de Casas Decimais
+    Sintaxe:tBigNumber():SetDecimals(nSet) -> nLastSet
 */
 method SetDecimals(nSet) class tBigNumber
 
@@ -902,11 +902,11 @@ method SetDecimals(nSet) class tBigNumber
 return(nLastSet)
 
 /*
-    method      : nthRootAcc
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Setar a Precisao para nthRoot
-    Sintaxe     : tBigNumber():nthRootAcc(nSet) -> nLastSet
+    method:nthRootAcc
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Setar a Precisao para nthRoot
+    Sintaxe:tBigNumber():nthRootAcc(nSet) -> nLastSet
 */
 method nthRootAcc(nSet) class tBigNumber
 
@@ -934,11 +934,11 @@ method nthRootAcc(nSet) class tBigNumber
 return(nLastSet)
 
 /*
-    method      : SetValue
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : SetValue
-    Sintaxe     : tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
+    method:SetValue
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:SetValue
+    Sintaxe:tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
 */
 method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
@@ -1112,11 +1112,11 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 return(self)
 
 /*
-    method      : GetValue
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : GetValue
-    Sintaxe     : tBigNumber():GetValue(lAbs,lObj) -> uNR
+    method:GetValue
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:GetValue
+    Sintaxe:tBigNumber():GetValue(lAbs,lObj) -> uNR
 */
 method GetValue(lAbs,lObj) class tBigNumber
 
@@ -1137,11 +1137,11 @@ method GetValue(lAbs,lObj) class tBigNumber
 return(uNR)
 
 /*
-    method      : ExactValue
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : ExactValue
-    Sintaxe     : tBigNumber():ExactValue(lAbs) -> uNR
+    method:ExactValue
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:ExactValue
+    Sintaxe:tBigNumber():ExactValue(lAbs) -> uNR
 */
 method ExactValue(lAbs,lObj) class tBigNumber
 
@@ -1169,21 +1169,21 @@ method ExactValue(lAbs,lObj) class tBigNumber
 return(uNR)
 
 /*
-    method      : Abs
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Retorna o Valor Absoluto de um Numero
-    Sintaxe     : tBigNumber():Abs() -> uNR
+    method:Abs
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna o Valor Absoluto de um Numero
+    Sintaxe:tBigNumber():Abs() -> uNR
 */
 method Abs(lObj) class tBigNumber
 return(self:GetValue(.T.,lObj))
 
 /*
-    method      : Int
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Retorna a Parte Inteira de um Numero
-    Sintaxe     : tBigNumber():Int(lObj,lSig) -> uNR
+    method:Int
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna a Parte Inteira de um Numero
+    Sintaxe:tBigNumber():Int(lObj,lSig) -> uNR
 */
 method Int(lObj,lSig) class tBigNumber
     local uNR
@@ -1196,11 +1196,11 @@ method Int(lObj,lSig) class tBigNumber
 return(uNR)
 
 /*
-    method      : Dec
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Retorna a Parte Decimal de um Numero
-    Sintaxe     : tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
+    method:Dec
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna a Parte Decimal de um Numero
+    Sintaxe:tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
 */
 method Dec(lObj,lSig,lNotZ) class tBigNumber
 
@@ -1229,11 +1229,11 @@ method Dec(lObj,lSig,lNotZ) class tBigNumber
 return(uNR)
 
 /*
-    method      : eq
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Compara se o valor corrente eh igual ao passado como parametro
-    Sintaxe     : tBigNumber():eq(uBigN) -> leq
+    method:eq
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Compara se o valor corrente eh igual ao passado como parametro
+    Sintaxe:tBigNumber():eq(uBigN) -> leq
 */
 method eq(uBigN) class tBigNumber
 
@@ -1258,21 +1258,21 @@ method eq(uBigN) class tBigNumber
 return(leq)
 
 /*
-    method      : ne
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Verifica se o valor corrente eh igual ao valor passado como parametro
-    Sintaxe     : tBigNumber():ne(uBigN) -> .not.(leq)
+    method:ne
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Verifica se o valor corrente eh igual ao valor passado como parametro
+    Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
 */
 method ne(uBigN) class tBigNumber
 return(.not.(self:eq(uBigN)))
 
 /*
-    method      : gt
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Verifica se o valor corrente eh maior que o valor passado como parametro
-    Sintaxe     : tBigNumber():gt(uBigN) -> lgt
+    method:gt
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Verifica se o valor corrente eh maior que o valor passado como parametro
+    Sintaxe:tBigNumber():gt(uBigN) -> lgt
 */
 method gt(uBigN) class tBigNumber
 
@@ -1309,11 +1309,11 @@ method gt(uBigN) class tBigNumber
 return(lgt)
 
 /*
-    method      : lt
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Verifica se o valor corrente eh menor que o valor passado como parametro
-    Sintaxe     : tBigNumber():lt(uBigN) -> llt
+    method:lt
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Verifica se o valor corrente eh menor que o valor passado como parametro
+    Sintaxe:tBigNumber():lt(uBigN) -> llt
 */
 method lt(uBigN) class tBigNumber
 
@@ -1350,34 +1350,34 @@ method lt(uBigN) class tBigNumber
 return(llt)
 
 /*
-    method      : gte
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Verifica se o valor corrente eh maior ou igual ao valor passado como parametro
-    Sintaxe     : tBigNumber():gte(uBigN) -> lgte
+    method:gte
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Verifica se o valor corrente eh maior ou igual ao valor passado como parametro
+    Sintaxe:tBigNumber():gte(uBigN) -> lgte
 */
 method gte(uBigN) class tBigNumber
 return(self:cmp(uBigN)>=0)
 
 /*
-    method      : lte
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Verifica se o valor corrente eh menor ou igual ao valor passado como parametro
-    Sintaxe     : tBigNumber():lte(uBigN) -> lte
+    method:lte
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Verifica se o valor corrente eh menor ou igual ao valor passado como parametro
+    Sintaxe:tBigNumber():lte(uBigN) -> lte
 */
 method lte(uBigN) class tBigNumber
 return(self:cmp(uBigN)<=0)
 
 /*
-    method      : cmp
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 11/03/2014
-    Descricao   : Compara self com valor passado como parametro e retorna:
-                  -1 : self < que valor de referencia;
-                   0 : self = valor de referencia;
-                   1 : self > que valor de referencia;
-    Sintaxe     : tBigNumber():cmp(uBigN) -> nCmp
+    method:cmp
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:11/03/2014
+    Descricao:Compara self com valor passado como parametro e retorna:
+                  -1:self < que valor de referencia;
+                   0:self = valor de referencia;
+                   1:self > que valor de referencia;
+    Sintaxe:tBigNumber():cmp(uBigN) -> nCmp
 */
 method cmp(uBigN) class tBigNumber
 
@@ -1447,21 +1447,21 @@ method cmp(uBigN) class tBigNumber
 return(nCmp)
 
 /*
-    method      : btw (between)
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 01/04/2014
-    Descricao   : Retorna .T. se self estiver no intervalo passado.
-    Sintaxe     : tBigNumber():btw(uBigS,uBigE) -> lRet
+    method:btw (between)
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:01/04/2014
+    Descricao:Retorna .T. se self estiver no intervalo passado.
+    Sintaxe:tBigNumber():btw(uBigS,uBigE) -> lRet
 */
 method btw(uBigS,uBigE) class tBigNumber
 return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
 
 /*
-    method      : ibtw (integer between)
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 11/03/2014
-    Descricao   : Retorna .T. se self estiver no intervalo passado.
-    Sintaxe     : tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
+    method:ibtw (integer between)
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:11/03/2014
+    Descricao:Retorna .T. se self estiver no intervalo passado.
+    Sintaxe:tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
 */
 method ibtw(uiBigS,uiBigE) class tBigNumber
     local lbtw:=.F.
@@ -1479,11 +1479,11 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
 return(lbtw)
 
 /*
-    method      : Max
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Retorna o maior valor entre o valor corrente e o valor passado como parametro
-    Sintaxe     : tBigNumber():Max(uBigN) -> oMax
+    method:Max
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna o maior valor entre o valor corrente e o valor passado como parametro
+    Sintaxe:tBigNumber():Max(uBigN) -> oMax
 */
 method Max(uBigN) class tBigNumber
     local oMax:=tBigNumber():New(uBigN)
@@ -1493,11 +1493,11 @@ method Max(uBigN) class tBigNumber
 return(oMax)
 
 /*
-    method      : Min
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Retorna o menor valor entre o valor corrente e o valor passado como parametro
-    Sintaxe     : tBigNumber():Min(uBigN) -> oMin
+    method:Min
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna o menor valor entre o valor corrente e o valor passado como parametro
+    Sintaxe:tBigNumber():Min(uBigN) -> oMin
 */
 method Min(uBigN) class tBigNumber
     local oMin:=tBigNumber():New(uBigN)
@@ -1507,11 +1507,11 @@ method Min(uBigN) class tBigNumber
 return(oMin)
 
 /*
-    method      : Add
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Soma
-    Sintaxe     : tBigNumber():Add(uBigN) -> oBigNR
+    method:Add
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Soma
+    Sintaxe:tBigNumber():Add(uBigN) -> oBigNR
 */
 method Add(uBigN) class tBigNumber
 
@@ -1594,11 +1594,11 @@ method Add(uBigN) class tBigNumber
 return(oadNR)
 
 /*
-    method      : iAdd
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 18/02/2015
-    Descricao   : Soma de Inteiros
-    Sintaxe     : tBigNumber():iAdd(uBigN) -> oBigNR
+    method:iAdd
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:18/02/2015
+    Descricao:Soma de Inteiros
+    Sintaxe:tBigNumber():iAdd(uBigN) -> oBigNR
 */
 method iAdd(uBigN) class tBigNumber
 
@@ -1666,11 +1666,11 @@ method iAdd(uBigN) class tBigNumber
 return(oadNR)
 
 /*
-    method      : Sub
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Subtracao
-    Sintaxe     : tBigNumber():Sub(uBigN) -> oBigNR
+    method:Sub
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Subtracao
+    Sintaxe:tBigNumber():Sub(uBigN) -> oBigNR
 */
 method Sub(uBigN) class tBigNumber
 
@@ -1753,11 +1753,11 @@ method Sub(uBigN) class tBigNumber
 return(osbNR)
 
 /*
-    method      : iSub
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 18/02/2015
-    Descricao   : Subtracao de Inteiros
-    Sintaxe     : tBigNumber():iSub(uBigN) -> oBigNR
+    method:iSub
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:18/02/2015
+    Descricao:Subtracao de Inteiros
+    Sintaxe:tBigNumber():iSub(uBigN) -> oBigNR
 */
 method iSub(uBigN) class tBigNumber
 
@@ -1825,11 +1825,11 @@ method iSub(uBigN) class tBigNumber
 return(osbNR)
 
 /*
-    method      : Mult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Multiplicacao
-    Sintaxe     : tBigNumber():Mult(uBigN) -> oBigNR
+    method:Mult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Multiplicacao
+    Sintaxe:tBigNumber():Mult(uBigN) -> oBigNR
 */
 method Mult(uBigN) class tBigNumber
 
@@ -1897,11 +1897,11 @@ method Mult(uBigN) class tBigNumber
 return(omtNR)
 
 /*
-    method      : iMult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 18/02/2015
-    Descricao   : Multiplicacao
-    Sintaxe     : tBigNumber():iMult(uBigN) -> oBigNR
+    method:iMult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:18/02/2015
+    Descricao:Multiplicacao
+    Sintaxe:tBigNumber():iMult(uBigN) -> oBigNR
 */
 method iMult(uBigN) class tBigNumber
 
@@ -1949,11 +1949,11 @@ method iMult(uBigN) class tBigNumber
 return(omtNR)
 
 /*
-    method      : egMult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Multiplicacao Egipcia
-    Sintaxe     : tBigNumber():egMult(uBigN) -> oBigNR
+    method:egMult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Multiplicacao Egipcia
+    Sintaxe:tBigNumber():egMult(uBigN) -> oBigNR
 */
 method egMult(uBigN) class tBigNumber
 
@@ -2018,11 +2018,11 @@ method egMult(uBigN) class tBigNumber
 return(omtNR)
 
 /*
-    method      : rMult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Multiplicacao Russa
-    Sintaxe     : tBigNumber():rMult(uBigN) -> oBigNR
+    method:rMult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Multiplicacao Russa
+    Sintaxe:tBigNumber():rMult(uBigN) -> oBigNR
 */
 method rMult(uBigN) class tBigNumber
 
@@ -2087,11 +2087,11 @@ method rMult(uBigN) class tBigNumber
 return(omtNR)
 
 /*
-    method      : Div
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Divisao
-    Sintaxe     : tBigNumber():Div(uBigN,lFloat) -> oBigNR
+    method:Div
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Divisao
+    Sintaxe:tBigNumber():Div(uBigN,lFloat) -> oBigNR
 */
 method Div(uBigN,lFloat) class tBigNumber
 
@@ -2237,11 +2237,11 @@ method Div(uBigN,lFloat) class tBigNumber
 return(odvNR)
 
 /*
-    method      : Divmethod
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 24/03/2014
-    Descricao   : Setar o metodo de Divisao a ser utilizado
-    Sintaxe     : tBigNumber():Divmethod(nmethod) -> nLstmethod
+    method:Divmethod
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:24/03/2014
+    Descricao:Setar o metodo de Divisao a ser utilizado
+    Sintaxe:tBigNumber():Divmethod(nmethod) -> nLstmethod
 */
 method Divmethod(nmethod) class tBigNumber
     local nLstmethod
@@ -2252,11 +2252,11 @@ method Divmethod(nmethod) class tBigNumber
 return(nLstmethod)
 
 /*
-    method      : Mod
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 05/03/2013
-    Descricao   : Resto da Divisao
-    Sintaxe     : tBigNumber():Mod(uBigN) -> oMod
+    method:Mod
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2013
+    Descricao:Resto da Divisao
+    Sintaxe:tBigNumber():Mod(uBigN) -> oMod
 */
 method Mod(uBigN) class tBigNumber
     local oMod:=tBigNumber():New(uBigN)
@@ -2272,11 +2272,11 @@ method Mod(uBigN) class tBigNumber
 return(oMod)
 
 /*
-    method      : Pow
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 05/03/2013
-    Descricao   : Calculo de Potencia n^x
-    Sintaxe     : tBigNumber():Pow(uBigN) -> oBigNR
+    method:Pow
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2013
+    Descricao:Calculo de Potencia n^x
+    Sintaxe:tBigNumber():Pow(uBigN) -> oBigNR
 */
 method Pow(uBigN) class tBigNumber
 
@@ -2391,11 +2391,11 @@ method Pow(uBigN) class tBigNumber
 return(opwNR)
 
 /*
-    method      : OpInc
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Incrementa em 1
-    Sintaxe     : tBigNumber():OpInc() -> oBigNR
+    method:OpInc
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Incrementa em 1
+    Sintaxe:tBigNumber():OpInc() -> oBigNR
 */
 method OpInc() class tBigNumber
 #ifdef __PTCOMPAT__
@@ -2405,11 +2405,11 @@ method OpInc() class tBigNumber
 #endif
 
 /*
-    method      : OpDec
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Decrementa em 1
-    Sintaxe     : tBigNumber():OpDec() -> oBigNR
+    method:OpDec
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Decrementa em 1
+    Sintaxe:tBigNumber():OpDec() -> oBigNR
 */
 method OpDec() class tBigNumber
 #ifdef __PTCOMPAT__
@@ -2420,11 +2420,11 @@ method OpDec() class tBigNumber
 
 
 /*
-    method      : e
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 06/02/2013
-    Descricao   : Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
-    Sintaxe     : tBigNumber():e(lforce) -> oeTthD
+    method:e
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/02/2013
+    Descricao:Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
+    Sintaxe:tBigNumber():e(lforce) -> oeTthD
     (((n+1)^(n+1))/(n^n))-((n^n)/((n-1)^(n-1)))
 */
 method e(lforce) class tBigNumber
@@ -2480,11 +2480,11 @@ method e(lforce) class tBigNumber
 return(oeTthD)
 
 /*
-    method    : Exp
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 06/02/2013
-    Descricao : Potencia do Numero de Neper e^cN
-    Sintaxe   : tBigNumber():Exp(lforce) -> oBigNR
+    method:Exp
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/02/2013
+    Descricao:Potencia do Numero de Neper e^cN
+    Sintaxe:tBigNumber():Exp(lforce) -> oBigNR
 */
 method Exp(lforce) class tBigNumber
     local oBigNe:=self:e(lforce)
@@ -2492,11 +2492,11 @@ method Exp(lforce) class tBigNumber
 return(oBigNR)
 
 /*
-    method    : PI
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 04/02/2013
-    Descricao : Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
-    Sintaxe   : tBigNumber():PI(lforce) -> oPITthD
+    method:PI
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
+    Sintaxe:tBigNumber():PI(lforce) -> oPITthD
 */
 method PI(lforce) class tBigNumber
 
@@ -2524,11 +2524,11 @@ method PI(lforce) class tBigNumber
 return(oPITthD)
 
 /*
-    method    : GCD
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 23/02/2013
-    Descricao : Retorna o GCD/MDC
-    Sintaxe   : tBigNumber():GCD(uBigN) -> oGCD
+    method:GCD
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:23/02/2013
+    Descricao:Retorna o GCD/MDC
+    Sintaxe:tBigNumber():GCD(uBigN) -> oGCD
 */
 method GCD(uBigN) class tBigNumber
 
@@ -2583,11 +2583,11 @@ static function cGCD(nX,nY)
 return(hb_ntos(nGCD))
 
 /*
-    method    : LCM
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 23/02/2013
-    Descricao : Retorna o LCM/MMC
-    Sintaxe   : tBigNumber():LCM(uBigN) -> oLCM
+    method:LCM
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:23/02/2013
+    Descricao:Retorna o LCM/MMC
+    Sintaxe:tBigNumber():LCM(uBigN) -> oLCM
 */
 method LCM(uBigN) class tBigNumber
 
@@ -2719,11 +2719,11 @@ return(hb_ntos(nLCM))
 
 /*
 
-    method    : nthRoot
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 05/03/2013
-    Descricao : Radiciacao
-    Sintaxe   : tBigNumber():nthRoot(uBigN) -> othRoot
+    method:nthRoot
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2013
+    Descricao:Radiciacao
+    Sintaxe:tBigNumber():nthRoot(uBigN) -> othRoot
 */
 method nthRoot(uBigN) class tBigNumber
 
@@ -2780,11 +2780,11 @@ return(othRoot)
 
 /*
 
-    method    : nthRootPF
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 05/03/2013
-    Descricao : Radiciacao utilizando Fatores Primos
-    Sintaxe   : tBigNumber():nthRootPF(uBigN) -> othRoot
+    method:nthRootPF
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2013
+    Descricao:Radiciacao utilizando Fatores Primos
+    Sintaxe:tBigNumber():nthRootPF(uBigN) -> othRoot
 */
 method nthRootPF(uBigN) class tBigNumber
 
@@ -2912,11 +2912,11 @@ method nthRootPF(uBigN) class tBigNumber
 return(othRoot)
 
 /*
-    method    : SQRT
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 06/03/2013
-    Descricao : Retorna a Raiz Quadrada (radix quadratum -> O Lado do Quadrado) do Numero passado como parametro
-    Sintaxe   : tBigNumber():SQRT() -> oSQRT
+    method:SQRT
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/03/2013
+    Descricao:Retorna a Raiz Quadrada (radix quadratum -> O Lado do Quadrado) do Numero passado como parametro
+    Sintaxe:tBigNumber():SQRT() -> oSQRT
 */
 method SQRT() class tBigNumber
 
@@ -2940,11 +2940,11 @@ method SQRT() class tBigNumber
 return(oSQRT)
 
 /*
-    method    : SysSQRT
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 06/03/2013
-    Descricao : Define o valor maximo para calculo da SQRT considerando a funcao padrao
-    Sintaxe   : tBigNumber():SysSQRT(uSet) -> oSysSQRT
+    method:SysSQRT
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/03/2013
+    Descricao:Define o valor maximo para calculo da SQRT considerando a funcao padrao
+    Sintaxe:tBigNumber():SysSQRT(uSet) -> oSysSQRT
 */
 method SysSQRT(uSet) class tBigNumber
 
@@ -2964,21 +2964,21 @@ method SysSQRT(uSet) class tBigNumber
 return(s__SysSQRT)
 
 /*
-    method      : Log
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe     : tBigNumber():Log(BigNB) -> oBigNR
+    method:Log
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe:tBigNumber():Log(BigNB) -> oBigNR
 */
 method Log(uBigNB) class tBigNumber
 return(self:LogN(uBigNB))
 
 /*
-    method      : LogN
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe     : tBigNumber():LogN(BigNB) -> oBigNR
+    method:LogN
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe:tBigNumber():LogN(BigNB) -> oBigNR
 */
 method LogN(uBigNB) class tBigNumber
     local oB:=s__o0:Clone()
@@ -2993,11 +2993,11 @@ method LogN(uBigNB) class tBigNumber
 return(oR)
 
 /*
-    method      : __Log
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe     : tBigNumber():__Log(BigNB) -> oBigNR
+    method:__Log
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe:tBigNumber():__Log(BigNB) -> oBigNR
 */
 method __Log(uBigNB) class tBigNumber
 return(self:__LogN(uBigNB))
@@ -3027,12 +3027,12 @@ return(oN:Div(oB))
 */
 
 /*
-    method      : __LogN
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe     : tBigNumber():__LogN(BigNB) -> oBigNR
-    Referencia  : //http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
+    method:__LogN
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo na Base N DEFAULT e
+    Sintaxe:tBigNumber():__LogN(BigNB) -> oBigNR
+    Referencia://http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
 */
 method __LogN(uBigNB) class tBigNumber
 
@@ -3162,63 +3162,63 @@ method __LogN(uBigNB) class tBigNumber
 return(oS)
 
 /*
-    method      : Log2
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo Base 2
-    Sintaxe     : tBigNumber():Log2() -> oBigNR
+    method:Log2
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo Base 2
+    Sintaxe:tBigNumber():Log2() -> oBigNR
 */
 method Log2() class tBigNumber
     local ob2:=s__o2:Clone()
 return(self:LogN(ob2))
 
 /*
-    method      : Log10
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Retorna o logaritmo Base 10
-    Sintaxe     : tBigNumber():Log10() -> oBigNR
+    method:Log10
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Retorna o logaritmo Base 10
+    Sintaxe:tBigNumber():Log10() -> oBigNR
 */
 method Log10() class tBigNumber
     local ob10:=s__o10:Clone()
 return(self:LogN(ob10))
 
 /*
-    method      : Ln
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 20/02/2013
-    Descricao   : Logaritmo Natural
-    Sintaxe     : tBigNumber():Ln() -> oBigNR
+    method:Ln
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:20/02/2013
+    Descricao:Logaritmo Natural
+    Sintaxe:tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
 return(self:LogN(s__o1:Exp()))
 
 /*
-    method    : MathC
-    Autor     : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data      : 05/03/2013
-    Descricao : Operacoes Matematicas
-    Sintaxe   : tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
+    method:MathC
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2013
+    Descricao:Operacoes Matematicas
+    Sintaxe:tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
 */
 method MathC(uBigN1,cOperator,uBigN2) class tBigNumber
 return(MathO(uBigN1,cOperator,uBigN2,.F.))
 
 /*
-    method      : MathN
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Operacoes Matematicas
-    Sintaxe     : tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
+    method:MathN
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Operacoes Matematicas
+    Sintaxe:tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
 */
 method MathN(uBigN1,cOperator,uBigN2) class tBigNumber
 return(MathO(uBigN1,cOperator,uBigN2,.T.))
 
 /*
-    method      : Rnd
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 06/02/2013
-    Descricao   : Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
-    Sintaxe     : tBigNumber():Rnd(nAcc) -> oRND
+    method:Rnd
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/02/2013
+    Descricao:Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
+    Sintaxe:tBigNumber():Rnd(nAcc) -> oRND
 */
 method Rnd(nAcc) class tBigNumber
 
@@ -3246,21 +3246,21 @@ method Rnd(nAcc) class tBigNumber
 return(oRnd)
 
 /*
-    method      : NoRnd
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 06/02/2013
-    Descricao   : NoRnd trunca um numero decimal
-    Sintaxe     : tBigNumber():NoRnd(nAcc) -> oBigNR
+    method:NoRnd
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/02/2013
+    Descricao:NoRnd trunca um numero decimal
+    Sintaxe:tBigNumber():NoRnd(nAcc) -> oBigNR
 */
 method NoRnd(nAcc) class tBigNumber
 return(self:Truncate(nAcc))
 
 /*
-    method      : Floor
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 05/03/2014
-    Descricao   : Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
-    Sintaxe     : tBigNumber():Floor(nAcc) -> oFloor
+    method:Floor
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2014
+    Descricao:Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
+    Sintaxe:tBigNumber():Floor(nAcc) -> oFloor
 */
 method Floor(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
@@ -3271,11 +3271,11 @@ method Floor(nAcc) class tBigNumber
 return(oFloor)
 
 /*
-    method      : Ceiling
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 05/03/2014
-    Descricao   : Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
-    Sintaxe     : tBigNumber():Ceiling(nAcc) -> oCeiling
+    method:Ceiling
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:05/03/2014
+    Descricao:Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
+    Sintaxe:tBigNumber():Ceiling(nAcc) -> oCeiling
 */
 method Ceiling(nAcc) class tBigNumber
     local oInt:=self:Int(.T.,.T.)
@@ -3286,11 +3286,11 @@ method Ceiling(nAcc) class tBigNumber
 return(oCeiling)
 
 /*
-    method      : Truncate
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 06/02/2013
-    Descricao   : Truncate trunca um numero decimal
-    Sintaxe     : tBigNumber():Truncate(nAcc) -> oTrc
+    method:Truncate
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:06/02/2013
+    Descricao:Truncate trunca um numero decimal
+    Sintaxe:tBigNumber():Truncate(nAcc) -> oTrc
 */
 method Truncate(nAcc) class tBigNumber
 
@@ -3306,11 +3306,11 @@ method Truncate(nAcc) class tBigNumber
 return(oTrc)
 
 /*
-    method      : Normalize
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Normaliza os Dados
-    Sintaxe     : tBigNumber():Normalize(oBigN) -> self
+    method:Normalize
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Normaliza os Dados
+    Sintaxe:tBigNumber():Normalize(oBigN) -> self
 */
 method Normalize(oBigN) class tBigNumber
 #ifdef __PTCOMPAT__
@@ -3355,11 +3355,11 @@ method Normalize(oBigN) class tBigNumber
 return(self)
 
 /*
-    method      : D2H
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 07/02/2013
-    Descricao   : Converte Decimal para Hexa
-    Sintaxe     : tBigNumber():D2H(cHexB) -> cHexN
+    method:D2H
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:07/02/2013
+    Descricao:Converte Decimal para Hexa
+    Sintaxe:tBigNumber():D2H(cHexB) -> cHexN
 */
 method D2H(cHexB) class tBigNumber
 
@@ -3413,11 +3413,11 @@ method D2H(cHexB) class tBigNumber
 return(oHexN)
 
 /*
-    method      : H2D
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 07/02/2013
-    Descricao   : Converte Hexa para Decimal
-    Sintaxe     : tBigNumber():H2D() -> otNR
+    method:H2D
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:07/02/2013
+    Descricao:Converte Hexa para Decimal
+    Sintaxe:tBigNumber():H2D() -> otNR
 */
 method H2D() class tBigNumber
 
@@ -3477,11 +3477,11 @@ method H2D() class tBigNumber
 return(otNR)
 
 /*
-    method      : H2B
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 07/02/2013
-    Descricao   : Converte Hex para Bin
-    Sintaxe     : tBigNumber():H2B(cHexN) -> cBin
+    method:H2B
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:07/02/2013
+    Descricao:Converte Hex para Bin
+    Sintaxe:tBigNumber():H2B(cHexN) -> cBin
 */
 method H2B() class tBigNumber
 
@@ -3582,11 +3582,11 @@ method H2B() class tBigNumber
 return(oBin)
 
 /*
-    method      : B2H
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 07/02/2013
-    Descricao   : Converte Bin para Hex
-    Sintaxe     : tBigNumber():B2H(cHexB) -> cHexN
+    method:B2H
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:07/02/2013
+    Descricao:Converte Bin para Hex
+    Sintaxe:tBigNumber():B2H(cHexB) -> cHexN
 */
 method B2H(cHexB) class tBigNumber
 
@@ -3687,11 +3687,11 @@ method B2H(cHexB) class tBigNumber
 return(oHexN)
 
 /*
-    method      : D2B
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 23/03/2013
-    Descricao   : Converte Dec para Bin
-    Sintaxe     : tBigNumber():D2B(cHexB) -> oBin
+    method:D2B
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:23/03/2013
+    Descricao:Converte Dec para Bin
+    Sintaxe:tBigNumber():D2B(cHexB) -> oBin
 */
 method D2B(cHexB) class tBigNumber
     local oHex:=self:D2H(cHexB)
@@ -3699,11 +3699,11 @@ method D2B(cHexB) class tBigNumber
 return(oBin)
 
 /*
-    method      : B2D
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 23/03/2013
-    Descricao   : Converte Bin para Dec
-    Sintaxe     : tBigNumber():B2D(cHexB) -> oDec
+    method:B2D
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:23/03/2013
+    Descricao:Converte Bin para Dec
+    Sintaxe:tBigNumber():B2D(cHexB) -> oDec
 */
 method B2D(cHexB) class tBigNumber
     local oHex:=self:B2H(cHexB)
@@ -3711,11 +3711,11 @@ method B2D(cHexB) class tBigNumber
 return(oDec)
 
 /*
-    method      : Randomize
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 03/03/2013
-    Descricao   : Randomize BigN Integer
-    Sintaxe     : tBigNumber():Randomize(uB,uE,nExit) -> oR
+    method:Randomize
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:03/03/2013
+    Descricao:Randomize BigN Integer
+    Sintaxe:tBigNumber():Randomize(uB,uE,nExit) -> oR
 */
 method Randomize(uB,uE,nExit) class tBigNumber
 
@@ -3922,11 +3922,11 @@ method Randomize(uB,uE,nExit) class tBigNumber
 return(oR)
 
 /*
-    function    : __Random
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 03/03/2013
-    Descricao   : Define a chamada para a funcao Random Padrao
-    Sintaxe     : __Random(nB,nE)
+    function:__Random
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:03/03/2013
+    Descricao:Define a chamada para a funcao Random Padrao
+    Sintaxe:__Random(nB,nE)
 */
 static function __Random(nB,nE)
 
@@ -3949,12 +3949,12 @@ static function __Random(nB,nE)
 return(nR)
 
 /*
-    method      : millerRabin
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 03/03/2013
-    Descricao   : Miller-Rabin method (Primality test)
-    Sintaxe     : tBigNumber():millerRabin(uI) -> lPrime
-    Ref.:       : http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
+    method:millerRabin
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:03/03/2013
+    Descricao:Miller-Rabin method (Primality test)
+    Sintaxe:tBigNumber():millerRabin(uI) -> lPrime
+    Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
 */
 method millerRabin(uI) class tBigNumber
 
@@ -3997,12 +3997,12 @@ method millerRabin(uI) class tBigNumber
 return(lPrime)
 
 /*
-    function    : mrPass
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 03/03/2013
-    Descricao   : Miller-Rabin Pass (Primality test)
-    Sintaxe     : mrPass(uA,uS,uD,uN)
-    Ref.:       : http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
+    function:mrPass
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:03/03/2013
+    Descricao:Miller-Rabin Pass (Primality test)
+    Sintaxe:mrPass(uA,uS,uD,uN)
+    Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
 */
 static function mrPass(uA,uS,uD,uN)
 
@@ -4039,13 +4039,13 @@ static function mrPass(uA,uS,uD,uN)
 return(lmrP)
 
 /*
-    method      : FI
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 10/03/2013
-    Descricao   : Euler's totient function
-    Sintaxe     : tBigNumber():FI() -> oT
-    Ref.:       : (Euler's totient function) http://community.topcoder.com/tc?module=static&d1=tutorials&d2=primeNumbers
-    Consultar   : http://www.javascripter.net/math/calculators/eulertotientfunction.htm para otimizar.
+    method:FI
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:10/03/2013
+    Descricao:Euler's totient function
+    Sintaxe:tBigNumber():FI() -> oT
+    Ref.::(Euler's totient function) http://community.topcoder.com/tc?module=static&d1=tutorials&d2=primeNumbers
+    Consultar:http://www.javascripter.net/math/calculators/eulertotientfunction.htm para otimizar.
 
     int fi(int n)
      {
@@ -4108,11 +4108,11 @@ return(oT)
 #endif //__PROTHEUS__
 
 /*
-    method      : PFactors
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 19/03/2013
-    Descricao   : Fatores Primos
-    Sintaxe     : tBigNumber():PFactors() -> aPFactors
+    method:PFactors
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:19/03/2013
+    Descricao:Fatores Primos
+    Sintaxe:tBigNumber():PFactors() -> aPFactors
 */
 method PFactors() class tBigNumber
 
@@ -4161,12 +4161,12 @@ method PFactors() class tBigNumber
 return(aPFactors)
 
 /*
-    method      : Factorial
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 19/03/2013
-    Descricao   : Fatorial de Numeros Inteiros
-    Sintaxe     : tBigNumber():Factorial() -> oF
-    TODO        : Otimizar++
+    method:Factorial
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:19/03/2013
+    Descricao:Fatorial de Numeros Inteiros
+    Sintaxe:tBigNumber():Factorial() -> oF
+    TODO:Otimizar++
                   Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
                                http://www.luschny.de/math/factorial/index.html
 */
@@ -4213,12 +4213,12 @@ method Factorial() class tBigNumber
 return(oF)
 
 /*
-    function    : recFact
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/01/2014
-    Descricao   : Fatorial de Numeros Inteiros
-    Sintaxe     : recFact(oS,oN)
-    Referencias : http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+    function:recFact
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/01/2014
+    Descricao:Fatorial de Numeros Inteiros
+    Sintaxe:recFact(oS,oN)
+    Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
 */
 static function recFact(oS,oN,oThreads)
 
@@ -4286,12 +4286,12 @@ return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
 #endif
 
 /*
-    function    : egMult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-    Sintaxe     : egMult(cN1,cN2,nBase,nAcc) -> oMTP
-    Obs.        : Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
+    function:egMult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
+    Sintaxe:egMult(cN1,cN2,nBase,nAcc) -> oMTP
+    Obs.:Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
 static function egMult(cN1,cN2,nBase)
 
@@ -4339,11 +4339,11 @@ static function egMult(cN1,cN2,nBase)
 return(oMTP)
 
 /*
-    function    : rMult
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Multiplicacao Russa (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-    Sintaxe     : rMult(cN1,cN2,nBase) -> oNR
+    function:rMult
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Multiplicacao Russa (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
+    Sintaxe:rMult(cN1,cN2,nBase) -> oNR
 
     Exemplo em PowerShell:
     //-----------------------------------------------------------------------------------
@@ -4359,7 +4359,7 @@ return(oMTP)
             $a=$a/2;
             $b=$b*2;
         } until ($a -eq 0);
-        "result : $r";
+        "result:$r";
     }
     ps_rMult 340 125
 
@@ -4376,7 +4376,7 @@ return(oMTP)
      2 x 16000
      1 x 32000
                +32000
-    result :    42500
+    result:   42500
 
 */
 static function rMult(cA,cB,nBase)
@@ -4419,11 +4419,11 @@ static function rMult(cA,cB,nBase)
 return(oR)
 
 /*
-    function    : egDiv
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-    Sintaxe     : egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> oeDivQ
+    function:egDiv
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
+    Sintaxe:egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> oeDivQ
 */
 static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 
@@ -4512,11 +4512,11 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
 return(oeDivQ)
 
 /*
-    function    : ecDiv
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 18/03/2014
-    Descricao   : Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
-    Sintaxe     : ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q
+    function:ecDiv
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:18/03/2014
+    Descricao:Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
+    Sintaxe:ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q
  */
 static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 
@@ -4598,23 +4598,23 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 return(q)
 
 /*
-    function    : nthRoot
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 10/02/2013
-    Descricao   : Metodo Newton-Raphson
-    Sintaxe     : nthRoot(oRootB,oRootE,oAcc) -> othRoot
+    function:nthRoot
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:10/02/2013
+    Descricao:Metodo Newton-Raphson
+    Sintaxe:nthRoot(oRootB,oRootE,oAcc) -> othRoot
 */
 static function nthRoot(oRootB,oRootE,oAcc)
 return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
 
 /*
-    function    : __Pow
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 10/02/2013
-    Descricao   : Metodo Newton-Raphson
-    Sintaxe     : __Pow(base,exp,EPS) -> oPow
-    Ref.        : http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function
-                : http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
+    function:__Pow
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:10/02/2013
+    Descricao:Metodo Newton-Raphson
+    Sintaxe:__Pow(base,exp,EPS) -> oPow
+    Ref.:http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function
+        :http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
 */
 static function __Pow(base,expR,EPS)
 
@@ -4684,11 +4684,11 @@ static function __Pow(base,expR,EPS)
 return(acc)
 
 /*
-    function    : __SQRT
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 10/02/2013
-    Descricao   : SQRT
-    Sintaxe     : __SQRT(p) -> oSQRT
+    function:__SQRT
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:10/02/2013
+    Descricao:SQRT
+    Sintaxe:__SQRT(p) -> oSQRT
 */
 static function __SQRT(p)
 #ifdef TBIGN_RECPOWER
@@ -4790,11 +4790,11 @@ return(r)
 #ifdef TBN_DBFILE
 
     /*
-        function    : Add
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Adicao
-        Sintaxe     : Add(a,b,n,nBase) -> cNR
+        function:Add
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Adicao
+        Sintaxe:Add(a,b,n,nBase) -> cNR
     */
     static function Add(a,b,n,nBase)
 
@@ -4841,11 +4841,11 @@ return(r)
     return(s)
 
     /*
-        function    : Sub
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Subtracao
-        Sintaxe     : Sub(a,b,n,nBase) -> cNR
+        function:Sub
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Subtracao
+        Sintaxe:Sub(a,b,n,nBase) -> cNR
     */
     static function Sub(a,b,n,nBase)
 
@@ -4892,12 +4892,12 @@ return(r)
     return(s)
 
     /*
-        function    : Mult
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Multiplicacao de Inteiros
-        Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
-        Obs.        : Mais rapida,usa a multiplicacao nativa
+        function:Mult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao de Inteiros
+        Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+        Obs.:Mais rapida,usa a multiplicacao nativa
     */
     static function Mult(cN1,cN2,n,nBase)
 
@@ -4991,11 +4991,11 @@ return(r)
     return(s)
 
     /*
-        function    : aNumber
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : db OF Numbers
-        Sintaxe     : aNumber(c,n,o) -> a
+        function:aNumber
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:db OF Numbers
+        Sintaxe:aNumber(c,n,o) -> a
     */
     static function aNumber(c,n,o)
 
@@ -5020,11 +5020,11 @@ return(r)
     return(a)
 
     /*
-        function    : dbGetcN
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 04/02/2013
-        Descricao   : Montar a String de Retorno
-        Sintaxe     : dbGetcN(a,x) -> s
+        function:dbGetcN
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Montar a String de Retorno
+        Sintaxe:dbGetcN(a,x) -> s
     */
     static function dbGetcN(a,n)
 
@@ -5146,11 +5146,11 @@ return(r)
     #ifdef TBN_ARRAY
 
         /*
-            function    : Add
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Adicao
-            Sintaxe     : Add(a,b,n,nBase) -> cNR
+            function:Add
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Adicao
+            Sintaxe:Add(a,b,n,nBase) -> cNR
         */
         static function Add(a,b,n,nBase)
 
@@ -5178,11 +5178,11 @@ return(r)
         return(s)
 
         /*
-            function    : Sub
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Subtracao
-            Sintaxe     : Sub(a,b,n,nBase) -> cNR
+            function:Sub
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Subtracao
+            Sintaxe:Sub(a,b,n,nBase) -> cNR
         */
         static function Sub(a,b,n,nBase)
 
@@ -5210,12 +5210,12 @@ return(r)
         return(s)
 
         /*
-            function    : Mult
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Multiplicacao de Inteiros
-            Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
-            Obs.        : Mais rapida,usa a multiplicacao nativa
+            function:Mult
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Multiplicacao de Inteiros
+            Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+            Obs.:Mais rapida,usa a multiplicacao nativa
         */
         static function Mult(cN1,cN2,n,nBase)
 
@@ -5276,11 +5276,11 @@ return(r)
         return(aGetcN(c,y))
 
         /*
-            function    : aGetcN
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Montar a String de Retorno
-            Sintaxe     : aGetcN(a,x) -> s
+            function:aGetcN
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Montar a String de Retorno
+            Sintaxe:aGetcN(a,x) -> s
         */
         static function aGetcN(a,n)
 
@@ -5310,11 +5310,11 @@ return(r)
     #else /*String*/
 
         /*
-            function    : Add
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Adicao
-            Sintaxe     : Add(a,b,n,nBase) -> cNR
+            function:Add
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Adicao
+            Sintaxe:Add(a,b,n,nBase) -> cNR
         */
         #ifdef __PTCOMPAT__
             static function Add(a,b,n,nBase)
@@ -5362,11 +5362,11 @@ return(r)
         #endif //__PTCOMPAT__
 
         /*
-            function    : Sub
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Subtracao
-            Sintaxe     : Sub(a,b,n,nBase) -> cNR
+            function:Sub
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Subtracao
+            Sintaxe:Sub(a,b,n,nBase) -> cNR
         */
         #ifdef __PTCOMPAT__
             static function Sub(a,b,n,nBase)
@@ -5411,12 +5411,12 @@ return(r)
             return(tBIGNSUB(a,b,n,nB))
         #endif //__PTCOMPAT__
         /*
-            function    : Mult
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Multiplicacao de Inteiros
-            Sintaxe     : Mult(cN1,cN2,n,nBase) -> cNR
-            Obs.        : Mais rapida, usa a multiplicacao nativa
+            function:Mult
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Multiplicacao de Inteiros
+            Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+            Obs.:Mais rapida, usa a multiplicacao nativa
         */
         #ifdef __PTCOMPAT__
             static function Mult(cN1,cN2,n,nBase)
@@ -5507,11 +5507,11 @@ return(r)
         #endif //__PTCOMPAT__
 
         /*
-            function    : cGetcN
-            Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data        : 04/02/2013
-            Descricao   : Montar a String de Retorno
-            Sintaxe     : cGetcN(c,n) -> s
+            function:cGetcN
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Montar a String de Retorno
+            Sintaxe:cGetcN(c,n) -> s
         */
         #ifdef __PTCOMPAT__
             static function cGetcN(c,n)
@@ -5571,11 +5571,11 @@ return(r)
 #endif //__PTCOMPAT__
 
 /*
-    function    : Power
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 26/08/2014
-    Descricao   : Exponenciação de Números Inteiros
-    Sintaxe     : Power(oB,oE)
+    function:Power
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:26/08/2014
+    Descricao:Exponenciação de Números Inteiros
+    Sintaxe:Power(oB,oE)
 */
 static function Power(oB,oE)
 #ifdef TBIGN_RECPOWER
@@ -5585,12 +5585,12 @@ static function Power(oB,oE)
     */
     return(recPower(oB,oE))
     /*
-        function    : recPower
-        Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data        : 26/08/2014
-        Descricao   : Exponenciação de Números Inteiros
-        Sintaxe     : recPower(oB,oE)
-        Referencias : Baseada em recFact
+        function:recPower
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:26/08/2014
+        Descricao:Exponenciação de Números Inteiros
+        Sintaxe:recPower(oB,oE)
+        Referencias:Baseada em recFact
         //-------------------------------------------------------------------------------------
         2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
                  4  *  4  *  4  *  4  *  4
@@ -5659,11 +5659,11 @@ return(oR)
 #endif
 
 /*
-    function    : tBigNInvert
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Inverte o Numero
-    Sintaxe     : tBigNInvert(c,n) -> s
+    function:tBigNInvert
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Inverte o Numero
+    Sintaxe:tBigNInvert(c,n) -> s
 */
 #ifdef __PTCOMPAT__
     static function tBigNInvert(c,n)
@@ -5683,11 +5683,11 @@ return(oR)
 #endif //__PTCOMPAT__
 
 /*
-    function    : MathO
-    Autor       : Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data        : 04/02/2013
-    Descricao   : Operacoes matematicas
-    Sintaxe     : MathO(uBigN1,cOperator,uBigN2,lRetObject)
+    function:MathO
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/02/2013
+    Descricao:Operacoes matematicas
+    Sintaxe:MathO(uBigN1,cOperator,uBigN2,lRetObject)
 */
 static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
 
