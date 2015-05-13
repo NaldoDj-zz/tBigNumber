@@ -181,7 +181,7 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                     exit
                 case "N"
                     while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
-					end while
+                    end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
                     case "A"

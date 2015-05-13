@@ -58,7 +58,6 @@
  */
 #ifdef __HARBOUR__   
 
-
     #pragma BEGINDUMP
  
         #include "hbapi.h"
