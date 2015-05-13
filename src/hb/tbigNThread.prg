@@ -19,6 +19,8 @@ Class tBigNThreads
     method New(nThreads) CONSTRUCTOR /*( /!\ )*/
     
     method Start(nThreads,nMemMode)
+    method ReStart(nThreads,nMemMode)
+    
     method Notify()
     method Wait()
     method Join()
@@ -64,7 +66,7 @@ method Start(nThreads,nMemMode) class tBigNThreads
         nStart:=1
     endif
     nThreads:=self:nThreads    
-    for nThread:=nStart To nThreads
+    for nThread:=nStart to nThreads
         self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
         self:aThreads[nThread][TH_EXE]:=NIL
         self:aThreads[nThread][TH_RES]:=NIL
@@ -84,8 +86,20 @@ method Start(nThreads,nMemMode) class tBigNThreads
     next nThread
 return(self)
 
+method ReStart(nThreads,nMemMode) class tBigNThreads
+    self:Join()
+    self:clearAllResults()
+    aSize(self:aThreads,0)
+    self:nThreads:=0
+return(self:Start(@nThreads,@nMemMode))
+
 method Notify() class tBigNThreads
-    aEval(self:aThreads,{|ath,nTh|self:aThreads[nTh][TH_RES]:=NIL,self:aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
+    local nThread
+    for nThread:=1 to self:nThreads
+        self:aThreads[nThread][TH_RES]:=NIL
+        self:aThreads[nThread][TH_END]:=.F.
+        hb_mutexNotify(self:aThreads[nThread][TH_MTX],nThread)
+    next nThread
 return(self)
 
 method Wait() class tBigNThreads
@@ -109,7 +123,17 @@ method Wait() class tBigNThreads
 return(self)
 
 method Join() class tBigNThreads
-    aEval(self:aThreads,{|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)})
+    local nThread
+    for nThread:=1 to self:nThreads
+        hb_mutexNotify(self:aThreads[nThread][TH_MTX],{||break()})
+        if .not.(self:aThreads[nThread][TH_NUM]==NIL)
+            if .not.(self:aThreads[nThread][TH_NUM]==NIL)
+                if hb_threadJoin(self:aThreads[nThread][TH_NUM])
+                    self:aThreads[nThread][TH_NUM]:=NIL
+                endif
+            endif
+        endif
+    next nThread
 return(self)
 
 method addEvent(uthEvent) class tBigNThreads
@@ -158,7 +182,7 @@ method getAllResults() class tBigNThreads
     if .not.(Empty(self:aRChilds))
         aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
     endif
-return(self:aResults)
+return(aClone(self:aResults))
 
 method clearAllResults() class tBigNThreads
     aSize(self:aRChilds,0)

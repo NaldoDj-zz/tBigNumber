@@ -580,6 +580,7 @@
         hb_ThreadWait(pttftProgress)
         tBigNGC()
         SET COLOR TO "r+/n"
+        __tbnSleep(.5)
         IF .NOT.(cC_GT_MODE=="MT")
             WAIT "Press any key to end"
         EndIF

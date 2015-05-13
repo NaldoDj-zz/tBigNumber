@@ -4101,9 +4101,9 @@ return(oT)
             end while
             i++
         end while
-           if (n>1)
-               fi-=Int(fi/n)
-           endif
+        if (n>1)
+            fi-=Int(fi/n)
+        endif
     return(fi)
 #endif //__PROTHEUS__
 
@@ -4174,6 +4174,10 @@ method Factorial() class tBigNumber
     local oN:=self:Clone():Int(.T.,.F.)
     local oF:=s__o1:Clone()
     #ifndef __PTCOMPAT__
+        local aResults
+        local lOddRes
+        local nResult
+        local nResults
         local oThreads
     #endif
     if .not.(oN:eq(s__o0))
@@ -4185,9 +4189,25 @@ method Factorial() class tBigNumber
             recFact(s__o1:Clone(),oN,oThreads)
             oThreads:Notify()
             oThreads:Wait()
-            oThreads:Join()
-            aEval(oThreads:getAllResults(),{|oR|oF:SetValue(oF:iMult(oR))}) 
+            aResults:=oThreads:getAllResults()
             oThreads:clearAllResults()
+            nResults:=Len(aResults)
+            lOddRes:=.not.((nResults%2)==0)
+            if (lOddRes)
+                aAdd(aResults,s__o1:Clone())
+                nResults+=1
+            endif
+            oThreads:=tBigNThreads():New()
+            oThreads:ReStart(nResults/2)
+            for nResult:=1 To nResults step 2
+                oThreads:setEvent(nResult,{@thiMult(),aResults[nResult],aResults[nResult+1]})
+            next nResult
+            oThreads:Notify()
+            oThreads:Wait()
+            oThreads:Join()
+            aResults:=oThreads:getAllResults()
+            oThreads:clearAllResults()
+            aEval(aResults,{|oR|oF:SetValue(oF:iMult(oR))})
         #endif
     endif
 return(oF)
@@ -5544,6 +5564,8 @@ return(r)
     return(oN:Pow(oB))
     static function th2Mult(oN)
     return(s__o2:Mult(oN))
+    static function thiMult(oN,oM)
+    return(oN:iMult(oM))
     static function thLogN(oN,oB)
     return(oN:LogN(oB))
 #endif //__PTCOMPAT__
