@@ -374,32 +374,32 @@ class tBigNumber from hbClass
 #ifndef __PROTHEUS__
 
          /* Operators Overloading:
-            "+"     = __OpPlus
-             "-"     = __OpMinus
-             "*"     = __OpMult
-             "/"     = __OpDivide
-             "%"     = __OpMod
-             "^"     = __OpPower
-             "**"    = __OpPower
-             "++"    = __OpInc
-             "--"    = __OpDec
-             "=="    = __OpEqual
-             "="     = __OpEqual (same as "==")
-             "!="    = __OpNotEqual
-             "<>"    = __OpNotEqual (same as "!=")
-             "#"     = __OpNotEqual (same as "!=")
-             "<"     = __OpLess
-             "<="    = __OpLessEqual
-             ">"     = __OpGreater
-             ">="    = __OpGreaterEqual
-             "$"     = __OpInstring
-             "$$"    = __OpInclude
-             "!"     = __OpNot
-             ".not." = __OpNot (same as "!")
-             ".and." = __OpAnd
-             ".or."  = __OpOr
-             ":="    = __OpAssign
-             "[]"    = __OpArrayIndex
+             "+"     =>__OpPlus
+             "-"     =>__OpMinus
+             "*"     =>__OpMult
+             "/"     =>__OpDivide
+             "%"     =>__OpMod
+             "^"     =>__OpPower
+             "**"    =>__OpPower
+             "++"    =>__OpInc
+             "--"    =>__OpDec
+             "=="    =>__OpEqual
+             "="     =>__OpEqual (same as "==")
+             "!="    =>__OpNotEqual
+             "<>"    =>__OpNotEqual (same as "!=")
+             "#"     =>__OpNotEqual (same as "!=")
+             "<"     =>__OpLess
+             "<="    =>__OpLessEqual
+             ">"     =>__OpGreater
+             ">="    =>__OpGreaterEqual
+             "$"     =>__OpInstring
+             "$$"    =>__OpInclude
+             "!"     =>__OpNot
+             ".not." =>__OpNot (same as "!")
+             ".and." =>__OpAnd
+             ".or."  =>__OpOr
+             ":="    =>__OpAssign
+             "[]"    =>__OpArrayIndex
         */
 
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: hb_APICLS.H, CLASSES.C AND HVM.C */
@@ -1292,7 +1292,7 @@ method gt(uBigN) class tBigNumber
             #else
                 lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==-1
             #endif
-        elseif ogtN1:lNeg.and..not.(ogtN2:lNeg)
+        elseif ogtN1:lNeg.and.(.not.(ogtN2:lNeg))
             lgt:=.F.
         elseif .not.(ogtN1:lNeg).and.ogtN2:lNeg
             lgt:=.T.
@@ -1333,7 +1333,7 @@ method lt(uBigN) class tBigNumber
             #else
                 llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1
             #endif
-        elseif oltN1:lNeg.and..not.(oltN2:lNeg)
+        elseif oltN1:lNeg.and.(.not.(oltN2:lNeg))
             llt:=.T.
         elseif .not.(oltN1:lNeg).and.oltN2:lNeg
             llt:=.F.
@@ -1426,7 +1426,7 @@ method cmp(uBigN) class tBigNumber
                     #endif
                 endif
                 llt:=iCmp==1
-            elseif ocmpN1:lNeg.and..not.(ocmpN2:lNeg)
+            elseif ocmpN1:lNeg.and.(.not.(ocmpN2:lNeg))
                 llt:=.T.
             elseif .not.(ocmpN1:lNeg).and.ocmpN2:lNeg
                 llt:=.F.
@@ -1464,7 +1464,7 @@ return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
     Sintaxe     : tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
 */
 method ibtw(uiBigS,uiBigE) class tBigNumber
-    local lbtw:= .F.
+    local lbtw:=.F.
     local oibtwS
     local oibtwE
     if self:Dec(.T.,.F.,.T.):eq(s__o0)
@@ -1473,7 +1473,7 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
         oibtwE:=s__o0:Clone()
         oibtwE:SetValue(uiBigE)
         if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0).and.oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
-            lbtw:= self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
+            lbtw:=self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
         endif
     endif
 return(lbtw)
@@ -1551,16 +1551,16 @@ method Add(uBigN) class tBigNumber
     cN2:=oadN2:cInt
     cN2+=oadN2:cDec
 
-    lNeg:=(oadN1:lNeg.and..not.(oadN2:lNeg)).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
+    lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
     if lNeg
         lAdd:=.F.
         #ifdef __HARBOUR__
-            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+            lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
-        lNeg:=(oadN1:lNeg.and..not.(lInv)).or.(oadN2:lNeg.and.lInv)
+        lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
         if lInv
             cNT:=cN1
             cN1:=cN2
@@ -1630,16 +1630,16 @@ method iAdd(uBigN) class tBigNumber
     cN1:=oadN1:cInt
     cN2:=oadN2:cInt
 
-    lNeg:=(oadN1:lNeg.and..not.(oadN2:lNeg)).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
+    lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
     if lNeg
         lAdd:=.F.
         #ifdef __HARBOUR__
-            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+            lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
-        lNeg:=(oadN1:lNeg.and..not.(lInv)).or.(oadN2:lNeg.and.lInv)
+        lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
         if lInv
             cNT:=cN1
             cN1:=cN2
@@ -1710,14 +1710,14 @@ method Sub(uBigN) class tBigNumber
     cN2:=osbN2:cInt
     cN2+=osbN2:cDec
 
-    lNeg:=(osbN1:lNeg.and..not.(osbN2:lNeg)).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
+    lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
     if lNeg
         lSub:=.F.
         lNeg:=osbN1:lNeg
     else
         #ifdef __HARBOUR__
-            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+            lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
@@ -1789,14 +1789,14 @@ method iSub(uBigN) class tBigNumber
     cN1:=osbN1:cInt
     cN2:=osbN2:cInt
 
-    lNeg:=(osbN1:lNeg.and..not.(osbN2:lNeg)).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
+    lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
     if lNeg
         lSub:=.F.
         lNeg:=osbN1:lNeg
     else
         #ifdef __HARBOUR__
-            lInv:= tBIGNmemcmp(cN1,cN2)==-1
+            lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
@@ -1862,7 +1862,7 @@ method Mult(uBigN) class tBigNumber
 
     lNeg1:=omtN1:lNeg
     lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
     cN1:=omtN1:cInt
     cN1+=omtN1:cDec
@@ -1930,7 +1930,7 @@ method iMult(uBigN) class tBigNumber
 
     lNeg1:=omtN1:lNeg
     lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
     cN1:=omtN1:cInt
     cN2:=omtN2:cInt
@@ -1985,7 +1985,7 @@ method egMult(uBigN) class tBigNumber
 
     lNeg1:=omtN1:lNeg
     lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
     cN1:=omtN1:cInt
     cN1+=omtN1:cDec
@@ -2054,7 +2054,7 @@ method rMult(uBigN) class tBigNumber
 
     lNeg1:=omtN1:lNeg
     lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
     cN1:=omtN1:cInt
     cN1+=omtN1:cDec
@@ -2145,7 +2145,7 @@ method Div(uBigN,lFloat) class tBigNumber
 
         lNeg1:=odvN1:lNeg
         lNeg2:=odvN2:lNeg
-        lNeg:=(lNeg1.and..not.(lNeg2)).or.(.not.(lNeg1).and.lNeg2)
+        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
         cN1:=odvN1:cInt
         cN1+=odvN1:cDec
@@ -2245,9 +2245,9 @@ return(odvNR)
 */
 method Divmethod(nmethod) class tBigNumber
     local nLstmethod
-    DEFAULT s__nDivMTD:= __DIVMETHOD__
-    DEFAULT nmethod:= s__nDivMTD
-    nLstmethod:= s__nDivMTD
+    DEFAULT s__nDivMTD:=__DIVMETHOD__
+    DEFAULT nmethod:=s__nDivMTD
+    nLstmethod:=s__nDivMTD
     s__nDivMTD:=nmethod
 return(nLstmethod)
 
@@ -2699,7 +2699,7 @@ static function cLCM(nX,nY)
             lMX:=(nX%nI)==0
             lMY:=(nY%nI)==0
             while lMX.or.lMY
-                nLCM *= nI
+                nLCM *=nI
                 if lMX
                     nX:=Int(nX/nI)
                     lMX:=(nX%nI)==0
@@ -4049,11 +4049,11 @@ return(lmrP)
 
     int fi(int n)
      {
-       int result = n;
+       int result=n;
        for(int i=2;i*i<=n;i++)
        {
-         if (n % i==0) result-=result/i;
-         while (n % i==0) n /= i;
+         if (n%i==0) result-=result/i;
+         while (n%i==0) n/=i;
       }
        if (n>1) result-=result/n;
        return result;
@@ -4181,7 +4181,7 @@ method Factorial() class tBigNumber
             oF:SetValue(recFact(s__o1:Clone(),oN))
         #else
             oThreads:=tBigNThreads():New()
-            oThreads:Start(15)
+            oThreads:Start(2)
             recFact(s__o1:Clone(),oN,oThreads)
             oThreads:Notify()
             oThreads:Wait()
@@ -4328,7 +4328,7 @@ return(oMTP)
     Exemplo em PowerShell:
     //-----------------------------------------------------------------------------------
     function ps_rMult([int]$a,[int]$b){
-        $r = 0;
+        $r=0;
         do {
             "$a x $b";
             if (($a%2)-and($a -gt 0)){
@@ -5748,7 +5748,7 @@ static procedure tBigNSleep(nSleep)
         sleep(nSleep*1000)
     #else
         Local nTime
-        nTime:= (hb_MilliSeconds()+(nSleep*1000))
+        nTime:=(hb_MilliSeconds()+(nSleep*1000))
         while (hb_MilliSeconds()<nTime)
         end while
     #endif
@@ -5837,5 +5837,5 @@ return
 #endif //__PROTHEUS__
 
 #ifdef __HARBOUR__
-    #include "..\src\hb\c\tbignumber.c"
+    #include "..\src\hb\c\tbigNumber.c"
 #endif // __HARBOUR__

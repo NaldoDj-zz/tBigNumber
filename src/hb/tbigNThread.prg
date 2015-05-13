@@ -1,18 +1,18 @@
 #include "hbclass.ch"
 #include "tBigNThread.ch"
 
-static s_aResults
-
 Class tBigNThreads
 
     PROTECTED:
     
     data aThreads
     data aResults
+
+    data aRChilds
     
     data nThreads
     data nMemMode
-    data nID    
+    data nThreadID
 
     EXPORTED:
     
@@ -34,13 +34,13 @@ Class tBigNThreads
 EndClass
 
 method new(nThreads) class tBigNThreads
-    DEFAULT s_aResults:=Array(0)
     DEFAULT nThreads:=0
     DEFAULT self:nThreads:=nThreads
     self:aThreads:=if(self:nThreads>0,Array(self:aThreads,SIZ_TH),Array(0))
     self:aResults:=Array(0)
+    self:aRChilds:=Array(0)
     self:nMemMode:=NIL
-    self:nID:=hb_ThreadID()
+    self:nThreadID:=hb_ThreadID()
 return(self)
 
 method Start(nThreads,nMemMode) class tBigNThreads
@@ -49,7 +49,7 @@ method Start(nThreads,nMemMode) class tBigNThreads
     DEFAULT nThreads:=self:nThreads
     DEFAULT nMemMode:=self:nMemMode
     self:nMemMode:=nMemMode
-    if (nThreads>self:nThreads).or.(self:nThreads==0)
+    if ((nThreads>self:nThreads).or.(self:nThreads==0))
         if (self:nThreads==0)
             nStart:=1
         else
@@ -69,13 +69,13 @@ method Start(nThreads,nMemMode) class tBigNThreads
         self:aThreads[nThread][TH_EXE]:=NIL
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:=.F.
-        if nMemMode==NIL
+        if (nMemMode==NIL)
             self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
         else
             self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
         endif
         while (self:aThreads[nThread][TH_NUM]==NIL)
-            if nMemMode==NIL
+            if (nMemMode==NIL)
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
             else
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
@@ -101,7 +101,7 @@ method Wait() class tBigNThreads
                 hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
             endif
         next nThread
-        if nThCount==nThreads
+        if (nThCount==nThreads)
             exit
         endif
         nThCount:=0
@@ -116,7 +116,7 @@ method addEvent(uthEvent) class tBigNThreads
     Local bEvent
     Local nThEvent
     Local oThreads
-    if (self:nID==hb_ThreadID())
+    if (self:nThreadID==hb_ThreadID())
         bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==NIL)}
         nThEvent:=aScan(self:aThreads,bEvent)
         while (nThEvent==0)
@@ -132,7 +132,7 @@ method addEvent(uthEvent) class tBigNThreads
         oThreads:Notify()
         oThreads:Wait()
         oThreads:Join()
-        aAdd(s_aResults,oThreads:getResult(nThEvent))
+        aAdd(self:aRChilds,oThreads:getResult(nThEvent))
     endif
 return(nThEvent)
 
@@ -155,14 +155,13 @@ return(uResult)
 
 method getAllResults() class tBigNThreads
     aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==NIL,NIL,aAdd(self:aResults,aTh[TH_RES]))})
-    if .not.(Empty(s_aResults))
-        aEval(s_aResults,{|r|aAdd(self:aResults,r)})
-        aSize(s_aResults,0)
+    if .not.(Empty(self:aRChilds))
+        aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
     endif
 return(self:aResults)
 
 method clearAllResults() class tBigNThreads
-    aSize(s_aResults,0)
+    aSize(self:aRChilds,0)
     aSize(self:aResults,0)
 return(NIL)
 

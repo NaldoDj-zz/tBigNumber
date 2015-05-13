@@ -186,7 +186,7 @@
 
         __nSLEEP:=Min(__nSLEEP,10)
         IF ((__nSLEEP)>10)
-            __nSLEEP /=10
+            __nSLEEP/=10
         EndIF
 
         /* set OEM font encoding for non unicode modes*/
@@ -195,7 +195,7 @@
         hb_cdpSelect("EN")
         hb_setTermCP("EN")
         /* set font name*/
-*hb_gtInfo(HB_GTI_FONTNAME,"Ms LineDraw"/*"Consolas"*//*"Ms LineDraw"*//*"Lucida Console"*/)
+        *hb_gtInfo(HB_GTI_FONTNAME,"Ms LineDraw"/*"Consolas"*//*"Ms LineDraw"*//*"Lucida Console"*/)
         /* set font size*/
         hb_gtInfo(HB_GTI_FONTWIDTH,6+4)
         hb_gtInfo(HB_GTI_FONTSIZE,12+4)
@@ -240,7 +240,7 @@
             
             hb_threadQuitRequest(ptttBigtstThread)
             hb_ThreadWait(ptttBigtstThread)
-            hb_gcAll(.T.)
+            tBigNGC()
             
         Else
         
@@ -299,7 +299,7 @@
         hb_gtSelect(pGT)
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         atBigNtst[3]:=NIL
-        hb_gcAll(.T.)
+        tBigNGC()
     Return(.T.)
     //--------------------------------------------------------------------------------------------------------
     Static Procedure tBigNtst(atBigNtst)
@@ -578,7 +578,7 @@
         hb_threadQuitRequest(pttftProgress)
         hb_ThreadWait(pttProgress)
         hb_ThreadWait(pttftProgress)
-        hb_gcAll(.T.)
+        tBigNGC()
         SET COLOR TO "r+/n"
         IF .NOT.(cC_GT_MODE=="MT")
             WAIT "Press any key to end"
@@ -703,23 +703,8 @@ Return(hb_aTokens(cStr,cToken))
 #endif
 //--------------------------------------------------------------------------------------------------------
 Static Procedure __tbnSleep(nSleep)
-    #ifdef __HARBOUR__
-        #ifdef TBN_DBFILE
-            Local nTime
-        #endif
-    #endif
     PARAMTYPE 1 VAR nSleep AS NUMBER OPTIONAL DEFAULT __nSLEEP
-    #ifdef __PROTHEUS__
-        Sleep(nSleep*1000)
-    #else
-        #ifdef TBN_DBFILE
-            nTime:=(hb_MilliSeconds()+(nSleep*1000))
-            while (hb_MilliSeconds()<nTime)
-            end while
-        #else
-            hb_idleSleep(nSleep)
-        #endif
-    #endif
+    tBigNSleep(nSleep)
 Return
 //--------------------------------------------------------------------------------------------------------
 Static Procedure __ConOut(fhLog,e,d)
@@ -1212,7 +1197,9 @@ Return(lHarbour)
     //--------------------------------------------------------------------------------------------------------
     Static Function FreeObj(oObj)
         oObj:=NIL
-    Return(hb_gcAll(.T.))
+    Return(tBigNGC())
+    Static Function tBigNGC()
+    Return(/*hb_gcAll(.T.)*/NIL)
     #include "..\src\tests\hb\tBigNAnim.prg"
 #else
     #ifdef TBN_DBFILE
@@ -1375,7 +1362,7 @@ static procedure tBigNtst02(fhLog)
             __ConOut(fhLog,__cSep)
         Next w
         otBigX:=NIL
-        hb_gcAll(.T.)
+        tBigNGC()
         __ConOut(fhLog," ------------ Teste Operator Overloading 0 -------------- END ")
     #endif
 
@@ -1441,7 +1428,7 @@ static procedure tBigNtst03(fhLog)
     aSize(aPFact,0)
     aPFact:=NIL
     #ifdef __HARBOUR__
-        hb_gcAll(.T.)
+        tBigNGC()
     #endif //__PROTHEUS__
 
     __ConOut(fhLog,"")
@@ -1496,7 +1483,7 @@ static procedure tBigNtst04(fhLog)
     aSize(aPrimes,0)
     aPrimes:=NIL
     #ifdef __HARBOUR__
-        hb_gcAll(.T.)
+        tBigNGC()
     #endif //__PROTHEUS__
 
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
@@ -2532,11 +2519,11 @@ static procedure tBigNtst22(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
            __oRTime2:SetRemaining(1)
         ASSIGN cW:=hb_ntos(n)
-        ASSIGN n    /=1.5
+        ASSIGN n   /=1.5
         __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
-        otBigN /="1.5"
+        otBigN/="1.5"
 #else
         otBigN:SetValue(otBigN:Div("1.5"))
 #endif
@@ -2589,7 +2576,7 @@ static procedure tBigNtst23(fhLog)
         otBigN:SetValue(cN)
         __ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
 #ifndef __PROTHEUS__
-        otBigN /=o3
+        otBigN/=o3
 #else
         otBigN:SetValue(otBigN:Div(o3))
 #endif
