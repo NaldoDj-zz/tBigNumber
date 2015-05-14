@@ -31,6 +31,8 @@ Class tBigNThreads
     method getResult(nThEvent)
     method getAllResults()
     
+    method sendCResults()
+    
     method clearAllResults()
     
 EndClass
@@ -177,10 +179,13 @@ return(uResult)
 
 method getAllResults() class tBigNThreads
     aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==NIL,NIL,aAdd(self:aResults,aTh[TH_RES]))})
-    if .not.(Empty(self:aRChilds))
-        aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
-    endif
+    self:sendCResults()
 return(aClone(self:aResults))
+
+method sendCResults() class tBigNThreads
+    aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
+    aSize(self:aRChilds,0)
+return(self)
 
 method clearAllResults() class tBigNThreads
     aSize(self:aRChilds,0)
