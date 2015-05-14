@@ -4164,53 +4164,18 @@ return(aPFactors)
     method:Factorial
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:19/03/2013
-    Descricao:Fatorial de Numeros Inteiros
-    Sintaxe:tBigNumber():Factorial() -> oF
-    TODO:Otimizar++
-                  Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
-                               http://www.luschny.de/math/factorial/index.html
+    Descricao: Fatorial de Numeros Inteiros
+    Sintaxe: tBigNumber():Factorial() -> oF
+    TODO   : Otimizar++
+    Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+                 http://www.luschny.de/math/factorial/index.html
 */
 method Factorial() class tBigNumber
     local oN:=self:Clone():Int(.T.,.F.)
-    local oF:=s__o1:Clone()
-    #ifndef __PTCOMPAT__
-        local aResults
-        local lOddRes
-        local nResult
-        local nResults
-        local oThreads
-    #endif
-    if .not.(oN:eq(s__o0))
-        #ifdef __PTCOMPAT__
-            oF:SetValue(recFact(s__o1:Clone(),oN))
-        #else
-            oThreads:=tBigNThreads():New()
-            oThreads:Start(2)
-            recFact(s__o1:Clone(),oN,oThreads)
-            oThreads:Notify()
-            oThreads:Wait()
-            aResults:=oThreads:getAllResults()
-            oThreads:clearAllResults()
-            nResults:=Len(aResults)
-            lOddRes:=.not.((nResults%2)==0)
-            if (lOddRes)
-                aAdd(aResults,s__o1:Clone())
-                nResults+=1
-            endif
-            oThreads:=tBigNThreads():New()
-            oThreads:ReStart(nResults/2)
-            for nResult:=1 To nResults step 2
-                oThreads:setEvent(nResult,{@thiMult(),aResults[nResult],aResults[nResult+1]})
-            next nResult
-            oThreads:Notify()
-            oThreads:Wait()
-            oThreads:Join()
-            aResults:=oThreads:getAllResults()
-            oThreads:clearAllResults()
-            aEval(aResults,{|oR|oF:SetValue(oF:iMult(oR))})
-        #endif
+    if oN:eq(s__o0)
+        return(s__o1:Clone())
     endif
-return(oF)
+return(recFact(s__o1:Clone(),oN))
 
 /*
     function:recFact
@@ -4220,9 +4185,10 @@ return(oF)
     Sintaxe:recFact(oS,oN)
     Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
 */
-static function recFact(oS,oN,oThreads)
+static function recFact(oS,oN)
 
 #ifndef __PTCOMPAT__
+    local oThreads
     local nB
     local nI
     local nSN
@@ -4278,9 +4244,14 @@ static function recFact(oS,oN,oThreads)
     oNI:SetValue(oNI:iSub(oI))
 
 #ifndef __PTCOMPAT__
-    oThreads:addEvent({@recFact(),oS,oI,oThreads})
-    oThreads:addEvent({@recFact(),oSI,oNI,oThreads})
-return(s__o1)
+    oThreads:=tBigNThreads():New()
+    oThreads:Start(2)
+    oThreads:setEvent(1,{@recFact(),oS,oI})
+    oThreads:setEvent(2,{@recFact(),oSI,oNI})
+    oThreads:Notify()
+    oThreads:Wait()
+    oThreads:Join()
+return(oThreads:getResult(1):iMult(oThreads:getResult(2)))
 #else
 return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
 #endif

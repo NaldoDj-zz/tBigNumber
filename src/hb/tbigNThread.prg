@@ -89,8 +89,8 @@ return(self)
 method ReStart(nThreads,nMemMode) class tBigNThreads
     self:Join()
     self:clearAllResults()
-    aSize(self:aThreads,0)
     self:nThreads:=0
+    aSize(self:aThreads,self:nThreads)
 return(self:Start(@nThreads,@nMemMode))
 
 method Notify() class tBigNThreads
@@ -127,10 +127,8 @@ method Join() class tBigNThreads
     for nThread:=1 to self:nThreads
         hb_mutexNotify(self:aThreads[nThread][TH_MTX],{||break()})
         if .not.(self:aThreads[nThread][TH_NUM]==NIL)
-            if .not.(self:aThreads[nThread][TH_NUM]==NIL)
-                if hb_threadJoin(self:aThreads[nThread][TH_NUM])
-                    self:aThreads[nThread][TH_NUM]:=NIL
-                endif
+            if hb_threadJoin(self:aThreads[nThread][TH_NUM])
+                self:aThreads[nThread][TH_NUM]:=NIL
             endif
         endif
     next nThread
