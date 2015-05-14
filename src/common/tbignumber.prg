@@ -5820,6 +5820,7 @@ return
                 THMOD0()
                 THNTHROOT()
                 THMULT()
+                THIMULT()
                 TH2MULT()
                 THPOW()
                 THLOGN()
