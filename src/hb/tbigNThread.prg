@@ -139,7 +139,7 @@ return(self)
 method addEvent(uthEvent) class tBigNThreads
     Local bEvent
     Local nThEvent
-    Local oThreads
+    Local oThChild
     if (self:nThreadID==hb_ThreadID())
         bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==NIL)}
         nThEvent:=aScan(self:aThreads,bEvent)
@@ -149,14 +149,13 @@ method addEvent(uthEvent) class tBigNThreads
         end while
         self:setEvent(nThEvent,uthEvent)
     else
-        oThreads:=tBigNThreads():New()
-        nThEvent:=1
-        oThreads:Start(nThEvent)
-        oThreads:setEvent(nThEvent,uthEvent)
-        oThreads:Notify()
-        oThreads:Wait()
-        oThreads:Join()
-        aAdd(self:aRChilds,oThreads:getResult(nThEvent))
+        oThChild:=tBigNThreads():New()
+        oThChild:Start(1)
+        oThChild:setEvent(1,uthEvent)
+        oThChild:Notify()
+        oThChild:Wait()
+        oThChild:Join()        
+        aEval(oThChild:getAllResults(),{|r|aAdd(self:aRChilds,r)})
     endif
 return(nThEvent)
 

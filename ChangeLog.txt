@@ -11,3 +11,6 @@
 2015-05-02 20:35 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
   * .gitattributes
   * prj/mg/win/64/tBigNumber64.mip
+
+2015-05-14 14:39 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+  * src/hb/tbigNThread.prg
