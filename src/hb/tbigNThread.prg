@@ -40,7 +40,7 @@ EndClass
 method new(nThreads) class tBigNThreads
     DEFAULT nThreads:=0
     DEFAULT self:nThreads:=nThreads
-    self:aThreads:=if(self:nThreads>0,Array(self:aThreads,SIZ_TH),Array(0))
+    self:aThreads:=if(self:nThreads>0,Array(self:nThreads,SIZ_TH),Array(0))
     self:aResults:=Array(0)
     self:aRChilds:=Array(0)
     self:nMemMode:=NIL

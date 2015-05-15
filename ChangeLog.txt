@@ -14,3 +14,6 @@
 
 2015-05-14 14:39 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
   * src/hb/tbigNThread.prg
+
+2015-05-15 16:22 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+  * src/hb/tbigNThread.prg - correcao na inicializacao de :aThreads quando no metodo :new
