@@ -66,7 +66,7 @@
 #define AC_TSTEXEC        "*"
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
-#define __NRTTST__         35
+#define __NRTTST__         36
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     Function Main()
@@ -672,6 +672,7 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     atBigNtst[33][1]:={|p|tBigNtst33(p)}
     atBigNtst[34][1]:={|p|tBigNtst34(p)}
     atBigNtst[35][1]:={|p|tBigNtst35(p)}
+    atBigNtst[36][1]:={|p|tBigNtst36(p)}    
 
     for nD:=1 to nJ
         atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,{|c|(nD==Val(c))})>0)
@@ -1208,6 +1209,12 @@ Return(lHarbour)
         Return(StaticCall(TBIGNUMBER,tBigNGC))
     #endif
 #endif
+
+//--------------------------------------------------------------------------------------------------------
+static function Fibonacci(uN)
+    Local oN:=tBigNumber():New(uN)
+return(oN:Fibonacci())
+    
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst01(fhLog)
 
@@ -3467,3 +3474,54 @@ static procedure tBigNtst35(fhLog)
 
 return
 //--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst36(fhLog)
+
+    Local cN            AS CHARACTER
+    Local cW            AS CHARACTER
+
+    Local n             AS NUMBER
+    Local x             AS NUMBER
+   
+    Local aFibonacci    AS ARRAY
+    
+    PARAMTYPE 1 VAR fhLog AS NUMBER
+    
+   __ConOut(fhLog,"")
+
+   __ConOut(fhLog," BEGIN ------------ Teste Fibonacci -------------- ")
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
+    __ConOut(fhLog,"")
+
+    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    For n:=1 To nN_TEST STEP nISQRT
+        ASSIGN cN:=hb_ntos(n)
+        ASSIGN aFibonacci:=Fibonacci(cN)
+        __oRTime2:SetRemaining(Len(aFibonacci))
+        For x:=1 To Len(aFibonacci)
+            ASSIGN cW:=aFibonacci[x]
+            __ConOut(fhLog,'Fibonacci('+cN+')',"RESULT: "+cW)
+            __oRTime2:Calcule()
+            __oRTime1:Calcule(.F.)
+        Next x
+        __ConOut(fhLog,__cSep)
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+        __ConOut(fhLog,__cSep)
+        __oRTime1:Calcule()
+        __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
+        __ConOut(fhLog,__cSep)
+    Next n
+    aSize(aFibonacci,0)
+    aFibonacci:=NIL
+    #ifdef __HARBOUR__
+        tBigNGC()
+    #endif //__PROTHEUS__
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog," ------------ Teste Fibonacci -------------- END ")
+
+    __ConOut(fhLog,"")
+    
+return

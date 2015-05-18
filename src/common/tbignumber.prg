@@ -370,6 +370,8 @@ class tBigNumber from hbClass
 
     method PFactors()
     method Factorial()    //TODO: Otimizar+
+    
+    method Fibonacci()
 
 #ifndef __PROTHEUS__
 
@@ -4257,6 +4259,40 @@ return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
 #endif
 
 /*
+    method:Factorial
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:18/05/2015
+    Descricao: Retorna a Sequencia de Fibonacci
+    Sintaxe: tBigNumber():Fibonacci() -> aFibonacci
+*/
+method Fibonacci() class tBigNumber
+    Local aFibonacci:=Array(0)
+    Local oN:=self
+    Local oA:=tBigNumber():New("0")
+    Local oB:=tBigNumber():New("1")
+#ifdef __HARBOUR__
+    Local oT
+#else
+    Local oT:=tBigNumber():New("0")
+#endif //__PROTEUS__
+#ifdef __HARBOUR__
+    While (oA<oN)
+        aAdd(aFibonacci,oA:ExactValue())
+        oT:=oB:Clone
+        oB:=oA+oB
+        oA:=oT
+   End While
+#else //__PROTEUS__
+    While (oA:lt(oN))
+        aAdd(aFibonacci,oA:ExactValue())
+        oT:SetValue(oB)
+        oB:SetValue(oA:Add(oB))
+        oA:SetValue(oT)
+    End While
+#endif
+return(aFibonacci)
+
+/*
     function:egMult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:04/02/2013
@@ -5091,7 +5127,7 @@ return(r)
                       lSuccess:=.T.
                     Catch
                       lSuccess:=.F.
-					  cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
             return(cFile)
@@ -5105,7 +5141,7 @@ return(r)
                       lSuccess:=.T.
                     Catch
                       lSuccess:=.F.
-					  cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
             return(cFile)

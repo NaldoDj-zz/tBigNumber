@@ -1,5 +1,5 @@
 
-2015-05-02 19:47 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+2015-05-02 19:47 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   - check.hb
   - commit.hb
   + bin/3rdpatch.hb
@@ -8,12 +8,18 @@
   + bin/harbour.ucf
   * .gitattributes
 
-2015-05-02 20:35 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+2015-05-02 20:35 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * .gitattributes
   * prj/mg/win/64/tBigNumber64.mip
 
-2015-05-14 14:39 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+2015-05-14 14:39 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
 
-2015-05-15 16:22 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+2015-05-15 16:22 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg - correcao na inicializacao de :aThreads quando no metodo :new
+
+2015-05-18 17:27 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/common/tbignumber.prg
+    - Metodo Fibonacci
+  * src/tests/tBigNtst.prg
+    - Teste Fibonacci
