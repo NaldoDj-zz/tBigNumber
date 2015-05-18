@@ -4264,6 +4264,22 @@ return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
     Data:18/05/2015
     Descricao: Retorna a Sequencia de Fibonacci
     Sintaxe: tBigNumber():Fibonacci() -> aFibonacci
+    
+#fib.py
+#-----------------------------------------------------
+import math
+def fib(n):
+     a, b = 0, 1
+     print(n,':')
+     while a < n:
+         print(a, end=' ')
+         a, b = b, a+b
+     print()
+#-----------------------------------------------------
+t=1000
+for number in range(1,t,int(math.sqrt(t)/2)):
+    fib(number)
+
 */
 method Fibonacci() class tBigNumber
     Local aFibonacci:=Array(0)

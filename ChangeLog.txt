@@ -23,3 +23,7 @@
     - Metodo Fibonacci
   * src/tests/tBigNtst.prg
     - Teste Fibonacci
+
+2015-05-18 17:58 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/common/tbignumber.prg
+    - Documentacao com exemplo em Python
