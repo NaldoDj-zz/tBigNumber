@@ -296,8 +296,8 @@ Method IsPrime(cN,lForce) CLASS tPrime
 
         IF .NOT.(Empty(aLine))
             aEval(aLine,{|x|aAdd(__aIPLRead,x)})
-			aSize(aLine,0)
-		EndIF
+            aSize(aLine,0)
+        EndIF
 
     END SEQUENCE
 
@@ -408,8 +408,8 @@ Method NextPrime(cN,lForce) CLASS tPrime
 
         IF .NOT.(Empty(aLine))
             aEval(aLine,{|x|aAdd(__aNPLRead,x)})
-			aSize(aLine,0)
-		EndIF
+            aSize(aLine,0)
+        EndIF
 
         DEFAULT cPrime:=""
         self:cPrime:=cPrime

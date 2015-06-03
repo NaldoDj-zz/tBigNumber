@@ -474,7 +474,7 @@
             DispOutAT(3,(__nCol-1),"[ ]")
         #endif
 
-        __ConOut(fhLog,"START ")                         //4
+        __ConOut(fhLog,"START ")                       //4
         __ConOut(fhLog,"DATE        : ",dStartDate)    //5
         __ConOut(fhLog,"TIME        : ",cStartTime)    //6
 
@@ -540,7 +540,7 @@
         ASSIGN cEndTime:=Time()
         __ConOut(fhLog,"TIME    :",cEndTime)
 
-        __oRTimeProc:Calcule()
+        __oRTimeProc:Calcule(.F.)
         __ConOut(fhLog,"ELAPSED :",__oRTimeProc:GetcTimeDiff())
 
         #ifdef __HARBOUR__
@@ -714,6 +714,7 @@ Static Procedure __ConOut(fhLog,e,d)
     Local ld    AS LOGICAL
     Local lSep  AS LOGICAL
     Local lMRow AS LOGICAL
+    Local lTBeg AS LOGICAL
 
     Local p     AS CHARACTER
 
@@ -802,8 +803,14 @@ Static Procedure __ConOut(fhLog,e,d)
         DispOutAT(__nRow,0,p,IF(.NOT.(lSep).AND.lMRow,"w+/n",IF(lSep.AND.lMRow,"c+/n","w+/n")))
     endif
     
+    lTBeg:=("BEGIN ------------"$p)
+    
+    IF (lTBeg)
+        DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
+    EndIF
+    
     IF hb_mutexLock(__phMutex)
-        __oRTimeProc:Calcule("-------------- END"$p)
+        __oRTimeProc:Calcule(lTBeg)
         hb_mutexUnLock(__phMutex)
     EndIF
 
@@ -1231,7 +1238,7 @@ static procedure tBigNtst01(fhLog)
     
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," BEGIN ------------ Teste MOD 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste MOD 0 -------------- ")
 
     
     otBigN:SetDecimals(nACC_SET)
@@ -1240,10 +1247,12 @@ static procedure tBigNtst01(fhLog)
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         ASSIGN cX:=hb_ntos(x)
-        __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
+        __oRTime2:SetRemaining(nN_TEST)
+        __oRTime2:SetStep(nISQRT)
         For n:=nN_TEST To 1 Step -nISQRT
             ASSIGN cN:=hb_ntos(n)
             ASSIGN cW:=otBigN:SetValue(cX):MOD(cN):ExactValue()
@@ -1261,7 +1270,7 @@ static procedure tBigNtst01(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste MOD 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste MOD 0 -------------- END")
 
     __ConOut(fhLog,"")
     
@@ -1282,7 +1291,7 @@ static procedure tBigNtst02(fhLog)
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
     #ifndef __PROTHEUS__
-        __ConOut(fhLog," BEGIN ------------ Teste Operator Overloading 0 -------------- ")
+        __ConOut(fhLog,"BEGIN ------------ Teste Operator Overloading 0 -------------- ")
 
         otBigN:SetDecimals(nACC_SET)
         otBigW:SetDecimals(nACC_SET)
@@ -1297,7 +1306,8 @@ static procedure tBigNtst02(fhLog)
             otBigW:=cW
             __ConOut(fhLog,"otBigW:="+cW,"RESULT: "+otBigW:ExactValue())
             __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
-            __oRTime2:SetRemaining(Int(nISQRT/2))
+            __oRTime2:SetRemaining(nISQRT)
+            __oRTime2:SetStep(Int(nISQRT/2))
             For n:=1 To nISQRT Step Int(nISQRT/2)
                 ASSIGN cN:=hb_ntos(n)
                 __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
@@ -1371,7 +1381,7 @@ static procedure tBigNtst02(fhLog)
         Next w
         otBigX:=NIL
         tBigNGC()
-        __ConOut(fhLog," ------------ Teste Operator Overloading 0 -------------- END ")
+        __ConOut(fhLog,"------------ Teste Operator Overloading 0 -------------- END")
     #endif
 
 return
@@ -1396,7 +1406,7 @@ static procedure tBigNtst03(fhLog)
     
    __ConOut(fhLog,"")
 
-    __ConOut(fhLog," BEGIN ------------ Teste Prime 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste Prime 0 -------------- ")
 
     
     otBigN:SetDecimals(nACC_SET)
@@ -1406,7 +1416,8 @@ static procedure tBigNtst03(fhLog)
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST STEP nISQRT
         ASSIGN cN:=hb_ntos(n)
         ASSIGN aPFact:=otBigN:SetValue(cN):PFactors()
@@ -1441,7 +1452,7 @@ static procedure tBigNtst03(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Prime 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Prime 0 -------------- END")
 
     __ConOut(fhLog,"")
     
@@ -1466,7 +1477,7 @@ static procedure tBigNtst04(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
-    __ConOut(fhLog," BEGIN ------------ Teste Prime 1 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste Prime 1 -------------- ")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
    
@@ -1499,7 +1510,7 @@ static procedure tBigNtst04(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Prime 1 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Prime 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1520,7 +1531,7 @@ static procedure tBigNtst05(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
-    __ConOut(fhLog," BEGIN ------------ Teste HEX16 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste HEX16 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1528,7 +1539,8 @@ static procedure tBigNtst05(fhLog)
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+    __oRTime1:SetRemaining(nISQRT*99)
+    __oRTime1:SetStep(99)
     For x:=0 TO (nISQRT*99) STEP 99
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
@@ -1557,7 +1569,7 @@ static procedure tBigNtst05(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste HEX16 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste HEX16 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1580,7 +1592,7 @@ static procedure tBigNtst06(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ Teste HEX32 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste HEX32 0 -------------- ")
         
     otBigN:SetDecimals(nACC_SET)
 
@@ -1588,7 +1600,8 @@ static procedure tBigNtst06(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(((nISQRT*99)/99)+1)
+    __oRTime1:SetRemaining(nISQRT*99)
+    __oRTime1:SetStep(99)
     For x:=0 TO (nISQRT*99) STEP 99
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
@@ -1617,7 +1630,7 @@ static procedure tBigNtst06(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste HEX32 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste HEX32 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1638,7 +1651,7 @@ static procedure tBigNtst07(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ ADD Teste 1 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ ADD Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -1653,7 +1666,8 @@ static procedure tBigNtst07(fhLog)
 #else
     otBigN:SetValue(o1)
 #endif
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1677,7 +1691,7 @@ static procedure tBigNtst07(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ ADD 1 -------------- END ")
+    __ConOut(fhLog,"------------ ADD 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1696,7 +1710,7 @@ static procedure tBigNtst08(fhLog)
   
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
-    __ConOut(fhLog," BEGIN ------------ ADD Teste 2 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ ADD Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -1708,7 +1722,8 @@ static procedure tBigNtst08(fhLog)
     ASSIGN n:=Val(cN)
     otBigN:SetValue(cN)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1732,7 +1747,7 @@ static procedure tBigNtst08(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ ADD Teste 2 -------------- END ")
+    __ConOut(fhLog,"------------ ADD Teste 2 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1751,7 +1766,7 @@ static procedure tBigNtst09(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ ADD Teste 3 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ ADD Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -1759,7 +1774,8 @@ static procedure tBigNtst09(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1783,7 +1799,7 @@ static procedure tBigNtst09(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ ADD Teste 3 -------------- END ")
+    __ConOut(fhLog,"------------ ADD Teste 3 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1802,7 +1818,7 @@ static procedure tBigNtst10(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ SUB Teste 1 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ SUB Teste 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
  
@@ -1810,7 +1826,8 @@ static procedure tBigNtst10(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1834,7 +1851,7 @@ static procedure tBigNtst10(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ SUB Teste 1 -------------- END ")
+    __ConOut(fhLog,"------------ SUB Teste 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1853,13 +1870,14 @@ static procedure tBigNtst11(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ SUB Teste 2 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ SUB Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1883,7 +1901,7 @@ static procedure tBigNtst11(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ SUB Teste 2 -------------- END")
+    __ConOut(fhLog,"------------ SUB Teste 2 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1902,13 +1920,14 @@ static procedure tBigNtst12(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog," BEGIN ------------ SUB Teste 3 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ SUB Teste 3 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -1932,7 +1951,7 @@ static procedure tBigNtst12(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ SUB Teste 3 -------------- END ")
+    __ConOut(fhLog,"------------ SUB Teste 3 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -1955,7 +1974,7 @@ static procedure tBigNtst13(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ MULT Teste 1 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ MULT Teste 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -1968,7 +1987,8 @@ static procedure tBigNtst13(fhLog)
     otBigN:SetValue(o1)
     otBigW:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -2003,7 +2023,7 @@ static procedure tBigNtst13(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 1 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 1 -------------- END")
 
     __ConOut(fhLog,"")
     
@@ -2023,7 +2043,7 @@ static procedure tBigNtst14(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ MULT Teste 2 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ MULT Teste 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
  
@@ -2034,7 +2054,8 @@ static procedure tBigNtst14(fhLog)
     ASSIGN n:=1
     otBigN:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -2066,7 +2087,7 @@ static procedure tBigNtst14(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 2 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 2 -------------- END")
 
      __ConOut(fhLog,"")
      
@@ -2086,7 +2107,7 @@ static procedure tBigNtst15(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ MULT Teste 3 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ MULT Teste 3 -------------- ")
    
     otBigW:SetDecimals(nACC_SET)
 
@@ -2097,7 +2118,8 @@ static procedure tBigNtst15(fhLog)
     ASSIGN n:=1
     otBigW:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -2125,7 +2147,7 @@ static procedure tBigNtst15(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 3 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 3 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2146,7 +2168,7 @@ static procedure tBigNtst16(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ MULT Teste 4 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ MULT Teste 4 -------------- ")
    
     otBigW:SetDecimals(nACC_SET)
 
@@ -2157,7 +2179,8 @@ static procedure tBigNtst16(fhLog)
     ASSIGN w:=1
     otBigW:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(w)
@@ -2195,7 +2218,7 @@ static procedure tBigNtst16(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 4 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 4 -------------- END")
 
     __ConOut(fhLog,"")
     
@@ -2216,7 +2239,7 @@ static procedure tBigNtst17(fhLog)
    
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ MULT Teste 5 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ MULT Teste 5 -------------- ")
    
     otBigW:SetDecimals(nACC_SET)
 
@@ -2227,7 +2250,8 @@ static procedure tBigNtst17(fhLog)
     ASSIGN w:=1
     otBigW:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(w)
@@ -2261,7 +2285,7 @@ static procedure tBigNtst17(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 5 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 5 -------------- END")
 
     __ConOut(fhLog,"")
    
@@ -2282,7 +2306,7 @@ static procedure tBigNtst18(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-   __ConOut(fhLog," BEGIN ------------ MULT Teste 6 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ MULT Teste 6 -------------- ")
    
     otBigW:SetDecimals(nACC_SET)
 
@@ -2293,9 +2317,11 @@ static procedure tBigNtst18(fhLog)
     ASSIGN w:=1
     otBigW:SetValue(o1)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
+        __oRTime2:SetStep()
         ASSIGN cN:=hb_ntos(w)
         ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
@@ -2327,7 +2353,7 @@ static procedure tBigNtst18(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ MULT Teste 6 -------------- END ")
+    __ConOut(fhLog,"------------ MULT Teste 6 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2345,7 +2371,7 @@ static procedure tBigNtst19(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste Factoring -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Factoring -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
 
@@ -2353,7 +2379,8 @@ static procedure tBigNtst19(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     ASSIGN n:=0
     While (n<=nN_TEST)
         __oRTime2:SetRemaining(1)
@@ -2376,7 +2403,7 @@ static procedure tBigNtst19(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Factoring 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Factoring 0 -------------- END")
 
     __ConOut(fhLog,"")
     
@@ -2395,7 +2422,7 @@ static procedure tBigNtst20(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-    __ConOut(fhLog," BEGIN ------------ Teste GCD/LCM 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste GCD/LCM 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -2403,10 +2430,12 @@ static procedure tBigNtst20(fhLog)
 
     __ConOut(fhLog,"")
  
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         ASSIGN cX:=hb_ntos(x)
-        __oRTime2:SetRemaining(Int(nN_TEST/nISQRT))
+        __oRTime2:SetRemaining(nN_TEST)
+        __oRTime2:SetStep(nISQRT)
         For n:=nN_TEST To 1 Step -nISQRT
             ASSIGN cN:=hb_ntos(n)
             ASSIGN cW:=otBigN:SetValue(cX):GCD(cN):ExactValue()
@@ -2426,7 +2455,7 @@ static procedure tBigNtst20(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste GCD/LCM 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste GCD/LCM 0 -------------- END")
 
     __ConOut(fhLog,"")
    
@@ -2446,7 +2475,7 @@ static procedure tBigNtst21(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
  
-   __ConOut(fhLog," BEGIN ------------ DIV Teste 0 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ DIV Teste 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -2455,10 +2484,12 @@ static procedure tBigNtst21(fhLog)
 
     __ConOut(fhLog,"")
  
-     __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For n:=0 TO nN_TEST Step nISQRT
         ASSIGN cN:=hb_ntos(n)
-        __oRTime2:SetRemaining(Int(nN_TEST/nISQRT)+1)
+        __oRTime2:SetRemaining(nISQRT)
+        __oRTime2:SetStep(nISQRT)
         For x:=0 TO nISQRT Step nISQRT
             ASSIGN cX:=hb_ntos(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_ntos(n/x))
@@ -2490,7 +2521,7 @@ static procedure tBigNtst21(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ DIV Teste 0 -------------- END ")
+    __ConOut(fhLog,"------------ DIV Teste 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2512,7 +2543,7 @@ static procedure tBigNtst22(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ DIV Teste 1 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ DIV Teste 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
 
@@ -2523,9 +2554,10 @@ static procedure tBigNtst22(fhLog)
     ASSIGN cN:=hb_ntos(n)
     otBigN:SetValue(cN)
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
-           __oRTime2:SetRemaining(1)
+        __oRTime2:SetRemaining(1)
         ASSIGN cW:=hb_ntos(n)
         ASSIGN n   /=1.5
         __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
@@ -2547,7 +2579,7 @@ static procedure tBigNtst22(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ DIV Teste 1 -------------- END ")
+    __ConOut(fhLog,"------------ DIV Teste 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2568,7 +2600,7 @@ static procedure tBigNtst23(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
-   __ConOut(fhLog," BEGIN ------------ DIV Teste 2 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ DIV Teste 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
 
@@ -2577,7 +2609,8 @@ static procedure tBigNtst23(fhLog)
     __ConOut(fhLog,"")
 
     otBigN:SetValue(o1)
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(x)
@@ -2600,7 +2633,7 @@ static procedure tBigNtst23(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ DIV Teste 2 -------------- END ")
+    __ConOut(fhLog,"------------ DIV Teste 2 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2622,7 +2655,7 @@ static procedure tBigNtst24(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste FI 0 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste FI 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -2632,7 +2665,8 @@ static procedure tBigNtst24(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cN:=hb_ntos(n)
@@ -2648,7 +2682,7 @@ static procedure tBigNtst24(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste FI 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste FI 0 -------------- END")
 
 return
 //--------------------------------------------------------------------------------------------------------
@@ -2670,7 +2704,7 @@ static procedure tBigNtst25(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," BEGIN ------------ Teste SQRT 1 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste SQRT 1 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -2684,9 +2718,10 @@ static procedure tBigNtst25(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int((((nISQRT*999)+999)-((nISQRT*999)-999))/99))
+    __oRTime1:SetRemaining(((nISQRT*999)+999)-((nISQRT*999)-999))
+    __oRTime1:SetStep(99)
     For x:=((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
-           __oRTime2:SetRemaining(1)
+        __oRTime2:SetRemaining(1)
         ASSIGN n:=x
         ASSIGN cN:=hb_ntos(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_ntos(SQRT(n)))
@@ -2710,7 +2745,7 @@ static procedure tBigNtst25(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste SQRT 1 -------------- END ")
+    __ConOut(fhLog,"------------ Teste SQRT 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2733,7 +2768,7 @@ static procedure tBigNtst26(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," BEGIN ------------ Teste SQRT 2 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste SQRT 2 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -2743,7 +2778,8 @@ static procedure tBigNtst26(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
@@ -2775,7 +2811,7 @@ static procedure tBigNtst26(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste SQRT 2 -------------- END ")
+    __ConOut(fhLog,"------------ Teste SQRT 2 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2793,7 +2829,7 @@ static procedure tBigNtst27(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
     
-   __ConOut(fhLog," BEGIN ------------ Teste Exp 0 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Exp 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -2833,7 +2869,7 @@ static procedure tBigNtst27(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Exp 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Exp 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2855,7 +2891,7 @@ static procedure tBigNtst28(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste Pow 0 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Pow 0 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -2865,7 +2901,8 @@ static procedure tBigNtst28(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
     For x:=IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT
         ASSIGN cN:=hb_ntos(x)
@@ -2907,7 +2944,7 @@ static procedure tBigNtst28(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Pow 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Pow 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2929,7 +2966,7 @@ static procedure tBigNtst29(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste Pow 1 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Pow 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -2939,10 +2976,12 @@ static procedure tBigNtst29(fhLog)
 
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining((nISQRT/5)+1)
+    __oRTime1:SetRemaining(nISQRT)
+    __oRTime1:SetStep(5)
     For x:=0 TO nISQRT STEP 5
         ASSIGN cN:=hb_ntos(x)
-        __oRTime2:SetRemaining((nISQRT/5)+1)
+        __oRTime2:SetRemaining(nISQRT)
+        __oRTime2:SetStep(5)
         For w:=0 To nISQRT STEP 5
             ASSIGN cW:=hb_ntos(w+.5)
             ASSIGN n:=x
@@ -2979,7 +3018,7 @@ static procedure tBigNtst29(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Pow 1 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Pow 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -2993,7 +3032,7 @@ static procedure tBigNtst30(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste Pow 2 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Pow 2 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3027,7 +3066,7 @@ static procedure tBigNtst30(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Pow 2 -------------- END ")
+    __ConOut(fhLog,"------------ Teste Pow 2 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -3053,10 +3092,9 @@ static procedure tBigNtst31(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
   
-    __ConOut(fhLog," BEGIN ------------ Teste LOG 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste LOG 0 -------------- ")
 
     __oRTime1:SetRemaining(13)
-
     otBigW:SysSQRT(0)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -3236,7 +3274,7 @@ static procedure tBigNtst31(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste LOG 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste LOG 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -3258,7 +3296,7 @@ static procedure tBigNtst32(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog," BEGIN ------------ Teste LOG 1 -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste LOG 1 -------------- ")
    
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3274,7 +3312,8 @@ static procedure tBigNtst32(fhLog)
 
     //Quer comparar o resultado:http://www.gyplclan.com/pt/logar_pt.html
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For w:=0 TO nN_TEST Step nISQRT
         ASSIGN cW:=hb_ntos(w)
         otBigW:SetValue(cW)
@@ -3314,7 +3353,7 @@ static procedure tBigNtst32(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste LOG 1 -------------- END ")
+    __ConOut(fhLog,"------------ Teste LOG 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -3333,7 +3372,7 @@ static procedure tBigNtst33(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog," BEGIN ------------ Teste LN 1 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste LN 1 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
     otBigW:nthRootAcc(nROOT_ACC_SET)
@@ -3345,7 +3384,8 @@ static procedure tBigNtst33(fhLog)
 
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT)+1)
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For w:=0 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN cW:=hb_ntos(w)
@@ -3362,7 +3402,7 @@ static procedure tBigNtst33(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste LN 1 -------------- END ")
+    __ConOut(fhLog,"------------ Teste LN 1 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -3385,7 +3425,7 @@ static procedure tBigNtst34(fhLog)
     
     PARAMTYPE 1 VAR fhLog AS NUMBER
   
-    __ConOut(fhLog," BEGIN ------------ Teste millerRabin 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste millerRabin 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -3400,6 +3440,7 @@ static procedure tBigNtst34(fhLog)
         IF (n<3)
             ASSIGN n+=1
         Else
+            __oRTime1:SetStep(2)
             ASSIGN n+=2
         EndIF
         ASSIGN cN:=hb_ntos(n)
@@ -3423,7 +3464,7 @@ static procedure tBigNtst34(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste millerRabin 0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste millerRabin 0 -------------- END")
 
     __ConOut(fhLog,"")
 
@@ -3441,7 +3482,7 @@ static procedure tBigNtst35(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog," BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
     
     otBigN:SetDecimals(nACC_SET)
 
@@ -3466,7 +3507,7 @@ static procedure tBigNtst35(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste RANDOMIZE  0 -------------- END ")
+    __ConOut(fhLog,"------------ Teste RANDOMIZE  0 -------------- END")
 
     __ConOut(fhLog,__cSep)
     __ConOut(fhLog,"")
@@ -3488,13 +3529,14 @@ static procedure tBigNtst36(fhLog)
     
    __ConOut(fhLog,"")
 
-   __ConOut(fhLog," BEGIN ------------ Teste Fibonacci -------------- ")
+   __ConOut(fhLog,"BEGIN ------------ Teste Fibonacci -------------- ")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     __ConOut(fhLog,"")
 
-    __oRTime1:SetRemaining(Int(nN_TEST/nISQRT))
+    __oRTime1:SetRemaining(nN_TEST)
+    __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST STEP nISQRT
         ASSIGN cN:=hb_ntos(n)
         ASSIGN aFibonacci:=Fibonacci(cN)
@@ -3520,7 +3562,7 @@ static procedure tBigNtst36(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog," ------------ Teste Fibonacci -------------- END ")
+    __ConOut(fhLog,"------------ Teste Fibonacci -------------- END")
 
     __ConOut(fhLog,"")
     

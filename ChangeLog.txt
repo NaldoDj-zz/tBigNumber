@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 
 2015-05-02 19:47 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   - check.hb
@@ -27,3 +30,46 @@
 2015-05-18 17:58 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
     - Documentacao com exemplo em Python
+
+2015-06-02 21:25 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * bin/check.hb
+  * bin/commit.hb
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+  * src/tests/tBigNtst.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
+
+2015-06-02 21:29 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * bin/check.hb
+  * ChangeLog.txt
+  * bin/commit.hb
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+  * src/tests/tBigNtst.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
+
+2015-06-02 21:29 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * bin/check.hb
+  * ChangeLog.txt
+  * bin/commit.hb
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+  * src/tests/tBigNtst.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
+
+2015-06-02 21:30 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * bin/check.hb
+  * ChangeLog.txt
+  * bin/commit.hb
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+  * src/tests/tBigNtst.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
