@@ -683,7 +683,7 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
                 hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
                 hb_gtSelect(pGT)
                 atBigNtst[nD][4]:=nD
-                atBigNtst[nD][5]:=hb_ntos(nD)
+                atBigNtst[nD][5]:=hb_NtoS(nD)
             #endif
         EndIF
     next nD
@@ -1131,8 +1131,8 @@ Return(lHarbour)
                 IF (cRTime==cLRTime)
                     __oRTimeProc:Calcule(.F.)
                 EndIF
-                ASSIGN cRTime:="["+hb_ntos(__oRTimeProc:GetnProgress())
-                ASSIGN cRTime+="/"+hb_ntos(__oRTimeProc:GetnTotal())+"]"
+                ASSIGN cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
+                ASSIGN cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
                 ASSIGN cRTime+="["+DtoC(__oRTimeProc:GetdEndTime())+"]"
                 ASSIGN cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
                 ASSIGN cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
@@ -1250,11 +1250,11 @@ static procedure tBigNtst01(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
-        ASSIGN cX:=hb_ntos(x)
+        ASSIGN cX:=hb_NtoS(x)
         __oRTime2:SetRemaining(nN_TEST)
         __oRTime2:SetStep(nISQRT)
         For n:=nN_TEST To 1 Step -nISQRT
-            ASSIGN cN:=hb_ntos(n)
+            ASSIGN cN:=hb_NtoS(n)
             ASSIGN cW:=otBigN:SetValue(cX):MOD(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():MOD('+cN+')',"RESULT: "+cW)
             __oRTime2:Calcule()
@@ -1302,14 +1302,14 @@ static procedure tBigNtst02(fhLog)
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C*/
         __oRTime1:SetRemaining(5+1)
         For w:=0 To 5
-            ASSIGN cW:=hb_ntos(w)
+            ASSIGN cW:=hb_NtoS(w)
             otBigW:=cW
             __ConOut(fhLog,"otBigW:="+cW,"RESULT: "+otBigW:ExactValue())
             __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
             __oRTime2:SetRemaining(nISQRT)
             __oRTime2:SetStep(Int(nISQRT/2))
             For n:=1 To nISQRT Step Int(nISQRT/2)
-                ASSIGN cN:=hb_ntos(n)
+                ASSIGN cN:=hb_NtoS(n)
                 __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
 /*(*)*/            __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
 /*(*)*/            __ConOut(fhLog,"otBigW^="+cN,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
@@ -1392,13 +1392,13 @@ static procedure tBigNtst03(fhLog)
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
     
     Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
   
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
 
     Local n         AS NUMBER
     Local x         AS NUMBER
+    Local y         AS NUMBER
    
     Local aPFact    AS ARRAY
     
@@ -1419,7 +1419,8 @@ static procedure tBigNtst03(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST STEP nISQRT
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN y:=0
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN aPFact:=otBigN:SetValue(cN):PFactors()
         __oRTime2:SetRemaining(Len(aPFact))
         For x:=1 To Len(aPFact)
@@ -1431,8 +1432,9 @@ static procedure tBigNtst03(fhLog)
             otBigW:SetValue(cW)
             While otBigW:gt(o0)
 #endif
-                otBigW:SetValue(otBigW:Sub(o1))
-                __ConOut(fhLog,cN+':tBigNumber():PFactors()',"RESULT: "+aPFact[x][1])
+                
+                __ConOut(fhLog,cN+':tBigNumber():PFactors():'+hb_NtoS(x)+':'+otBigW:ExactValue()+':'+hb_NtoS(++y),"RESULT: "+aPFact[x][1])
+                otBigW:OpDec()
             End While
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
@@ -1544,12 +1546,12 @@ static procedure tBigNtst05(fhLog)
     For x:=0 TO (nISQRT*99) STEP 99
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN cHex:=otBigN:SetValue(cN):D2H("16"):Int()
         __ConOut(fhLog,cN+':tBigNumber():D2H(16)',"RESULT: "+cHex)
         ASSIGN cN:=otBH16:SetValue(cHex):H2D():Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-        __ConOut(fhLog,cN+"=="+hb_ntos(n),"RESULT: "+cValToChar(cN==hb_ntos(n)))
+        __ConOut(fhLog,cN+"=="+hb_NtoS(n),"RESULT: "+cValToChar(cN==hb_NtoS(n)))
         ASSIGN cN:=otBH16:H2B():Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         ASSIGN cHex:=otBBin:SetValue(cN):B2H('16'):Int()
@@ -1605,12 +1607,12 @@ static procedure tBigNtst06(fhLog)
     For x:=0 TO (nISQRT*99) STEP 99
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN cHex:=otBigN:SetValue(cN):D2H("32"):Int()
         __ConOut(fhLog,cN+':tBigNumber():D2H(32)',"RESULT: "+cHex)
         ASSIGN cN:=otBH32:SetValue(cHex):H2D("32"):Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-        __ConOut(fhLog,cN+"=="+hb_ntos(n),"RESULT: "+cValToChar(cN==hb_ntos(n)))
+        __ConOut(fhLog,cN+"=="+hb_NtoS(n),"RESULT: "+cValToChar(cN==hb_NtoS(n)))
         ASSIGN cN:=otBH32:H2B('32'):Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         ASSIGN cHex:=otBBin:SetValue(cN):B2H('32'):Int()
@@ -1670,9 +1672,9 @@ static procedure tBigNtst07(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n+=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="9999.9999999999"
@@ -1726,9 +1728,9 @@ static procedure tBigNtst08(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n+=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="9999.9999999999"
@@ -1778,9 +1780,9 @@ static procedure tBigNtst09(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n+=-9999.9999999999
-        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN+="-9999.9999999999"
@@ -1830,9 +1832,9 @@ static procedure tBigNtst10(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n-=9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN-="9999.9999999999"
@@ -1880,9 +1882,9 @@ static procedure tBigNtst11(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n-=9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN-="9999.9999999999"
@@ -1930,9 +1932,9 @@ static procedure tBigNtst12(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN n-=-9999.9999999999
-        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN-="-9999.9999999999"
@@ -1991,7 +1993,7 @@ static procedure tBigNtst13(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2001,7 +2003,7 @@ static procedure tBigNtst13(fhLog)
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN*="1.5"
@@ -2058,7 +2060,7 @@ static procedure tBigNtst14(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2068,7 +2070,7 @@ static procedure tBigNtst14(fhLog)
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN*="1.5"
@@ -2122,7 +2124,7 @@ static procedure tBigNtst15(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
@@ -2132,7 +2134,7 @@ static procedure tBigNtst15(fhLog)
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
         ASSIGN n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("1.5"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+otBigW:ExactValue())
@@ -2183,7 +2185,7 @@ static procedure tBigNtst16(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(w)
+        ASSIGN cN:=hb_NtoS(w)
         ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -2193,7 +2195,7 @@ static procedure tBigNtst16(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
         ASSIGN cN:=otBigW:ExactValue()
 #ifndef __PROTHEUS__
         otBigW*="3.555"
@@ -2254,7 +2256,7 @@ static procedure tBigNtst17(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(w)
+        ASSIGN cN:=hb_NtoS(w)
         ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -2264,7 +2266,7 @@ static procedure tBigNtst17(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -2322,7 +2324,7 @@ static procedure tBigNtst18(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         __oRTime2:SetStep()
-        ASSIGN cN:=hb_ntos(w)
+        ASSIGN cN:=hb_NtoS(w)
         ASSIGN w*=3.555
         ASSIGN z:=Len(cN)
         While ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -2332,7 +2334,7 @@ static procedure tBigNtst18(fhLog)
         While ((SubStr(cN,-1)=="*") .and. (z>1))
             ASSIGN cN:=SubStr(cN,1,--z)
         End While
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_ntos(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
         ASSIGN cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:rMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -2384,7 +2386,7 @@ static procedure tBigNtst19(fhLog)
     ASSIGN n:=0
     While (n<=nN_TEST)
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         #ifdef __PROTHEUS__
             otBigN:SetValue(cN)
         #else
@@ -2433,11 +2435,11 @@ static procedure tBigNtst20(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
-        ASSIGN cX:=hb_ntos(x)
+        ASSIGN cX:=hb_NtoS(x)
         __oRTime2:SetRemaining(nN_TEST)
         __oRTime2:SetStep(nISQRT)
         For n:=nN_TEST To 1 Step -nISQRT
-            ASSIGN cN:=hb_ntos(n)
+            ASSIGN cN:=hb_NtoS(n)
             ASSIGN cW:=otBigN:SetValue(cX):GCD(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
             ASSIGN cW:=otBigN:LCM(cN):ExactValue()
@@ -2487,12 +2489,12 @@ static procedure tBigNtst21(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For n:=0 TO nN_TEST Step nISQRT
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         __oRTime2:SetRemaining(nISQRT)
         __oRTime2:SetStep(nISQRT)
         For x:=0 TO nISQRT Step nISQRT
-            ASSIGN cX:=hb_ntos(x)
-            __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_ntos(n/x))
+            ASSIGN cX:=hb_NtoS(x)
+            __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_NtoS(n/x))
 #ifndef __PROTHEUS__
             otBigN:=cN
             otBigW:=(otBigN/cX)
@@ -2551,16 +2553,16 @@ static procedure tBigNtst22(fhLog)
 
     __ConOut(fhLog,"")
 
-    ASSIGN cN:=hb_ntos(n)
+    ASSIGN cN:=hb_NtoS(n)
     otBigN:SetValue(cN)
 
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cW:=hb_ntos(n)
+        ASSIGN cW:=hb_NtoS(n)
         ASSIGN n   /=1.5
-        __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_ntos(n))
+        __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
 #ifndef __PROTHEUS__
         otBigN/="1.5"
@@ -2613,9 +2615,9 @@ static procedure tBigNtst23(fhLog)
     __oRTime1:SetStep(nISQRT)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(x)
+        ASSIGN cN:=hb_NtoS(x)
         otBigN:SetValue(cN)
-        __ConOut(fhLog,cN+"/3","RESULT: "+hb_ntos(x/3))
+        __ConOut(fhLog,cN+"/3","RESULT: "+hb_NtoS(x/3))
 #ifndef __PROTHEUS__
         otBigN/=o3
 #else
@@ -2669,7 +2671,7 @@ static procedure tBigNtst24(fhLog)
     __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
         __oRTime2:Calcule()
         __oRTime1:Calcule()
@@ -2723,8 +2725,8 @@ static procedure tBigNtst25(fhLog)
     For x:=((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
-        ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_ntos(SQRT(n)))
+        ASSIGN cN:=hb_NtoS(n)
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NtoS(SQRT(n)))
         otBigN:SetValue(cN)
         otBigW:SetValue(otBigN:SQRT())
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigW:ExactValue())
@@ -2783,8 +2785,8 @@ static procedure tBigNtst26(fhLog)
     For x:=1 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
-        ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_ntos(SQRT(n)))
+        ASSIGN cN:=hb_NtoS(n)
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NtoS(SQRT(n)))
 #ifndef __PROTHEUS__
         otBigN:=cN
         otBigN:=otBigN:SQRT()
@@ -2843,8 +2845,8 @@ static procedure tBigNtst27(fhLog)
     For x:=0 TO nISQRT
         __oRTime2:SetRemaining(1)
         ASSIGN n:=x
-        ASSIGN cN:=hb_ntos(n)
-        __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_ntos(Exp(n)))
+        ASSIGN cN:=hb_NtoS(n)
+        __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_NtoS(Exp(n)))
 #ifndef __PROTHEUS__
     otBigN:=cN
 #else
@@ -2905,13 +2907,13 @@ static procedure tBigNtst28(fhLog)
     __oRTime1:SetStep(nISQRT)
     //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
     For x:=IF(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT
-        ASSIGN cN:=hb_ntos(x)
+        ASSIGN cN:=hb_NtoS(x)
         __oRTime2:SetRemaining(nISQRT)
         For w:=-nISQRT To 0
-            ASSIGN cW:=hb_ntos(w)
+            ASSIGN cW:=hb_NtoS(w)
             ASSIGN n:=x
             ASSIGN n:=(n^w)
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_ntos(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
 #ifndef __PROTHEUS__
             otBigN:=cN
 #else
@@ -2979,14 +2981,14 @@ static procedure tBigNtst29(fhLog)
     __oRTime1:SetRemaining(nISQRT)
     __oRTime1:SetStep(5)
     For x:=0 TO nISQRT STEP 5
-        ASSIGN cN:=hb_ntos(x)
+        ASSIGN cN:=hb_NtoS(x)
         __oRTime2:SetRemaining(nISQRT)
         __oRTime2:SetStep(5)
         For w:=0 To nISQRT STEP 5
-            ASSIGN cW:=hb_ntos(w+.5)
+            ASSIGN cW:=hb_NtoS(w+.5)
             ASSIGN n:=x
             ASSIGN n:=(n^(w+.5))
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_ntos(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
             #ifndef __PROTHEUS__
                 otBigN:=cN
             #else
@@ -3315,9 +3317,9 @@ static procedure tBigNtst32(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For w:=0 TO nN_TEST Step nISQRT
-        ASSIGN cW:=hb_ntos(w)
+        ASSIGN cW:=hb_NtoS(w)
         otBigW:SetValue(cW)
-        __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_ntos(Log(w)))
+        __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_NtoS(Log(w)))
         ASSIGN cX:=otBigW:SetValue(cW):Log():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
          otBigN:SetValue(cX)
@@ -3330,7 +3332,7 @@ static procedure tBigNtst32(fhLog)
         __ConOut(fhLog,__cSep)
         __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5)+1)
         For n:=0 TO INT(MAX(nISQRT,5)/5)
-            ASSIGN cN:=hb_ntos(n)
+            ASSIGN cN:=hb_NtoS(n)
             ASSIGN cX:=otBigW:SetValue(cW):Log(cN):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             otBigN:SetValue(cX)
@@ -3388,7 +3390,7 @@ static procedure tBigNtst33(fhLog)
     __oRTime1:SetStep(nISQRT)
     For w:=0 TO nN_TEST Step nISQRT
         __oRTime2:SetRemaining(1)
-        ASSIGN cW:=hb_ntos(w)
+        ASSIGN cW:=hb_NtoS(w)
         ASSIGN cX:=otBigW:SetValue(cW):Ln():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
         __oRTime2:Calcule()
@@ -3443,7 +3445,7 @@ static procedure tBigNtst34(fhLog)
             __oRTime1:SetStep(2)
             ASSIGN n+=2
         EndIF
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN lPn:=oPrime:IsPrime(cN,.T.)
         ASSIGN lMR:=IF(lPn,lPn,otBigN:SetValue(cN):millerRabin(o2))
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+IF(lMR,"","   "))
@@ -3538,12 +3540,12 @@ static procedure tBigNtst36(fhLog)
     __oRTime1:SetRemaining(nN_TEST)
     __oRTime1:SetStep(nISQRT)
     For n:=1 To nN_TEST STEP nISQRT
-        ASSIGN cN:=hb_ntos(n)
+        ASSIGN cN:=hb_NtoS(n)
         ASSIGN aFibonacci:=Fibonacci(cN)
         __oRTime2:SetRemaining(Len(aFibonacci))
         For x:=1 To Len(aFibonacci)
             ASSIGN cW:=aFibonacci[x]
-            __ConOut(fhLog,'Fibonacci('+cN+')',"RESULT: "+cW)
+            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(x),"RESULT: "+cW)
             __oRTime2:Calcule()
             __oRTime1:Calcule(.F.)
         Next x
