@@ -2,6 +2,19 @@
  * $Id$
  */
 
+/* Read doc/howtorep.txt and use this format for entry headers:
+   YYYY*MM*DD HH:MM UTC[*|+]hhmm Your Full Name (your_email address)
+   2013*12*31 13:59 UTC+0100 Foo Bar (foo.bar foobar.org)
+   See copyright/license at the end of the file.
+   Encoding: UTF*8 (No BOM)  Notation (in 5th position):
+     * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
+ */
+
+2015-06-14 15:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * ChangeLog.txt
+  * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
+  * src/tests/tBigNtst.prg
+ 
 2015-06-11 00:22 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
