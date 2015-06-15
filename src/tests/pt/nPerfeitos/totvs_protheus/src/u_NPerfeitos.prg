@@ -95,7 +95,7 @@
         Else
             ASSIGN bExec:={|lEnd,oProcess|ProcRedefine(@oProcess,@oFont,0,600,600,.T.,.T.),NPerfeitos(@lIsBlind,@oProcess)}
             ASSIGN oFont:=TFont():New("COURIER NEW",NIL,14,NIL,.T.)
-            ASSIGN oProcess:=MsNewProcess():New(bExec,OemToAnsi("Números Perfeitos :: http://www.blacktdn.com.br"),"Calculando...",.T.)
+            ASSIGN oProcess:=MsNewProcess():New(bExec,OemToAnsi("Numeros Perfeitos :: http://www.blacktdn.com.br"),"Calculando...",.T.)
             oProcess:Activate()
             IF .NOT.(oProcess:lEnd)
                 oProcess:oDlg:End()
@@ -176,13 +176,13 @@
                 ASSIGN nWait:=0
                 MakeDir(NP_PATHLCK)
                 IF (++nWait>NP_GRIDBMAXWAIT)
-                    UserException(OemToAnsi("[NP_EXCEPTION][NPerfeitos][Impossível Criar Diretório: "+NP_PATHLCK+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][NPerfeitos][Impossivel Criar Diretorio: "+NP_PATHLCK+"]"))
                 EndIF
             End While
 
             Set(4,"dd/mm/yyyy")
 
-            ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Números Perfeitos: Início do Processamento...]"))
+            ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Numeros Perfeitos: Inicio do Processamento...]"))
 
             IF .NOT.(OpenDBs(@aDBs,.T.))
                 ASSIGN nWait:=0
@@ -197,11 +197,11 @@
 
             IF .NOT.(File(NP_FILELCK))
                 IF .NOT.(LockNPFile(@NP_FILELCK,FO_COMPAT))
-                    UserException(OemToAnsi("[NP_EXCEPTION][NPerfeitos][Impossível Criar arquivo: "+NP_FILELCK+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][NPerfeitos][Impossivel Criar arquivo: "+NP_FILELCK+"]"))
                 EndIF
             EndIF
 
-            ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Números Perfeitos: Início do Cálculo]"))
+            ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Numeros Perfeitos: Inicio do Calculo]"))
             ConOut(OemToAnsi("[NP_MSG][NPerfeitos](Para encerrar o Processamento, exclua o arquivo "+NP_FILELCK+")"))
 
             ASSIGN oNI:=tBigNumber():New()
@@ -227,7 +227,7 @@
                 While ((++nWait)<=nSL)
                     ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
                     ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-                    ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Media"+":["+oRTime1:GetcAverageTime()+"]"
                     oProcess:IncRegua1(cIncRegua)
                     oRTime1:Calcule()
                     IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
@@ -247,7 +247,7 @@
                 IF (lProcessa)
                     ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
                     ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-                    ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+                    ASSIGN cIncRegua+=" | "+"Media"+":["+oRTime1:GetcAverageTime()+"]"
                     oProcess:IncRegua1(cIncRegua)
                     IF (oProcess:lEnd)
                         UnLockNPFile(@NP_FILELCK)
@@ -274,7 +274,7 @@
 
                         IKillApp(.T.)
 
-                        oNG:SetValue(oNG:Add("1"))
+                        oNG:OpInc()
                         oNF:SetValue(oNI:Add(oNP))
 
                         IF (oNF:gt(oMG))
@@ -409,7 +409,7 @@
 
         aEval(__aLockNPFile,{|e|UnLockNPFile(e[1])})
 
-        ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Números Perfeitos: Final do Processamento...]"),"","")
+        ConOut("","",OemToAnsi("[NP_MSG][NPerfeitos][Numeros Perfeitos: Final do Processamento...]"),"","")
 
         IF .NOT.(lSetCentury)
             __SetCentury("off")
@@ -453,7 +453,7 @@
             ASSIGN lPrepEnv:=OpenDBs(@aDBs,.F.)
 
             IF .NOT.(lPrepEnv)
-                UserException(OemToAnsi("[U_GMathPEnv][Problema na Preparação do Ambiente. Impossível Abrir aruivos de Trabalho]"))
+                UserException(OemToAnsi("[U_GMathPEnv][Problema na Preparacao do Ambiente. Impossivel Abrir arquivos de Trabalho]"))
             EndIF
 
             ASSIGN &(NP_PRVT_NPLPENV):=.T.
@@ -785,11 +785,11 @@
         PARAMTYPE 1 VAR lKillApp AS LOGICAL OPTIONAL DEFAULT .T.
 
         IF .NOT.(File(NP_FILELCK))
-            ConOut("","",OemToAnsi("[NP_WARNING][IKillApp][Finalização Forçada. Arquivo "+NP_FILELCK+" não encontrado]"))
+            ConOut("","",OemToAnsi("[NP_WARNING][IKillApp][Finalizacao Forcada. Arquivo "+NP_FILELCK+" nao encontrado]"))
             IF (lKillApp)
                 KillApp(lKillApp)
             Else
-                UserException(OemToAnsi("[NP_EXCEPTION][IKillApp][Finalização Forçada. Arquivo "+NP_FILELCK+" não encontrado]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][IKillApp][Finalizacao Forcada. Arquivo "+NP_FILELCK+" nao encontrado]"))
             EndIF
         EndIF
 
@@ -853,7 +853,6 @@
         Local lLockFile AS LOGICAL
 
         Local o0        AS OBJECT CLASS "TBIGNUMBER"
-        Local o1        AS OBJECT CLASS "TBIGNUMBER"
         Local oN        AS OBJECT CLASS "TBIGNUMBER"
         Local oSm       AS OBJECT CLASS "TBIGNUMBER"
         Local oP1       AS OBJECT CLASS "TBIGNUMBER"
@@ -931,16 +930,15 @@
             ASSIGN oN:=tBigNumber():New(cN)
 
             ASSIGN o0:=tBigNumber():New("0")
-            ASSIGN o1:=tBigNumber():New("1")
             ASSIGN oSm:=tBigNumber():New(o0)
-            ASSIGN oP1:=tBigNumber():New(o1)
+            ASSIGN oP1:=tBigNumber():New("1")
 
             While (oP1:lt(@oN))
                 IKillApp(.F.)
                 IF (oN:Mod(oP1):eq(o0))
                      oSm:SetValue(oSm:Add(oP1))
                 EndIF
-                oP1:SetValue(oP1:Add(o1))
+                oP1:SetValue(oP1:OpInc())
             End While
 
             ASSIGN lPerfect:=oN:eq(oSm)
@@ -1164,7 +1162,7 @@
                     ASSIGN nTcLink:=AdvConnection()
                     IF .NOT.(Empty(nTcLink))
                         IF (nTcLink==-1)
-                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível conectar ao DBMS]"))
+                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel conectar ao DBMS]"))
                         EndIF
                     EndIF
                 EndIF
@@ -1191,11 +1189,11 @@
             IF (lNotShared)
 
                 IF .NOT.(UnLockNPFile(@NP_LOCKBYFNAME))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível Obter Exclusividade para Criação das Tabelas para o Inicio do Processamento]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel Obter Exclusividade para Criacao das Tabelas para o Inicio do Processamento]"))
                 EndIF
 
                 IF .NOT.(LockNPFile(@NP_LOCKBYFNAME))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível Obter Exclusividade para Criação das Tabelas para o Inicio do Processamento]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel Obter Exclusividade para Criacao das Tabelas para o Inicio do Processamento]"))
                 EndIF
 
             EndIF
@@ -1206,12 +1204,12 @@
 
             IF .NOT.(MsFile(cDBIP,NIL,__cNPRDD))
                 IF .NOT.(MsCreate(cDBIP, @aDBIP,@__cNPRDD))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossível Criar: "+cDBIP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossivel Criar: "+cDBIP+"]"))
                 EndIF
             EndIF
 
             IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.NOT.(lNotShared),.F.,.T.,.F.))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
             EndIF
 
             ASSIGN lPMaxNumP:=(Len((__cAliasIP)->IP_NUMBER)<__nPMaxNumP)
@@ -1254,10 +1252,10 @@
                     ASSIGN cDBTmp:=CriaTrab(NIL,.F.)+IF(__lTopConn,"",IF(__ldbfCDXAds,GetDBExtension(),IF(__lCtreeCDX,GetDBExtension(),"")))
                     (__cAliasIP)->(dbCloseArea())
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.T.,.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
                     EndIF
                     IF .NOT.((__cAliasIP)->(MsCopyFile(cDBIP,cDBTmp,__cNPRDD)))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível renomear tabela "+ cDBIP+" para Recriacao]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel renomear tabela "+ cDBIP+" para Recriacao]"))
                     EndIF
                 EndIF
                 (__cAliasIP)->(tbDropIndex(__cAliasIP,cIDIP,aOrdBagIP))
@@ -1265,20 +1263,20 @@
                 IF .NOT.(MsErase(cDBIP,NIL,__cNPRDD))
                     IF File(cDBIP)
                         IF .NOT.(fErase(cDBIP)==0)
-                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível dropar tabela "+ cDBIP+" para Recriacao]"))
+                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel dropar tabela "+ cDBIP+" para Recriacao]"))
                         EndIF
                     EndIF
                 EndIF
                 IF .NOT.(MsCreate(cDBIP, @aDBIP,@__cNPRDD))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossível Criar: "+cDBIP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossivel Criar: "+cDBIP+"]"))
                 EndIF
                 IF (lPMaxNumP)
                     ASSIGN cAliasTmp:=GetNextAlias()
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBTmp,@cAliasTmp,.T.,.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBTmp+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBTmp+"]"))
                     EndIF
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.NOT.(lNotShared),.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
                     EndIF
                     (__cAliasIP)->(MsAppEnd(cDBIP,cDBTmp))
                     (cAliasTmp)->(dbCloseArea())
@@ -1286,7 +1284,7 @@
                 EndIF
                 (__cAliasIP)->(dbCloseArea())
                 IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.NOT.(lNotShared),.F.,.T.,.F.))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
                 EndIF
             EndIF
 
@@ -1294,16 +1292,16 @@
                 (__cAliasIP)->(tbDropIndex(__cAliasIP,cIDIP,aOrdBagIP))
                 (__cAliasIP)->(dbCloseArea())
                 IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.NOT.(lNotShared),.F.,.T.,.F.))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
                 EndIF
             EndIF
 
             IF .NOT.((__cAliasIP)->(tbCreateIndex(@__cAliasIP,@cIDIP,@aOrdBagIP)))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível Indexar: "+cIDIP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel Indexar: "+cIDIP+"]"))
             EndIF
             (__cAliasIP)->(dbCloseArea())
             IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBIP,@__cAliasIP,.NOT.(lNotShared),.F.,.T.,.F.))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBIP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBIP+"]"))
             EndIF
             (__cAliasIP)->(tbCreateIndex(@__cAliasIP,@cIDIP,@aOrdBagIP))
 
@@ -1311,12 +1309,12 @@
 
             IF .NOT.(MsFile(cDBNP,NIL,__cNPRDD))
                 IF .NOT.(MsCreate(cDBNP, @aDBNP,@__cNPRDD))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossível Criar: "+cDBNP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossivel Criar: "+cDBNP+"]"))
                 EndIF
             EndIF
 
             IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.NOT.(lNotShared),.F.,.T.,.F.))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
             EndIF
 
             ASSIGN lPMaxNumP:=(Len((__cAliasNP)->NP_NUMBER)<__nPMaxNumP)
@@ -1359,10 +1357,10 @@
                     ASSIGN cDBTmp:=CriaTrab(NIL,.F.)+IF(__lTopConn,"",IF(__ldbfCDXAds,GetDBExtension(),IF(__lCtreeCDX,GetDBExtension(),"")))
                     (__cAliasNP)->(dbCloseArea())
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.T.,.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
                     EndIF
                     IF .NOT.((__cAliasNP)->(MsCopyFile(cDBNP,cDBTmp,__cNPRDD)))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível renomear tabela "+ cDBNP+" para Recriacao]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel renomear tabela "+ cDBNP+" para Recriacao]"))
                     EndIF
                 EndIF
                 (__cAliasNP)->(tbDropIndex(__cAliasNP,cIDNP,aOrdBagNP))
@@ -1370,20 +1368,20 @@
                 IF .NOT.(MsErase(cDBNP,NIL,__cNPRDD))
                     IF File(cDBNP)
                         IF .NOT.(fErase(cDBNP)==0)
-                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível dropar tabela "+ cDBNP+" para Recriacao]"))
+                            UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel dropar tabela "+ cDBNP+" para Recriacao]"))
                         EndIF
                     EndIF
                 EndIF
                 IF .NOT.(MsCreate(cDBNP, @aDBNP,@__cNPRDD))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossível Criar: "+cDBNP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs]Impossivel Criar: "+cDBNP+"]"))
                 EndIF
                 IF (lPMaxNumP)
                     ASSIGN cAliasTmp:=GetNextAlias()
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBTmp,@cAliasTmp,.T.,.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBTmp+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBTmp+"]"))
                     EndIF
                     IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.NOT.(lNotShared),.F.,.T.,.F.))
-                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                        UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
                     EndIF
                     (__cAliasNP)->(MsAppEnd(cDBNP,cDBTmp))
                     (cAliasTmp)->(dbCloseArea())
@@ -1391,7 +1389,7 @@
                 EndIF
                 (__cAliasNP)->(dbCloseArea())
                 IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.NOT.(lNotShared),.F.,.T.,.F.))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
                 EndIF
             EndIF
 
@@ -1400,16 +1398,16 @@
                 (__cAliasNP)->(dbClearIndex())
                 (__cAliasNP)->(dbCloseArea())
                 IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.NOT.(lNotShared),.F.,.T.,.F.))
-                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                    UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
                 EndIF
             EndIF
 
             IF .NOT.((__cAliasNP)->(tbCreateIndex(@__cAliasNP,@cIDNP,@aOrdBagNP)))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível Indexar: "+cIDNP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel Indexar: "+cIDNP+"]"))
             EndIF
             (__cAliasNP)->(dbCloseArea())
             IF .NOT.(MsOpenDbf(.T.,@__cNPRDD,@cDBNP,@__cAliasNP,.NOT.(lNotShared),.F.,.T.,.F.))
-                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossível abrir: "+cDBNP+"]"))
+                UserException(OemToAnsi("[NP_EXCEPTION][OpenDBs][Impossivel abrir: "+cDBNP+"]"))
             EndIF
             (__cAliasNP)->(tbCreateIndex(@__cAliasNP,@cIDNP,@aOrdBagNP))
 
@@ -1771,12 +1769,12 @@
             For nBag:=1 To nBags
                 IF (cAlias)->(MsFile(cBagName,aOrdBag[nBag][3],cRddName))
                     MsErase(cBagName,aOrdBag[nBag][3],cRddName)
-                 EndIF
+                EndIF
             Next nBag
-             MsErase(cBagName,cBagName,cRddName)
-             IF File(cBagName)
+            MsErase(cBagName,cBagName,cRddName)
+            IF File(cBagName)
                  fErase(cBagName)
-             EndIF
+            EndIF
             ASSIGN lDropOK:=.NOT.(File(cBagName))
             (cAlias)->(dbClearIndex())
         EndIF
@@ -1815,7 +1813,7 @@
                     Else
                         ASSIGN cQuery:=("Drop Index "+aOrdBag[nBag][3])
                     EndIF
-                       ASSIGN lDropped:=(TcSqlExec(cQuery)==0)
+                    ASSIGN lDropped:=(TcSqlExec(cQuery)==0)
                 Else
                     ASSIGN lDropped:=MsErase(cTable,aOrdBag[nBag][3],"TOPCONN")
                 EndIF
@@ -1889,7 +1887,7 @@
         oRTime2:Calcule(.T.)
         ASSIGN cIncRegua:="["+oProgress2:Eval("RANDOM")+"]"
         ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime2:GetdEndTime())+"]["+oRTime2:GetcEndTime()+"]"
-        ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime2:GetcAverageTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Media"+":["+oRTime2:GetcAverageTime()+"]"
         IF .NOT.(Empty(aGPCall))
             ASSIGN cIncRegua+=" | [Interval]["+aGPCall[1][1]+":"+aGPCall[Len(aGPCall)][2]+"]"
         EndIF
@@ -1900,7 +1898,7 @@
         oRTime1:Calcule(.F.)
         ASSIGN cIncRegua:="["+oProgress1:Eval("DISJUNCTION")+"]"
         ASSIGN cIncRegua+=" | "+"Final"+":["+DtoC(oRTime1:GetdEndTime())+"]["+oRTime1:GetcEndTime()+"]"
-        ASSIGN cIncRegua+=" | "+"Média"+":["+oRTime1:GetcAverageTime()+"]"
+        ASSIGN cIncRegua+=" | "+"Media"+":["+oRTime1:GetcAverageTime()+"]"
         //----------------------------------------------------------------------------------------------
         oProcess:cMsg1:=cIncRegua
         oProcess:oMsg1:Refresh(.T.)

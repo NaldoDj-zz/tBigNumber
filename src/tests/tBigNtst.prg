@@ -712,8 +712,6 @@ Return
 Static Procedure __ConOut(fhLog,e,d)
 
     Local ld    AS LOGICAL
-    Local lSep  AS LOGICAL
-    Local lMRow AS LOGICAL
     Local lTBeg AS LOGICAL
 
     Local p     AS CHARACTER
@@ -728,6 +726,8 @@ Static Procedure __ConOut(fhLog,e,d)
     Local cDOAt  AS CHARACTER
     Local nLines AS NUMBER
     Local nCLine AS NUMBER
+    Local lSep   AS LOGICAL
+    Local lMRow  AS LOGICAL
 
 #endif
 
@@ -815,6 +815,10 @@ Static Procedure __ConOut(fhLog,e,d)
     EndIF
 
 #else
+    lTBeg:=("BEGIN ------------"$p)
+    IF (lTBeg)
+        PTInternal(1,"[tBigNTST]["+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"]")
+    EndIF
     ? p
 #endif
 
