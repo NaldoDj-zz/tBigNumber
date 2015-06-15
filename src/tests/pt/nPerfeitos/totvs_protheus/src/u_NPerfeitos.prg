@@ -313,7 +313,7 @@
                                 BREAK
                             ENDIF
                             #IFNDEF __DEBUGNP
-                                ASSIGN oGClient:=GridClient():New()
+                                DEFAULT oGClient:=GridClient():New()
                                 ASSIGN oGClient:lBlind:=.T.    //Nao Executa a Processa
                                 ASSIGN lGridC:=oGClient:ConnectCoord()
                                 IF .NOT.(lGridC)
@@ -327,8 +327,6 @@
                                         ASSIGN lGridC:=.F.
                                         aEval(aGPCall,{|e,y|aGPCall[y][3]:=lGridC,U_GMathCall(@e),IF(lProcessa,IncRegua(@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall),NIL)})
                                     EndIF
-                                    StartGJob(@oGClient,.F.)
-                                    oGClient:=FreeObj(oGClient)
                                 Else
                                     BREAK
                                 EndIF
@@ -1646,22 +1644,19 @@
 
             IF (lServer)
                 StartJob("GridServer",cSEnv,.F.)
-                ASSIGN nWait:=0
-                While ((++nWait)<=NP_GRIDBMAXWAIT)
-                    Sleep(NP_SLEEP_MIN)
-                End While
             EndIF
 
-            ASSIGN nInstances:=Val(GetPvProfString("GridAgent","Instances",GetEnvServer(),GetSrvIniName()))
+            ASSIGN nInstances:=Val(GetPvProfString("GridAgent","Instances",cAEnv,cIni))
             While (nInstances>0)
                 --nInstances
                 StartJob("GridAgent",cAEnv,.F.)
-                ASSIGN nWait:=0
-                While ((++nWait)<=NP_GRIDBMAXWAIT)
-                    Sleep(NP_SLEEP_MIN)
-                End While
             End While
 
+            ASSIGN nWait:=0
+            While ((++nWait)<=NP_GRIDBMAXWAIT)
+                Sleep(NP_SLEEP_MIN)
+            End While
+            
             IF .NOT.(ValType(oGClient)=="O")
                 ASSIGN oGClient:=GridClient():New()
                 ASSIGN oGClient:lBlind:=.T.    //Nao Executa a Processa
