@@ -8,7 +8,7 @@
     #include "tryexception.ch"
 
     #DEFINE NP_GRID             "100"           //Informe um Numero Par
-    #DEFINE NP_THREAD           5               //Numero de Threads Concorrentes
+    #DEFINE NP_THREAD           150             //Numero de Threads Concorrentes
     #DEFINE NP_MAXZERO          25              //0000000000000000000000000  | How big do you want?
     #DEFINE NP_MAXNUMP          (NP_MAXZERO+1)  //10000000000000000000000000 | MASK: 10.000.000.000.000.000.000.000.000
     #DEFINE NP_PATHLCK          "\np_semaforo\"
@@ -40,13 +40,13 @@
         Static __lTopConn       AS LOGICAL      VALUE .T.
         Static __lCtreeCDX      AS LOGICAL      VALUE .F.
         Static __ldbfCDXAds     AS LOGICAL      VALUE .F.
-        #DEFINE NP_SLEEP_MIN    250
-        #DEFINE NP_SLEEP_MED    500
-        #DEFINE NP_SLEEP_MAX    1500
+        #DEFINE NP_SLEEP_MIN    100
+        #DEFINE NP_SLEEP_MED    NP_SLEEP_MIN*2
+        #DEFINE NP_SLEEP_MAX    NP_SLEEP_MIN*3
     #ELSE
-        #DEFINE NP_SLEEP_MIN    150
-        #DEFINE NP_SLEEP_MED    300
-        #DEFINE NP_SLEEP_MAX    500
+        #DEFINE NP_SLEEP_MIN    050
+        #DEFINE NP_SLEEP_MED    NP_SLEEP_MIN*2
+        #DEFINE NP_SLEEP_MAX    NP_SLEEP_MIN*3
         #IFDEF NP_CTREE
             Static __cNPRDD      AS CHARACTER   VALUE "CTREECDX"
             Static __lTopConn    AS LOGICAL     VALUE .F.
@@ -219,7 +219,8 @@
 
             ASSIGN cNI:=GetStartNumber(.F.,@lProcessa,@oProcess,@oProgress1,@oProgress2,@oRTime1,@oRTime2,@nIncRegua,@aGPCall)
             ASSIGN nSL:=Len(cNI)
-
+            
+            
             IF (lProcessa)
                 oProcess:SetRegua1(nEL)
                 oProcess:SetRegua2(NP_MAXINCREGUA2)
@@ -647,7 +648,6 @@
                     IKillApp(.F.)
                     IF .NOT.(aThread[nID][1])
                         StartJob("U__NPGJOB",cEnvServer,.F.,aThread[nID][3],aThread[nID][2],aThread[nID][4],aThread[nID][5],aThread[nID][6])
-                        Sleep(NP_SLEEP_MAX)
                     EndIF
                 Next nID
 
@@ -685,7 +685,6 @@
                             Sleep(NP_SLEEP_MED)
                             UnLockNPFile(@cNPFile)
                             StartJob("U__NPGJOB",cEnvServer,.F.,aThread[nID][3],aThread[nID][2],aThread[nID][4],aThread[nID][5],aThread[nID][6])
-                            Sleep(NP_SLEEP_MAX)
                             Loop
                         EndIF
 
@@ -719,7 +718,6 @@
                             IF .NOT.(lFound)
                                 ConOut("","","[NP_WARNING][MathIPNum]["+aThread[nID][3]+"][Not Found][Restart]")
                                 StartJob("U__NPGJOB",cEnvServer,.F.,aThread[nID][3],aThread[nID][2],aThread[nID][4],aThread[nID][5],aThread[nID][6])
-                                Sleep(NP_SLEEP_MAX)
                             EndIF
                         EndIF
 

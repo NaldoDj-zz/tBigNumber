@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-06 23:27 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
+ 
 2015-06-15 12:42 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg 
  
