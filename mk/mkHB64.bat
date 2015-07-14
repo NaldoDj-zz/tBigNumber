@@ -5,13 +5,22 @@ D:
 CD D:\GitHub\tBigNumber\mk\
 SET > env_mkHB64.txt
     SET HB_PATH=D:\GitHub\core\
-    SET MinGW64_PATH=D:\MinGW64\BIN\
+    SET MinGW64_PATH=D:\mingw64\bin\
     SET PATH=%PATH%;%HB_PATH%
     SET PATH=%PATH%;%MinGW64_PATH%
     SET HB_CPU=x86_64
     SET HB_PLATFORM=win
     SET HB_COMPILER=mingw64
     SET HB_CCPATH=%MinGW64_PATH%
+    IF EXIST D:\OpenSSL-Win64\include (
+        SET HB_WITH_OPENSSL=D:\OpenSSL-Win64\include
+    )
+    IF EXIST D:\FreeImage\Dist (
+        SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist
+    )
+    IF EXIST D:\mxml (
+        SET HB_WITH_MXML=D:\mxml
+    )    
     rem SET HB_BUILD_VERBOSE=yes
        D:
        CD %HB_PATH%

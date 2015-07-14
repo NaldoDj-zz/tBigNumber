@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-14 00:13 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * mk/mkHB.bat
+  * mk/mkHB64.bat
+ 
 2015-07-10 13:17 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * mk/mkHB.bat
   * mk/mkHB64.bat
