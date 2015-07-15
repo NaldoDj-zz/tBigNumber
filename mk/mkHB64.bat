@@ -15,8 +15,8 @@ SET > env_mkHB64.txt
     IF EXIST D:\OpenSSL-Win64\include (
         SET HB_WITH_OPENSSL=D:\OpenSSL-Win64\include
     )
-    IF EXIST D:\FreeImage\Dist (
-        SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist
+    IF EXIST D:\FreeImage\Dist\x64 (
+        SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist\x64
     )
     IF EXIST D:\mxml (
         SET HB_WITH_MXML=D:\mxml

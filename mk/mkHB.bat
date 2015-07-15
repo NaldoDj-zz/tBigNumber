@@ -5,7 +5,7 @@ D:
 CD D:\GitHub\tBigNumber\mk\
 SET > env_mkHB.txt 
     SET HB_PATH=D:\GitHub\core\
-    SET MinGW_PATH=D:\TDM-GCC-32\bin\
+    SET MinGW_PATH=D:\mingw\bin\
     SET PATH=%_PATH%;%HB_PATH%
     SET PATH=%PATH%;%MinGW_PATH%
     SET HB_CPU=x86
@@ -15,8 +15,8 @@ SET > env_mkHB.txt
     IF EXIST D:\OpenSSL-Win32\include (
         SET HB_WITH_OPENSSL=D:\OpenSSL-Win32\include
     )    
-    IF EXIST D:\FreeImage\Dist (
-        SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist
+    IF EXIST D:\FreeImage\Dist\x32 (
+        SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist\x32
     )
     IF EXIST D:\mxml (
         SET HB_WITH_MXML=D:\mxml
