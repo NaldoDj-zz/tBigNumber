@@ -4294,7 +4294,7 @@ method Fibonacci() class tBigNumber
 #ifdef __HARBOUR__
     While (oA<oN)
         aAdd(aFibonacci,oA:ExactValue())
-        oT:=oB:Clone
+        oT:=oB:Clone()
         oB:=oA+oB
         oA:=oT
    End While
