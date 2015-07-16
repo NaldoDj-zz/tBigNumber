@@ -13,6 +13,8 @@ Class tBigNThreads
     data nThreads
     data nMemMode
     data nThreadID
+    
+    data nMtxJob
 
     EXPORTED:
     
@@ -45,6 +47,7 @@ method new(nThreads) class tBigNThreads
     self:aRChilds:=Array(0)
     self:nMemMode:=NIL
     self:nThreadID:=hb_ThreadID()
+    self:nMtxJob:=hb_mutexCreate()
 return(self)
 
 method Start(nThreads,nMemMode) class tBigNThreads
@@ -69,20 +72,19 @@ method Start(nThreads,nMemMode) class tBigNThreads
     endif
     nThreads:=self:nThreads    
     for nThread:=nStart to nThreads
-        self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
         self:aThreads[nThread][TH_EXE]:=NIL
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:=.F.
         if (nMemMode==NIL)
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads)
         else
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads)
         endif
         while (self:aThreads[nThread][TH_NUM]==NIL)
             if (nMemMode==NIL)
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads)
             else
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads)
             endif
         end while
     next nThread
@@ -100,7 +102,7 @@ method Notify() class tBigNThreads
     for nThread:=1 to self:nThreads
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:=.F.
-        hb_mutexNotify(self:aThreads[nThread][TH_MTX],nThread)
+        hb_mutexNotify(self:nMtxJob,nThread)
     next nThread
 return(self)
 
@@ -110,11 +112,8 @@ method Wait() class tBigNThreads
     local nThCount:=0
     while .T.
         for nThread:=1 to nThreads
-            if hb_mutexLock(self:aThreads[nThread][TH_MTX])
-                if self:aThreads[nThread][TH_END]
-                    ++nThCount
-                endif
-                hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
+            if self:aThreads[nThread][TH_END]
+                ++nThCount
             endif
         next nThread
         if (nThCount==nThreads)
@@ -127,13 +126,10 @@ return(self)
 method Join() class tBigNThreads
     local nThread
     for nThread:=1 to self:nThreads
-        hb_mutexNotify(self:aThreads[nThread][TH_MTX],{||break()})
-        if .not.(self:aThreads[nThread][TH_NUM]==NIL)
-            if hb_threadJoin(self:aThreads[nThread][TH_NUM])
-                self:aThreads[nThread][TH_NUM]:=NIL
-            endif
-        endif
-    next nThread
+        hb_mutexNotify(self:nMtxJob,{||break()})
+        hb_threadQuitRequest(self:aThreads[nThread][TH_NUM])
+        self:aThreads[nThread][TH_NUM]:=NIL
+    next nTread
 return(self)
 
 method addEvent(uthEvent) class tBigNThreads
@@ -206,8 +202,6 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                     hb_ExecFromArray(xJob)
                     exit
                 case "N"
-                    while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
-                    end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
                     case "A"
@@ -220,7 +214,6 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                         aThreads[xJob][TH_RES]:=NIL
                     endswitch
                     aThreads[xJob][TH_END]:=.T.
-                    hb_MutexUnLock(aThreads[xJob][TH_MTX])
                     exit
                 endswitch
             endif
