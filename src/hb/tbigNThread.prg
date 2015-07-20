@@ -182,7 +182,7 @@ method procedure clearAllResults() class tBigNThreads
 return
 
 method procedure setSleep(nSleep) class tBigNThreads
-    DEFAULT nSleep:=0
+    DEFAULT nSleep:=0.01
     self:nSleep:=nSleep
 return
 

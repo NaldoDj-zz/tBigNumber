@@ -4247,7 +4247,6 @@ static function recFact(oS,oN)
 
 #ifndef __PTCOMPAT__
     oThreads:=tBigNThreads():New()
-    oThreads:setSleep(0.001)
     oThreads:Start(2)
     oThreads:setEvent(1,{@recFact(),oS,oI})
     oThreads:setEvent(2,{@recFact(),oSI,oNI})
