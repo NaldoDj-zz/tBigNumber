@@ -4247,6 +4247,7 @@ static function recFact(oS,oN)
 
 #ifndef __PTCOMPAT__
     oThreads:=tBigNThreads():New()
+    oThreads:setSleep(0.001)
     oThreads:Start(2)
     oThreads:setEvent(1,{@recFact(),oS,oI})
     oThreads:setEvent(2,{@recFact(),oSI,oNI})
@@ -5788,17 +5789,6 @@ static procedure __InitstbN(nBase)
     s__lstbNSet:=.T.
 return
 
-static procedure tBigNSleep(nSleep)
-    #ifdef __PROTHEUS__
-        sleep(nSleep*1000)
-    #else
-        Local nTime
-        nTime:=(hb_MilliSeconds()+(nSleep*1000))
-        while (hb_MilliSeconds()<nTime)
-        end while
-    #endif
-Return
-
 static procedure s__IncS0(n)
     while n>s__nN0
         while .not.(hb_mutexLock(s__MTXcN0))
@@ -5865,7 +5855,6 @@ return
             TBIGNNORMALIZE()
             TBIGNSQRT()
             TBIGNLOG()
-            TBIGNSLEEP()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()

@@ -1,4 +1,5 @@
 #include "hbclass.ch"
+#include "hbclass.ch"
 #include "tBigNThread.ch"
 
 Class tBigNThreads
@@ -13,6 +14,8 @@ Class tBigNThreads
     data nThreadID
     
     data nMtxJob
+    
+    data nSleep
 
     EXPORTED:
     
@@ -22,7 +25,7 @@ Class tBigNThreads
     method ReStart(nThreads,nMemMode)
     
     method Notify()
-    method Wait()
+    method Wait(nSleep)
     method Join()
     
     method addEvent(uthEvent)
@@ -32,6 +35,8 @@ Class tBigNThreads
     method getAllResults()
     
     method clearAllResults()
+    
+    method setSleep(nSleep)
     
 EndClass
 
@@ -43,10 +48,12 @@ method function new(nThreads) class tBigNThreads
     self:nMemMode:=NIL
     self:nThreadID:=hb_ThreadID()
     self:nMtxJob:=hb_mutexCreate()
+    self:setSleep()
 return(self)
 
 method procedure Start(nThreads,nMemMode) class tBigNThreads
     local nStart
+    local nSleep:=self:nSleep
     local nThread
     DEFAULT nThreads:=self:nThreads
     DEFAULT nMemMode:=self:nMemMode
@@ -72,16 +79,17 @@ method procedure Start(nThreads,nMemMode) class tBigNThreads
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:=.F.
         if (nMemMode==NIL)
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
         else
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
         endif
         while (self:aThreads[nThread][TH_NUM]==NIL)
             if (nMemMode==NIL)
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
             else
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
             endif
+            tBigNSleep(nSleep)
         end while
     next nThread
 return
@@ -103,13 +111,15 @@ method procedure Notify() class tBigNThreads
     next nThread
 return
 
-method procedure Wait() class tBigNThreads
+method procedure Wait(nSleep) class tBigNThreads
     local nThread
     local nThreads:=self:nThreads
     local nThCount:=0
+    DEFAULT nSleep:=self:nSleep
     while .T.
         for nThread:=1 to nThreads
             if .not.(hb_MutexLock(self:aThreads[nThread][TH_MTX]))
+                tBigNSleep(nSleep)
                 loop
             endif
             if self:aThreads[nThread][TH_END]
@@ -121,6 +131,7 @@ method procedure Wait() class tBigNThreads
             exit
         endif
         nThCount:=0
+        tBigNSleep(nSleep)
     end while
 return
 
@@ -170,7 +181,12 @@ method procedure clearAllResults() class tBigNThreads
     aSize(self:aResults,0)
 return
 
-static Procedure tbigNthRun(mtxJob,aThreads)
+method procedure setSleep(nSleep) class tBigNThreads
+    DEFAULT nSleep:=0
+    self:nSleep:=nSleep
+return
+
+static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
     local cTyp
     local xJob
     begin sequence
@@ -185,7 +201,9 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                     hb_ExecFromArray(xJob)
                     exit
                 case "N"
-                    hb_MutexLock(aThreads[xJob][TH_MTX])
+                    while .not.(hb_MutexLock(aThreads[xJob][TH_MTX]))
+                        tBigNSleep(nSleep)
+                    end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
                     case "A"
