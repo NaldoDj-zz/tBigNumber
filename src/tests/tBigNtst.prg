@@ -2403,6 +2403,7 @@ static procedure tBigNtst19(fhLog)
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         __ConOut(fhLog,__cSep)
         ASSIGN n+=nISQRT
+        tBigNSleep(0.05)
     End While
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     __ConOut(fhLog,__cSep)

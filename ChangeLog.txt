@@ -10,6 +10,20 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-20 17:15 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * hbc/_tbigNumber.hbc
+  * hbp/_tbigNumber.hbp
+  * hbp/tBigNtst_dbfile_assignv.hbp
+  * hbp/tBigNtst_dbfile_dyn_obj.hbp
+  * hbp/tBigNtst_dbfile_memio_assignv.hbp
+  * hbp/tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
+  * hbp/tBigNtst_dbfile_memio_dyn_obj.hbp
+  * hbp/tBigNtst_dbfile_memio.hbp
+  * hbp/tBigNtst_dbfile.hbp
+  * rc/tBigNtst.rc
+  * src/hb/tbigNThread.prg
+  * src/tests/tBigNtst.prg
+ 
 2015-07-20 16:30 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
