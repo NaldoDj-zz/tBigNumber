@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-21 02:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/hb/tbigNThread.prg
+ 
 2015-07-20 17:15 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * hbc/_tbigNumber.hbc
   * hbp/_tbigNumber.hbp
