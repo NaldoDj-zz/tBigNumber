@@ -18,5 +18,4 @@ CD D:\GitHub\tBigNumber\mk\
 for /f %%e in (env_mkLib.txt ) do (
     SET %%e
 )
-DEL env_mkLib.txt 
-
+DEL env_mkLib.txt

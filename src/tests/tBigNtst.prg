@@ -63,7 +63,7 @@
 #define L_ROPROGRESS       "0"
 #define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
-#define AC_TSTEXEC        "*"
+#define AC_TSTEXEC        "1:17,-18,19:36"
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
 #define __NRTTST__         36
