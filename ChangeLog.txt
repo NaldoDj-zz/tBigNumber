@@ -10,6 +10,14 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-27 20:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * ChangeLog.txt
+  + mk/__mkHB-msvc.bat
+  * mk/__mkHB-msvc64.bat
+  * src/common/tbignumber.prg
+  * src/hb/tbigNThread.prg
+  * src/tests/tBigNtst.prg
+ 
 2015-07-26 21:08 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + mk/mk-msvc64.bat
   + mk/mkHB-msvc64.bat
@@ -169,3 +177,10 @@
   + bin/commit.hb
   + bin/harbour.ucf
   * .gitattributes
+
+2015-07-27 20:09 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+  + mk/__mkHB-msvc.bat
+  * mk/__mkHB-msvc64.bat
+  * src/common/tbignumber.prg
+  * src/hb/tbigNThread.prg
+  * src/tests/tBigNtst.prg

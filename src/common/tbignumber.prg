@@ -56,7 +56,6 @@
 
 #ifdef __PROTHEUS__
     //-------------------------------------------------------------------------------------
-    static __cEnvSrv
     #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
     #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
     #xtranslate hb_mutexCreate()            => ThreadID()
@@ -89,8 +88,8 @@ static s__nN9
 static s__o0
 static s__o1
 static s__o2
+static s__o3
 static s__o10
-static s__o20
 static s__od2
 
 static s__oMinFI
@@ -4166,18 +4165,75 @@ return(aPFactors)
     method:Factorial
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:19/03/2013
-    Descricao: Fatorial de Numeros Inteiros
-    Sintaxe: tBigNumber():Factorial() -> oF
-    TODO   : Otimizar++
-    Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
-                 http://www.luschny.de/math/factorial/index.html
+    Descricao:Fatorial de Numeros Inteiros
+    Sintaxe:tBigNumber():Factorial() -> oF
+    TODO:Otimizar++
+    Referencias:http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
+                http://www.luschny.de/math/factorial/index.html
+                 
 */
 method Factorial() class tBigNumber
+#ifdef __PTCOMPAT__
+    local aResult
+#endif //__PTCOMPAT__
+    local aRecFact:=Array(0)
     local oN:=self:Clone():Int(.T.,.F.)
-    if oN:eq(s__o0)
-        return(s__o1:Clone())
-    endif
-return(recFact(s__o1:Clone(),oN))
+    local oR:=s__o1:Clone()
+    local nD
+    local nJ
+#ifndef __PTCOMPAT__
+    local nT
+    local oThreads
+#endif //__PTCOMPAT_    
+    begin sequence
+        if oN:eq(s__o0)
+            break
+        endif
+        recFact(s__o1:Clone(),oN,@aRecFact,hb_MutexCreate())
+#ifndef __PTCOMPAT__
+        oThreads:=tBigNThreads():New()
+        oThreads:Start(Len(aRecFact))
+        aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{@multFact(),e[1],e[2]})})
+        oThreads:Notify()
+        oThreads:Wait()
+        oThreads:Join()
+        while ((nJ:=Len(aRecFact:=oThreads:getAllResults()))>1)
+            if .not.((nJ%2)==0)
+                ++nJ
+                aAdd(aRecFact,s__o1:Clone())
+            endif
+            oThreads:=tBigNThreads():New()
+            oThreads:Start(nJ/2)
+            nT:=0
+            for nD:=1 to nJ step 2
+                oThreads:SetEvent(++nT,{@thiMult(),aRecFact[nD],aRecFact[nD+1]})
+            next nD
+            oThreads:Notify()
+            oThreads:Wait()
+            oThreads:Join()
+        end while
+        aEval(aRecFact,{|r|oR:=oR:iMult(r)})
+#else //__PTCOMPAT__
+        aResult:=Array(0)
+        aEval(aRecFact,{|e|aAdd(aResult,multFact(e[1],e[2]))})
+        aSize(aRecFact,0)
+        while ((nJ:=Len(aResult))>1)
+            if .not.((nJ%2)==0)
+                ++nJ
+                aAdd(aResult,s__o1:Clone())
+            endif
+            nT:=0
+            for nD:=1 to nJ step 2
+                aAdd(aRecFact,aResult[nD]:iMult(aResult[nD+1]))
+            next nD
+            aSize(aResult,0)
+            aEval(aRecFact,{|r|aAdd(aResult,r)})
+            aSize(aRecFact,0)
+        end while
+        aEval(aResult,{|r|oR:SetValue(oR:iMult(r))})
+#endif //__PTCOMPAT__
+    end sequence
+return(oR)
 
 /*
     function:recFact
@@ -4185,81 +4241,109 @@ return(recFact(s__o1:Clone(),oN))
     Data:04/01/2014
     Descricao:Fatorial de Numeros Inteiros
     Sintaxe:recFact(oS,oN)
-    Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+    Referencias:http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
+    static BigInt recfact(long start, long n) {
+        long i;
+        if (n <= 16) { 
+            BigInt r = new BigInt(start);
+            for (i = start + 1; i < start + n; i++) r *= i;
+            return r;
+        }
+        i = n / 2;
+        return recfact(start, i) * recfact(start + i, n - i);
+    }
+    static BigInt factorial(long n) { return recfact(1, n); }        
 */
-static function recFact(oS,oN)
+static procedure recFact(oS,oN,aRecFact,pMTX)
+
+    local oI    
+    local oSI
+    local oNI
 
 #ifndef __PTCOMPAT__
     local oThreads
+#endif //__PTCOMPAT_
+    
+    begin sequence
+
+        oI:=oN:Clone()
+        
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
+        oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
+
+        //TODO: Porque? n<=(3*(n/2))  
+        if oN:lte(s__o3:iMult(oI))
+            while .not.(hb_MutexLock(pMTX))
+            end while
+            aAdd(aRecFact,{oS,oN})
+            hb_MutexUnLock(pMTX)
+            break
+        endif
+
+        oSI:=oS:Clone()
+        oSI:SetValue(oSI:iAdd(oI))
+
+        oNI:=oN:Clone()
+        oNI:SetValue(oNI:iSub(oI))
+        
+        #ifndef __PTCOMPAT__
+            oThreads:=tBigNThreads():New()
+            oThreads:Start(2)
+            oThreads:setEvent(1,{||recFact(oS,oI,@aRecFact)})
+            oThreads:setEvent(2,{||recFact(oSI,oNI,@aRecFact)})
+            oThreads:Notify()
+            oThreads:Wait()
+            oThreads:Join()
+        #else //__PTCOMPAT__
+            recFact(oS,oI,@aRecFact)
+            recFact(oSI,oNI,@aRecFact)
+        #endif //__PTCOMPAT__        
+
+    end sequence
+        
+return
+
+/*
+    function:multFact
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:27/07/2015
+    Descricao:Fatorial de Numeros Inteiros
+    Sintaxe:recFact(oS,oN)
+    Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+*/
+static function multFact(oS,oN)
+    local oR:=oS:Clone()
+#ifndef __PTCOMPAT__
     local nB
     local nI
     local nSN
 #else
+    local oI
     local oSN
 #endif
-
-    local oI
-    local oR
-    local oSI
-    local oNI
-    
-    oR:=s__o0:Clone()
-    
-#ifdef __PTCOMPAT__
-    //-------------------------------------------------------------------------------------
-    //(Div(2)==Mult(.5)
-    if oN:lte(s__o20:Mult(oN:Mult(s__od2):Int(.T.,.F.)))
-#else
-    if oN:lte(s__o20)
-#endif
-        oR:SetValue(oS)
-        #ifdef __PTCOMPAT__
-            oI:=oS:Clone()
-            oSN:=oS:Clone()
-            oSN:SetValue(oSN:iAdd(oN))
+    #ifdef __PTCOMPAT__
+        oI:=oS:Clone()
+        oSN:=oS:Clone()
+        oSN:SetValue(oSN:iAdd(oN))
+        oI:OpInc()
+        while oI:lt(oSN)
+            oR:SetValue(oR:iMult(oI))
             oI:OpInc()
-            while oI:lt(oSN)
-                oR:SetValue(oR:iMult(oI))
-                oI:OpInc()
-            end while
-        #else
-            nB:=oS:__nBase()
-            nI:=Val(oS:__cInt())
-            nSN:=nI
-            nSN+=Val(oN:__cInt())
-            while ++nI<nSN
-                oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
-            end while
-        #endif //__PTCOMPAT__        
-        return(oR)
-    endif
-
-    oI:=oN:Clone()
-    //-------------------------------------------------------------------------------------
-    //(Div(2)==Mult(.5)
-    oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
-
-    oSI:=oS:Clone()
-    oSI:SetValue(oSI:iAdd(oI))
-
-    oNI:=oN:Clone()
-    oNI:SetValue(oNI:iSub(oI))
-
-#ifndef __PTCOMPAT__
-    oThreads:=tBigNThreads():New()
-    oThreads:Start(2)
-    oThreads:setEvent(1,{@recFact(),oS,oI})
-    oThreads:setEvent(2,{@recFact(),oSI,oNI})
-    oThreads:Notify()
-    oThreads:Wait()
-    oThreads:Join()
-return(oThreads:getResult(1):iMult(oThreads:getResult(2)))
-#else
-return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
-#endif
+        end while
+    #else
+        nB:=oS:__nBase()
+        nI:=Val(oS:__cInt())
+        nSN:=nI
+        nSN+=Val(oN:__cInt())
+        while ++nI<nSN
+            oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
+        end while
+    #endif //__PTCOMPAT__        
+return(oR)
 
 /*
-    method:Factorial
+    method:Fibonacci
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:18/05/2015
     Descricao: Retorna a Sequencia de Fibonacci
@@ -5775,16 +5859,13 @@ static procedure __InitstbN(nBase)
     s__o0:=tBigNumber():New("0",nBase)
     s__o1:=tBigNumber():New("1",nBase)
     s__o2:=tBigNumber():New("2",nBase)
+    s__o3:=tBigNumber():New("3",nBase)
     s__o10:=tBigNumber():New("10",nBase)
-    s__o20:=tBigNumber():New("20",nBase)
     s__od2:=tBigNumber():New("0.5",nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
-    #ifdef __PROTHEUS__
-        DEFAULT __cEnvSrv:=GetEnvServer()
-    #endif
     s__lstbNSet:=.T.
 return
 

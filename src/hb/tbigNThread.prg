@@ -1,5 +1,4 @@
 #include "hbclass.ch"
-#include "hbclass.ch"
 #include "tBigNThread.ch"
 
 Class tBigNThreads
@@ -7,11 +6,9 @@ Class tBigNThreads
     PROTECTED:
     
     data aThreads
-    data aResults
     
     data nThreads
     data nMemMode
-    data nThreadID
     
     data nMtxJob
     
@@ -22,19 +19,15 @@ Class tBigNThreads
     method New(nThreads) CONSTRUCTOR /*( /!\ )*/
     
     method Start(nThreads,nMemMode)
-    method ReStart(nThreads,nMemMode)
     
     method Notify()
     method Wait(nSleep)
     method Join()
     
-    method addEvent(uthEvent)
     method setEvent(nThEvent,uthEvent)
 
     method getResult(nThEvent)
     method getAllResults()
-    
-    method clearAllResults()
     
     method setSleep(nSleep)
     
@@ -44,9 +37,7 @@ method function new(nThreads) class tBigNThreads
     DEFAULT nThreads:=0
     DEFAULT self:nThreads:=nThreads
     self:aThreads:=if(self:nThreads>0,Array(self:nThreads,SIZ_TH),Array(0))
-    self:aResults:=Array(0)
     self:nMemMode:=NIL
-    self:nThreadID:=hb_ThreadID()
     self:nMtxJob:=hb_mutexCreate()
     self:setSleep()
 return(self)
@@ -89,18 +80,8 @@ method procedure Start(nThreads,nMemMode) class tBigNThreads
             else
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
             endif
-            tBigNSleep(nSleep)
         end while
     next nThread
-    tBigNSleep(nSleep)
-return
-
-method procedure ReStart(nThreads,nMemMode) class tBigNThreads
-    self:Join()
-    self:clearAllResults()
-    self:nThreads:=0
-    aSize(self:aThreads,self:nThreads)
-    self:Start(@nThreads,@nMemMode)
 return
 
 method procedure Notify() class tBigNThreads
@@ -110,7 +91,6 @@ method procedure Notify() class tBigNThreads
         self:aThreads[nThread][TH_END]:=.F.
         hb_mutexNotify(self:nMtxJob,nThread)
     next nThread
-    tBigNSleep(self:nSleep)
 return
 
 method procedure Wait(nSleep) class tBigNThreads
@@ -150,16 +130,6 @@ method procedure Join() class tBigNThreads
     next nTread
 return
 
-method function addEvent(uthEvent) class tBigNThreads
-    local bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==NIL)}
-    local nThEvent:=aScan(self:aThreads,bEvent)
-    while (nThEvent==0)
-        self:Start(self:nThreads+1,self:nMemMode)
-        nThEvent:=aScan(self:aThreads,bEvent)
-    end while
-    self:setEvent(nThEvent,uthEvent)
-return(nThEvent)
-
 method function setEvent(nThEvent,uthEvent) class tBigNThreads
     local uLEvent
     DEFAULT nThEvent:=0
@@ -174,19 +144,22 @@ method function getResult(nThEvent) class tBigNThreads
     DEFAULT nThEvent:=0
     if ((nThEvent>0).and.(nThEvent<=self:nThreads))
         uResult:=self:aThreads[nThEvent][TH_RES]
+        self:aThreads[nThEvent][TH_RES]:=NIL
     endif
 return(uResult)
 
 method function getAllResults() class tBigNThreads
-    aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==NIL,NIL,aAdd(self:aResults,aTh[TH_RES]))})
-return(aClone(self:aResults))
-
-method procedure clearAllResults() class tBigNThreads
-    aSize(self:aResults,0)
-return
+    local aResults:=Array(0)
+    local nThread
+    for nThread:=1 to self:nThreads
+        if .not.(self:aThreads[nThread][TH_RES]==NIL)
+            aAdd(aResults,self:getResult(nThread))        
+        endif
+    next nResult
+return(aResults)
 
 method procedure setSleep(nSleep) class tBigNThreads
-    DEFAULT nSleep:=0.05
+    DEFAULT nSleep:=0.01
     self:nSleep:=nSleep
 return
 
