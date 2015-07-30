@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-30 01:42 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/pt/tbigNThread.prg
+  * src/pt/tBigNGlobals.prg
+ 
 2015-07-29 21:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/pt/tbigNExecFromArray.prg
   + src/pt/tbigNMessage.prg

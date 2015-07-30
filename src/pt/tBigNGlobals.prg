@@ -15,7 +15,7 @@ Class tBigNGlobals
     method function  PutGlbVars(cGlbName,aGlbValues,lGlbLock)
     method procedure ClearGlbValue(cGlbName,lGlbLock)
 
-    method function getGlbVarResult(cGlbName)
+    method function  getGlbVarResult(cGlbName)
     method procedure sendGlbVarResult(cGlbName,xGlbRes)
 
 EndClass

@@ -41,9 +41,11 @@ Class tBigNThread
 
     method function getResult(nThEvent)
     method function getGlbResult(nThEvent)
+
     method function getAllResults()
     
-    method procedure sendGlbVarResult()
+    method function  getGlbVarResult(cGlbName)
+    method procedure sendGlbVarResult(cGlbName)
     
 EndClass
 
@@ -137,8 +139,8 @@ method procedure Notify() class tBigNThread
 return
 
 method procedure Wait(nSleep) class tBigNThread
+    local cTOut    AS CHARACTER VALUE SetTimeOut("0")
     local cMTXID   AS CHARACTER
-    local cTOut AS CHARACTER VALUE SetTimeOut("0")
     local nThread  AS NUMBER
     local nThreads AS NUMBER VALUE self:nThreads
     local nThCount AS NUMBER
@@ -147,7 +149,10 @@ method procedure Wait(nSleep) class tBigNThread
     while .not.(KillApp())
         for nThread:=1 to nThreads
             ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
-            if (xGetGlbValue(self:cMtxJob)=="1").and.(xGetGlbValue(cMTXID)=="1")
+            begin sequence                
+                if .not.(xGetGlbValue(self:cMtxJob)=="1").and.(xGetGlbValue(cMTXID)=="1")
+                    break
+                endif
                 if (self:aThreads[nThread][TH_END]=="1")
                     if (self:aThreads[nThread][TH_RES]==NIL)
                         xResult:=xGetGlbValue(cMTXID+"TH_RES")
@@ -167,7 +172,7 @@ method procedure Wait(nSleep) class tBigNThread
                 else
                     self:aThreads[nThread][TH_END]:=xGetGlbValue(cMTXID+"TH_END")
                 endif
-            else
+            recover
                 xPutGlbValue(cMTXID+"TH_END","1")
                 self:aThreads[nThread][TH_END]:="1"
                 if (self:aThreads[nThread][TH_RES]==NIL)
@@ -190,7 +195,7 @@ method procedure Wait(nSleep) class tBigNThread
                 endif
                 xPutGlbValue(cMTXID+"TH_END","1")
                 ++nThCount
-            endif
+            end sequence
         next nThread
         if (nThCount==nThreads)
             exit
@@ -280,11 +285,16 @@ method function getAllResults() class tBigNThread
     next nResult
 return(aResults)
 
-method procedure sendGlbVarResult() class tBigNThread
+method function getGlbVarResult(cGlbName) class tBigNThread
+    PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
+return(getGlbVarResult(cGlbName))
+
+method procedure sendGlbVarResult(cGlbName) class tBigNThread
     local aResults AS ARRAY
+    PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
     if .not.(self:cGlbResult==NIL)
         ASSIGN aResults:=self:getAllResults()
-        sendGlbVarResult(self:cGlbResult,aResults)
+        sendGlbVarResult(cGlbName,aResults)
     endif
 return
 
