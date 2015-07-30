@@ -16,7 +16,7 @@ Class tBigNGlobals
     method procedure ClearGlbValue(cGlbName,lGlbLock)
 
     method function  getGlbVarResult(cGlbName)
-    method procedure sendGlbVarResult(cGlbName,xGlbRes)
+    method procedure setGlbVarResult(cGlbName,xGlbRes)
 
 EndClass
 
@@ -149,11 +149,11 @@ method function getGlbVarResult(cGlbName) class tBigNGlobals
     self:ClearGlbValue(cGlbName)
 return(aResults)
 
-method procedure sendGlbVarResult(cGlbName,xGlbRes) class tBigNGlobals
+method procedure setGlbVarResult(cGlbName,xGlbRes) class tBigNGlobals
     local aGlbValues AS ARRAY
     local aResults   AS ARRAY
     PARAMTYPE 1 VAR cGlbName AS CHARACTER
-    PARAMTYPE 2 VAR xGlbRes AS UNDEFINED OPTIONAL
+    PARAMTYPE 2 VAR xGlbRes  AS UNDEFINED OPTIONAL
     if .not.(valType(xGlbRes)=="A")
         aAdd(aResults,xGlbRes)
     else

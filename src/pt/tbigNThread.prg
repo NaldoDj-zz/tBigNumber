@@ -45,7 +45,7 @@ Class tBigNThread
     method function getAllResults()
     
     method function  getGlbVarResult(cGlbName)
-    method procedure sendGlbVarResult(cGlbName)
+    method procedure setGlbVarResult(cGlbName,xGlbRes)
     
 EndClass
 
@@ -217,7 +217,7 @@ method procedure Join() class tBigNThread
         IPCGo(self:cMtxJob,self:aThreads[nThread])
         Sleep(self:nSleep)
     next nTread
-    self:sendGlbVarResult()
+    self:setGlbVarResult()
 return
 
 method procedure Finalize() class tBigNThread
@@ -271,16 +271,16 @@ method function getGlbResult(nThEvent) class tBigNThread
 return(uResult)
 
 method function getAllResults() class tBigNThread
-    local aResults   AS ARRAY
-    local aGLBReults AS ARRAY
-    local nThread
+    local aResults    AS ARRAY
+    local aGLBResults AS ARRAY
+    local nThread     AS NUMBER
     for nThread:=1 to self:nThreads
         if .not.(self:aThreads[nThread][TH_RES]==NIL)
             aAdd(aResults,self:getResult(nThread))        
         endif
         if .not.(self:aThreads[nThread][TH_GLB]==NIL)
-            aGLBReults:=self:getGlbResult(nThread)
-            aEval(aGLBReults,{|r|aAdd(aResults,r)})       
+            aGLBResults:=self:getGlbResult(nThread)
+            aEval(aGLBResults,{|r|aAdd(aResults,r)})       
         endif
     next nResult
 return(aResults)
@@ -289,12 +289,17 @@ method function getGlbVarResult(cGlbName) class tBigNThread
     PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
 return(getGlbVarResult(cGlbName))
 
-method procedure sendGlbVarResult(cGlbName) class tBigNThread
+method procedure setGlbVarResult(cGlbName,xGlbRes) class tBigNThread
     local aResults AS ARRAY
     PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
+    PARAMTYPE 2 VAR xGlbRes  AS UNDEFINED OPTIONAL
     if .not.(self:cGlbResult==NIL)
         ASSIGN aResults:=self:getAllResults()
-        sendGlbVarResult(cGlbName,aResults)
+        if .not.(xGlbRes==NIL)
+            setGlbVarResult(cGlbName,xGlbRes)
+        else
+            setGlbVarResult(cGlbName,aResults)
+        endif
     endif
 return
 
@@ -347,7 +352,7 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
                     ASSIGN cTyp:=valType(xRes)
                     do case
                     case (cTyp=="A")
-                        sendGlbVarResult(cMTX+"TH_GLB",{xRes})
+                        setGlbVarResult(cMTX+"TH_GLB",{xRes})
                     case (cTyp=="C")
                         if (Upper(xRes)=="E_X_I_T_")
                             xPutGlbValue(cMTX,"0")
@@ -454,9 +459,9 @@ static function getGlbVarResult(cGlbName)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
 return(s__oGlbVars:getGlbVarResult(@cGlbName))
 
-static function sendGlbVarResult(cGlbName,xGbRes)
+static function setGlbVarResult(cGlbName,xGlbRes)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-return(s__oGlbVars:sendGlbVarResult(@cGlbName,@xGbRes))
+return(s__oGlbVars:setGlbVarResult(@cGlbName,@xGlbRes))
 
 static function OutPutMessage(xOutPut,nOutPut)
     DEFAULT s__oOutMessage:=tBigNMessage():New(nOutPut)
