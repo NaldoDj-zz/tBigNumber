@@ -10,6 +10,20 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-29 21:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  + src/pt/tbigNExecFromArray.prg
+  + src/pt/tbigNMessage.prg
+  + src/pt/tbigNMutex.prg
+  + src/pt/tbigNThread.prg
+  + src/pt/tBigNGlobals.prg
+  * include/tbigNThread.ch
+  * prj/pt/git_tBigNumber.prj
+  * src/common/tbignumber.prg
+  * src/hb/tbigNThread.prg
+  * include/pt_tBigNumber.ch
+  * src/tests/tBigNtst.prg
+    ;multithreading, quando __PROTHEUS__, e outros bichos...
+ 
 2015-07-27 20:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   + mk/__mkHB-msvc.bat

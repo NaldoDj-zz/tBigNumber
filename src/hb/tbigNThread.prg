@@ -1,7 +1,7 @@
 #include "hbclass.ch"
 #include "tBigNThread.ch"
 
-Class tBigNThreads
+Class tBigNThread
 
     PROTECTED:
     
@@ -16,7 +16,7 @@ Class tBigNThreads
 
     EXPORTED:
     
-    method New(nThreads) CONSTRUCTOR /*( /!\ )*/
+    method New() CONSTRUCTOR /*( /!\ )*/
     
     method Start(nThreads,nMemMode)
     
@@ -33,16 +33,14 @@ Class tBigNThreads
     
 EndClass
 
-method function new(nThreads) class tBigNThreads
-    DEFAULT nThreads:=0
-    DEFAULT self:nThreads:=nThreads
-    self:aThreads:=if(self:nThreads>0,Array(self:nThreads,SIZ_TH),Array(0))
-    self:nMemMode:=NIL
+method function new() class tBigNThread
+    self:aThreads:=Array(0)
+    self:nThreads:=0
     self:nMtxJob:=hb_mutexCreate()
     self:setSleep()
 return(self)
 
-method procedure Start(nThreads,nMemMode) class tBigNThreads
+method procedure Start(nThreads,nMemMode) class tBigNThread
     local nStart
     local nSleep:=self:nSleep
     local nThread
@@ -84,7 +82,7 @@ method procedure Start(nThreads,nMemMode) class tBigNThreads
     next nThread
 return
 
-method procedure Notify() class tBigNThreads
+method procedure Notify() class tBigNThread
     local nThread
     for nThread:=1 to self:nThreads
         self:aThreads[nThread][TH_RES]:=NIL
@@ -93,7 +91,7 @@ method procedure Notify() class tBigNThreads
     next nThread
 return
 
-method procedure Wait(nSleep) class tBigNThreads
+method procedure Wait(nSleep) class tBigNThread
     local pMTX
     local nThread
     local nThreads:=self:nThreads
@@ -119,7 +117,7 @@ method procedure Wait(nSleep) class tBigNThreads
     end while
 return
 
-method procedure Join() class tBigNThreads
+method procedure Join() class tBigNThread
     local nThread
     for nThread:=1 to self:nThreads
         hb_mutexNotify(self:nMtxJob,{||break()})
@@ -130,7 +128,7 @@ method procedure Join() class tBigNThreads
     next nTread
 return
 
-method function setEvent(nThEvent,uthEvent) class tBigNThreads
+method function setEvent(nThEvent,uthEvent) class tBigNThread
     local uLEvent
     DEFAULT nThEvent:=0
     if ((nThEvent>0).and.(nThEvent<=self:nThreads))
@@ -139,7 +137,7 @@ method function setEvent(nThEvent,uthEvent) class tBigNThreads
     endif
 return(uLEvent)
 
-method function getResult(nThEvent) class tBigNThreads
+method function getResult(nThEvent) class tBigNThread
     local uResult
     DEFAULT nThEvent:=0
     if ((nThEvent>0).and.(nThEvent<=self:nThreads))
@@ -148,7 +146,7 @@ method function getResult(nThEvent) class tBigNThreads
     endif
 return(uResult)
 
-method function getAllResults() class tBigNThreads
+method function getAllResults() class tBigNThread
     local aResults:=Array(0)
     local nThread
     for nThread:=1 to self:nThreads
@@ -158,7 +156,7 @@ method function getAllResults() class tBigNThreads
     next nResult
 return(aResults)
 
-method procedure setSleep(nSleep) class tBigNThreads
+method procedure setSleep(nSleep) class tBigNThread
     DEFAULT nSleep:=0.01
     self:nSleep:=nSleep
 return

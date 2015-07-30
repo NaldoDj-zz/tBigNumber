@@ -4,12 +4,19 @@
 
     #ifdef __PROTHEUS__
 
-        #include "protheus.ch"
+        #include "totvs.ch"
 
-        #xtranslate thread static       => static
-        #xtranslate hb_ntos([<n,...>]) => LTrim(Str([<n>]))
-        #xtranslate user procedure      => user function
-
+        #xtranslate thread static        => static
+        #xtranslate hb_ntos([<n,...>])   => LTrim(Str([<n>]))
+        #xtranslate NToS([<n,...>])      => LTrim(Str([<n>]))
+        #xtranslate user procedure       => user function
+        #xcommand user procedure <p>     => procedure u_<p>
+        #xtranslate user procedure <p>   => procedure u_<p>
+        #xcommand method function <m>    => method <m>
+        #xtranslate method function <m>  => method <m>
+        #xcommand method procedure <m>   => method <m>
+        #xtranslate method procedure <m> => method <m>
+        
         #xcommand DEFAULT =>
         /* Default parameters management */
         #xcommand DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;

@@ -4,7 +4,7 @@
         (1) core/tests/gtwin.prg         (1/1)
         (2) Main thread GT/Tests Monitor (1/9)
         (3) Configure tests              (1/1)
-        (4) tBigNThreads.prg             (1/1)
+        (4) tBigNThread.prg             (1/1)
         (4.1) hb_ExecFromArray()         (1/1)
         (5) tBigNSleep.prg               (1/1)    
         (6) log file name                (0/1)           
@@ -263,7 +263,7 @@
       
         IF (nThreads>0)
             //"Share publics and privates with child threads."
-            oThreads:=tBigNThreads():New()
+            oThreads:=tBigNThread():New()
             oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
             nThAT:=0
             While ((nThAT:=aScan(atBigNtst,{|e|e[2]},nThAT+1))>0)

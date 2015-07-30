@@ -64,20 +64,35 @@ Group git_tBigNumber
              Type=T
          End
       End
+      Folder tests
+         VSSPath=Nova Pasta4
+         FilesCount=1
+         File \GitHub\tBigNumber\src\tests\tBigNtst.prg
+             Type=T
+         End
+      End
       Folder pt
-         VSSPath=Nova Pasta3
-         FilesCount=2
-         File \GitHub\tBigNumber\src\pt\__pteTthD.prg
+         VSSPath=Nova Pasta4
+         FilesCount=7
+         File \GitHub\tBigNumber\src\pt\tbigNThread.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\pt\tbigNMutex.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\pt\tbigNMessage.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\pt\tBigNGlobals.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\pt\tbigNExecFromArray.prg
              Type=T
          End
          File \GitHub\tBigNumber\src\pt\__ptPITthD.prg
              Type=T
          End
-      End
-      Folder tests
-         VSSPath=Nova Pasta4
-         FilesCount=1
-         File \GitHub\tBigNumber\src\tests\tBigNtst.prg
+         File \GitHub\tBigNumber\src\pt\__pteTthD.prg
              Type=T
          End
       End
