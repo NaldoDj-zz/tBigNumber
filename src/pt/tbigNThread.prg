@@ -227,19 +227,22 @@ return
 method procedure Finalize() class tBigNThread
     local cMTXID  AS CHARACTER
     local nThread AS NUMBER
-    xClearGlbValue(self:cMtxJob)
-    for nThread:=1 to self:nThreads
-        ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
-        xClearGlbValue(cMTXID)
-        xClearGlbValue(cMTXID+"TH_NUM")
-        xClearGlbValue(cMTXID+"TH_EXE")
-        xClearGlbValue(cMTXID+"TH_RES")
-        xClearGlbValue(cMTXID+"TH_END")
-        xClearGlbValue(cMTXID+"TH_ERR")
-        xClearGlbValue(cMTXID+"TH_MSG")
-        xClearGlbValue(cMTXID+"TH_STK")
-        xClearGlbValue(cMTXID+"TH_GLB")
-    next nTread
+    if xGlbLock(GLB_LOCK)
+        xClearGlbValue(self:cMtxJob,.F.)
+        for nThread:=1 to self:nThreads
+            ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
+            xClearGlbValue(cMTXID,.F.)
+            xClearGlbValue(cMTXID+"TH_NUM",.F.)
+            xClearGlbValue(cMTXID+"TH_EXE",.F.)
+            xClearGlbValue(cMTXID+"TH_RES",.F.)
+            xClearGlbValue(cMTXID+"TH_END",.F.)
+            xClearGlbValue(cMTXID+"TH_ERR",.F.)
+            xClearGlbValue(cMTXID+"TH_MSG",.F.)
+            xClearGlbValue(cMTXID+"TH_STK",.F.)
+            xClearGlbValue(cMTXID+"TH_GLB",.F.)
+        next nTread
+        xGlbUnLock(GLB_LOCK)
+    endif
     self:nThreads:=0
     aSize(self:aThreads,0)
     self:aThreads:=NIL
@@ -421,6 +424,10 @@ static procedure DefError(e,xJOB)
             endif
         endif
     endif
+    if (valType(e)=="O")
+        OutPutMessage(e:Description,MSG_CONOUT)
+        OutPutMessage(e:ErrorStack,MSG_CONOUT)
+    endif    
     break
 return
 
@@ -442,6 +449,20 @@ static function SetTimeOut(xSet)
         cTOut:=xSet
     EndIF
 Return(NToS(PtInternal(2,cTOut)))
+
+static function xGlbLock()
+    DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
+return(s__oGlbVars:GlbLock())
+
+static function xGlbUnLock()
+    DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
+return(s__oGlbVars:GlbUnLock())
 
 static function xGetGlbValue(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()

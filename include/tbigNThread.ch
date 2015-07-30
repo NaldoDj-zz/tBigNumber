@@ -2,7 +2,9 @@
 
     #define _hb_TBigNThread_CH
     
-    #include "tbigNDef.ch"
+    #ifndef _hb_TBigNDef_CH
+        #include "tbigNDef.ch"
+    #endif
 
     //-------------------------------------------------------------------------------------
     /* Thread Control */

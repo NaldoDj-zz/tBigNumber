@@ -2,7 +2,9 @@
 
     #define _TBigNumber_CH
 
-    #include "tBigndef.ch"
+    #ifndef _hb_TBigNDef_CH
+        #include "tbigNDef.ch"
+    #endif
     #ifdef __PROTHEUS__
         #include "pt_tBigNumber.ch"
     #else
@@ -13,6 +15,7 @@
     #include "set.ch"
     #include "fileio.ch"
     #include "tbignthread.ch"
+    #include "tbignmessage.ch"
 
     #define MAX_DECIMAL_PRECISION    99999999999999999999999999999 //99.999.999.999.999.999.999.999.999.999
 

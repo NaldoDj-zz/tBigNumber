@@ -13,11 +13,10 @@
         #ifndef __HARBOUR__
             #define __HARBOUR__
         #endif
-    #endif
-
-    /* by default create __MT__ version */
-    #ifndef __MT__
-        #define __MT__
+        /* by default create __MT__ version */
+        #ifndef __MT__
+            #define __MT__
+        #endif
     #endif
     
     #ifndef SYMBOL_UNUSED
@@ -46,13 +45,13 @@
                                         OPERATOR_ROOT,     ;
                                     }
     #ifdef __HARBOUR__
-	    #xcommand DEFAULT =>
-	    //-------------------------------------------------------------------------------------
-	    /* Default parameters management */
-	    #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
-	                    => ;
-	                    iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
-	                    [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
-	#endif
-		                                    
+        #xcommand DEFAULT =>
+        //-------------------------------------------------------------------------------------
+        /* Default parameters management */
+        #xtranslate DEFAULT <uVar1> := <uVal1> [, <uVarN> := <uValN> ] ;
+                        => ;
+                        iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
+                        [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
+    #endif
+                                            
 #endif /*_hb_TBigNDef_CH*/

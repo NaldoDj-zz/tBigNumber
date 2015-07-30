@@ -16,7 +16,7 @@ Group git_tBigNumber
       FoldersCount=4
       Folder include
          VSSPath=Nova Pasta2
-         FilesCount=8
+         FilesCount=9
          File \GitHub\tBigNumber\include\directry.ch
              Type=T
          End
@@ -39,6 +39,9 @@ Group git_tBigNumber
              Type=T
          End
          File \GitHub\tBigNumber\include\tBigNumber.ch
+             Type=T
+         End
+         File \GitHub\tBigNumber\include\tbigNMessage.ch
              Type=T
          End
       End

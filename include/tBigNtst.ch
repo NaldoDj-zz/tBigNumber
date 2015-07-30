@@ -2,7 +2,9 @@
 
     #define _tBigNtst_CH
     
-    #include "tBigndef.ch"
+    #ifndef _hb_TBigNDef_CH
+        #include "tBigndef.ch"
+    #endif
 
     #ifdef PROTHEUS
         #include "pt_tBigNtst.ch"

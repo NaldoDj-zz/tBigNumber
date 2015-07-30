@@ -159,7 +159,7 @@
            
         /*
             Include : ParamType.ch
-            Função  : __SetType
+            Funcao  : __SetType
             Autor   : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
             Data    : 29/07/2012
             Uso     : Strongly Typed Variables
@@ -226,13 +226,13 @@
                  endif    
                 PARAMTYPE cVarName VAR xRetVal AS ARRAY     DEFAULT uVal OPTIONAL MESSAGE (cMessage)
             endif
-                                
+
         Return( xRetVal )
-        
+
         #ifdef PTEX_ASSIGN_VAR
             /*
                 Include : ParamType.ch
-                Função  : __IsTyped
+                Funcao  : __IsTyped
                 Autor   : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
                 Data    : 29/07/2012
                 Uso     : Strongly Typed Variables
