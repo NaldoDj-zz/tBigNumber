@@ -57,7 +57,7 @@ method function new() class tBigNThread
     self:cEnvSrv:=GetEnvServer()
     self:cMtxJob:=MutexCreate()
     self:nThreads:=0
-    self:nSleep:=10
+    self:nSleep:=100
     self:nTimeOut:=IPC_TIMEOUT
     self:nOutPutMsg:=0
 return(self)
@@ -352,15 +352,19 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
                     ASSIGN cTyp:=valType(xRes)
                     do case
                     case (cTyp=="A")
-                        setGlbVarResult(cMTX+"TH_GLB",{xRes})
+                        if .not.(Empty(xRes))
+                            setGlbVarResult(cMTX+"TH_GLB",xRes)
+                        endif    
                     case (cTyp=="C")
                         if (Upper(xRes)=="E_X_I_T_")
                             xPutGlbValue(cMTX,"0")
-                        else
+                        elseif .not.(Empty(xRes))
                             xPutGlbValue(cMTX+"TH_RES",xRes)
                         endif
                     otherwise
-                        xPutGlbValue(cMTX+"TH_RES",cValToChar(xRes))
+                        if .not.(xRes==NIL)
+                            xPutGlbValue(cMTX+"TH_RES",cValToChar(xRes))
+                        endif
                     endcase
                     xPutGlbValue(cMTX+"TH_END","1")
                     if .not.(xGetGlbValue(mtxJob)=="1")
@@ -437,30 +441,51 @@ Return(NToS(PtInternal(2,cTOut)))
 
 static function xGetGlbValue(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:GetGlbValue(@cGlbName,@lGlbLock))
 
 static function xPutGlbValue(cGlbName,cGlbValue,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:PutGlbValue(@cGlbName,@cGlbValue,@lGlbLock))    
 
 static function xGetGbVars(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:GetGlbVars(@cGlbName,@lGlbLock))
 
 static function xPutGbVars(cGlbName,aGlbValues,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:PutGlbVars(@cGlbName,@aGlbValues,@lGlbLock))
 
 static function xClearGlbValue(cGlbName,lGlbLck)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:ClearGlbValue(@cGlbName,@lGlbLck))
 
 static function getGlbVarResult(cGlbName)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:getGlbVarResult(@cGlbName))
 
 static function setGlbVarResult(cGlbName,xGlbRes)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
+    s__oGlbVars:nSleep:=100
+    s__oGlbVars:nAttempts:=50
+    s__oGlbVars:lGlbLock:=.T.
 return(s__oGlbVars:setGlbVarResult(@cGlbName,@xGlbRes))
 
 static function OutPutMessage(xOutPut,nOutPut)
@@ -470,7 +495,6 @@ return(s__oOutMessage:OutPutMessage(xOutPut,nOutPut))
 static function OutPutInternal(cOutInternal,nOutPut)
     DEFAULT s__oOutMessage:=tBigNMessage():New(nOutPut)
 return(s__oOutMessage:ToInternal(cOutInternal))
-
 
 #include "paramtypex.ch"
 #include "tryexception.ch"

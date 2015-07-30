@@ -4200,6 +4200,7 @@ method Factorial() class tBigNumber
         #endif //__PROTHEUS__
         oThreads:=tBigNThread():New()
         #ifdef __PROTHEUS__
+            pMTX:=pt_MutexCreate()
             oThreads:cGlbResult:=pMTX
             oThreads:bOnStartJob:="u_tBigNumber()"
         #endif //__PROTHEUS__
@@ -4220,9 +4221,18 @@ method Factorial() class tBigNumber
         #endif
                 if .not.((nJ%2)==0)
                     ++nJ
-                    aAdd(aRecFact,s__o1:Clone())
+                    #ifdef __PROTHEUS__
+                        aAdd(aRecFact,s__o1:Clone():GetValue())
+                    #else //__HARBOUR__
+                        aAdd(aRecFact,s__o1:Clone())
+                    #endif //__PROTHEUS__
                 endif
                 oThreads:=tBigNThread():New()
+                #ifdef __PROTHEUS__
+                    pMTX:=pt_MutexCreate()
+                    oThreads:cGlbResult:=pMTX
+                    oThreads:bOnStartJob:="u_tBigNumber()"
+                #endif //__PROTHEUS__
                 oThreads:Start(nJ/2)
                 nT:=0
                 for nD:=1 to nJ step 2

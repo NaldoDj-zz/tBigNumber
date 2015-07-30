@@ -24,8 +24,8 @@ user function tBigNGlobals()
 return(tBigNGlobals():New(nThreads))
 
 method function new() class tBigNGlobals
-    self:nSleep:=1
-    self:nAttempts:=10
+    self:nSleep:=0
+    self:nAttempts:=0
     self:lGlbLock:=.F.
 return(self)
 
@@ -142,26 +142,76 @@ method procedure ClearGlbValue(cGlbName,lGlbLock) class tBigNGlobals
     endif
 return
 
-method function getGlbVarResult(cGlbName) class tBigNGlobals
+method function getGlbVarResult(cGlbName,lGlbLock) class tBigNGlobals
     local aResults AS ARRAY
+    local nResult  AS NUMBER
+    local nResults AS NUMBER
     PARAMTYPE 1 VAR cGlbName AS CHARACTER
-    ASSIGN aResults:=self:GetGlbVars(cGlbName)
-    self:ClearGlbValue(cGlbName)
+    PARAMTYPE 2 VAR lGlbLock AS LOGICAL OPTIONAL DEFAULT self:lGlbLock
+    if (lGlbLock)
+        while .not.(GlbLock())
+            if (++nATT>self:nAttempts)
+                UserException("["+ProcName()+"][UNABLE TO GLOBAL LOCK]")
+            endif
+            if (KillApp())
+                UserException("["+ProcName()+"][RECEIVED][KILLAPP]")
+            endif
+            Sleep(self:nSleep)
+        end while
+    endif
+    ASSIGN aResults:=self:GetGlbVars(cGlbName,.F.)
+    self:ClearGlbValue(cGlbName,.F.)
+    ASSIGN nResults:=Len(aResults)
+    while ((nResult:=aScan(aResults,{|r|(valType(r)=="C")},++nResult))>0)
+        if Empty(aResults[nResult])
+            aSize(aDel(aResults,nResult--),--nResults)
+        endif
+    end while
+    if (lGlbLock)
+        GlbUnLock()
+    endif
 return(aResults)
 
-method procedure setGlbVarResult(cGlbName,xGlbRes) class tBigNGlobals
+method procedure setGlbVarResult(cGlbName,xGlbRes,lGlbLock) class tBigNGlobals
+    local cType      AS CHARACTER VALUE valType(xGlbRes)
     local aGlbValues AS ARRAY
     local aResults   AS ARRAY
     PARAMTYPE 1 VAR cGlbName AS CHARACTER
     PARAMTYPE 2 VAR xGlbRes  AS UNDEFINED OPTIONAL
-    if .not.(valType(xGlbRes)=="A")
-        aAdd(aResults,xGlbRes)
+    PARAMTYPE 3 VAR lGlbLock AS LOGICAL OPTIONAL DEFAULT self:lGlbLock
+    if .not.(cType=="A")
+        if .not.(cType=="U")
+            if .not.(cType=="C").or.(.not.(Empty(xGlbRes)))
+                aAdd(aResults,xGlbRes)
+            endif
+        endif
     else
-        aEval(xGlbRes,{|r|aAdd(aResults,r)})
+        aEval(xGlbRes,{|r|;
+                            cType:=valType(r),;
+                            if(.not.(cType=="U"),;
+                                if(.not.(cType=="C").or.(.not.(Empty(cType))),aAdd(aResults,r),NIL),;
+                                NIL;
+                            );
+                       };
+         )
     endif
-    ASSIGN aGlbValues:=self:getGlbVarResult(cGlbName)
+    if (lGlbLock)
+        while .not.(GlbLock())
+            if (++nATT>self:nAttempts)
+                UserException("["+ProcName()+"][UNABLE TO GLOBAL LOCK]")
+            endif
+            if (KillApp())
+                UserException("["+ProcName()+"][RECEIVED][KILLAPP]")
+            endif
+            Sleep(self:nSleep)
+        end while
+    endif
+    ASSIGN aGlbValues:=self:getGlbVarResult(cGlbName,.F.)
     aEval(aResults,{|r|aAdd(aGlbValues,r)})
-    self:PutGlbVars(cGlbName,@aGlbValues)
+    self:PutGlbVars(cGlbName,@aGlbValues,.F.)
+    if (lGlbLock)
+        GlbUnLock()
+    endif
 return
 
 #include "paramtypex.ch"
