@@ -20,7 +20,7 @@ Class tBigNThread
     data bOnStartJob
     data bOnFinishJob
     
-    data bAfterJobStart
+    data bAfterStartJob
     
     data nThreads
     data nTimeOut
@@ -31,6 +31,7 @@ Class tBigNThread
     data cMtxJob
     
     data nSleep
+    data nAttempts
     
     method function New() CONSTRUCTOR /*(/!\)*/
     
@@ -48,8 +49,8 @@ Class tBigNThread
 
     method function getAllResults()
     
-    method function  getGlbVarResult(cGlbName)
-    method procedure setGlbVarResult(cGlbName,xGlbRes)
+    method function  getGlbVarResult(cGlbName,lGlbLock)
+    method procedure setGlbVarResult(cGlbName,xGlbRes,lGlbLock)
     
 EndClass
 
@@ -62,6 +63,7 @@ method function new() class tBigNThread
     self:cMtxJob:=MutexCreate()
     self:nThreads:=0
     self:nSleep:=100
+    self:nAttempts:=10
     self:nTimeOut:=IPC_TIMEOUT
     self:nOutPutMsg:=0
 return(self)
@@ -69,7 +71,7 @@ return(self)
 method procedure Start(nThreads) class tBigNThread
     local cMTXID  AS CHARACTER 
     local nStart  AS NUMBER
-    local nSleep  AS NUMBER    VALUE self:nSleep
+    local nSleep  AS NUMBER VALUE self:nSleep
     local nThread AS NUMBER
     PARAMTYPE nThreads AS NUMBER DEFAULT self:nThreads
     self:lOutPutMsg:=.not.(Empty(self:nOutPutMsg))
@@ -98,8 +100,8 @@ method procedure Start(nThreads) class tBigNThread
         self:aThreads[nThread][TH_NUM]:=ThreadID()
         if (IPCCount(self:cMtxJob)<((self:nThreads-nThread)+1))
             StartJob("u_bigNthRun",self:cEnvSrv,.F.,self:cMtxJob,self:nTimeOut,self:bOnStartJob,self:bOnFinishJob)
-            if (valType(self:bAfterJobStart)=="B")
-                Eval(bAfterJobStart)
+            if (valType(self:bAfterStartJob)=="B")
+                Eval(bAfterStartJob)
             endif
             Sleep(self:nSleep)
         endif
@@ -110,20 +112,18 @@ method procedure Start(nThreads) class tBigNThread
 return
 
 method procedure Notify() class tBigNThread
-    local cMTXID  AS CHARACTER
-    local nATT    AS NUMBER
-    local nThread AS NUMBER
+    local cMTXID   AS CHARACTER
+    local nAttempt AS NUMBER
+    local nThread  AS NUMBER
     for nThread:=1 to self:nThreads
         ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:="0"
         xPutGlbValue(cMTXID+"TH_RES","")
         xPutGlbValue(cMTXID+"TH_END","0")
-        nATT:=0
         if ((xGetGlbValue(self:cMtxJob)=="1").and.(xGetGlbValue(cMTXID)=="1"))
-            nATT:=0
             while .not.(IPCGo(self:cMtxJob,self:aThreads[nThread]))
-                if (++nATT>10)
+                if (++nAttempt>self:nAttempts)
                     xPutGlbValue(cMTXID+"TH_RES","E_R_R_O_R_")
                     xPutGlbValue(cMTXID+"TH_END","1")
                     xGetGlbValue(cMTXID,"0")                    
@@ -132,12 +132,13 @@ method procedure Notify() class tBigNThread
                 sleep(self:nSleep)
                 if (IPCCount(self:cMtxJob)<((self:nThreads-nThread)+1))
                     StartJob("u_bigNthRun",self:cEnvSrv,.F.,self:cMtxJob,self:nTimeOut,self:bOnStartJob,self:bOnFinishJob)
-                    if (valType(self:bAfterJobStart)=="B")
-                        Eval(bAfterJobStart)
+                    if (valType(self:bAfterStartJob)=="B")
+                        Eval(bAfterStartJob)
                     endif
                     Sleep(self:nSleep)
                 endif
             end While
+            ASSIGN nAttempt:=0
         endif
     next nThread
 return
@@ -286,26 +287,28 @@ method function getAllResults() class tBigNThread
             aAdd(aResults,self:getResult(nThread))        
         endif
         if .not.(self:aThreads[nThread][TH_GLB]==NIL)
-            aGLBResults:=self:getGlbResult(nThread)
+            ASSIGN aGLBResults:=self:getGlbResult(nThread)
             aEval(aGLBResults,{|r|aAdd(aResults,r)})       
         endif
     next nResult
 return(aResults)
 
-method function getGlbVarResult(cGlbName) class tBigNThread
+method function getGlbVarResult(cGlbName,lGlbLock) class tBigNThread
     PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
-return(getGlbVarResult(cGlbName))
+    PARAMTYPE 2 VAR lGlbLock AS LOGICAL   OPTIONAL DEFAULT GLB_LOCK
+return(getGlbVarResult(cGlbName,lGlbLock))
 
-method procedure setGlbVarResult(cGlbName,xGlbRes) class tBigNThread
+method procedure setGlbVarResult(cGlbName,xGlbRes,lGlbLock) class tBigNThread
     local aResults AS ARRAY
     PARAMTYPE 1 VAR cGlbName AS CHARACTER OPTIONAL DEFAULT self:cGlbResult
     PARAMTYPE 2 VAR xGlbRes  AS UNDEFINED OPTIONAL
+    PARAMTYPE 3 VAR lGlbLock AS LOGICAL   OPTIONAL DEFAULT GLB_LOCK
     if .not.(self:cGlbResult==NIL)
         ASSIGN aResults:=self:getAllResults()
         if .not.(xGlbRes==NIL)
-            setGlbVarResult(cGlbName,xGlbRes)
+            setGlbVarResult(cGlbName,xGlbRes,lGlbLock)
         else
-            setGlbVarResult(cGlbName,aResults)
+            setGlbVarResult(cGlbName,aResults,lGlbLock)
         endif
     endif
 return
@@ -492,26 +495,26 @@ static function xPutGbVars(cGlbName,aGlbValues,lGlbLock)
     s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:PutGlbVars(@cGlbName,@aGlbValues,@lGlbLock))
 
-static function xClearGlbValue(cGlbName,lGlbLck)
+static function xClearGlbValue(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
     s__oGlbVars:nSleep:=GLB_SLEEP
     s__oGlbVars:nAttempts:=GLB_ATTEMPTS
     s__oGlbVars:lGlbLock:=GLB_LOCK
-return(s__oGlbVars:ClearGlbValue(@cGlbName,@lGlbLck))
+return(s__oGlbVars:ClearGlbValue(@cGlbName,@lGlbLock))
 
-static function getGlbVarResult(cGlbName)
+static function getGlbVarResult(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
     s__oGlbVars:nSleep:=GLB_SLEEP
     s__oGlbVars:nAttempts:=GLB_ATTEMPTS
     s__oGlbVars:lGlbLock:=GLB_LOCK
-return(s__oGlbVars:getGlbVarResult(@cGlbName))
+return(s__oGlbVars:getGlbVarResult(@cGlbName,lGlbLock))
 
-static function setGlbVarResult(cGlbName,xGlbRes)
+static function setGlbVarResult(cGlbName,xGlbRes,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
     s__oGlbVars:nSleep:=GLB_SLEEP
     s__oGlbVars:nAttempts:=GLB_ATTEMPTS
     s__oGlbVars:lGlbLock:=GLB_LOCK
-return(s__oGlbVars:setGlbVarResult(@cGlbName,@xGlbRes))
+return(s__oGlbVars:setGlbVarResult(@cGlbName,@xGlbRes,lGlbLock))
 
 static function OutPutMessage(xOutPut,nOutPut)
     DEFAULT s__oOutMessage:=tBigNMessage():New(nOutPut)
