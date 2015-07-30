@@ -3,6 +3,10 @@
 
 #define IPC_TIMEOUT ((3600000*24)*2)
 
+#define GLB_SLEEP    100
+#define GLB_ATTEMPTS 50
+#define GLB_LOCK     .T.
+
 static s__oGlbVars
 static s__oOutMessage
 
@@ -441,51 +445,51 @@ Return(NToS(PtInternal(2,cTOut)))
 
 static function xGetGlbValue(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:GetGlbValue(@cGlbName,@lGlbLock))
 
 static function xPutGlbValue(cGlbName,cGlbValue,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:PutGlbValue(@cGlbName,@cGlbValue,@lGlbLock))    
 
 static function xGetGbVars(cGlbName,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:GetGlbVars(@cGlbName,@lGlbLock))
 
 static function xPutGbVars(cGlbName,aGlbValues,lGlbLock)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:PutGlbVars(@cGlbName,@aGlbValues,@lGlbLock))
 
 static function xClearGlbValue(cGlbName,lGlbLck)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:ClearGlbValue(@cGlbName,@lGlbLck))
 
 static function getGlbVarResult(cGlbName)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:getGlbVarResult(@cGlbName))
 
 static function setGlbVarResult(cGlbName,xGlbRes)
     DEFAULT s__oGlbVars:=tBigNGlobals():New()
-    s__oGlbVars:nSleep:=100
-    s__oGlbVars:nAttempts:=50
-    s__oGlbVars:lGlbLock:=.T.
+    s__oGlbVars:nSleep:=GLB_SLEEP
+    s__oGlbVars:nAttempts:=GLB_ATTEMPTS
+    s__oGlbVars:lGlbLock:=GLB_LOCK
 return(s__oGlbVars:setGlbVarResult(@cGlbName,@xGlbRes))
 
 static function OutPutMessage(xOutPut,nOutPut)
