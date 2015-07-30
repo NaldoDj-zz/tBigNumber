@@ -4,7 +4,7 @@
         (1) core/tests/gtwin.prg         (1/1)
         (2) Main thread GT/Tests Monitor (1/9)
         (3) Configure tests              (1/1)
-        (4) tBigNThread.prg             (1/1)
+        (4) tBigNThread.prg              (1/1)
         (4.1) hb_ExecFromArray()         (1/1)
         (5) tBigNSleep.prg               (1/1)    
         (6) log file name                (0/1)           

@@ -4227,7 +4227,6 @@ method Factorial() class tBigNumber
                 nT:=0
                 for nD:=1 to nJ step 2
                     #ifdef __PROTHEUS__
-                        ConOut(valType(aRecFact[nD]),valType(aRecFact[nD+1]))
                         oThreads:SetEvent(++nT,"u_thiMult('"+aRecFact[nD]+"','"+aRecFact[nD+1]+"')")
                     #else //__HARBOUR__
                         oThreads:SetEvent(++nT,{@thiMult(),aRecFact[nD],aRecFact[nD+1]})

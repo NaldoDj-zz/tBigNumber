@@ -311,10 +311,10 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
     local xJob  AS UNDEFINED
     local xRes  AS UNDEFINED
     try exception using {|e|DefError(e,mtxJob)}
-        PARAMTYPE 1 VAR mtxJob    AS CHARACTER
-        PARAMTYPE 2 VAR nTimeOut  AS NUMBER OPTIONAL DEFAULT IPC_TIMEOUT
-        PARAMTYPE 3 VAR bOnStartJob  AS UNDEFINED OPTIONAL
-        PARAMTYPE 4 VAR bOnFinishJob AS UNDEFINED OPTIONAL
+        PARAMTYPE 1 VAR mtxJob       AS CHARACTER
+        PARAMTYPE 2 VAR nTimeOut     AS NUMBER OPTIONAL DEFAULT IPC_TIMEOUT
+        PARAMTYPE 3 VAR bOnStartJob  AS ARRAY,BLOCK,CHARACTER OPTIONAL
+        PARAMTYPE 4 VAR bOnFinishJob AS ARRAY,BLOCK,CHARACTER OPTIONAL
         ASSIGN cFunN:=ProcName()
         SetFunName(cFunN)
         OutPutInternal(cFunN)
