@@ -28,12 +28,15 @@ Class tBigNThread
     data nOutPutMsg
     data lOutPutMsg
     
+    data lProcess
+    data oProcess
+    
     data cMtxJob
     
     data nSleep
     data nAttempts
     
-    method function New() CONSTRUCTOR /*(/!\)*/
+    method function New(oProcess) CONSTRUCTOR /*(/!\)*/
     
     method procedure Start(nThreads)
     
@@ -47,32 +50,39 @@ Class tBigNThread
     method function getResult(nThEvent)
     method function getGlbResult(nThEvent)
 
-    method function getAllResults()
+    method function getAllResults(lGlbVarResult)
     
     method function  getGlbVarResult(cGlbName,lGlbLock)
     method procedure setGlbVarResult(cGlbName,xGlbRes,lGlbLock)
     
+    method function setObjProcess(oProcess) 
+    
 EndClass
 
-user function tBigNThread()
-return(tBigNThread():New())
+user function tBigNThread(oProcess)
+    PARAMTYPE 1 VAR oProcess AS OBJECT OPTIONAL
+return(tBigNThread():New(oProcess))
 
-method function new() class tBigNThread
+method function new(oProcess) class tBigNThread
+    PARAMTYPE 1 VAR oProcess AS OBJECT OPTIONAL
     self:aThreads:=Array(0)
     self:cEnvSrv:=GetEnvServer()
     self:cMtxJob:=MutexCreate()
+    self:cGlbResult:=(self:cMtxJob+"GLBRESULT")
     self:nThreads:=0
     self:nSleep:=100
     self:nAttempts:=10
     self:nTimeOut:=IPC_TIMEOUT
     self:nOutPutMsg:=0
+    self:setObjProcess(oProcess)
+
 return(self)
 
 method procedure Start(nThreads) class tBigNThread
-    local cMTXID  AS CHARACTER 
-    local nStart  AS NUMBER
-    local nSleep  AS NUMBER VALUE self:nSleep
-    local nThread AS NUMBER
+    local cMTXID   AS CHARACTER 
+    local nStart   AS NUMBER
+    local nSleep   AS NUMBER VALUE self:nSleep
+    local nThread  AS NUMBER
     PARAMTYPE nThreads AS NUMBER DEFAULT self:nThreads
     self:lOutPutMsg:=.not.(Empty(self:nOutPutMsg))
     if ((nThreads>self:nThreads).or.(self:nThreads==0))
@@ -81,17 +91,30 @@ method procedure Start(nThreads) class tBigNThread
         else
             ASSIGN nStart:=(self:nThreads+(nThreads-self:nThreads))
         endif
+        if (self:lProcess)
+            self:oProcess:SetRegua2(nThreads)
+        endif
         while (nThreads>0)
             aAdd(self:aThreads,Array(SIZ_TH))
             ++self:nThreads
             --nThreads
+            if (self:lProcess)
+                self:oProcess:IncRegua2()
+            endif
         end while
     else
         ASSIGN nStart:=1
     endif
     xPutGlbValue(self:cMtxJob,"1")
     nThreads:=self:nThreads    
+    if (self:lProcess)
+        self:oProcess:SetRegua1(((nThreads-nStart)+1))
+        self:oProcess:SetRegua2(0)
+    endif
     for nThread:=nStart to nThreads
+        if (self:lProcess)
+            self:oProcess:IncRegua2()
+        endif        
         ASSIGN cMTXID:=MutexCreate()
         self:aThreads[nThread][TH_MTX]:=cMTXID
         self:aThreads[nThread][TH_EXE]:=NIL
@@ -108,6 +131,9 @@ method procedure Start(nThreads) class tBigNThread
         xPutGlbValue(cMTXID,"1")
         xPutGlbValue(cMTXID+"TH_RES","")
         xPutGlbValue(cMTXID+"TH_END","0")
+        if (self:lProcess)
+            self:oProcess:IncRegua1()
+        endif        
     next nThread
 return
 
@@ -115,6 +141,10 @@ method procedure Notify() class tBigNThread
     local cMTXID   AS CHARACTER
     local nAttempt AS NUMBER
     local nThread  AS NUMBER
+    if (self:lProcess)
+        self:oProcess:SetRegua1(self:nThreads)
+        self:oProcess:SetRegua2(0)
+    endif
     for nThread:=1 to self:nThreads
         ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
         self:aThreads[nThread][TH_RES]:=NIL
@@ -137,8 +167,14 @@ method procedure Notify() class tBigNThread
                     endif
                     Sleep(self:nSleep)
                 endif
+                if (self:lProcess)
+                    self:oProcess:IncRegua2()
+                endif        
             end While
             ASSIGN nAttempt:=0
+        endif
+        if (self:lProcess)
+            self:oProcess:IncRegua1()
         endif
     next nThread
 return
@@ -151,7 +187,13 @@ method procedure Wait(nSleep) class tBigNThread
     local nThCount AS NUMBER
     local xResult  AS UNDEFINED
     PARAMTYPE nSleep AS NUMBER OPTIONAL DEFAULT self:nSleep
+    if (self:lProcess)
+        self:oProcess:SetRegua1(0)
+    endif
     while .not.(KillApp())
+        if (self:lProcess)
+            self:oProcess:SetRegua2(nThreads)
+        endif
         for nThread:=1 to nThreads
             ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
             begin sequence                
@@ -201,12 +243,18 @@ method procedure Wait(nSleep) class tBigNThread
                 xPutGlbValue(cMTXID+"TH_END","1")
                 ++nThCount
             end sequence
+            if (self:lProcess)
+                self:oProcess:IncRegua2()
+            endif
         next nThread
         if (nThCount==nThreads)
             exit
         endif
         ASSIGN nThCount:=0
         Sleep(nSleep)
+        if (self:lProcess)
+            self:oProcess:IncRegua1()
+        endif
     end while
     SetTimeOut(cTOut)
 return
@@ -215,12 +263,22 @@ method procedure Join() class tBigNThread
     local cMTXID  AS CHARACTER 
     local nThread AS NUMBER
     xPutGlbValue(self:cMtxJob,"0")
+    if (self:lProcess)
+        self:oProcess:SetRegua1(self:nThreads)
+        self:oProcess:SetRegua2(0)
+    endif
     for nThread:=1 to self:nThreads
+        if (self:lProcess)
+            self:oProcess:IncRegua2()
+        endif
         ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
         xPutGlbValue(cMTXID,"0")
         self:aThreads[nThread][TH_EXE]:="'E_X_I_T_'"
         IPCGo(self:cMtxJob,self:aThreads[nThread])
         Sleep(self:nSleep)
+        if (self:lProcess)
+            self:oProcess:IncRegua1()
+        endif
     next nTread
     self:setGlbVarResult()
 return
@@ -229,8 +287,16 @@ method procedure Finalize() class tBigNThread
     local cMTXID  AS CHARACTER
     local nThread AS NUMBER
     if xGlbLock(GLB_LOCK)
+        if (self:lProcess)
+            self:oProcess:SetRegua1(self:nThreads)
+            self:oProcess:SetRegua2(self:nThreads)
+        endif
         xClearGlbValue(self:cMtxJob,.F.)
+        xClearGlbValue(self:cMtxJob+"GLBRESULT",.F.)
         for nThread:=1 to self:nThreads
+            if (self:lProcess)
+                self:oProcess:IncRegua2()
+            endif
             ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
             xClearGlbValue(cMTXID,.F.)
             xClearGlbValue(cMTXID+"TH_NUM",.F.)
@@ -241,6 +307,9 @@ method procedure Finalize() class tBigNThread
             xClearGlbValue(cMTXID+"TH_MSG",.F.)
             xClearGlbValue(cMTXID+"TH_STK",.F.)
             xClearGlbValue(cMTXID+"TH_GLB",.F.)
+            if (self:lProcess)
+                self:oProcess:IncRegua1()
+            endif
         next nTread
         xGlbUnLock(GLB_LOCK)
     endif
@@ -278,10 +347,11 @@ method function getGlbResult(nThEvent) class tBigNThread
     endif
 return(uResult)
 
-method function getAllResults() class tBigNThread
+method function getAllResults(lGlbVarResult) class tBigNThread
     local aResults    AS ARRAY
     local aGLBResults AS ARRAY
     local nThread     AS NUMBER
+    PARAMTYPE 1 VAR lGlbVarResult AS LOGICAL OPTIONAL DEFAULT .F.
     for nThread:=1 to self:nThreads
         if .not.(self:aThreads[nThread][TH_RES]==NIL)
             aAdd(aResults,self:getResult(nThread))        
@@ -291,6 +361,10 @@ method function getAllResults() class tBigNThread
             aEval(aGLBResults,{|r|aAdd(aResults,r)})       
         endif
     next nResult
+    if (lGlbVarResult)
+        ASSIGN aGLBResults:=self:getGlbVarResult()
+        aEval(aGLBResults,{|r|aAdd(aResults,r)})
+    endif
 return(aResults)
 
 method function getGlbVarResult(cGlbName,lGlbLock) class tBigNThread
@@ -312,6 +386,14 @@ method procedure setGlbVarResult(cGlbName,xGlbRes,lGlbLock) class tBigNThread
         endif
     endif
 return
+
+method function setObjProcess(oProcess) class tBigNThread
+    PARAMTYPE 1 VAR oProcess AS OBJECT OPTIONAL
+    self:lProcess:=((valType(oProcess)=="O").and.(GetClassName(oProcess)$"TNEWPROCESS/MSNEWPROCESS"))
+    if (self:lProcess)
+        self:oProcess:=oProcess
+    endif
+return(self:lProcess)
 
 user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
     local cMTX  AS CHARACTER
