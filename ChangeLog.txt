@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-07-30 21:36 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * prj/pt/git_tBigNumber.prj
+ 
 2015-07-30 21:31 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT1.prg
   * prj/pt/git_tBigNumber.prj

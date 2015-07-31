@@ -11,7 +11,7 @@ Group git_tBigNumber
       PalmName=
       OutPut=
    End
-   ProjectsCount=2
+   ProjectsCount=3
    Project tBigNumber
       FoldersCount=4
       Folder include
@@ -69,11 +69,8 @@ Group git_tBigNumber
       End
       Folder tests
          VSSPath=Nova Pasta4
-         FilesCount=2
+         FilesCount=1
          File \GitHub\tBigNumber\src\tests\tBigNtst.prg
-             Type=T
-         End
-         File \tmp\uThTest.prw
              Type=T
          End
       End
@@ -116,6 +113,16 @@ Group git_tBigNumber
          VSSPath=Nova Pasta2
          FilesCount=1
          File \GitHub\tBigNumber\src\tests\pt\nPerfeitos\totvs_protheus\include\tryexception.ch
+             Type=T
+         End
+      End
+   End
+   Project tBigNThread
+      FoldersCount=1
+      Folder tests
+         VSSPath=Nova Pasta1
+         FilesCount=1
+         File \GitHub\tBigNumber\src\tests\pt\tbignthreads\uThreadT1.prg
              Type=T
          End
       End
