@@ -1,5 +1,12 @@
 #include "tBigNumber.ch"
 
+/*
+    class:tBigNGlobals
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Instancia um novo objeto do tipo tBigNGlobals
+    Sintaxe:tBigNGlobals():New() -> self
+*/
 Class tBigNGlobals
    
     data nSleep

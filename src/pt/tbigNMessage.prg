@@ -1,5 +1,12 @@
 #include "tBigNumber.ch"
 
+/*
+    class:tBigNMessage
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Instancia um novo objeto do tipo tBigNMessage
+    Sintaxe:tBigNMessage():New(nOutPut) -> self
+*/
 Class tBigNMessage
     
     data cOwner

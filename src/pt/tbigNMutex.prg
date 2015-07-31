@@ -2,6 +2,13 @@
 
 static s__cMTXID
 
+/*
+    class:tBigNMutex
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Instancia um novo objeto do tipo tBigNMutex
+    Sintaxe:tBigNMutex():New() -> self
+*/
 Class tBigNMutex
 
     data cEnvSrv

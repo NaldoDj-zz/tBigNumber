@@ -2,6 +2,13 @@
 
 #define TST_MAXTHREAD 15
 
+/*
+    Funcao:ThreadT1
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Exemplo de uso da Classe utThread (derivada de tBigNThread)
+    Sintaxe:u_ThreadT1
+*/
 user procedure ThreadT1()
     local oProcess:=MsNewProcess():New({||thProcess(oProcess)})
     oProcess:Activate()

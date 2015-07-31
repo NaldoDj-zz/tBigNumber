@@ -10,6 +10,13 @@
 static s__oGlbVars
 static s__oOutMessage
 
+/*
+    class:tBigNThread
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Instancia um novo objeto do tipo tBigNThread
+    Sintaxe:tBigNThread():New(oProcess) -> self
+*/
 Class tBigNThread
     
     data aThreads

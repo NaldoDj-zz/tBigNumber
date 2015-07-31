@@ -1,5 +1,12 @@
 #include "tBigNumber.ch"
 
+/*
+    class:tBigNExecFromArray
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:30/07/2015
+    Descricao:Instancia um novo objeto do tipo tBigNExecFromArray
+    Sintaxe:tBigNExecFromArray():New() -> self
+*/
 Class tBigNExecFromArray
     
     method function New() CONSTRUCTOR /*(/!\)*/
