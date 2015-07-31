@@ -16,6 +16,11 @@ static s__oOutMessage
     Data:30/07/2015
     Descricao:Instancia um novo objeto do tipo tBigNThread
     Sintaxe:tBigNThread():New(oProcess) -> self
+    TODO: 1 - Tratamento das Mensagens de Processamento
+          3 - LockByName
+          4 - Arquivo de Semaforo
+          5 - Exemplos com acesso ao SGBD
+          6 - etc.
 */
 Class tBigNThread
     
@@ -82,7 +87,6 @@ method function new(oProcess) class tBigNThread
     self:nTimeOut:=IPC_TIMEOUT
     self:nOutPutMsg:=0
     self:setObjProcess(oProcess)
-
 return(self)
 
 method procedure Start(nThreads) class tBigNThread
