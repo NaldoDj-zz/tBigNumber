@@ -21,7 +21,11 @@ return(tBigNExecFromArray():New())
 method function new() class tBigNExecFromArray
 return(self)
 
-method function ExecFromArray(aExec) class tBigNExecFromArray
+method function ExecFromArray(aExec,bError) class tBigNExecFromArray
+    PARAMTYPE 1 VAR aExec  AS ARRAY
+    PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
+return(ExecFromArray(aExec,bError))
+static function ExecFromArray(aExec,bError)
     local nD
     local nJ
     local aPrm
@@ -29,18 +33,21 @@ method function ExecFromArray(aExec) class tBigNExecFromArray
     local xRet
     local xFun
     local xPrm
-    PARAMTYPE 1 VAR aExec AS ARRAY
+    PARAMTYPE 1 VAR aExec  AS ARRAY
+    PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
     begin sequence
         if Empty(aExec)
+            xRet:=aExec
             break
         endif
-        tryexception
+        tryexception using bError
             if (Len(aExec)==1)
                 xFun:=aExec[1]
                 cTyp:=valType(xFun)
                 do case
                 case (cTyp=="A")
-                    xRet:=ExecFromArray(xFun)
+                    xRet:=Array(0)
+                    aAdd(xRet,ExecFromArray(xFun,bError))
                 case (cTyp=="B")
                     xRet:=Eval(xFun)
                 case (cTyp=="C")
@@ -53,22 +60,47 @@ method function ExecFromArray(aExec) class tBigNExecFromArray
                 cTyp:=valType(xFun)
                 do case
                 case (cTyp=="A")
-                    xRet:=ExecFromArray(xFun)
+                    xRet:=Array(0)
+                    nJ:=Len(aExec)
+                    for nD:=1 to nJ
+                        aAdd(xRet,ExecFromArray(aExec[nD],bError))
+                    next nD
                 case (cTyp=="B")
-                    aPrm:=Array(0)
-                    nJ:=Len(aExec)
-                    for nD:=2 to nJ
-                        aAdd(aPrm,aExec[nD])
-                    next nD
-                    xRet:=Eval(xFun,aPrm)
-                case (cTyp=="C")                
-                    aPrm:=Array(0)
-                    nJ:=Len(aExec)
-                    for nD:=2 to nJ
-                        aAdd(aPrm,aExec[nD])
-                    next nD
-                    xFun:=ToExecFromArr(xFun,aPrm)
-                    xRet:=&(xFun)
+                    cTyp:=valType(aExec[2])
+                    if (cTyp=="A")
+                        xRet:=Array(0)
+                        nJ:=Len(aExec[2])
+                        for nD:=2 to nJ
+                            aPrm:=aExec[2][nD]
+                            aAdd(xRet,Eval(xFun,aPrm))
+                        next nD
+                    else
+                        aPrm:=Array(0) 
+                        nJ:=Len(aExec)
+                        for nD:=2 to nJ
+                            aAdd(aPrm,aExec[nD])
+                        next nD
+                        xFun:=Eval(xFun,aPrm)
+                    endif
+                case (cTyp=="C")
+                    cTyp:=valType(aExec[2])
+                    if (cTyp=="A")
+                        xRet:=Array(0)
+                        nJ:=Len(aExec[2])
+                        for nD:=1 to nJ
+                            aPrm:=aExec[2][nD]
+                            aAdd(xRet,&(ToExecFromArr(xFun,aPrm)))
+                        Next nD                        
+                    else
+                        aPrm:=Array(0) 
+                        nJ:=Len(aExec)
+                        for nD:=2 to nJ
+                            aAdd(aPrm,aExec[nD])
+                        next nD
+                        xFun:=&(ToExecFromArr(xFun,aPrm))
+                     endif   
+                otherwise
+                    xRet:=aExec
                 end case
             endif
         end exception

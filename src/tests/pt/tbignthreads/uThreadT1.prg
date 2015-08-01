@@ -6,7 +6,7 @@
     Funcao:ThreadT1
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:30/07/2015
-    Descricao:Exemplo de uso da Classe utThread (derivada de tBigNThread)
+    Descricao:Exemplo (1) de uso da Classe utThread (derivada de tBigNThread)
     Sintaxe:u_ThreadT1
 */
 user procedure ThreadT1()
@@ -15,23 +15,23 @@ user procedure ThreadT1()
 return
 
 static function thProcess(oProcess)
-    Local oThread:=utThread():New(oProcess)    
-    Local nThread
-    Local nThreads:=TST_MAXTHREAD
+    Local nTotal
     Local nValor1
     Local nValor2
-    Local nTotal
+    Local nThread
+    Local nThreads:=TST_MAXTHREAD
+    Local oThread:=utThread():New(oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
     oProcess:SetRegua2(0)
     For nThread:=1 To nThreads
+        oProcess:IncRegua2()
         nValor1:=nThread
         nValor2:=(nThreads-nThread)
-        oProcess:IncRegua2()
         if ((nThread%2)==0)
-            oThread:setEvent(nThread,{"u_Sum",nValor1,nValor2})
+            oThread:setEvent(nThread,{"u_Sum1",nValor1,nValor2})
         else
-            oThread:setEvent(nThread,"u_Sum('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")    
+            oThread:setEvent(nThread,"u_Sum1('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")    
         endif
         oProcess:SetRegua1()
     Next nThread
@@ -45,7 +45,7 @@ static function thProcess(oProcess)
     ConOut("Total:",nTotal)
 return
 
-user function Sum(xValor1,xValor2)
+user function Sum1(xValor1,xValor2)
     local nValor1:=if(valType(xValor1)=="C",Val(xValor1),xValor1)
     local nValor2:=if(valType(xValor2)=="C",Val(xValor2),xValor2)
     //-----------------------------------------------------------
