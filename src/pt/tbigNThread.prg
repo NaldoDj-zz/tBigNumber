@@ -51,7 +51,9 @@ Class tBigNThread
     
     method procedure Start(nThreads)
     
-    method procedure Notify()
+    method procedure Notify(nThEvent,lProcess)
+    method function  Notified(nThEvent)
+
     method procedure Wait(nSleep)
     method procedure Join()
     method procedure Finalize()
@@ -131,6 +133,22 @@ method procedure Start(nThreads) class tBigNThread
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:="0"
         self:aThreads[nThread][TH_NUM]:=ThreadID()
+        self:aThreads[nThread][TH_ERR]:=""
+        self:aThreads[nThread][TH_MSG]:=""
+        self:aThreads[nThread][TH_STK]:=""
+        self:aThreads[nThread][TH_GLB]:=NIL
+        if xGlbLock(GLB_LOCK)
+            xPutGlbValue(cMTXID,"0",.F.)
+            xPutGlbValue(cMTXID+"TH_NUM",NToS(self:aThreads[nThread][TH_NUM]),.F.)
+            xPutGlbValue(cMTXID+"TH_EXE","",.F.)
+            xPutGlbValue(cMTXID+"TH_RES","",.F.)
+            xPutGlbValue(cMTXID+"TH_END","0",.F.)
+            xPutGlbValue(cMTXID+"TH_ERR","0",.F.)
+            xPutGlbValue(cMTXID+"TH_MSG","",.F.)
+            xPutGlbValue(cMTXID+"TH_STK","",.F.)
+            xClearGlbValue(cMTXID+"TH_GLB",.F.)
+            xGlbUnLock(GLB_LOCK)
+        endif
         if (IPCCount(self:cMtxJob)<((self:nThreads-nThread)+1))
             StartJob("u_bigNthRun",self:cEnvSrv,.F.,self:cMtxJob,self:nTimeOut,self:bOnStartJob,self:bOnFinishJob)
             if (valType(self:bAfterStartJob)=="B")
@@ -138,56 +156,86 @@ method procedure Start(nThreads) class tBigNThread
             endif
             Sleep(self:nSleep)
         endif
-        xPutGlbValue(cMTXID,"1")
-        xPutGlbValue(cMTXID+"TH_RES","")
-        xPutGlbValue(cMTXID+"TH_END","0")
         if (self:lProcess)
             self:oProcess:IncRegua1()
         endif        
     next nThread
 return
 
-method procedure Notify() class tBigNThread
+method procedure Notify(nThEvent,lProcess) class tBigNThread
     local cMTXID   AS CHARACTER
     local nAttempt AS NUMBER
     local nThread  AS NUMBER
-    if (self:lProcess)
+    local nThreads AS NUMBER
+    PARAMTYPE 1 VAR nThEvent AS NUMBER  OPTIONAL DEFAULT 0
+    PARAMTYPE 2 VAR lProcess AS LOGICAL OPTIONAL DEFAULT ((nThEvent==0).and.self:lProcess)
+    if (lProcess).and.(self:lProcess)
         self:oProcess:SetRegua1(self:nThreads)
         self:oProcess:SetRegua2(0)
     endif
-    for nThread:=1 to self:nThreads
-        ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
-        self:aThreads[nThread][TH_RES]:=NIL
-        self:aThreads[nThread][TH_END]:="0"
-        xPutGlbValue(cMTXID+"TH_RES","")
-        xPutGlbValue(cMTXID+"TH_END","0")
-        if ((xGetGlbValue(self:cMtxJob)=="1").and.(xGetGlbValue(cMTXID)=="1"))
-            while .not.(IPCGo(self:cMtxJob,self:aThreads[nThread]))
-                if (++nAttempt>self:nAttempts)
-                    xPutGlbValue(cMTXID+"TH_RES","E_R_R_O_R_")
-                    xPutGlbValue(cMTXID+"TH_END","1")
-                    xGetGlbValue(cMTXID,"0")                    
-                    exit
-                endif
-                sleep(self:nSleep)
-                if (IPCCount(self:cMtxJob)<((self:nThreads-nThread)+1))
-                    StartJob("u_bigNthRun",self:cEnvSrv,.F.,self:cMtxJob,self:nTimeOut,self:bOnStartJob,self:bOnFinishJob)
-                    if (valType(self:bAfterStartJob)=="B")
-                        Eval(bAfterStartJob)
+    ASSIGN nThEvent:=Min(Max(nThEvent,1),self:nThreads)
+    if ((nThEvent>0).and.(nThEvent<=self:nThreads))
+        nThreads:=if(nThEvent>0,nThEvent,self:nThreads)
+        for nThread:=nThEvent to nThreads
+            ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
+            self:aThreads[nThread][TH_RES]:=NIL
+            self:aThreads[nThread][TH_END]:="0"
+            self:aThreads[nThread][TH_ERR]:=""
+            self:aThreads[nThread][TH_MSG]:=""
+            self:aThreads[nThread][TH_STK]:=""
+            self:aThreads[nThread][TH_GLB]:=NIL
+            if xGlbLock(GLB_LOCK)
+                xPutGlbValue(cMTXID,"0",.F.)
+                xPutGlbValue(cMTXID+"TH_NUM",NToS(self:aThreads[nThread][TH_NUM]),.F.)
+                xPutGlbValue(cMTXID+"TH_EXE","",.F.)
+                xPutGlbValue(cMTXID+"TH_RES","",.F.)
+                xPutGlbValue(cMTXID+"TH_END","0",.F.)
+                xPutGlbValue(cMTXID+"TH_ERR","0",.F.)
+                xPutGlbValue(cMTXID+"TH_MSG","",.F.)
+                xPutGlbValue(cMTXID+"TH_STK","",.F.)
+                xClearGlbValue(cMTXID+"TH_GLB",.F.)
+                xGlbUnLock(GLB_LOCK)
+            endif
+            if (xGetGlbValue(self:cMtxJob)=="1")
+                while .not.(IPCGo(self:cMtxJob,self:aThreads[nThread]))
+                    if (++nAttempt>self:nAttempts)
+                        xPutGlbValue(cMTXID+"TH_RES","E_R_R_O_R_")
+                        xPutGlbValue(cMTXID+"TH_END","1")
+                        xGetGlbValue(cMTXID,"0")                    
+                        exit
                     endif
-                    Sleep(self:nSleep)
-                endif
-                if (self:lProcess)
-                    self:oProcess:IncRegua2()
-                endif        
-            end While
-            ASSIGN nAttempt:=0
-        endif
-        if (self:lProcess)
-            self:oProcess:IncRegua1()
-        endif
-    next nThread
+                    sleep(self:nSleep)
+                    if (IPCCount(self:cMtxJob)<((self:nThreads-nThread)+1))
+                        StartJob("u_bigNthRun",self:cEnvSrv,.F.,self:cMtxJob,self:nTimeOut,self:bOnStartJob,self:bOnFinishJob)
+                        if (valType(self:bAfterStartJob)=="B")
+                            Eval(bAfterStartJob)
+                        endif
+                        Sleep(self:nSleep)
+                    endif
+                    if (lProcess).and.(self:lProcess)
+                        self:oProcess:IncRegua2()
+                    endif        
+                end While
+                ASSIGN nAttempt:=0
+            endif
+            if (lProcess).and.(self:lProcess)
+                self:oProcess:IncRegua1()
+            endif
+        next nThread
+    endif
 return
+
+method function Notified(nThEvent) class tBigNThread
+    local cMTXID    AS CHARACTER
+    local lNotified AS LOGICAL VALUE .F.
+    PARAMTYPE 1 VAR nThEvent AS NUMBER OPTIONAL DEFAULT 0
+    if ((nThEvent>0).and.(nThEvent<=self:nThreads))
+        ASSIGN cMTXID:=self:aThreads[nThEvent][TH_MTX]
+        lNotified:=.not.(xGetGlbValue(cMTXID)=="0")
+    else
+        lNotified:=.T.
+    endif
+return(lNotified)
 
 method procedure Wait(nSleep) class tBigNThread
     local cTOut    AS CHARACTER VALUE SetTimeOut("0")
@@ -207,7 +255,7 @@ method procedure Wait(nSleep) class tBigNThread
         for nThread:=1 to nThreads
             ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
             begin sequence                
-                if .not.(xGetGlbValue(self:cMtxJob)=="1").and.(xGetGlbValue(cMTXID)=="1")
+                if .not.(xGetGlbValue(self:cMtxJob)=="1").and.(self:Notified(nThread))
                     break
                 endif
                 if (self:aThreads[nThread][TH_END]=="1")
@@ -438,6 +486,8 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
                 do case
                 case (cTyp=="A")
                     ASSIGN cMTX:=xJob[TH_MTX]
+                    xPutGlbValue(cMTX,"1")
+                    xPutGlbValue(cMTX+"TH_NUM",NToS(ThreadID()))
                     ASSIGN cTyp:=valType(xJob[TH_EXE])
                     do case
                     case (cTyp=="C")
@@ -459,7 +509,7 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
                         endif    
                     case (cTyp=="C")
                         if (Upper(xRes)=="E_X_I_T_")
-                            xPutGlbValue(cMTX,"0")
+                            xPutGlbValue(cMTX,"-1")
                         elseif .not.(Empty(xRes))
                             xPutGlbValue(cMTX+"TH_RES",xRes)
                         endif
@@ -474,13 +524,13 @@ user procedure bigNthRun(mtxJob,nTimeOut,bOnStartJob,bOnFinishJob)
                     endif
                 case (cTyp=="C")
                     if (Upper(xJob)=="E_X_I_T_")
-                        xPutGlbValue(mtxJob,"0")
+                        xPutGlbValue(mtxJob,"-1")
                         exit
                     endif
                     xRes:=&(xJob)                    
                     if (valType(xRes)=="C")
                         if (Upper(xRes)=="E_X_I_T_")
-                            xPutGlbValue(mtxJob,"0")
+                            xPutGlbValue(mtxJob,"-1")
                             exit
                         endif
                     endif
@@ -508,7 +558,7 @@ static procedure DefError(e,xJOB)
     local cType:=valType(xJOB)
     local cMTXID:=if((cType=="A"),xJOB[TH_MTX],if((cType=="C"),xJOB,"__NOID__"))
     if .not.(cMTXID=="__NOID__")
-        xPutGlbValue(cMTXID,"0")
+        xPutGlbValue(cMTXID,"-1")
         if (cType=="A")
             xPutGlbValue(cMTXID+"TH_RES","E_R_R_O_R_")
             xPutGlbValue(cMTXID+"TH_END","1")   
