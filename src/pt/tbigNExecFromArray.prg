@@ -22,8 +22,6 @@ method function new() class tBigNExecFromArray
 return(self)
 
 method function ExecFromArray(aExec,bError) class tBigNExecFromArray
-    PARAMTYPE 1 VAR aExec  AS ARRAY
-    PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
 return(ExecFromArray(aExec,bError))
 static function ExecFromArray(aExec,bError)
     local nD
@@ -33,13 +31,13 @@ static function ExecFromArray(aExec,bError)
     local xRet
     local xFun
     local xPrm
-    PARAMTYPE 1 VAR aExec  AS ARRAY
-    PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
+    PARAMTYPE 1 VAR aExec AS ARRAY
     begin sequence
         if Empty(aExec)
             xRet:=aExec
             break
         endif
+        PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
         tryexception using bError
             if (Len(aExec)==1)
                 xFun:=aExec[1]
