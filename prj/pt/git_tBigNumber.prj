@@ -121,7 +121,10 @@ Group git_tBigNumber
       FoldersCount=1
       Folder tests
          VSSPath=Nova Pasta1
-         FilesCount=4
+         FilesCount=6
+         File \GitHub\tBigNumber\src\tests\pt\tbignthreads\uThreadSum.prg
+             Type=T
+         End
          File \GitHub\tBigNumber\src\tests\pt\tbignthreads\uThreadT1.prg
              Type=T
          End
@@ -132,6 +135,9 @@ Group git_tBigNumber
              Type=T
          End
          File \GitHub\tBigNumber\src\tests\pt\tbignthreads\uThreadT4.prg
+             Type=T
+         End
+         File \GitHub\tBigNumber\src\tests\pt\tbignthreads\uThreadT5.prg
              Type=T
          End
       End

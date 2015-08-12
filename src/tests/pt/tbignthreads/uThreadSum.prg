@@ -38,11 +38,9 @@ static function ThreadQuit()
     local lMTXHdlThd:=(Type("__cMTXHdlThd")=="C")
     if (lMTXJobThd)
         lQuit:=.not.(xGetGlbValue(__cMTXJobThd)=="1")
-        OutPutMessage("QUIT:"+if(lQuit,".T.",".F.")+"|"+xGetGlbValue(__cMTXJobThd))
     endif    
     if (lMTXHdlThd)
         lQuit:=(lQuit.or.(.not.(File(__cMTXHdlThd))))
-        OutPutMessage("QUIT:"+if(lQuit,".T.",".F.")+"|"+__cMTXHdlThd)
     endif
 return(lQuit)
 
