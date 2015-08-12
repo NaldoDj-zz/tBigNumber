@@ -250,23 +250,28 @@ method function Notified(nThEvent) class tBigNThread
 return(lNotified)
 
 method procedure Wait(nSleep) class tBigNThread
-    local cTOut    AS CHARACTER VALUE SetTimeOut("0")
-    local cIncR1   AS CHARACTER
-    local cIncR2   AS CHARACTER
-    local cMTXID   AS CHARACTER
-    local nThread  AS NUMBER
-    local nThreads AS NUMBER VALUE self:nThreads
-    local nThCount AS NUMBER
-    local xResult  AS UNDEFINED
+    local cTOut     AS CHARACTER VALUE SetTimeOut("0")
+    local cIncR1    AS CHARACTER
+    local cIncR2    AS CHARACTER
+    local cMTXID    AS CHARACTER
+    local nAttempt  AS NUMBER
+    local nAttempts AS NUMBER VALUE 10
+    local nThread   AS NUMBER
+    local nThreads  AS NUMBER VALUE self:nThreads
+    local nThCount  AS NUMBER
+    local xResult   AS UNDEFINED
     PARAMTYPE nSleep AS NUMBER OPTIONAL DEFAULT self:nSleep
     if (self:lProcess)
         ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
-        self:oProcess:SetRegua1(nThreads)
+        self:oProcess:SetRegua1(nAttempts)
     endif
     while .not.(self:oMtxJob:MTXKillApp())
         if (self:lProcess)
-            self:oProcess:SetRegua1(nThreads)
+            if ((++nAttempt)>nAttempts)
+                nAttempt:=0
+                self:oProcess:SetRegua1(nAttempts)
+            endif
             self:oProcess:SetRegua2(nThreads)
         endif
         for nThread:=1 to nThreads
@@ -324,6 +329,7 @@ method procedure Wait(nSleep) class tBigNThread
                     self:QuitRequest()
                 endif
             endif
+            Sleep(nSleep)
         next nThread
         if (nThCount==nThreads)
             exit

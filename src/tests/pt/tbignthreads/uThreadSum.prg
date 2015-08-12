@@ -9,7 +9,7 @@
 */
 user function ThreadSum(xValor1,xValor2)
     local nD
-    local nJ:=1500
+    local nJ:=15000
     local nResult:=0
     local nValor1:=if(valType(xValor1)=="C",Val(xValor1),xValor1)
     local nValor2:=if(valType(xValor2)=="C",Val(xValor2),xValor2)
