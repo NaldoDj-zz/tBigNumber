@@ -100,6 +100,7 @@ method procedure Start(nThreads) class tBigNThread
             ASSIGN nStart:=(self:nThreads+(nThreads-self:nThreads))
         endif
         if (self:lProcess)
+            ASSIGN cIncR1:="Processando..."
             ASSIGN cIncR2:=ProcName()
             self:oProcess:SetRegua2(nThreads)
         endif
@@ -175,6 +176,7 @@ method procedure Notify(nThEvent,lProcess) class tBigNThread
     PARAMTYPE 1 VAR nThEvent AS NUMBER  OPTIONAL DEFAULT 0
     PARAMTYPE 2 VAR lProcess AS LOGICAL OPTIONAL DEFAULT ((nThEvent==0).and.self:lProcess)
     if (lProcess).and.(self:lProcess)
+        ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(self:nThreads)
         self:oProcess:SetRegua2(0)
@@ -258,6 +260,7 @@ method procedure Wait(nSleep) class tBigNThread
     local xResult  AS UNDEFINED
     PARAMTYPE nSleep AS NUMBER OPTIONAL DEFAULT self:nSleep
     if (self:lProcess)
+        ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(0)
     endif
@@ -337,6 +340,7 @@ method procedure Join() class tBigNThread
     local nThread AS NUMBER
     xPutGlbValue(self:oMtxJob:cMutex,"0")
     if (self:lProcess)
+        ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(self:nThreads)
         self:oProcess:SetRegua2(0)
@@ -364,6 +368,7 @@ method procedure Finalize() class tBigNThread
     local nThread AS NUMBER
     if xGlbLock(GLB_LOCK)
         if (self:lProcess)
+            ASSIGN cIncR1:="Processando..."
             ASSIGN cIncR2:=ProcName()
             self:oProcess:SetRegua1(self:nThreads)
             self:oProcess:SetRegua2(self:nThreads)
@@ -483,6 +488,7 @@ method procedure QuitRequest() class tBigNThread
     local cIncR2  AS CHARACTER
     local nThread AS NUMBER
     if (self:lProcess)
+        ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(self:nThreads)
         self:oProcess:SetRegua2(self:nThreads)
