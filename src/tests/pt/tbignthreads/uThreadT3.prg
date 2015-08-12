@@ -47,7 +47,7 @@ static procedure thProcess(oProcess,lEnd)
         endif
         oThread:Notify(nThread,.F.)
         while .not.(oThread:Notified(nThread))
-            oProcess:IncRegua2()
+            oProcess:IncRegua2("Pending notification...")
         end while
         oProcess:IncRegua1()
         sleep(oThread:nSleep)

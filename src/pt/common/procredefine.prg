@@ -14,7 +14,7 @@
             if (laMeter)
                 DEFAULT oFont:=TFont():New("Lucida Console",NIL,12,NIL,.T.)
                 DEFAULT nLeft:=40
-                DEFAULT nWidth:=95
+                DEFAULT nWidth:=80
                 nMeters:=Len(oProcess:aMeter)
                 For nMeter:=1 To nMeters
                     For nObj:=1 To 2

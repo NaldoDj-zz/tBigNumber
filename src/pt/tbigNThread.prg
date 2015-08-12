@@ -132,7 +132,7 @@ method procedure Start(nThreads) class tBigNThread
     nThreads:=self:nThreads    
     if (self:lProcess)
         self:oProcess:SetRegua1(((nThreads-nStart)+1))
-        self:oProcess:SetRegua2(0)
+        self:oProcess:SetRegua2(((nThreads-nStart)+1))
     endif
     for nThread:=nStart to nThreads
         if (self:lProcess)
@@ -179,7 +179,7 @@ method procedure Notify(nThEvent,lProcess) class tBigNThread
         ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(self:nThreads)
-        self:oProcess:SetRegua2(0)
+        self:oProcess:SetRegua2(self:nThreads)
     endif
     ASSIGN lAllThds:=(nThEvent==0)
     ASSIGN nThEvent:=Min(Max(nThEvent,1),self:nThreads)
@@ -262,10 +262,11 @@ method procedure Wait(nSleep) class tBigNThread
     if (self:lProcess)
         ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
-        self:oProcess:SetRegua1(0)
+        self:oProcess:SetRegua1(nThreads)
     endif
     while .not.(self:oMtxJob:MTXKillApp())
         if (self:lProcess)
+            self:oProcess:SetRegua1(nThreads)
             self:oProcess:SetRegua2(nThreads)
         endif
         for nThread:=1 to nThreads
@@ -319,6 +320,9 @@ method procedure Wait(nSleep) class tBigNThread
             end sequence
             if (self:lProcess)
                 self:oProcess:IncRegua2(cIncR2)
+                if (self:oProcess:lEnd)
+                    self:QuitRequest()
+                endif
             endif
         next nThread
         if (nThCount==nThreads)
@@ -343,7 +347,7 @@ method procedure Join() class tBigNThread
         ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
         self:oProcess:SetRegua1(self:nThreads)
-        self:oProcess:SetRegua2(0)
+        self:oProcess:SetRegua2(self:nThreads)
     endif
     for nThread:=1 to self:nThreads
         if (self:lProcess)
@@ -503,10 +507,10 @@ method procedure QuitRequest() class tBigNThread
         endif
     next nThread
     xPutGlbValue(self:oMtxJob:cMutex,"-1")
-    if File(self:cHdlFile)
-        fErase(self:cHdlFile)
+    if File(self:oMtxJob:cHdlFile)
+        fErase(self:oMtxJob:cHdlFile)
     endif
-    self:oMtxJob:MTXKillApp(self:cHdlFile,.T.)
+    self:oMtxJob:MTXKillApp(self:oMtxJob:cHdlFile,.T.)
 return
 
 method procedure threadQuitRequest(nThEvent) class tBigNThread

@@ -11,7 +11,7 @@
     Sintaxe:u_ThreadT5
 */
 user procedure ThreadT5()
-    local bProc:={|oProcess|thProcess(oProcess,@oProcess:lEnd)}
+    local bProc:={|oProcess|ProcRedefine(@oProcess),thProcess(oProcess,@oProcess:lEnd)}
     local bonWInit:={||oProcess:=tNewProcess():New(@cProcD,@cProcT,@bProc,@cProcD,NIL,NIL,NIL,NIL,NIL,@lViewExecute,@lOneMeter),oMainWnd:End()}
     local cProcD:=ProcName()
     local cProcT:="Processando Threads..."
@@ -103,7 +103,7 @@ static procedure thProcess(oProcess,lEnd)
         endif
         oThread:Notify(nThread,.F.)
         while .not.(oThread:Notified(nThread))
-            oProcess:IncRegua2()
+            oProcess:IncRegua2("Pending notification...")
         end while
         oProcess:IncRegua1()
         sleep(oThread:nSleep)
