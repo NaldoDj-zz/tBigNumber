@@ -113,7 +113,7 @@ method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
             cFile:=s__aMTXKey[nKey][4]
             cFile+=s__aMTXKey[nKey][1]
              cFile+=s__aMTXKey[nKey][3]
-              self:MTXSControl(cFile,.F.,.T.)
+              self:MTXSControl(cFile,.F.,.F.)
         endif
     endif
     nSize:=s__aMTXKey[nKey][2]

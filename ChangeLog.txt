@@ -9,7 +9,10 @@
    Encoding: UTF*8 (No BOM)  Notation (in 5th position):
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
-
+2015-08-12 18:38 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/pt/tbigNMutex.prg
+  * src/pt/tbigNThread.prg
+ 
 2015-08-12 16:54 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/pt/git_tBigNumber.prj
   * src/tests/pt/tbignthreads/uThreadSum.prg
