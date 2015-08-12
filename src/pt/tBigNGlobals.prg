@@ -31,9 +31,9 @@ Class tBigNGlobals
 EndClass
 
 user function tBigNGlobals()
-return(tBigNGlobals():New(nThreads))
+return(tBigNGlobals():New())
 
-method function new() class tBigNGlobals
+method function New() class tBigNGlobals
     self:nSleep:=0
     self:nAttempts:=0
     self:lGlbLock:=.F.
@@ -73,6 +73,7 @@ method function GetGlbValue(cGlbName,lGlbLock) class tBigNGlobals
         lLock:=self:GlbLock(lGlbLock)
     endif
     if (lLock)
+        ASSIGN cGlbName:=("__GLB__"+cGlbName)
         ASSIGN cGlbValue:=GetGlbValue(cGlbName)        
         if (lGlbLock)
             self:GlbUnLock(lGlbLock)
@@ -90,6 +91,7 @@ method function PutGlbValue(cGlbName,cGlbValue,lGlbLock) class tBigNGlobals
         lLock:=self:GlbLock(lGlbLock)
     endif
     if (lLock)
+        ASSIGN cGlbName:=("__GLB__"+cGlbName)
         ASSIGN cLGValue:=self:GetGlbValue(cGlbName,lGlbLock)
         PutGlbValue(cGlbName,cGlbValue)
         if (lGlbLock)
@@ -107,6 +109,7 @@ method function GetGlbVars(cGlbName,lGlbLock) class tBigNGlobals
         lLock:=self:GlbLock(lGlbLock)
     endif
     if (lLock)
+        ASSIGN cGlbName:=("__GLB__"+cGlbName)    
         GetGlbVars(cGlbName,@aGlbValues)
         if (lGlbLock)
             self:GlbUnLock(lGlbLock)
@@ -124,6 +127,7 @@ method function PutGlbVars(cGlbName,aGlbValues,lGlbLock) class tBigNGlobals
         lLock:=self:GlbLock(lGlbLock)
     endif
     if (lLock)
+        ASSIGN cGlbName:=("__GLB__"+cGlbName)    
         ASSIGN aLGlbValues:=self:GetGlbVars(cGlbName,lGlbLock)
         PutGlbVars(cGlbName,aGlbValues)
         if (lGlbLock)
@@ -140,6 +144,7 @@ method procedure ClearGlbValue(cGlbName,lGlbLock) class tBigNGlobals
         lLock:=self:GlbLock(lGlbLock)
     endif
     if (lLock)
+        ASSIGN cGlbName:=("__GLB__"+cGlbName)    
         ClearGlbValue(cGlbName)
         if (lGlbLock)
             self:GlbUnLock(lGlbLock)

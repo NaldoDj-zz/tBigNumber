@@ -32,4 +32,4 @@
 
     #endif
     
-#endif
+#endif /*_hb_TBigNumber_CH*/

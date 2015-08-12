@@ -20,8 +20,7 @@ Class tBigNMessage
 EndClass
 
 user function tBigNMessage(nOutPut)
-    PARAMTYPE 1 VAR nOutPut AS NUMBER OPTIONAL DEFAULT MSG_CONOUT
-return(tBigNMessage():New(nOutPut))
+return(tBigNMessage():New(@nOutPut))
 
 method function new(nOutPut) class tBigNMessage
     PARAMTYPE 1 VAR nOutPut AS NUMBER OPTIONAL DEFAULT MSG_CONOUT
@@ -56,7 +55,7 @@ method function OutPutMessage(xOutPut,nOutPut) class tBigNMessage
                     cOutPut:=cValToChar(xOutPut)
                 endcase                
             endif
-            cOutPut:="["+self:cOwner+"]["+cProcName1+"]["+NToS(ProcLine(1))+"]["+DToS(MsDate())+"]["+Time()+"][MSG]"+cOutPut
+            cOutPut:="["+self:cOwner+"]["+NToS(ThreadID())+"]["+cProcName1+"]["+NToS(ProcLine(1))+"]["+DToS(MsDate())+"]["+Time()+"]["+self:cOwner+"]"+cOutPut
         endif
     
         if (nOutPut==MSG_CONOUT)

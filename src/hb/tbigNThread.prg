@@ -55,6 +55,11 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
         endif
         While (nThreads>0)
             aAdd(self:aThreads,Array(SIZ_TH))
+            nThread:=Len(self:aThreads)
+            self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
+            self:aThreads[nThread][TH_EXE]:=NIL
+            self:aThreads[nThread][TH_RES]:=NIL
+            self:aThreads[nThread][TH_END]:=.F.
             ++self:nThreads
             --nThreads
         End While
@@ -63,10 +68,6 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
     endif
     nThreads:=self:nThreads    
     for nThread:=nStart to nThreads
-        self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
-        self:aThreads[nThread][TH_EXE]:=NIL
-        self:aThreads[nThread][TH_RES]:=NIL
-        self:aThreads[nThread][TH_END]:=.F.
         if (nMemMode==NIL)
             self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
         else

@@ -1,6 +1,6 @@
-#ifndef _hb_TBigNMessage_CH
+#ifndef _pt_TBigNMessage_CH
 
-    #define _hb_TBigNMessage_CH
+    #define _pt_TBigNMessage_CH
 
     #ifdef __PROTHEUS__
         #define MSG_CONOUT      1//:Mensagem via ConOut
@@ -13,4 +13,4 @@
     #else //__HARBOUR__
     #endif //__PROTHEUS__
 
-#endif /*_hb_TBigNMessage_CH*/
+#endif /*_pt_TBigNMessage_CH*/

@@ -62,6 +62,7 @@
     #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
     #xtranslate method <methodName> SETGET  => method <methodName>
+    #define MTX_KEY "TBIGNUMBER_0000000000"
     //-------------------------------------------------------------------------------------
 #else // __HARBOUR__
     //-------------------------------------------------------------------------------------
@@ -110,10 +111,6 @@ static s__MTXcN9:=hb_mutexCreate()
 static s__MTXACC:=hb_mutexCreate()
 static s__MTXDEC:=hb_mutexCreate()
 static s__MTXSQR:=hb_mutexCreate()
-
-#ifdef __PROTHEUS__
-static s__oGlbVars
-#endif //__PROTHEUS__
 
 #ifdef TBN_ARRAY
     #define __THREAD_STATIC__ 1
@@ -580,7 +577,7 @@ endclass
 */
 #ifdef __PROTHEUS__
     user function tBigNumber(uBigN,nBase)
-    return(tBigNumber():New(uBigN,nBase))
+    return(tBigNumber():New(@uBigN,@nBase))
 #endif
 
 /*
@@ -4192,15 +4189,15 @@ method Factorial() class tBigNumber
         #ifdef __HARBOUR__
             pMTX:=hb_MutexCreate()
         #else //__PROTHEUS__
-            pMTX:=pt_MutexCreate()
+            pMTX:=MTXCreate(NIL,MTX_KEY)
         #endif
         recFact(s__o1:Clone(),oN,@aRecFact,pMTX)
         #ifdef __PROTHEUS__
             aEval(getGlbVarResult(pMTX),{|r|aAdd(aRecFact,r)})
         #endif //__PROTHEUS__
-        oThreads:=tBigNThread():New()
+        oThreads:=tBigNThread():New(MTX_KEY)
         #ifdef __PROTHEUS__
-            pMTX:=pt_MutexCreate()
+            pMTX:=MTXCreate(NIL,MTX_KEY)
             oThreads:cGlbResult:=pMTX
             oThreads:bOnStartJob:="u_tBigNumber()"
         #endif //__PROTHEUS__
@@ -4215,6 +4212,7 @@ method Factorial() class tBigNumber
         oThreads:Join()
         #ifdef __PROTHEUS__
             oThreads:Finalize()
+            MTXObj(NIL,MTX_KEY):Clear()
             while ((nJ:=Len(aRecFact:=getGlbVarResult(pMTX)))>1)
         #else //__HARBOUR__
             while ((nJ:=Len(aRecFact:=oThreads:getAllResults()))>1)
@@ -4227,9 +4225,9 @@ method Factorial() class tBigNumber
                         aAdd(aRecFact,s__o1:Clone())
                     #endif //__PROTHEUS__
                 endif
-                oThreads:=tBigNThread():New()
+                oThreads:=tBigNThread():New(MTX_KEY)
                 #ifdef __PROTHEUS__
-                    pMTX:=pt_MutexCreate()
+                    pMTX:=MTXCreate(NIL,MTX_KEY)
                     oThreads:cGlbResult:=pMTX
                     oThreads:bOnStartJob:="u_tBigNumber()"
                 #endif //__PROTHEUS__
@@ -4247,6 +4245,7 @@ method Factorial() class tBigNumber
                 oThreads:Join()
                 #ifdef __PROTHEUS__
                     oThreads:Finalize()
+                    MTXObj(NIL,MTX_KEY):Clear()
                 #endif //__PROTHEUS__
             end while
         #ifdef __PROTHEUS__
@@ -4318,7 +4317,7 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
         oNI:=oN:Clone()
         oNI:SetValue(oNI:iSub(oI))
         
-        oThreads:=tBigNThread():New()
+        oThreads:=tBigNThread():New(MTX_KEY)
         #ifdef __PROTHEUS__
             oThreads:cGlbResult:=pMTX
             oThreads:bOnStartJob:="u_tBigNumber()"
@@ -5719,13 +5718,6 @@ return(r)
     return(oN:LogN(oB))
 #else
     #ifdef __PROTHEUS__
-        static function pt_MutexCreate()
-            static s__oMutex
-            DEFAULT s__oMutex:=tBigNMutex():New()
-        return(s__oMutex:MutexCreate())
-        static function getGlbVarResult(cGlbName)
-            DEFAULT s__oGlbVars:=tBigNGlobals():New()
-        return(s__oGlbVars:getGlbVarResult(@cGlbName))
         user function thMultFact(cS,cN)    
             local oS:=tBigNumber():New(cS)
             local oN:=tBigNumber():New(cN)
@@ -6017,4 +6009,6 @@ return
 
 #ifdef __HARBOUR__
     #include "..\src\hb\c\tbigNumber.c"
+#else //__PROTHEUS__
+    #include "tBiGNCommon.prg"
 #endif // __HARBOUR__

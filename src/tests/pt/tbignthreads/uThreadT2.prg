@@ -10,11 +10,14 @@
     Sintaxe:u_ThreadT2
 */
 user procedure ThreadT2()
-    local oProcess:=MsNewProcess():New({||thProcess(oProcess)})
+    local bProc:={|lEnd,oProcess|ProcRedefine(@oProcess,NIL,0,250,250,.T.,.T.),thProcess(oProcess,lEnd)}
+    local cProcD:=ProcName()
+    local cProcT:="Processando Threads..."
+    local oProcess:=MsNewProcess():New(bProc,cProcT,cProcD,.T.)
     oProcess:Activate()
 return
 
-static function thProcess(oProcess)
+static procedure thProcess(oProcess,lEnd)
     local aEvent
     local bEvent
     local cTypeR
@@ -26,23 +29,27 @@ static function thProcess(oProcess)
     local nResult
     local nResults
     local nThreads:=TST_MAXTHREAD
-    local oThread:=utThread():New(oProcess)    
+    local oThread:=utThread():New(NIL,oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
     oProcess:SetRegua2(0)
-    For nThread:=1 To nThreads
+    for nThread:=1 To nThreads
         oProcess:IncRegua2()
+        if (lEnd)
+            oThread:QuitRequest()
+            exit
+        endif
         nValor1:=nThread
         nValor2:=(nThreads-nThread)
         if ((nThread%9)==0)
             aEvent:={;
-                        {{|n|u_Sum2(n[1],n[2])},nValor1,nValor2},;
-                        {{|n|u_Sum2(n[1],n[2])},nValor1,nValor2};
+                        {{|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2},;
+                        {{|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2};
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%8)==0)
             aEvent:={;
-                        {|n|u_Sum2(n[1],n[2])},;
+                        {|n|u_ThreadSum(n[1],n[2])},;
                         {;
                             {nValor1,nValor2},;
                             {nValor1,nValor2},;
@@ -53,21 +60,21 @@ static function thProcess(oProcess)
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%7)==0)
             aEvent:={;
-                        {|n|u_Sum2(n[1],n[2])},nValor1,nValor2;
+                        {|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2;
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%6)==0)
-            oThread:setEvent(nThread,{||u_Sum2(n1,n2)})
+            oThread:setEvent(nThread,{||u_ThreadSum(n1,n2)})
         elseif ((nThread%5)==0)
             aEvent:={;
-                        {"u_Sum2",nValor1,nValor2},;
-                        {"u_Sum2",nValor1,nValor2},;
-                        {"u_Sum2",nValor1,nValor2};
+                        {"u_ThreadSum",nValor1,nValor2},;
+                        {"u_ThreadSum",nValor1,nValor2},;
+                        {"u_ThreadSum",nValor1,nValor2};
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%4)==0)
             aEvent:={;
-                        "u_Sum2",;
+                        "u_ThreadSum",;
                         {;
                             {nValor1,nValor2},;
                             {nValor1,nValor2},;
@@ -77,16 +84,16 @@ static function thProcess(oProcess)
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%3)==0)
-            aEvent:={"u_Sum2",nValor1,nValor2}
+            aEvent:={"u_ThreadSum",nValor1,nValor2}
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%2)==0)
-            oThread:setEvent(nThread,"u_Sum2('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")
+            oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")
         else
             aEvent:={(nValor1+nValor2)}
             oThread:setEvent(nThread,aEvent)
         endif
         oProcess:SetRegua1()
-    Next nThread
+    next nThread
     oThread:Notify()
     oThread:Wait()
     oThread:Join()
@@ -108,7 +115,10 @@ static function thProcess(oProcess)
                          );
                     );
     }
+    oProcess:SetRegua1(nResults)
+    oProcess:SetRegua2(nResults)
     for nResult:=1 to nResults
+        oProcess:SetRegua2()
         cTypeR:=valType(aResults[nResult])
         if (cTypeR=="A")
             aEval(aResults[nResult],bEvent)
@@ -120,24 +130,9 @@ static function thProcess(oProcess)
                 nTotal+=aResults[nResult]
             endif
         endif    
+        oProcess:SetRegua1()
     next nResult
     ConOut("Total:",nTotal)
 return
 
-user function Sum2(xValor1,xValor2)
-    local nValor1:=if(valType(xValor1)=="C",Val(xValor1),xValor1)
-    local nValor2:=if(valType(xValor2)=="C",Val(xValor2),xValor2)
-    //-----------------------------------------------------------
-    //OBS.: NAO ESPERE QUE ESSA INFOMACAO SEJA IMPRESSA NA ORDEM
-    //      AFINAL: MT
-    ConOut(;
-                Replicate("-",20),;
-                "[ProcName(2)]",ProcName(2),;
-                "[ProcName(1)]",ProcName(1),;
-                "[ProcName(0)]",ProcName(),;
-                "[ThreadID]",ThreadID(),;
-                "[nValor1]",nValor1,;
-                "[nValor2]",nValor2,;
-                Replicate("-",20);
-    )
-return((nValor1+nValor2))
+#include "procredefine.prg"
