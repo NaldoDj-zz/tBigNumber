@@ -72,7 +72,7 @@ method function New(cMTXKey,oProcess) class tBigNThread
     PARAMTYPE 2 VAR oProcess AS OBJECT    OPTIONAL
     self:aThreads:=Array(0)
     self:cEnvSrv:=GetEnvServer()
-    self:oMtxJob:=tBigNMutex():New(cMTXKey)
+    self:oMtxJob:=tBigNMutex():New(NIL,cMTXKey)
     self:cGlbKey:=(self:oMtxJob:cMutex+"GLBKEY")
     xPutGlbValue(self:cGlbKey,self:oMtxJob:cMTXKey)
     self:cGlbResult:=(self:oMtxJob:cMutex+"GLBRESULT")

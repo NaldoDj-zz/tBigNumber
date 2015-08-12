@@ -14,6 +14,7 @@
     static s__oExecFromArray
 
     static function MTXObj(cMutex,cMTXKey)
+        DEFAULT cMTXKey:=NToS(ThreadID())
         DEFAULT s__oMutex:=tBigNMutex():New(@cMutex,@cMTXKey)
         if .not.(Empty(cMutex))
             s__oMutex:cMutex:=cMutex    
@@ -24,6 +25,7 @@
     return(s__oMutex)
     
     static function MTXCreate(cMutex,cMTXKey)
+        DEFAULT cMTXKey:=NToS(ThreadID())
         DEFAULT s__oMutex:=tBigNMutex():New(@cMutex,@cMTXKey)
         if .not.(Empty(cMutex))
             s__oMutex:cMutex:=cMutex    
@@ -34,6 +36,7 @@
     return(s__oMutex:MTXCreate(@cMTXKey))
 
     static function MTXHandle(cMutex,cMTXKey)
+        DEFAULT cMTXKey:=NToS(ThreadID())
         DEFAULT s__oMutex:=tBigNMutex():New(@cMutex,@cMTXKey)
         if .not.(Empty(cMutex))
             s__oMutex:cMutex:=cMutex    

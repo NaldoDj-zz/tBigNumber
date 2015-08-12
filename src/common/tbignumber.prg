@@ -62,7 +62,7 @@
     #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
     #xtranslate method <methodName> SETGET  => method <methodName>
-    #define MTX_KEY "TBIGNUMBER_0000000000"
+    #define MTX_KEY hb_NToS(ThreadID())
     //-------------------------------------------------------------------------------------
 #else // __HARBOUR__
     //-------------------------------------------------------------------------------------
