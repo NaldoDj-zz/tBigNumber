@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-08-12 16:12 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/tests/pt/tbignthreads/uThreadT1.prg
+  * src/tests/pt/tbignthreads/uThreadT3.prg
+ 
 2015-08-12 14:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT5.prg
   * src/pt/common/procredefine.prg

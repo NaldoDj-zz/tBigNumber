@@ -18,11 +18,16 @@ user procedure ThreadT3()
 return
 
 static procedure thProcess(oProcess,lEnd)
+    local bEvent
+    local cTypeR
+    local nNode
     local nTotal
     local nValor1
     local nValor2
     local nThread
     local nThreads:=TST_MAXTHREAD
+    local nResult
+    local nResults
     local oThread:=utThread():New(NIL,oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
@@ -51,8 +56,39 @@ static procedure thProcess(oProcess,lEnd)
     oThread:Join()
     aResults:=oThread:getAllResults(.T.)
     oThread:Finalize()
+    nNode:=0
     nTotal:=0
-    aEval(aResults,{|r,i|ConOut("Result Index["+NToS(i)+"]",r,Replicate("-",20)),nTotal+=Val(r)})
+    nResults:=Len(aResults)
+    bEvent={|r,i|if(;
+                        (valType(r)=="A"),;
+                        (++nNode,aEval(r,bEvent),--nNode),;
+                        (;
+                            ConOut(;
+                                    "Result Index["+NToS(nResult)+"]"+if(nNode>0,"["+NToS(nNode)+"]["+NToS(i)+"]","["+NToS(i)+"]"),;
+                                    if(valType(r)$"C|N",r,valType(r)),;
+                                    Replicate("-",20);
+                           ),;
+                           nTotal+=if(valType(r)=="C",Val(r),if(valType(r)=="N",r,0));
+                         );
+                    );
+    }
+    oProcess:SetRegua1(nResults)
+    oProcess:SetRegua2(nResults)
+    for nResult:=1 to nResults
+        oProcess:IncRegua2()
+        cTypeR:=valType(aResults[nResult])
+        if (cTypeR=="A")
+            aEval(aResults[nResult],bEvent)
+        else
+            ConOut("Result Index["+NToS(nResult)+"]",aResults[nResult],Replicate("-",20))
+            if (cTypeR=="C")
+                nTotal+=Val(aResults[nResult])
+            elseif (cTypeR=="N")
+                nTotal+=aResults[nResult]
+            endif
+        endif    
+        oProcess:IncRegua1()
+    next nResult
     ConOut("Total:",nTotal)
 return
 
