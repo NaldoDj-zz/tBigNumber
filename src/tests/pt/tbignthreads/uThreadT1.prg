@@ -26,7 +26,7 @@ static procedure thProcess(oProcess,lEnd)
     local oThread:=utThread():New(NIL,oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
-    oProcess:SetRegua2(0)
+    oProcess:SetRegua2(nThreads)
     for nThread:=1 To nThreads
         oProcess:IncRegua2()
         if (lEnd)
@@ -40,7 +40,7 @@ static procedure thProcess(oProcess,lEnd)
         else
             oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")    
         endif
-        oProcess:SetRegua1()
+        oProcess:IncRegua1()
     next nThread
     oThread:Notify()
     oThread:Wait()

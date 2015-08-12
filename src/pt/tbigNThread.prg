@@ -452,7 +452,7 @@ return
 
 method function setObjProcess(oProcess) class tBigNThread
     PARAMTYPE 1 VAR oProcess AS OBJECT OPTIONAL
-    self:lProcess:=((valType(oProcess)=="O").and.(GetClassName(oProcess)$"TNEWPROCESS/MSNEWPROCESS"))
+    self:lProcess:=((valType(oProcess)=="O").and.(GetClassName(oProcess)$"FWGRIDPROCESS/TNEWPROCESS/MSNEWPROCESS"))
     if (self:lProcess)
         self:oProcess:=oProcess
     endif

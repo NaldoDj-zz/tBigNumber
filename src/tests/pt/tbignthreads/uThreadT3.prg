@@ -26,7 +26,7 @@ static procedure thProcess(oProcess,lEnd)
     local oThread:=utThread():New(NIL,oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
-    oProcess:SetRegua2(0)
+    oProcess:SetRegua2(nThreads)
     for nThread:=1 To nThreads
         oProcess:IncRegua2()
         if (lEnd)
@@ -44,7 +44,7 @@ static procedure thProcess(oProcess,lEnd)
         while .not.(oThread:Notified(nThread))
             oProcess:IncRegua2()
         end while
-        oProcess:SetRegua1()
+        oProcess:IncRegua1()
         sleep(oThread:nSleep)
     next nThread
     oThread:Wait()

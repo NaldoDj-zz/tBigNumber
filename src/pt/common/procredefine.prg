@@ -55,4 +55,17 @@
             lProcRedefine:=.T.
         endif
     return(lProcRedefine)
+    static procedure SetBlind(lIsBlind)
+        DEFAULT lIsBlind:= .F.
+        IF ( lIsBlind )
+            __cINTERNET:="AUTOMATICO"
+        Else
+            __cINTERNET:=NIL
+        EndIF
+        IF (Type("oApp")=="O")
+            oApp:lIsBlind:=lIsBlind
+            oApp:cInternet:=__cINTERNET
+        EndIF
+        __cBinder:=__cINTERNET
+    return 
 #endif /*_pt_ProcRedefine_CH*/

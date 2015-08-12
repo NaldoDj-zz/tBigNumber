@@ -32,7 +32,7 @@ static procedure thProcess(oProcess,lEnd)
     local oThread:=utThread():New(NIL,oProcess)    
     oThread:Start(nThreads)
     oProcess:SetRegua1(nThreads)
-    oProcess:SetRegua2(0)
+    oProcess:SetRegua2(nThreads)
     for nThread:=1 To nThreads
         oProcess:IncRegua2()
         if (lEnd)
@@ -92,7 +92,7 @@ static procedure thProcess(oProcess,lEnd)
             aEvent:={(nValor1+nValor2)}
             oThread:setEvent(nThread,aEvent)
         endif
-        oProcess:SetRegua1()
+        oProcess:IncRegua1()
     next nThread
     oThread:Notify()
     oThread:Wait()
@@ -118,7 +118,7 @@ static procedure thProcess(oProcess,lEnd)
     oProcess:SetRegua1(nResults)
     oProcess:SetRegua2(nResults)
     for nResult:=1 to nResults
-        oProcess:SetRegua2()
+        oProcess:IncRegua2()
         cTypeR:=valType(aResults[nResult])
         if (cTypeR=="A")
             aEval(aResults[nResult],bEvent)
@@ -130,7 +130,7 @@ static procedure thProcess(oProcess,lEnd)
                 nTotal+=aResults[nResult]
             endif
         endif    
-        oProcess:SetRegua1()
+        oProcess:IncRegua1()
     next nResult
     ConOut("Total:",nTotal)
 return

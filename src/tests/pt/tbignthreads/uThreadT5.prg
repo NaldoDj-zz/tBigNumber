@@ -1,20 +1,29 @@
+#include "tbiconn.ch"
 #include "tBigNumber.ch"
 
 #define TST_MAXTHREAD 50
 
 /*
-    Funcao:ThreadT4
+    Funcao:ThreadT5
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:01/08/2015
-    Descricao:Exemplo (4) de uso da Classe utThread (derivada de tBigNThread)
-    Sintaxe:u_ThreadT4
+    Data:12/08/2015
+    Descricao:Exemplo (5) de uso da Classe utThread (derivada de tBigNThread)
+    Sintaxe:u_ThreadT5
 */
-user procedure ThreadT4()
-    local bProc:={|lEnd,oProcess|ProcRedefine(@oProcess,NIL,0,250,250,.T.,.T.),thProcess(oProcess,lEnd)}
+user procedure ThreadT5()
+    local bProc:={|oProcess|thProcess(oProcess,@oProcess:lEnd)}
+    local bonWInit:={||oProcess:=tNewProcess():New(@cProcD,@cProcT,@bProc,@cProcD,NIL,NIL,NIL,NIL,NIL,@lViewExecute,@lOneMeter),oMainWnd:End()}
     local cProcD:=ProcName()
     local cProcT:="Processando Threads..."
-    local oProcess:=MsNewProcess():New(bProc,cProcT,cProcD,.T.)
-    oProcess:Activate()
+    Local lViewExecute:=.T.
+    Local lOneMeter:=.F.
+    local oProcess
+    Private oMainWnd
+    PREPARE ENVIRONMENT EMPRESA "99" FILIAL "01"          
+        SetBlind(.F.)
+        DEFINE WINDOW oMainWnd FROM 000,000 TO 000,000 TITLE cProcT
+        ACTIVATE WINDOW oMainWnd MAXIMIZED ON INIT Eval(bonWInit)
+    RESET ENVIRONMENT
 return
 
 static procedure thProcess(oProcess,lEnd)
@@ -138,4 +147,5 @@ static procedure thProcess(oProcess,lEnd)
     next nResult
     ConOut("Total:",nTotal)
 return
+
 #include "procredefine.prg"

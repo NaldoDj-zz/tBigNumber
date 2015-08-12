@@ -10,6 +10,16 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-08-12 14:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  + src/tests/pt/tbignthreads/uThreadT5.prg
+  * src/pt/common/procredefine.prg
+  * src/pt/tbigNThread.prg
+  * src/tests/pt/tbignthreads/uThreadSum.prg
+  * src/tests/pt/tbignthreads/uThreadT1.prg
+  * src/tests/pt/tbignthreads/uThreadT2.prg
+  * src/tests/pt/tbignthreads/uThreadT3.prg
+  * src/tests/pt/tbignthreads/uThreadT4.prg
+ 
 2015-08-12 11:59 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/common/tBigNCommon.prg
