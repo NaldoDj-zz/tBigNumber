@@ -4203,7 +4203,7 @@ method Factorial() class tBigNumber
         #endif //__PROTHEUS__
         oThreads:Start(Len(aRecFact))
         #ifdef __PROTHEUS__
-            aEval(aRecFact,{|e,i|oThreads:SetEvent(i,"u_thMultFact('"+e[1]+"','"+e[2]+"')")})
+            aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{"u_thMultFact",e[1],e[2]})})
         #else //__HARBOUR__
             aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{@multFact(),e[1],e[2]})})
         #endif //__PROTHEUS__
@@ -4211,9 +4211,10 @@ method Factorial() class tBigNumber
         oThreads:Wait()
         oThreads:Join()
         #ifdef __PROTHEUS__
+            aRecFact:=oThreads:getAllResults(.T.)
             oThreads:Finalize()
             MTXObj(NIL,MTX_KEY):Clear()
-            while ((nJ:=Len(aRecFact:=getGlbVarResult(pMTX)))>1)
+            while ((nJ:=Len(aRecFact))>1)
         #else //__HARBOUR__
             while ((nJ:=Len(aRecFact:=oThreads:getAllResults()))>1)
         #endif
@@ -4235,7 +4236,7 @@ method Factorial() class tBigNumber
                 nT:=0
                 for nD:=1 to nJ step 2
                     #ifdef __PROTHEUS__
-                        oThreads:SetEvent(++nT,"u_thiMult('"+aRecFact[nD]+"','"+aRecFact[nD+1]+"')")
+                        oThreads:SetEvent(++nT,{"u_thiMult",{aRecFact[nD],aRecFact[nD+1]}})
                     #else //__HARBOUR__
                         oThreads:SetEvent(++nT,{@thiMult(),aRecFact[nD],aRecFact[nD+1]})
                     #endif //__PROTHEUS__
@@ -4244,6 +4245,7 @@ method Factorial() class tBigNumber
                 oThreads:Wait()
                 oThreads:Join()
                 #ifdef __PROTHEUS__
+                    aRecFact:=oThreads:getAllResults(.T.)
                     oThreads:Finalize()
                     MTXObj(NIL,MTX_KEY):Clear()
                 #endif //__PROTHEUS__
@@ -4327,14 +4329,14 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
             oThreads:setEvent(1,{||recFact(oS,oI,@aRecFact)})
             oThreads:setEvent(2,{||recFact(oSI,oNI,@aRecFact)})
         #else //__PROTHEUS__
-            oThreads:setEvent(1,"u_threcFact('"+oS:GetValue()+"','"+oI:GetValue()+"','"+pMTX+"')")
-            oThreads:setEvent(2,"u_threcFact('"+oSI:GetValue()+"','"+oNI:GetValue()+"','"+pMTX+"')")
+            oThreads:setEvent(1,{"u_threcFact",{oS:GetValue(),oI:GetValue(),pMTX}})
+            oThreads:setEvent(2,{"u_threcFact",{oSI:GetValue(),oNI:GetValue(),pMTX}})
         #endif //__HARBOUR__
             oThreads:Notify()
             oThreads:Wait()
             oThreads:Join()
         #ifdef __PROTHEUS__
-            oThreads:Finalize()
+            oThreads:Finalize(.F.)
         #endif //__PROTHEUS__
  
     end sequence

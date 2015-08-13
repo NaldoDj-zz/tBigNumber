@@ -11,7 +11,7 @@ Class tBigNExecFromArray
     
     method function New() CONSTRUCTOR /*(/!\)*/
 
-    method function ExecFromArray(aExec)
+    method function ExecFromArray(xExec)
     
 EndClass
 
@@ -21,88 +21,138 @@ return(tBigNExecFromArray():New())
 method function new() class tBigNExecFromArray
 return(self)
 
-method function ExecFromArray(aExec,bError) class tBigNExecFromArray
-return(ExecFromArray(aExec,bError))
-static function ExecFromArray(aExec,bError)
+method function ExecFromArray(xExec,bError) class tBigNExecFromArray
+return(ExecFromArray(xExec,bError))
+static function ExecFromArray(xExec,bError)
     local nD
     local nJ
     local aPrm
     local cTyp
+    local lArr
+    local nLen
     local xRet
     local xFun
     local xPrm
-    PARAMTYPE 1 VAR aExec AS ARRAY
-    begin sequence
-        if Empty(aExec)
-            xRet:=aExec
-            break
-        endif
-        PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
-        tryexception using bError
-            if (Len(aExec)==1)
-                xFun:=aExec[1]
-                cTyp:=valType(xFun)
-                do case
-                case (cTyp=="A")
+    PARAMTYPE 1 VAR xExec  AS ARRAY,BLOCK,CHARACTER,LOGICAL,NUMBER,DATE,OBJECT
+    PARAMTYPE 2 VAR bError AS BLOCK OPTIONAL DEFAULT ErrorBlock()
+    tryexception using bError
+        cTyp:=valType(xExec)
+        if .not.(cTyp=="A")
+            xFun:=xExec
+            do case
+            case (cTyp=="B")
+                xRet:=Eval(xFun)
+            case (cTyp=="C")
+                xRet:=&(xFun)
+            otherwise
+                xRet:=xFun
+            end case
+        elseif (Len(xExec)==1)
+            xFun:=xExec[1]
+            cTyp:=valType(xFun)
+            do case
+            case (cTyp=="A")
+                xRet:=Array(0)
+                aAdd(xRet,ExecFromArray(xFun,bError))
+            case (cTyp=="B")
+                xRet:=Eval(xFun)
+            case (cTyp=="C")
+                xRet:=&(xFun)
+            otherwise
+                xRet:=xFun
+            end case
+        else
+            xFun:=xExec[1]
+            cTyp:=valType(xFun)
+            do case
+            case (cTyp=="A")
+                xRet:=Array(0)
+                nJ:=Len(xExec)
+                for nD:=1 to nJ
+                    aPrm:=xExec[nD]
+                    aAdd(xRet,ExecFromArray(aPrm,bError))
+                next nD
+            case (cTyp=="B")
+                cTyp:=valType(xExec[2])
+                if (cTyp=="A")
                     xRet:=Array(0)
-                    aAdd(xRet,ExecFromArray(xFun,bError))
-                case (cTyp=="B")
-                    xRet:=Eval(xFun)
-                case (cTyp=="C")
-                    xRet:=&(xFun)
-                otherwise
-                    xRet:=xFun
-                end case
-            else
-                xFun:=aExec[1]
-                cTyp:=valType(xFun)
-                do case
-                case (cTyp=="A")
-                    xRet:=Array(0)
-                    nJ:=Len(aExec)
-                    for nD:=1 to nJ
-                        aAdd(xRet,ExecFromArray(aExec[nD],bError))
-                    next nD
-                case (cTyp=="B")
-                    cTyp:=valType(aExec[2])
-                    if (cTyp=="A")
-                        xRet:=Array(0)
-                        nJ:=Len(aExec[2])
-                        for nD:=2 to nJ
-                            aPrm:=aExec[2][nD]
-                            aAdd(xRet,Eval(xFun,aPrm))
-                        next nD
+                    nJ:=Len(xExec[2])
+                    if (nJ>0)
+                        lArr:=(valType(xExec[2][1])=="A")
+                        if (lArr)
+                            nLen:=Len(xExec[2][1])
+                            for nD:=2 to nJ
+                                lArr:=(lArr.and.(valType(xExec[2][nD])=="A"))
+                                lArr:=(lArr.and.(Len(xExec[2][nD])==nLen))
+                                if .not.(lArr)
+                                    exit
+                                endif
+                            next nD                        
+                        endif                      
+                        if (lArr)
+                            for nD:=1 to nJ
+                                aPrm:=xExec[2][nD]
+                                aAdd(xRet,Eval(xFun,aPrm))
+                            next nD
+                        else
+                            aPrm:=xExec[2]
+                            xRet:=Eval(xFun,aPrm)
+                        endif        
                     else
-                        aPrm:=Array(0) 
-                        nJ:=Len(aExec)
-                        for nD:=2 to nJ
-                            aAdd(aPrm,aExec[nD])
-                        next nD
-                        xFun:=Eval(xFun,aPrm)
+                        aPrm:=xExec[2]
+                        xRet:=Eval(xFun,aPrm)
                     endif
-                case (cTyp=="C")
-                    cTyp:=valType(aExec[2])
-                    if (cTyp=="A")
-                        xRet:=Array(0)
-                        nJ:=Len(aExec[2])
-                        for nD:=1 to nJ
-                            aPrm:=aExec[2][nD]
-                            aAdd(xRet,&(ToExecFromArr(xFun,aPrm)))
-                        Next nD                        
+                else
+                    aPrm:=Array(0) 
+                    nJ:=Len(xExec)
+                    for nD:=2 to nJ
+                        aAdd(aPrm,xExec[nD])
+                    next nD
+                    xRet:=Eval(xFun,aPrm)
+                 endif
+            case (cTyp=="C")
+                cTyp:=valType(xExec[2])
+                if (cTyp=="A")
+                    nJ:=Len(xExec[2])
+                    if (nJ>0)
+                        lArr:=(valType(xExec[2][1])=="A")
+                        if (lArr)
+                            nLen:=Len(xExec[2][1])
+                            for nD:=2 to nJ
+                                lArr:=(lArr.and.(valType(xExec[2][nD])=="A"))
+                                lArr:=(lArr.and.(Len(xExec[2][nD])==nLen))
+                                if .not.(lArr)
+                                    exit
+                                endif
+                            next nD
+                        endif
+                        if (lArr)
+                            xRet:=Array(0)
+                            for nD:=1 to nJ
+                                aPrm:=xExec[2][nD]
+                                aAdd(xRet,&(ToExecFromArr(xFun,aPrm)))
+                            next nD
+                        else
+                            aPrm:=xExec[2]
+                            xRet:=&(ToExecFromArr(xFun,aPrm))
+                        endif        
                     else
-                        aPrm:=Array(0) 
-                        nJ:=Len(aExec)
-                        for nD:=2 to nJ
-                            aAdd(aPrm,aExec[nD])
-                        next nD
-                        xFun:=&(ToExecFromArr(xFun,aPrm))
-                     endif   
-                otherwise
-                    xRet:=aExec
-                end case
-            endif
-        end exception
-    end sequence
+                        aPrm:=xExec[2]
+                        xRet:=&(ToExecFromArr(xFun,aPrm))
+                    endif
+                else
+                    aPrm:=Array(0) 
+                    nJ:=Len(xExec)
+                    for nD:=2 to nJ
+                        aAdd(aPrm,xExec[nD])
+                    next nD
+                    xRet:=&(ToExecFromArr(xFun,aPrm))
+                 endif   
+            otherwise
+                xRet:=xExec
+            end case
+        endif
+    end exception
 return(xRet)
 
 static function ToExecFromArr(cFun,aParameters)

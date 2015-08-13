@@ -371,11 +371,12 @@ method procedure Join() class tBigNThread
     self:setGlbVarResult()
 return
 
-method procedure Finalize() class tBigNThread
+method procedure Finalize(lGlbResult) class tBigNThread
     local cIncR1  AS CHARACTER
     local cIncR2  AS CHARACTER
     local cMTXID  AS CHARACTER
     local nThread AS NUMBER
+    PARAMTYPE 1 VAR lGlbResult AS LOGICAL OPTIONAL DEFAULT .T.
     if xGlbLock(GLB_LOCK)
         if (self:lProcess)
             ASSIGN cIncR1:="Processando..."
@@ -385,7 +386,9 @@ method procedure Finalize() class tBigNThread
         endif
         xClearGlbValue(self:oMtxJob:cMutex,.F.)
         xClearGlbValue(self:oMtxJob:cMutex+"GLBKEY",.F.)
-        xClearGlbValue(self:oMtxJob:cMutex+"GLBRESULT",.F.)
+        if (lGlbResult)
+            xClearGlbValue(self:oMtxJob:cMutex+"GLBRESULT",.F.)
+        endif
         self:oMtxJob:MTXSControl(self:oMtxJob:cHdlFile,.T.)
         self:oMtxJob:MTXFControl(self:oMtxJob:cHdlFile,self:oMtxJob:nHdlFile,.T.)
         for nThread:=1 to self:nThreads

@@ -10,6 +10,11 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-08-13 13:12 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/common/tbignumber.prg
+  * src/pt/tbigNExecFromArray.prg
+  * src/pt/tbigNThread.prg
+ 
 2015-08-12 20:04 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/tests/pt/tbignthreads/uThreadSum.prg
