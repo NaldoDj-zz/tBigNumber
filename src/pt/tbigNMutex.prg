@@ -1,6 +1,6 @@
 #include "tBigNumber.ch"
 
-static s__aMTXKey      AS ARRAY
+static s__aMTXKey       AS ARRAY
 static s__aMTXPrcExc    AS ARRAY
 static s__aMTXSControl  AS ARRAY
 
@@ -23,7 +23,7 @@ Class tBigNMutex
     data lLockByName
     
     data nSize
-    data nSeep
+    data nSleep
     data nHdlFile
     data nAttempts
 
@@ -45,6 +45,7 @@ user function tBigNMutex(cMutex,cMTXKey,lLockByName,lMTXCreate)
 return(tBigNMutex():New(@cMutex,@cMTXKey,@lLockByName,@lMTXCreate))
 
 method function New(cMutex,cMTXKey,lLockByName,lMTXCreate) class tBigNMutex
+    PARAMTYPE 3 VAR lLockByName AS LOGICAL   OPTIONAL DEFAULT .F.
     self:cMTXPath:="\mtx\"
     if .not.(lIsDir(self:cMTXPath))
         MakeDir(self:cMTXPath)
@@ -52,8 +53,6 @@ method function New(cMutex,cMTXKey,lLockByName,lMTXCreate) class tBigNMutex
     self:cHdlPath:=self:cMTXPath
     PARAMTYPE 1 VAR cMutex      AS CHARACTER OPTIONAL
     PARAMTYPE 2 VAR cMTXKey     AS CHARACTER OPTIONAL DEFAULT self:MTXKey()
-    PARAMTYPE 3 VAR lLockByName AS LOGICAL   OPTIONAL DEFAULT .F.
-    PARAMTYPE 4 VAR lMTXCreate  AS LOGICAL   OPTIONAL DEFAULT .T.
     self:cMTXKey:=cMTXKey
     self:cHdlPath+=self:cMTXKey+"\"
     if .not.(lIsDir(self:cHdlPath))
@@ -61,9 +60,10 @@ method function New(cMutex,cMTXKey,lLockByName,lMTXCreate) class tBigNMutex
     endif
     self:nHdlFile:=-1
     self:cMutex:=cMutex
-    self:nSeep:=100
+    self:nSleep:=100
     self:nAttempts:=10
     self:lLockByName:=lLockByName
+    PARAMTYPE 4 VAR lMTXCreate  AS LOGICAL   OPTIONAL DEFAULT .T.
     if (lMTXCreate)
         cMutex:=self:MTXCreate(@self:cMTXKey,Empty(self:cMutex),@self:nSize)
     endif
@@ -81,7 +81,7 @@ method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
     local cHdlPath      AS CHARACTER VALUE self:cHdlPath
     local cMTXSMPR      AS CHARACTER
     local cMTXSMPF      AS CHARACTER
-    local cProcName     AS CHARACTER
+    local cProcName     AS CHARACTER VALUE ProcName()
     
     local nKey          AS NUMBER
     local nFile         AS NUMBER
@@ -90,12 +90,14 @@ method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
     local nHdlFile      AS NUMBER
 
     local lHdlControl  AS LOGICAL
-    
-    cProcName:=ProcName()
 
     PARAMTYPE 1 VAR cMTXKey AS CHARACTER OPTIONAL DEFAULT self:cMTXKey
     PARAMTYPE 2 VAR nSize   AS NUMBER    OPTIONAL DEFAULT if(.not.(Empty(cMTXKey)),Len(cMTXKey),10)
     PARAMTYPE 3 VAR lInc    AS LOGICAL   OPTIONAL DEFAULT ((.T.).and.(.not.(Empty(self:cMutex)))) 
+
+    if .not.(lIsDir(self:cMTXPath))
+        MakeDir(self:cMTXPath)
+    endif
 
     if .not.(valType(s__aMTXKey)=="A")
         s__aMTXKey:=Array(0)
@@ -207,6 +209,10 @@ method function MTXFControl(cHdlFile,nHdlFile,lfClose,lExclusive) class tBigNMut
     PARAMTYPE 3 VAR lfClose     AS LOGICAL   OPTIONAL DEFAULT .T.
     PARAMTYPE 4 VAR lExclusive  AS LOGICAL   OPTIONAL DEFAULT .F.
 
+    if .not.(lIsDir(self:cMTXPath))
+        MakeDir(self:cMTXPath)
+    endif
+    
     SplitPath(cHdlFile,@cSPDrive,@cSPPath,@cSPFile,@cSPExt)
 
     ASSIGN cHdlFile:=cHdlPath
@@ -214,7 +220,10 @@ method function MTXFControl(cHdlFile,nHdlFile,lfClose,lExclusive) class tBigNMut
     ASSIGN cHdlFile+=cSPExt
     
     ASSIGN self:cHdlFile:=cHdlFile
-
+    if .not.(lIsDir(cHdlPath))
+        MakeDir(cHdlPath)
+    endif
+    
     if .not.(File(cHdlFile))
         if (self:lLockByName)
             while .not.(lLockByName:=mtxLockByName(cHdlFile))
@@ -324,7 +333,7 @@ Return(lMTXSControl)
 
 method function MTXPrcExc(cProcA,cProcB,lfClose) class tBigNMutex
     
-    local cProcName     AS CHARACTER   
+    local cProcName     AS CHARACTER    VALUE ProcName()   
     
     local cGlbValPA     AS CHARACTER
     local cGlbVarPA     AS CHARACTER
@@ -334,7 +343,7 @@ method function MTXPrcExc(cProcA,cProcB,lfClose) class tBigNMutex
     local cGlbVarPB     AS CHARACTER
     local cFileProcB    AS CHARACTER    
 
-    local lMTXPrcExc    AS LOGICAL VALUE .F.
+    local lMTXPrcExc    AS LOGICAL      VALUE .F.
 
     local nAttempt      AS NUMBER
     
@@ -347,8 +356,6 @@ method function MTXPrcExc(cProcA,cProcB,lfClose) class tBigNMutex
     IF .not.(valType(s__aMTXPrcExc)=="A")
         s__aMTXPrcExc:=Array(0)
     EndIF
-
-    cProcName:=ProcName()
 
     PARAMTYPE 1 VAR cProcA  AS CHARACTER
     PARAMTYPE 2 VAR cProcB  AS CHARACTER

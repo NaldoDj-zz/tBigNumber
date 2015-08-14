@@ -18,7 +18,7 @@ EndClass
 user function tBigNExFArray()
 return(tBigNExecFromArray():New())
 
-method function new() class tBigNExecFromArray
+method function New() class tBigNExecFromArray
 return(self)
 
 method function ExecFromArray(xExec,bError) class tBigNExecFromArray

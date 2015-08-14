@@ -10,6 +10,15 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-08-13 21:36 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * include/hb_tBigNumber.ch
+  * include/pt_tBigNumber.ch
+  * src/common/tbignumber.prg
+  * src/pt/common/tBigNCommon.prg
+  * src/pt/tbigNExecFromArray.prg
+  * src/pt/tbigNMessage.prg
+  * src/pt/tbigNMutex.prg
+ 
 2015-08-13 13:12 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/tbigNExecFromArray.prg

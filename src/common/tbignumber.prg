@@ -62,7 +62,6 @@
     #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
     #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
     #xtranslate method <methodName> SETGET  => method <methodName>
-    #define MTX_KEY hb_NToS(ThreadID())
     //-------------------------------------------------------------------------------------
 #else // __HARBOUR__
     //-------------------------------------------------------------------------------------
@@ -89,7 +88,6 @@ static s__nN9
 static s__o0
 static s__o1
 static s__o2
-static s__o3
 static s__o10
 static s__od2
 
@@ -4181,6 +4179,7 @@ method Factorial() class tBigNumber
     local nJ
     local nT
     local pMTX
+    local pFunc
     local oThreads
     begin sequence
         if oN:eq(s__o0)
@@ -4203,10 +4202,11 @@ method Factorial() class tBigNumber
         #endif //__PROTHEUS__
         oThreads:Start(Len(aRecFact))
         #ifdef __PROTHEUS__
-            aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{"u_thMultFact",e[1],e[2]})})
+            pFunc:="u_thMultFact"
         #else //__HARBOUR__
-            aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{@multFact(),e[1],e[2]})})
+            pFunc:=@multFact()
         #endif //__PROTHEUS__
+        aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{pFunc,e[1],e[2]})})
         oThreads:Notify()
         oThreads:Wait()
         oThreads:Join()
@@ -4236,10 +4236,11 @@ method Factorial() class tBigNumber
                 nT:=0
                 for nD:=1 to nJ step 2
                     #ifdef __PROTHEUS__
-                        oThreads:SetEvent(++nT,{"u_thiMult",{aRecFact[nD],aRecFact[nD+1]}})
+                        pFunc:="u_thiMult"
                     #else //__HARBOUR__
-                        oThreads:SetEvent(++nT,{@thiMult(),aRecFact[nD],aRecFact[nD+1]})
+                        pFunc:=@thiMult()
                     #endif //__PROTHEUS__
+                    oThreads:SetEvent(++nT,{pFunc,aRecFact[nD],aRecFact[nD+1]})
                 next nD
                 oThreads:Notify()
                 oThreads:Wait()
@@ -4287,20 +4288,12 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
     local oSI
     local oNI
 
-#ifndef __PROTHEUS__
     local oThreads
-#endif //__PTCOMPAT__
     
     begin sequence
 
-        oI:=oN:Clone()
-        
-        //-------------------------------------------------------------------------------------
-        //(Div(2)==Mult(.5)
-        oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
-
-        //TODO: Porque? n<=(3*(n/2))  
-        if oN:lte(s__o3:iMult(oI))
+        //TODO: Resolver Inconsistencia no Calculo Quando HARBOUR  
+        if oN:lte(s__o10)
             #ifdef __PROTHEUS__
                 DEFAULT aRecFact:=Array(0)
                 aAdd(aRecFact,{oS:GetValue(),oN:GetValue()})
@@ -4313,6 +4306,12 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
             break
         endif
 
+        oI:=oN:Clone()
+        
+        //-------------------------------------------------------------------------------------
+        //(Div(2)==Mult(.5)
+        oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
+        
         oSI:=oS:Clone()
         oSI:SetValue(oSI:iAdd(oI))
 
@@ -4326,8 +4325,9 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
         #endif //__PROTHEUS__
         oThreads:Start(2)
         #ifdef __HARBOUR__ 
-            oThreads:setEvent(1,{||recFact(oS,oI,@aRecFact)})
-            oThreads:setEvent(2,{||recFact(oSI,oNI,@aRecFact)})
+            //TODO: Resolver Inconsistencia no Calculo Quando HARBOUR
+            oThreads:setEvent(1,{||recFact(oS,oI,@aRecFact,pMTX)})
+            oThreads:setEvent(2,{||recFact(oSI,oNI,@aRecFact,pMTX)})
         #else //__PROTHEUS__
             oThreads:setEvent(1,{"u_threcFact",{oS:GetValue(),oI:GetValue(),pMTX}})
             oThreads:setEvent(2,{"u_threcFact",{oSI:GetValue(),oNI:GetValue(),pMTX}})
@@ -5917,7 +5917,6 @@ static procedure __InitstbN(nBase)
     s__o0:=tBigNumber():New("0",nBase)
     s__o1:=tBigNumber():New("1",nBase)
     s__o2:=tBigNumber():New("2",nBase)
-    s__o3:=tBigNumber():New("3",nBase)
     s__o10:=tBigNumber():New("10",nBase)
     s__od2:=tBigNumber():New("0.5",nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)

@@ -22,7 +22,7 @@ EndClass
 user function tBigNMessage(nOutPut)
 return(tBigNMessage():New(@nOutPut))
 
-method function new(nOutPut) class tBigNMessage
+method function New(nOutPut) class tBigNMessage
     PARAMTYPE 1 VAR nOutPut AS NUMBER OPTIONAL DEFAULT MSG_CONOUT
     self:cOwner:="MSG"
     self:nOutPut:=nOutPut

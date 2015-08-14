@@ -25,6 +25,10 @@
         #if defined(__PLATFORM__CYGWIN) //TODO: Remover teste quando resolver diferencas encontradas nesta plataforma.
             #define __PTCOMPAT__        //Forco o modo de Compatibilidade com o Protheus
         #endif
+        
+        #ifndef MTX_KEY
+            #define MTX_KEY 
+        #endif
 
         #ifndef CRLF
             #define CRLF hb_eol()

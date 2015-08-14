@@ -16,6 +16,10 @@
         #xtranslate method function <m>  => method <m>
         #xcommand method procedure <m>   => method <m>
         #xtranslate method procedure <m> => method <m>
+
+        #ifndef MTX_KEY
+            #define MTX_KEY NToS(ThreadID())
+        #endif
         
         #xcommand DEFAULT =>
         /* Default parameters management */
