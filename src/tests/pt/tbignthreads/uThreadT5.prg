@@ -30,10 +30,10 @@ static procedure thProcess(oProcess,lEnd)
     local aEvent
     local bEvent
     local cTypeR
+    local nVal1
+    local nVal2
     local nNode
     local nTotal
-    local nValor1
-    local nValor2
     local nThread
     local nResult
     local nResults
@@ -48,57 +48,57 @@ static procedure thProcess(oProcess,lEnd)
             oThread:QuitRequest()
             exit
         endif
-        nValor1:=nThread
-        nValor2:=(nThreads-nThread)
+        nVal1:=nThread
+        nVal2:=(nThreads-nThread)
         if ((nThread%9)==0)
             aEvent:={;
-                        {{|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2},;
-                        {{|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2};
+                        {{|n|u_ThreadSum(n[1],n[2])},nVal1,nVal2},;
+                        {{|n|u_ThreadSum(n[1],n[2])},nVal1,nVal2};
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%8)==0)
             aEvent:={;
                         {|n|u_ThreadSum(n[1],n[2])},;
                         {;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2};
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2};
                         };
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%7)==0)
             aEvent:={;
-                        {|n|u_ThreadSum(n[1],n[2])},nValor1,nValor2;
+                        {|n|u_ThreadSum(n[1],n[2])},nVal1,nVal2;
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%6)==0)
             oThread:setEvent(nThread,{||u_ThreadSum(n1,n2)})
         elseif ((nThread%5)==0)
             aEvent:={;
-                        {"u_ThreadSum",nValor1,nValor2},;
-                        {"u_ThreadSum",nValor1,nValor2},;
-                        {"u_ThreadSum",nValor1,nValor2};
+                        {"u_ThreadSum",nVal1,nVal2},;
+                        {"u_ThreadSum",nVal1,nVal2},;
+                        {"u_ThreadSum",nVal1,nVal2};
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%4)==0)
             aEvent:={;
                         "u_ThreadSum",;
                         {;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2},;
-                            {nValor1,nValor2};
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2},;
+                            {nVal1,nVal2};
                          };
             }
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%3)==0)
-            aEvent:={"u_ThreadSum",nValor1,nValor2}
+            aEvent:={"u_ThreadSum",nVal1,nVal2}
             oThread:setEvent(nThread,aEvent)
         elseif ((nThread%2)==0)
-            oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")
+            oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nVal1)+"','"+NToS(nVal2)+"')")
         else
-            aEvent:={(nValor1+nValor2)}
+            aEvent:={(nVal1+nVal2)}
             oThread:setEvent(nThread,aEvent)
         endif
         oThread:Notify(nThread,.F.)

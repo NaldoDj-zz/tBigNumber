@@ -5,22 +5,22 @@
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:01/08/2015
     Descricao:Exemplo de uso da Classe utThread (derivada de tBigNThread)
-    Sintaxe:u_ThreadSum(xValor1,xValor2)
+    Sintaxe:u_ThreadSum(xVal1,xVal2)
 */
-user function ThreadSum(xValor1,xValor2)
+user function ThreadSum(xVal1,xVal2)
     local nD
     local nJ:=15000
     local nResult:=0
-    local nValor1:=if(valType(xValor1)=="C",Val(xValor1),xValor1)
-    local nValor2:=if(valType(xValor2)=="C",Val(xValor2),xValor2)
+    local nVal1:=if(valType(xVal1)=="C",Val(xVal1),xVal1)
+    local nVal2:=if(valType(xVal2)=="C",Val(xVal2),xVal2)
     ConOut(;
                 Replicate("-",20),;
                 "[ProcName(2)]",ProcName(2),;
                 "[ProcName(1)]",ProcName(1),;
                 "[ProcName(0)]",ProcName(),;
                 "[ThreadID]",ThreadID(),;
-                "[nValor1]",nValor1,;
-                "[nValor2]",nValor2,;
+                "[nVal1]",nVal1,;
+                "[nVal2]",nVal2,;
                 Replicate("-",20);
     )
     for nD:=1 to nJ
@@ -28,7 +28,7 @@ user function ThreadSum(xValor1,xValor2)
             OutPutMessage("ThreadQuitRequest..."+NToS(ThreadID()))
             exit
         endif
-        nResult+=(nValor1+nValor2)
+        nResult+=(nVal1+nVal2)
     next nD
 return(nResult)
 

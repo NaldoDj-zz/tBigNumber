@@ -52,8 +52,8 @@ method function New(cMutex,cMTXKey,lLockByName,lMTXCreate) class tBigNMutex
     endif
     self:cHdlPath:=self:cMTXPath
     PARAMTYPE 1 VAR cMutex      AS CHARACTER OPTIONAL
-    PARAMTYPE 2 VAR cMTXKey     AS CHARACTER OPTIONAL DEFAULT self:MTXKey()
-    self:cMTXKey:=cMTXKey
+    PARAMTYPE 2 VAR cMTXKey     AS CHARACTER OPTIONAL 
+    self:cMTXKey:=self:MTXKey(cMTXKey)
     self:cHdlPath+=self:cMTXKey+"\"
     if .not.(lIsDir(self:cHdlPath))
         MakeDir(self:cHdlPath)
@@ -69,8 +69,16 @@ method function New(cMutex,cMTXKey,lLockByName,lMTXCreate) class tBigNMutex
     endif
 return(self)
 
-method function MTXKey() class tBigNMutex
-return(self:MTXCreate("",.T.,3))
+method function MTXKey(cMTXKey) class tBigNMutex
+    local lInc
+    local nSize
+    PARAMTYPE 1 VAR cMTXKey AS CHARACTER OPTIONAL
+    ASSIGN lInc:=Empty(cMTXKey)
+    ASSIGN nSize:=if(lInc,0,Len(cMTXKey))
+    if (nSize==0)
+        ASSIGN nSize:=3
+    endif
+return(self:MTXCreate(cMTXKey,lInc,nSize))
 
 method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
     
@@ -105,7 +113,7 @@ method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
 
     nKey:=aScan(s__aMTXKey,{|e|e[1]==cMTXKey})
     if (nKey==0)
-        self:cExt:=("."+Lower(cMTXKey+if(Empty(cMTXKey),"","-")+cProcName))
+        self:cExt:=("."+Lower(if(Empty(cMTXKey),"",cMTXKey)+if(Empty(cMTXKey),"","-")+cProcName))
         aAdd(s__aMTXKey,{cMTXKey,nSize,self:cExt,cHdlPath})
         nKey:=Len(s__aMTXKey)
         if .not.(lIsDir(cHdlPath))
@@ -114,8 +122,8 @@ method function MTXCreate(cMTXKey,lInc,nSize) class tBigNMutex
         if .not.(Empty(cMTXKey))
             cFile:=s__aMTXKey[nKey][4]
             cFile+=s__aMTXKey[nKey][1]
-             cFile+=s__aMTXKey[nKey][3]
-              self:MTXSControl(cFile,.F.,.F.)
+            cFile+=s__aMTXKey[nKey][3]
+            self:MTXSControl(cFile,.F.,.F.)
         endif
     endif
     nSize:=s__aMTXKey[nKey][2]

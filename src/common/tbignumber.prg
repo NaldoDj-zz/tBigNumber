@@ -74,6 +74,7 @@
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
     //-------------------------------------------------------------------------------------
+    memvar m_aRecFact
 #endif //__PROTHEUS__
 
 #ifndef __DIVMETHOD__
@@ -2986,10 +2987,14 @@ method LogN(uBigNB) class tBigNumber
     DEFAULT uBigNB:=self:e()
     oB:SetValue(uBigNB)
 #ifndef __PTCOMPAT__
-    oR:SetValue(TBIGNLOG(self:GetValue(),oB:GetValue()))
-#else
+    #ifndef __LMETHOD__
+        oR:SetValue(TBIGNLOG(self:GetValue(),oB:GetValue()))
+    #else
+        oR:SetValue(self:__Log(oB))
+    #endif //__LMETHOD__
+#else //__PTCOMPAT__
     oR:SetValue(self:__Log(oB))
-#endif
+#endif //__PTCOMPAT__
 return(oR)
 
 /*
@@ -4172,7 +4177,7 @@ return(aPFactors)
                  
 */
 method Factorial() class tBigNumber
-    local aRecFact:=Array(0)
+    local aRecFact
     local oN:=self:Clone():Int(.T.,.F.)
     local oR:=s__o1:Clone()
     local nD
@@ -4186,23 +4191,41 @@ method Factorial() class tBigNumber
             break
         endif
         #ifdef __HARBOUR__
+            private m_aRecFact:=Array(0)
             pMTX:=hb_MutexCreate()
         #else //__PROTHEUS__
-            pMTX:=MTXCreate(NIL,MTX_KEY)
+            pMTX:="TBIGN_RECFACT_000001"
         #endif
-        recFact(s__o1:Clone(),oN,@aRecFact,pMTX)
+        oThreads:=tBigNThread():New(MTX_KEY)
         #ifdef __PROTHEUS__
+            oThreads:cGlbResult:=pMTX
+            oThreads:bOnStartJob:="u_tBigNumber()"
+        #endif //__PROTHEUS__
+        oThreads:Start(1,HB_THREAD_INHERIT_MEMVARS)
+        #ifdef __HARBOUR__
+            pFunc:=@threcFact()
+        #else //__PROTHEUS__
+            pFunc:="u_threcFact()"
+        #endif //__HARBOUR__
+        oThreads:setEvent(1,{pFunc,s__o1:Clone():GetValue(),oN:GetValue(),pMTX})
+        oThreads:Notify()
+        oThreads:Wait()
+        oThreads:Join()
+        #ifdef __PROTHEUS__
+            aRecFact:=oThreads:getAllResults(.F.)
             aEval(getGlbVarResult(pMTX),{|r|aAdd(aRecFact,r)})
+            xClearGlbValue(pMTX)
+            oThreads:Finalize()
+        #else //__HARBOUR__
+            aRecFact:=m_aRecFact
         #endif //__PROTHEUS__
         oThreads:=tBigNThread():New(MTX_KEY)
         #ifdef __PROTHEUS__
-            pMTX:=MTXCreate(NIL,MTX_KEY)
-            oThreads:cGlbResult:=pMTX
             oThreads:bOnStartJob:="u_tBigNumber()"
         #endif //__PROTHEUS__
         oThreads:Start(Len(aRecFact))
         #ifdef __PROTHEUS__
-            pFunc:="u_thMultFact"
+            pFunc:="u_thMultFact()"
         #else //__HARBOUR__
             pFunc:=@multFact()
         #endif //__PROTHEUS__
@@ -4210,52 +4233,45 @@ method Factorial() class tBigNumber
         oThreads:Notify()
         oThreads:Wait()
         oThreads:Join()
+        aRecFact:=oThreads:getAllResults(.T.)
         #ifdef __PROTHEUS__
-            aRecFact:=oThreads:getAllResults(.T.)
             oThreads:Finalize()
-            MTXObj(NIL,MTX_KEY):Clear()
-            while ((nJ:=Len(aRecFact))>1)
-        #else //__HARBOUR__
-            while ((nJ:=Len(aRecFact:=oThreads:getAllResults()))>1)
-        #endif
-                if .not.((nJ%2)==0)
-                    ++nJ
-                    #ifdef __PROTHEUS__
-                        aAdd(aRecFact,s__o1:Clone():GetValue())
-                    #else //__HARBOUR__
-                        aAdd(aRecFact,s__o1:Clone())
-                    #endif //__PROTHEUS__
-                endif
-                oThreads:=tBigNThread():New(MTX_KEY)
-                #ifdef __PROTHEUS__
-                    pMTX:=MTXCreate(NIL,MTX_KEY)
-                    oThreads:cGlbResult:=pMTX
-                    oThreads:bOnStartJob:="u_tBigNumber()"
-                #endif //__PROTHEUS__
-                oThreads:Start(nJ/2)
-                nT:=0
-                for nD:=1 to nJ step 2
-                    #ifdef __PROTHEUS__
-                        pFunc:="u_thiMult"
-                    #else //__HARBOUR__
-                        pFunc:=@thiMult()
-                    #endif //__PROTHEUS__
-                    oThreads:SetEvent(++nT,{pFunc,aRecFact[nD],aRecFact[nD+1]})
-                next nD
-                oThreads:Notify()
-                oThreads:Wait()
-                oThreads:Join()
-                #ifdef __PROTHEUS__
-                    aRecFact:=oThreads:getAllResults(.T.)
-                    oThreads:Finalize()
-                    MTXObj(NIL,MTX_KEY):Clear()
-                #endif //__PROTHEUS__
-            end while
-        #ifdef __PROTHEUS__
-            aEval(aRecFact,{|r|oR:SetValue(oR:iMult(r))})
-        #else //__HARBOUR__
-            aEval(aRecFact,{|r|oR:=oR:iMult(r)})
         #endif //__PROTHEUS__
+        while ((nJ:=Len(aRecFact))>1)
+            if .not.((nJ%2)==0)
+                ++nJ
+                #ifdef __PROTHEUS__
+                    aAdd(aRecFact,s__o1:Clone():GetValue())
+                #else //__HARBOUR__
+                    aAdd(aRecFact,s__o1:Clone())
+                #endif //__PROTHEUS__
+            endif
+            oThreads:=tBigNThread():New(MTX_KEY)
+            #ifdef __PROTHEUS__
+                oThreads:bOnStartJob:="u_tBigNumber()"
+            #endif //__PROTHEUS__
+            oThreads:Start(nJ/2)
+            nT:=0
+            for nD:=1 to nJ step 2
+                #ifdef __PROTHEUS__
+                    pFunc:="u_thiMult()"
+                #else //__HARBOUR__
+                    pFunc:=@thiMult()
+                #endif //__PROTHEUS__
+                oThreads:SetEvent(++nT,{pFunc,aRecFact[nD],aRecFact[nD+1]})
+            next nD
+            oThreads:Notify()
+            oThreads:Wait()
+            oThreads:Join()
+            aRecFact:=oThreads:getAllResults(.T.)
+            #ifdef __PROTHEUS__
+                oThreads:Finalize()
+            #endif //__PROTHEUS__
+        end while
+        #ifdef __PROTHEUS__
+            MTXObj(NIL,MTX_KEY):Clear()
+        #endif //__PROTHEUS__
+        aEval(aRecFact,{|r|oR:SetValue(oR:iMult(r))})
     end sequence
 return(oR)
 
@@ -4279,9 +4295,10 @@ return(oR)
     static BigInt factorial(long n) { return recfact(1, n); }        
 */
 #ifdef __PROTHEUS__
-static function recFact(oS,oN,aRecFact,pMTX)
+static function recFact(oS,oN,pMTX)
+    local aRecFact:=Array(0)
 #else //__HARBOUR__
-static procedure recFact(oS,oN,aRecFact,pMTX)
+static procedure recFact(oS,oN,pMTX)
 #endif //__PROTHEUS__
 
     local oI    
@@ -4290,18 +4307,20 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
 
     local oThreads
     
+    local pFunc
+    
     begin sequence
 
-        //TODO: Resolver Inconsistencia no Calculo Quando HARBOUR  
+        //TODO: Resolver Inconsistencia no Calculo
         if oN:lte(s__o10)
             #ifdef __PROTHEUS__
-                DEFAULT aRecFact:=Array(0)
                 aAdd(aRecFact,{oS:GetValue(),oN:GetValue()})
             #else //__HARBOUR__
-                while .not.(hb_MutexLock(pMTX))
+                while .not.(hb_mutexLock(pMTX))
+                    tBigNSleep(.05)
                 end while
-                aAdd(aRecFact,{oS,oN})
-                hb_MutexUnLock(pMTX)
+                aAdd(m_aRecFact,{oS:Clone(),oN:Clone()})
+                hb_mutexUnLock(pMTX)
             #endif //__PROTHEUS__
             break
         endif
@@ -4323,18 +4342,17 @@ static procedure recFact(oS,oN,aRecFact,pMTX)
             oThreads:cGlbResult:=pMTX
             oThreads:bOnStartJob:="u_tBigNumber()"
         #endif //__PROTHEUS__
-        oThreads:Start(2)
-        #ifdef __HARBOUR__ 
-            //TODO: Resolver Inconsistencia no Calculo Quando HARBOUR
-            oThreads:setEvent(1,{||recFact(oS,oI,@aRecFact,pMTX)})
-            oThreads:setEvent(2,{||recFact(oSI,oNI,@aRecFact,pMTX)})
+        oThreads:Start(2,HB_THREAD_INHERIT_MEMVARS)
+        #ifdef __HARBOUR__
+            pFunc:=@threcFact()
         #else //__PROTHEUS__
-            oThreads:setEvent(1,{"u_threcFact",{oS:GetValue(),oI:GetValue(),pMTX}})
-            oThreads:setEvent(2,{"u_threcFact",{oSI:GetValue(),oNI:GetValue(),pMTX}})
+            pFunc:="u_threcFact()"
         #endif //__HARBOUR__
-            oThreads:Notify()
-            oThreads:Wait()
-            oThreads:Join()
+        oThreads:setEvent(1,{pFunc,oS:GetValue(),oI:GetValue(),pMTX})
+        oThreads:setEvent(2,{pFunc,oSI:GetValue(),oNI:GetValue(),pMTX})
+        oThreads:Notify()
+        oThreads:Wait()
+        oThreads:Join()
         #ifdef __PROTHEUS__
             oThreads:Finalize(.F.)
         #endif //__PROTHEUS__
@@ -5718,6 +5736,10 @@ return(r)
     return(oN:iMult(oM))
     static function thLogN(oN,oB)
     return(oN:LogN(oB))
+    static function threcFact(cS,cN,pMTX)   
+        local oS:=tBigNumber():New(cS)
+        local oN:=tBigNumber():New(cN)
+    return(recFact(oS,oN,pMTX))
 #else
     #ifdef __PROTHEUS__
         user function thMultFact(cS,cN)    
@@ -5727,7 +5749,7 @@ return(r)
         user function threcFact(cS,cN,cMTX)   
             local oS:=tBigNumber():New(cS)
             local oN:=tBigNumber():New(cN)
-        return(recFact(oS,oN,NIL,cMTX))
+        return(recFact(oS,oN,cMTX))
         user function thiMult(cN,cM)
             local oN:=tBigNumber():New(cN)
             local oM:=tBigNumber():New(cM)

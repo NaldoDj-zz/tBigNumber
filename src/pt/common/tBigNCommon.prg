@@ -4,8 +4,8 @@
     
     #include "tbignumber.ch"
     
-    #define GLB_SLEEP    100
-    #define GLB_ATTEMPTS 50
+    #define GLB_SLEEP    150
+    #define GLB_ATTEMPTS 100
     #define GLB_LOCK     .T.
 
     static s__oMutex

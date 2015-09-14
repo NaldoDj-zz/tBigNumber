@@ -348,7 +348,6 @@ method procedure Join() class tBigNThread
     local cIncR2  AS CHARACTER
     local cMTXID  AS CHARACTER 
     local nThread AS NUMBER
-    xPutGlbValue(self:oMtxJob:cMutex,"0")
     if (self:lProcess)
         ASSIGN cIncR1:="Processando..."
         ASSIGN cIncR2:=ProcName()
@@ -360,7 +359,7 @@ method procedure Join() class tBigNThread
             self:oProcess:IncRegua2(cIncR2)
         endif
         ASSIGN cMTXID:=self:aThreads[nThread][TH_MTX]
-        xPutGlbValue(cMTXID,"0")
+        xPutGlbValue(cMTXID,"-1")
         self:aThreads[nThread][TH_EXE]:="'_E_X_I_T_'"
         IPCGo(self:oMtxJob:cMutex,self:aThreads[nThread])
         Sleep(self:nSleep)
@@ -369,6 +368,7 @@ method procedure Join() class tBigNThread
         endif
     next nTread
     self:setGlbVarResult()
+    xPutGlbValue(self:oMtxJob:cMutex,"-1")
 return
 
 method procedure Finalize(lGlbResult) class tBigNThread

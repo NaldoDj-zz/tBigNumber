@@ -20,10 +20,10 @@ return
 static procedure thProcess(oProcess,lEnd)
     local bEvent
     local cTypeR
+    local nVal1
+    local nVal2
     local nNode
     local nTotal
-    local nValor1
-    local nValor2
     local nThread
     local nThreads:=TST_MAXTHREAD
     local nResult
@@ -38,12 +38,12 @@ static procedure thProcess(oProcess,lEnd)
             oThread:QuitRequest()
             exit
         endif
-        nValor1:=nThread
-        nValor2:=(nThreads-nThread)
+        nVal1:=nThread
+        nVal2:=(nThreads-nThread)
         if ((nThread%2)==0)
-            oThread:setEvent(nThread,{"u_ThreadSum",nValor1,nValor2})
+            oThread:setEvent(nThread,{"u_ThreadSum",nVal1,nVal2})
         else
-            oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nValor1)+"','"+NToS(nValor2)+"')")    
+            oThread:setEvent(nThread,"u_ThreadSum('"+NToS(nVal1)+"','"+NToS(nVal2)+"')")    
         endif
         oProcess:IncRegua1()
     next nThread
