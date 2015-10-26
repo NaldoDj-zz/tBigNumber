@@ -42,7 +42,6 @@ return(self)
 
 method procedure Start(nThreads,nMemMode) class tBigNThread
     local nStart
-    local nSleep:=self:nSleep
     local nThread
     DEFAULT nThreads:=self:nThreads
     DEFAULT nMemMode:=self:nMemMode
@@ -59,7 +58,7 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
             self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
             self:aThreads[nThread][TH_EXE]:=NIL
             self:aThreads[nThread][TH_RES]:=NIL
-            self:aThreads[nThread][TH_END]:=.F.
+            self:aThreads[nThread][TH_END]:=hb_mutexCreate()
             ++self:nThreads
             --nThreads
         End While
@@ -69,15 +68,15 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
     nThreads:=self:nThreads    
     for nThread:=nStart to nThreads
         if (nMemMode==NIL)
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob)
         else
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
+            self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob)
         endif
         while (self:aThreads[nThread][TH_NUM]==NIL)
             if (nMemMode==NIL)
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob)
             else
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,nSleep)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob)
             endif
         end while
     next nThread
@@ -87,28 +86,50 @@ method procedure Notify() class tBigNThread
     local nThread
     for nThread:=1 to self:nThreads
         self:aThreads[nThread][TH_RES]:=NIL
-        self:aThreads[nThread][TH_END]:=.F.
-        hb_mutexNotify(self:nMtxJob,nThread)
+        while .not.(hb_MutexLock(self:aThreads[nThread][TH_END]))
+            tBigNSleep(self:nSleep)
+        end while
+        hb_mutexNotify(self:aThreads[nThread][TH_END],.F.)
+        hb_MutexUnLock(self:aThreads[nThread][TH_END])
+        while .not.(hb_MutexLock(self:nMtxJob))
+            tBigNSleep(self:nSleep)
+        end while
+        hb_mutexNotify(self:nMtxJob,self:aThreads[nThread])
+        hb_MutexUnLock(self:nMtxJob)
     next nThread
 return
 
 method procedure Wait(nSleep) class tBigNThread
-    local pMTX
+    local athEnd
+    local lThEnd
     local nThread
     local nThreads:=self:nThreads
     local nThCount:=0
+    local xRes
     DEFAULT nSleep:=self:nSleep
+    athEnd:=Array(nThreads)
+    aFill(athEnd,.F.)
     while .T.
         for nThread:=1 to nThreads
-            pMTX:=self:aThreads[nThread][TH_MTX]
-            if .not.(hb_MutexLock(pMTX))
+            if .not.(hb_MutexLock(self:aThreads[nThread][TH_MTX]))
                 tBigNSleep(nSleep)
                 loop
             endif
-            if self:aThreads[nThread][TH_END]
+            lThEnd:=athEnd[nThread]
+            if .not.(lThEnd)
+                if hb_mutexSubscribe(self:aThreads[nThread][TH_END],NIL,@lThEnd)
+                    athEnd[nThread]:=lThEnd
+                endif    
+            endif
+            if lThEnd
+                if (self:aThreads[nThread][TH_RES]==NIL)
+                    if hb_mutexSubscribe(self:aThreads[nThread][TH_MTX],NIL,@xRes)
+                        self:aThreads[nThread][TH_RES]:=xRes
+                    endif
+                endif
                 ++nThCount
             endif
-            hb_MutexUnLock(pMTX)
+            hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
         next nThread
         if (nThCount==nThreads)
             exit
@@ -120,12 +141,9 @@ return
 
 method procedure Join() class tBigNThread
     local nThread
+    local pFunc:=@break()
     for nThread:=1 to self:nThreads
-        hb_mutexNotify(self:nMtxJob,{||break()})
-        if .not.(self:aThreads[nThread][TH_NUM]==NIL)
-            hb_threadQuitRequest(self:aThreads[nThread][TH_NUM])
-            self:aThreads[nThread][TH_NUM]:=NIL
-        endif
+        hb_mutexNotify(self:nMtxJob,{"H_ACTION"=>pFunc})
     next nTread
 return
 
@@ -162,10 +180,9 @@ method procedure setSleep(nSleep) class tBigNThread
     self:nSleep:=nSleep
 return
 
-static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
+static Procedure tbigNthRun(mtxJob)
+    local aJob
     local cTyp
-    local nJob
-    local pMTX
     local xJob
     local xRes
     begin sequence
@@ -176,16 +193,12 @@ static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
                 case "B"
                     Eval(xJob)
                     exit
-                case "A"
-                    hb_ExecFromArray(xJob)
+                case "H"
+                    hb_ExecFromArray(xJob["H_ACTION"])
                     exit
-                case "N"
-                    nJob:=xJob
-                    pMTX:=aThreads[nJob][TH_MTX]
-                    while .not.(hb_MutexLock(pMTX))
-                        tBigNSleep(nSleep)
-                    end while
-                    xJob:=aThreads[nJob][TH_EXE]
+                case "A"
+                    aJob:=xJob
+                    xJob:=aJob[TH_EXE]
                     cTyp:=ValType(xJob)
                     switch cTyp
                     case "A"
@@ -194,15 +207,14 @@ static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
                     case "B"
                         xRes:=Eval(xJob)
                         exit
+                    otherwise
+                        xRes:=NIL
                     endswitch
-                    aThreads[nJob][TH_RES]:=xRes
-                    aThreads[nJob][TH_END]:=.T.
-                    hb_MutexUnLock(pMTX)
+                    hb_mutexNotify(aJob[TH_MTX],xRes)
+                    hb_mutexNotify(aJob[TH_END],.T.)
                     exit
                 endswitch
             endif
-            xJob:=NIL
-            xRes:=NIL
         end while
     end sequence
 return

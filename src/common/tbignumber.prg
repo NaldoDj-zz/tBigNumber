@@ -5754,6 +5754,13 @@ return(r)
             local oN:=tBigNumber():New(cN)
             local oM:=tBigNumber():New(cM)
         return(oN:iMult(oM):GetValue())        
+    #else
+        static function thiMult(oN,oM)
+        return(oN:iMult(oM))
+        static function threcFact(cS,cN,pMTX)   
+            local oS:=tBigNumber():New(cS)
+            local oN:=tBigNumber():New(cN)
+        return(recFact(oS,oN,pMTX))
     #endif //__PROTHEUS__
 #endif //__PTCOMPAT__
 
