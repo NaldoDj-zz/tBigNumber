@@ -56,6 +56,7 @@
 
 #ifdef __PROTHEUS__
     //-------------------------------------------------------------------------------------
+    static __cEnvSrv
     #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
     #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
     #xtranslate hb_mutexCreate()            => ThreadID()
@@ -74,7 +75,6 @@
     #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
     #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
     //-------------------------------------------------------------------------------------
-    memvar m_aRecFact
 #endif //__PROTHEUS__
 
 #ifndef __DIVMETHOD__
@@ -90,6 +90,7 @@ static s__o0
 static s__o1
 static s__o2
 static s__o10
+static s__o20
 static s__od2
 
 static s__oMinFI
@@ -576,7 +577,7 @@ endclass
 */
 #ifdef __PROTHEUS__
     user function tBigNumber(uBigN,nBase)
-    return(tBigNumber():New(@uBigN,@nBase))
+    return(tBigNumber():New(uBigN,nBase))
 #endif
 
 /*
@@ -637,7 +638,7 @@ return(self)
                 if Select(ths_aFiles[nFile][1])>0
                     (ths_aFiles[nFile][1])->(dbCloseArea())
                 endif
-                #ifdef __PROTHEUS__
+                #ifdef __PROTEUS__
                     MsErase(ths_aFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
                 #else
                     #ifdef TBN_MEMIO
@@ -1558,7 +1559,7 @@ method Add(uBigN) class tBigNumber
         lAdd:=.F.
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTHEUS__
+        #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
         lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
@@ -1637,7 +1638,7 @@ method iAdd(uBigN) class tBigNumber
         lAdd:=.F.
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTHEUS__
+        #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
         lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
@@ -1719,7 +1720,7 @@ method Sub(uBigN) class tBigNumber
     else
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTHEUS__
+        #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
         lNeg:=osbN1:lNeg.or.lInv
@@ -1798,7 +1799,7 @@ method iSub(uBigN) class tBigNumber
     else
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTHEUS__
+        #else //__PROTEUS__
             lInv:=cN1<cN2
         #endif //__HARBOUR__
         lNeg:=osbN1:lNeg.or.lInv
@@ -4169,111 +4170,18 @@ return(aPFactors)
     method:Factorial
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:19/03/2013
-    Descricao:Fatorial de Numeros Inteiros
-    Sintaxe:tBigNumber():Factorial() -> oF
-    TODO:Otimizar++
-    Referencias:http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
-                http://www.luschny.de/math/factorial/index.html
-                 
+    Descricao: Fatorial de Numeros Inteiros
+    Sintaxe: tBigNumber():Factorial() -> oF
+    TODO   : Otimizar++
+    Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+                 http://www.luschny.de/math/factorial/index.html
 */
 method Factorial() class tBigNumber
-    local aRecFact
     local oN:=self:Clone():Int(.T.,.F.)
-    local oR:=s__o1:Clone()
-    local nD
-    local nJ
-    local nT
-    local pMTX
-    local pFunc
-    local oThreads
-    begin sequence
-        if oN:eq(s__o0)
-            break
-        endif
-        #ifdef __HARBOUR__
-            private m_aRecFact:=Array(0)
-            pMTX:=hb_MutexCreate()
-        #else //__PROTHEUS__
-            pMTX:="TBIGN_RECFACT_000001"
-        #endif
-        oThreads:=tBigNThread():New(MTX_KEY)
-        #ifdef __PROTHEUS__
-            oThreads:cGlbResult:=pMTX
-            oThreads:bOnStartJob:="u_tBigNumber()"
-        #endif //__PROTHEUS__
-        oThreads:Start(1,HB_THREAD_INHERIT_MEMVARS)
-        #ifdef __HARBOUR__
-            pFunc:=@threcFact()
-        #else //__PROTHEUS__
-            pFunc:="u_threcFact()"
-        #endif //__HARBOUR__
-        oThreads:setEvent(1,{pFunc,s__o1:Clone():GetValue(),oN:GetValue(),pMTX})
-        oThreads:Notify()
-        oThreads:Wait()
-        oThreads:Join()
-        #ifdef __PROTHEUS__
-            aRecFact:=oThreads:getAllResults(.F.)
-            aEval(getGlbVarResult(pMTX),{|r|aAdd(aRecFact,r)})
-            xClearGlbValue(pMTX)
-            oThreads:Finalize()
-        #else //__HARBOUR__
-            aRecFact:=m_aRecFact
-        #endif //__PROTHEUS__
-        oThreads:=tBigNThread():New(MTX_KEY)
-        #ifdef __PROTHEUS__
-            oThreads:bOnStartJob:="u_tBigNumber()"
-        #endif //__PROTHEUS__
-        oThreads:Start(Len(aRecFact))
-        #ifdef __PROTHEUS__
-            pFunc:="u_thMultFact()"
-        #else //__HARBOUR__
-            pFunc:=@multFact()
-        #endif //__PROTHEUS__
-        aEval(aRecFact,{|e,i|oThreads:SetEvent(i,{pFunc,e[1],e[2]})})
-        oThreads:Notify()
-        oThreads:Wait()
-        oThreads:Join()
-        aRecFact:=oThreads:getAllResults(.T.)
-        #ifdef __PROTHEUS__
-            oThreads:Finalize()
-        #endif //__PROTHEUS__
-        while ((nJ:=Len(aRecFact))>1)
-            if .not.((nJ%2)==0)
-                ++nJ
-                #ifdef __PROTHEUS__
-                    aAdd(aRecFact,s__o1:Clone():GetValue())
-                #else //__HARBOUR__
-                    aAdd(aRecFact,s__o1:Clone())
-                #endif //__PROTHEUS__
-            endif
-            oThreads:=tBigNThread():New(MTX_KEY)
-            #ifdef __PROTHEUS__
-                oThreads:bOnStartJob:="u_tBigNumber()"
-            #endif //__PROTHEUS__
-            oThreads:Start(nJ/2)
-            nT:=0
-            for nD:=1 to nJ step 2
-                #ifdef __PROTHEUS__
-                    pFunc:="u_thiMult()"
-                #else //__HARBOUR__
-                    pFunc:=@thiMult()
-                #endif //__PROTHEUS__
-                oThreads:SetEvent(++nT,{pFunc,aRecFact[nD],aRecFact[nD+1]})
-            next nD
-            oThreads:Notify()
-            oThreads:Wait()
-            oThreads:Join()
-            aRecFact:=oThreads:getAllResults(.T.)
-            #ifdef __PROTHEUS__
-                oThreads:Finalize()
-            #endif //__PROTHEUS__
-        end while
-        #ifdef __PROTHEUS__
-            MTXObj(NIL,MTX_KEY):Clear()
-        #endif //__PROTHEUS__
-        aEval(aRecFact,{|r|oR:SetValue(oR:iMult(r))})
-    end sequence
-return(oR)
+    if oN:eq(s__o0)
+        return(s__o1:Clone())
+    endif
+return(recFact(s__o1:Clone(),oN))
 
 /*
     function:recFact
@@ -4281,130 +4189,81 @@ return(oR)
     Data:04/01/2014
     Descricao:Fatorial de Numeros Inteiros
     Sintaxe:recFact(oS,oN)
-    Referencias:http://www.luschny.de/math/factorial/FastFactorialFunctions.htm
-    static BigInt recfact(long start, long n) {
-        long i;
-        if (n <= 16) { 
-            BigInt r = new BigInt(start);
-            for (i = start + 1; i < start + n; i++) r *= i;
-            return r;
-        }
-        i = n / 2;
-        return recfact(start, i) * recfact(start + i, n - i);
-    }
-    static BigInt factorial(long n) { return recfact(1, n); }        
-*/
-#ifdef __PROTHEUS__
-static function recFact(oS,oN,pMTX)
-    local aRecFact:=Array(0)
-#else //__HARBOUR__
-static procedure recFact(oS,oN,pMTX)
-#endif //__PROTHEUS__
-
-    local oI    
-    local oSI
-    local oNI
-
-    local oThreads
-    
-    local pFunc
-    
-    begin sequence
-
-        //TODO: Resolver Inconsistencia no Calculo
-        if oN:lte(s__o10)
-            #ifdef __PROTHEUS__
-                aAdd(aRecFact,{oS:GetValue(),oN:GetValue()})
-            #else //__HARBOUR__
-                while .not.(hb_mutexLock(pMTX))
-                    tBigNSleep(.05)
-                end while
-                aAdd(m_aRecFact,{oS:Clone(),oN:Clone()})
-                hb_mutexUnLock(pMTX)
-            #endif //__PROTHEUS__
-            break
-        endif
-
-        oI:=oN:Clone()
-        
-        //-------------------------------------------------------------------------------------
-        //(Div(2)==Mult(.5)
-        oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
-        
-        oSI:=oS:Clone()
-        oSI:SetValue(oSI:iAdd(oI))
-
-        oNI:=oN:Clone()
-        oNI:SetValue(oNI:iSub(oI))
-        
-        oThreads:=tBigNThread():New(MTX_KEY)
-        #ifdef __PROTHEUS__
-            oThreads:cGlbResult:=pMTX
-            oThreads:bOnStartJob:="u_tBigNumber()"
-        #endif //__PROTHEUS__
-        oThreads:Start(2,HB_THREAD_INHERIT_MEMVARS)
-        #ifdef __HARBOUR__
-            pFunc:=@threcFact()
-        #else //__PROTHEUS__
-            pFunc:="u_threcFact()"
-        #endif //__HARBOUR__
-        oThreads:setEvent(1,{pFunc,oS:GetValue(),oI:GetValue(),pMTX})
-        oThreads:setEvent(2,{pFunc,oSI:GetValue(),oNI:GetValue(),pMTX})
-        oThreads:Notify()
-        oThreads:Wait()
-        oThreads:Join()
-        #ifdef __PROTHEUS__
-            oThreads:Finalize(.F.)
-        #endif //__PROTHEUS__
- 
-    end sequence
-
-#ifdef __PROTHEUS__        
-return(aRecFact)
-#else //__HARBOUR__
-return
-#endif
-
-/*
-    function:multFact
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:27/07/2015
-    Descricao:Fatorial de Numeros Inteiros
-    Sintaxe:recFact(oS,oN)
     Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
 */
-static function multFact(oS,oN)
-    local oR:=oS:Clone()
+static function recFact(oS,oN)
+
 #ifndef __PTCOMPAT__
+    local oThreads
     local nB
     local nI
     local nSN
 #else
-    local oI
     local oSN
 #endif
-    #ifdef __PTCOMPAT__
-        oI:=oS:Clone()
-        oSN:=oS:Clone()
-        oSN:SetValue(oSN:iAdd(oN))
-        oI:OpInc()
-        while oI:lt(oSN)
-            oR:SetValue(oR:iMult(oI))
+
+    local oI
+    local oR
+    local oSI
+    local oNI
+    
+    oR:=s__o0:Clone()
+    
+#ifdef __PTCOMPAT__
+    //-------------------------------------------------------------------------------------
+    //(Div(2)==Mult(.5)
+    if oN:lte(s__o20:Mult(oN:Mult(s__od2):Int(.T.,.F.)))
+#else
+    if oN:lte(s__o20)
+#endif
+        oR:SetValue(oS)
+        #ifdef __PTCOMPAT__
+            oI:=oS:Clone()
+            oSN:=oS:Clone()
+            oSN:SetValue(oSN:iAdd(oN))
             oI:OpInc()
-        end while
-    #else //__HARBOUR__
-        nB:=oS:__nBase()
-        nI:=Val(oS:__cInt())
-        nSN:=nI
-        nSN+=Val(oN:__cInt())
-        while ++nI<nSN
-            oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
-        end while
-    #endif //__PTCOMPAT__        
-return(oR)
+            while oI:lt(oSN)
+                oR:SetValue(oR:iMult(oI))
+                oI:OpInc()
+            end while
+        #else
+            nB:=oS:__nBase()
+            nI:=Val(oS:__cInt())
+            nSN:=nI
+            nSN+=Val(oN:__cInt())
+            while ++nI<nSN
+                oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
+            end while
+        #endif //__PTCOMPAT__        
+        return(oR)
+    endif
+
+    oI:=oN:Clone()
+    //-------------------------------------------------------------------------------------
+    //(Div(2)==Mult(.5)
+    oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
+
+    oSI:=oS:Clone()
+    oSI:SetValue(oSI:iAdd(oI))
+
+    oNI:=oN:Clone()
+    oNI:SetValue(oNI:iSub(oI))
+
+#ifndef __PTCOMPAT__
+    oThreads:=tBigNThread():New()
+    oThreads:Start(2)
+    oThreads:setEvent(1,{@recFact(),oS,oI})
+    oThreads:setEvent(2,{@recFact(),oSI,oNI})
+    oThreads:Notify()
+    oThreads:Wait()
+    oThreads:Join()
+return(oThreads:getResult(1):iMult(oThreads:getResult(2)))
+#else
+return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
+#endif
 
 /*
-    method:Fibonacci
+    method:Factorial
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:18/05/2015
     Descricao: Retorna a Sequencia de Fibonacci
@@ -4435,7 +4294,7 @@ method Fibonacci() class tBigNumber
     Local oT
 #else
     Local oT:=tBigNumber():New("0")
-#endif //__PROTHEUS__
+#endif //__PROTEUS__
 #ifdef __HARBOUR__
     While (oA<oN)
         aAdd(aFibonacci,oA:ExactValue())
@@ -4443,7 +4302,7 @@ method Fibonacci() class tBigNumber
         oB:=oA+oB
         oA:=oT
    End While
-#else //__PROTHEUS__
+#else //__PROTEUS__
     While (oA:lt(oN))
         aAdd(aFibonacci,oA:ExactValue())
         oT:SetValue(oB)
@@ -4878,7 +4737,7 @@ static function __SQRT(p)
     local EPS
     local q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
-        #ifdef __PROTHEUS__
+        #ifdef __PROTEUS__
             r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
         #else //__HARBOUR__
             #ifdef __PTCOMPAT__
@@ -4886,14 +4745,14 @@ static function __SQRT(p)
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
-        #endif //__PROTHEUS__
+        #endif //__PROTEUS__
     else
         n:=s__nthRAcc-1
         s__IncS0(n)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
-        #ifdef __PROTHEUS__
+        #ifdef __PROTEUS__
             r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
         #else //__HARBOUR__
             #ifdef __PTCOMPAT__
@@ -4901,8 +4760,8 @@ static function __SQRT(p)
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
-        #endif //__PROTHEUS__
-#ifdef __PROTHEUS__
+        #endif //__PROTEUS__
+#ifdef __PROTEUS__
         if r:eq(s__o0).or."*"$r:GetValue()
 #else //__HARBOUR__
     #ifdef __PTCOMPAT__
@@ -5736,32 +5595,6 @@ return(r)
     return(oN:iMult(oM))
     static function thLogN(oN,oB)
     return(oN:LogN(oB))
-    static function threcFact(cS,cN,pMTX)   
-        local oS:=tBigNumber():New(cS)
-        local oN:=tBigNumber():New(cN)
-    return(recFact(oS,oN,pMTX))
-#else
-    #ifdef __PROTHEUS__
-        user function thMultFact(cS,cN)    
-            local oS:=tBigNumber():New(cS)
-            local oN:=tBigNumber():New(cN)
-        return(multFact(oS,oN):GetValue())
-        user function threcFact(cS,cN,cMTX)   
-            local oS:=tBigNumber():New(cS)
-            local oN:=tBigNumber():New(cN)
-        return(recFact(oS,oN,cMTX))
-        user function thiMult(cN,cM)
-            local oN:=tBigNumber():New(cN)
-            local oM:=tBigNumber():New(cM)
-        return(oN:iMult(oM):GetValue())        
-    #else
-        static function thiMult(oN,oM)
-        return(oN:iMult(oM))
-        static function threcFact(cS,cN,pMTX)   
-            local oS:=tBigNumber():New(cS)
-            local oN:=tBigNumber():New(cN)
-        return(recFact(oS,oN,pMTX))
-    #endif //__PROTHEUS__
 #endif //__PTCOMPAT__
 
 /*
@@ -5947,11 +5780,15 @@ static procedure __InitstbN(nBase)
     s__o1:=tBigNumber():New("1",nBase)
     s__o2:=tBigNumber():New("2",nBase)
     s__o10:=tBigNumber():New("10",nBase)
+    s__o20:=tBigNumber():New("20",nBase)
     s__od2:=tBigNumber():New("0.5",nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
+    #ifdef __PROTHEUS__
+        DEFAULT __cEnvSrv:=GetEnvServer()
+    #endif
     s__lstbNSet:=.T.
 return
 
@@ -6039,6 +5876,4 @@ return
 
 #ifdef __HARBOUR__
     #include "..\src\hb\c\tbigNumber.c"
-#else //__PROTHEUS__
-    #include "tBiGNCommon.prg"
 #endif // __HARBOUR__

@@ -9,6 +9,10 @@
    Encoding: UTF*8 (No BOM)  Notation (in 5th position):
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
+
+2015-11-02 22:26 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * src/common/tbignumber.prg
+  * src/hb/tbigNThread.prg
  
 2015-10-26 09:58 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
