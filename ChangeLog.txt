@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-11-05 15:31 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/hb/tbigNThread.prg
+ 
 2015-11-05 02:33 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/tbigNThread.prg

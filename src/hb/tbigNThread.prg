@@ -77,19 +77,12 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
         self:aThreads[nThread][TH_EXE]:=NIL
         self:aThreads[nThread][TH_RES]:=NIL
         self:aThreads[nThread][TH_END]:=.F.
-        if (hb_mutexQueueInfo(self:nMtxJob,@nWorkers,@nEvents).and.((nWorkers<=self:nThreads).or.(nEvents<=500)))
+        if (hb_mutexQueueInfo(self:nMtxJob,@nWorkers,@nEvents).and.((nWorkers<self:nThreads)))
             if (nMemMode==NIL)
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
             else
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
             endif
-            while (self:aThreads[nThread][TH_NUM]==NIL)
-                if (nMemMode==NIL)
-                    self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
-                else
-                    self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
-                endif
-            end while
             hb_threadDetach(self:aThreads[nThread][TH_NUM])
         endif
     next nThread
