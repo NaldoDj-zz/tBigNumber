@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-11-05 02:33 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/hb/tbigNThread.prg
 
 2015-11-03 23:44 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
@@ -377,7 +380,7 @@
   + bin/harbour.ucf
   * .gitattributes
 
-2015-07-27 20:09 UTC--300 NaldoDj (marinaldo.jesus gmail.com)
+2015-07-27 20:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + mk/__mkHB-msvc.bat
   * mk/__mkHB-msvc64.bat
   * src/common/tbignumber.prg

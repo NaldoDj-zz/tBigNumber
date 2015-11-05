@@ -22,13 +22,11 @@ Class tBigNThread
     method New(nThreads) CONSTRUCTOR /*( /!\ )*/
     
     method Start(nThreads,nMemMode)
-    method ReStart(nThreads,nMemMode)
     
     method Notify()
     method Wait()
     method Join()
     
-    method addEvent(uthEvent)
     method setEvent(nThEvent,uthEvent)
 
     method getResult(nThEvent)
@@ -97,14 +95,6 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
     next nThread
 return
 
-method procedure ReStart(nThreads,nMemMode) class tBigNThread
-    self:Join()
-    self:clearAllResults()
-    self:nThreads:=0
-    aSize(self:aThreads,self:nThreads)
-    self:Start(@nThreads,@nMemMode)
-return
-
 method procedure Notify() class tBigNThread
     local aThreads:=self:aThreads
     local cTyp
@@ -159,18 +149,16 @@ method procedure Wait() class tBigNThread
 return
 
 method procedure Join() class tBigNThread
-    hb_mutexNotifyAll(self:nMtxJob,{||break()})
+    local nThread
+    local nEvents
+    local nWorkers
+    for nThread:=1 to self:nThreads
+        hb_mutexNotify(self:nMtxJob,{||break()})
+    next nTread
+    if (hb_mutexQueueInfo(self:nMtxJob,@nWorkers,@nEvents).and.(nWorkers>0))
+        hb_mutexNotifyAll(self:nMtxJob,{||break()})
+    endif
 return
-
-method function addEvent(uthEvent) class tBigNThread
-    local bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==NIL)}
-    local nThEvent:=aScan(self:aThreads,bEvent)
-    while (nThEvent==0)
-        self:Start(self:nThreads+1,self:nMemMode)
-        nThEvent:=aScan(self:aThreads,bEvent)
-    end while
-    self:setEvent(nThEvent,uthEvent)
-return(nThEvent)
 
 method function setEvent(nThEvent,uthEvent) class tBigNThread
     local uLEvent
@@ -198,7 +186,7 @@ method procedure clearAllResults() class tBigNThread
 return
 
 method procedure setSleep(nSleep) class tBigNThread
-    DEFAULT nSleep:=0.0000
+    DEFAULT nSleep:=0
     self:nSleep:=nSleep
 return
 
