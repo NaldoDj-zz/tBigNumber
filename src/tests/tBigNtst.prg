@@ -497,8 +497,8 @@
         #endif
 
         #ifdef __HARBOUR__
-            __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),10)+"/"+StrZero(__oRTime1:GetnTotal(),10)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
-            __ConOut(fhLog,"FINAL2      : ","["+StrZero(__oRTime2:GetnProgress(),10)+"/"+StrZero(__oRTime2:GetnTotal(),10)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
+            __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),16)+"/"+StrZero(__oRTime1:GetnTotal(),16)+"]|["+DtoC(__oRTime1:GetdEndTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
+            __ConOut(fhLog,"FINAL2      : ","["+StrZero(__oRTime2:GetnProgress(),16)+"/"+StrZero(__oRTime2:GetnTotal(),16)+"]|["+DtoC(__oRTime2:GetdEndTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
             __ConOut(fhLog,"")                                                //11
             __ConOut(fhLog,"")                                                //12
             DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")     //12
@@ -752,9 +752,9 @@ Static Procedure __ConOut(fhLog,e,d)
 
     @ 09,15 CLEAR TO 09,__nMaxCol
     cDOAt:="["
-    cDOAt+=StrZero(__oRTime1:GetnProgress(),10)
+    cDOAt+=StrZero(__oRTime1:GetnProgress(),16)
     cDOAt+="/"
-    cDOAt+=StrZero(__oRTime1:GetnTotal(),10)
+    cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
     cDOAt+="]|["
     cDOAt+=DtoC(__oRTime1:GetdEndTime())
     cDOAt+="]["+__oRTime1:GetcEndTime()
@@ -767,9 +767,9 @@ Static Procedure __ConOut(fhLog,e,d)
 
     @ 10,15 CLEAR TO 10,__nMaxCol
     cDOAt:="["
-    cDOAt+=StrZero(__oRTime2:GetnProgress(),10)
+    cDOAt+=StrZero(__oRTime2:GetnProgress(),16)
     cDOAt+="/"
-    cDOAt+=StrZero(__oRTime2:GetnTotal(),10)
+    cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
     cDOAt+="]|["
     cDOAt+=DtoC(__oRTime2:GetdEndTime())
     cDOAt+="]["+__oRTime2:GetcEndTime()
