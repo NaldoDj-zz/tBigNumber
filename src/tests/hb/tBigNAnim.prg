@@ -21,7 +21,7 @@ static function aBicycling()
 #pragma __streaminclude "..\src\tests\hb\ASCII.art\Bicycling.ASCII.art"|return(%s)
 static function aMacarena()
     /* http://shanx.com/ascii/macarena */
-#pragma __streaminclude "..\src\tests\hb\ASCII.art\aMacarena.ASCII.art"|return(%s)
+#pragma __streaminclude "..\src\tests\hb\ASCII.art\Macarena.ASCII.art"|return(%s)
 static function aBaseball()
     /*Baseball, by Joan G. Stark: http://www.retrojunkie.com/asciiart/ani/misc/baseball.htm */
 #pragma __streaminclude "..\src\tests\hb\ASCII.art\Baseball.ASCII.art"|return(%s)
