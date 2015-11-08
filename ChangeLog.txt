@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-11-08 18:11 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+
 2015-11-07 15:08 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/hb/tBigNAnim.prg
  
