@@ -10,6 +10,19 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2015-11-09 09:46 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * ChangeLog.txt
+  + src/tests/tBigNtst.rc
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/hb/c/tbigNumber.c
+
+2015-11-09 09:44 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  + src/tests/tBigNtst.rc
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/hb/c/tbigNumber.c
+ 
 2015-11-08 18:11 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip

@@ -161,7 +161,7 @@
             while (--n>=0){
                 v+=(*(&a[n])-'0')+(*(&b[n])-'0');
                 if ( v>=nB ){
-                    v -=nB;
+                    v-=nB;
                     v1=1;
                 }    
                 else{
@@ -199,7 +199,7 @@
                 }    
                 v+=v1;
                 if ( v>=nB ){
-                    v -=nB;
+                    v-=nB;
                     v1=1;
                 }    
                 else{
@@ -225,7 +225,7 @@
         HB_FUNC_STATIC( TBIGNLADD ){
             hb_retnint((HB_MAXUINT)hb_parnint(1)+(HB_MAXUINT)hb_parnint(2));
         }
-   
+
         static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){
             char * c=(char*)hb_xgrab(y+1);
             HB_SIZE k=y-1;
@@ -258,7 +258,7 @@
             hb_retclen(szRet,y);
             hb_xfree(szRet);
         }
-        
+
         static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB){
             HB_BOOL bSub=HB_TRUE;
             int v;
@@ -267,7 +267,7 @@
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 if (bSub){
-                    v   -=s;
+                    v-=s;
                     bSub=HB_FALSE;
                 }                
                 v+=v1;
@@ -285,7 +285,7 @@
             }
             return sN;
         }
-        
+
         HB_FUNC_STATIC( TBIGNISUB ){
             HB_SIZE n=(HB_SIZE)(hb_parclen(1));
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
@@ -298,7 +298,7 @@
         HB_FUNC_STATIC( TBIGNLSUB ){
             hb_retnint((HB_MAXUINT)hb_parnint(1)-(HB_MAXUINT)hb_parnint(2));
         }
- 
+
         static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB){
             
             char * c=(char*)hb_xgrab(y+1);
@@ -332,7 +332,7 @@
                 k++;
                 i++;
             }
-        
+
             while (l<=n){
                 s=n;
                 j=l;
@@ -356,10 +356,10 @@
             
             char * r=tBIGNReverse(c,y);
             hb_xfree(c);
-    
+
             return r;
         }
-    
+
         HB_FUNC_STATIC( TBIGNMULT ){
             HB_SIZE n=(HB_SIZE)hb_parnint(3);
             char * a=tBIGNReverse(hb_parc(1),n);
@@ -374,7 +374,7 @@
         }
 
         static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult){
-    
+
             HB_MAXUINT szptBIGNeMult=sizeof(ptBIGNeMult*);
             HB_MAXUINT szstBIGNeMult=sizeof(stBIGNeMult);            
             
@@ -386,7 +386,7 @@
             hb_xfree(Tmp);
             
             pegMultTmp->cMultP=hb_strdup(pD);
-    
+
             Tmp=tBIGNPadL("0",n,"0");
             pegMult->cMultM=hb_strdup(Tmp);
             pegMult->cMultP=hb_strdup(Tmp);
@@ -414,7 +414,7 @@
                     break;
                 }
                 
-				++nI;
+                ++nI;
 
             } while (HB_TRUE);
             
@@ -428,7 +428,7 @@
                 pegMultTmp->cMultM=tBIGNAdd(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
                 hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                 hb_xfree(pegMultTmp->cMultM);
-    
+
                 pegMultTmp->cMultP=tBIGNAdd(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
                 hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                 hb_xfree(pegMultTmp->cMultP);
@@ -439,7 +439,7 @@
                     break;
                 } else{
                         if (iCmp==1){
-    
+
                             pegMultTmp->cMultM=tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
                             hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
                             hb_xfree(pegMultTmp->cMultM);
@@ -447,7 +447,7 @@
                             pegMultTmp->cMultP=tBIGNSub(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
                             hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
                             hb_xfree(pegMultTmp->cMultP);
-    
+
                     }
                 }  
                 
@@ -503,7 +503,7 @@
             }
             return sN;
         }
-        
+
         HB_FUNC_STATIC( TBIGN2MULT ){
             HB_SIZE n=(HB_SIZE)(hb_parclen(1)+1);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
@@ -511,14 +511,14 @@
             hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
             hb_xfree(szRet);
         }
-        
+
         static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB){
             HB_MAXUINT v;
             HB_MAXUINT v1=0;
             int i=isN;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
-                v *=m;
+                v*=m;
                 v+=v1;
                 if (v>=nB){
                     v1=v/nB;
@@ -530,7 +530,7 @@
             }
             return sN;
         }
-        
+
         HB_FUNC_STATIC( TBIGNIMULT ){
             HB_SIZE n=(HB_SIZE)(hb_parclen(1)*2);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
@@ -545,10 +545,10 @@
         }
 
         static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv){
-    
+
             HB_MAXUINT szptBIGNeDiv=sizeof(ptBIGNeDiv*);
             HB_MAXUINT szstBIGNeDiv=sizeof(stBIGNeDiv);
-    
+
             ptBIGNeDiv *peDVArr=(ptBIGNeDiv*)hb_xgrab(szptBIGNeDiv);
             ptBIGNeDiv pegDivTmp=(ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
             
@@ -559,7 +559,7 @@
             pegDivTmp->cDivR=hb_strdup(pD);
             
             int nI=0;
- 
+
             do {
 
                 peDVArr=(ptBIGNeDiv*)hb_xrealloc(peDVArr,(nI+1)*szptBIGNeDiv);
@@ -580,26 +580,26 @@
                     break;
                 }
                 
-				++nI;
+                ++nI;
 
             } while (HB_TRUE);
-  
+
             hb_xfree(pegDivTmp->cDivQ);
             hb_xfree(pegDivTmp->cDivR);
 
             int nF=nI;
-  
+
             Tmp=tBIGNPadL("0",n,"0");
             pegDiv->cDivQ=hb_strdup(Tmp);
             pegDiv->cDivR=hb_strdup(Tmp);
             hb_xfree(Tmp);
-  
+
             do {
                 
                 pegDivTmp->cDivQ=tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
                 hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                 hb_xfree(pegDivTmp->cDivQ);
-    
+
                 pegDivTmp->cDivR=tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
                 hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                 hb_xfree(pegDivTmp->cDivR);
@@ -610,15 +610,15 @@
                     break;
                 } else{
                         if (iCmp==1){
-    
+
                             pegDivTmp->cDivQ=tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
                             hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
                             hb_xfree(pegDivTmp->cDivQ);
-    
+
                             pegDivTmp->cDivR=tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
                             hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
                             hb_xfree(pegDivTmp->cDivR);
-    
+
                     }
                 }  
                 
@@ -631,7 +631,7 @@
             }
             hb_xfree(peDVArr);
             peDVArr=NULL;
-   
+
             pegDivTmp->cDivR=tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
             hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
             hb_xfree(pegDivTmp->cDivR);
@@ -640,13 +640,13 @@
         }
         
         HB_FUNC_STATIC( TBIGNEGDIV ){
- 
+
             HB_SIZE n=(HB_SIZE)(hb_parnint(4)+1); 
             char * pN=tBIGNPadL(hb_parc(1),n,"0");
             char * pD=tBIGNPadL(hb_parc(2),n,"0");
             ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
             int iCmp=memcmp(pN,pD,n);
-          
+
             switch(iCmp){
                 case -1:{
                     pegDiv->cDivQ=tBIGNPadL("0",n,"0");
@@ -673,30 +673,30 @@
             hb_xfree(pegDiv->cDivQ);
             hb_xfree(pegDiv);
         }
-        
+
         static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv){
             
             int n=0;
-            
+
             pecDiv->cDivR=hb_strdup(pA);
             char * aux=hb_strdup(pB);
-             
+
             HB_MAXUINT v1;
-          
+
             ptBIGNeDiv  pecDivTmp=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
 
             HB_MAXUINT szHB_MAXUINT=sizeof(HB_MAXUINT);
             HB_MAXUINT snHB_MAXUINT=ipN*szHB_MAXUINT;
-            
+
             HB_MAXUINT *ipA=(HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
             HB_MAXUINT *iaux=(HB_MAXUINT*)hb_xgrab(snHB_MAXUINT);
-                        
+
             int i=ipN;
             while(--i>=0){
                 ipA[i]=(*(&pecDiv->cDivR[i])-'0');
                 iaux[i]=(*(&aux[i])-'0');
             }
- 
+
             while (memcmp(iaux,ipA,ipN)<=0){
                 n++;
                 v1=0;
@@ -715,7 +715,7 @@
 
             hb_xfree(ipA);
             ipA=NULL;
- 
+
             i=ipN;
             while(--i>=0){
                 aux[i]="0123456789"[iaux[i]];
@@ -726,8 +726,8 @@
             
             HB_MAXUINT *idivQ=(HB_MAXUINT*)calloc(ipN,szHB_MAXUINT);
             char * sN2=tBIGNPadL("2",ipN,"0");
- 
-            while (n--){            
+
+            while (n--){
                 tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
                 hb_xmemcpy(aux,pecDivTmp->cDivQ,ipN);
                 hb_xfree(pecDivTmp->cDivQ);
@@ -838,7 +838,7 @@
             return nGCD;
         }*/
         
-        //http://en.wikipedia.org/wiki/Binary_GCD_algorithm
+        /*http://en.wikipedia.org/wiki/Binary_GCD_algorithm*/
         static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v){
           int shift;
          
@@ -868,8 +868,8 @@
                   swapping is just pointer movement,and the subtraction
                   can be done in-place. */
                if (u> v) {
-                 unsigned int t=v; v=u; u=t;}  // Swap u and v.
-               v=v-u;                            // Here v>=u.
+                 unsigned int t=v; v=u; u=t;}/*Swap u and v.*/
+               v=v-u;                        /*Here v>=u.*/
              } while (v!=0);
          
           /* restore common factors of 2 */
@@ -893,7 +893,7 @@
                 lMx=((x%i)==0);
                 lMy=((y%i)==0);
                 while (lMx||lMy){
-                    nLCM *=i;
+                    nLCM*=i;
                     if (lMx){
                         x/=i;
                         lMx=((x%i)==0);
@@ -906,7 +906,7 @@
                 if ((x==1)&&(y==1)){
                     break;
                 }
-				++i;
+                ++i;
             }
             
             return nLCM;
@@ -1101,4 +1101,4 @@
         
     #pragma ENDDUMP
 
-#endif // __HARBOUR__
+#endif /*__HARBOUR__*/
