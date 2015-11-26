@@ -83,7 +83,9 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
             else
                 self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
             endif
-            hb_threadDetach(self:aThreads[nThread][TH_NUM])
+            if .not.(self:aThreads[nThread][TH_NUM]==NIL)
+                hb_threadDetach(self:aThreads[nThread][TH_NUM])
+            endif
         endif
     next nThread
 return
