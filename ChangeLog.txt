@@ -10,6 +10,12 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-01-26 23:27 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/common/tbignumber.prg
+  * src/tests/tBigNtst.prg
+ 
 2015-11-26 21:32 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   * prj/mg/win/32/tBigNumber32.mip

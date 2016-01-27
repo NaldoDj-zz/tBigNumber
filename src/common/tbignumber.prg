@@ -370,7 +370,7 @@ class tBigNumber from hbClass
 
     method PFactors()
     method Factorial()    //TODO: Otimizar+
-    
+
     method Fibonacci()
 
 #ifndef __PROTHEUS__
@@ -544,19 +544,19 @@ endclass
 
     method iPlus(uBigN) class tBigNumber
     return(self:iAdd(uBigN))
-    
+
     method Minus(uBigN) class tBigNumber
     return(self:Sub(uBigN))
 
     method iMinus(uBigN) class tBigNumber
     return(self:iSub(uBigN))
-    
+
     method Multiply(uBigN)  class tBigNumber
     return(self:Mult(uBigN))
 
     method iMultiply(uBigN)  class tBigNumber
     return(self:iMult(uBigN))
-    
+
     method egMultiply(uBigN) class tBigNumber
     return(self:egMult(uBigN))
 
@@ -605,7 +605,7 @@ method New(uBigN,nBase) class tBigNumber
         if ths_lsdSet==NIL
             __Initsthd()
         endif
-    #endif //__THREAD_STATIC__    
+    #endif //__THREAD_STATIC__
 
     DEFAULT uBigN:="0"
     self:SetValue(uBigN,nBase)
@@ -834,7 +834,7 @@ return(self:nSize)
     Sintaxe:tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
-    local oClone    
+    local oClone
     #ifdef __THREAD_STATIC__
         try
             if ths_lsdSet==NIL
@@ -846,7 +846,7 @@ method Clone() class tBigNumber
                     oClone:=__objClone(self)
                 #endif //__PROTHEUS__
             endif
-        catch    
+        catch
             ths_lsdSet:=NIL
             oClone:=tBigNumber():New(self)
         end
@@ -856,9 +856,9 @@ method Clone() class tBigNumber
         #else  //__HARBOUR__
             oClone:=__objClone(self)
         #endif //__PROTHEUS__
-    #endif //__THREAD_STATIC__    
+    #endif //__THREAD_STATIC__
 return(oClone)
-    
+
 /*
     method:className
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1021,7 +1021,7 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
     elseif cType=="C"
 
-        while " " $ uBigN
+        while " "$uBigN
             uBigN:=StrTran(uBigN," ","")
         end while
 
@@ -2953,7 +2953,7 @@ method SysSQRT(uSet) class tBigNumber
     local cType
 
     cType:=ValType(uSet)
-    if ( cType $ "C|N|O" )
+    if ( cType$"C|N|O" )
         while .not.(hb_mutexLock(s__MTXSQR))
         end while
         s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
@@ -3550,7 +3550,7 @@ method H2B() class tBigNumber
              break
         endif
 
-        if .not.(cHexB $ "[16][32]")
+        if .not.(cHexB$"[16][32]")
             break
         endif
 
@@ -3652,7 +3652,7 @@ method B2H(cHexB) class tBigNumber
             break
         endif
 
-        if .not.(cHexB $ "[16][32]")
+        if .not.(cHexB$"[16][32]")
             oHexN:=tBigNumber():New(NIL,16)
             break
         endif
@@ -4206,9 +4206,9 @@ static function recFact(oS,oN)
     local oR
     local oSI
     local oNI
-    
+
     oR:=s__o0:Clone()
-    
+
 #ifdef __PTCOMPAT__
     //-------------------------------------------------------------------------------------
     //(Div(2)==Mult(.5)
@@ -4234,7 +4234,7 @@ static function recFact(oS,oN)
             while ++nI<nSN
                 oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
             end while
-        #endif //__PTCOMPAT__        
+        #endif //__PTCOMPAT__
         return(oR)
     endif
 
@@ -4268,7 +4268,7 @@ return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
     Data:18/05/2015
     Descricao: Retorna a Sequencia de Fibonacci
     Sintaxe: tBigNumber():Fibonacci() -> aFibonacci
-    
+
 #fib.py
 #-----------------------------------------------------
 import math
@@ -5768,7 +5768,7 @@ return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
 // -------------------- assign static values --------------------------------
 static procedure __InitstbN(nBase)
     s__lstbNSet:=.F.
-    *                10        20        30        40        50        60        70        80        90       100       110       120       130       140       150      
+    *                10        20        30        40        50        60        70        80        90       100       110       120       130       140       150
     *        123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
     s__cN0:="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
     s__cN0+="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"

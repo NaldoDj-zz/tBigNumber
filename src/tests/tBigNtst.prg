@@ -873,7 +873,7 @@ Return(lHarbour)
 
         Local aRdnPG     AS ARRAY                        VALUE Array(0)
         Local aRdnAn     AS ARRAY                        VALUE Array(0)
-        Local aSAnim     AS ARRAY                        VALUE Array(28)
+        Local aSAnim     AS ARRAY                        VALUE Array(29)
 
         Local cAT        AS CHARACTER
         Local cRTime     AS CHARACTER
@@ -1066,6 +1066,12 @@ Return(lHarbour)
             ASSIGN aSAnim[28]:=SubStr(aSAnim[28],1,Len(aSAnim[28])-1)
         EndIF
 
+        ASSIGN aSAnim[29]:=Replicate(Chr(149)+";",nSizeP2-1)
+        ASSIGN aSAnim[29]:=SubStr(aSAnim[01],1,nSizeP2-1)
+        IF (SubStr(aSAnim[29],-1)==";")
+            ASSIGN aSAnim[29]:=SubStr(aSAnim[29],1,Len(aSAnim[29])-1)
+        EndIF
+        
         IF (lRandom)
             ASSIGN nSAnim:=abs(HB_RandomInt(1,nLenA))
             aAdd(aRdnAn,nSAnim)
