@@ -71,6 +71,7 @@
         }
 
         static char * TBIGNReplicate(const char * szText,HB_ISIZ nTimes){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNReplicate(%s,%d)",szText,nTimes));
             HB_SIZE nLen=strlen(szText);       
             HB_ISIZ nRLen=(nLen*nTimes);
             char * szResult=(char*)hb_xgrab(nRLen+1);
@@ -85,6 +86,7 @@
         }
 
         static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNPadL(%s,%d,%s)",szItem,nLen,szPad));            
             int itmLen=strlen(szItem);
             int padLen=nLen-itmLen;
             char * pbuffer;
@@ -109,7 +111,8 @@
             hb_xfree(szRet);
         }
 
-        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad){    
+        static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad){  
+            HB_TRACE(HB_TR_DEBUG,("tBIGNPadR(%s,%d,%s)",szItem,nLen,szPad));            
             int itmLen=strlen(szItem);
             int padLen=nLen-itmLen;
             char * pbuffer;
@@ -135,6 +138,7 @@
         }
 
         static char * tBIGNReverse(const char * szF,const HB_SIZE s){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%"HB_PFS"u,)",szF,s));
             HB_SIZE f=s;
             HB_SIZE t=0;
             char * szT=(char*)hb_xgrab(s+1);
@@ -153,7 +157,8 @@
             hb_xfree(szR);
         }
 
-        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){    
+        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){ 
+            HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%d,%"HB_PFS"u,%d)",a,b,n,y,nB));        
             char * c=(char*)hb_xgrab(y+1);
             HB_SIZE k=y-1;
             HB_MAXUINT v=0;
@@ -187,6 +192,7 @@
         }
         
         static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigNiADD(%s,%d,%d,%d)",sN,a,isN,nB));
             HB_BOOL bAdd=HB_TRUE;
             HB_MAXUINT v;
             HB_MAXUINT v1=0;
@@ -227,6 +233,7 @@
         }
 
         static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%d,%"HB_PFS"u,%d)",a,b,n,y,nB));
             char * c=(char*)hb_xgrab(y+1);
             HB_SIZE k=y-1;
             int v=0;
@@ -260,6 +267,7 @@
         }
 
         static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigNiSUB(%s,%d,%d,%d)",sN,s,isN,nB));
             HB_BOOL bSub=HB_TRUE;
             int v;
             int v1=0;
@@ -300,6 +308,8 @@
         }
 
         static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXUINT nB){
+            
+            HB_TRACE(HB_TR_DEBUG,("tBIGNMult(%s,%s,%"HB_PFS"u,%"HB_PFS"u,%d)",a,b,n,y,nB));
             
             char * c=(char*)hb_xgrab(y+1);
             
@@ -375,6 +385,8 @@
 
         static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult){
 
+            HB_TRACE(HB_TR_DEBUG,("tBIGNegMult(%s,%s,%d,%d,%p)",pN,pD,n,nB,pegMult));
+        
             HB_MAXUINT szptBIGNeMult=sizeof(ptBIGNeMult*);
             HB_MAXUINT szstBIGNeMult=sizeof(stBIGNeMult);            
             
@@ -486,6 +498,7 @@
         }
         
         static char * tBigN2Mult(char * sN,const int isN,const HB_MAXUINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigN2Mult(%s,%d,%d)",sN,isN,nB));
             HB_MAXUINT v;
             HB_MAXUINT v1=0;
             int i=isN;
@@ -513,6 +526,7 @@
         }
 
         static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigNiMult(%s,%d,%"HB_PFS"u,%d)",sN,m,isN,nB));
             HB_MAXUINT v;
             HB_MAXUINT v1=0;
             int i=isN;
@@ -545,6 +559,8 @@
         }
 
         static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeDiv pegDiv){
+            
+            HB_TRACE(HB_TR_DEBUG,("tBIGNegDiv(%s,%s,%d,%d,%p)",pN,pD,n,nB,pegDiv));
 
             HB_MAXUINT szptBIGNeDiv=sizeof(ptBIGNeDiv*);
             HB_MAXUINT szstBIGNeDiv=sizeof(stBIGNeDiv);
@@ -675,6 +691,8 @@
         }
 
         static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXUINT nB,ptBIGNeDiv pecDiv){
+            
+            HB_TRACE(HB_TR_DEBUG,("tBIGNecDiv(%s,%s,%d,%d,%p)",pA,pB,ipN,nB,pecDiv));
             
             int n=0;
 
@@ -820,6 +838,7 @@
                 
         /*
         static HB_MAXUINT tBIGNGCD(HB_MAXUINT x,HB_MAXUINT y){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNGCD(%d,%d)",x,y));
             HB_MAXUINT nGCD=x;  
             x=HB_MAX(y,nGCD);
             y=HB_MIN(nGCD,y);
@@ -840,7 +859,11 @@
         
         /*http://en.wikipedia.org/wiki/Binary_GCD_algorithm*/
         static HB_MAXUINT tBIGNGCD(HB_MAXUINT u,HB_MAXUINT v){
+            
+          HB_TRACE(HB_TR_DEBUG,("tBIGNGCD(%d,%d)",x,y));
+          
           int shift;
+          
          
           /* GCD(0,v)==v; GCD(u,0)==u,GCD(0,0)==0 */
           if (u==0) return v;
@@ -882,6 +905,8 @@
 
         /*
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
+            
+            HB_TRACE(HB_TR_DEBUG,("tBIGNLCM(%d,%d)",x,y));
              
             HB_MAXUINT nLCM=1;
             HB_MAXUINT i=2;
@@ -915,6 +940,7 @@
         */
 
         static HB_MAXUINT tBIGNLCM(HB_MAXUINT x,HB_MAXUINT y){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNLCM(%d,%d)",x,y));
             return ((y/tBIGNGCD(x,y))*x);
         }    
         
@@ -923,6 +949,7 @@
         }
 
         static HB_MAXUINT tBIGNFI(HB_MAXUINT n){
+            HB_TRACE(HB_TR_DEBUG,("tBIGNFI(%d)",n));
             HB_MAXUINT i;
             HB_MAXUINT fi=n;
             for(i=2;((i*i)<=n);i++){

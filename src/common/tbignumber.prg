@@ -880,25 +880,26 @@ method SetDecimals(nSet) class tBigNumber
 
     local nLastSet
 
-    while .not.(hb_mutexLock(s__MTXDEC))
-    end while
+    if hb_mutexLock(s__MTXDEC)
+    
+        nLastSet:=s__nDecSet
 
-    nLastSet:=s__nDecSet
+        DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
+        DEFAULT nSet:=s__nDecSet
+        DEFAULT nLastSet:=nSet
 
-    DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
-    DEFAULT nSet:=s__nDecSet
-    DEFAULT nLastSet:=nSet
+        #ifdef _0
+            if nSet>MAX_DECIMAL_PRECISION
+                nSet:=MAX_DECIMAL_PRECISION
+            endif
+        #endif
 
-    #ifdef _0
-        if nSet>MAX_DECIMAL_PRECISION
-            nSet:=MAX_DECIMAL_PRECISION
-        endif
-    #endif
+        s__nDecSet:=nSet
 
-    s__nDecSet:=nSet
+        hb_mutexUnLock(s__MTXDEC)
 
-    hb_mutexUnLock(s__MTXDEC)
-
+    endif
+        
     DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
 
 return(nLastSet)
@@ -914,23 +915,24 @@ method nthRootAcc(nSet) class tBigNumber
 
     local nLastSet
 
-    while .not.(hb_mutexLock(s__MTXACC))
-    end while
+    if hb_mutexLock(s__MTXACC)
 
-    nLastSet:=s__nthRAcc
+        nLastSet:=s__nthRAcc
 
-    DEFAULT s__nthRAcc:=if(nSet==NIL,6,nSet)
-    DEFAULT nSet:=s__nthRAcc
-    DEFAULT nLastSet:=nSet
+        DEFAULT s__nthRAcc:=if(nSet==NIL,6,nSet)
+        DEFAULT nSet:=s__nthRAcc
+        DEFAULT nLastSet:=nSet
 
-    if nSet>MAX_DECIMAL_PRECISION
-        nSet:=MAX_DECIMAL_PRECISION
+        if nSet>MAX_DECIMAL_PRECISION
+            nSet:=MAX_DECIMAL_PRECISION
+        endif
+
+        s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
+
+        hb_mutexUnLock(s__MTXACC)
+    
     endif
-
-    s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
-
-    hb_mutexUnLock(s__MTXACC)
-
+        
     DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
 
 return(nLastSet)
@@ -2954,13 +2956,13 @@ method SysSQRT(uSet) class tBigNumber
 
     cType:=ValType(uSet)
     if ( cType$"C|N|O" )
-        while .not.(hb_mutexLock(s__MTXSQR))
-        end while
-        s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
-        if s__SysSQRT:gt(MAX_SYS_SQRT)
-            s__SysSQRT:SetValue(MAX_SYS_SQRT)
+        if hb_mutexLock(s__MTXSQR)
+            s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
+            if s__SysSQRT:gt(MAX_SYS_SQRT)
+                s__SysSQRT:SetValue(MAX_SYS_SQRT)
+            endif
+            hb_MutexUnLock(s__MTXSQR)
         endif
-        hb_MutexUnLock(s__MTXSQR)
     endif
 
 return(s__SysSQRT)
@@ -5794,21 +5796,21 @@ return
 
 static procedure s__IncS0(n)
     while n>s__nN0
-        while .not.(hb_mutexLock(s__MTXcN0))
-        end while
-        s__cN0+=s__cN0
-        s__nN0+=s__nN0
-        hb_mutexUnLock(s__MTXcN0)
+        if hb_mutexLock(s__MTXcN0)
+            s__cN0+=s__cN0
+            s__nN0+=s__nN0
+            hb_mutexUnLock(s__MTXcN0)
+        endif
     end while
 return
 
 static procedure s__IncS9(n)
     while n>s__nN9
-        while .not.(hb_mutexLock(s__MTXcN9))
-        end while
-        s__cN9+=s__cN9
-        s__nN9+=s__nN9
-        hb_mutexUnLock(s__MTXcN9)
+        if hb_mutexLock(s__MTXcN9)
+            s__cN9+=s__cN9
+            s__nN9+=s__nN9
+            hb_mutexUnLock(s__MTXcN9)
+        endif
     end while
 return
 

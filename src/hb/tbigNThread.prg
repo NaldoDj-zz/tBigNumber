@@ -79,9 +79,9 @@ method procedure Start(nThreads,nMemMode) class tBigNThread
         self:aThreads[nThread][TH_END]:=.F.
         if (hb_mutexQueueInfo(self:nMtxJob,@nWorkers,@nEvents).and.((nWorkers<self:nThreads)))
             if (nMemMode==NIL)
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),@self:nMtxJob,@self:aThreads)
             else
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads,self:nSleep)
+                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),@self:nMtxJob,@self:aThreads)
             endif
             if .not.(self:aThreads[nThread][TH_NUM]==NIL)
                 hb_threadDetach(self:aThreads[nThread][TH_NUM])
@@ -93,6 +93,9 @@ return
 method procedure Notify() class tBigNThread
     local aThreads:=self:aThreads
     local cTyp
+    local pMTX
+    local uJob
+    local uRes
     local nThread
     local nEvents
     local nWorkers
@@ -100,22 +103,27 @@ method procedure Notify() class tBigNThread
         aThreads[nThread][TH_RES]:=NIL
         aThreads[nThread][TH_END]:=.F.
         if (hb_mutexQueueInfo(self:nMtxJob,@nWorkers,@nEvents).and.(nWorkers<self:nThreads))
-            while .not.(hb_MutexLock(self:aThreads[nThread][TH_MTX]))
-                tBigNSleep(self:nSleep)
-            end while
-            cTyp:=ValType(aThreads[nThread][TH_EXE])
+            pMTX:=self:aThreads[nThread][TH_MTX]
+            if hb_MutexLock(pMTX)
+                uJob:=aThreads[nThread][TH_EXE]
+                hb_MutexUnLock(pMTX)
+            endif
+            cTyp:=ValType(uJob)
             switch cTyp
             case "A"
-                aThreads[nThread][TH_RES]:=hb_ExecFromArray(aThreads[nThread][TH_EXE])
+                uRes:=hb_ExecFromArray(uJob)
                 exit
             case "B"
-                aThreads[nThread][TH_RES]:=Eval(aThreads[nThread][TH_EXE])
+                uRes:=Eval(uJob)
                 exit
             otherwise
-                aThreads[nThread][TH_RES]:=NIL
+                uRes:=NIL
             endswitch
-            aThreads[nThread][TH_END]:=.T.
-            hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
+            if hb_MutexLock(pMTX)
+                aThreads[nThread][TH_RES]:=uRes
+                aThreads[nThread][TH_END]:=.T.
+                hb_MutexUnLock(pMTX)
+            endif
             loop
         endif
         hb_mutexNotify(self:nMtxJob,nThread)
@@ -126,20 +134,21 @@ method procedure Wait() class tBigNThread
     local nThread
     local nThreads:=self:nThreads
     local nThCount:=0
+    local pMTX
     while .T.
         for nThread:=1 to nThreads
-            if hb_MutexLock(self:aThreads[nThread][TH_MTX])
+            pMTX:=self:aThreads[nThread][TH_MTX]
+            if hb_MutexLock(pMTX,0)
                 if self:aThreads[nThread][TH_END]
                     ++nThCount
                 endif
-                hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
+                hb_MutexUnLock(pMTX)
             endif
         next nThread
         if (nThCount==nThreads)
             exit
         endif
         nThCount:=0
-        tBigNSleep(self:nSleep)
     end while
 return
 
@@ -185,9 +194,12 @@ method procedure setSleep(nSleep) class tBigNThread
     self:nSleep:=nSleep
 return
 
-static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
+static Procedure tbigNthRun(mtxJob,aThreads)
     local cTyp
     local xJob
+    local pMTX
+    local uJob
+    local uRes
     begin sequence
         while .T.
             if hb_mutexSubscribe(mtxJob,NIL,@xJob)
@@ -200,22 +212,27 @@ static Procedure tbigNthRun(mtxJob,aThreads,nSleep)
                     hb_ExecFromArray(xJob)
                     exit
                 case "N"
-                    while .not.(hb_MutexLock(aThreads[xJob][TH_MTX]))
-                        tBigNSleep(nSleep)
-                    end while
-                    cTyp:=ValType(aThreads[xJob][TH_EXE])
+                    pMTX:=aThreads[xJob][TH_MTX]
+                    if hb_MutexLock(pMTX)
+                        uJob:=aThreads[xJob][TH_EXE]
+                        hb_MutexUnLock(pMTX)
+                    endif
+                    cTyp:=ValType(uJob)
                     switch cTyp
                     case "A"
-                        aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
+                        uRes:=hb_ExecFromArray(uJob)
                         exit
                     case "B"
-                        aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
+                        uRes:=Eval(uJob)
                         exit
                     otherwise
-                        aThreads[xJob][TH_RES]:=NIL
+                        uRes:=NIL
                     endswitch
-                    aThreads[xJob][TH_END]:=.T.
-                    hb_MutexUnLock(aThreads[xJob][TH_MTX])
+                    if hb_MutexLock(pMTX)
+                        aThreads[xJob][TH_RES]:=uRes
+                        aThreads[xJob][TH_END]:=.T.
+                        hb_MutexUnLock(pMTX)
+                    endif
                     exit
                 endswitch
             endif
