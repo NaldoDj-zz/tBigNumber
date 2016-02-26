@@ -107,8 +107,12 @@
             HB_ISIZ nLen=hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadL(szItem,nLen,szPad);
-            hb_retclen(szRet,(HB_SIZE)nLen);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(szRet,(HB_SIZE)nLen);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,(HB_SIZE)nLen);
+            #endif
         }
 
         static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad){  
@@ -133,8 +137,12 @@
             HB_ISIZ nLen=hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadR(szItem,nLen,szPad);
-            hb_retclen(szRet,(HB_SIZE)nLen);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(szRet,(HB_SIZE)nLen);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,(HB_SIZE)nLen);
+            #endif
         }
 
         static char * tBIGNReverse(const char * szF,const HB_SIZE s){
@@ -153,8 +161,12 @@
             const char * szF=hb_parc(1);
             const HB_SIZE s=(HB_SIZE)hb_parnint(2);
             char * szR=tBIGNReverse(szF,s);
-            hb_retclen(szR,s);
-            hb_xfree(szR);
+            #if 0
+                hb_retclen(szR,s);
+                hb_xfree(szR);
+            #else
+                hb_retclen_buffer(szR,s);
+            #endif
         }
 
         static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXUINT nB){ 
@@ -187,8 +199,12 @@
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)+1);
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(5);
             char * szRet=tBIGNAdd(a,b,(int)n,y,nB);
-            hb_retclen(szRet,y);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(szRet,y);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,y);
+            #endif
         }
         
         static char * tBigNiADD(char * sN, HB_MAXUINT a,const int isN,const HB_MAXUINT nB){
@@ -224,8 +240,12 @@
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             HB_MAXUINT a=(HB_MAXUINT)hb_parnint(2);
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(tBigNiADD(szRet,a,(int)n,nB),n);
+            #endif
         }
         
         HB_FUNC_STATIC( TBIGNLADD ){
@@ -262,8 +282,12 @@
             const HB_SIZE y=n;
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(4);
             char * szRet=tBIGNSub(a,b,(int)n,y,nB);
-            hb_retclen(szRet,y);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(szRet,y);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,y);
+            #endif
         }
 
         static char * tBigNiSUB(char * sN,const HB_MAXUINT s,const int isN,const HB_MAXUINT nB){
@@ -298,9 +322,13 @@
             HB_SIZE n=(HB_SIZE)(hb_parclen(1));
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             int s=(HB_MAXUINT)hb_parnint(2);
-            const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiSUB(szRet,s,(int)n,nB),n);
-            hb_xfree(szRet);
+            const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(3);            
+            #if 0
+                hb_retclen(tBigNiSUB(szRet,s,(int)n,nB),n);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(tBigNiSUB(szRet,s,(int)n,nB),n);
+            #endif
         }
         
         HB_FUNC_STATIC( TBIGNLSUB ){
@@ -377,10 +405,14 @@
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(5);
             char * szRet=tBIGNMult(a,b,n,y,nB);
-            hb_retclen(szRet,y);
+            #if 0
+                hb_retclen(szRet,y);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,y);
+            #endif
             hb_xfree(a);
-            hb_xfree(b);
-            hb_xfree(szRet);
+            hb_xfree(b);            
         }
 
         static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXUINT nB,ptBIGNeMult pegMult){
@@ -488,7 +520,11 @@
             
             tBIGNegMult(pN,pD,(int)n,nB,pegMult);
         
-            hb_retclen(pegMult->cMultP,n);
+            #if 0
+                hb_retclen(pegMult->cMultP,n);
+            #else
+                hb_retclen_buffer(hb_strdup(pegMult->cMultP),n);
+            #endif            
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -521,8 +557,12 @@
             HB_SIZE n=(HB_SIZE)(hb_parclen(1)+1);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(2);
-            hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(tBigN2Mult(szRet,(int)n,nB),n);
+            #endif
         }
 
         static char * tBigNiMult(char * sN,const HB_MAXUINT m,const HB_SIZE isN,const HB_MAXUINT nB){
@@ -550,8 +590,12 @@
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             HB_MAXUINT m=(HB_MAXUINT)hb_parnint(2);
             const HB_MAXUINT nB=(HB_MAXUINT)hb_parnint(3);
-            hb_retclen(tBigNiMult(szRet,m,n,nB),n);
-            hb_xfree(szRet);
+            #if 0
+                hb_retclen(tBigNiMult(szRet,m,n,nB),n);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),n);
+            #endif
         }
         
         HB_FUNC_STATIC( TBIGNLMULT ){
@@ -681,7 +725,11 @@
             }
             
             hb_storclen(pegDiv->cDivR,n,3);
-            hb_retclen(pegDiv->cDivQ,n);
+            #if 0
+                hb_retclen(pegDiv->cDivQ,n);
+            #else
+                hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),n);
+            #endif
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -827,7 +875,11 @@
             }
             
             hb_storclen(pecDiv->cDivR,n,3);
-            hb_retclen(pecDiv->cDivQ,n);
+            #if 0
+                hb_retclen(pecDiv->cDivQ,n);
+            #else
+                hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),n);
+            #endif
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -1047,32 +1099,44 @@
               long double ldArg=strtold(hb_parc(1),NULL);
               if (ldArg<=0)
               {
-                 std::string str=to_string(0.0);
-                 char * cstr=(char*)hb_xgrab(str.length()+1);
-                 std::strcpy(cstr,str.c_str());
-                 hb_retclen(cstr,strlen(cstr));
-                 hb_xfree(cstr);
+                std::string str=to_string(0.0);
+                char * cstr=(char*)hb_xgrab(str.length()+1);
+                std::strcpy(cstr,str.c_str());
+                #if 0
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,strlen(cstr));
+                #endif
               } 
               else
               {
-                 hb_mathResetError(&hb_exc);
-                 ldResult=sqrtl(ldArg);
-                 if( hb_mathGetError(&hb_exc,"SQRTL",ldArg,0.0,ldResult))
-                 {
-                    std::string str=to_string(0.0);
-                    char * cstr=(char*)hb_xgrab(str.length()+1);
-                    std::strcpy(cstr,str.c_str());
-                    hb_retclen(cstr,strlen(cstr));
-                    hb_xfree(cstr);
-                 } 
-                 else
-                 { 
-                    std::string str=to_string(ldResult);
-                    char * cstr=(char*)hb_xgrab(str.length()+1);
-                    std::strcpy(cstr,str.c_str());
-                    hb_retclen(cstr,strlen(cstr));
-                    hb_xfree(cstr);
-                 }
+                    hb_mathResetError(&hb_exc);
+                    ldResult=sqrtl(ldArg);
+                    if( hb_mathGetError(&hb_exc,"SQRTL",ldArg,0.0,ldResult))
+                    {
+                        std::string str=to_string(0.0);
+                        char * cstr=(char*)hb_xgrab(str.length()+1);
+                        std::strcpy(cstr,str.c_str());                        
+                        #if 0
+                            hb_retclen(cstr,strlen(cstr));
+                            hb_xfree(cstr);
+                        #else
+                            hb_retclen_buffer(cstr,strlen(cstr));
+                        #endif
+                    } 
+                    else
+                    { 
+                        std::string str=to_string(ldResult);
+                        char * cstr=(char*)hb_xgrab(str.length()+1);
+                        std::strcpy(cstr,str.c_str());
+                        #if 0
+                            hb_retclen(cstr,strlen(cstr));
+                            hb_xfree(cstr);
+                        #else
+                            hb_retclen_buffer(cstr,strlen(cstr));
+                        #endif
+                    }
               }
            }
            else 
@@ -1080,8 +1144,12 @@
                 std::string str=to_string(0.0);
                 char * cstr=(char*)hb_xgrab(str.length()+1);
                 std::strcpy(cstr,str.c_str());
-                hb_retclen(cstr,strlen(cstr));
-                hb_xfree(cstr);
+                #if 0
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,strlen(cstr));
+                #endif
             }
         }
 
@@ -1100,8 +1168,12 @@
                     std::string str=to_string(0.0);
                     char * cstr=(char*)hb_xgrab(str.length()+1);
                     std::strcpy(cstr,str.c_str());
-                    hb_retclen(cstr,strlen(cstr));
-                    hb_xfree(cstr);
+                    #if 0
+                        hb_retclen(cstr,strlen(cstr));
+                        hb_xfree(cstr);
+                    #else
+                        hb_retclen_buffer(cstr,strlen(cstr));
+                    #endif
                 } 
                 else
                 { 
@@ -1112,8 +1184,12 @@
                     }
                     char * cstr=(char*)hb_xgrab(str.length()+1);
                     std::strcpy(cstr,str.c_str());
-                    hb_retclen(cstr,strlen(cstr));
-                    hb_xfree(cstr);
+                    #if 0
+                        hb_retclen(cstr,strlen(cstr));
+                        hb_xfree(cstr);
+                    #else
+                        hb_retclen_buffer(cstr,strlen(cstr));
+                    #endif
                 }
            }
            else 
@@ -1121,8 +1197,12 @@
                 std::string str=to_string(0.0);
                 char * cstr=(char*)hb_xgrab(str.length()+1);
                 std::strcpy(cstr,str.c_str());
-                hb_retclen(cstr,strlen(cstr));
-                hb_xfree(cstr);
+                #if 0
+                    hb_retclen(cstr,strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,strlen(cstr));
+                #endif
             }
         }
         
