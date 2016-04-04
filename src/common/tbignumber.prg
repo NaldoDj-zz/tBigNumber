@@ -370,6 +370,7 @@ class tBigNumber from hbClass
 
     method PFactors()
     method Factorial()    //TODO: Otimizar+
+    method thFactorial()  //TODO: Otimizar+
 
     method Fibonacci()
 
@@ -4195,19 +4196,21 @@ return(recFact(s__o1:Clone(),oN))
 */
 static function recFact(oS,oN)
 
-#ifndef __PTCOMPAT__
-    local oThreads
-    local nB
-    local nI
-    local nSN
-#else
+#ifdef __PTCOMPAT__
     local oSN
-#endif
+#endif //__PTCOMPAT__
 
     local oI
+
     local oR
     local oSI
     local oNI
+
+#ifndef __PTCOMPAT__
+    local nB
+    local nI
+    local nSN
+#endif //__PTCOMPAT__ 
 
     oR:=s__o0:Clone()
 
@@ -4251,7 +4254,70 @@ static function recFact(oS,oN)
     oNI:=oN:Clone()
     oNI:SetValue(oNI:iSub(oI))
 
-#ifndef __PTCOMPAT__
+return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
+
+/*
+    method:thFactorial
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:19/03/2013
+    Descricao: Fatorial de Numeros Inteiros
+    Sintaxe: tBigNumber():Factorial() -> oF
+    TODO   : Otimizar++
+    Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+                 http://www.luschny.de/math/factorial/index.html
+*/
+method thFactorial() class tBigNumber
+    local oN:=self:Clone():Int(.T.,.F.)
+    if oN:eq(s__o0)
+        return(s__o1:Clone())
+    endif
+return(threcFact(s__o1:Clone(),oN))
+
+/*
+    function:threcFact
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:04/01/2014
+    Descricao:Fatorial de Numeros Inteiros
+    Sintaxe:recFact(oS,oN)
+    Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+*/
+static function threcFact(oS,oN)
+
+    local oThreads
+    local nB
+    local nI
+    local nSN
+
+    local oI
+    local oR
+    local oSI
+    local oNI
+
+    oR:=s__o0:Clone()
+
+    if oN:lte(s__o20)
+        oR:SetValue(oS)
+        nB:=oS:__nBase()
+        nI:=Val(oS:__cInt())
+        nSN:=nI
+        nSN+=Val(oN:__cInt())
+        while ++nI<nSN
+            oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
+        end while
+        return(oR)
+    endif
+
+    oI:=oN:Clone()
+    //-------------------------------------------------------------------------------------
+    //(Div(2)==Mult(.5)
+    oI:SetValue(oI:Mult(s__od2):Int(.T.,.F.))
+
+    oSI:=oS:Clone()
+    oSI:SetValue(oSI:iAdd(oI))
+
+    oNI:=oN:Clone()
+    oNI:SetValue(oNI:iSub(oI))
+
     oThreads:=tBigNThread():New()
     oThreads:Start(2)
     oThreads:setEvent(1,{@recFact(),oS,oI})
@@ -4259,13 +4325,11 @@ static function recFact(oS,oN)
     oThreads:Notify()
     oThreads:Wait()
     oThreads:Join()
+
 return(oThreads:getResult(1):iMult(oThreads:getResult(2)))
-#else
-return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
-#endif
 
 /*
-    method:Factorial
+    method:Fibonacci
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:18/05/2015
     Descricao: Retorna a Sequencia de Fibonacci
