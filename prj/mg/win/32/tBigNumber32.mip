@@ -1,114 +1,118 @@
-VERSION 05 05 00                                                                                                                                                                                                                                              
-PRJ_VERSION 00 00 0037
-PROJECTFOLDER <ThisFolder>                                                                                                                                                                                                                                    
-LASTLIBFOLDERm3gh                                                                                                                                                                                                                                             
-LASTLIBFOLDERm3wh                                                                                                                                                                                                                                             
-LASTLIBFOLDERm3vh                                                                                                                                                                                                                                             
-RUNFOLDER D:\GitHub\tbigNumber\                                                                                                                                                                                                                               
-RUNPARAM                                                                                                                                                                                                                                                      
-OVERWRITECOMPILEPARM                                                                                                                                                                                                                                          
-OVERWRITELINKPARM                                                                                                                                                                                                                                             
-CHECKHARBOUR h                                                                                                                                                                                                                                                
-CHECKCPP w                                                                                                                                                                                                                                                    
-CHECKGUI m3                                                                                                                                                                                                                                                   
-CHECKLINK DYNAMIC                                                                                                                                                                                                                                             
-CHECKCPLUSPLUS YES                                                                                                                                                                                                                                            
-CHECKCONSOLE YES                                                                                                                                                                                                                                              
-CHECKUPX YES                                                                                                                                                                                                                                                  
-CHECKFORMTOOL AUTO                                                                                                                                                                                                                                            
-CHECKDBFTOOL US_DBTOOL                                                                                                                                                                                                                                        
-WARNINGLEVEL 3                                                                                                                                                                                                                                                
-EXITSEVERITY 2                                                                                                                                                                                                                                                
-OUTPUTCOPYMOVE MOVE                                                                                                                                                                                                                                           
-OUTPUTCOPYMOVEFOLDER D:\GitHub\tbigNumber\exe\mg\mingw                                                                                                                                                                                                        
-OUTPUTRENAME NONE                                                                                                                                                                                                                                             
-OUTPUTRENAMENEWNAME                                                                                                                                                                                                                                           
-CHECKOUTPUTSUFFIX YES                                                                                                                                                                                                                                         
-OUTPUTTYPE SRCEXE                                                                                                                                                                                                                                             
-CHECKREIMPORT NO                                                                                                                                                                                                                                              
-LIBREIMPORT                                                                                                                                                                                                                                                   
-DbfBrowseRichEditBottom .T.                                                                                                                                                                                                                                   
-EXTRARUNCMDFINAL                                                                                                                                                                                                                                              
-EXTRARUNPROJECT                                                                                                                                                                                                                                               
-EXTRARUNCMDEXE                                                                                                                                                                                                                                                
-EXTRARUNCMDFREE                                                                                                                                                                                                                                               
-EXTRARUNPROJECTPARM                                                                                                                                                                                                                                           
-EXTRARUNEXEPARM                                                                                                                                                                                                                                               
-EXTRARUNFREEPARM                                                                                                                                                                                                                                              
-EXTRARUNTYPE                                                                                                                                                                                                                                                  
-EXTRARUNPROJECTRADIO                                                                                                                                                                                                                                          
-EXTRARUNPROJECTLITE .T.                                                                                                                                                                                                                                       
-EXTRARUNPROJECTFORCEFULL .F.                                                                                                                                                                                                                                  
-EXTRARUNPROJECTRUN .F.                                                                                                                                                                                                                                        
-EXTRARUNPROJECTBUTTONRUN .F.                                                                                                                                                                                                                                  
-EXTRARUNPROJECTCLEAR .F.                                                                                                                                                                                                                                      
-EXTRARUNPROJECTLOG .F.                                                                                                                                                                                                                                        
-EXTRARUNPROJECTLOGONLYERROR .F.                                                                                                                                                                                                                               
-EXTRARUNPROJECTAUTOEXIT .T.                                                                                                                                                                                                                                   
-EXTRARUNEXEWAIT .T.                                                                                                                                                                                                                                           
-EXTRARUNEXEPAUSE .T.                                                                                                                                                                                                                                          
-EXTRARUNFREEWAIT .T.                                                                                                                                                                                                                                          
-EXTRARUNFREEPAUSE .T.                                                                                                                                                                                                                                         
-MI_BMAINEXEICON EI_default_application_icon                                                                                                                                                                                                                   
-MI_BASSOCIATIONEXEICON EI_default_association_icon                                                                                                                                                                                                            
-MI_BEXEASSOCIATION .F.                                                                                                                                                                                                                                        
-MI_CEXEASSOCIATION                                                                                                                                                                                                                                            
-MI_NEXEASSOCIATIONICON 1                                                                                                                                                                                                                                      
-MI_BEXEBACKUPOPTION .F.                                                                                                                                                                                                                                       
-MI_BNEWFILE .F.                                                                                                                                                                                                                                               
-MI_NNEWFILESUGGESTED 1                                                                                                                                                                                                                                        
-MI_CNEWFILELEYEND                                                                                                                                                                                                                                             
-MI_NNEWFILEEMPTY 1                                                                                                                                                                                                                                            
-MI_CNEWFILEUSERFILE                                                                                                                                                                                                                                           
-MI_NDESTINATIONPATH 1                                                                                                                                                                                                                                         
-MI_CDESTINATIONPATH                                                                                                                                                                                                                                           
-MI_NLEYENDSUGGESTED 1                                                                                                                                                                                                                                         
-MI_CLEYENDUSERTEXT                                                                                                                                                                                                                                            
-MI_QT_BINSTALLOFF .T.                                                                                                                                                                                                                                         
-MI_QT_BINSTALLFULL .T.                                                                                                                                                                                                                                        
-MI_QT_BCOPYQTTOINSTALLFOLDER .F.                                                                                                                                                                                                                              
-MI_BDESKTOPSHORTCUT .T.                                                                                                                                                                                                                                       
-MI_NDESKTOPSHORTCUT 1                                                                                                                                                                                                                                         
-MI_BSTARTMENUSHORTCUT .T.                                                                                                                                                                                                                                     
-MI_NSTARTMENUSHORTCUT 1                                                                                                                                                                                                                                       
-MI_BLAUNCHAPPLICATION .T.                                                                                                                                                                                                                                     
-MI_NLAUNCHAPPLICATION 1                                                                                                                                                                                                                                       
-MI_BLAUNCHBACKUPOPTION .F.                                                                                                                                                                                                                                    
-MI_BREBOOT .F.                                                                                                                                                                                                                                                
-MI_CDEFAULTLANGUAGE EN                                                                                                                                                                                                                                        
-MI_NINSTALLERNAME 1                                                                                                                                                                                                                                           
-MI_CINSTALLERNAME                                                                                                                                                                                                                                             
-MI_CIMAGE                                                                                                                                                                                                                                                     
-MI_BSELECTALLPRG .F.                                                                                                                                                                                                                                          
-MI_BSELECTALLHEA .F.                                                                                                                                                                                                                                          
-MI_BSELECTALLPAN .F.                                                                                                                                                                                                                                          
-MI_BSELECTALLDBF .F.                                                                                                                                                                                                                                          
-MI_BSELECTALLLIB .F.                                                                                                                                                                                                                                          
-SHGDATABASE *NONE*                                                                                                                                                                                                                                            
-SHGLASTFOLDERIMG                                                                                                                                                                                                                                              
-SHGOUTPUTTYPE NO                                                                                                                                                                                                                                              
-SHGHTMLFOLDER                                                                                                                                                                                                                                                 
-HOTLASTEXTERNALFILE                                                                                                                                                                                                                                           
-SOURCE D:\GitHub\tBigNumber\src\tests\tBigNtst.prg                                                                                                                                                                                                            
-SOURCE D:\GitHub\tBigNumber\src\common\tbignumber.prg                                                                                                                                                                                                         
-SOURCE D:\GitHub\tBigNumber\src\common\tfRead.prg                                                                                                                                                                                                             
-SOURCE D:\GitHub\tBigNumber\src\common\tPrime.prg                                                                                                                                                                                                             
-SOURCE D:\GitHub\tBigNumber\src\common\tRemaining.prg                                                                                                                                                                                                         
-SOURCE D:\GitHub\tBigNumber\src\common\tSProgress.prg                                                                                                                                                                                                         
-SOURCE D:\GitHub\tBigNumber\src\common\tTimeCalc.prg                                                                                                                                                                                                          
-SOURCE D:\GitHub\tBigNumber\src\hb\__hbeTthD.prg                                                                                                                                                                                                              
-SOURCE D:\GitHub\tBigNumber\src\hb\__hbPITthD.prg                                                                                                                                                                                                             
-SOURCE D:\GitHub\tBigNumber\src\hb\tBigNError.prg                                                                                                                                                                                                             
-SOURCE D:\GitHub\tBigNumber\src\hb\tBigNErrorSys.prg                                                                                                                                                                                                          
-SOURCE D:\GitHub\tBigNumber\src\hb\tBigNSleep.prg                                                                                                                                                                                                             
-SOURCE D:\GitHub\tBigNumber\src\hb\tbigNThread.prg                                                                                                                                                                                                            
-HEAD D:\GitHub\tBigNumber\include\hb_tBigNtst.ch                                                                                                                                                                                                              
-HEAD D:\GitHub\tBigNumber\include\hb_tBigNumber.ch                                                                                                                                                                                                            
-HEAD D:\GitHub\tBigNumber\include\paramtypex.ch                                                                                                                                                                                                               
-HEAD D:\GitHub\tBigNumber\include\tBigNDef.ch                                                                                                                                                                                                                 
-HEAD D:\GitHub\tBigNumber\include\tbigNThread.ch                                                                                                                                                                                                              
-HEAD D:\GitHub\tBigNumber\include\tBigNtst.ch                                                                                                                                                                                                                 
-HEAD D:\GitHub\tBigNumber\include\tBigNumber.ch                                                                                                                                                                                                               
-HEAD D:\GitHub\core\contrib\xhb\xhb.ch                                                                                                                                                                                                                        
-INCLUDEm3wh *Last* <MIHFolder>\harbour\lib\win\mingw\libhbvmmt.a                                                                                                                                                                                              
-EXCLUDEm3wh libhbvm.a                                                                                                                                                                                                                                         
+VERSION 05 06 01
+PRJ_VERSION 00 00 0038
+PROJECTFOLDER <ThisFolder>
+LASTLIBFOLDERm3gh 
+LASTLIBFOLDERm3wh 
+LASTLIBFOLDERm3vh 
+RUNFOLDER D:\GitHub\tbigNumber\
+RUNPARAM 
+OVERWRITECOMPILEPARM 
+OVERWRITELINKPARM 
+CHECKHARBOUR h
+CHECKCPP w
+CHECKGUI m3
+CHECKLINK DYNAMIC
+CHECKCPLUSPLUS YES
+CHECKCONSOLE YES
+CHECKUPX YES
+CHECKFORMTOOL AUTO
+CHECKDBFTOOL US_DBTOOL
+WARNINGLEVEL 3
+EXITSEVERITY 2
+OUTPUTCOPYMOVE MOVE
+OUTPUTCOPYMOVEFOLDER D:\GitHub\tbigNumber\exe\mg\mingw
+OUTPUTRENAME NONE
+OUTPUTRENAMENEWNAME 
+CHECKOUTPUTSUFFIX YES
+OUTPUTTYPE SRCEXE
+CHECKREIMPORT NO
+LIBREIMPORT 
+DbfBrowseRichEditBottom .T.
+NCODEPAGESOURCES 1
+CCODEPAGESOURCES 
+NCODEPAGEDBF 1
+CCODEPAGEDBF 
+EXTRARUNCMDFINAL 
+EXTRARUNPROJECT 
+EXTRARUNCMDEXE 
+EXTRARUNCMDFREE 
+EXTRARUNPROJECTPARM 
+EXTRARUNEXEPARM 
+EXTRARUNFREEPARM 
+EXTRARUNTYPE 
+EXTRARUNPROJECTRADIO 
+EXTRARUNPROJECTLITE .T.
+EXTRARUNPROJECTFORCEFULL .F.
+EXTRARUNPROJECTRUN .F.
+EXTRARUNPROJECTBUTTONRUN .F.
+EXTRARUNPROJECTCLEAR .F.
+EXTRARUNPROJECTLOG .F.
+EXTRARUNPROJECTLOGONLYERROR .F.
+EXTRARUNPROJECTAUTOEXIT .T.
+EXTRARUNEXEWAIT .T.
+EXTRARUNEXEPAUSE .T.
+EXTRARUNFREEWAIT .T.
+EXTRARUNFREEPAUSE .T.
+MI_BMAINEXEICON EI_default_application_icon
+MI_BASSOCIATIONEXEICON EI_default_association_icon
+MI_BEXEASSOCIATION .F.
+MI_CEXEASSOCIATION 
+MI_NEXEASSOCIATIONICON 1
+MI_BEXEBACKUPOPTION .F.
+MI_BNEWFILE .F.
+MI_NNEWFILESUGGESTED 1
+MI_CNEWFILELEYEND 
+MI_NNEWFILEEMPTY 1
+MI_CNEWFILEUSERFILE 
+MI_NDESTINATIONPATH 1
+MI_CDESTINATIONPATH 
+MI_NLEYENDSUGGESTED 1
+MI_CLEYENDUSERTEXT 
+MI_QT_BINSTALLOFF .T.
+MI_QT_BINSTALLFULL .T.
+MI_QT_BCOPYQTTOINSTALLFOLDER .F.
+MI_BDESKTOPSHORTCUT .T.
+MI_NDESKTOPSHORTCUT 1
+MI_BSTARTMENUSHORTCUT .T.
+MI_NSTARTMENUSHORTCUT 1
+MI_BLAUNCHAPPLICATION .T.
+MI_NLAUNCHAPPLICATION 1
+MI_BLAUNCHBACKUPOPTION .F.
+MI_BREBOOT .F.
+MI_CDEFAULTLANGUAGE EN
+MI_NINSTALLERNAME 1
+MI_CINSTALLERNAME 
+MI_CIMAGE 
+MI_BSELECTALLPRG .F.
+MI_BSELECTALLHEA .F.
+MI_BSELECTALLPAN .F.
+MI_BSELECTALLDBF .F.
+MI_BSELECTALLLIB .F.
+SHGDATABASE *NONE*
+SHGLASTFOLDERIMG 
+SHGOUTPUTTYPE NO
+SHGHTMLFOLDER 
+HOTLASTEXTERNALFILE 
+SOURCE D:\GitHub\tBigNumber\src\tests\tBigNtst.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tbignumber.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tfRead.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tPrime.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tRemaining.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tSProgress.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tTimeCalc.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\__hbeTthD.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\__hbPITthD.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\tBigNError.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\tBigNErrorSys.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\tBigNSleep.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\tbigNThread.prg
+HEAD D:\GitHub\tBigNumber\include\hb_tBigNtst.ch
+HEAD D:\GitHub\tBigNumber\include\hb_tBigNumber.ch
+HEAD D:\GitHub\tBigNumber\include\paramtypex.ch
+HEAD D:\GitHub\tBigNumber\include\tBigNDef.ch
+HEAD D:\GitHub\tBigNumber\include\tbigNThread.ch
+HEAD D:\GitHub\tBigNumber\include\tBigNtst.ch
+HEAD D:\GitHub\tBigNumber\include\tBigNumber.ch
+HEAD D:\GitHub\core\contrib\xhb\xhb.ch
+INCLUDEm3wh *Last* <MIHFolder>\harbour\lib\win\mingw\libhbvmmt.a
+EXCLUDEm3wh libhbvm.a
