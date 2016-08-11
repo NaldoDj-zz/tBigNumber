@@ -228,6 +228,7 @@
             
             While .NOT.(lFinalize)
                 DispOut("*")
+#ifdef __0
                 IF(++nCol>=nMaxScrCol)
                     IF (++nRow>=nMaxScrRow)
                         nRow:=0
@@ -235,8 +236,14 @@
                     EndIF
                     nCol:=0
                 EndIF
+                nRow:=HB_RandomInt(nRow,nMaxScrRow)
+                nCol:=HB_RandomInt(nCol,nMaxScrCol)
+#else
+                nRow:=HB_RandomInt(0,nMaxScrRow)
+                nCol:=HB_RandomInt(0,nMaxScrCol)
+#endif //__0
                 SetPos(nRow,nCol)
-                __tbnSleep()
+                __tbnSleep(__nSLEEP)
             End While
             
             hb_threadQuitRequest(ptttBigtstThread)
