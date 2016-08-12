@@ -71,6 +71,7 @@
 #ifdef __HARBOUR__
     Function Main()
         
+        Local aScreen
         Local atBigNtst
       
         Local cIni:="tBigNtst.ini"
@@ -78,9 +79,13 @@
         Local cKey
         Local aSect
         Local cSection
+        Local cDispOut
         
         Local nRow
         Local nCol
+        Local nSRow
+        Local nSCol
+        Local nScreen
         Local nMaxScrRow
         Local nMaxScrCol
         
@@ -226,13 +231,28 @@
             nRow:=Row()
             nCol:=Col()
             
+            nScreen:=0
+            cDispOut:="+"
+            aScreen:=Array((nMaxScrRow+1),(nMaxScrCol+1))
+            aEval(aScreen,{|x|aFill(x,.F.)})
+            
             While .NOT.(lFinalize)
-                DispOut("*")
+                nSRow:=(nRow+1)
+                nSCol:=(nCol+1)
+                if .not.(aScreen[nSRow][nSCol])
+                    nScreen:=0
+                    DispOut(cDispOut)
+                    aScreen[nSRow][nSCol]:=.T.
+                    aEval(aScreen,{|x|aEval(x,{|y|nScreen+=if(y,1,0)})})
+                    if (nScreen==(nMaxScrRow*nMaxScrCol))
+                        cDispOut:=if(cDispOut=="+"," ","*")
+                        aEval(aScreen,{|x|aFill(x,.F.)})
+                    endif
+                endif
 #ifdef __0
                 IF(++nCol>=nMaxScrCol)
                     IF (++nRow>=nMaxScrRow)
                         nRow:=0
-                        CLS
                     EndIF
                     nCol:=0
                 EndIF
@@ -815,6 +835,7 @@ Static Procedure __ConOut(fhLog,e,d)
     lTBeg:=("BEGIN ------------"$p)
     
     IF (lTBeg)
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]["+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"]")
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     EndIF
     

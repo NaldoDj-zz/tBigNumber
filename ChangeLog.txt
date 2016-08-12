@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-08-12 13:40 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/tests/tBigNtst.prg
+ 
 2016-08-11 20:52 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
  
