@@ -71,14 +71,16 @@
 #ifdef __HARBOUR__
     Function Main()
         
+        Local aSect
         Local aScreen
         Local atBigNtst
       
         Local cIni:="tBigNtst.ini"
         Local hIni:=hb_iniRead(cIni)
+
         Local cKey
-        Local aSect
         Local cSection
+        Local cChrDOut
         Local cDispOut
         
         Local nRow
@@ -88,7 +90,11 @@
         Local nScreen
         Local nMaxScrRow
         Local nMaxScrCol
+        Local nSMaxScrRow
+        Local nSMaxScrCol
+        Local nTMaxRolCol
         
+        Local lChangeC
         Local lFinalize
         Local ptftBigtstThread
         Local ptttBigtstThread
@@ -232,21 +238,28 @@
             nCol:=Col()
             
             nScreen:=0
-            cDispOut:="+"
-            aScreen:=Array((nMaxScrRow+1),(nMaxScrCol+1))
-            aEval(aScreen,{|x|aFill(x,.F.)})
+            lChangeC:=.F.
+            cChrDOut:=Chr(254)
+            cDispOut:=cChrDOut
+            nSMaxScrRow:=(nMaxScrRow+1)
+            nSMaxScrCol:=(nMaxScrCol+1)
+            nTMaxRolCol:=(nSMaxScrRow*nSMaxScrCol)
+            aScreen:=Array(nSMaxScrRow,nSMaxScrCol)
+            aEval(aScreen,{|x|aFill(x,.T.)})
             
             While .NOT.(lFinalize)
                 nSRow:=(nRow+1)
                 nSCol:=(nCol+1)
-                if .not.(aScreen[nSRow][nSCol])
+                if (aScreen[nSRow][nSCol])
                     nScreen:=0
-                    DispOut(cDispOut)
-                    aScreen[nSRow][nSCol]:=.T.
-                    aEval(aScreen,{|x|aEval(x,{|y|nScreen+=if(y,1,0)})})
-                    if (nScreen==(nMaxScrRow*nMaxScrCol))
-                        cDispOut:=if(cDispOut=="+"," ","*")
-                        aEval(aScreen,{|x|aFill(x,.F.)})
+                    SetPos(nRow,nCol)
+                    lChangeC:=.not.(lChangeC)
+                    DispOut(cDispOut,if(lChangeC,"w+/n","w+/n"))
+                    aScreen[nSRow][nSCol]:=.F.
+                    aEval(aScreen,{|x|aEval(x,{|y|nScreen+=if(y,0,1)})})
+                    if (nScreen==nTMaxRolCol)
+                        cDispOut:=if(cDispOut==cChrDOut," ",cChrDOut)
+                        aEval(aScreen,{|x|aFill(x,.T.)})
                     endif
                 endif
 #ifdef __0
@@ -262,8 +275,6 @@
                 nRow:=HB_RandomInt(0,nMaxScrRow)
                 nCol:=HB_RandomInt(0,nMaxScrCol)
 #endif //__0
-                SetPos(nRow,nCol)
-                __tbnSleep(__nSLEEP)
             End While
             
             hb_threadQuitRequest(ptttBigtstThread)
