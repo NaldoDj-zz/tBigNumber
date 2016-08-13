@@ -2,12 +2,12 @@
     /*
         TODO:
         (1) core/tests/gtwin.prg         (1/1)
-        (2) Main thread GT/Tests Monitor (1/9)
+        (2) Main thread GT/Tests Monitor (0/1)
         (3) Configure tests              (1/1)
         (4) tBigNThread.prg              (1/1)
         (4.1) hb_ExecFromArray()         (1/1)
         (5) tBigNSleep.prg               (1/1)    
-        (6) log file name                (0/1)           
+        (6) log file name                (1/1)           
 */    
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
@@ -67,6 +67,7 @@
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
 #define __NRTTST__         36
+#define __PADL_T__          2
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     Function Main()
@@ -222,7 +223,7 @@
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         
 
-        ChkIntTstExec(@aAC_TSTEXEC,2)
+        ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
         
         IF (cC_GT_MODE=="MT")
@@ -417,7 +418,7 @@
             __nSLEEP*=10
         EndIF
 
-    ChkIntTstExec(@aAC_TSTEXEC,2)
+    ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
     atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     
     Return(tBigNtst(@atBigNtst))
@@ -478,7 +479,11 @@
 
         aEval(atBigNtst,{|e|if(e[2],++ntBigNtst,NIL)})
         Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(ntBigNtst)
-
+        IF ((cC_GT_MODE=="MT").and.(ntBigNtst==1))
+            cLog+="_"
+            cLog+=PadL(atBigNtst[ntBigNtst][5],__PADL_T__,"0")
+        ENDIF
+        
         Private __phMutex:=hb_mutexCreate()
 
         MakeDir(cFld)

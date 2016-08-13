@@ -362,7 +362,7 @@ class tBigNumber from hbClass
     method D2B(cHexB)
     method B2D(cHexB)
 
-    method Randomize(uB,uE,nExit)
+    method Randomize(uB,uE)
 
     method millerRabin(uI)
 
@@ -3577,36 +3577,21 @@ return(oDec)
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:03/03/2013
     Descricao:Randomize BigN Integer
-    Sintaxe:tBigNumber():Randomize(uB,uE,nExit) -> oR
+    Sintaxe:tBigNumber():Randomize(uB,uE) -> oR
 */
-method Randomize(uB,uE,nExit) class tBigNumber
-
-    local aE
+method Randomize(uB,uE) class tBigNumber
 
     local oB:=s__o0:Clone()
     local oE:=s__o0:Clone()
     local oT:=s__o0:Clone()
-    local oM:=s__o0:Clone()
     local oR:=s__o0:Clone()
 
-    local cR:=""
-
-    local nB
-    local nE
-    local nR
-    local nS
-    local nT
-
-    local lI
-
-    #ifdef __HARBOUR__
-        oM:SetValue("9999999999999999999999999999")
-    #else //__PROTHEUS__
-        oM:SetValue("999999999")
-    #endif
+    local cN
+    local cR
+    Local cT
 
     DEFAULT uB:="1"
-    DEFAULT uE:=oM:ExactValue()
+    DEFAULT uE:="99999999999999999999999999999999"
 
     oB:SetValue(uB)
     oE:SetValue(uE)
@@ -3617,170 +3602,63 @@ method Randomize(uB,uE,nExit) class tBigNumber
     oT:SetValue(oB:Min(oE))
     oE:SetValue(oB:Max(oE))
     oB:SetValue(oT)
-
-    begin sequence
-
-        if oB:gt(oM)
-
-            nE:=Val(oM:ExactValue())
-            nB:=Int(nE/2)
-            nR:=__Random(nB,nE)
-            cR:=hb_ntos(nR)
-
-            oR:SetValue(cR)
-
-            lI:=.F.
-            nS:=oE:nInt
-
-            while oR:lt(oM)
-                nR:=__Random(nB,nE)
-                cR+=hb_ntos(nR)
-                nT:=nS
-                if lI
-                    while nT>0
-                        nR:=-(__Random(1,nS))
-                        oR:SetValue(oR:Add(Left(cR,nR)))
-                        if oR:gte(oE)
-                            exit
-                        endif
-                        nT+=nR
-                    end while
-                else
-                    while nT>0
-                        nR:=__Random(1,nS)
-                        oR:SetValue(oR:Add(Left(cR,nR)))
-                        if oR:gte(oE)
-                            exit
-                        endif
-                        nT-=nR
-                    end while
-                endif
-                lI:=.not.(lI)
-            end while
-
-            DEFAULT nExit:=EXIT_MAX_RANDOM
-            aE:=Array(0)
-
-            nS:=oE:nInt
-
-            while oR:lt(oE)
-                nR:=__Random(nB,nE)
-                cR+=hb_ntos(nR)
-                nT:=nS
-                if lI
-                    while  nT>0
-                        nR:=-(__Random(1,nS))
-                        oR:SetValue(oR:Add(Left(cR,nR)))
-                        if oR:gte(oE)
-                            exit
-                        endif
-                        nT+=nR
-                    end while
-                else
-                    while nT>0
-                        nR:=__Random(1,nS)
-                        oR:SetValue(oR:Add(Left(cR,nR)))
-                        if oR:gte(oE)
-                            exit
-                        endif
-                        nT-=nR
-                    end while
-                endif
-                lI:=.not.(lI)
-                nT:=0
-                if aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
-                    exit
-                endif
-                if nT<=RANDOM_MAX_EXIT
-                    aAdd(aE,__Random(1,nExit))
-                endif
-            end while
-
-            break
-
-        endif
-
-        if oE:lte(oM)
-            nB:=Val(oB:ExactValue())
-            nE:=Val(oE:ExactValue())
-            nR:=__Random(nB,nE)
-            cR+=hb_ntos(nR)
-            oR:SetValue(cR)
-            break
-        endif
-
-        DEFAULT nExit:=EXIT_MAX_RANDOM
-        aE:=Array(0)
-
-        lI:=.F.
-        nS:=oE:nInt
-
-        while oR:lt(oE)
-            nB:=Val(oB:ExactValue())
-            nE:=Val(oM:ExactValue())
-            nR:=__Random(nB,nE)
-            cR+=hb_ntos(nR)
-            nT:=nS
-            if lI
-                while nT>0
-                    nR:=-(__Random(1,nS))
-                    oR:SetValue(oR:Add(Left(cR,nR)))
-                    if oR:gte(oE)
-                        exit
-                    endif
-                    nT+=nR
-                end while
-            else
-                while nT>0
-                    nR:=__Random(1,nS)
-                    oR:SetValue(oR:Add(Left(cR,nR)))
-                    if oR:gte(oE)
-                        exit
-                    endif
-                    nT-=nR
-                end while
-            endif
-            lI:=.not.(lI)
-            nT:=0
-            if aScan(aE,{|n|++nT,n==__Random(1,nExit)})>0
-                exit
-            endif
-            if nT<=RANDOM_MAX_EXIT
-                aAdd(aE,__Random(1,nExit))
-            endif
+    
+    oT:SetValue(oE:Sub(oB):Div(s__o2):Int(.T.):Abs(.T.))
+    
+    cR:=""
+    cT:=oT:__cInt()
+    #ifdef __HARBOUR__
+        for each cN in cT
+            cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+        next
+    #else
+        while (Len(cT)>0)
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cT:=SubStr(cT,2)
         end while
+    #endif
+    
+    oR:SetValue(oR:Add(cR))
 
-    end sequence
+    oT:SetValue(oB)
 
-    if oR:lt(oB).or.oR:gt(oE)
-
-        nT:=Min(oE:nInt,oM:nInt)
-        s__IncS9(nT)
-        cR:=Left(s__cN9,nT)
-        oT:SetValue(cR)
-        cR:=oM:Min(oE:Min(oT)):ExactValue()
-        nT:=Val(cR)
-
-        //-------------------------------------------------------------------------------------
-        //(Div(2)==Mult(.5)
-        oT:SetValue(oE:Sub(oB):Mult(s__od2):Int(.T.))
-
-        while oR:lt(oB)
-            oR:SetValue(oR:Add(oT))
-            nR:=__Random(1,nT)
-            cR:=hb_ntos(nR)
-            oR:SetValue(oR:Sub(cR))
+    cR:=""
+    cT:=oT:__cInt()
+    #ifdef __HARBOUR__
+        for each cN in cT
+            cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+        next
+    #else
+        while (Len(cT)>0)
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cT:=SubStr(cT,2)
         end while
+    #endif
+    
+    oR:SetValue(oR:Add(cR))
 
-        while oR:gt(oE)
-            oR:SetValue(oR:Sub(oT))
-            nR:=__Random(1,nT)
-            cR:=hb_ntos(nR)
-            oR:SetValue(oR:Add(cR))
+    oT:SetValue(oE:Sub(oR):Int(.T.):Abs(.T.))
+
+    cR:=""
+    cT:=oT:__cInt()
+    #ifdef __HARBOUR__
+        for each cN in cT
+            cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+        next
+    #else
+        while (Len(cT)>0)
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cT:=SubStr(cT,2)
         end while
+    #endif
 
-    endif
-
+    oR:SetValue(cR)
+    
+    while (oR:gt(oE))
+        oT:SetValue(oR:Sub(oB):Div(s__o2):Int(.T.):Abs(.T.))
+        oR:SetValue(oT)
+    end while
+    
 return(oR)
 
 /*
@@ -5634,6 +5512,7 @@ return
             TBIGNNORMALIZE()
             TBIGNSQRT()
             TBIGNLOG()
+            S__INCS9()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()
