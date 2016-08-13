@@ -480,8 +480,7 @@
         aEval(atBigNtst,{|e|if(e[2],++ntBigNtst,NIL)})
         Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(ntBigNtst)
         IF ((cC_GT_MODE=="MT").and.(ntBigNtst==1))
-            cLog+="_"
-            cLog+=PadL(atBigNtst[ntBigNtst][5],__PADL_T__,"0")
+            cLog:=StrTran(cLog,"tBigNtst_",PadL(atBigNtst[ntBigNtst][5],__PADL_T__,"0")+"_tBigNtst_")
         ENDIF
         
         Private __phMutex:=hb_mutexCreate()
