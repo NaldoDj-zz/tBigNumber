@@ -249,6 +249,19 @@
             aEval(aScreen,{|x|aFill(x,.T.)})
             
             While .NOT.(lFinalize)
+ #ifdef __0
+                IF(++nCol>=nMaxScrCol)
+                    IF (++nRow>=nMaxScrRow)
+                        nRow:=0
+                    EndIF
+                    nCol:=0
+                EndIF
+                nRow:=HB_RandomInt(nRow,nMaxScrRow)
+                nCol:=HB_RandomInt(nCol,nMaxScrCol)
+#else
+                nRow:=HB_RandomInt(0,nMaxScrRow)
+                nCol:=HB_RandomInt(0,nMaxScrCol)
+#endif //__0
                 nSRow:=(nRow+1)
                 nSCol:=(nCol+1)
                 if (aScreen[nSRow][nSCol])
@@ -263,19 +276,6 @@
                         aEval(aScreen,{|x|aFill(x,.T.)})
                     endif
                 endif
-#ifdef __0
-                IF(++nCol>=nMaxScrCol)
-                    IF (++nRow>=nMaxScrRow)
-                        nRow:=0
-                    EndIF
-                    nCol:=0
-                EndIF
-                nRow:=HB_RandomInt(nRow,nMaxScrRow)
-                nCol:=HB_RandomInt(nCol,nMaxScrCol)
-#else
-                nRow:=HB_RandomInt(0,nMaxScrRow)
-                nCol:=HB_RandomInt(0,nMaxScrCol)
-#endif //__0
             End While
             
             hb_threadQuitRequest(ptttBigtstThread)
