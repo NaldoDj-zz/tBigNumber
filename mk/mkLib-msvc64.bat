@@ -3,10 +3,10 @@ echo BATCH FILE FOR Harbour msvc64
 rem ============================================================================
 D:
 CD D:\GitHub\tBigNumber\mk\
-SET > env_mkLib64.txt
+SET > env_mkLib_msvc64.txt
     SET HB_PATH=D:\GitHub\core\
-    IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" (
-        CALL "c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" X64
+    IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" (
+        CALL "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" X64
         SET msvc64_PATH="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"
     ) ELSE IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\vcvarsall.bat" (
         CALL "c:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\vcvarsall.bat" X64
@@ -29,7 +29,7 @@ SET > env_mkLib64.txt
        %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=msvc64 ..\hbp\_tbigNumber.hbp
 D:
 CD D:\GitHub\tBigNumber\mk\
-for /f %%e in (env_mkLib64.txt) do (
+for /f %%e in (env_mkLib_msvc64.txt) do (
     SET %%e
 )
-DEL env_mkLib64.txt
+DEL env_mkLib_msvc64.txt

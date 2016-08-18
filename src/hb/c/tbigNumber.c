@@ -34,6 +34,11 @@
         #include <hbmather.h>
         #include <hbapierr.h>
         
+        #ifdef _MSC_VER
+            #define _CRT_SECURE_NO_WARNINGS
+            #pragma warning(disable:4996)
+        #endif
+        
         typedef struct{
             char * cMultM;
             char * cMultP;

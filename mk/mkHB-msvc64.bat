@@ -3,10 +3,10 @@ echo BATCH FILE FOR Harbour msvc64
 rem ============================================================================
 D:
 CD D:\GitHub\tBigNumber\mk\
-SET > env_mkHB64.txt
+SET > env_msvc64.txt
     SET HB_PATH=D:\GitHub\core\
-    IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" (
-        CALL "c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" X64
+    IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" (
+        CALL "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" X64
         SET msvc64_PATH="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin"
     ) ELSE IF EXIST "c:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\vcvarsall.bat" (
         CALL "c:\Program Files (x86)\Microsoft Visual Studio 13.0\VC\vcvarsall.bat" X64
@@ -49,7 +49,7 @@ SET > env_mkHB64.txt
        %HB_PATH%\win-make.exe -f MakeFile %1
 D:
 CD D:\GitHub\tBigNumber\mk\
-for /f %%e in (env_mkHB64.txt) do (
+for /f %%e in (env_msvc64.txt) do (
     SET %%e
 )
-DEL env_mkHB64.txt
+DEL env_msvc64.txt
