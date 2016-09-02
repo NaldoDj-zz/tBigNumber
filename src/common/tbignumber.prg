@@ -3613,7 +3613,7 @@ method Randomize(uB,uE) class tBigNumber
         next
     #else
         while (Len(cT)>0)
-            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
             cT:=SubStr(cT,2)
         end while
     #endif
@@ -3630,7 +3630,7 @@ method Randomize(uB,uE) class tBigNumber
         next
     #else
         while (Len(cT)>0)
-            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
             cT:=SubStr(cT,2)
         end while
     #endif
@@ -3647,7 +3647,7 @@ method Randomize(uB,uE) class tBigNumber
         next
     #else
         while (Len(cT)>0)
-            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1)))
+            cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
             cT:=SubStr(cT,2)
         end while
     #endif

@@ -3,6 +3,7 @@
 #-d__PTCOMPAT__
 #-d__ALT_D__
 #-dTBIGN_RECPOWER
+#-d__LMETHOD__
 
 -mt
 

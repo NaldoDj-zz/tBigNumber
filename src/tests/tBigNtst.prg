@@ -266,9 +266,8 @@
                 nSCol:=(nCol+1)
                 if (aScreen[nSRow][nSCol])
                     nScreen:=0
-                    SetPos(nRow,nCol)
                     lChangeC:=.not.(lChangeC)
-                    DispOut(cDispOut,if(lChangeC,"w+/n","w+/n"))
+                    DispOutAT(nRow,nCol,cDispOut,if(lChangeC,"w+/n","w+/n"))
                     aScreen[nSRow][nSCol]:=.F.
                     aEval(aScreen,{|x|aEval(x,{|y|nScreen+=if(y,0,1)})})
                     if (nScreen==nTMaxRolCol)
