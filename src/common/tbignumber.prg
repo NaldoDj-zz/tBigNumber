@@ -54,29 +54,15 @@
 
 #include "tBigNumber.ch"
 
-#ifdef __PROTHEUS__
+ #ifdef __HARBOUR__
     //-------------------------------------------------------------------------------------
-    static __cEnvSrv
-    #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
-    #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
-    #xtranslate hb_mutexCreate()            => ThreadID()
-    #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
-    #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
-    #xtranslate method <methodName> SETGET  => method <methodName>
-    //-------------------------------------------------------------------------------------
-#else // __HARBOUR__
-    //-------------------------------------------------------------------------------------
-    #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
-    #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
-    #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
-    #xtranslate Right([<prm,...>])   => hb_bRight([<prm>])
-    #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
-    #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
-    #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
-    #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
-    //-------------------------------------------------------------------------------------
-#endif //__PROTHEUS__
-
+        #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
+        #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
+        #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
+        #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
+   //-------------------------------------------------------------------------------------
+#endif //__HARBOUR__
+ 
 #ifndef __DIVMETHOD__
     #define __DIVMETHOD__ 1
 #endif
@@ -5440,9 +5426,6 @@ static procedure __InitstbN(nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
-    #ifdef __PROTHEUS__
-        DEFAULT __cEnvSrv:=GetEnvServer()
-    #endif
     s__lstbNSet:=.T.
 return
 
