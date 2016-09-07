@@ -33,6 +33,7 @@
         MEMVAR lL_LOGPROCESS
         MEMVAR cC_GT_MODE
         MEMVAR aAC_TSTEXEC
+        MEMVAR cCN_MERSENNE_POW
         MEMVAR __oRTime1
         MEMVAR __oRTime2
         MEMVAR __nMaxRow
@@ -63,10 +64,11 @@
 #define L_ROPROGRESS       "0"
 #define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
-#define AC_TSTEXEC        "1:17,-18,19:36"
+#define AC_TSTEXEC        "1:17,-18,19:37"
+#define CN_MERSENNE_POW      "2"  
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
-#define __NRTTST__         36
+#define __NRTTST__         37
 #define __PADL_T__          2
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
@@ -118,6 +120,7 @@
         Private lL_LOGPROCESS
         Private cC_GT_MODE
         Private aAC_TSTEXEC
+        Private cCN_MERSENNE_POW
         Private lDispML:=.T.
 
         #ifdef __HBSHELL_USR_DEF_GT
@@ -137,6 +140,7 @@
             hIni["GENERAL"]["L_LOGPROCESS"]:=L_LOGPROCESS
             hIni["GENERAL"]["C_GT_MODE"]:=C_GT_MODE
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
+            hIni["GENERAL"]["CN_MERSENNE_POW"]:=CN_MERSENNE_POW
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
         Else
             FOR EACH cSection IN hIni:Keys
@@ -176,6 +180,9 @@
                         CASE "AC_TSTEXEC"
                             aAC_TSTEXEC:=_StrToKArr(AllTrim(aSect[cKey]),",")
                             EXIT
+                        CASE "CN_MERSENNE_POW"
+                            cCN_MERSENNE_POW:=AllTrim(aSect[cKey])
+                            EXIT
                     ENDSWITCH
                 NEXT cKey
             NEXT cSection
@@ -192,7 +199,8 @@
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-
+        cCN_MERSENNE_POW:=IF(Empty(cCN_MERSENNE_POW),CN_MERSENNE_POW,cCN_MERSENNE_POW)
+        
         __SetCentury("ON")
         SET DATE TO BRITISH
 
@@ -221,8 +229,7 @@
         /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
-        
-
+ 
         ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
         
@@ -368,6 +375,7 @@
         Private lL_LOGPROCESS
         Private cC_GT_MODE
         Private aAC_TSTEXEC
+        Private cCN_MERSENNE_POW
         
         IF FindFunction("U_TFINI") //NDJLIB020.PRG
             otFIni:=U_TFINI(cIni)
@@ -384,6 +392,7 @@
                 otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
                 otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                 otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
+                otFIni:AddNewProperty("GENERAL","CN_MERSENNE_POW",CN_MERSENNE_POW)
                 otFIni:SaveAs(cIni)
             Else
                 nACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -396,7 +405,8 @@
                 lL_ROPROGRESS:=(oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
                 lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                 cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
-                aAC_TSTEXEC:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC ",AC_TSTEXEC)),",")
+                aAC_TSTEXEC:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
+                cCN_MERSENNE_POW:=AllTrim(oTFINI:GetPropertyValue("GENERAL","CN_MERSENNE_POW",CN_MERSENNE_POW))
             EndIF
         EndIF
         
@@ -411,6 +421,7 @@
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
+        cCN_MERSENNE_POW:=IF(Empty(cCN_MERSENNE_POW),CN_MERSENNE_POW,cCN_MERSENNE_POW)
         __nSLEEP:=Max(__nSLEEP,10)
         
         IF ((__nSLEEP)<10)
@@ -715,7 +726,8 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
     atBigNtst[33][1]:={|p|tBigNtst33(p)}
     atBigNtst[34][1]:={|p|tBigNtst34(p)}
     atBigNtst[35][1]:={|p|tBigNtst35(p)}
-    atBigNtst[36][1]:={|p|tBigNtst36(p)}    
+    atBigNtst[36][1]:={|p|tBigNtst36(p)}
+    atBigNtst[37][1]:={|p|tBigNtst37(p)}    
 
     for nD:=1 to nJ
         atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,{|c|(nD==Val(c))})>0)
@@ -793,35 +805,7 @@ Static Procedure __ConOut(fhLog,e,d)
 
 #ifdef __HARBOUR__
 
-    @ 09,15 CLEAR TO 09,__nMaxCol
-    cDOAt:="["
-    cDOAt+=StrZero(__oRTime1:GetnProgress(),16)
-    cDOAt+="/"
-    cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
-    cDOAt+="]|["
-    cDOAt+=DtoC(__oRTime1:GetdEndTime())
-    cDOAt+="]["+__oRTime1:GetcEndTime()
-    cDOAt+="]|["
-    cDOAt+=__oRTime1:GetcAverageTime()
-    cDOAt+="]["
-    cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
-    cDOAt+=" %]"
-    DispOutAT(09,15,cDOAt,"w+/n")
-
-    @ 10,15 CLEAR TO 10,__nMaxCol
-    cDOAt:="["
-    cDOAt+=StrZero(__oRTime2:GetnProgress(),16)
-    cDOAt+="/"
-    cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
-    cDOAt+="]|["
-    cDOAt+=DtoC(__oRTime2:GetdEndTime())
-    cDOAt+="]["+__oRTime2:GetcEndTime()
-    cDOAt+="]|["
-    cDOAt+=__oRTime2:GetcAverageTime()
-    cDOAt+="]["
-    cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
-    cDOAt+=" %]"
-    DispOutAT(10,15,cDOAt,"w+/n")
+    ShowFinalProc()
 
     DEFAULT __nRow:=0
     ASSIGN lSep:=(p==__cSep)
@@ -1183,8 +1167,11 @@ Return(lHarbour)
 
             IF hb_mutexLock(__phMutex,0)
                 IF (cRTime==cLRTime)
-                    __oRTimeProc:Calcule(.F.)
+                    __oRTime1:Calcule(.F.)
+                    __oRTime2:Calcule(.F.)
+                   __oRTimeProc:Calcule(.F.)
                 EndIF
+                ShowFinalProc()
                 ASSIGN cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
                 ASSIGN cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
                 ASSIGN cRTime+="["+DtoC(__oRTimeProc:GetdEndTime())+"]"
@@ -1202,6 +1189,41 @@ Return(lHarbour)
             __tbnSleep(nSLEEP)
 
         End While
+    
+    Return
+    Static Procedure ShowFinalProc()
+        
+        Local cDOAt      AS CHARACTER
+
+        @ 09,15 CLEAR TO 09,__nMaxCol
+        cDOAt:="["
+        cDOAt+=StrZero(__oRTime1:GetnProgress(),16)
+        cDOAt+="/"
+        cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
+        cDOAt+="]|["
+        cDOAt+=DtoC(__oRTime1:GetdEndTime())
+        cDOAt+="]["+__oRTime1:GetcEndTime()
+        cDOAt+="]|["
+        cDOAt+=__oRTime1:GetcAverageTime()
+        cDOAt+="]["
+        cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
+        cDOAt+=" %]"
+        DispOutAT(09,15,cDOAt,"w+/n")
+    
+        @ 10,15 CLEAR TO 10,__nMaxCol
+        cDOAt:="["
+        cDOAt+=StrZero(__oRTime2:GetnProgress(),16)
+        cDOAt+="/"
+        cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
+        cDOAt+="]|["
+        cDOAt+=DtoC(__oRTime2:GetdEndTime())
+        cDOAt+="]["+__oRTime2:GetcEndTime()
+        cDOAt+="]|["
+        cDOAt+=__oRTime2:GetcAverageTime()
+        cDOAt+="]["
+        cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
+        cDOAt+=" %]"
+        DispOutAT(10,15,cDOAt,"w+/n")
     
     Return
     //--------------------------------------------------------------------------------------------------------
@@ -3707,4 +3729,47 @@ static procedure tBigNtst36(fhLog)
 
     __ConOut(fhLog,"")
     
+return
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst37(fhLog)
+
+    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
+
+    Local cX        AS CHARACTER
+    Local cW        AS CHARACTER
+
+    PARAMTYPE 1 VAR fhLog AS NUMBER
+  
+    __ConOut(fhLog,"BEGIN ------------ Teste BIG Mersenne number -------------- ")
+
+    __oRTime1:SetRemaining(1)
+ 
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+
+    __ConOut(fhLog,"")
+
+    __oRTime2:SetRemaining(1)
+    
+    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+')',":...")
+    
+    otBigW:SetValue(otBigW:Pow(cCN_MERSENNE_POW))
+    ASSIGN cX:=otBigW:ExactValue()
+    ASSIGN cW:=otBigW:OpDec():ExactValue()
+    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+')',"RESULT: "+cX)
+    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+'):OpDec()',"RESULT: "+cW)
+    __oRTime2:Calcule()
+    __oRTime1:Calcule()
+    __ConOut(fhLog,__cSep)
+    __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+    *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+    __ConOut(fhLog,__cSep)
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog,"------------ Teste BIG Mersenne number -------------- END")
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog,"")
+
 return

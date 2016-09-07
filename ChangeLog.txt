@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-09-07 00:22 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/tests/tBigNtst.prg
+    + Mersenne Number
+ 
 2016-09-01 21:44 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst.hbp
   * src/common/tbignumber.prg
