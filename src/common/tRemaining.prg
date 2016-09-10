@@ -24,6 +24,7 @@ Class tRemaining FROM tTimeCalc
     DATA nSRemaining    AS NUMERIC   INIT 0              HIDDEN
     DATA nTotal         AS NUMERIC   INIT 0              HIDDEN
     DATA nStep          AS NUMERIC   INIT 1              HIDDEN
+    DATA lForceStep     AS LOGICAL   INIT .F.            HIDDEN
     
 #ifndef __PROTHEUS__
     EXPORTED:
@@ -34,6 +35,7 @@ Class tRemaining FROM tTimeCalc
     Method ClassName()
 
     Method SetStep(nStep)
+    Method ForceStep(lSet)
     Method SetRemaining(nTotal)
 
     Method Calcule(lProgress)
@@ -77,12 +79,19 @@ Method SetRemaining(nTotal) Class tRemaining
     self:nSRemaining:=0
     self:nTotal:=nTotal
     self:SetStep()
+    self:ForceStep()
 Return(self)
 
 Method SetStep(nStep) Class tRemaining
     DEFAULT nStep:=1
     self:nStep:=nStep
 Return(self)
+
+Method ForceStep(lSet) Class tRemaining
+    local lLast:=self:lForceStep
+    DEFAULT lSet:=.F.
+    self:lForceStep:=lSet
+Return(lLast)
 
 Method Calcule(lProgress) Class tRemaining
 
@@ -112,7 +121,7 @@ Method Calcule(lProgress) Class tRemaining
     self:nSRemaining:=nTimeDiff
 
     DEFAULT lProgress:=.T.
-    IF (lProgress)
+    IF (lProgress).or.(self:lForceStep)
         self:nProgress+=self:nStep
         self:nProgress:=Min(self:nProgress,self:nTotal)
     EndIF
@@ -126,6 +135,13 @@ Method Calcule(lProgress) Class tRemaining
     self:cEndTime:=aEndTime[1]
     self:dEndTime:=aEndTime[2]
 
+    IF (self:lForceStep)
+        IF (self:nProgress>=self:nTotal)
+            self:nTotal+=self:nProgress
+            self:nProgress:=0
+        EndIF
+    EndIF
+    
 Return(self)
 
 Method GetcAverageTime() Class tRemaining
