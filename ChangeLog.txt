@@ -10,6 +10,16 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-09-10 16:21 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * ChangeLog.txt
+  * hbp/tBigNtst.hbp
+  * src/hb/c/tbigNumber.c
+
+2016-09-10 16:19 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * hbp/tBigNtst.hbp
+  * src/common/tbignumber.prg
+  * src/hb/c/tbigNumber.c
+  
 2016-09-10 00:25 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip

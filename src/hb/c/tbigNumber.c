@@ -60,7 +60,7 @@
         static char * tBigNiADD(char * sN, HB_MAXINT a,const int isN,const HB_MAXINT nB);
         static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB);        
         static char * tBigNiSUB(char * sN,const HB_MAXINT s,const int isN,const HB_MAXINT nB); 
-        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB);
+        static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB);
         static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult);        
         static char * tBigN2Mult(char * sN,const int isN,const HB_MAXINT nB);
         static char * tBigNiMult(char * sN,const HB_MAXINT m,const HB_SIZE isN,const HB_MAXINT nB);
@@ -339,10 +339,12 @@
             hb_retnint((HB_MAXINT)hb_parnint(1)-(HB_MAXINT)hb_parnint(2));
         }
 
-        static char * tBIGNMult(const char * a,const char * b,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB){
+        static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB){
             
             HB_TRACE(HB_TR_DEBUG,("tBIGNMult(%s,%s,%"HB_PFS"u,%"HB_PFS"u,%d)",a,b,n,y,nB));
             
+            char * a=tBIGNReverse(pValue1,n);
+            char * b=tBIGNReverse(pValue2,n);
             char * c=(char*)hb_xgrab(y+1);
             
             HB_SIZE i=0;
@@ -395,8 +397,12 @@
                 }
                 l++;
             }        
+
+            hb_xfree(a);
+            hb_xfree(b);            
             
             char * r=tBIGNReverse(c,y);
+
             hb_xfree(c);
 
             return r;
@@ -404,19 +410,15 @@
 
         HB_FUNC_STATIC( TBIGNMULT ){
             HB_SIZE n=(HB_SIZE)hb_parnint(3);
-            char * a=tBIGNReverse(hb_parc(1),n);
-            char * b=tBIGNReverse(hb_parc(2),n);
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
-            char * szRet=tBIGNMult(a,b,n,y,nB);
+            char * szRet=tBIGNMult(hb_parc(1),hb_parc(2),n,y,nB);
             #if 0
                 hb_retclen(szRet,y);
                 hb_xfree(szRet);
             #else
                 hb_retclen_buffer(szRet,y);
             #endif
-            hb_xfree(a);
-            hb_xfree(b);            
         }
 
         static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult){
@@ -440,7 +442,7 @@
             pegMult->cMultP=hb_strdup(Tmp);
             hb_xfree(Tmp);
             
-            int nI=0;
+            HB_MAXINT nI=0;
 
             do {
             
@@ -469,7 +471,7 @@
             hb_xfree(pegMultTmp->cMultM);
             hb_xfree(pegMultTmp->cMultP);
             
-            int nF=nI;
+            HB_MAXINT nF=nI;
 
             do {
                
@@ -622,7 +624,7 @@
             
             pegDivTmp->cDivR=hb_strdup(pD);
             
-            int nI=0;
+            HB_MAXINT nI=0;
 
             do {
 
@@ -651,7 +653,7 @@
             hb_xfree(pegDivTmp->cDivQ);
             hb_xfree(pegDivTmp->cDivR);
 
-            int nF=nI;
+            HB_MAXINT nF=nI;
 
             Tmp=tBIGNPadL("0",n,"0");
             pegDiv->cDivQ=hb_strdup(Tmp);
@@ -728,11 +730,12 @@
                 }
             }
             
-            hb_storclen(pegDiv->cDivR,n,3);
             #if 0
                 hb_retclen(pegDiv->cDivQ,n);
+                hb_storclen(pegDiv->cDivR,n,3);
             #else
                 hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),n);
+                hb_storclen_buffer(hb_strdup(pegDiv->cDivR),n,3);
             #endif
 
             hb_xfree(pN);
@@ -746,7 +749,7 @@
             
             HB_TRACE(HB_TR_DEBUG,("tBIGNecDiv(%s,%s,%d,%d,%p)",pA,pB,ipN,nB,pecDiv));
             
-            int n=0;
+            HB_MAXINT n=0;
 
             pecDiv->cDivR=hb_strdup(pA);
             char * aux=hb_strdup(pB);
@@ -761,7 +764,7 @@
             HB_MAXINT *ipA=(HB_MAXINT*)hb_xgrab(snHB_MAXINT);
             HB_MAXINT *iaux=(HB_MAXINT*)hb_xgrab(snHB_MAXINT);
 
-            int i=ipN;
+            HB_MAXINT i=ipN;
             while(--i>=0){
                 ipA[i]=(*(&pecDiv->cDivR[i])-'0');
                 iaux[i]=(*(&aux[i])-'0');
@@ -878,11 +881,12 @@
                 }
             }
             
-            hb_storclen(pecDiv->cDivR,n,3);
             #if 0
                 hb_retclen(pecDiv->cDivQ,n);
+                hb_storclen(pecDiv->cDivR,n,3);
             #else
                 hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),n);
+                hb_storclen_buffer(hb_strdup(pecDiv->cDivR),n,3);
             #endif
 
             hb_xfree(pN);
@@ -1060,17 +1064,43 @@
             if (lPadL||lPadR){
                 if (lPadL){
                     tmpPad=tBIGNPadL(hb_parc(1),nPadL,"0");
-                    hb_storclen(tmpPad,nPadL,1);
-                    hb_stornint(nPadL,2);
-                    hb_xfree(tmpPad);
+                    #if 0
+                        hb_storclen(tmpPad,nPadL,1);
+                        hb_xfree(tmpPad);
+                        hb_stornint(nPadL,2);
+                    #else
+                        if( hb_storclen_buffer( tmpPad, nPadL, 1 ) )
+                        {
+                            hb_stornint(nPadL,2);
+                        } 
+                        else{
+                            hb_xfree( tmpPad );
+                            lPadL=HB_FALSE;
+                            lPadR=HB_FALSE;
+                        }                                    
+                    #endif
                 }
                 if (lPadR){
                     tmpPad=tBIGNPadR(hb_parc(3),nPadR,"0");
-                    hb_storclen(tmpPad,nPadR,3);
-                    hb_stornint(nPadR,4);
-                    hb_xfree(tmpPad);
+                    #if 0
+                        hb_storclen(tmpPad,nPadR,3);
+                        hb_xfree(tmpPad);
+                        hb_stornint(nPadR,4);
+                    #else
+                        if( hb_storclen_buffer( tmpPad, nPadR, 3 ) )
+                        {
+                            hb_stornint(nPadR,4);
+                        } 
+                        else{
+                            hb_xfree( tmpPad );
+                            lPadL=HB_FALSE;
+                            lPadR=HB_FALSE;
+                        }                                    
+                    #endif
                 }
-                hb_stornint(nPadL+nPadR,5);
+                if (lPadL||lPadR){
+                    hb_stornint(nPadL+nPadR,5);
+                }
             }
 
             lPadL=nPadL!=nInt2;
@@ -1079,17 +1109,43 @@
             if (lPadL||lPadR){
                 if (lPadL){
                     tmpPad=tBIGNPadL(hb_parc(6),nPadL,"0");
-                    hb_storclen(tmpPad,nPadL,6);
-                    hb_stornint(nPadL,7);
-                    hb_xfree(tmpPad);
+                    #if 0
+                        hb_storclen(tmpPad,nPadL,6);
+                        hb_xfree(tmpPad);
+                        hb_stornint(nPadL,7);
+                    #else
+                            if( hb_storclen_buffer( tmpPad, nPadL, 6 ) )
+                            {
+                                hb_stornint(nPadL,7);
+                            } 
+                            else{
+                                hb_xfree( tmpPad );
+                                lPadL=HB_FALSE;
+                                lPadR=HB_FALSE;
+                            }                                    
+                    #endif
                 }
                 if (lPadR){
                     tmpPad=tBIGNPadR(hb_parc(8),nPadR,"0");
-                    hb_storclen(tmpPad,nPadR,8);
-                    hb_stornint(nPadR,9);
-                    hb_xfree(tmpPad);
+                    #if 0
+                        hb_storclen(tmpPad,nPadR,8);
+                        hb_xfree(tmpPad);
+                        hb_stornint(nPadR,9);
+                    #else
+                            if( hb_storclen_buffer( tmpPad, nPadR, 8 ) )
+                            {
+                                hb_stornint(nPadR,9);
+                            } 
+                            else{
+                                hb_xfree( tmpPad );
+                                lPadL=HB_FALSE;
+                                lPadR=HB_FALSE;
+                            }                                    
+                    #endif
                 }
-                hb_stornint(nPadL+nPadR,10);
+                if (lPadL||lPadR){
+                    hb_stornint(nPadL+nPadR,10);
+                }
             }
        
         }
