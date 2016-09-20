@@ -64,16 +64,16 @@
         static char * remLeft( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );
         /*static char * remRight( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );*/
         static char * tBIGNReverse(const char * szF,const HB_SIZE s);
-        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB);
-        static char * tBigNiADD(char * sN, HB_MAXINT a,const int isN,const HB_MAXINT nB);
-        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB);        
-        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const int isN,const HB_MAXINT nB); 
+        static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB);
+        static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB);
+        static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB);        
+        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB); 
         static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB);
-        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult);        
-        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXINT nB);
+        static void tBIGNegMult(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeMult pegMult);        
+        static char * tBigN2Mult(char * sN,const HB_MAXINT isN,const HB_MAXINT nB);
         static char * tBigNiMult(char * sN,const HB_MAXINT m,const HB_SIZE isN,const HB_MAXINT nB);
-        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeDiv pegDiv);        
-        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXINT nB,ptBIGNeDiv pecDiv);        
+        static void tBIGNegDiv(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeDiv pegDiv);        
+        static void tBIGNecDiv(const char * pA,const char * pB,HB_MAXINT ipN,const HB_MAXINT nB,ptBIGNeDiv pecDiv);        
         static HB_MAXINT tBIGNGCD(HB_MAXINT u,HB_MAXINT v);
         static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y);
         static HB_MAXINT tBIGNFI(HB_MAXINT n);
@@ -239,7 +239,7 @@
             #endif
         }
 
-        static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB){ 
+        static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){ 
             HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%d,%"HB_PFS"u,%d)",a,b,n,y,nB));        
             char * c=(char*)hb_xgrab(y+1);
             HB_SIZE k=y-1;
@@ -277,12 +277,12 @@
             #endif
         }
         
-        static char * tBigNiADD(char * sN, HB_MAXINT a,const int isN,const HB_MAXINT nB){
+        static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBigNiADD(%s,%d,%d,%d)",sN,a,isN,nB));
             HB_BOOL bAdd=HB_TRUE;
             HB_MAXINT v;
             HB_MAXINT v1=0;
-            int i=isN;
+            HB_MAXINT i=isN;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 if (bAdd){
@@ -322,7 +322,7 @@
             hb_retnint((HB_MAXINT)hb_parnint(1)+(HB_MAXINT)hb_parnint(2));
         }
 
-        static char * tBIGNSub(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB){
+        static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%d,%"HB_PFS"u,%d)",a,b,n,y,nB));
             char * c=(char*)hb_xgrab(y+1);
             HB_SIZE k=y-1;
@@ -360,12 +360,12 @@
             #endif
         }
 
-        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const int isN,const HB_MAXINT nB){
+        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBigNiSUB(%s,%d,%d,%d)",sN,s,isN,nB));
             HB_BOOL bSub=HB_TRUE;
             HB_MAXINT v;
             HB_MAXINT v1=0;
-            int i=isN;
+            HB_MAXINT i=isN;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 if (bSub){
@@ -397,7 +397,7 @@
                 hb_retclen(tBigNiSUB(szRet,s,n,nB),n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigNiSUB(szRet,s,(int)n,nB),n);
+                hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),n);
             #endif
         }
         
@@ -407,7 +407,7 @@
 
         static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB){
             
-            HB_TRACE(HB_TR_DEBUG,("tBIGNMult(%s,%s,%"HB_PFS"u,%"HB_PFS"u,%d)",a,b,n,y,nB));
+            HB_TRACE(HB_TR_DEBUG,("tBIGNMult(%s,%s,%"HB_PFS"u,%"HB_PFS"u,%d)",pValue1,pValue2,n,y,nB));
             
             char * a=tBIGNReverse(pValue1,n);
             char * b=tBIGNReverse(pValue2,n);
@@ -508,7 +508,7 @@
                     szPow=tBIGNPadL(szBas,n,"0");
                     szInd=tBigNiSUB(szInd,1,k,nB);
                     y=(n*2);
-                    if (strncmp(szInd,szOne,k)==0){
+                    if (hb_strnicmp(szInd,szOne,k)==0){
                         break;
                     }
             }
@@ -523,7 +523,7 @@
             #endif
         }        
  
-       static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult){
+       static void tBIGNegMult(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeMult pegMult){
 
             HB_TRACE(HB_TR_DEBUG,("tBIGNegMult(%s,%s,%d,%d,%p)",pN,pD,n,nB,pegMult));
         
@@ -641,11 +641,11 @@
             hb_xfree(pegMult);
         }
         
-        static char * tBigN2Mult(char * sN,const int isN,const HB_MAXINT nB){
+        static char * tBigN2Mult(char * sN,const HB_MAXINT isN,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBigN2Mult(%s,%d,%d)",sN,isN,nB));
             HB_MAXINT v;
             HB_MAXINT v1=0;
-            int i=isN;
+            HB_MAXINT i=isN;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 v<<=1;
@@ -710,7 +710,7 @@
             hb_retnint((HB_MAXINT)hb_parnint(1)*(HB_MAXINT)hb_parnint(2));
         }
 
-        static void tBIGNegDiv(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeDiv pegDiv){
+        static void tBIGNegDiv(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeDiv pegDiv){
             
             HB_TRACE(HB_TR_DEBUG,("tBIGNegDiv(%s,%s,%d,%d,%p)",pN,pD,n,nB,pegDiv));
 
@@ -847,7 +847,7 @@
             hb_xfree(pegDiv);
         }
 
-        static void tBIGNecDiv(const char * pA,const char * pB,int ipN,const HB_MAXINT nB,ptBIGNeDiv pecDiv){
+        static void tBIGNecDiv(const char * pA,const char * pB,HB_MAXINT ipN,const HB_MAXINT nB,ptBIGNeDiv pecDiv){
             
             HB_TRACE(HB_TR_DEBUG,("tBIGNecDiv(%s,%s,%d,%d,%p)",pA,pB,ipN,nB,pecDiv));
             
