@@ -298,7 +298,8 @@ class tBigNumber from hbClass
 
     method Mod(uBigN)
 
-    method Pow(uBigN)
+    method Pow(uBigN,lIPower)
+    method iPow(uBigN)
 
     method OpInc()
     method OpDec()
@@ -423,11 +424,11 @@ class tBigNumber from hbClass
         OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
 /*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
 
-        OPERATOR "^"   ARG uBigN INLINE __OpPower("^",self,uBigN)
-        OPERATOR "**"  ARG uBigN INLINE __OpPower("**",self,uBigN)     //(same as "^")
+        OPERATOR "^"   ARGS uBigN,lIPower INLINE __OpPower("^",self,uBigN,lIPower)
+        OPERATOR "**"  ARGS uBigN,lIPower INLINE __OpPower("**",self,uBigN,lIPower)     //(same as "^")
 
-/*(*)*/ OPERATOR "^="  ARG uBigN INLINE __OpPower("^=",self,uBigN)
-/*(*)*/ OPERATOR "**=" ARG uBigN INLINE __OpPower("**=",self,uBigN)    //(same as "^=")
+/*(*)*/ OPERATOR "^="  ARGS uBigN,lIPower INLINE __OpPower("^=",self,uBigN,lIPower)
+/*(*)*/ OPERATOR "**=" ARGS uBigN,lIPower INLINE __OpPower("**=",self,uBigN,lIPower)    //(same as "^=")
 
         OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
 
@@ -1082,9 +1083,20 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
     DEFAULT lLZRmv:=(self:nBase==10)
     if lLZRmv
-        while self:nInt>1.and.Left(self:cInt,1)=="0"
-            self:cInt:=Right(self:cInt,--self:nInt)
-        end while
+        #ifdef __HARBOUR__
+            if self:nInt>1.and.Left(self:cInt,1)=="0"
+                self:cInt:=RemLeft(self:cInt,"0")
+                self:nInt:=hb_bLen(self:cInt)
+                if (self:nInt==0)
+                    self:cInt:="0"
+                    self:nInt:=1
+                endif
+            endif
+        #else //__PROTEUS__
+            while self:nInt>1.and.Left(self:cInt,1)=="0"
+                self:cInt:=Right(self:cInt,--self:nInt)
+            end while
+        #endif //__HARBOUR__
     endif
 
     DEFAULT nAcc:=s__nDecSet
@@ -2266,9 +2278,9 @@ return(oMod)
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:05/03/2013
     Descricao:Calculo de Potencia n^x
-    Sintaxe:tBigNumber():Pow(uBigN) -> oBigNR
+    Sintaxe:tBigNumber():Pow(uBigN,lIPower) -> oBigNR
 */
-method Pow(uBigN) class tBigNumber
+method Pow(uBigN,lIPower) class tBigNumber
 
     local oSelf:=self:Clone()
 
@@ -2350,7 +2362,8 @@ method Pow(uBigN) class tBigNumber
 
         endif
 
-        opwNR:SetValue(Power(opwNR,opwNP))
+        DEFAULT lIPower:=.F.
+        opwNR:SetValue(Power(opwNR,opwNP,lIPower))
 
         if lPowF
             opwNR:SetValue(opwNR:nthRoot(opwB))
@@ -2363,6 +2376,16 @@ method Pow(uBigN) class tBigNumber
     endif
 
 return(opwNR)
+
+/*
+    method:iPow
+    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+    Data:19/09/2016
+    Descricao:Calculo de Potencia de Inteiros n^x
+    Sintaxe:tBigNumber():iPow(uBigN) -> oBigNR
+*/
+method iPow(uBigN) class tBigNumber
+return(self:Pow(uBigN,.T.))
 
 /*
     method:OpInc
@@ -5257,15 +5280,15 @@ return(r)
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:26/08/2014
     Descricao:Exponenciação de Números Inteiros
-    Sintaxe:Power(oB,oE)
+    Sintaxe:Power(oB,oE,lIPower)
 */
-static function Power(oB,oE)
+static function Power(oB,oE,lIPower)
 #ifdef TBIGN_RECPOWER
     /*
         TODO:   This application has requested the Runtime to terminate it in an unusual way
                 Please contact the application's support team for more information.
     */
-    return(recPower(oB,oE))
+    return(recPower(oB,oE,lIPower))
     /*
         function:recPower
         Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -5288,7 +5311,7 @@ static function Power(oB,oE)
                                             2048
         //-------------------------------------------------------------------------------------
     */
-    static function recPower(oB,oE)
+    static function recPower(oB,oE,lIPower)
 
         local oR:=oB:Clone()
 
@@ -5297,12 +5320,24 @@ static function Power(oB,oE)
         local oE2
 
         if oE:lte(s__o2)
-
-            oI:=oE:Clone()
-            while oI:gt(s__o1)
-                oR:SetValue(oR:Mult(oB))
-                oI:OpDec()
-            end while
+            #ifdef __PTCOMPAT__
+                oI:=oE:Clone()
+                while oI:gt(s__o1)
+                    oR:SetValue(oR:Mult(oB))
+                    oI:OpDec()
+                end while
+            #else //__HARBOUR__
+                if .not.(lIPower)
+                    oI:=oE:Clone()
+                    while oI:gt(s__o1)
+                        oR:SetValue(oR:Mult(oB))
+                        oI:OpDec()
+                    end while
+                else
+                    oB:Normalize(@oE)
+                    oR:SetValue(TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase()))
+                endif
+            #endif //__PTCOMPAT__
             return(oR)
         endif
 
@@ -5314,14 +5349,26 @@ static function Power(oB,oE)
         oE1:SetValue(oE1:Mult(s__od2):Int(.T.,.F.))
         oE2:SetValue(oE2:Sub(oE1))
 
-        return(recPower(oB,oE1):Mult(recPower(oB,oE2)))
+        return(recPower(oB,oE1,lIPower):Mult(recPower(oB,oE2,lIPower)))
 #else
     local oR:=oB:Clone()
     local oI:=oE:Clone()
-    while oI:gt(s__o1)
-        oR:SetValue(oR:Mult(oB))
-        oI:OpDec()
-    end while
+    #ifdef __PTCOMPAT__
+        while oI:gt(s__o1)
+            oR:SetValue(oR:Mult(oB))
+            oI:OpDec()
+        end while
+    #else //__HARBOUR__
+        if .not.(lIPower)
+            while oI:gt(s__o1)
+                oR:SetValue(oR:Mult(oB))
+                oI:OpDec()
+            end while
+        else
+            oB:Normalize(@oE)
+            oR:SetValue(TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase()))
+        endif
+    #endif //__PTCOMPAT__
 return(oR)
 #endif
 
@@ -5496,6 +5543,7 @@ return
             TBIGNSQRT()
             TBIGNLOG()
             S__INCS9()
+            TBIGNPOWER()
             #ifndef __PTCOMPAT__
                 THADD()
                 THDIV()

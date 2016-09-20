@@ -4228,12 +4228,11 @@ static procedure tBigNtst37(fhLog)
 
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
 
-    Local cX        AS CHARACTER
     Local cW        AS CHARACTER
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste BIG Mersenne number -------------- ")
+    __ConOut(fhLog,"BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
     IF hb_mutexLock(__phMutex,0)
        __oRTime1:SetRemaining(1)
@@ -4247,13 +4246,11 @@ static procedure tBigNtst37(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+')',":...")
+    __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',":...")
 
-    otBigW:SetValue(otBigW:Pow(cCN_MERSENNE_POW))
-    ASSIGN cX:=otBigW:ExactValue()
+    otBigW:SetValue(otBigW:iPow(cCN_MERSENNE_POW)):OpDec()
     ASSIGN cW:=otBigW:OpDec():ExactValue()
-    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+')',"RESULT: "+cX)
-    __ConOut(fhLog,'2:tBigNumber():Pow('+cCN_MERSENNE_POW+'):OpDec()',"RESULT: "+cW)
+    __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',"RESULT: "+cW)
     IF hb_mutexLock(__phMutex,0)
         __oRTime2:ForceStep(.F.)
         __oRTime2:Calcule()
@@ -4267,7 +4264,7 @@ static procedure tBigNtst37(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,"------------ Teste BIG Mersenne number -------------- END")
+    __ConOut(fhLog,"------------ Teste BIG Mersenne Number -------------- END")
 
     __ConOut(fhLog,"")
 

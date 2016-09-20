@@ -42,6 +42,10 @@
         #define DO_PAD_PADLEFT   0
         #define DO_PAD_PADRIGHT  1
         
+        #define DO_REMOVE_REMALL    0
+        #define DO_REMOVE_REMLEFT   1
+        #define DO_REMOVE_REMRIGHT  2
+        
         typedef struct{
             char * cMultM;
             char * cMultP;
@@ -55,6 +59,10 @@
         static char * do_pad( int iSwitch, const char * pcString, HB_ISIZ nRetLen , const char cFill );
         static char * tBIGNPadL(const char * szItem,HB_ISIZ nLen,const char * szPad);
         static char * tBIGNPadR(const char * szItem,HB_ISIZ nLen,const char * szPad);
+        static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch );
+        /*static char * remAll( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );*/
+        static char * remLeft( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );
+        /*static char * remRight( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );*/
         static char * tBIGNReverse(const char * szF,const HB_SIZE s);
         static char * tBIGNAdd(const char * a,const char * b,int n,const HB_SIZE y,const HB_MAXINT nB);
         static char * tBigNiADD(char * sN, HB_MAXINT a,const int isN,const HB_MAXINT nB);
@@ -110,6 +118,7 @@
                        *pc = cFill;
                  }
               }
+              pcRet[( sRetLen > sStrLen ? sRetLen : sStrLen )]='\0';
               return pcRet;
         }
        
@@ -148,6 +157,63 @@
                 hb_retclen_buffer(szRet,(HB_SIZE)nLen);
             #endif
         }
+        
+        
+        static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
+        {
+
+              const char * pcTmp;
+              const char * pc;
+              HB_SIZE sRetLen;
+
+              sRetLen = sStrLen;
+              pcTmp = pcString;
+              
+              if( iSwitch != DO_REMOVE_REMRIGHT )
+              {
+                 while( ( *pcTmp == *cSearch ) && ( pcTmp < pcString + sStrLen ) )
+                 {
+                    pcTmp++;
+                    sRetLen--;
+                 }
+              }
+
+              if( iSwitch != DO_REMOVE_REMLEFT )
+              {
+                 pc = pcString + sStrLen - 1;
+                 while( ( *pc == *cSearch ) && ( pc >= pcTmp ) )
+                 {
+                    pc--;
+                    sRetLen--;
+                 }
+              }
+             
+              if( sRetLen == 0 )
+                 return tBIGNPadL("0",1,"0");
+              else
+              {
+                  char * pcRet=(char*)hb_xgrab(sRetLen+1);
+                  hb_xmemcpy(pcRet,pcTmp,sRetLen);
+                  pcRet[sRetLen]='\0';
+                  return pcRet;
+              }           
+        }
+
+        
+        /*static char * remAll( const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
+        {
+           return do_remove( DO_REMOVE_REMALL, pcString, sStrLen, cSearch );
+        }*/
+
+        static char * remLeft( const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
+        {
+           return do_remove( DO_REMOVE_REMLEFT, pcString, sStrLen, cSearch );
+        }
+
+        /*static char * remRight( const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
+        {
+           return do_remove( DO_REMOVE_REMRIGHT, pcString, sStrLen, cSearch );
+        }*/        
 
         static char * tBIGNReverse(const char * szF,const HB_SIZE s){
             HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%"HB_PFS"u,)",szF,s));
@@ -345,7 +411,7 @@
             
             char * a=tBIGNReverse(pValue1,n);
             char * b=tBIGNReverse(pValue2,n);
-            char * c=(char*)hb_xgrab(y+1);
+            char * c=tBIGNPadL("0",y,"0");
             
             HB_SIZE i=0;
             HB_SIZE k=0;
@@ -400,9 +466,9 @@
 
             hb_xfree(a);
             hb_xfree(b);            
-            
-            char * r=tBIGNReverse(c,y);
 
+            char * r=remLeft((const char *)tBIGNReverse(c,y),y,"0");
+           
             hb_xfree(c);
 
             return r;
@@ -410,18 +476,54 @@
 
         HB_FUNC_STATIC( TBIGNMULT ){
             HB_SIZE n=(HB_SIZE)hb_parnint(3);
-            const HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
+            HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             char * szRet=tBIGNMult(hb_parc(1),hb_parc(2),n,y,nB);
             #if 0
-                hb_retclen(szRet,y);
+                hb_retclen(szRet,strlen(szRet));
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,y);
+                hb_retclen_buffer(szRet,strlen(szRet));
             #endif
         }
 
-        static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult){
+        HB_FUNC_STATIC( TBIGNPOWER ){
+            const char * szBas=hb_parc(1);
+            const char * szExp=hb_parc(2);
+            HB_SIZE n=(HB_SIZE)hb_parnint(3);
+            HB_SIZE k=n;
+            HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
+            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            char * szInd=hb_strdup(szExp);
+            char * szRet=hb_strdup(szBas);
+            char * szPow=hb_strdup(szBas);
+            char * szOne=tBIGNPadL("1",k,"0");
+            while (HB_TRUE)
+            {
+                    const char * pow=tBIGNMult(szRet,szPow,n,y,nB);
+                    hb_xfree(szPow);
+                    hb_xfree(szRet);
+                    n=strlen(pow);
+                    szRet=tBIGNPadL(pow,n,"0");
+                    szPow=tBIGNPadL(szBas,n,"0");
+                    szInd=tBigNiSUB(szInd,1,k,nB);
+                    y=(n*2);
+                    if (strncmp(szInd,szOne,k)==0){
+                        break;
+                    }
+            }
+            hb_xfree(szPow);
+            hb_xfree(szInd);
+            hb_xfree(szOne);
+            #if 0
+                hb_retclen(szRet,n);
+                hb_xfree(szRet);
+            #else
+                hb_retclen_buffer(szRet,n);
+            #endif
+        }        
+ 
+       static void tBIGNegMult(const char * pN,const char * pD,int n,const HB_MAXINT nB,ptBIGNeMult pegMult){
 
             HB_TRACE(HB_TR_DEBUG,("tBIGNegMult(%s,%s,%d,%d,%p)",pN,pD,n,nB,pegMult));
         
