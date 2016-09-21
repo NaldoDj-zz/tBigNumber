@@ -229,7 +229,8 @@
         /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
-
+        *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
+        
         ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
@@ -341,12 +342,24 @@
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
+        *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
+        myGTIEvent()
         tBigNtst({atBigNtst})
         hb_gtSelect(pGT)
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         atBigNtst[3]:=NIL
         tBigNGC()
     Return(.T.)
+    
+    //--------------------------------------------------------------------------------------------------------
+    static Procedure myGTIEvent(nEvent,...)
+        switch nEvent
+            case HB_GTE_CLOSE
+                QUIT
+                exit
+        endswitch
+    return
+    
     //--------------------------------------------------------------------------------------------------------
     Static Procedure tBigNtst(atBigNtst)
 
@@ -739,6 +752,7 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
                 atBigNtst[nD][3]:=hb_gtCreate(THREAD_GT)
                 pGT:=hb_gtSelect(atBigNtst[nD][3])
                 hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
+                *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
                 hb_gtSelect(pGT)
                 atBigNtst[nD][4]:=nD
                 atBigNtst[nD][5]:=hb_NtoS(nD)
@@ -4248,7 +4262,7 @@ static procedure tBigNtst37(fhLog)
 
     __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',":...")
 
-    otBigW:SetValue(otBigW:iPow(cCN_MERSENNE_POW)):OpDec()
+    otBigW:SetValue(otBigW:iPow(cCN_MERSENNE_POW))
     ASSIGN cW:=otBigW:OpDec():ExactValue()
     __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',"RESULT: "+cW)
     IF hb_mutexLock(__phMutex,0)
