@@ -5208,7 +5208,9 @@ return(r)
             return(cGetcN(c,y))
         #else //__HARBOUR__
             static function Mult(a,b,n,nB)
-            return(tBIGNMULT(a,b,n,n,nB))
+                local y:=n
+                local cN:=tBIGNMULT(a,b,n,y,nB)
+            return(cN)
         #endif //__PTCOMPAT__
 
         /*

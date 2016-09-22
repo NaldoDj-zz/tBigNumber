@@ -8,6 +8,8 @@
 
 -mt
 
+#-cflag=-DHB_TR_LEVEL_DEBUG
+
 -i../include
 -i../../core/contrib/xhb
 

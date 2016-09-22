@@ -65,7 +65,22 @@
 #define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
 #define AC_TSTEXEC        "1:17,-18,19:37"
-#define CN_MERSENNE_POW      "2"
+//--------------------------------------------------------------------------------------------------------
+//Mersenne:
+//http://mathworld.wolfram.com/MersennePrime.html
+//https://en.wikipedia.org/wiki/Mersenne_prime
+#ifdef __HARBOUR__
+    #ifdef __PTCOMPAT__
+        //1,279 -> 15 Mersenne prime List 
+        #define CN_MERSENNE_POW "1279"    
+    #else
+         //6,972,593 -> 38 Mersenne prime List
+        #define CN_MERSENNE_POW "6972593"
+    #endif //__PTCOMPAT__
+#else //__PROTHEUS__
+    //1,279 -> 15 Mersenne prime List
+    #define CN_MERSENNE_POW     "1279"    
+#endif //__HARBOUR__
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
 #define __NRTTST__         37
