@@ -129,14 +129,14 @@
 
         HB_FUNC_STATIC( TBIGNPADL ){      
             const char * szItem=hb_parc(1);
-            HB_SIZE nLen=hb_parns(2);
+            HB_SIZE nLen=(HB_SIZE)hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadL(szItem,nLen,szPad);
             #if 0
-                hb_retclen(szRet,(HB_SIZE)nLen);
+                hb_retclen(szRet,nLen);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,(HB_SIZE)nLen);
+                hb_retclen_buffer(szRet,nLen);
             #endif
         }
 
@@ -147,14 +147,14 @@
        
         HB_FUNC_STATIC( TBIGNPADR ){
             const char * szItem=hb_parc(1);
-            HB_SIZE nLen=hb_parns(2);
+            HB_SIZE nLen=(HB_SIZE)hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadR(szItem,nLen,szPad);
             #if 0
-                hb_retclen(szRet,(HB_SIZE)nLen);
+                hb_retclen(szRet,nLen);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,(HB_SIZE)nLen);
+                hb_retclen_buffer(szRet,nLen);
             #endif
         }
         
@@ -267,10 +267,10 @@
         HB_FUNC_STATIC( TBIGNADD ){    
             const char * a=hb_parc(1);
             const char * b=hb_parc(2);
-            HB_SIZE n=(HB_SIZE)hb_parnint(3);
+            HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)+1);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
-            char * szRet=tBIGNAdd(a,b,(int)n,y,nB);
+            char * szRet=tBIGNAdd(a,b,n,y,nB);
             #if 0
                 hb_retclen(szRet,y);
                 hb_xfree(szRet);
@@ -309,15 +309,15 @@
         }
         
         HB_FUNC_STATIC( TBIGNIADD ){
-            HB_SIZE n=(HB_SIZE)(hb_parclen(1)+1);
+            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
             #if 0
-                hb_retclen(tBigNiADD(szRet,a,(int)n,nB),n);
+                hb_retclen(tBigNiADD(szRet,a,n,nB),n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigNiADD(szRet,a,(int)n,nB),n);
+                hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),n);
             #endif
         }
         
@@ -352,15 +352,15 @@
         HB_FUNC_STATIC( TBIGNSUB ){    
             const char * a=hb_parc(1);
             const char * b=hb_parc(2);
-            HB_SIZE n=(HB_SIZE)hb_parnint(3);
-            const HB_SIZE y=n;
+            HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
+            const HB_SIZE y=(HB_SIZE)n;
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
-            char * szRet=tBIGNSub(a,b,(int)n,y,nB);
+            char * szRet=tBIGNSub(a,b,n,y,nB);
             #if 0
-                hb_retclen(szRet,y);
-                hb_xfree(szRet);
-            #else
                 hb_retclen_buffer(szRet,y);
+            #else
+                hb_retclen(szRet,y);
+                hb_xfree(szRet);                
             #endif
         }
 
@@ -524,11 +524,11 @@
                     {
                        hb_xmemcpy(szRet,pow,n); 
                     }
-                    hb_xfree((void*)pow);
+                    hb_xfree((char*)pow);
                     t=k;
                     const char * tmp=tBigNiSUB(szInd,1,k,nB);
                     szInd=remLeft(tmp,k,"0");
-                    hb_xfree((void*)tmp);
+                    hb_xfree((char*)tmp);
                     k=(HB_SIZE)strlen(szInd);
                     if (!(k==t))
                     {
@@ -648,14 +648,14 @@
         
         HB_FUNC_STATIC( TBIGNEGMULT ){
             
-            HB_SIZE n=(HB_SIZE)(hb_parnint(3)*2);            
+            HB_MAXINT n=(HB_MAXINT)(hb_parnint(3)*2);            
             char * pN=tBIGNPadL(hb_parc(1),n,"0");
             char * pD=tBIGNPadL(hb_parc(2),n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
             
             ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
             
-            tBIGNegMult(pN,pD,(int)n,nB,pegMult);
+            tBIGNegMult(pN,pD,n,nB,pegMult);
         
             #if 0
                 hb_retclen(pegMult->cMultP,n);
@@ -691,14 +691,14 @@
         }
 
         HB_FUNC_STATIC( TBIGN2MULT ){
-            HB_SIZE n=(HB_SIZE)(hb_parclen(1)+1);
+            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(2);
             #if 0
-                hb_retclen(tBigN2Mult(szRet,(int)n,nB),n);
+                hb_retclen(tBigN2Mult(szRet,n,nB),n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigN2Mult(szRet,(int)n,nB),n);
+                hb_retclen_buffer(tBigN2Mult(szRet,n,nB),n);
             #endif
         }
 
@@ -839,7 +839,7 @@
         
         HB_FUNC_STATIC( TBIGNEGDIV ){
 
-            HB_SIZE n=(HB_SIZE)(hb_parnint(4)+1); 
+            HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1); 
             char * pN=tBIGNPadL(hb_parc(1),n,"0");
             char * pD=tBIGNPadL(hb_parc(2),n,"0");
             ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
@@ -858,7 +858,7 @@
                 }
                 default:{
                     const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
-                    tBIGNegDiv(pN,pD,(int)n,nB,pegDiv);
+                    tBIGNegDiv(pN,pD,n,nB,pegDiv);
                 }
             }
             
@@ -990,7 +990,7 @@
         
         HB_FUNC_STATIC( TBIGNECDIV ){
             
-            HB_SIZE n=(HB_SIZE)(hb_parnint(4)+1);
+            HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1);
             char * pN=tBIGNPadL(hb_parc(1),n,"0");
             char * pD=tBIGNPadL(hb_parc(2),n,"0");
             ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
@@ -1009,7 +1009,7 @@
                 }
                 default:{
                     const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
-                    tBIGNecDiv(pN,pD,(int)n,nB,pecDiv);
+                    tBIGNecDiv(pN,pD,n,nB,pecDiv);
                 }
             }
             

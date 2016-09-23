@@ -33,7 +33,7 @@
         MEMVAR lL_LOGPROCESS
         MEMVAR cC_GT_MODE
         MEMVAR aAC_TSTEXEC
-        MEMVAR cCN_MERSENNE_POW
+        MEMVAR aACN_MERSENNE_POW
         MEMVAR __oRTime1
         MEMVAR __oRTime2
         MEMVAR __nMaxRow
@@ -71,15 +71,15 @@
 //https://en.wikipedia.org/wiki/Mersenne_prime
 #ifdef __HARBOUR__
     #ifdef __PTCOMPAT__
-        //1,279 -> 15 Mersenne prime List 
-        #define CN_MERSENNE_POW "1279"    
+        //1..15 Mersenne prime List 
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"    
     #else
-         //6,972,593 -> 38 Mersenne prime List
-        #define CN_MERSENNE_POW "6972593"
+         //1..38 Mersenne prime List
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"
     #endif //__PTCOMPAT__
 #else //__PROTHEUS__
-    //1,279 -> 15 Mersenne prime List
-    #define CN_MERSENNE_POW     "1279"    
+    //1..15 Mersenne prime List
+    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"    
 #endif //__HARBOUR__
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
@@ -135,7 +135,7 @@
         Private lL_LOGPROCESS
         Private cC_GT_MODE
         Private aAC_TSTEXEC
-        Private cCN_MERSENNE_POW
+        Private aACN_MERSENNE_POW
         Private lDispML:=.T.
 
         #ifdef __HBSHELL_USR_DEF_GT
@@ -155,7 +155,7 @@
             hIni["GENERAL"]["L_LOGPROCESS"]:=L_LOGPROCESS
             hIni["GENERAL"]["C_GT_MODE"]:=C_GT_MODE
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
-            hIni["GENERAL"]["CN_MERSENNE_POW"]:=CN_MERSENNE_POW
+            hIni["GENERAL"]["ACN_MERSENNE_POW"]:=ACN_MERSENNE_POW
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#End of file")
         Else
             FOR EACH cSection IN hIni:Keys
@@ -195,8 +195,8 @@
                         CASE "AC_TSTEXEC"
                             aAC_TSTEXEC:=_StrToKArr(AllTrim(aSect[cKey]),",")
                             EXIT
-                        CASE "CN_MERSENNE_POW"
-                            cCN_MERSENNE_POW:=AllTrim(aSect[cKey])
+                        CASE "ACN_MERSENNE_POW"
+                            aACN_MERSENNE_POW:=_StrToKArr(AllTrim(aSect[cKey]),",")
                             EXIT
                     ENDSWITCH
                 NEXT cKey
@@ -214,7 +214,7 @@
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        cCN_MERSENNE_POW:=IF(Empty(cCN_MERSENNE_POW),CN_MERSENNE_POW,cCN_MERSENNE_POW)
+        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrToKArr(AllTrim(ACN_MERSENNE_POW),","),aACN_MERSENNE_POW)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -403,7 +403,7 @@
         Private lL_LOGPROCESS
         Private cC_GT_MODE
         Private aAC_TSTEXEC
-        Private cCN_MERSENNE_POW
+        Private aACN_MERSENNE_POW
 
         IF FindFunction("U_TFINI") //NDJLIB020.PRG
             otFIni:=U_TFINI(cIni)
@@ -420,7 +420,7 @@
                 otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
                 otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                 otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
-                otFIni:AddNewProperty("GENERAL","CN_MERSENNE_POW",CN_MERSENNE_POW)
+                otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)
                 otFIni:SaveAs(cIni)
             Else
                 nACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
@@ -434,7 +434,7 @@
                 lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                 cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
                 aAC_TSTEXEC:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
-                cCN_MERSENNE_POW:=AllTrim(oTFINI:GetPropertyValue("GENERAL","CN_MERSENNE_POW",CN_MERSENNE_POW))
+                aACN_MERSENNE_POW:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)),",")
             EndIF
         EndIF
 
@@ -449,7 +449,7 @@
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        cCN_MERSENNE_POW:=IF(Empty(cCN_MERSENNE_POW),CN_MERSENNE_POW,cCN_MERSENNE_POW)
+        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrToKArr(ACN_MERSENNE_POW,","),aACN_MERSENNE_POW)
         __nSLEEP:=Max(__nSLEEP,10)
 
         IF ((__nSLEEP)<10)
@@ -1352,8 +1352,7 @@ static procedure tBigNtst01(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,"BEGIN ------------ Teste MOD 0 -------------- ")
-
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste MOD 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1420,7 +1419,7 @@ static procedure tBigNtst02(fhLog)
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
     #ifndef __PROTHEUS__
-        __ConOut(fhLog,"BEGIN ------------ Teste Operator Overloading 0 -------------- ")
+        __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
 
         otBigN:SetDecimals(nACC_SET)
         otBigW:SetDecimals(nACC_SET)
@@ -1550,8 +1549,7 @@ static procedure tBigNtst03(fhLog)
 
    __ConOut(fhLog,"")
 
-    __ConOut(fhLog,"BEGIN ------------ Teste Prime 0 -------------- ")
-
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -1638,7 +1636,7 @@ static procedure tBigNtst04(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste Prime 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 1 -------------- ")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -1704,7 +1702,7 @@ static procedure tBigNtst05(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste HEX16 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX16 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1776,7 +1774,7 @@ static procedure tBigNtst06(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste HEX32 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX32 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1850,7 +1848,7 @@ static procedure tBigNtst07(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ ADD Teste 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1920,7 +1918,7 @@ static procedure tBigNtst08(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ ADD Teste 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -1988,7 +1986,7 @@ static procedure tBigNtst09(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ ADD Teste 3 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 3 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2052,7 +2050,7 @@ static procedure tBigNtst10(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ SUB Teste 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2116,7 +2114,7 @@ static procedure tBigNtst11(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ SUB Teste 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2178,7 +2176,7 @@ static procedure tBigNtst12(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ SUB Teste 3 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 3 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2244,7 +2242,7 @@ static procedure tBigNtst13(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ MULT Teste 1 -------------- ")
+   __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -2325,7 +2323,7 @@ static procedure tBigNtst14(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ MULT Teste 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2401,7 +2399,7 @@ static procedure tBigNtst15(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ MULT Teste 3 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 3 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
 
@@ -2474,7 +2472,7 @@ static procedure tBigNtst16(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ MULT Teste 4 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 4 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
 
@@ -2557,7 +2555,7 @@ static procedure tBigNtst17(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ MULT Teste 5 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 5 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
 
@@ -2636,7 +2634,7 @@ static procedure tBigNtst18(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ MULT Teste 6 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 6 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
 
@@ -2713,7 +2711,7 @@ static procedure tBigNtst19(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Factoring -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Factoring -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2776,7 +2774,7 @@ static procedure tBigNtst20(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste GCD/LCM 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste GCD/LCM 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2844,7 +2842,7 @@ static procedure tBigNtst21(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ DIV Teste 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -2927,7 +2925,7 @@ static procedure tBigNtst22(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ DIV Teste 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -2996,7 +2994,7 @@ static procedure tBigNtst23(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ DIV Teste 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -3063,7 +3061,7 @@ static procedure tBigNtst24(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste FI 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste FI 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigW:SetDecimals(nACC_SET)
@@ -3124,7 +3122,7 @@ static procedure tBigNtst25(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,"BEGIN ------------ Teste SQRT 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3200,7 +3198,7 @@ static procedure tBigNtst26(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,"BEGIN ------------ Teste SQRT 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3273,7 +3271,7 @@ static procedure tBigNtst27(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Exp 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Exp 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3347,7 +3345,7 @@ static procedure tBigNtst28(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Pow 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3437,7 +3435,7 @@ static procedure tBigNtst29(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Pow 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3518,7 +3516,7 @@ static procedure tBigNtst30(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Pow 2 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 2 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -3590,7 +3588,7 @@ static procedure tBigNtst31(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste LOG 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 0 -------------- ")
 
     IF hb_mutexLock(__phMutex,0)
         __oRTime1:SetRemaining(13)
@@ -3917,7 +3915,7 @@ static procedure tBigNtst32(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"BEGIN ------------ Teste LOG 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 1 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
     otBigN:nthRootAcc(nROOT_ACC_SET)
@@ -4008,7 +4006,7 @@ static procedure tBigNtst33(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste LN 1 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LN 1 -------------- ")
 
     otBigW:SetDecimals(nACC_SET)
     otBigW:nthRootAcc(nROOT_ACC_SET)
@@ -4073,7 +4071,7 @@ static procedure tBigNtst34(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste millerRabin 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste millerRabin 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -4140,7 +4138,7 @@ static procedure tBigNtst35(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -4197,9 +4195,9 @@ static procedure tBigNtst36(fhLog)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-   __ConOut(fhLog,"")
+    __ConOut(fhLog,"")
 
-   __ConOut(fhLog,"BEGIN ------------ Teste Fibonacci -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci -------------- ")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -4256,18 +4254,20 @@ return
 static procedure tBigNtst37(fhLog)
 
     Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
+    Local otBigM    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
 
-    Local cW        AS CHARACTER
+    Local cM        AS CHARACTER
+    Local cR        AS CHARACTER
+    
+    Local nD        AS NUMBER
+    Local nJ        AS NUMBER VALUE Len(aACN_MERSENNE_POW)
 
     PARAMTYPE 1 VAR fhLog AS NUMBER
 
-    __ConOut(fhLog,"BEGIN ------------ Teste BIG Mersenne Number -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
     IF hb_mutexLock(__phMutex,0)
-       __oRTime1:SetRemaining(1)
-       __oRTime2:SetRemaining(1)
-       __oRTime2:SetStep(1/1000)
-       __oRTime2:ForceStep(.T.)
+       __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     EndIF
 
@@ -4275,19 +4275,32 @@ static procedure tBigNtst37(fhLog)
 
     __ConOut(fhLog,"")
 
-    __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',":...")
+    for nD:=1 to nJ
+        IF hb_mutexLock(__phMutex,0)
+           __oRTime2:SetRemaining(1)
+           __oRTime2:SetStep(1/1000)
+           __oRTime2:ForceStep(.T.)
+           hb_mutexUnLock(__phMutex)
+        EndIF
+        ASSIGN cM:=aACN_MERSENNE_POW[nD]
+        __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',":...")
+        otBigM:SetValue(otBigW:iPow(cM))
+        ASSIGN cR:=otBigM:OpDec():ExactValue()
+        otBigM:SetValue("0")
+        __ConOut(fhLog,otBigW:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
+        IF hb_mutexLock(__phMutex,0)
+            __oRTime2:ForceStep(.F.)
+            __oRTime2:Calcule()
+            __oRTime1:Calcule()
+            __ConOut(fhLog,__cSep)
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+            hb_mutexUnLock(__phMutex)
+        EndIF
+        *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+        __ConOut(fhLog,__cSep)        
+    next nD
 
-    otBigW:SetValue(otBigW:iPow(cCN_MERSENNE_POW))
-    ASSIGN cW:=otBigW:OpDec():ExactValue()
-    __ConOut(fhLog,'2:tBigNumber():iPow('+cCN_MERSENNE_POW+'):OpDec()',"RESULT: "+cW)
-    IF hb_mutexLock(__phMutex,0)
-        __oRTime2:ForceStep(.F.)
-        __oRTime2:Calcule()
-        __oRTime1:Calcule()
-        __ConOut(fhLog,__cSep)
-        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
-        hb_mutexUnLock(__phMutex)
-    EndIF
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
     __ConOut(fhLog,__cSep)
 
