@@ -4,6 +4,7 @@
 *.tmp
 *.temp
 *.log
+*.trc
 *.scc
 *.old
 *.err*
@@ -30,6 +31,7 @@ mg_error_log.htm
 /tbigN_err
 /tbigN_log
 /tbigN_tmp
+/tbigN_trc
 /exe/win/mingw/*
 /exe/win/mingw64/*
 /exe/mg/mingw/*

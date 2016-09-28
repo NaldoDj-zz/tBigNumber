@@ -7,7 +7,7 @@ SET > env_mkall.txt
     rem ============================================================================
     SET HB_BUILD_MODE=cpp
     SET HB_USER_CFLAGS=-DHB_FM_STATISTICS
-    SET HB_TR_LEVEL=DEBUG
+    SET HB_TR_LEVEL=HB_TR_DEBUG
     SET HB_TR_SYSOUT=Y
     SET HB_TR_WINOUT=1
     SET HB_TR_OUTPUT=hb_trace_dbg.log
@@ -24,7 +24,7 @@ SET > env_mkall.txt
     rem ============================================================================
     SET HB_BUILD_MODE=cpp
     SET HB_USER_CFLAGS=-DHB_FM_STATISTICS
-    SET HB_TR_LEVEL=DEBUG
+    SET HB_TR_LEVEL=HB_TR_DEBUG
     SET HB_TR_SYSOUT=Y
     SET HB_TR_WINOUT=1
     SET HB_TR_OUTPUT=hb_trace_dbg.log
@@ -41,7 +41,7 @@ SET > env_mkall.txt
     rem ============================================================================
     SET HB_BUILD_MODE=cpp
     SET HB_USER_CFLAGS=-DHB_FM_STATISTICS
-    SET HB_TR_LEVEL=DEBUG
+    SET HB_TR_LEVEL=HB_TR_DEBUG
     SET HB_TR_SYSOUT=Y
     SET HB_TR_WINOUT=1
     SET HB_TR_OUTPUT=hb_trace_dbg.log

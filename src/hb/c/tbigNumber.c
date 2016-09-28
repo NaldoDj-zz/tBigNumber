@@ -545,10 +545,15 @@
             hb_xfree(szInd);
             hb_xfree(szOne);
             #if 0
-                hb_retclen(szRet,n);
+                hb_retc(szRet);
                 hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(szRet,n);
+            #else 
+                #if 0
+                    hb_retclen(szRet,n);
+                    hb_xfree(szRet);
+                #else
+                    hb_retclen_buffer(szRet,n);
+                #endif
             #endif
         }        
  
