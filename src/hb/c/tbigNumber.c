@@ -34,6 +34,8 @@
         #include <hbmather.h>
         #include <hbapierr.h>
         
+        #include <..\include\c\try_throw_catch.h>
+        
         #ifdef _MSC_VER
             #define _CRT_SECURE_NO_WARNINGS
             #pragma warning(disable:4996)

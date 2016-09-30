@@ -2,7 +2,7 @@
 #-d__HB_Q_SQRT__
 #-d__PTCOMPAT__
 #-d__ALT_D__
--dTBIGN_RECPOWER
+#-dTBIGN_RECPOWER
 #-d__LMETHOD__
 -cflag=-DHB_TR_LEVEL_DEBUG
 
