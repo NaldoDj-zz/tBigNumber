@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-10-04 19:34 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * hbp/tBigNtst.hbp
+  * src/hb/c/tbigNumber.c
+ 
 2016-09-30 00:23 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   + include/c/try_throw_catch.h
   * bin/commit.hb

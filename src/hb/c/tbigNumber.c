@@ -96,7 +96,7 @@
               HB_SIZE sStrLen = ( HB_SIZE ) strlen( pcString );
               HB_SIZE sRetLen = ( HB_SIZE ) nRetLen;
 
-              pcRet = ( char * ) hb_xgrab( sRetLen + 1 );
+              pcRet = ( char * ) hb_xgrab( ( HB_SIZE )sRetLen + 1 );
 
               if( iSwitch == DO_PAD_PADLEFT )
               {
@@ -135,10 +135,10 @@
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadL(szItem,nLen,szPad);
             #if 0
-                hb_retclen(szRet,nLen);
+                hb_retclen(szRet,( HB_SIZE )nLen);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,nLen);
+                hb_retclen_buffer(szRet,( HB_SIZE )nLen);
             #endif
         }
 
@@ -153,10 +153,10 @@
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadR(szItem,nLen,szPad);
             #if 0
-                hb_retclen(szRet,nLen);
+                hb_retclen(szRet,( HB_SIZE )nLen);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,nLen);
+                hb_retclen_buffer(szRet,( HB_SIZE )nLen);
             #endif
         }
         
@@ -194,7 +194,7 @@
                  return tBIGNPadL("0",1,"0");
               else
               {
-                  char * pcRet=(char*)hb_xgrab(sRetLen+1);
+                  char * pcRet=(char*)hb_xgrab(( HB_SIZE )sRetLen+1);
                   hb_xmemcpy(pcRet,pcTmp,sRetLen);
                   pcRet[sRetLen]='\0';
                   return pcRet;
@@ -221,7 +221,7 @@
             HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%" HB_PFS "u)",szF,s));
             HB_SIZE f=s;
             HB_SIZE t=0;
-            char * szT=(char*)hb_xgrab(s+1);
+            char * szT=(char*)hb_xgrab(( HB_SIZE )s+1);
             for(;f;){
                 szT[t++]=szF[--f];
             }
@@ -235,16 +235,16 @@
             char * szR=tBIGNReverse(szF,s);
             hb_xfree((void*)szF);
             #if 0
-                hb_retclen(szR,s);
+                hb_retclen(szR,( HB_SIZE )s);
                 hb_xfree(szR);
             #else
-                hb_retclen_buffer(szR,s);
+                hb_retclen_buffer(szR,( HB_SIZE )s);
             #endif
         }
 
         static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){ 
             HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));        
-            char * c=(char*)hb_xgrab(y+1);
+            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
@@ -274,10 +274,10 @@
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             char * szRet=tBIGNAdd(a,b,n,y,nB);
             #if 0
-                hb_retclen(szRet,y);
+                hb_retclen(szRet,( HB_SIZE )y);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,y);
+                hb_retclen_buffer(szRet,( HB_SIZE )y);
             #endif
         }
         
@@ -312,14 +312,14 @@
         
         HB_FUNC_STATIC( TBIGNIADD ){
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
-            char * szRet=tBIGNPadL(hb_parc(1),n,"0");
+            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
             #if 0
-                hb_retclen(tBigNiADD(szRet,a,n,nB),n);
+                hb_retclen(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),n);
+                hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
             #endif
         }
         
@@ -329,7 +329,7 @@
 
         static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-            char * c=(char*)hb_xgrab(y+1);
+            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
@@ -359,9 +359,9 @@
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
             char * szRet=tBIGNSub(a,b,n,y,nB);
             #if 0
-                hb_retclen_buffer(szRet,y);
+                hb_retclen_buffer(szRet,( HB_SIZE )y);
             #else
-                hb_retclen(szRet,y);
+                hb_retclen(szRet,( HB_SIZE )y);
                 hb_xfree(szRet);                
             #endif
         }
@@ -396,14 +396,14 @@
 
         HB_FUNC_STATIC( TBIGNISUB ){
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1));
-            char * szRet=tBIGNPadL(hb_parc(1),n,"0");
+            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT s=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);            
             #if 0
-                hb_retclen(tBigNiSUB(szRet,s,n,nB),n);
+                hb_retclen(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),n);
+                hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
             #endif
         }
         
@@ -491,10 +491,10 @@
             char * szRet=tBIGNMult(pValue1,pValue2,n,y,nB);
             n=( HB_SIZE )strlen(szRet);
             #if 0
-                hb_retclen(szRet,n);
+                hb_retclen(szRet,( HB_SIZE )n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(szRet,n);
+                hb_retclen_buffer(szRet,( HB_SIZE )n);
             #endif
         }
 
@@ -547,14 +547,13 @@
             hb_xfree(szInd);
             hb_xfree(szOne);
             #if 0
-                hb_retc(szRet);
-                hb_xfree(szRet);
+                hb_retclen_buffer(szRet,( HB_SIZE )n);
             #else 
                 #if 0
-                    hb_retclen(szRet,n);
+                    hb_retclen(szRet,( HB_SIZE )n);
                     hb_xfree(szRet);
                 #else
-                    hb_retclen_buffer(szRet,n);
+                   hb_retc(szRet);
                 #endif
             #endif
         }        
@@ -566,16 +565,16 @@
             HB_MAXINT szptBIGNeMult=sizeof(ptBIGNeMult*);
             HB_MAXINT szstBIGNeMult=sizeof(stBIGNeMult);            
             
-            ptBIGNeMult *peMTArr=(ptBIGNeMult*)hb_xgrab(szptBIGNeMult);        
-            ptBIGNeMult pegMultTmp=(ptBIGNeMult)hb_xgrab(szstBIGNeMult);
+            ptBIGNeMult *peMTArr=(ptBIGNeMult*)hb_xgrab(( HB_SIZE )szptBIGNeMult);        
+            ptBIGNeMult pegMultTmp=(ptBIGNeMult)hb_xgrab(( HB_SIZE )szstBIGNeMult);
             
-            char * Tmp=tBIGNPadL("1",n,"0");
+            char * Tmp=tBIGNPadL("1",( HB_SIZE )n,"0");
             pegMultTmp->cMultM=hb_strdup(Tmp);
             hb_xfree(Tmp);
             
             pegMultTmp->cMultP=hb_strdup(pD);
 
-            Tmp=tBIGNPadL("0",n,"0");
+            Tmp=tBIGNPadL("0",( HB_SIZE )n,"0");
             pegMult->cMultM=hb_strdup(Tmp);
             pegMult->cMultP=hb_strdup(Tmp);
             hb_xfree(Tmp);
@@ -584,21 +583,21 @@
 
             do {
             
-                peMTArr=(ptBIGNeMult*)hb_xrealloc(peMTArr,(nI+1)*szptBIGNeMult);
-                peMTArr[nI]=(ptBIGNeMult)hb_xgrab(szstBIGNeMult);
+                peMTArr=(ptBIGNeMult*)hb_xrealloc(peMTArr,(( HB_SIZE )nI+1)*( HB_SIZE )szptBIGNeMult);
+                peMTArr[nI]=(ptBIGNeMult)hb_xgrab(( HB_SIZE )szstBIGNeMult);
                 
                 peMTArr[nI]->cMultM=hb_strdup(pegMultTmp->cMultM);
                 peMTArr[nI]->cMultP=hb_strdup(pegMultTmp->cMultP);  
 
-                char * tmp=tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,n,nB);
-                hb_xmemcpy(pegMultTmp->cMultM,tmp,n);
+                char * tmp=tBIGNAdd(pegMultTmp->cMultM,pegMultTmp->cMultM,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegMultTmp->cMultM,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
                     
-                tmp=tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,n,nB);                
-                hb_xmemcpy(pegMultTmp->cMultP,tmp,n);
+                tmp=tBIGNAdd(pegMultTmp->cMultP,pegMultTmp->cMultP,n,( HB_SIZE )n,nB);                
+                hb_xmemcpy(pegMultTmp->cMultP,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
                 
-                if (memcmp(pegMultTmp->cMultM,pN,n)==1){
+                if (memcmp(pegMultTmp->cMultM,pN,( HB_SIZE )n)==1){
                     break;
                 }
                 
@@ -613,27 +612,27 @@
 
             do {
                
-                pegMultTmp->cMultM=tBIGNAdd(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
-                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                pegMultTmp->cMultM=tBIGNAdd(pegMult->cMultM,peMTArr[nI]->cMultM,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,( HB_SIZE )n);
                 hb_xfree(pegMultTmp->cMultM);
 
-                pegMultTmp->cMultP=tBIGNAdd(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
-                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                pegMultTmp->cMultP=tBIGNAdd(pegMult->cMultP,peMTArr[nI]->cMultP,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,( HB_SIZE )n);
                 hb_xfree(pegMultTmp->cMultP);
                 
-                int iCmp=memcmp(pegMult->cMultM,pN,n);
+                int iCmp=memcmp(pegMult->cMultM,pN,( HB_SIZE )n);
 
                 if (iCmp==0){
                     break;
                 } else{
                         if (iCmp==1){
 
-                            pegMultTmp->cMultM=tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,n,nB);
-                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,n);
+                            pegMultTmp->cMultM=tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,( HB_SIZE )n,nB);
+                            hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,( HB_SIZE )n);
                             hb_xfree(pegMultTmp->cMultM);
     
-                            pegMultTmp->cMultP=tBIGNSub(pegMult->cMultP,peMTArr[nI]->cMultP,n,n,nB);
-                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,n);
+                            pegMultTmp->cMultP=tBIGNSub(pegMult->cMultP,peMTArr[nI]->cMultP,n,( HB_SIZE )n,nB);
+                            hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,( HB_SIZE )n);
                             hb_xfree(pegMultTmp->cMultP);
 
                     }
@@ -656,18 +655,18 @@
         HB_FUNC_STATIC( TBIGNEGMULT ){
             
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(3)*2);            
-            char * pN=tBIGNPadL(hb_parc(1),n,"0");
-            char * pD=tBIGNPadL(hb_parc(2),n,"0");
+            char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
+            char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
             
-            ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrab(sizeof(stBIGNeMult));
+            ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrab(( HB_SIZE )sizeof(stBIGNeMult));
             
             tBIGNegMult(pN,pD,n,nB,pegMult);
         
             #if 0
-                hb_retclen(pegMult->cMultP,n);
+                hb_retclen(pegMult->cMultP,( HB_SIZE )n);
             #else
-                hb_retclen_buffer(hb_strdup(pegMult->cMultP),n);
+                hb_retclen_buffer(hb_strdup(pegMult->cMultP),( HB_SIZE )n);
             #endif            
 
             hb_xfree(pN);
@@ -699,13 +698,13 @@
 
         HB_FUNC_STATIC( TBIGN2MULT ){
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
-            char * szRet=tBIGNPadL(hb_parc(1),n,"0");
+            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(2);
             #if 0
-                hb_retclen(tBigN2Mult(szRet,n,nB),n);
+                hb_retclen(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigN2Mult(szRet,n,nB),n);
+                hb_retclen_buffer(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
             #endif
         }
 
@@ -736,10 +735,10 @@
             HB_MAXINT m=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
             #if 0
-                hb_retclen(tBigNiMult(szRet,m,n,nB),n);
+                hb_retclen(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
                 hb_xfree(szRet);
             #else
-                hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),n);
+                hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
             #endif
         }
         
@@ -754,10 +753,10 @@
             HB_MAXINT szptBIGNeDiv=sizeof(ptBIGNeDiv*);
             HB_MAXINT szstBIGNeDiv=sizeof(stBIGNeDiv);
 
-            ptBIGNeDiv *peDVArr=(ptBIGNeDiv*)hb_xgrab(szptBIGNeDiv);
-            ptBIGNeDiv pegDivTmp=(ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
+            ptBIGNeDiv *peDVArr=(ptBIGNeDiv*)hb_xgrab(( HB_SIZE )szptBIGNeDiv);
+            ptBIGNeDiv pegDivTmp=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )szstBIGNeDiv);
             
-            char * Tmp=tBIGNPadL("1",n,"0");
+            char * Tmp=tBIGNPadL("1",( HB_SIZE )n,"0");
             pegDivTmp->cDivQ=hb_strdup(Tmp);
             hb_xfree(Tmp);
             
@@ -767,21 +766,21 @@
 
             do {
 
-                peDVArr=(ptBIGNeDiv*)hb_xrealloc(peDVArr,(nI+1)*szptBIGNeDiv);
-                peDVArr[nI]=(ptBIGNeDiv)hb_xgrab(szstBIGNeDiv);
+                peDVArr=(ptBIGNeDiv*)hb_xrealloc(peDVArr,(( HB_SIZE )nI+1)*( HB_SIZE )szptBIGNeDiv);
+                peDVArr[nI]=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )szstBIGNeDiv);
                 
                 peDVArr[nI]->cDivQ=hb_strdup(pegDivTmp->cDivQ);
                 peDVArr[nI]->cDivR=hb_strdup(pegDivTmp->cDivR);  
 
-                char * tmp=tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,n,nB);
-                hb_xmemcpy(pegDivTmp->cDivQ,tmp,n);
+                char * tmp=tBIGNAdd(pegDivTmp->cDivQ,pegDivTmp->cDivQ,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegDivTmp->cDivQ,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
                     
-                tmp=tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,n,nB);
-                hb_xmemcpy(pegDivTmp->cDivR,tmp,n);
+                tmp=tBIGNAdd(pegDivTmp->cDivR,pegDivTmp->cDivR,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegDivTmp->cDivR,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
 
-                if (memcmp(pegDivTmp->cDivR,pN,n)==1){
+                if (memcmp(pegDivTmp->cDivR,pN,( HB_SIZE )n)==1){
                     break;
                 }
                 
@@ -794,34 +793,34 @@
 
             HB_MAXINT nF=nI;
 
-            Tmp=tBIGNPadL("0",n,"0");
+            Tmp=tBIGNPadL("0",( HB_SIZE )n,"0");
             pegDiv->cDivQ=hb_strdup(Tmp);
             pegDiv->cDivR=hb_strdup(Tmp);
             hb_xfree(Tmp);
 
             do {
                 
-                pegDivTmp->cDivQ=tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
-                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                pegDivTmp->cDivQ=tBIGNAdd(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,( HB_SIZE )n);
                 hb_xfree(pegDivTmp->cDivQ);
 
-                pegDivTmp->cDivR=tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
-                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                pegDivTmp->cDivR=tBIGNAdd(pegDiv->cDivR,peDVArr[nI]->cDivR,n,( HB_SIZE )n,nB);
+                hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,( HB_SIZE )n);
                 hb_xfree(pegDivTmp->cDivR);
                 
-                int iCmp=memcmp(pegDiv->cDivR,pN,n);
+                int iCmp=memcmp(pegDiv->cDivR,pN,( HB_SIZE )n);
 
                 if (iCmp==0){
                     break;
                 } else{
                         if (iCmp==1){
 
-                            pegDivTmp->cDivQ=tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,n);
+                            pegDivTmp->cDivQ=tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,( HB_SIZE )n,nB);
+                            hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,( HB_SIZE )n);
                             hb_xfree(pegDivTmp->cDivQ);
 
-                            pegDivTmp->cDivR=tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR,n,n,nB);
-                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+                            pegDivTmp->cDivR=tBIGNSub(pegDiv->cDivR,peDVArr[nI]->cDivR,n,( HB_SIZE )n,nB);
+                            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,( HB_SIZE )n);
                             hb_xfree(pegDivTmp->cDivR);
 
                     }
@@ -837,8 +836,8 @@
             hb_xfree(peDVArr);
             peDVArr=NULL;
 
-            pegDivTmp->cDivR=tBIGNSub(pN,pegDiv->cDivR,n,n,nB);
-            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,n);
+            pegDivTmp->cDivR=tBIGNSub(pN,pegDiv->cDivR,n,( HB_SIZE )n,nB);
+            hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,( HB_SIZE )n);
             hb_xfree(pegDivTmp->cDivR);
             hb_xfree(pegDivTmp);
                 
@@ -847,20 +846,20 @@
         HB_FUNC_STATIC( TBIGNEGDIV ){
 
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1); 
-            char * pN=tBIGNPadL(hb_parc(1),n,"0");
-            char * pD=tBIGNPadL(hb_parc(2),n,"0");
-            ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            int iCmp=memcmp(pN,pD,n);
+            char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
+            char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
+            ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
+            int iCmp=memcmp(pN,pD,( HB_SIZE )n);
 
             switch(iCmp){
                 case -1:{
-                    pegDiv->cDivQ=tBIGNPadL("0",n,"0");
+                    pegDiv->cDivQ=tBIGNPadL("0",( HB_SIZE )n,"0");
                     pegDiv->cDivR=hb_strdup(pN);
                     break;
                 }
                 case 0:{
-                    pegDiv->cDivQ=tBIGNPadL("1",n,"0");
-                    pegDiv->cDivR=tBIGNPadL("0",n,"0");
+                    pegDiv->cDivQ=tBIGNPadL("1",( HB_SIZE )n,"0");
+                    pegDiv->cDivR=tBIGNPadL("0",( HB_SIZE )n,"0");
                     break;
                 }
                 default:{
@@ -870,11 +869,11 @@
             }
             
             #if 0
-                hb_retclen(pegDiv->cDivQ,n);
-                hb_storclen(pegDiv->cDivR,n,3);
+                hb_retclen(pegDiv->cDivQ,( HB_SIZE )n);
+                hb_storclen(pegDiv->cDivR,( HB_SIZE )n,3);
             #else
-                hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),n);
-                hb_storclen_buffer(hb_strdup(pegDiv->cDivR),n,3);
+                hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),( HB_SIZE )n);
+                hb_storclen_buffer(hb_strdup(pegDiv->cDivR),( HB_SIZE )n,3);
             #endif
 
             hb_xfree(pN);
@@ -895,13 +894,13 @@
 
             HB_MAXINT v1;
 
-            ptBIGNeDiv  pecDivTmp=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
+            ptBIGNeDiv  pecDivTmp=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
 
             HB_MAXINT szHB_MAXINT=sizeof(HB_MAXINT);
             HB_MAXINT snHB_MAXINT=ipN*szHB_MAXINT;
 
-            HB_MAXINT *ipA=(HB_MAXINT*)hb_xgrab(snHB_MAXINT);
-            HB_MAXINT *iaux=(HB_MAXINT*)hb_xgrab(snHB_MAXINT);
+            HB_MAXINT *ipA=(HB_MAXINT*)hb_xgrab(( HB_SIZE )snHB_MAXINT);
+            HB_MAXINT *iaux=(HB_MAXINT*)hb_xgrab(( HB_SIZE )snHB_MAXINT);
 
             HB_MAXINT i=ipN;
             while(--i>=0){
@@ -909,7 +908,7 @@
                 iaux[i]=(*(&aux[i])-'0');
             }
 
-            while (memcmp(iaux,ipA,ipN)<=0){
+            while (memcmp(iaux,ipA,( HB_SIZE )ipN)<=0){
                 n++;
                 v1=0;
                 i=ipN;
@@ -936,12 +935,12 @@
             hb_xfree(iaux);
             iaux=NULL;
             
-            HB_MAXINT *idivQ=(HB_MAXINT*)calloc(ipN,szHB_MAXINT);
-            char * sN2=tBIGNPadL("2",ipN,"0");
+            HB_MAXINT *idivQ=(HB_MAXINT*)calloc(( HB_SIZE )ipN,( HB_SIZE )szHB_MAXINT);
+            char * sN2=tBIGNPadL("2",( HB_SIZE )ipN,"0");
 
             while (n--){
                 tBIGNegDiv(aux,sN2,ipN,nB,pecDivTmp);
-                hb_xmemcpy(aux,pecDivTmp->cDivQ,ipN);
+                hb_xmemcpy(aux,pecDivTmp->cDivQ,( HB_SIZE )ipN);
                 hb_xfree(pecDivTmp->cDivQ);
                 hb_xfree(pecDivTmp->cDivR);    
                 v1=0;
@@ -956,9 +955,9 @@
                         v1=0;
                     }
                 }
-                if (memcmp(pecDiv->cDivR,aux,ipN)>=0){
-                    char * tmp=tBIGNSub(pecDiv->cDivR,aux,ipN,ipN,nB);
-                    hb_xmemcpy(pecDiv->cDivR,tmp,ipN);
+                if (memcmp(pecDiv->cDivR,aux,( HB_SIZE )ipN)>=0){
+                    char * tmp=tBIGNSub(pecDiv->cDivR,aux,ipN,( HB_SIZE )ipN,nB);
+                    hb_xmemcpy(pecDiv->cDivR,tmp,( HB_SIZE )ipN);
                     hb_xfree(tmp);
                     v1=0;
                     i=ipN;
@@ -983,7 +982,7 @@
             hb_xfree(sN2);
             hb_xfree(pecDivTmp);
             
-            pecDiv->cDivQ=(char*)hb_xgrab(ipN+1);
+            pecDiv->cDivQ=(char*)hb_xgrab(( HB_SIZE )ipN+1);
 
             i=ipN;
             while(--i>=0){
@@ -998,20 +997,20 @@
         HB_FUNC_STATIC( TBIGNECDIV ){
             
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1);
-            char * pN=tBIGNPadL(hb_parc(1),n,"0");
-            char * pD=tBIGNPadL(hb_parc(2),n,"0");
-            ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrab(sizeof(stBIGNeDiv));
-            int iCmp=memcmp(pN,pD,n);
+            char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
+            char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
+            ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
+            int iCmp=memcmp(pN,pD,( HB_SIZE )n);
           
             switch(iCmp){
                 case -1:{
-                    pecDiv->cDivQ=tBIGNPadL("0",n,"0");
+                    pecDiv->cDivQ=tBIGNPadL("0",( HB_SIZE )n,"0");
                     pecDiv->cDivR=hb_strdup(pN);
                     break;
                 }
                 case 0:{
-                    pecDiv->cDivQ=tBIGNPadL("1",n,"0");
-                    pecDiv->cDivR=tBIGNPadL("0",n,"0");
+                    pecDiv->cDivQ=tBIGNPadL("1",( HB_SIZE )n,"0");
+                    pecDiv->cDivR=tBIGNPadL("0",( HB_SIZE )n,"0");
                     break;
                 }
                 default:{
@@ -1021,11 +1020,11 @@
             }
             
             #if 0
-                hb_retclen(pecDiv->cDivQ,n);
-                hb_storclen(pecDiv->cDivR,n,3);
+                hb_retclen(pecDiv->cDivQ,( HB_SIZE )n);
+                hb_storclen(pecDiv->cDivR,( HB_SIZE )n,3);
             #else
-                hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),n);
-                hb_storclen_buffer(hb_strdup(pecDiv->cDivR),n,3);
+                hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),( HB_SIZE )n);
+                hb_storclen_buffer(hb_strdup(pecDiv->cDivR),( HB_SIZE )n,3);
             #endif
 
             hb_xfree(pN);
@@ -1299,7 +1298,7 @@
               if (ldArg<=0)
               {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(str.length()+1);
+                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1315,7 +1314,7 @@
                     if( hb_mathGetError(&hb_exc,"SQRTL",(double)ldArg,0.0,(double)ldResult))
                     {
                         std::string str=to_string(0.0);
-                        char * cstr=(char*)hb_xgrab(str.length()+1);
+                        char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                         std::strcpy(cstr,str.c_str());                        
                         #if 0
                             hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1327,7 +1326,7 @@
                     else
                     { 
                         std::string str=to_string(ldResult);
-                        char * cstr=(char*)hb_xgrab(str.length()+1);
+                        char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                         std::strcpy(cstr,str.c_str());
                         #if 0
                             hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1341,7 +1340,7 @@
            else 
            {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(str.length()+1);
+                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1365,7 +1364,7 @@
                 if( hb_mathGetError(&hb_exc,"LOG10L",(double)ldArgN,(double)ldArgB,(double)ldResult))
                 {
                     std::string str=to_string(0.0);
-                    char * cstr=(char*)hb_xgrab(str.length()+1);
+                    char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                     std::strcpy(cstr,str.c_str());
                     #if 0
                         hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1381,7 +1380,7 @@
                     {
                         str=to_string(0.0);
                     }
-                    char * cstr=(char*)hb_xgrab(str.length()+1);
+                    char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                     std::strcpy(cstr,str.c_str());
                     #if 0
                         hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1394,7 +1393,7 @@
            else 
            {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(str.length()+1);
+                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
