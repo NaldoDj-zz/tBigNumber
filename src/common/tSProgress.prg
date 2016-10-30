@@ -341,7 +341,7 @@ Static Function _StrToKArr(cStr,cToken)
         cStr:=StrTran(cStr,cDToken,cToken+" "+cToken)
     End While
 #ifdef PROTHEUS
-Return(StrToKArr(cStr,cToken))
+Return(StrTokArr2(cStr,cToken))
 #else
 Return(hb_aTokens(cStr,cToken))
 #endif

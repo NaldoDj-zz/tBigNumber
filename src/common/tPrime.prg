@@ -119,7 +119,7 @@ Method New(cPath,nLocal) CLASS tPrime
                 #IFDEF __HARBOUR__
                      aLine:=hb_ATokens(cLine," ")
                 #ELSE //__PROTHEUS__
-                     aLine:=StrTokArr(cLine," ")
+                     aLine:=StrTokArr22(cLine," ")
                 #ENDIF
                 cFPrime:=aLine[1]
                 nSize:=Max(Len(cFPrime),nSize)
@@ -145,7 +145,7 @@ Method New(cPath,nLocal) CLASS tPrime
                 #IFDEF __HARBOUR__
                      aLine:=hb_ATokens(cLine," ")
                 #ELSE //__PROTHEUS__
-                     aLine:=StrTokArr(cLine," ")
+                     aLine:=StrTokArr22(cLine," ")
                 #ENDIF
                 cLPrime:=aLine[Len(aLine)]
                 nSize:=Max(Len(cFPrime),nSize)
@@ -281,7 +281,7 @@ Method IsPrime(cN,lForce) CLASS tPrime
             #IFDEF __HARBOUR__
                  aLine:=hb_ATokens(cLine," ")
             #ELSE //__PROTHEUS__
-                aLine:=StrTokArr(cLine," ")
+                aLine:=StrTokArr22(cLine," ")
             #ENDIF
             nPrime:=aScan(aLine,{|x|PadL(x,self:nSize)==cN})
             IF (lPrime:=nPrime>0)
@@ -396,7 +396,7 @@ Method NextPrime(cN,lForce) CLASS tPrime
             #IFDEF __HARBOUR__
                  aLine:=hb_ATokens(cLine," ")
             #ELSE //__PROTHEUS__
-                aLine:=StrTokArr(cLine," ")
+                aLine:=StrTokArr22(cLine," ")
             #ENDIF
             nPrime:=aScan(aLine,{|x|(cPrime:=PadL(x,self:nSize))>cN})
             IF (lPrime:=nPrime>0)

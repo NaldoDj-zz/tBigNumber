@@ -71,15 +71,16 @@
 //https://en.wikipedia.org/wiki/Mersenne_prime
 #ifdef __HARBOUR__
     #ifdef __PTCOMPAT__
-        //1..15 Mersenne prime List 
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"    
+        //1..15 Mersenne prime List
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"
     #else
          //1..38,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593#,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"
+        //#",13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
     #endif //__PTCOMPAT__
 #else //__PROTHEUS__
     //1..15 Mersenne prime List
-    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"    
+    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"
 #endif //__HARBOUR__
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
@@ -179,7 +180,7 @@
                             nN_TEST:=Val(aSect[cKey])
                             EXIT
                         CASE "C_OOPROGRESS"
-                            aC_OOPROGRESS:=_StrToKArr(Upper(AllTrim(aSect[cKey])),",")
+                            aC_OOPROGRESS:=_StrTokArr(Upper(AllTrim(aSect[cKey])),",")
                             EXIT
                         CASE "L_OOPROGRAND"
                             lL_OOPROGRAND:=(aSect[cKey]=="1")
@@ -194,10 +195,10 @@
                             cC_GT_MODE:=Upper(AllTrim(aSect[cKey]))
                             EXIT
                         CASE "AC_TSTEXEC"
-                            aAC_TSTEXEC:=_StrToKArr(AllTrim(aSect[cKey]),",")
+                            aAC_TSTEXEC:=_StrTokArr(AllTrim(aSect[cKey]),",")
                             EXIT
                         CASE "ACN_MERSENNE_POW"
-                            aACN_MERSENNE_POW:=_StrToKArr(AllTrim(aSect[cKey]),",")
+                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(aSect[cKey]),",")
                             EXIT
                     ENDSWITCH
                 NEXT cKey
@@ -209,13 +210,13 @@
         nACC_ALOG:=IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
         __nSLEEP:=IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
         nN_TEST:=IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-        aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+        aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrTokArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
         lL_OOPROGRAND:=IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
         lL_ROPROGRESS:=IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
-        aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrToKArr(AllTrim(ACN_MERSENNE_POW),","),aACN_MERSENNE_POW)
+        aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
+        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(ACN_MERSENNE_POW),","),aACN_MERSENNE_POW)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -247,7 +248,7 @@
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
-        
+
         ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
@@ -368,9 +369,9 @@
         atBigNtst[3]:=NIL
         tBigNGC()
     Return(.T.)
-    
+
     //--------------------------------------------------------------------------------------------------------
-    static Procedure myGTIEvent(nEvent,...)
+    static Procedure myGTIEvent(nEvent)
         switch nEvent
             case HB_GTE_CLOSE
                 QUIT
@@ -380,7 +381,7 @@
                 exit
         endswitch
     return
-    
+
     //--------------------------------------------------------------------------------------------------------
     Static Procedure tBigNtst(atBigNtst)
 
@@ -434,13 +435,13 @@
                 nACC_ALOG:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
                 __nSLEEP:=Val(oTFINI:GetPropertyValue("GENERAL","__SLEEP",__SLEEP))
                 nN_TEST:=Val(oTFINI:GetPropertyValue("GENERAL","N_TEST",N_TEST))
-                aC_OOPROGRESS:=_StrToKArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
+                aC_OOPROGRESS:=_StrTokArr(Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_OOPROGRESS",C_OOPROGRESS))),",")
                 lL_OOPROGRAND:=(oTFINI:GetPropertyValue("GENERAL","L_OOPROGRAND",L_OOPROGRAND)=="1")
                 lL_ROPROGRESS:=(oTFINI:GetPropertyValue("GENERAL","L_ROPROGRESS",L_ROPROGRESS)=="1")
                 lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                 cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
-                aAC_TSTEXEC:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
-                aACN_MERSENNE_POW:=_StrToKArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)),",")
+                aAC_TSTEXEC:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
+                aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)),",")
             EndIF
         EndIF
 
@@ -449,13 +450,13 @@
         nACC_ALOG:=IF(Empty(nACC_ALOG),Val(ACC_ALOG),nACC_ALOG)
         __nSLEEP:=IF(Empty(__nSLEEP),Val(__SLEEP),__nSLEEP)
         nN_TEST:=IF(Empty(nN_TEST),Val(N_TEST),nN_TEST)
-        aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrToKArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
+        aC_OOPROGRESS:=IF(Empty(aC_OOPROGRESS),_StrTokArr(Upper(AllTrim(C_OOPROGRESS)),","),aC_OOPROGRESS)
         lL_OOPROGRAND:=IF(Empty(lL_OOPROGRAND),L_OOPROGRAND=="1",lL_OOPROGRAND)
         lL_ROPROGRESS:=IF(Empty(lL_ROPROGRESS),L_ROPROGRESS=="1",lL_ROPROGRESS)
         lL_LOGPROCESS:=IF(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=IF(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
-        aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrToKArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrToKArr(ACN_MERSENNE_POW,","),aACN_MERSENNE_POW)
+        aAC_TSTEXEC:=IF(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
+        aACN_MERSENNE_POW:=IF(Empty(aACN_MERSENNE_POW),_StrTokArr(ACN_MERSENNE_POW,","),aACN_MERSENNE_POW)
         __nSLEEP:=Max(__nSLEEP,10)
 
         IF ((__nSLEEP)<10)
@@ -691,7 +692,7 @@ static procedure ChkIntTstExec(aAC_TSTEXEC,nPad)
 
     For nD:=1 To nJ
         IF (":"$aAC_TSTEXEC[nD])
-            aTmp:=_StrToKArr(AllTrim(aAC_TSTEXEC[nD]),":")
+            aTmp:=_StrTokArr(AllTrim(aAC_TSTEXEC[nD]),":")
             nTmp:=Len(aTmp)
             IF (nTmp>=1)
                 IF (nTmp==1)
@@ -783,7 +784,7 @@ static function GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
 
 return(atBigNtst)
 //--------------------------------------------------------------------------------------------------------
-Static Function _StrToKArr(cStr,cToken)
+Static Function _StrTokArr(cStr,cToken)
     Local cDToken
     DEFAULT cStr:=""
     DEFAULT cToken:=";"
@@ -792,7 +793,7 @@ Static Function _StrToKArr(cStr,cToken)
         cStr:=StrTran(cStr,cDToken,cToken+" "+cToken)
     End While
 #ifdef PROTHEUS
-Return(StrToKArr(cStr,cToken))
+Return(StrTokArr2(cStr,cToken))
 #else
 Return(hb_aTokens(cStr,cToken))
 #endif
@@ -1290,7 +1291,7 @@ Return(lHarbour)
 
             For nAnim:=1 To nAnimes
                 cAnim:=aAnim[nAnim]
-                FOR EACH cRow IN _StrToKArr(cAnim,"[\n]")
+                FOR EACH cRow IN _StrTokArr(cAnim,"[\n]")
                     lBreak:=(";"$cRow)
                     IF (lBreak)
                         IF ((nRowC==0).and..NOT.(nRow==0))
@@ -4264,7 +4265,7 @@ static procedure tBigNtst37(fhLog)
 
     Local cM        AS CHARACTER
     Local cR        AS CHARACTER
-    
+
     Local nD        AS NUMBER
     Local nJ        AS NUMBER VALUE Len(aACN_MERSENNE_POW)
 
@@ -4303,7 +4304,7 @@ static procedure tBigNtst37(fhLog)
             hb_mutexUnLock(__phMutex)
         EndIF
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
-        __ConOut(fhLog,__cSep)        
+        __ConOut(fhLog,__cSep)
     next nD
 
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
