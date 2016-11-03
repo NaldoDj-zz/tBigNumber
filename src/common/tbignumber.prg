@@ -62,7 +62,7 @@
         #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
    //-------------------------------------------------------------------------------------
 #endif //__HARBOUR__
- 
+
 #ifndef __DIVMETHOD__
     #define __DIVMETHOD__ 1
 #endif
@@ -868,7 +868,7 @@ method SetDecimals(nSet) class tBigNumber
     local nLastSet
 
     if hb_mutexLock(s__MTXDEC)
-    
+
         nLastSet:=s__nDecSet
 
         DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
@@ -886,7 +886,7 @@ method SetDecimals(nSet) class tBigNumber
         hb_mutexUnLock(s__MTXDEC)
 
     endif
-        
+
     DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
 
 return(nLastSet)
@@ -917,9 +917,9 @@ method nthRootAcc(nSet) class tBigNumber
         s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
 
         hb_mutexUnLock(s__MTXACC)
-    
+
     endif
-        
+
     DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
 
 return(nLastSet)
@@ -3611,9 +3611,9 @@ method Randomize(uB,uE) class tBigNumber
     oT:SetValue(oB:Min(oE))
     oE:SetValue(oB:Max(oE))
     oB:SetValue(oT)
-    
+
     oT:SetValue(oE:Sub(oB):Div(s__o2):Int(.T.):Abs(.T.))
-    
+
     cR:=""
     cT:=oT:__cInt()
     #ifdef __HARBOUR__
@@ -3626,7 +3626,7 @@ method Randomize(uB,uE) class tBigNumber
             cT:=SubStr(cT,2)
         end while
     #endif
-    
+
     oR:SetValue(oR:Add(cR))
 
     oT:SetValue(oB)
@@ -3643,7 +3643,7 @@ method Randomize(uB,uE) class tBigNumber
             cT:=SubStr(cT,2)
         end while
     #endif
-    
+
     oR:SetValue(oR:Add(cR))
 
     oT:SetValue(oE:Sub(oR):Int(.T.):Abs(.T.))
@@ -3662,12 +3662,12 @@ method Randomize(uB,uE) class tBigNumber
     #endif
 
     oR:SetValue(cR)
-    
+
     while (oR:gt(oE))
         oT:SetValue(oR:Sub(oB):Div(s__o2):Int(.T.):Abs(.T.))
         oR:SetValue(oT)
     end while
-    
+
 return(oR)
 
 /*
@@ -3677,25 +3677,37 @@ return(oR)
     Descricao:Define a chamada para a funcao Random Padrao
     Sintaxe:__Random(nB,nE)
 */
-static function __Random(nB,nE)
+#ifdef __HARBOUR__
+static function __Random(nB AS NUMERIC,nE AS NUMERIC)
+#else //__PROTHEUS__
+static function __Random(nB AS NUMERIC,nE AS NUMERIC) AS NUMERIC
+#endif //__HARBOUR__
+    
+    local nR AS NUMERIC
 
-    local nR
-
-    if nB==0
+    if (nB==0)
         nB:=1
     endif
 
-    if nB==nE
+    if (nB==nE)
         ++nE
+    elseif (nB>nE)
+        nR:=nB
+        nB:=nE
+        nE:=nR
     endif
 
     #ifdef __HARBOUR__
         nR:=Abs(hb_RandomInt(nB,nE))
     #else //__PROTHEUS__
         nR:=Randomize(nB,nE)
-    #endif
+    #endif //__HARBOUR__
 
+#ifdef __HARBOUR__
+return(nR) AS NUMERIC
+#else //__PROTHEUS__
 return(nR)
+#endif //__HARBOUR__
 
 /*
     method:millerRabin
@@ -3950,7 +3962,7 @@ static function recFact(oS,oN)
     local nB
     local nI
     local nSN
-#endif //__PTCOMPAT__ 
+#endif //__PTCOMPAT__
 
     oR:=s__o0:Clone()
 
