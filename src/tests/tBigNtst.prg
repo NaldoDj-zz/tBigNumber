@@ -4285,8 +4285,10 @@ static procedure tBigNtst37(fhLog)
     for nD:=1 to nJ
         IF hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
            __oRTime2:SetRemaining(1)
-           __oRTime2:SetStep(1/1000)
-           __oRTime2:ForceStep(.T.)
+           #ifdef __HARBOUR__
+               __oRTime2:SetStep(1/1000)
+               __oRTime2:ForceStep(.T.)
+           #endif //__HARBOUR__
            hb_mutexUnLock(__phMutex)
         EndIF
         ASSIGN cM:=aACN_MERSENNE_POW[nD]
@@ -4296,7 +4298,9 @@ static procedure tBigNtst37(fhLog)
         otBigM:SetValue("0")
         __ConOut(fhLog,otBigW:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
         IF hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
-            __oRTime2:ForceStep(.F.)
+            #ifdef __HARBOUR__
+                __oRTime2:ForceStep(.F.)
+            #endif //__HARBOUR__
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)

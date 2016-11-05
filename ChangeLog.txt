@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-05 10:23 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/tests/tBigNtst.prg
+ 
 2016-11-03 09:28 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
  
