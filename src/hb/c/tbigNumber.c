@@ -258,7 +258,13 @@
                 else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k]="0123456789"[v];
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k-1]="0123456789"[v1];
                 v=v1;
                 --k;
@@ -302,6 +308,9 @@
                 else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 sN[i]="0123456789"[v];
                 if (v1==0){
                     break;
@@ -343,7 +352,13 @@
                 else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k]="0123456789"[v];
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k-1]="0123456789"[v1];
                 v=v1;
                 --k;
@@ -386,6 +401,9 @@
                 else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 sN[i]="0123456789"[v];
                 if (v1==0){
                     break;
@@ -439,10 +457,16 @@
                 if (v>=nB){
                     v1=v/nB;
                     v%=nB;
-               }else{
+                }else{
                     v1=0;
-                 };
+                };
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k]="0123456789"[v];
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k+1]="0123456789"[v1];
                 v=v1;
                 k++;
@@ -461,7 +485,13 @@
                 }else{
                     v1=0;                    
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k]="0123456789"[v];
+                /*
+                    TODO: Rever este conceito
+                */
                 c[k+1]="0123456789"[v1];
                 v=v1;
                 if (++k>=y){
@@ -691,6 +721,9 @@
                 }else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 sN[i]="0123456789"[v];
             }
             return sN;
@@ -724,6 +757,9 @@
                 }else{
                     v1=0;
                 }
+                /*
+                    TODO: Rever este conceito
+                */
                 sN[i]="0123456789"[v];
             }
             return sN;
@@ -929,6 +965,9 @@
 
             i=ipN;
             while(--i>=0){
+                /*
+                    TODO: Rever este conceito
+                */
                 aux[i]="0123456789"[iaux[i]];
             }
             
@@ -986,6 +1025,9 @@
 
             i=ipN;
             while(--i>=0){
+                /*
+                    TODO: Rever este conceito
+                */
                 pecDiv->cDivQ[i]="0123456789"[idivQ[i]];
             }
             

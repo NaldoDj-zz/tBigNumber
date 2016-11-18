@@ -3682,7 +3682,7 @@ static function __Random(nB AS NUMERIC,nE AS NUMERIC)
 #else //__PROTHEUS__
 static function __Random(nB AS NUMERIC,nE AS NUMERIC) AS NUMERIC
 #endif //__HARBOUR__
-    
+
     local nR AS NUMERIC
 
     if (nB==0)
@@ -5335,6 +5335,7 @@ static function Power(oB,oE,lIPower)
 
         if oE:lte(s__o2)
             #ifdef __PTCOMPAT__
+                SYMBOL_UNUSED(lIPower)
                 oI:=oE:Clone()
                 while oI:gt(s__o1)
                     oR:SetValue(oR:Mult(oB))
@@ -5368,6 +5369,7 @@ static function Power(oB,oE,lIPower)
     local oR:=oB:Clone()
     local oI:=oE:Clone()
     #ifdef __PTCOMPAT__
+        SYMBOL_UNUSED(lIPower)
         while oI:gt(s__o1)
             oR:SetValue(oR:Mult(oB))
             oI:OpDec()
