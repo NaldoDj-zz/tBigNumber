@@ -10,6 +10,30 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-19 13:07 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * mk/__mkHB-msvc.bat
+  * mk/__mkHB-msvc64.bat
+  * mk/mk-msvc.bat
+  * mk/mk-msvc64.bat
+  * mk/mk.bat
+  * mk/mk64.bat
+  * mk/mkAll-Trace.bat
+  * mk/mkAll.bat
+  * mk/mkAllLib.bat
+  * mk/mkARM.bat
+  * mk/mkHB-msvc.bat
+  * mk/mkHB-msvc64.bat
+  * mk/mkHB.bat
+  * mk/mkHB64.bat
+  * mk/mkHBAll-Trace.bat
+  * mk/mkHBAll.bat
+  * mk/mkLib-msvc.bat
+  * mk/mkLib-msvc64.bat
+  * mk/mkLib.bat
+  * mk/mkLib64.bat
+  * mk/mkLibARM.bat
+  * src/tests/tBigNtst.prg
+ 
 2016-11-19 00:12 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
  
