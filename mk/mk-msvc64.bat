@@ -1,5 +1,5 @@
+@echo off
 SETLOCAL ENABLEEXTENSIONS
-    @echo off
     echo BATCH FILE FOR Harbour msvc64
     rem ============================================================================
     D:

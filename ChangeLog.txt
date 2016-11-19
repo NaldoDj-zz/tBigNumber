@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-19 13:44 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * mk/mk-msvc64.bat
+  * src/tests/tBigNtst.prg
+ 
 2016-11-19 13:07 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/__mkHB-msvc.bat
   * mk/__mkHB-msvc64.bat
