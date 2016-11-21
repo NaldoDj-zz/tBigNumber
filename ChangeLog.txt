@@ -10,10 +10,15 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-21 01:32 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/tests/tBigNtst.prg
+
 2016-11-19 13:44 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/mk-msvc64.bat
   * src/tests/tBigNtst.prg
- 
+
 2016-11-19 13:07 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/__mkHB-msvc.bat
   * mk/__mkHB-msvc64.bat
@@ -37,33 +42,33 @@
   * mk/mkLib64.bat
   * mk/mkLibARM.bat
   * src/tests/tBigNtst.prg
- 
+
 2016-11-19 00:12 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2016-11-18 16:36 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
- 
+
 2016-11-17 08:48 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
- 
+
 2016-11-05 10:23 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2016-11-03 09:28 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
- 
+
 2016-10-30 14:39 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tPrime.prg
   * src/common/tSProgress.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-10-04 19:34 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst.hbp
   * src/hb/c/tbigNumber.c
- 
+
 2016-09-30 00:23 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   + include/c/try_throw_catch.h
   * bin/commit.hb
@@ -71,7 +76,7 @@
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/c/tbigNumber.c
- 
+
 2016-09-28 05:26 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * .gitignore
   * hbp/tBigNtst.hbp
@@ -79,12 +84,12 @@
   * mk/mkHBAll-Trace.bat
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-09-23 09:04 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/mkHBAll.bat
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-09-22 20:44 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   + mk/mkAll-Trace.bat
   + mk/mkHBAll-Trace.bat
@@ -93,22 +98,22 @@
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
   * mk/mkHBAll.bat
- 
+
 2016-09-21 19:00 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-09-20 18:29 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/c/tbigNumber.c
- 
+
 2016-09-20 11:23 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-09-10 16:21 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * ChangeLog.txt
   * hbp/tBigNtst.hbp
@@ -118,28 +123,28 @@
   * hbp/tBigNtst.hbp
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
-  
+
 2016-09-10 00:25 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tRemaining.prg
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-09-07 02:31 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNumber.ch
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-09-07 00:22 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
     + Mersenne Number
- 
+
 2016-09-01 21:44 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst.hbp
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-08-18 00:51 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   + mk/mk-msvc.bat
   + mk/mkLib-msvc.bat
@@ -150,68 +155,68 @@
   * src/hb/c/tbigNumber.c
   * mk/__mkHB-msvc.bat
   * mk/__mkHB-msvc64.bat
- 
+
 2016-08-16 22:55 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2016-08-12 22:24 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
- 
+
 2016-08-12 21:56 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-08-12 15:19 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * ChangeLog.txt
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
- 
+
 2016-08-12 13:40 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
- 
+
 2016-08-11 20:52 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2016-08-11 09:42 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
- 
+
 2016-07-25 05:45 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
     ! Thread estava apresentando inconsistencia nos calculos. Removi. Rever conceitos.
- 
+
 2016-06-08 22:22 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
 
 2016-04-04 10:28 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * rc/ico/tBigNCalc_win.ico
- 
+
 2016-04-03 22:32 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
- 
+
 2016-02-29 13:04 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
- 
+
 2016-02-26 11:05 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/c/tbigNumber.c
- 
+
 2016-02-23 18:14 UTC--300 Naldo DJ (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * include/paramtypex.ch
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
   * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-01-26 23:27 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-11-26 21:32 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   * prj/mg/win/32/tBigNumber32.mip
@@ -220,7 +225,7 @@
 
 2015-11-11 22:35 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/tBigNtst.prg
- 
+
 2015-11-09 09:46 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   + src/tests/tBigNtst.rc
@@ -233,14 +238,14 @@
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/c/tbigNumber.c
- 
+
 2015-11-08 18:11 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
 
 2015-11-07 15:08 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/hb/tBigNAnim.prg
- 
+
 2015-11-07 15:02 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * .gitattributes
   * src/tests/hb/ASCII.art/Baseball.ASCII.art
@@ -249,22 +254,22 @@
   * src/tests/hb/tBigNAnim.prg
   * src/tests/tBigNtst.prg
   * src/tests/hb/ASCII.art/Mararena.ASCII.art -> src/tests/hb/ASCII.art/Macarena.ASCII.art
- 
+
 2015-11-05 15:31 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/tbigNThread.prg
- 
+
 2015-11-05 02:33 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/hb/tbigNThread.prg
 
 2015-11-03 23:44 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
- 
+
 2015-11-02 22:26 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
- 
+
 2015-10-26 09:58 UTC--200 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tbignumber.prg
@@ -282,7 +287,7 @@
   * src/tests/pt/tbignthreads/uThreadT4.prg
   * src/tests/pt/tbignthreads/uThreadT5.prg
   * src/common/tbignumber.prg
- 
+
 2015-08-13 21:36 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * include/hb_tBigNumber.ch
   * include/pt_tBigNumber.ch
@@ -291,16 +296,16 @@
   * src/pt/tbigNExecFromArray.prg
   * src/pt/tbigNMessage.prg
   * src/pt/tbigNMutex.prg
- 
+
 2015-08-13 13:12 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/tbigNExecFromArray.prg
   * src/pt/tbigNThread.prg
- 
+
 2015-08-12 20:04 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/tests/pt/tbignthreads/uThreadSum.prg
- 
+
 2015-08-12 19:46 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   * src/pt/common/procredefine.prg
@@ -308,28 +313,28 @@
   * src/tests/pt/tbignthreads/uThreadT4.prg
   * src/pt/tbigNThread.prg
   * src/tests/pt/tbignthreads/uThreadT5.prg
- 
+
 2015-08-12 19:31 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/tests/pt/tbignthreads/uThreadT3.prg
   * src/tests/pt/tbignthreads/uThreadT4.prg
   * src/tests/pt/tbignthreads/uThreadT5.prg
- 
+
 2015-08-12 18:49 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
- 
+
 2015-08-12 18:38 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNMutex.prg
   * src/pt/tbigNThread.prg
- 
+
 2015-08-12 16:54 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/pt/git_tBigNumber.prj
   * src/tests/pt/tbignthreads/uThreadSum.prg
- 
+
 2015-08-12 16:12 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/pt/tbignthreads/uThreadT1.prg
   * src/tests/pt/tbignthreads/uThreadT3.prg
- 
+
 2015-08-12 14:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT5.prg
   * src/pt/common/procredefine.prg
@@ -339,12 +344,12 @@
   * src/tests/pt/tbignthreads/uThreadT2.prg
   * src/tests/pt/tbignthreads/uThreadT3.prg
   * src/tests/pt/tbignthreads/uThreadT4.prg
- 
+
 2015-08-12 11:59 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/common/tBigNCommon.prg
   * src/pt/tbigNThread.prg
- 
+
 2015-08-12 11:41 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/pt/common/procredefine.prg
   + src/pt/common/tBigNCommon.prg
@@ -362,17 +367,17 @@
   * src/tests/pt/tbignthreads/uThreadT2.prg
   * src/tests/pt/tbignthreads/uThreadT3.prg
   * src/tests/pt/tbignthreads/uThreadT4.prg
- 
+
 2015-08-01 15:02 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT3.prg
   + src/tests/pt/tbignthreads/uThreadT4.prg
   * prj/pt/git_tBigNumber.prj
   * src/pt/tbigNThread.prg
- 
+
 2015-08-01 05:00 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNExecFromArray.prg
     * Issue #2
- 
+
 2015-08-01 04:31 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT2.prg
   * src/pt/tbigNExecFromArray.prg
@@ -380,11 +385,11 @@
     * Issue #2
   * src/pt/tbigNThread.prg
   * src/tests/pt/tbignthreads/uThreadT1.prg
- 
+
 2015-07-31 06:34 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
     ; TODO List
- 
+
 2015-07-30 23:52 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNExecFromArray.prg
   * src/pt/tbigNMessage.prg
@@ -393,19 +398,19 @@
   * src/pt/tBigNGlobals.prg
   * src/tests/pt/tbignthreads/uThreadT1.prg
     ; Documentacao de Cabecalho
- 
+
 2015-07-30 21:36 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/pt/git_tBigNumber.prj
- 
+
 2015-07-30 21:31 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/tests/pt/tbignthreads/uThreadT1.prg
   * prj/pt/git_tBigNumber.prj
   * src/pt/tbigNThread.prg
- 
+
 2015-07-30 17:08 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/pt/tBigNGlobals.prg
- 
+
 2015-07-30 16:32 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * include/hb_tBigNtst.ch
   * include/hb_tBigNumber.ch
@@ -420,28 +425,28 @@
   * include/tBigNDef.ch
   * include/tBigNtst.ch
   * include/tBigNumber.ch
- 
+
 2015-07-30 14:41 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
- 
+
 2015-07-30 14:27 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/tbigNThread.prg
   * src/pt/tBigNGlobals.prg
- 
+
 2015-07-30 02:52 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/pt/tbigNThread.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-07-30 02:38 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/pt/tBigNGlobals.prg
- 
+
 2015-07-30 01:42 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/pt/tbigNThread.prg
   * src/pt/tBigNGlobals.prg
- 
+
 2015-07-29 21:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + src/pt/tbigNExecFromArray.prg
   + src/pt/tbigNMessage.prg
@@ -455,7 +460,7 @@
   * include/pt_tBigNumber.ch
   * src/tests/tBigNtst.prg
     ;multithreading, quando __PROTHEUS__, e outros bichos...
- 
+
 2015-07-27 20:09 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   + mk/__mkHB-msvc.bat
@@ -463,28 +468,28 @@
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-07-26 21:08 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + mk/mk-msvc64.bat
   + mk/mkHB-msvc64.bat
   + mk/__mkHB-msvc64.bat
   + mk/mkLib-msvc64.bat
- 
+
 2015-07-26 21:06 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * mk/mk.bat
   * mk/mkHB.bat
   * mk/mkHB64.bat
   * mk/mkLib.bat
- 
+
 2015-07-23 11:31 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * mk/mk.bat
   * mk/mk64.bat
   * mk/mkLib.bat
   * src/tests/tBigNtst.prg
- 
+
 2015-07-21 02:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
- 
+
 2015-07-20 17:15 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * hbc/_tbigNumber.hbc
   * hbp/_tbigNumber.hbp
@@ -498,55 +503,55 @@
   * rc/tBigNtst.rc
   * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-07-20 16:30 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
- 
+
 2015-07-20 16:18 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
- 
+
 2015-07-20 15:07 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * include/tbigNThread.ch
   * src/hb/tbigNThread.prg
- 
+
 2015-07-16 07:08 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/common/tbignumber.prg
- 
+
 2015-07-16 00:52 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * include/tbigNThread.ch
   * src/hb/tbigNThread.prg
- 
+
 2015-07-15 05:17 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   + mk/mkopenSSL.sh
   + mk/mkopenSSL64.sh
   * mk/mkHB.bat
   * mk/mkHB64.bat
- 
+
 2015-07-14 00:13 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * mk/mkHB.bat
   * mk/mkHB64.bat
- 
+
 2015-07-10 13:17 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * mk/mkHB.bat
   * mk/mkHB64.bat
- 
+
 2015-07-06 23:27 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
- 
+
 2015-06-15 12:42 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
-  * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg 
- 
+  * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
+
 2015-06-15 01:06 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-06-14 15:33 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * ChangeLog.txt
   * src/tests/pt/nPerfeitos/totvs_protheus/src/u_NPerfeitos.prg
   * src/tests/tBigNtst.prg
- 
+
 2015-06-11 00:22 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
@@ -607,14 +612,14 @@
 
 2015-05-15 16:22 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg - correcao na inicializacao de :aThreads quando no metodo :new
-    
+
 2015-05-14 14:39 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * src/hb/tbigNThread.prg
 
 2015-05-02 20:35 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   * .gitattributes
   * prj/mg/win/64/tBigNumber64.mip
-    
+
 2015-05-02 19:47 UTC--300 NaldoDj (marinaldo/dot/jesus/at/blacktdn/dot/com)
   - check.hb
   - commit.hb

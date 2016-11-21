@@ -29,7 +29,7 @@
         MEMVAR __cSep
         MEMVAR __CRLF
         MEMVAR cC_GT_MODE
-        
+
         MEMVAR nISQRT
         MEMVAR nN_TEST
         MEMVAR __nSLEEP
@@ -47,14 +47,14 @@
         MEMVAR __nMaxRow
         MEMVAR __nMaxCol
         MEMVAR __noProgress
-        
+
         MEMVAR __oRTime1
         MEMVAR __oRTime2
         MEMVAR __oRTimeProc
 
         MEMVAR __phMutex
     //--------------------------------------------------------------------------------------------------------
-#endif //__HARBOUR__
+#endif /*__HARBOUR__*/
 //--------------------------------------------------------------------------------------------------------
 #include "tBigNtst.ch"
 #include "tBigNumber.ch"
@@ -70,7 +70,7 @@
 #define L_ROPROGRESS       "0"
 #define L_LOGPROCESS       "1"
 #define C_GT_MODE          "ST"
-#define AC_TSTEXEC        "1:17,-18,19:37"
+#define AC_TSTEXEC        "1:17,-18,19:38"
 //--------------------------------------------------------------------------------------------------------
 //Mersenne:
 //http://mathworld.wolfram.com/MersennePrime.html
@@ -82,14 +82,14 @@
     #else
          //1..38,(#...49) Mersenne prime List
         #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
-    #endif //__PTCOMPAT__
-#else //__PROTHEUS__
+    #endif /*__PTCOMPAT__*/
+#else /*__PROTHEUS__*/
     //1..15,(#...49) Mersenne prime List
     #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
-#endif //__HARBOUR__
+#endif /*__HARBOUR__*/
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
-#define __NRTTST__         37
+#define __NRTTST__         38
 #define __PADL_T__          2
 #define N_MTX_TIMEOUT     NIL
 //--------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@
         Local cDispOut          AS CHARACTER
 
         Local hIni              AS HASH
-        
+
         Local nRow              AS NUMERIC
         Local nCol              AS NUMERIC
         Local nSRow             AS NUMERIC
@@ -122,7 +122,7 @@
 
         Local lChangeC          AS LOGICAL
         Local lFinalize         AS LOGICAL
-        
+
         Local ptftBigtstThread  AS POINTER
         Local ptttBigtstThread  AS POINTER
 
@@ -138,10 +138,10 @@
         Private aC_OOPROGRESS       AS ARRAY
 
         Private cC_GT_MODE          AS CHARACTER
-        
+
         Private nN_TEST             AS NUMERIC
         Private __nSLEEP            AS NUMERIC
-        Private nACC_SET            AS NUMERIC   
+        Private nACC_SET            AS NUMERIC
         Private nACC_ALOG           AS NUMERIC
         Private nROOT_ACC_SET       AS NUMERIC
 
@@ -151,14 +151,14 @@
         Private lL_LOGPROCESS       AS LOGICAL
 
         lDispML:=.T.
-        
+
         #ifdef __HBSHELL_USR_DEF_GT
             hbshell_gtSelect(HBSHELL_GTSELECT)
         #endif
 
         cIni:="tBigNtst.ini"
         hIni:=hb_iniRead(cIni)
-        
+
         if .NOT.(File(cIni)).or. Empty(hIni)
             hIni["GENERAL"]:=hb_Hash()
             hIni["GENERAL"]["ACC_SET"]:=ACC_SET
@@ -287,7 +287,7 @@
             nSMaxScrCol:=(nMaxScrCol+1)
             nTMaxRolCol:=(nSMaxScrRow*nSMaxScrCol)
             aScreen:=Array(nSMaxScrRow,nSMaxScrCol)
-            aEval(aScreen,{|x|aFill(x,.T.)})
+            aEval(aScreen,{|x AS ARRAY|aFill(x,.T.)})
 
             while .NOT.(lFinalize)
  #ifdef __0
@@ -302,7 +302,7 @@
 #else
                 nRow:=HB_RandomInt(0,nMaxScrRow)
                 nCol:=HB_RandomInt(0,nMaxScrCol)
-#endif //__0
+#endif /*__0*/
                 nSRow:=(nRow+1)
                 nSCol:=(nCol+1)
                 if (aScreen[nSRow][nSCol])
@@ -310,10 +310,10 @@
                     lChangeC:=.not.(lChangeC)
                     DispOutAT(nRow,nCol,cDispOut,if(lChangeC,"w+/n","w+/n"))
                     aScreen[nSRow][nSCol]:=.F.
-                    aEval(aScreen,{|x|aEval(x,{|y|nScreen+=if(y,0,1)})})
+                    aEval(aScreen,{|x AS ARRAY|aEval(x,{|y AS NUMERIC|nScreen+=if(y,0,1)})})
                     if (nScreen==nTMaxRolCol)
                         cDispOut:=if(cDispOut==cChrDOut," ",cChrDOut)
-                        aEval(aScreen,{|x|aFill(x,.T.)})
+                        aEval(aScreen,{|x AS ARRAY|aFill(x,.T.)})
                     endif
                 endif
             end while
@@ -337,17 +337,17 @@
         Local nThAT     AS NUMERIC
         Local nThread   AS NUMERIC
         Local nThreads  AS NUMERIC
-        
+
         nThreads:=0
 
-        aEval(atBigNtst,{|e|if(e[2],++nThreads,NIL)})
+        aEval(atBigNtst,{|e AS ARRAY|if(e[2],++nThreads,NIL)})
 
         if (nThreads>0)
             //"Share publics and privates with child threads."
             oThreads:=tBigNThread():New()
             oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
             nThAT:=0
-            while ((nThAT:=aScan(atBigNtst,{|e|e[2]},nThAT+1))>0)
+            while ((nThAT:=aScan(atBigNtst,{|e AS ARRAY|e[2]},nThAT+1))>0)
                 nThread:=nThreads
                 oThreads:setEvent(nThread,{@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol})
                 --nThreads
@@ -405,7 +405,7 @@
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigNtst(atBigNtst AS ARRAY)
 
-#else /* __PROTHEUS__*/
+#else /*__PROTHEUS__*/
         //--------------------------------------------------------------------------------------------------------
         #xtranslate ExeName() => ProcName()
         //----------------------------------------------------------
@@ -424,7 +424,7 @@
             Private aAC_TSTEXEC         AS ARRAY
             Private aC_OOPROGRESS       AS ARRAY
             Private aACN_MERSENNE_POW   AS ARRAY
-            
+
             Private cC_GT_MODE          AS CHARACTER
 
             Private nN_TEST             AS NUMERIC
@@ -436,11 +436,11 @@
             Private lL_OOPROGRAND       AS LOGICAL
             Private lL_ROPROGRESS       AS LOGICAL
             Private lL_LOGPROCESS       AS LOGICAL
-            
+
             cIni:="tBigNtst.ini"
 
             if Findfunction("U_TFINI") //NDJLIB020.PRG
-                otFIni:=U_TFINI(cIni)
+                otFIni:=u_TFINI(cIni)
                 if .NOT.File(cIni)
                     otFIni:AddNewSession("GENERAL")
                     otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
@@ -495,82 +495,113 @@
 
             return(tBigNtst(@atBigNtst))
         /*User function tBigNtst*/
-    
+
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigNtst(atBigNtst AS ARRAY)
 
-#endif /* __PROTHEUS__*/
+#endif /*__PROTHEUS__*/
 
         #ifdef __HARBOUR__
-            Local tsBegin:=HB_DATETIME()
+            Local tsBegin           AS DATETIME
             Local nsElapsed
         #endif
 
-            Local dStartDate AS DATE      VALUE Date()
-            Local dendDate
-            Local cStartTime AS CHARACTER VALUE Time()
-            Local cendTime   AS CHARACTER
+            Local dStartDate        AS DATE
+            Local dEndDate
+            Local cStartTime        AS CHARACTER
+            Local cEndTime          AS CHARACTER
 
         #ifdef __HARBOUR__
-            Local cFld       AS CHARACTER VALUE tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
-            Local cLog       AS CHARACTER VALUE cFld+"tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
-            Local ptfProgress:=@Progress()
-            Local pttProgress
-            Local ptfftProgress:=@ftProgress()
-            Local pttftProgress
-        #else
-            Local cLog       AS CHARACTER VALUE GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
-        #endif
+            Local cFld              AS CHARACTER
+            Local cLog              AS CHARACTER
+            Local ptfProgress       AS POINTER
+            Local pttProgress       AS POINTER
+            Local ptfftProgress     AS POINTER
+            Local pttftProgress     AS POINTER
+        #else /*__PROTHEUS__*/
+            Local cLog              AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-            Local cN         AS CHARACTER
-            Local cW         AS CHARACTER
-            Local cX         AS CHARACTER
+            Local cN                AS CHARACTER
+            Local cW                AS CHARACTER
+            Local cX                AS CHARACTER
 
-            Local n          AS NUMERIC
-            Local w          AS NUMERIC
-            Local x          AS NUMERIC
-            Local z          AS NUMERIC
+            Local n                 AS NUMERIC
+            Local w                 AS NUMERIC
+            Local x                 AS NUMERIC
+            Local z                 AS NUMERIC
 
-            Local fhLog      AS NUMERIC
+            Local fhLog             AS NUMERIC
 
-            Local ntBigNtst  AS NUMERIC
+            Local ntBigNtst         AS NUMERIC
 
         #ifdef __HARBOUR__
+
+            Local lKillProgress     AS LOGICAL
+
+            ptfProgress:=@Progress()
+            ptfftProgress:=@ftProgress()
 
             #ifdef __ALT_D__
-                Local lKillProgress AS LOGICAL VALUE .T.
+                lKillProgress:=.T.
             #else
-                Local lKillProgress AS LOGICAL VALUE .F.
-            #endif
+                lKillProgress:=.F.
+            #endif /*__ALT_D__*/
 
-            Private __nMaxRow       AS NUMERIC VALUE (MaxRow()-9)
-            Private __nMaxCol       AS NUMERIC VALUE MaxCol()
-            Private __nCol          AS NUMERIC VALUE Int((__nMaxCol)/2)
-            Private __nRow          AS NUMERIC VALUE 0
-            Private __noProgress    AS NUMERIC VALUE Int(((__nMaxCol)/3)-(__nCol/6))
+            Private __nMaxRow       AS NUMERIC
+            __nMaxRow:=(MaxRow()-9)
 
-            Private __cSep          AS CHARACTER VALUE Replicate("-",__nMaxCol)
+            Private __nMaxCol       AS NUMERIC
+            __nMaxCol:=MaxCol()
 
-            aEval(atBigNtst,{|e|if(e[2],++ntBigNtst,NIL)})
-            Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(ntBigNtst)
+            Private __nCol          AS NUMERIC
+            __nCol:=Int((__nMaxCol)/2)
+
+            Private __nRow          AS NUMERIC
+            __nRow:=0
+
+            Private __noProgress    AS NUMERIC
+            __noProgress:=Int(((__nMaxCol)/3)-(__nCol/6))
+
+            Private __cSep          AS CHARACTER
+            __cSep:=Replicate("-",__nMaxCol)
+
+            aEval(atBigNtst,{|e AS ARRAY|if(e[2],++ntBigNtst,NIL)})
+
+            Private __oRTimeProc    AS OBJECT
+            __oRTimeProc:=tRemaining():New(ntBigNtst)
+
+            cFld:=tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
+            cLog:=cFld+"tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(HB_RandomInt(1,999),3)+".log"
+
             if ((cC_GT_MODE=="MT").and.(ntBigNtst==1))
                 cLog:=StrTran(cLog,"tBigNtst_",PadL(atBigNtst[ntBigNtst][5],__PADL_T__,"0")+"_tBigNtst_")
             endif
 
             MakeDir(cFld)
 
-        #else
+        #else /*__PROTHEUS__*/
 
-            Private __cSep          AS CHARACTER VALUE "---------------------------------------------------------"
-            Private __oRTimeProc    AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New(1)
+            cLog:=GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
+
+            Private __cSep          AS CHARACTER
+            __cSep:="---------------------------------------------------------"
+            Private __oRTimeProc    AS OBJECT
+            __oRTimeProc:=tRemaining():New(1)
 
         #endif
 
-            Private __phMutex:=hb_mutexCreate()
+            Private __phMutex       AS POINTER
+            __phMutex:=hb_mutexCreate()
 
-            Private __CRLF          AS CHARACTER VALUE CRLF
-            Private __oRTime1       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
-            Private __oRTime2       AS OBJECT CLASS "TREMAINING" VALUE tRemaining():New()
+            Private __CRLF          AS CHARACTER
+            __CRLF:=CRLF
+
+            Private __oRTime1       AS OBJECT
+            __oRTime1:=tRemaining():New()
+
+            Private __oRTime2       AS OBJECT
+            __oRTime2:=tRemaining():New()
 
             ASSIGN fhLog:=if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),-1)
             if (lL_LOGPROCESS)
@@ -578,7 +609,8 @@
                 ASSIGN fhLog:=fOpen(cLog,FO_READWRITE+FO_SHARED)
             endif
 
-            Private nISQRT:=Int(SQRT(nN_TEST))
+            Private nISQRT          AS NUMERIC
+            nISQRT:=Int(SQRT(nN_TEST))
 
         #ifdef __HARBOUR__
             SetColor("w+/n")
@@ -591,35 +623,41 @@
                 DispOutAT(3,(__nCol-1),"[ ]")
             #endif
 
+
             __ConOut(fhLog,"START ")                                            //4
+
+            dStartDate:=Date()
             __ConOut(fhLog,"DATE        : ",dStartDate)                         //5
+
+            cStartTime:=Time()
             __ConOut(fhLog,"TIME        : ",cStartTime)                         //6
 
             #ifdef __HARBOUR__
+                tsBegin:=HB_DATETIME()
                 __ConOut(fhLog,"TIMESTAMP   : ",HB_TTOC(tsBegin))               //7
-            #endif
+            #endif /*__HARBOUR__*/
 
             #ifdef TBN_DBFILE
                 #ifndef TBN_MEMIO
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: DBFILE")     //8
                 #else
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: DBMEMIO")    //8
-                #endif
+                #endif /*TBN_MEMIO*/
             #else
                 #ifdef TBN_ARRAY
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: ARRAY")      //8
                 #else
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: STRING")     //8
-                #endif
-            #endif
+                #endif /*TBN_ARRAY*/
+            #endif /*TBN_DBFILE*/
 
             #ifdef __HARBOUR__
-                __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),16)+"/"+StrZero(__oRTime1:GetnTotal(),16)+"]|["+DtoC(__oRTime1:GetdendTime())+"]["+__oRTime1:GetcendTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
-                __ConOut(fhLog,"FINAL2      : ","["+StrZero(__oRTime2:GetnProgress(),16)+"/"+StrZero(__oRTime2:GetnTotal(),16)+"]|["+DtoC(__oRTime2:GetdendTime())+"]["+__oRTime2:GetcendTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
+                __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),16)+"/"+StrZero(__oRTime1:GetnTotal(),16)+"]|["+DtoC(__oRTime1:GetdendTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
+                __ConOut(fhLog,"FINAL2      : ","["+StrZero(__oRTime2:GetnProgress(),16)+"/"+StrZero(__oRTime2:GetnTotal(),16)+"]|["+DtoC(__oRTime2:GetdendTime())+"]["+__oRTime2:GetcEndTime()+"]|["+__oRTime2:GetcAverageTime()+"]") //10
                 __ConOut(fhLog,"")                                              //11
                 __ConOut(fhLog,"")                                              //12
                 DispOutAT(12,__noProgress,"["+Space(__noProgress)+"]","w+/n")   //12
-            #endif
+            #endif /*__HARBOUR__*/
 
             __ConOut(fhLog,"")                                                  //13
 
@@ -637,7 +675,7 @@
                 ptfProgress,@lKillProgress,@__oRTimeProc,@__phMutex,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
                 pttftProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
                 ptfftProgress,@lKillProgress,__nSLEEP,__nMaxCol,__nMaxRow)
-             #endif
+            #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
             __nRow:=__nMaxRow
@@ -647,15 +685,15 @@
 
         #ifdef __HARBOUR__
             __nRow:=__nMaxRow
-        #endif
+        #endif /*__HARBOUR__*/
 
             __ConOut(fhLog,"end ")
 
-            dendDate:=Date()
-            __ConOut(fhLog,"DATE    :",dendDate)
+            dEndDate:=Date()
+            __ConOut(fhLog,"DATE    :",dEndDate)
 
-            ASSIGN cendTime:=Time()
-            __ConOut(fhLog,"TIME    :",cendTime)
+            ASSIGN cEndTime:=Time()
+            __ConOut(fhLog,"TIME    :",cEndTime)
 
             if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
                 __oRTimeProc:Calcule(.F.)
@@ -666,7 +704,7 @@
             #ifdef __HARBOUR__
                 nsElapsed:=(HB_DATETIME()-tsBegin)
                 __ConOut(fhLog,"tELAPSED:",StrTran(StrTran(HB_TTOC(HB_NTOT(nsElapsed)),"/","")," ",""))
-            #endif
+            #endif /*__HARBOUR__*/
 
             __ConOut(fhLog,__cSep)
 
@@ -693,7 +731,7 @@
             #ifdef TBN_DBFILE
                 tBigNGC()
             #endif
-        #else// __HARBOUR__
+        #else /*__HARBOUR__*/
             lKillProgress:=.T.
             hb_threadQuitRequest(pttProgress)
             hb_threadQuitRequest(pttftProgress)
@@ -706,15 +744,18 @@
                 WAIT "Press any key to end"
             endif
             CLS
-        #endif
+        #endif /*__PROTHEUS__*/
 
         return
     /*static procedure tBigNtst*/
-    
+
 //--------------------------------------------------------------------------------------------------------
 static procedure ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
 
     Local aTmp  AS ARRAY
+
+    Local bAsc  AS BLOCK
+    Local bSrt  AS BLOCK
 
     Local nD    AS NUMERIC
     Local nJ    AS NUMERIC
@@ -737,20 +778,35 @@ static procedure ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
         endif
     next nD
 
+    #ifdef __HARBOUR__
+        bAsc:={|e AS CHARACTER|":"$e}
+    #else
+        bAsc:={|e|":"$e}
+    #endif /*__HARBOUR__*/
+
     nJ:=Len(aAC_TSTEXEC)
-    while ((nTmp:=aScan(aAC_TSTEXEC,{|e|":"$e}))>0)
+
+    while ((nTmp:=aScan(aAC_TSTEXEC,bAsc))>0)
         aSize(aDel(aAC_TSTEXEC,nTmp),--nJ)
     end while
 
-    aSort(aAC_TSTEXEC,NIL,NIL,{|x,y|PadL(x,nPad)<PadL(y,nPad)})
+    #ifdef __HARBOUR__
+        bSrt:={|x AS CHARACTER,y AS CHARACTER|PadL(x,nPad)<PadL(y,nPad)}
+    #else
+        bSrt:={|x,y|PadL(x,nPad)<PadL(y,nPad)}
+    #endif /*__HARBOUR__*/
+
+    aSort(aAC_TSTEXEC,NIL,NIL,bSrt)
 
     return
-/*static procedure ChkIntTstExec*/    
+/*static procedure ChkIntTstExec*/
 
 //--------------------------------------------------------------------------------------------------------
 static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
 
     local atBigNtst AS ARRAY
+
+    local bAsc      AS BLOCK
 
     local nD        AS NUMERIC
     local nJ        AS NUMERIC
@@ -760,9 +816,16 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
     #ifndef __PTCOMPAT__
         local pGT   AS POINTER
     #endif
-    
+
     nJ:=__NRTTST__
-    lAll:=(aScan(aAC_TSTEXEC,{|c|(c=="*")})>0)
+
+    #ifdef __HARBOUR__
+        bAsc:={|c AS CHARACTER|(c=="*")}
+    #else
+        bAsc:={|c|(c=="*")}
+    #endif /*__HARBOUR__*/
+
+    lAll:=(aScan(aAC_TSTEXEC,bAsc)>0)
     atBigNtst:=Array(nJ,if((cC_GT_MODE=="MT"),5,2))
 
     atBigNtst[1][1]:={|p|tBigNtst01(p)}
@@ -805,9 +868,16 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
     atBigNtst[35][1]:={|p|tBigNtst35(p)}
     atBigNtst[36][1]:={|p|tBigNtst36(p)}
     atBigNtst[37][1]:={|p|tBigNtst37(p)}
+    atBigNtst[38][1]:={|p|tBigNtst38(p)}
+
+    #ifdef __HARBOUR__
+        bAsc:={|c AS CHARACTER|(nD==Val(c))}
+    #else
+        bAsc:={|c|(nD==Val(c))}
+    #endif /*__HARBOUR__*/
 
     for nD:=1 to nJ
-        atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,{|c|(nD==Val(c))})>0)
+        atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,bAsc)>0)
         if atBigNtst[nD][2].and.(cC_GT_MODE=="MT")
             #ifndef __PTCOMPAT__
                 atBigNtst[nD][3]:=hb_gtCreate(THREAD_GT)
@@ -823,7 +893,7 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
 
     return(atBigNtst)
 /*static function GettBigNtst*/
-    
+
 //--------------------------------------------------------------------------------------------------------
 static function _StrTokArr(cStr AS CHARACTER,cToken AS CHARACTER)
     Local cDToken   AS CHARACTER
@@ -839,10 +909,10 @@ static function _StrTokArr(cStr AS CHARACTER,cToken AS CHARACTER)
     return(hb_aTokens(cStr,cToken))
 #endif
 /*static function _StrTokArr*/
-    
+
 //--------------------------------------------------------------------------------------------------------
 static procedure __tbnSleep(nSleep AS NUMERIC)
-    PARAMTYPE 1 VAR nSleep AS NUMERIC OPTIONAL DEFAULT __nSLEEP
+    DEFAULT nSleep:=__nSLEEP
     tBigNSleep(nSleep)
     return
 /*static procedure __tbnSleep*/
@@ -869,10 +939,6 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
     Local lMRow  AS LOGICAL
 
 #endif
-
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
-    PARAMTYPE 2 VAR e     AS UNDEFINED
-    PARAMTYPE 3 VAR d     AS UNDEFINED
 
     ASSIGN ld:=.NOT.(Empty(d))
 
@@ -961,7 +1027,7 @@ static function IsHb()
     #endif
     return(lHarbour)
 /*static function IsHb*/
-    
+
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     static function cValToChar(e)
@@ -987,13 +1053,13 @@ static function IsHb()
         endswitch
         return(s)
     /*static function cValToChar*/
-    
+
     //--------------------------------------------------------------------------------------------------------
     static procedure Progress(lKillProgress AS LOGICAL,__oRTimeProc AS OBJECT,__phMutex AS POINTER,nCol AS NUMERIC,aProgress2 AS ARRAY,nProgress2 AS NUMERIC,nSLEEP AS NUMERIC,nMaxCol AS NUMERIC,lRandom AS LOGICAL,lPRandom AS LOGICAL)
 
-        Local aRdnPG     AS ARRAY                        VALUE Array(0)
-        Local aRdnAn     AS ARRAY                        VALUE Array(0)
-        Local aSAnim     AS ARRAY                        VALUE Array(29)
+        Local aRdnPG     AS ARRAY
+        Local aRdnAn     AS ARRAY
+        Local aSAnim     AS ARRAY
 
         Local cAT        AS CHARACTER
         Local cRTime     AS CHARACTER
@@ -1002,21 +1068,41 @@ static function IsHb()
         Local cProgress  AS CHARACTER
 
         Local lChange    AS LOGICAL
-        Local lCScreen   AS LOGICAL                       VALUE .T.
+        Local lCScreen   AS LOGICAL
 
         Local nAT        AS NUMERIC
         Local nQT        AS NUMERIC
-        Local nLenA      AS NUMERIC                        VALUE Len(aSAnim)
-        Local nLenP      AS NUMERIC                        VALUE Len(aProgress2)
-        Local nSAnim     AS NUMERIC                        VALUE 1
-        Local nSizeP     AS NUMERIC                        VALUE (nProgress2*2)
-        Local nSizeP2    AS NUMERIC                        VALUE (nSizeP*2)
-        Local nSizeP3    AS NUMERIC                        VALUE (nSizeP*3)
+        Local nLenA      AS NUMERIC
+        Local nLenP      AS NUMERIC
+        Local nSAnim     AS NUMERIC
+        Local nSizeP     AS NUMERIC
+        Local nSizeP2    AS NUMERIC
+        Local nSizeP3    AS NUMERIC
         Local nChange    AS NUMERIC
-        Local nProgress  AS NUMERIC                        VALUE 1
+        Local nProgress  AS NUMERIC
 
-        Local oProgress1 AS OBJECT CLASS "TSPROGRESS"     VALUE tSProgress():New()
-        Local oProgress2 AS OBJECT CLASS "TSPROGRESS"     VALUE tSProgress():New()
+        Local oProgress1 AS OBJECT
+        Local oProgress2 AS OBJECT
+
+        aRdnPG:=Array(0)
+        aRdnAn:=Array(0)
+        aSAnim:=Array(29)
+
+        lCScreen:=.T.
+
+        nLenA:=Len(aSAnim)
+        nLenP:=Len(aProgress2)
+
+        nSAnim:=1
+
+        nSizeP:=(nProgress2*2)
+        nSizeP2:=(nSizeP*2)
+        nSizeP3:=(nSizeP*3)
+
+        nProgress:=1
+
+        oProgress1:=tSProgress():New()
+        oProgress2:=tSProgress():New()
 
         ASSIGN aSAnim[01]:=Replicate(Chr(7)+";",nSizeP2-1)
         ASSIGN aSAnim[01]:=SubStr(aSAnim[01],1,nSizeP2-1)
@@ -1268,7 +1354,7 @@ static function IsHb()
                 ASSIGN cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
                 ASSIGN cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
                 ASSIGN cRTime+="["+DtoC(__oRTimeProc:GetdendTime())+"]"
-                ASSIGN cRTime+="["+__oRTimeProc:GetcendTime()+"]"
+                ASSIGN cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
                 ASSIGN cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
                 ASSIGN cRTime+="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
                 ASSIGN cLRTime:=cRTime
@@ -1285,10 +1371,10 @@ static function IsHb()
 
         return
     /*static procedure Progress*/
-    
+
     static procedure ShowFinalProc()
 
-        Local cDOAt      AS CHARACTER
+        Local cDOAt AS CHARACTER
 
         @ 09,15 CLEAR TO 09,__nMaxCol
         cDOAt:="["
@@ -1297,7 +1383,7 @@ static function IsHb()
         cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
         cDOAt+="]|["
         cDOAt+=DtoC(__oRTime1:GetdendTime())
-        cDOAt+="]["+__oRTime1:GetcendTime()
+        cDOAt+="]["+__oRTime1:GetcEndTime()
         cDOAt+="]|["
         cDOAt+=__oRTime1:GetcAverageTime()
         cDOAt+="]["
@@ -1312,7 +1398,7 @@ static function IsHb()
         cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
         cDOAt+="]|["
         cDOAt+=DtoC(__oRTime2:GetdendTime())
-        cDOAt+="]["+__oRTime2:GetcendTime()
+        cDOAt+="]["+__oRTime2:GetcEndTime()
         cDOAt+="]|["
         cDOAt+=__oRTime2:GetcAverageTime()
         cDOAt+="]["
@@ -1322,23 +1408,32 @@ static function IsHb()
 
         return
     /*static procedure ShowFinalProc*/
-    
+
     //--------------------------------------------------------------------------------------------------------
     static procedure ftProgress(lKillProgress AS LOGICAL,nSLEEP AS NUMERIC,nMaxCol AS NUMERIC,nMaxRow AS NUMERIC)
 
-        Local aAnim    AS ARRAY     VALUE GetBigNAnim()
+        Local aAnim    AS ARRAY
 
         Local cRow     AS CHARACTER
         Local cAnim    AS CHARACTER
         Local cRAnim   AS CHARACTER
 
-        Local lBreak   AS LOGICAL   VALUE .F.
+        Local lBreak   AS LOGICAL
 
         Local nRow     AS NUMERIC
         Local nRowC    AS NUMERIC
         Local nAnim    AS NUMERIC
-        Local nAnimes  AS NUMERIC    VALUE Len(aAnim)
-        Local nRowAnim AS NUMERIC    VALUE (nMaxRow+2)
+        Local nAnimes  AS NUMERIC
+        Local nRowAnim AS NUMERIC
+
+
+        aAnim:=GetBigNAnim()
+
+        lBreak:=.F.
+
+        nAnimes:=Len(aAnim)
+
+        nRowAnim:=(nMaxRow+2)
 
         while .NOT.(lKillProgress)
 
@@ -1371,7 +1466,7 @@ static function IsHb()
 
         return
     /*static procedure ftProgress*/
-    
+
     //--------------------------------------------------------------------------------------------------------
     static procedure BuildScreen(fhLog AS NUMERIC,nMaxCol AS NUMERIC)
         CLEAR SCREEN
@@ -1380,13 +1475,13 @@ static function IsHb()
         ShowTime(2,nMaxCol-8,.F.,"r+/n",.F.,.F.)
         return
     /*static procedure BuildScreen*/
-    
+
     //--------------------------------------------------------------------------------------------------------
     static function FreeObj(oObj AS OBJECT)
         oObj:=NIL
         return(tBigNGC())
     /*static function FreeObj*/
-    
+
     static function tBigNGC()
         return(/*hb_gcAll(.T.)*/NIL)
     /*static function tBigNGC*/
@@ -1399,7 +1494,7 @@ static function IsHb()
         /*static function tBigNGC*/
     #endif
 #endif
-    
+
 //--------------------------------------------------------------------------------------------------------
 static function Fibonacci(uN)
     Local oN:=tBigNumber():New(uN)
@@ -1409,7 +1504,7 @@ static function Fibonacci(uN)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst01(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -1418,7 +1513,7 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"")
 
@@ -1478,9 +1573,9 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst02(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigX    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
+    Local otBigX    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -1488,7 +1583,9 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local w         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
+    otBigX:=tBigNumber():New()
 
     #ifndef __PROTHEUS__
         __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
@@ -1605,10 +1702,10 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst03(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
-    Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
+    Local o0        AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -1619,7 +1716,10 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
 
     Local aPFact    AS ARRAY
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
+
+    o0:=tBigNumber():New("0")
 
    __ConOut(fhLog,"")
 
@@ -1681,7 +1781,7 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
     aPFact:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif //__PROTHEUS__
+    #endif /*__PROTHEUS__*/
 
     __ConOut(fhLog,"")
 
@@ -1699,18 +1799,20 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
 
     Local n         AS NUMERIC
 
-    Local aPrimes   AS ARRAY  VALUE {;
-                                         "15485783", "15485801", "15485807", "15485837", "15485843", "15485849", "15485857", "15485863",;
-                                         "15487403", "15487429", "15487457", "15487469", "15487471", "15487517", "15487531", "15487541",;
-                                         "32458051", "32458057", "32458073", "32458079", "32458091", "32458093", "32458109", "32458123",;
-                                         "49981171", "49981199", "49981219", "49981237", "49981247", "49981249", "49981259", "49981271",;
-                                         "67874921", "67874959", "67874969", "67874987", "67875007", "67875019", "67875029", "67875061",;
-                                        "982451501","982451549","982451567","982451579","982451581","982451609","982451629","982451653";
-                                    }
+    Local aPrimes   AS ARRAY
 
-    Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New()
+    Local oPrime    AS OBJECT
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    aPrimes:={;
+         "15485783","15485801","15485807","15485837","15485843","15485849","15485857","15485863",;
+         "15487403","15487429","15487457","15487469","15487471","15487517","15487531","15487541",;
+         "32458051","32458057","32458073","32458079","32458091","32458093","32458109","32458123",;
+         "49981171","49981199","49981219","49981237","49981247","49981249","49981259","49981271",;
+         "67874921","67874959","67874969","67874987","67875007","67875019","67875029","67875061",;
+         "982451501","982451549","982451567","982451579","982451581","982451609","982451629","982451653";
+    }
+
+    oPrime:=tPrime():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 1 -------------- ")
 
@@ -1719,7 +1821,7 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
     __ConOut(fhLog,"")
 
     oPrime:IsPReset()
-    oPrime:nextPReset()
+    oPrime:NextPReset()
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(Len(aPrimes))
@@ -1732,8 +1834,8 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
             hb_mutexUnLock(__phMutex)
         endif
         ASSIGN cN:=PadL(aPrimes[n],oPrime:nSize)
-        __ConOut(fhLog,'tPrime():nextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:nextPrime(cN)))
-        __ConOut(fhLog,'tPrime():nextPrime('+cN+')',"RESULT: "+oPrime:cPrime)
+        __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))
+        __ConOut(fhLog,'tPrime():NextPrime('+cN+')',"RESULT: "+oPrime:cPrime)
         __ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -1749,7 +1851,7 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
     aPrimes:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif //__PROTHEUS__
+    #endif /*__PROTHEUS__*/
 
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
@@ -1767,7 +1869,7 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst05(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cHex      AS CHARACTER
@@ -1775,10 +1877,13 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    Local otBH16    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,16)
-    Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
+    Local otBH16    AS OBJECT
+    Local otBBin    AS OBJECT
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+
+    otBH16:=tBigNumber():New(NIL,16)
+    otBBin:=tBigNumber():New(NIL,2)
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX16 0 -------------- ")
 
@@ -1841,7 +1946,7 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst06(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cHex      AS CHARACTER
@@ -1849,10 +1954,13 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    Local otBH32    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,32)
-    Local otBBin    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New(NIL,2)
+    Local otBH32    AS OBJECT
+    Local otBBin    AS OBJECT
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+
+    otBH32:=tBigNumber():New(NIL,32)
+    otBBin:=tBigNumber():New(NIL,2)
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX32 0 -------------- ")
 
@@ -1915,20 +2023,21 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
 
     return
 /*static procedure tBigNtst06*/
-    
+
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst07(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 1 -------------- ")
 
@@ -1993,14 +2102,14 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst08(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 2 -------------- ")
 
@@ -2063,14 +2172,14 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst09(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 3 -------------- ")
 
@@ -2129,14 +2238,14 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst10(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 1 -------------- ")
 
@@ -2195,14 +2304,14 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst11(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 2 -------------- ")
 
@@ -2259,14 +2368,14 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst12(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 3 -------------- ")
 
@@ -2323,10 +2432,10 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst13(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
 
@@ -2334,7 +2443,10 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 1 -------------- ")
 
@@ -2407,9 +2519,9 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst14(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
 
@@ -2417,7 +2529,9 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 2 -------------- ")
 
@@ -2485,9 +2599,9 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst15(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
 
@@ -2495,7 +2609,9 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 3 -------------- ")
 
@@ -2559,9 +2675,9 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst16(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -2570,7 +2686,9 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 4 -------------- ")
 
@@ -2644,9 +2762,9 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst17(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -2655,7 +2773,9 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 5 -------------- ")
 
@@ -2725,9 +2845,9 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst18(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
+    Local o1        AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -2736,7 +2856,9 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 6 -------------- ")
 
@@ -2809,13 +2931,13 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst19(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Factoring -------------- ")
 
@@ -2871,7 +2993,7 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst20(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -2880,7 +3002,7 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste GCD/LCM 0 -------------- ")
 
@@ -2940,8 +3062,8 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst21(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -2950,7 +3072,8 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 0 -------------- ")
 
@@ -3027,7 +3150,7 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst22(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3035,9 +3158,9 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
     Local n         AS NUMERIC VALUE 19701215
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 1 -------------- ")
+
+    otBigN:=tBigNumber():New()
 
     otBigN:SetDecimals(nACC_SET)
 
@@ -3097,16 +3220,20 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst23(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
-    Local o3        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("3")
+    Local o1        AS OBJECT
+    Local o3        AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+
+    o1:=tBigNumber():New("1")
+    o3:=tBigNumber():New("3")
+
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 2 -------------- ")
 
@@ -3163,8 +3290,8 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst24(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3175,7 +3302,8 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste FI 0 -------------- ")
 
@@ -3224,8 +3352,8 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst25(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3236,7 +3364,8 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
 
     __ConOut(fhLog,"")
 
@@ -3303,7 +3432,7 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst26(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3314,7 +3443,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"")
 
@@ -3383,7 +3512,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst27(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3391,7 +3520,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Exp 0 -------------- ")
 
@@ -3457,7 +3586,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst28(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3467,7 +3596,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
     Local w         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 0 -------------- ")
 
@@ -3549,7 +3678,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst29(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -3559,7 +3688,7 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
     Local w         AS NUMERIC
     Local x         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 1 -------------- ")
 
@@ -3638,11 +3767,11 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst30(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local n         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 2 -------------- ")
 
@@ -3700,23 +3829,35 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst31(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
     Local cX        AS CHARACTER
 
-    Local o0        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
-    Local o1        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("1")
-    Local o2        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
-    Local o3        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("3")
-    Local o4        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("4")
-    Local o5        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("5")
-    Local o6        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("6")
-    Local o7        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("7")
-    Local o8        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("8")
-    Local o9        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("9")
-    Local o10       AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("10")
+    Local o0        AS OBJECT
+    Local o1        AS OBJECT
+    Local o2        AS OBJECT
+    Local o3        AS OBJECT
+    Local o4        AS OBJECT
+    Local o5        AS OBJECT
+    Local o6        AS OBJECT
+    Local o7        AS OBJECT
+    Local o8        AS OBJECT
+    Local o9        AS OBJECT
+    Local o10       AS OBJECT
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
+
+    o0:=tBigNumber():New("0")
+    o1:=tBigNumber():New("1")
+    o2:=tBigNumber():New("2")
+    o3:=tBigNumber():New("3")
+    o4:=tBigNumber():New("4")
+    o5:=tBigNumber():New("5")
+    o6:=tBigNumber():New("6")
+    o7:=tBigNumber():New("7")
+    o8:=tBigNumber():New("8")
+    o9:=tBigNumber():New("9")
+    o10:=tBigNumber():New("10")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 0 -------------- ")
 
@@ -4035,8 +4176,8 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst32(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
+    Local otBigW    AS OBJECT
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
@@ -4045,7 +4186,8 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local w         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+    otBigW:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 1 -------------- ")
 
@@ -4131,14 +4273,14 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst33(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigW    AS OBJECT
 
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
 
     Local w         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LN 1 -------------- ")
 
@@ -4192,20 +4334,25 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst34(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
-    Local o2        AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
+    Local o2        AS OBJECT
 
     Local cN        AS CHARACTER
 
     Local n         AS NUMERIC
 
-    Local oPrime    AS OBJECT CLASS "TPRIME"     VALUE tPrime():New()
+    Local oPrime    AS OBJECT
 
     Local lMR       AS LOGICAL
     Local lPn       AS LOGICAL
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
+
+    o2:=tBigNumber():New("2")
+
+    oPrime:=tPrime():New()
+
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste millerRabin 0 -------------- ")
 
@@ -4246,7 +4393,7 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
         __ConOut(fhLog,__cSep)
     end while
     oPrime:IsPReset()
-    oPrime:nextPReset()
+    oPrime:NextPReset()
 
     oPrime:=FreeObj(oPrime)
 
@@ -4270,11 +4417,11 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst35(fhLog AS NUMERIC)
 
-    Local otBigN    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New()
+    Local otBigN    AS OBJECT
 
     Local n         AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
 
@@ -4333,8 +4480,6 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
 
     Local aFibonacci    AS ARRAY
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
-
     __ConOut(fhLog,"")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci -------------- ")
@@ -4381,7 +4526,7 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
     aFibonacci:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif //__PROTHEUS__
+    #endif /*__PROTHEUS__*/
 
     __ConOut(fhLog,"")
 
@@ -4395,16 +4540,85 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst37(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("2")
-    Local otBigM    AS OBJECT CLASS "TBIGNUMBER" VALUE tBigNumber():New("0")
+    Local cN            AS CHARACTER
+    Local cW            AS CHARACTER
+
+    Local n             AS NUMERIC
+    Local x             AS NUMERIC
+
+    Local aFibonacci    AS ARRAY
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci x Mersenne-------------- ")
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+
+    __ConOut(fhLog,"")
+
+    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        __oRTime1:SetRemaining(nN_TEST)
+        __oRTime1:SetStep(nISQRT)
+        hb_mutexUnLock(__phMutex)
+    endif
+
+    For n:=1 To Len(aACN_MERSENNE_POW)
+        ASSIGN cN:=aACN_MERSENNE_POW[n]
+        ASSIGN aFibonacci:=Fibonacci(cN)
+        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            __oRTime2:SetRemaining(Len(aFibonacci))
+            hb_mutexUnLock(__phMutex)
+        endif
+        For x:=1 To Len(aFibonacci)
+            ASSIGN cW:=aFibonacci[x]
+            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(x),"RESULT: "+cW)
+            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+                __oRTime2:Calcule()
+                __oRTime1:Calcule(.F.)
+                hb_mutexUnLock(__phMutex)
+            endif
+        next x
+        __ConOut(fhLog,__cSep)
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+        *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+        __ConOut(fhLog,__cSep)
+        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            __oRTime1:Calcule()
+            __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
+            hb_mutexUnLock(__phMutex)
+        endif
+        *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+        __ConOut(fhLog,__cSep)
+    next n
+    aSize(aFibonacci,0)
+    aFibonacci:=NIL
+    #ifdef __HARBOUR__
+        tBigNGC()
+    #endif /*__PROTHEUS__*/
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog,"------------ Teste Fibonacci x Mersenne-------------- end")
+
+    __ConOut(fhLog,"")
+
+    return
+/*static procedure tBigNtst37*/
+
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst38(fhLog AS NUMERIC)
+
+    Local otBigW    AS OBJECT
+    Local otBigM    AS OBJECT
 
     Local cM        AS CHARACTER
     Local cR        AS CHARACTER
 
     Local nD        AS NUMERIC
-    Local nJ        AS NUMERIC VALUE Len(aACN_MERSENNE_POW)
+    Local nJ        AS NUMERIC
 
-    PARAMTYPE 1 VAR fhLog AS NUMERIC
+    otBigW:=tBigNumber():New("2")
+    otBigM:=tBigNumber():New("0")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
@@ -4416,6 +4630,8 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
+    
+    nJ:=Len(aACN_MERSENNE_POW)
 
     for nD:=1 to nJ
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -4423,7 +4639,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
            #ifdef __HARBOUR__
                __oRTime2:SetStep(1/1000)
                __oRTime2:ForceStep(.T.)
-           #endif //__HARBOUR__
+           #endif /*__HARBOUR__*/
            hb_mutexUnLock(__phMutex)
         endif
         ASSIGN cM:=aACN_MERSENNE_POW[nD]
@@ -4435,7 +4651,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             #ifdef __HARBOUR__
                 __oRTime2:ForceStep(.F.)
-            #endif //__HARBOUR__
+            #endif /*__HARBOUR__*/
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)
@@ -4459,4 +4675,4 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
     __ConOut(fhLog,"")
 
     return
-/*static procedure tBigNtst37*/
+/*static procedure tBigNtst38*/
