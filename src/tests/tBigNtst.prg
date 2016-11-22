@@ -328,7 +328,8 @@
 
         endif
 
-    return(0)
+        return(0)
+    /*function Main*/
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigtstThread(lFinalize AS LOGICAL,atBigNtst AS ARRAY,nMaxScrRow AS NUMERIC,nMaxScrCol AS NUMERIC)
 

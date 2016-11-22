@@ -67,36 +67,38 @@
     #define __DIVMETHOD__ 1
 #endif
 
-static s__cN0
-static s__nN0
-static s__cN9
-static s__nN9
+static s_aH2B   AS ARRAY
 
-static s__o0
-static s__o1
-static s__o2
-static s__o10
-static s__o20
-static s__od2
+static s__cN0   AS CHARACTER
+static s__nN0   AS NUMERIC
+static s__cN9   AS CHARACTER
+static s__nN9   AS  NUMERIC
 
-static s__oMinFI
-static s__oMinGCD
-static s__nMinLCM
+static s__o0    AS OBJECT
+static s__o1    AS OBJECT
+static s__o2    AS OBJECT
+static s__o10   AS OBJECT
+static s__o20   AS OBJECT
+static s__od2   AS OBJECT
 
-static s__lstbNSet
+static s__oMinFI    AS OBJECT
+static s__oMinGCD   AS OBJECT
+static s__nMinLCM   AS OBJECT
 
-static s__nDivMTD
+static s__lstbNSet  AS LOGICAL
 
-static s__nthRAcc
-static s__nDecSet
+static s__nDivMTD   AS NUMERIC
 
-static s__SysSQRT
+static s__nthRAcc   AS NUMERIC
+static s__nDecSet   AS NUMERIC
 
-static s__MTXcN0:=hb_mutexCreate()
-static s__MTXcN9:=hb_mutexCreate()
-static s__MTXACC:=hb_mutexCreate()
-static s__MTXDEC:=hb_mutexCreate()
-static s__MTXSQR:=hb_mutexCreate()
+static s__SysSQRT   AS NUMERIC
+
+static s__MTXcN0    AS POINTER
+static s__MTXcN9    AS POINTER
+static s__MTXACC    AS POINTER
+static s__MTXDEC    AS POINTER
+static s__MTXSQR    AS POINTER
 
 #ifdef TBN_ARRAY
     #define __THREAD_STATIC__ 1
@@ -107,14 +109,14 @@ static s__MTXSQR:=hb_mutexCreate()
 #endif
 
 #ifdef __THREAD_STATIC__
-    thread static ths_lsdSet
+    thread static ths_lsdSet            AS LOGICAL
     #ifdef TBN_ARRAY
-        thread static ths_aZAdd
-        thread static ths_aZSub
-        thread static ths_aZMult
+        thread static ths_aZAdd         AS ARRAY
+        thread static ths_aZSub         AS ARRAY
+        thread static ths_aZMult        AS ARRAY
     #else
         #ifdef TBN_DBFILE
-            thread static ths_aFiles
+            thread static ths_aFiles    AS ARRAY
         #endif
     #endif
 #endif
@@ -184,7 +186,7 @@ class tBigNumber from hbClass
     EXPORTED:
 #endif
 
-    method New(uBigN,nBase) CONSTRUCTOR /*( /!\ )*/
+    method New(uBigN,nBase AS NUMERIC) CONSTRUCTOR /*( /!\ )*/
 
 #ifndef __PROTHEUS__
     #ifdef TBN_DBFILE
@@ -192,31 +194,31 @@ class tBigNumber from hbClass
     #endif
 #endif
 
-    method Normalize(oBigN)
+    method Normalize(oBigN AS OBJECT)
 
-    method __cDec(cDec)   SETGET
-    method __cInt(cInt)   SETGET
-    method __cRDiv(cRDiv) SETGET
-    method __cSig(cSig)   SETGET
-    method __lNeg(lNeg)   SETGET
-    method __nBase(nBase) SETGET
-    method __nDec(nDec)   SETGET
-    method __nInt(nInt)   SETGET
-    method __nSize(nSize) SETGET
+    method __cDec(cDec AS CHARACTER)    SETGET
+    method __cInt(cInt AS CHARACTER)    SETGET
+    method __cRDiv(cRDiv AS CHARACTER)  SETGET
+    method __cSig(cSig AS CHARACTER)    SETGET
+    method __lNeg(lNeg AS LOGICAL)      SETGET
+    method __nBase(nBase AS NUMERIC)    SETGET
+    method __nDec(nDec AS NUMERIC)      SETGET
+    method __nInt(nInt AS NUMERIC)      SETGET
+    method __nSize(nSize AS NUMERIC)    SETGET
 
     method Clone()
     method className()
 
-    method SetDecimals(nSet)
+    method SetDecimals(nSet AS NUMERIC)
 
-    method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc)
-    method GetValue(lAbs,lObj)
-    method ExactValue(lAbs,lObj)
+    method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
+    method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL)
+    method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL)
 
-    method Abs(lObj)
+    method Abs(lObj AS LOGICAL)
 
-    method Int(lObj,lSig)
-    method Dec(lObj,lSig,lNotZ)
+    method Int(lObj AS LOGICAL,lSig AS LOGICAL)
+    method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL)
 
     method eq(uBigN)
     method ne(uBigN)
@@ -287,35 +289,35 @@ class tBigNumber from hbClass
     method rMultiply(uBigN)
 #endif
 
-    method Div(uBigN,lFloat)
+    method Div(uBigN,lFloat AS LOGICAL)
 #ifndef __PROTHEUS__
     method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
 #else
-    method Divide(uBigN,lFloat)
+    method Divide(uBigN,lFloat AS LOGICAL)
 #endif
 
-    method Divmethod(nmethod)
+    method Divmethod(nMethod AS NUMERIC)
 
     method Mod(uBigN)
 
-    method Pow(uBigN,lIPower)
+    method Pow(uBigN,lIPower AS LOGICAL)
     method iPow(uBigN)
 
     method OpInc()
     method OpDec()
 
-    method e(lforce)
+    method e(lforce AS LOGICAL)
 
-    method Exp(lforce)
+    method Exp(lforce AS LOGICAL)
 
-    method PI(lforce)    //TODO: Implementar o calculo.
+    method PI(lforce AS LOGICAL)    //TODO: Implementar o calculo.
 
     method GCD(uBigN)
     method LCM(uBigN)
 
     method nthRoot(uBigN)
     method nthRootPF(uBigN)
-    method nthRootAcc(nSet)
+    method nthRootAcc(nSet AS NUMERIC)
 
     method SQRT()
     method SysSQRT(uSet)
@@ -326,28 +328,28 @@ class tBigNumber from hbClass
     method __Log(uBigNB)
     method __LogN(uBigNB)   //TODO: Validar Calculo.
 
-    method Log2()         //TODO: Validar Calculo.
-    method Log10()        //TODO: Validar Calculo.
+    method Log2()           //TODO: Validar Calculo.
+    method Log10()          //TODO: Validar Calculo.
 
-    method Ln()           //TODO: Validar Calculo.
+    method Ln()             //TODO: Validar Calculo.
 
-    method MathC(uBigN1,cOperator,uBigN2)
-    method MathN(uBigN1,cOperator,uBigN2)
+    method MathC(uBigN1,cOperator AS CHARACTER,uBigN2)
+    method MathN(uBigN1,cOperator AS CHARACTER,uBigN2)
 
-    method Rnd(nAcc)
-    method NoRnd(nAcc)
-    method Truncate(nAcc)
-    method Floor(nAcc)   //TODO: Verificar regra a partir de referencias bibliograficas.
-    method Ceiling(nAcc) //TODO: Verificar regra a partir de referencias bibliograficas.
+    method Rnd(nAcc AS NUMERIC)
+    method NoRnd(nAcc AS NUMERIC)
+    method Truncate(nAcc AS NUMERIC)
+    method Floor(nAcc AS NUMERIC)   //TODO: Verificar regra a partir de referencias bibliograficas.
+    method Ceiling(nAcc AS NUMERIC) //TODO: Verificar regra a partir de referencias bibliograficas.
 
-    method D2H(cHexB)
+    method D2H(cHexB AS CHARACTER)
     method H2D()
 
     method H2B()
-    method B2H(cHexB)
+    method B2H(cHexB AS CHARACTER)
 
-    method D2B(cHexB)
-    method B2D(cHexB)
+    method D2B(cHexB AS CHARACTER)
+    method B2D(cHexB AS CHARACTER)
 
     method Randomize(uB,uE)
 
@@ -440,77 +442,90 @@ endclass
 
     /* overloaded methods/functions */
 
-    static function __OpEqual(oSelf,uBigN)
-    return(oSelf:eq(uBigN))
+    static function __OpEqual(oSelf AS OBJECT,uBigN)
+        return(oSelf:eq(uBigN))
+    /*static function __OpEqual*/
 
-    static function __OpNotEqual(oSelf,uBigN)
-    return(oSelf:ne(uBigN))
+    static function __OpNotEqual(oSelf AS OBJECT,uBigN)
+        return(oSelf:ne(uBigN))
+    /*static function __OpNotEqual*/
 
-    static function __OpGreater(oSelf,uBigN)
-    return(oSelf:gt(uBigN))
+    static function __OpGreater(oSelf AS OBJECT,uBigN)
+        return(oSelf:gt(uBigN))
+    /*static function __OpGreater*/
 
-    static function __OpGreaterEqual(oSelf,uBigN)
-    return(oSelf:gte(uBigN))
+    static function __OpGreaterEqual(oSelf AS OBJECT,uBigN)
+        return(oSelf:gte(uBigN))
+    /*static function __OpGreaterEqual*/
 
-    static function __OpLess(oSelf,uBigN)
-    return(oSelf:lt(uBigN))
+    static function __OpLess(oSelf AS OBJECT,uBigN)
+        return(oSelf:lt(uBigN))
+    /*static function __OpLess*/
 
-    static function __OpLessEqual(oSelf,uBigN)
-    return(oSelf:lte(uBigN))
+    static function __OpLessEqual(oSelf AS OBJECT,uBigN)
+        return(oSelf:lte(uBigN))
+    /*static function __OpLessEqual*/
 
-    static function __OpInc(oSelf)
-    return(oSelf:OpInc())
+    static function __OpInc(oSelf AS OBJECT)
+        return(oSelf:OpInc())
+    /*static function __OpInc*/
 
-    static function __OpDec(oSelf)
-    return(oSelf:OpDec())
+    static function __OpDec(oSelf AS OBJECT)
+        return(oSelf:OpDec())
+    /*static function __OpDec*/
 
-    static function __OpPlus(cOp,oSelf,uBigN)
-        local oOpPlus
+    static function __OpPlus(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
+        local oOpPlus   AS OBJECT
         if cOp=="+="
             oOpPlus:=oSelf:SetValue(oSelf:Add(uBigN))
         else
             oOpPlus:=oSelf:Add(uBigN)
         endif
-    return(oOpPlus)
+        return(oOpPlus)
+    /*static function __OpPlus*/
 
-    static function __OpMinus(cOp,oSelf,uBigN)
-        local oOpMinus
+    static function __OpMinus(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
+        local oOpMinus  AS OBJECT
         if cOp=="-="
             oOpMinus:=oSelf:SetValue(oSelf:Sub(uBigN))
         else
             oOpMinus:=oSelf:Sub(uBigN)
         endif
-    return(oOpMinus)
+        return(oOpMinus)
+    /*static function __OpMinus*/
 
-    static function __OpMult(cOp,oSelf,uBigN)
-        local oOpMult
+    static function __OpMult(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
+        local oOpMult   AS OBJECT
         if cOp=="*="
             oOpMult:=oSelf:SetValue(oSelf:Mult(uBigN))
         else
             oOpMult:=oSelf:Mult(uBigN)
         endif
-    return(oOpMult)
+        return(oOpMult)
+    /*static function __OpMult*/
 
-    static function __OpDivide(cOp,oSelf,uBigN,lFloat)
-        local oOpDivide
+    static function __OpDivide(cOp AS CHARACTER,oSelf AS OBJECT,uBigN,lFloat AS LOGICAL)
+        local oOpDivide AS OBJECT
         if cOp=="/="
             oOpDivide:=oSelf:SetValue(oSelf:Div(uBigN,lFloat))
         else
             oOpDivide:=oSelf:Div(uBigN,lFloat)
         endif
-    return(oOpDivide)
+        return(oOpDivide)
+    /*static function __OpDivide*/
 
-    static function __OpMod(cOp,oSelf,uBigN)
-        local oOpMod
+    static function __OpMod(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
+        local oOpMod    AS OBJECT
         if cOp=="%="
             oOpMod:=oSelf:SetValue(oSelf:Mod(uBigN))
         else
             oOpMod:=oSelf:Mod(uBigN)
         endif
-    return(oOpMod)
+        return(oOpMod)
+    /*static function __OpMod*/
 
-    static function __OpPower(cOp,oSelf,uBigN)
-        local oOpPower
+    static function __OpPower(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
+        local oOpPower  AS OBJECT
         switch cOp
             case "^="
             case "**="
@@ -519,52 +534,64 @@ endclass
             otherwise
                 oOpPower:=oSelf:Pow(uBigN)
         endswitch
-    return(oOpPower)
+        return(oOpPower)
+    /*static function __OpPower*/
 
-    static function __OpAssign(oSelf,uBigN,nBase,cRDiv,lLZRmv,nAcc)
-    return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
+    static function __OpAssign(oSelf AS OBJECT,uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
+        return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
+    /*static function __OpAssign*/
 
 #else //INLINE HARBOUR METHODS
 
     method Plus(uBigN) class tBigNumber
-    return(self:Add(uBigN))
+        return(self:Add(uBigN))
+    /*method Plus*/
 
     method iPlus(uBigN) class tBigNumber
-    return(self:iAdd(uBigN))
+        return(self:iAdd(uBigN))
+    /*method iPlus*/
 
     method Minus(uBigN) class tBigNumber
-    return(self:Sub(uBigN))
-
+        return(self:Sub(uBigN))
+    /*method Minus*/
+    
     method iMinus(uBigN) class tBigNumber
-    return(self:iSub(uBigN))
+        return(self:iSub(uBigN))
+    /*method iMinus*/
 
     method Multiply(uBigN)  class tBigNumber
-    return(self:Mult(uBigN))
-
+        return(self:Mult(uBigN))
+    /*method Multiply*/
+    
     method iMultiply(uBigN)  class tBigNumber
-    return(self:iMult(uBigN))
-
+        return(self:iMult(uBigN))
+    /*method iMultiply*/
+    
     method egMultiply(uBigN) class tBigNumber
-    return(self:egMult(uBigN))
-
+        return(self:egMult(uBigN))
+    /*method egMultiply*/
+    
     method rMultiply(uBigN) class tBigNumber
-    return(self:rMult(uBigN))
-
-    method Divide(uBigN,lFloat) class tBigNumber
-    return(self:Div(uBigN,lFloat))
+        return(self:rMult(uBigN))
+    /*method rMultiply*/
+    
+    method Divide(uBigN,lFloat AS LOGICAL) class tBigNumber
+        return(self:Div(uBigN,lFloat))
+    /*method Divide*/
 
 #endif //__PROTHEUS__
 
 /*
-    function:tBigNumber():New
+    function:u_tBigNumber()
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:04/02/2013
     Descricao:Instancia um novo Objeto tBigNumber
-    Sintaxe:tBigNumber():New(uBigN,nBase) -> self
+    Sintaxe:u_tBigNumber(uBigN,nBase) -> otBigNumber
 */
 #ifdef __PROTHEUS__
-    user function tBigNumber(uBigN,nBase)
-    return(tBigNumber():New(uBigN,nBase))
+    function u_tBigNumber(uBigN,nBase AS NUMERIC) AS OBJECT
+        return(tBigNumber():New(uBigN,nBase))
+    /*function u_tBigNumber*/
 #endif
 
 /*
@@ -574,8 +601,16 @@ endclass
     Descricao:CONSTRUCTOR
     Sintaxe:tBigNumber():New(uBigN,nBase) -> self
 */
-method New(uBigN,nBase) class tBigNumber
+method New(uBigN,nBase AS NUMERIC) class tBigNumber
 
+    if s__lstbNSet==NIL
+        DEFAULT s__MTXcN0:=hb_mutexCreate()
+        DEFAULT s__MTXcN9:=hb_mutexCreate()
+        DEFAULT s__MTXACC:=hb_mutexCreate()
+        DEFAULT s__MTXDEC:=hb_mutexCreate()
+        DEFAULT s__MTXSQR:=hb_mutexCreate()
+    endif
+    
     DEFAULT nBase:=10
     self:nBase:=nBase
 
@@ -603,7 +638,9 @@ method New(uBigN,nBase) class tBigNumber
         self:Divmethod(__DIVMETHOD__)
     endif
 
-return(self)
+    return(self)
+
+/*method New*/
 
 /*
     method:tBigNGC
@@ -617,8 +654,8 @@ return(self)
     #else
         static procedure tBigNGC()
     #endif
-            local nFile
-            local nFiles
+            local nFile     AS NUMERIC
+            local nFiles    AS NUMERIC
             DEFAULT ths_aFiles:=Array(0)
             nFiles:=tBIGNaLen(ths_aFiles)
             for nFile:=1 to nFiles
@@ -636,7 +673,8 @@ return(self)
                 #endif
             next nFile
             aSize(ths_aFiles,0)
-        return
+            return
+        /*static procedure tBigNGC*/
 #endif
 
 /*
@@ -646,7 +684,7 @@ return(self)
     Descricao:__cDec
     Sintaxe:tBigNumber():__cDec() -> cDec
 */
-method __cDec(cDec) class tBigNumber
+method __cDec(cDec AS CHARACTER) class tBigNumber
     if .not.(cDec==NIL)
         self:lNeg:=Left(cDec,1)=="-"
         if self:lNeg
@@ -660,7 +698,8 @@ method __cDec(cDec) class tBigNumber
             self:cSig:=""
         endif
     endif
-return(self:cDec)
+    return(self:cDec)
+/*method __cDec*/
 
 /*
     method:__cInt
@@ -669,7 +708,7 @@ return(self:cDec)
     Descricao:__cDec
     Sintaxe:tBigNumber():__cInt() -> cInt
 */
-method __cInt(cInt) class tBigNumber
+method __cInt(cInt AS CHARACTER) class tBigNumber
     if .not.(cInt==NIL)
         self:lNeg:=Left(cInt,1)=="-"
         if self:lNeg
@@ -683,7 +722,8 @@ method __cInt(cInt) class tBigNumber
             self:cSig:=""
         endif
     endif
-return(self:cInt)
+    return(self:cInt)
+/*method __cInt*/
 
 /*
     method:__cRDiv
@@ -692,15 +732,16 @@ return(self:cInt)
     Descricao:__cRDiv
     Sintaxe:tBigNumber():__cRDiv() -> __cRDiv
 */
-method __cRDiv(cRDiv) class tBigNumber
+method __cRDiv(cRDiv AS CHARACTER) class tBigNumber
     if .not.(cRDiv==NIL)
         if Empty(cRDiv)
             cRDiv:="0"
         endif
         self:cRDiv:=cRDiv
     endif
-return(self:cRDiv)
-
+    return(self:cRDiv)
+/*method __cRDiv*/
+    
 /*
     method:__cSig
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -708,7 +749,7 @@ return(self:cRDiv)
     Descricao:__cSig
     Sintaxe:tBigNumber():__cSig() -> cSig
 */
-method __cSig(cSig) class tBigNumber
+method __cSig(cSig AS CHARACTER) class tBigNumber
     if .not.(cSig==NIL)
         self:cSig:=cSig
         self:lNeg:=(cSig=="-")
@@ -720,8 +761,9 @@ method __cSig(cSig) class tBigNumber
             self:cSig:=""
         endif
     endif
-return(self:cSig)
-
+    return(self:cSig)
+/*method __cSig*/
+    
 /*
     method:__lNeg
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -729,7 +771,7 @@ return(self:cSig)
     Descricao:__lNeg
     Sintaxe:tBigNumber():__lNeg() -> lNeg
 */
-method __lNeg(lNeg) class tBigNumber
+method __lNeg(lNeg AS LOGICAL) class tBigNumber
     if .not.(lNeg==NIL)
         self:lNeg:=lNeg
         if self:eq(s__o0)
@@ -740,7 +782,8 @@ method __lNeg(lNeg) class tBigNumber
             self:cSig:="-"
         endif
     endif
-return(self:lNeg)
+    return(self:lNeg)
+/*method __lNeg*/    
 
 /*
     method:__nBase
@@ -749,12 +792,13 @@ return(self:lNeg)
     Descricao:__nBase
     Sintaxe:tBigNumber():__nBase() -> nBase
 */
-method __nBase(nBase) class tBigNumber
+method __nBase(nBase AS NUMERIC) class tBigNumber
     if .not.(nBase==NIL)
         self:nBase:=nBase
     endif
-return(self:nBase)
-
+    return(self:nBase)
+/*method __nBase*/
+    
 /*
     method:__nDec
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -762,7 +806,7 @@ return(self:nBase)
     Descricao:__nDec
     Sintaxe:tBigNumber():__nDec() -> nDec
 */
-method __nDec(nDec) class tBigNumber
+method __nDec(nDec AS NUMERIC) class tBigNumber
     if .not.(nDec==NIL)
         if nDec>self:nDec
             self:cDec:=PadR(self:cDec,nDec,"0")
@@ -772,7 +816,8 @@ method __nDec(nDec) class tBigNumber
         self:nDec:=nDec
         self:nSize:=self:nInt+self:nDec
     endif
-return(self:nDec)
+    return(self:nDec)
+/*method __nDec*/
 
 /*
     method:__nInt
@@ -781,7 +826,7 @@ return(self:nDec)
     Descricao:__nInt
     Sintaxe:tBigNumber():__nInt() -> nInt
 */
-method __nInt(nInt) class tBigNumber
+method __nInt(nInt AS NUMERIC) class tBigNumber
     if .not.(nInt==NIL)
         if nInt>self:nInt
             self:cInt:=PadL(self:cInt,nInt,"0")
@@ -789,8 +834,9 @@ method __nInt(nInt) class tBigNumber
             self:nSize:=self:nInt+self:nDec
         endif
     endif
-return(self:nInt)
-
+    return(self:nInt)
+/*method __nInt*/
+    
 /*
     method:__nSize
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -798,7 +844,7 @@ return(self:nInt)
     Descricao:nSize
     Sintaxe:tBigNumber():__nSize() -> nSize
 */
-method __nSize(nSize) class tBigNumber
+method __nSize(nSize AS NUMERIC) class tBigNumber
     if .not.(nSize==NIL)
         if nSize>self:nInt+self:nDec
             if self:nInt>self:nDec
@@ -811,8 +857,9 @@ method __nSize(nSize) class tBigNumber
             self:nSize:=nSize
         endif
     endif
-return(self:nSize)
-
+    return(self:nSize)
+/*method __nSize*/
+    
 /*
     method:Clone
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -821,7 +868,7 @@ return(self:nSize)
     Sintaxe:tBigNumber():Clone() -> oClone
 */
 method Clone() class tBigNumber
-    local oClone
+    local oClone    AS OBJECT
     #ifdef __THREAD_STATIC__
         try
             if ths_lsdSet==NIL
@@ -844,7 +891,8 @@ method Clone() class tBigNumber
             oClone:=__objClone(self)
         #endif //__PROTHEUS__
     #endif //__THREAD_STATIC__
-return(oClone)
+    return(oClone)
+/*method Clone*/
 
 /*
     method:className
@@ -854,7 +902,8 @@ return(oClone)
     Sintaxe:tBigNumber():className() -> cclassName
 */
 method className() class tBigNumber
-return("TBIGNUMBER")
+    return("TBIGNUMBER")
+/*method className*/
 
 /*
     method:SetDecimals
@@ -863,9 +912,9 @@ return("TBIGNUMBER")
     Descricao:Setar o Numero de Casas Decimais
     Sintaxe:tBigNumber():SetDecimals(nSet) -> nLastSet
 */
-method SetDecimals(nSet) class tBigNumber
+method SetDecimals(nSet AS NUMERIC) class tBigNumber
 
-    local nLastSet
+    local nLastSet  AS NUMERIC
 
     if hb_mutexLock(s__MTXDEC)
 
@@ -889,7 +938,9 @@ method SetDecimals(nSet) class tBigNumber
 
     DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
 
-return(nLastSet)
+    return(nLastSet)
+
+/*method SetDecimals*/
 
 /*
     method:nthRootAcc
@@ -898,9 +949,9 @@ return(nLastSet)
     Descricao:Setar a Precisao para nthRoot
     Sintaxe:tBigNumber():nthRootAcc(nSet) -> nLastSet
 */
-method nthRootAcc(nSet) class tBigNumber
+method nthRootAcc(nSet AS NUMERIC) class tBigNumber
 
-    local nLastSet
+    local nLastSet  AS NUMERIC
 
     if hb_mutexLock(s__MTXACC)
 
@@ -922,7 +973,9 @@ method nthRootAcc(nSet) class tBigNumber
 
     DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
 
-return(nLastSet)
+    return(nLastSet)
+    
+/*method nthRootAcc*/
 
 /*
     method:SetValue
@@ -931,19 +984,21 @@ return(nLastSet)
     Descricao:SetValue
     Sintaxe:tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
 */
-method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
+method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC) class tBigNumber
 
-    local cType:=ValType(uBigN)
+    local cType AS CHARACTER
 
-    local nFP
+    local nFP   AS NUMERIC
 
     #ifdef __TBN_DYN_OBJ_SET__
-    local nP
+        local nP    AS NUMERIC
         #ifdef __HARBOUR__
-            MEMVAR pThis
+            MEMVAR oThis
         #endif
-        private pThis
+        private oThis   AS OBJECT
     #endif
+    
+    cType:=ValType(uBigN)
 
     if cType=="O"
 
@@ -953,12 +1008,12 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
             #ifdef __PROTHEUS__
 
-                This:=self
+                oThis:=self
                 uBigN:=classDataArr(uBigN)
                 nFP:=hb_bLen(uBigN)
 
                 for nP:=1 to nFP
-                    &("This:"+uBigN[nP][1]):=uBigN[nP][2]
+                    &("oThis:"+uBigN[nP][1]):=uBigN[nP][2]
                 next nP
 
             #else
@@ -987,11 +1042,11 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
         #ifdef __TBN_DYN_OBJ_SET__
 
-            pThis:=self
+            oThis:=self
             nFP:=hb_bLen(uBigN)
 
             for nP:=1 to nFP
-                &("pThis:"+uBigN[nP][1]):=uBigN[nP][2]
+                &("oThis:"+uBigN[nP][1]):=uBigN[nP][2]
             next nP
 
         #else
@@ -1111,7 +1166,9 @@ method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
 
     self:nSize:=(self:nInt+self:nDec)
 
-return(self)
+    return(self)
+    
+/*method SetValue*/
 
 /*
     method:GetValue
@@ -1120,7 +1177,7 @@ return(self)
     Descricao:GetValue
     Sintaxe:tBigNumber():GetValue(lAbs,lObj) -> uNR
 */
-method GetValue(lAbs,lObj) class tBigNumber
+method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
     local uNR
 
@@ -1136,7 +1193,9 @@ method GetValue(lAbs,lObj) class tBigNumber
         uNR:=tBigNumber():New(uNR)
     endif
 
-return(uNR)
+    return(uNR)
+    
+/*method GetValue*/    
 
 /*
     method:ExactValue
@@ -1145,9 +1204,9 @@ return(uNR)
     Descricao:ExactValue
     Sintaxe:tBigNumber():ExactValue(lAbs) -> uNR
 */
-method ExactValue(lAbs,lObj) class tBigNumber
+method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
-    local cDec
+    local cDec  AS CHARACTER
 
     local uNR
 
@@ -1168,7 +1227,9 @@ method ExactValue(lAbs,lObj) class tBigNumber
         uNR:=tBigNumber():New(uNR)
     endif
 
-return(uNR)
+    return(uNR)
+    
+/*method ExactValue*/
 
 /*
     method:Abs
@@ -1177,9 +1238,10 @@ return(uNR)
     Descricao:Retorna o Valor Absoluto de um Numero
     Sintaxe:tBigNumber():Abs() -> uNR
 */
-method Abs(lObj) class tBigNumber
-return(self:GetValue(.T.,lObj))
-
+method Abs(lObj AS LOGICAL) class tBigNumber
+    return(self:GetValue(.T.,lObj))
+/*method Abs*/
+    
 /*
     method:Int
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1187,7 +1249,7 @@ return(self:GetValue(.T.,lObj))
     Descricao:Retorna a Parte Inteira de um Numero
     Sintaxe:tBigNumber():Int(lObj,lSig) -> uNR
 */
-method Int(lObj,lSig) class tBigNumber
+method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
     local uNR
     DEFAULT lObj:=.F.
     DEFAULT lSig:=.F.
@@ -1195,7 +1257,8 @@ method Int(lObj,lSig) class tBigNumber
     if lObj
         uNR:=tBigNumber():New(uNR)
     endif
-return(uNR)
+    return(uNR)
+/*method Int*/
 
 /*
     method:Dec
@@ -1204,13 +1267,15 @@ return(uNR)
     Descricao:Retorna a Parte Decimal de um Numero
     Sintaxe:tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
 */
-method Dec(lObj,lSig,lNotZ) class tBigNumber
+method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
 
-    local cDec:=self:cDec
+    local cDec  AS CHARACTER
 
     local nDec
 
     local uNR
+    
+    cDec:=self:cDec
 
     DEFAULT lNotZ:=.F.
     if lNotZ
@@ -1228,7 +1293,9 @@ method Dec(lObj,lSig,lNotZ) class tBigNumber
         uNR:=if(lSig,self:cSig,"")+cDec
     endif
 
-return(uNR)
+    return(uNR)
+    
+/*method Dec*/
 
 /*
     method:eq
@@ -1239,12 +1306,15 @@ return(uNR)
 */
 method eq(uBigN) class tBigNumber
 
-    local leq
+    local leq   AS LOGICAL
 
-    local oeqN1:=s__o0:Clone()
-    local oeqN2:=s__o0:Clone()
+    local oeqN1 AS OBJECT
+    local oeqN2 AS OBJECT
 
+    oeqN1:=s__o0:Clone()
     oeqN1:SetValue(self)
+    
+    oeqN2:=s__o0:Clone()
     oeqN2:SetValue(uBigN)
 
     leq:=oeqN1:lNeg==oeqN2:lNeg
@@ -1257,7 +1327,9 @@ method eq(uBigN) class tBigNumber
         #endif
     endif
 
-return(leq)
+    return(leq)
+ 
+ /*method eq*/
 
 /*
     method:ne
@@ -1267,8 +1339,10 @@ return(leq)
     Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
 */
 method ne(uBigN) class tBigNumber
-return(.not.(self:eq(uBigN)))
-
+    return(.not.(self:eq(uBigN)))
+/*method ne*/
+    
+    
 /*
     method:gt
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1278,12 +1352,15 @@ return(.not.(self:eq(uBigN)))
 */
 method gt(uBigN) class tBigNumber
 
-    local lgt
+    local lgt   AS LOGICAL
 
-    local ogtN1:=s__o0:Clone()
-    local ogtN2:=s__o0:Clone()
+    local ogtN1 AS OBJECT
+    local ogtN2 AS OBJECT
 
+    ogtN1:=s__o0:Clone()
     ogtN1:SetValue(self)
+    
+    ogtN2:=s__o0:Clone()
     ogtN2:SetValue(uBigN)
 
     if ogtN1:lNeg.or.ogtN2:lNeg
@@ -1308,7 +1385,9 @@ method gt(uBigN) class tBigNumber
         #endif
     endif
 
-return(lgt)
+    return(lgt)
+    
+/*method gt*/
 
 /*
     method:lt
@@ -1319,12 +1398,15 @@ return(lgt)
 */
 method lt(uBigN) class tBigNumber
 
-    local llt
+    local llt   AS LOGICAL
 
-    local oltN1:=s__o0:Clone()
-    local oltN2:=s__o0:Clone()
+    local oltN1 AS OBJECT
+    local oltN2 AS OBJECT
 
+    oltN1:=s__o0:Clone()
     oltN1:SetValue(self)
+    
+    oltN2:=s__o0:Clone()
     oltN2:SetValue(uBigN)
 
     if oltN1:lNeg.or.oltN2:lNeg
@@ -1349,7 +1431,9 @@ method lt(uBigN) class tBigNumber
         #endif
     endif
 
-return(llt)
+    return(llt)
+
+/*method lt*/
 
 /*
     method:gte
@@ -1359,8 +1443,9 @@ return(llt)
     Sintaxe:tBigNumber():gte(uBigN) -> lgte
 */
 method gte(uBigN) class tBigNumber
-return(self:cmp(uBigN)>=0)
-
+    return(self:cmp(uBigN)>=0)
+/*method gte(*/
+    
 /*
     method:lte
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1369,8 +1454,9 @@ return(self:cmp(uBigN)>=0)
     Sintaxe:tBigNumber():lte(uBigN) -> lte
 */
 method lte(uBigN) class tBigNumber
-return(self:cmp(uBigN)<=0)
-
+    return(self:cmp(uBigN)<=0)
+/*method lte*/
+    
 /*
     method:cmp
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1383,16 +1469,19 @@ return(self:cmp(uBigN)<=0)
 */
 method cmp(uBigN) class tBigNumber
 
-    local nCmp
-    local iCmp
+    local nCmp  AS NUMERIC
+    local iCmp  AS NUMERIC
 
-    local llt
-    local leq
+    local llt   AS LOGICAL
+    local leq   AS LOGICAL
 
-    local ocmpN1:=s__o0:Clone()
-    local ocmpN2:=s__o0:Clone()
+    local ocmpN1    AS OBJECT
+    local ocmpN2    AS OBJECT
 
+    ocmpN1:=s__o0:Clone()
     ocmpN1:SetValue(self)
+    
+    ocmpN2:=s__o0:Clone()
     ocmpN2:SetValue(uBigN)
 
 #ifdef __PTCOMPAT__
@@ -1446,8 +1535,11 @@ method cmp(uBigN) class tBigNumber
         endif
     endif
 
-return(nCmp)
+    return(nCmp)
 
+/*method cmp*/
+    
+    
 /*
     method:btw (between)
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1456,8 +1548,9 @@ return(nCmp)
     Sintaxe:tBigNumber():btw(uBigS,uBigE) -> lRet
 */
 method btw(uBigS,uBigE) class tBigNumber
-return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
-
+    return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
+/*method btw*/
+    
 /*
     method:ibtw (integer between)
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1466,9 +1559,10 @@ return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
     Sintaxe:tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
 */
 method ibtw(uiBigS,uiBigE) class tBigNumber
-    local lbtw:=.F.
-    local oibtwS
-    local oibtwE
+    local lbtw      AS LOGICAL
+    local oibtwS    AS OBJECT
+    local oibtwE    AS OBJECT
+    lbtw:=.F.
     if self:Dec(.T.,.F.,.T.):eq(s__o0)
         oibtwS:=s__o0:Clone()
         oibtwS:SetValue(uiBigS)
@@ -1478,8 +1572,9 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
             lbtw:=self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
         endif
     endif
-return(lbtw)
-
+    return(lbtw)
+/*method ibtw*/
+    
 /*
     method:Max
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1488,12 +1583,15 @@ return(lbtw)
     Sintaxe:tBigNumber():Max(uBigN) -> oMax
 */
 method Max(uBigN) class tBigNumber
-    local oMax:=tBigNumber():New(uBigN)
+    local oMax  AS OBJECT
+    oMax:=tBigNumber():New(uBigN)
     if self:gt(oMax)
         oMax:SetValue(self)
     endif
-return(oMax)
-
+    return(oMax)
+/*method Max*/
+    
+    
 /*
     method:Min
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1502,12 +1600,15 @@ return(oMax)
     Sintaxe:tBigNumber():Min(uBigN) -> oMin
 */
 method Min(uBigN) class tBigNumber
-    local oMin:=tBigNumber():New(uBigN)
+    local oMin  AS OBJECT
+    oMin:=tBigNumber():New(uBigN)
     if self:lt(oMin)
         oMin:SetValue(self)
     endif
-return(oMin)
-
+    return(oMin)
+/*method Min*/
+    
+    
 /*
     method:Add
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1517,24 +1618,24 @@ return(oMin)
 */
 method Add(uBigN) class tBigNumber
 
-    local cInt
-    local cDec
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lInv
-    local lAdd:=.T.
+    local lNeg  AS LOGICAL
+    local lInv  AS LOGICAL
+    local lAdd  AS LOGICAL
 
-    local nDec
-    local nSize
+    local nDec  AS NUMERIC
+    local nSize AS NUMERIC
 
-    local oadNR
+    local oadNR AS OBJECT
 
-    local oadN1
-    local oadN2
+    local oadN1 AS OBJECT
+    local oadN2 AS OBJECT
 
     oadN1:=s__o0:Clone()
     oadN1:SetValue(self)
@@ -1570,9 +1671,10 @@ method Add(uBigN) class tBigNumber
             cNT:=NIL
         endif
     else
+        lAdd:=.T.
         lNeg:=oadN1:lNeg
     endif
-
+    
     if lAdd
         cNT:=Add(cN1,cN2,nSize,self:nBase)
     else
@@ -1593,8 +1695,10 @@ method Add(uBigN) class tBigNumber
         oadNR:__cSig("-")
     endif
 
-return(oadNR)
+    return(oadNR)
 
+/*method Add*/    
+    
 /*
     method:iAdd
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1604,20 +1708,20 @@ return(oadNR)
 */
 method iAdd(uBigN) class tBigNumber
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lInv
-    local lAdd:=.T.
+    local lNeg  AS LOGICAL
+    local lInv  AS LOGICAL
+    local lAdd  AS LOGICAL
 
-    local nSize
+    local nSize AS NUMERIC
 
-    local oadNR
+    local oadNR AS OBJECT
 
-    local oadN1
-    local oadN2
+    local oadN1 AS OBJECT
+    local oadN2 AS OBJECT
 
     oadN1:=s__o0:Clone()
     oadN1:SetValue(self)
@@ -1649,6 +1753,7 @@ method iAdd(uBigN) class tBigNumber
             cNT:=NIL
         endif
     else
+        lAdd:=.T.
         lNeg:=oadN1:lNeg
     endif
 
@@ -1665,8 +1770,10 @@ method iAdd(uBigN) class tBigNumber
         oadNR:__cSig("-")
     endif
 
-return(oadNR)
+    return(oadNR)
 
+/*method iAdd*/    
+    
 /*
     method:Sub
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1676,24 +1783,24 @@ return(oadNR)
 */
 method Sub(uBigN) class tBigNumber
 
-    local cInt
-    local cDec
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lInv
-    local lSub:=.T.
+    local lNeg  AS LOGICAL
+    local lInv  AS LOGICAL
+    local lSub  AS LOGICAL
 
-    local nDec
-    local nSize
+    local nDec  AS NUMERIC
+    local nSize AS NUMERIC
 
-    local osbNR
+    local osbNR AS NUMERIC
 
-    local osbN1
-    local osbN2
+    local osbN1 AS NUMERIC
+    local osbN2 AS NUMERIC
 
     osbN1:=s__o0:Clone()
     osbN1:SetValue(self)
@@ -1718,6 +1825,7 @@ method Sub(uBigN) class tBigNumber
         lSub:=.F.
         lNeg:=osbN1:lNeg
     else
+        lSub:=.T.
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
@@ -1752,8 +1860,11 @@ method Sub(uBigN) class tBigNumber
         osbNR:__cSig("-")
     endif
 
-return(osbNR)
+    return(osbNR)
 
+/*method Sub*/
+    
+    
 /*
     method:iSub
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1763,20 +1874,20 @@ return(osbNR)
 */
 method iSub(uBigN) class tBigNumber
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lInv
-    local lSub:=.T.
+    local lNeg  AS LOGICAL
+    local lInv  AS LOGICAL
+    local lSub  AS LOGICAL
 
-    local nSize
+    local nSize AS NUMERIC
 
-    local osbNR
+    local osbNR AS NUMERIC
 
-    local osbN1
-    local osbN2
+    local osbN1 AS NUMERIC
+    local osbN2 AS NUMERIC
 
     osbN1:=s__o0:Clone()
     osbN1:SetValue(self)
@@ -1797,6 +1908,7 @@ method iSub(uBigN) class tBigNumber
         lSub:=.F.
         lNeg:=osbN1:lNeg
     else
+        lSub:=.T.
         #ifdef __HARBOUR__
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
@@ -1824,8 +1936,11 @@ method iSub(uBigN) class tBigNumber
         osbNR:__cSig("-")
     endif
 
-return(osbNR)
+    return(osbNR)
 
+/*method iSub*/
+    
+    
 /*
     method:Mult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1835,24 +1950,24 @@ return(osbNR)
 */
 method Mult(uBigN) class tBigNumber
 
-    local cInt
-    local cDec
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lNeg1
-    local lNeg2
+    local lNeg  AS LOGICAL
+    local lNeg1 AS LOGICAL
+    local lNeg2 AS LOGICAL
 
-    local nDec
-    local nSize
+    local nDec  AS NUMERIC
+    local nSize AS NUMERIC
 
-    local omtNR
+    local omtNR AS OBJECT
 
-    local omtN1
-    local omtN2
+    local omtN1 AS OBJECT
+    local omtN2 AS OBJECT
 
     omtN1:=s__o0:Clone()
     omtN1:SetValue(self)
@@ -1896,8 +2011,10 @@ method Mult(uBigN) class tBigNumber
         omtNR:__cSig("-")
     endif
 
-return(omtNR)
+    return(omtNR)
 
+/*method Mult*/    
+    
 /*
     method:iMult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1907,20 +2024,20 @@ return(omtNR)
 */
 method iMult(uBigN) class tBigNumber
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lNeg1
-    local lNeg2
+    local lNeg  AS LOGICAL
+    local lNeg1 AS LOGICAL
+    local lNeg2 AS LOGICAL
 
-    local nSize
+    local nSize AS NUMERIC
 
-    local omtNR
+    local omtNR AS OBJECT
 
-    local omtN1
-    local omtN2
+    local omtN1 AS OBJECT
+    local omtN2 AS OBJECT
 
     omtN1:=s__o0:Clone()
     omtN1:SetValue(self)
@@ -1948,8 +2065,10 @@ method iMult(uBigN) class tBigNumber
         omtNR:__cSig("-")
     endif
 
-return(omtNR)
+    return(omtNR)
 
+/*method iMult*/    
+    
 /*
     method:egMult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -1959,23 +2078,23 @@ return(omtNR)
 */
 method egMult(uBigN) class tBigNumber
 
-    local cInt
-    local cDec
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lNeg1
-    local lNeg2
+    local lNeg  AS LOGICAL
+    local lNeg1 AS LOGICAL
+    local lNeg2 AS LOGICAL
 
-    local nDec
+    local nDec  AS NUMERIC
 
-    local omtNR
+    local omtNR AS OBJECT
 
-    local omtN1
-    local omtN2
+    local omtN1 AS OBJECT
+    local omtN2 AS OBJECT
 
     omtN1:=s__o0:Clone()
     omtN1:SetValue(self)
@@ -2017,8 +2136,10 @@ method egMult(uBigN) class tBigNumber
         omtNR:__cSig("-")
     endif
 
-return(omtNR)
+    return(omtNR)
 
+/*method egMult*/    
+    
 /*
     method:rMult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2028,23 +2149,23 @@ return(omtNR)
 */
 method rMult(uBigN) class tBigNumber
 
-    local cInt
-    local cDec
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNT
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNT   AS CHARACTER
 
-    local lNeg
-    local lNeg1
-    local lNeg2
+    local lNeg  AS LOGICAL
+    local lNeg1 AS LOGICAL
+    local lNeg2 AS LOGICAL
 
-    local nDec
+    local nDec  AS NUMERIC
 
-    local omtNR
+    local omtNR AS OBJECT
 
-    local omtN1
-    local omtN2
+    local omtN1 AS OBJECT
+    local omtN2 AS OBJECT
 
     omtN1:=s__o0:Clone()
     omtN1:SetValue(self)
@@ -2086,7 +2207,9 @@ method rMult(uBigN) class tBigNumber
         omtNR:__cSig("-")
     endif
 
-return(omtNR)
+    return(omtNR)
+    
+/*method rMult*/    
 
 /*
     method:Div
@@ -2095,28 +2218,30 @@ return(omtNR)
     Descricao:Divisao
     Sintaxe:tBigNumber():Div(uBigN,lFloat) -> oBigNR
 */
-method Div(uBigN,lFloat) class tBigNumber
+method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
 
-    local cDec
+    local cDec  AS CHARACTER
 
-    local cN1
-    local cN2
-    local cNR
+    local cN1   AS CHARACTER
+    local cN2   AS CHARACTER
+    local cNR   AS CHARACTER
 
-    local lNeg
-    local lNeg1
-    local lNeg2
+    local lNeg  AS LOGICAL
+    local lNeg1 AS LOGICAL
+    local lNeg2 AS LOGICAL
 
-    local nAcc:=s__nDecSet
-    local nDec
+    local nAcc  AS NUMERIC
+    local nDec  AS NUMERIC
 
-    local odvN1
-    local odvN2
+    local odvN1 AS OBJECT
+    local odvN2 AS OBJECT
 
-    local odvRD
-    local odvNR:=s__o0:Clone()
+    local odvRD AS OBJECT
+    local odvNR AS OBJECT
 
     begin sequence
+    
+        odvNR:=s__o0:Clone()
 
         if s__o0:eq(uBigN)
             odvNR:SetValue(s__o0)
@@ -2154,6 +2279,8 @@ method Div(uBigN,lFloat) class tBigNumber
 
         cN2:=odvN2:cInt
         cN2+=odvN2:cDec
+        
+        nAcc:=s__nDecSet
 
         if s__nDivMTD==2
             odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
@@ -2236,22 +2363,24 @@ method Div(uBigN,lFloat) class tBigNumber
 
     end sequence
 
-return(odvNR)
+    return(odvNR)
+/*method Div*/    
 
 /*
     method:Divmethod
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
     Data:24/03/2014
     Descricao:Setar o metodo de Divisao a ser utilizado
-    Sintaxe:tBigNumber():Divmethod(nmethod) -> nLstmethod
+    Sintaxe:tBigNumber():Divmethod(nMethod) -> nLstmethod
 */
-method Divmethod(nmethod) class tBigNumber
-    local nLstmethod
+method Divmethod(nMethod AS NUMERIC) class tBigNumber
+    local nLstmethod    AS NUMERIC
     DEFAULT s__nDivMTD:=__DIVMETHOD__
-    DEFAULT nmethod:=s__nDivMTD
+    DEFAULT nMethod:=s__nDivMTD
     nLstmethod:=s__nDivMTD
-    s__nDivMTD:=nmethod
-return(nLstmethod)
+    s__nDivMTD:=nMethod
+    return(nLstmethod)
+/*method Divmethod*/    
 
 /*
     method:Mod
@@ -2261,8 +2390,10 @@ return(nLstmethod)
     Sintaxe:tBigNumber():Mod(uBigN) -> oMod
 */
 method Mod(uBigN) class tBigNumber
-    local oMod:=tBigNumber():New(uBigN)
-    local nCmp:=self:cmp(oMod)
+    local oMod  AS OBJECT
+    local nCmp  AS NUMERIC
+    oMod:=tBigNumber():New(uBigN)
+    nCmp:=self:cmp(oMod)
     if nCmp==-1
         oMod:SetValue(self)
     elseif nCmp==0
@@ -2271,8 +2402,10 @@ method Mod(uBigN) class tBigNumber
         oMod:SetValue(self:Div(oMod,.F.))
         oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
     endif
-return(oMod)
-
+    return(oMod)
+/*method Mod*/
+    
+    
 /*
     method:Pow
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2280,32 +2413,36 @@ return(oMod)
     Descricao:Calculo de Potencia n^x
     Sintaxe:tBigNumber():Pow(uBigN,lIPower) -> oBigNR
 */
-method Pow(uBigN,lIPower) class tBigNumber
+method Pow(uBigN,lIPower AS LOGICAL) class tBigNumber
 
-    local oSelf:=self:Clone()
+    local oSelf AS OBJECT
 
-    local cM10
+    local cM10  AS CHARACTER
 
-    local cPowB
-    local cPowA
+    local cPowB AS CHARACTER
+    local cPowA AS CHARACTER
 
-    local lPoWN
-    local lPowF
+    local lPoWN AS LOGICAL
+    local lPowF AS LOGICAL
 
-    local nZS
+    local nZS   AS NUMERIC
 
-    local opwA
-    local opwB
+    local opwA  AS OBJECT
+    local opwB  AS OBJECT
 
-    local opwNP:=s__o0:Clone()
-    local opwNR:=s__o0:Clone()
+    local opwNP AS OBJECT
+    local opwNR AS OBJECT
 
     local opwGCD
 
-    lPoWN:=opwNP:SetValue(uBigN):lt(s__o0)
-
     begin sequence
+    
+        opwNR:=s__o0:Clone()
+        oSelf:=self:Clone()
 
+        opwNP:=s__o0:Clone()
+        lPoWN:=opwNP:SetValue(uBigN):lt(s__o0)
+        
         if oSelf:eq(s__o0).and.opwNP:eq(s__o0)
             opwNR:SetValue(s__o1)
             break
@@ -2375,7 +2512,8 @@ method Pow(uBigN,lIPower) class tBigNumber
         opwNR:SetValue(s__o1:Div(opwNR))
     endif
 
-return(opwNR)
+    return(opwNR)
+/*method Pow*/    
 
 /*
     method:iPow
@@ -2385,8 +2523,9 @@ return(opwNR)
     Sintaxe:tBigNumber():iPow(uBigN) -> oBigNR
 */
 method iPow(uBigN) class tBigNumber
-return(self:Pow(uBigN,.T.))
-
+    return(self:Pow(uBigN,.T.))
+/*method iPow*/
+    
 /*
     method:OpInc
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2400,6 +2539,7 @@ method OpInc() class tBigNumber
 #else
     return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
 #endif
+/*method OpInc()*/
 
 /*
     method:OpDec
@@ -2414,7 +2554,7 @@ method OpDec() class tBigNumber
 #else
     return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
 #endif
-
+/*method OpDec*/
 
 /*
     method:e
@@ -2424,18 +2564,18 @@ method OpDec() class tBigNumber
     Sintaxe:tBigNumber():e(lforce) -> oeTthD
     (((n+1)^(n+1))/(n^n))-((n^n)/((n-1)^(n-1)))
 */
-method e(lforce) class tBigNumber
+method e(lforce AS LOGICAL) class tBigNumber
 
-    local oeTthD
+    local oeTthD    AS OBJECT
 
-    local oPowN
-    local oDiv1P
-    local oDiv1S
-    local oBigNC
-    local oAdd1N
-    local oSub1N
-    local oPoWNAd
-    local oPoWNS1
+    local oPowN     AS OBJECT
+    local oDiv1P    AS OBJECT
+    local oDiv1S    AS OBJECT
+    local oBigNC    AS OBJECT
+    local oAdd1N    AS OBJECT
+    local oSub1N    AS OBJECT
+    local oPoWNAd   AS OBJECT
+    local oPoWNS1   AS OBJECT    
 
     begin sequence
 
@@ -2474,8 +2614,11 @@ method e(lforce) class tBigNumber
 
     end sequence
 
-return(oeTthD)
+    return(oeTthD)
 
+ /*method e*/
+    
+    
 /*
     method:Exp
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2483,10 +2626,16 @@ return(oeTthD)
     Descricao:Potencia do Numero de Neper e^cN
     Sintaxe:tBigNumber():Exp(lforce) -> oBigNR
 */
-method Exp(lforce) class tBigNumber
-    local oBigNe:=self:e(lforce)
-    local oBigNR:=oBigNe:Pow(self)
-return(oBigNR)
+method Exp(lforce AS LOGICAL) class tBigNumber
+    
+    local oBigNe    AS OBJECT
+    local oBigNR    AS OBJECT
+    
+    oBigNe:=self:e(lforce)
+    oBigNR:=oBigNe:Pow(self)
+
+    return(oBigNR)
+/*method Exp*/    
 
 /*
     method:PI
@@ -2495,9 +2644,9 @@ return(oBigNR)
     Descricao:Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
     Sintaxe:tBigNumber():PI(lforce) -> oPITthD
 */
-method PI(lforce) class tBigNumber
+method PI(lforce AS LOGICAL) class tBigNumber
 
-    local oPITthD
+    local oPITthD   AS OBJECT
 
     DEFAULT lforce:=.F.
 
@@ -2518,7 +2667,8 @@ method PI(lforce) class tBigNumber
 
     end sequence
 
-return(oPITthD)
+    return(oPITthD)
+/*method PI*/    
 
 /*
     method:GCD
@@ -2529,13 +2679,16 @@ return(oPITthD)
 */
 method GCD(uBigN) class tBigNumber
 
-    local oX:=self:Clone()
-    local oY:=tBigNumber():New(uBigN)
+    local oX    AS OBJECT
+    local oY    AS OBJECT
 
     local oGCD
 
-    oX:SetValue(oY:Max(self))
+    oY:=tBigNumber():New(uBigN)
     oY:SetValue(oY:Min(self))
+    
+    oX:=self:Clone()
+    oX:SetValue(oY:Max(self))
 
     if oY:eq(s__o0)
         oGCD:=oX
@@ -2555,13 +2708,17 @@ method GCD(uBigN) class tBigNumber
         endif
     endif
 
-return(oGCD)
+    return(oGCD)
 
-static function cGCD(nX,nY)
+/*method GCD*/    
+    
+static function cGCD(nX AS NUMERIC,nY AS NUMERIC)
     #ifndef __PTCOMPAT__
-        local nGCD:=TBIGNGCD(nX,nY)
+        local nGCD  AS NUMERIC
+        nGCD:=TBIGNGCD(nX,nY)
     #else //__PROTHEUS__
-        local nGCD:=nX
+        local nGCD  AS NUMERIC
+        nGCD:=nX
         nX:=Max(nY,nGCD)
         nY:=Min(nGCD,nY)
         if nY==0
@@ -2577,8 +2734,10 @@ static function cGCD(nX,nY)
             end while
         endif
     #endif //__PTCOMPAT__
-return(hb_ntos(nGCD))
+    return(hb_ntos(nGCD))
 
+/*static function cGCD*/
+    
 /*
     method:LCM
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2588,19 +2747,23 @@ return(hb_ntos(nGCD))
 */
 method LCM(uBigN) class tBigNumber
 
-    local oX:=self:Clone()
-    local oY:=tBigNumber():New(uBigN)
+    local oX    AS OBJECT
+    local oY    AS OBJECT
 
-    local oI:=s__o2:Clone()
+    local oI    AS OBJECT
 
-    local oLCM:=s__o1:Clone()
+    local oLCM  AS OBJECT
 
     local lMX
     local lMY
 
+    oX:=self:Clone()
+    oY:=tBigNumber():New(uBigN)
+    oLCM:=s__o1:Clone()
     if oX:nInt<=s__nMinLCM.and.oY:nInt<=s__nMinLCM
         oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
     else
+        oI:=s__o2:Clone()
         while .T.
            lMX:=oX:Mod(oI):eq(s__o0)
            lMY:=oY:Mod(oI):eq(s__o0)
@@ -2622,16 +2785,27 @@ method LCM(uBigN) class tBigNumber
         end while
     endif
 
-return(oLCM)
+    return(oLCM)
 
-static function cLCM(nX,nY)
+/*method LCM*/    
+    
+static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
     #ifndef __PTCOMPAT__
-        local nLCM:=TBIGNLCM(nX,nY)
+    
+        local nLCM  AS NUMERIC
+        nLCM:=TBIGNLCM(nX,nY)
+    
     #else //__PROTHEUS__
-        local nLCM:=1
-        local nI:=2
-        local lMX
-        local lMY
+        
+        local nLCM  AS NUMERIC
+        local nI    AS NUMERIC
+        
+        local lMX   AS LOGICAL
+        local lMY   AS LOGICAL
+        
+        nLCM:=1
+        nI:=2
+
         while .T.
             lMX:=(nX%nI)==0
             lMY:=(nY%nI)==0
@@ -2651,9 +2825,13 @@ static function cLCM(nX,nY)
             endif
             ++nI
         end while
-    #endif //__PTCOMPAT__
-return(hb_ntos(nLCM))
 
+    #endif //__PTCOMPAT__
+
+    return(hb_ntos(nLCM))
+
+/*static function cLCM*/    
+    
 /*
 
     method:nthRoot
@@ -2664,19 +2842,22 @@ return(hb_ntos(nLCM))
 */
 method nthRoot(uBigN) class tBigNumber
 
-    local cFExit
+    local cFExit    AS CHARACTER
 
-    local nZS
+    local nZS       AS NUMERIC
 
-    local oRootB:=self:Clone()
+    local oRootB    AS OBJECT
     local oRootE
 
-    local othRoot:=s__o0:Clone()
+    local othRoot   AS OBJECT
 
-    local oFExit
+    local oFExit    AS OBJECT
 
     begin sequence
+    
+        othRoot:=s__o0:Clone()
 
+        oRootB:=self:Clone()
         if oRootB:eq(s__o0)
             break
         endif
@@ -2713,8 +2894,10 @@ method nthRoot(uBigN) class tBigNumber
 
     end sequence
 
-return(othRoot)
+    return(othRoot)
 
+/*method nthRoot*/    
+    
 /*
 
     method:nthRootPF
@@ -2725,31 +2908,34 @@ return(othRoot)
 */
 method nthRootPF(uBigN) class tBigNumber
 
-    local aIPF
-    local aDPF
+    local aIPF      AS ARRAY
+    local aDPF      AS ARRAY
 
-    local cFExit
+    local cFExit    AS CHARACTER
 
-    local lDec
+    local lDec      AS LOGICAL
 
-    local nZS
+    local nZS       AS NUMERIC
 
-    local nPF
-    local nPFs
+    local nPF       AS NUMERIC
+    local nPFs      AS NUMERIC
 
-    local oRootB:=self:Clone()
-    local oRootD
-    local oRootE
+    local oRootB    AS OBJECT
+    local oRootD    AS OBJECT
+    local oRootE    AS OBJECT
 
-    local oRootT
+    local oRootT    AS OBJECT
 
-    local othRoot:=s__o0:Clone()
-    local othRootD
+    local othRoot   AS OBJECT
+    local othRootD  AS OBJECT
 
-    local oFExit
+    local oFExit    AS OBJECT
 
     begin sequence
+    
+        othRoot:=s__o0:Clone()
 
+        oRootB:=self:Clone()
         if oRootB:eq(s__o0)
             break
         endif
@@ -2846,8 +3032,10 @@ method nthRootPF(uBigN) class tBigNumber
 
     end sequence
 
-return(othRoot)
+    return(othRoot)
 
+/*method nthRootPF*/    
+    
 /*
     method:SQRT
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2857,10 +3045,11 @@ return(othRoot)
 */
 method SQRT() class tBigNumber
 
-    local oSQRT:=self:Clone()
+    local oSQRT AS OBJECT
 
     begin sequence
 
+        oSQRT:=self:Clone()
         if oSQRT:lte(oSQRT:SysSQRT())
             oSQRT:SetValue(__SQRT(hb_ntos(Val(oSQRT:GetValue()))))
             break
@@ -2874,8 +3063,10 @@ method SQRT() class tBigNumber
 
     end sequence
 
-return(oSQRT)
+    return(oSQRT)
 
+/*method SQRT*/    
+    
 /*
     method:SysSQRT
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2885,7 +3076,7 @@ return(oSQRT)
 */
 method SysSQRT(uSet) class tBigNumber
 
-    local cType
+    local cType AS CHARACTER
 
     cType:=ValType(uSet)
     if ( cType$"C|N|O" )
@@ -2898,8 +3089,10 @@ method SysSQRT(uSet) class tBigNumber
         endif
     endif
 
-return(s__SysSQRT)
+    return(s__SysSQRT)
 
+/*method SysSQRT*/    
+    
 /*
     method:Log
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2908,8 +3101,9 @@ return(s__SysSQRT)
     Sintaxe:tBigNumber():Log(BigNB) -> oBigNR
 */
 method Log(uBigNB) class tBigNumber
-return(self:LogN(uBigNB))
-
+    return(self:LogN(uBigNB))
+/*method Log*/
+    
 /*
     method:LogN
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2918,12 +3112,14 @@ return(self:LogN(uBigNB))
     Sintaxe:tBigNumber():LogN(BigNB) -> oBigNR
 */
 method LogN(uBigNB) class tBigNumber
-    local oB:=s__o0:Clone()
-    local oR:=s__o0:Clone()
+    local oB    AS OBJECT
+    local oR    AS OBJECT
     DEFAULT uBigNB:=self:e()
+    oB:=s__o0:Clone()
     oB:SetValue(uBigNB)
+    oR:=s__o0:Clone()
 #ifndef __PTCOMPAT__
-    #ifndef __LMETHOD__
+    #ifndef __LMETHOD__    
         oR:SetValue(TBIGNLOG(self:GetValue(),oB:GetValue()))
     #else
         oR:SetValue(self:__Log(oB))
@@ -2931,8 +3127,10 @@ method LogN(uBigNB) class tBigNumber
 #else //__PTCOMPAT__
     oR:SetValue(self:__Log(oB))
 #endif //__PTCOMPAT__
-return(oR)
-
+    return(oR)
+/*method LogN*/
+    
+    
 /*
     method:__Log
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2941,8 +3139,9 @@ return(oR)
     Sintaxe:tBigNumber():__Log(BigNB) -> oBigNR
 */
 method __Log(uBigNB) class tBigNumber
-return(self:__LogN(uBigNB))
-
+    return(self:__LogN(uBigNB))
+/*method __Log*/
+    
 /*
     method:__LogN
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -2953,23 +3152,25 @@ return(self:__LogN(uBigNB))
 */
 method __LogN(uBigNB) class tBigNumber
 
-    local oS:=s__o0:Clone()
-    local oT:=s__o0:Clone()
-    local oI:=s__o1:Clone()
-    local oX:=self:Clone()
-    local oY:=s__o0:Clone()
-    local oLT:=s__o0:Clone()
+    local oS        AS OBJECT
+    local oT        AS OBJECT
+    local oI        AS OBJECT
+    local oX        AS OBJECT
+    local oY        AS OBJECT
+    local oLT       AS OBJECT
 
-    local noTcmp1
+    local noTcmp1   AS NUMERIC
 
-    local lflag:=.F.
+    local lflag     AS LOGICAL
 
+    oX:=self:Clone()
     if oX:eq(s__o0)
         return(s__o0:Clone())
     endif
 
     DEFAULT uBigNB:=self:e()
 
+    oT:=s__o0:Clone()
     oT:SetValue(uBigNB)
 
     noTcmp1:=oT:cmp(s__o1)
@@ -2977,6 +3178,7 @@ method __LogN(uBigNB) class tBigNumber
         return(s__o0:Clone())
     endif
 
+    lflag:=.F.
     if s__o0:lt(oT).and.noTcmp1==-1
          lflag:=.not.(lflag)
          oT:__cSig("")
@@ -2984,11 +3186,14 @@ method __LogN(uBigNB) class tBigNumber
          noTcmp1:=oT:cmp(s__o1)
     endif
 
+    oI:=s__o1:Clone()
+    oY:=s__o0:Clone()
     while oX:gt(oT).and.noTcmp1==1
        oY:SetValue(oY:Add(oI))
        oX:SetValue(oX:Div(oT))
     end while
 
+    oS:=s__o0:Clone()
     oS:SetValue(oS:Add(oY))
     oT:SetValue(oT:nthRoot(s__o2))
     //-------------------------------------------------------------------------------------
@@ -2997,6 +3202,7 @@ method __LogN(uBigNB) class tBigNumber
 
     oY:SetValue(s__o0)
 
+    oLT:=s__o0:Clone()
     noTcmp1:=oT:cmp(s__o1)
 
     while noTcmp1==1
@@ -3030,7 +3236,8 @@ method __LogN(uBigNB) class tBigNumber
         oS:__cSig("-")
     endif
 
-return(oS)
+    return(oS)
+/*method __LogN*/
 
 /*
     method:Log2
@@ -3040,9 +3247,11 @@ return(oS)
     Sintaxe:tBigNumber():Log2() -> oBigNR
 */
 method Log2() class tBigNumber
-    local ob2:=s__o2:Clone()
-return(self:LogN(ob2))
-
+    local ob2   AS OBJECT
+    ob2:=s__o2:Clone()
+    return(self:LogN(ob2))
+/*method Log2*/
+    
 /*
     method:Log10
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3051,9 +3260,11 @@ return(self:LogN(ob2))
     Sintaxe:tBigNumber():Log10() -> oBigNR
 */
 method Log10() class tBigNumber
-    local ob10:=s__o10:Clone()
-return(self:LogN(ob10))
-
+    local ob10  AS OBJECT
+    ob10:=s__o10:Clone()
+    return(self:LogN(ob10))
+/*method Log10*/
+    
 /*
     method:Ln
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3062,8 +3273,9 @@ return(self:LogN(ob10))
     Sintaxe:tBigNumber():Ln() -> oBigNR
 */
 method Ln() class tBigNumber
-return(self:LogN(s__o1:Exp()))
-
+    return(self:LogN(s__o1:Exp()))
+/*method Ln*/
+    
 /*
     method:MathC
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3071,9 +3283,10 @@ return(self:LogN(s__o1:Exp()))
     Descricao:Operacoes Matematicas
     Sintaxe:tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
 */
-method MathC(uBigN1,cOperator,uBigN2) class tBigNumber
-return(MathO(uBigN1,cOperator,uBigN2,.F.))
-
+method MathC(uBigN1,cOperator AS CHARACTER,uBigN2) class tBigNumber
+    return(MathO(uBigN1,cOperator,uBigN2,.F.))
+/*method MathC*/
+    
 /*
     method:MathN
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3081,9 +3294,10 @@ return(MathO(uBigN1,cOperator,uBigN2,.F.))
     Descricao:Operacoes Matematicas
     Sintaxe:tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
 */
-method MathN(uBigN1,cOperator,uBigN2) class tBigNumber
-return(MathO(uBigN1,cOperator,uBigN2,.T.))
-
+method MathN(uBigN1,cOperator AS CHARACTER,uBigN2) class tBigNumber
+    return(MathO(uBigN1,cOperator,uBigN2,.T.))
+/*method MathN*/
+    
 /*
     method:Rnd
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3091,13 +3305,14 @@ return(MathO(uBigN1,cOperator,uBigN2,.T.))
     Descricao:Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
     Sintaxe:tBigNumber():Rnd(nAcc) -> oRND
 */
-method Rnd(nAcc) class tBigNumber
+method Rnd(nAcc AS NUMERIC) class tBigNumber
 
-    local oRnd:=self:Clone()
+    local oRnd  AS OBJECT
 
-    local cAdd
-    local cAcc
+    local cAdd  AS CHARACTER
+    local cAcc  AS CHARACTER
 
+    oRnd:=self:Clone()
     DEFAULT nAcc:=Max((Min(oRnd:nDec,s__nDecSet)-1),0)
 
     if .not.(oRnd:eq(s__o0))
@@ -3114,7 +3329,8 @@ method Rnd(nAcc) class tBigNumber
         oRnd:SetValue(oRnd:cInt+"."+Left(oRnd:cDec,nAcc),NIL,oRnd:cRDiv)
     endif
 
-return(oRnd)
+    return(oRnd)
+/*method Rnd*/    
 
 /*
     method:NoRnd
@@ -3123,8 +3339,9 @@ return(oRnd)
     Descricao:NoRnd trunca um numero decimal
     Sintaxe:tBigNumber():NoRnd(nAcc) -> oBigNR
 */
-method NoRnd(nAcc) class tBigNumber
-return(self:Truncate(nAcc))
+method NoRnd(nAcc AS NUMERIC) class tBigNumber
+    return(self:Truncate(nAcc))
+/*method NoRnd*/
 
 /*
     method:Floor
@@ -3133,13 +3350,20 @@ return(self:Truncate(nAcc))
     Descricao:Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
     Sintaxe:tBigNumber():Floor(nAcc) -> oFloor
 */
-method Floor(nAcc) class tBigNumber
-    local oInt:=self:Int(.T.,.T.)
-    local oFloor:=self:Clone()
+method Floor(nAcc AS NUMERIC) class tBigNumber
+    
+    local oInt      AS OBJECT
+    local oFloor    AS OBJECT
+    
+    oFloor:=self:Clone()
     DEFAULT nAcc:=Max((Min(oFloor:nDec,s__nDecSet)-1),0)
     oFloor:SetValue(oFloor:Rnd(nAcc):Int(.T.,.T.))
+    
+    oInt:=self:Int(.T.,.T.)
     oFloor:SetValue(oFloor:Min(oInt))
-return(oFloor)
+    
+    return(oFloor)
+/*method Floor*/    
 
 /*
     method:Ceiling
@@ -3148,13 +3372,20 @@ return(oFloor)
     Descricao:Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
     Sintaxe:tBigNumber():Ceiling(nAcc) -> oCeiling
 */
-method Ceiling(nAcc) class tBigNumber
-    local oInt:=self:Int(.T.,.T.)
-    local oCeiling:=self:Clone()
+method Ceiling(nAcc AS NUMERIC) class tBigNumber
+    
+    local oInt      AS OBJECT
+    local oCeiling  AS OBJECT
+    
+    oCeiling:=self:Clone()
     DEFAULT nAcc:=Max((Min(oCeiling:nDec,s__nDecSet)-1),0)
     oCeiling:SetValue(oCeiling:Rnd(nAcc):Int(.T.,.T.))
+
+    oInt:=self:Int(.T.,.T.)
     oCeiling:SetValue(oCeiling:Max(oInt))
-return(oCeiling)
+    
+    return(oCeiling)
+/*method Ceiling(nAcc)*/
 
 /*
     method:Truncate
@@ -3163,18 +3394,22 @@ return(oCeiling)
     Descricao:Truncate trunca um numero decimal
     Sintaxe:tBigNumber():Truncate(nAcc) -> oTrc
 */
-method Truncate(nAcc) class tBigNumber
+method Truncate(nAcc AS NUMERIC) class tBigNumber
 
-    local oTrc:=self:Clone()
-    local cDec:=oTrc:cDec
+    local oTrc  AS OBJECT
+    local cDec  AS CHARACTER
 
+    oTrc:=self:Clone()
+    
+    cDec:=oTrc:cDec    
     if .not.(s__o0:eq(cDec))
         DEFAULT nAcc:=Min(oTrc:nDec,s__nDecSet)
         cDec:=Left(cDec,nAcc)
         oTrc:SetValue(oTrc:cInt+"."+cDec)
     endif
 
-return(oTrc)
+    return(oTrc)
+/*method Truncate*/
 
 /*
     method:Normalize
@@ -3183,17 +3418,24 @@ return(oTrc)
     Descricao:Normaliza os Dados
     Sintaxe:tBigNumber():Normalize(oBigN) -> self
 */
-method Normalize(oBigN) class tBigNumber
+method Normalize(oBigN AS OBJECT) class tBigNumber
 #ifdef __PTCOMPAT__
-    local nPadL:=Max(self:nInt,oBigN:nInt)
-    local nPadR:=Max(self:nDec,oBigN:nDec)
-    local nSize:=(nPadL+nPadR)
+    local nPadL AS NUMERIC
+    local nPadR AS NUMERIC
+    local nSize AS NUMERIC
 
-    local lPadL:=nPadL!=self:nInt
-    local lPadR:=nPadR!=self:nDec
+    local lPadL AS LOGICAL
+    local lPadR AS LOGICAL
 
+    nPadL:=Max(self:nInt,oBigN:nInt)
+    nPadR:=Max(self:nDec,oBigN:nDec)
+    nSize:=(nPadL+nPadR)
+    
     s__IncS0(nSize)
 
+    lPadR:=nPadR!=self:nDec
+    lPadL:=nPadL!=self:nInt
+    
     if lPadL.or.lPadR
         if lPadL
             self:cInt:=Left(s__cN0,nPadL-self:nInt)+self:cInt
@@ -3220,11 +3462,12 @@ method Normalize(oBigN) class tBigNumber
         endif
         oBigN:nSize:=nSize
     endif
-#else
+#else /*__HARBOUR__*/
     tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
-#endif
-return(self)
-
+#endif /*__PTCOMPAT__*/
+    return(self)
+/*method Normalize*/
+   
 /*
     method:D2H
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3232,25 +3475,31 @@ return(self)
     Descricao:Converte Decimal para Hexa
     Sintaxe:tBigNumber():D2H(cHexB) -> cHexN
 */
-method D2H(cHexB) class tBigNumber
+method D2H(cHexB AS CHARACTER) class tBigNumber
 
-    local otH:=s__o0:Clone()
-    local otN:=tBigNumber():New(self:cInt)
+    local otH   AS OBJECT
+    local otN   AS OBJECT
 
-    local cHexN:=""
-    local cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
+    local cHexN AS CHARACTER
+    local cHexC AS CHARACTER
 
-    local cInt
-    local cDec
-    local cSig:=self:cSig
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
+    local cSig  AS CHARACTER
 
-    local oHexN
+    local oHexN AS OBJECT
 
-    local nAT
+    local nAT   AS NUMERIC
 
     DEFAULT cHexB:="16"
 
+    otH:=s__o0:Clone()
     otH:SetValue(cHexB)
+    
+    otN:=tBigNumber():New(self:cInt)
+
+    cHexN:=""
+    cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
 
     while otN:gt(s__o0)
         otN:SetValue(otN:Div(otH,.F.))
@@ -3279,9 +3528,11 @@ method D2H(cHexB) class tBigNumber
 
     cDec:=cHexN
 
+    cSig:=self:cSig
     oHexN:=tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
 
-return(oHexN)
+    return(oHexN)
+/*method D2H*/
 
 /*
     method:H2D
@@ -3292,27 +3543,40 @@ return(oHexN)
 */
 method H2D() class tBigNumber
 
-    local otH:=s__o0:Clone()
-    local otNR:=s__o0:Clone()
-    local otLN:=s__o0:Clone()
-    local otPw:=s__o0:Clone()
-    local otNI:=s__o0:Clone()
-    local otAT:=s__o0:Clone()
+    local otH   AS OBJECT
+    local otNR  AS OBJECT
+    local otLN  AS OBJECT
+    local otPw  AS OBJECT
+    local otNI  AS OBJECT
+    local otAT  AS OBJECT
 
-    local cHexB:=hb_ntos(self:nBase)
-    local cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
-    local cHexN:=self:cInt
+    local cHexB AS CHARACTER
+    local cHexC AS CHARACTER
+    local cHexN AS CHARACTER
 
     local cInt
     local cDec
-    local cSig:=self:cSig
+    local cSig  AS CHARACTER
 
-    local nLn:=hb_bLen(cHexN)
-    local nI:=nLn
+    local nLn   AS NUMERIC
+    local nI    AS NUMERIC
 
+    otH:=s__o0:Clone()
+    cHexB:=hb_ntos(self:nBase)
     otH:SetValue(cHexB)
+    cHexN:=self:cInt
+    nLn:=hb_bLen(cHexN)
+    otLN:=s__o0:Clone()
     otLN:SetValue(hb_ntos(nLn))
+    
+    otNR:=s__o0:Clone()
+    
+    otPw:=s__o0:Clone()
+    otNI:=s__o0:Clone()
+    otAT:=s__o0:Clone()
 
+    cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
+    nI:=nLn
     while nI>0
         otNI:SetValue(hb_ntos(--nI))
         otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
@@ -3343,10 +3607,12 @@ method H2D() class tBigNumber
 
     cDec:=otNR:cDec
 
+    cSig:=self:cSig
     otNR:SetValue(cSig+cInt+"."+cDec)
 
-return(otNR)
-
+    return(otNR)
+/*method H2D*/
+    
 /*
     method:H2B
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3356,61 +3622,31 @@ return(otNR)
 */
 method H2B() class tBigNumber
 
-    local aH2B:={;
-                            {"0","00000"},;
-                            {"1","00001"},;
-                            {"2","00010"},;
-                            {"3","00011"},;
-                            {"4","00100"},;
-                            {"5","00101"},;
-                            {"6","00110"},;
-                            {"7","00111"},;
-                            {"8","01000"},;
-                            {"9","01001"},;
-                            {"A","01010"},;
-                            {"B","01011"},;
-                            {"C","01100"},;
-                            {"D","01101"},;
-                            {"E","01110"},;
-                            {"F","01111"},;
-                            {"G","10000"},;
-                            {"H","10001"},;
-                            {"I","10010"},;
-                            {"J","10011"},;
-                            {"K","10100"},;
-                            {"L","10101"},;
-                            {"M","10110"},;
-                            {"N","10111"},;
-                            {"O","11000"},;
-                            {"P","11001"},;
-                            {"Q","11010"},;
-                            {"R","11011"},;
-                            {"S","11100"},;
-                            {"T","11101"},;
-                            {"U","11110"},;
-                            {"V","11111"};
-                        }
+    local aH2B  AS ARRAY
+    
+    local cChr  AS CHARACTER
+    local cBin  AS CHARACTER
 
-    local cChr
-    local cBin:=""
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
 
-    local cInt
-    local cDec
+    local cSig  AS CHARACTER
+    local cHexB AS CHARACTER
+    local cHexN AS CHARACTER
 
-    local cSig:=self:cSig
-    local cHexB:=hb_ntos(self:nBase)
-    local cHexN:=self:cInt
+    local oBin  AS OBJECT
 
-    local oBin:=tBigNumber():New(NIL,2)
+    local nI    AS NUMERIC
+    local nLn   AS NUMERIC
+    local nAT   AS NUMERIC
 
-    local nI:=0
-    local nLn:=hb_bLen(cHexN)
-    local nAT
-
-    local l16
+    local l16   AS LOGICAL
 
     begin sequence
 
+        cBin:=""
+    
+        cHexB:=hb_ntos(self:nBase)
         if Empty(cHexB)
              break
         endif
@@ -3420,7 +3656,12 @@ method H2B() class tBigNumber
         endif
 
         l16:=cHexB=="16"
+        
+        aH2B:=s_aH2B
 
+        cHexN:=self:cInt
+        nLn:=hb_bLen(cHexN)
+        nI:=0
         while ++nI<=nLn
             cChr:=SubStr(cHexN,nI,1)
             nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
@@ -3446,12 +3687,17 @@ method H2B() class tBigNumber
 
         cDec:=cBin
 
+        oBin:=tBigNumber():New(NIL,2)
+        cSig:=self:cSig
         oBin:SetValue(cSig+cInt+"."+cDec)
 
     end sequence
+    
+    DEFAULT oBin:=tBigNumber():New(NIL,2)
 
-return(oBin)
-
+    return(oBin)
+/*method H2B*/
+    
 /*
     method:B2H
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3459,58 +3705,25 @@ return(oBin)
     Descricao:Converte Bin para Hex
     Sintaxe:tBigNumber():B2H(cHexB) -> cHexN
 */
-method B2H(cHexB) class tBigNumber
+method B2H(cHexB AS CHARACTER) class tBigNumber
 
-    local aH2B:={;
-                            {"0","00000"},;
-                            {"1","00001"},;
-                            {"2","00010"},;
-                            {"3","00011"},;
-                            {"4","00100"},;
-                            {"5","00101"},;
-                            {"6","00110"},;
-                            {"7","00111"},;
-                            {"8","01000"},;
-                            {"9","01001"},;
-                            {"A","01010"},;
-                            {"B","01011"},;
-                            {"C","01100"},;
-                            {"D","01101"},;
-                            {"E","01110"},;
-                            {"F","01111"},;
-                            {"G","10000"},;
-                            {"H","10001"},;
-                            {"I","10010"},;
-                            {"J","10011"},;
-                            {"K","10100"},;
-                            {"L","10101"},;
-                            {"M","10110"},;
-                            {"N","10111"},;
-                            {"O","11000"},;
-                            {"P","11001"},;
-                            {"Q","11010"},;
-                            {"R","11011"},;
-                            {"S","11100"},;
-                            {"T","11101"},;
-                            {"U","11110"},;
-                            {"V","11111"};
-                        }
+    local aH2B  AS ARRAY
 
-    local cChr
-    local cInt
-    local cDec
-    local cSig:=self:cSig
-    local cBin:=self:cInt
-    local cHexN:=""
+    local cChr  AS CHARACTER
+    local cInt  AS CHARACTER
+    local cDec  AS CHARACTER
+    local cSig  AS CHARACTER
+    local cBin  AS CHARACTER
+    local cHexN AS CHARACTER
 
-    local oHexN
+    local oHexN AS OBJECT
 
-    local nI:=1
-    local nLn:=hb_bLen(cBin)
-    local nAT
+    local nI    AS NUMERIC
+    local nLn   AS NUMERIC
+    local nAT   AS NUMERIC
 
-    local l16
-
+    local l16   AS LOGICAL
+    
     begin sequence
 
         if Empty(cHexB)
@@ -3524,6 +3737,13 @@ method B2H(cHexB) class tBigNumber
 
         l16:=cHexB=="16"
 
+        aH2B:=s_aH2B
+        cBin:=self:cInt
+        cHexN:=""
+        
+        nI:=1
+        nLn:=hb_bLen(cBin)
+        
         while nI<=nLn
             cChr:=SubStr(cBin,nI,if(l16,4,5))
             nAT:=aScan(aH2B,{|aE|(if(l16,SubStr(aE[2],2),aE[2])==cChr)})
@@ -3551,11 +3771,13 @@ method B2H(cHexB) class tBigNumber
 
         cDec:=cHexN
 
+        cSig:=self:cSig
         oHexN:=tBigNumber():New(cSig+cInt+"."+cDec,Val(cHexB))
 
     end sequence
 
-return(oHexN)
+    return(oHexN)
+/*method B2H*/    
 
 /*
     method:D2B
@@ -3564,10 +3786,13 @@ return(oHexN)
     Descricao:Converte Dec para Bin
     Sintaxe:tBigNumber():D2B(cHexB) -> oBin
 */
-method D2B(cHexB) class tBigNumber
-    local oHex:=self:D2H(cHexB)
-    local oBin:=oHex:H2B()
-return(oBin)
+method D2B(cHexB AS CHARACTER) class tBigNumber
+    local oHex  AS OBJECT
+    local oBin  AS OBJECT
+    oHex:=self:D2H(cHexB)
+    oBin:=oHex:H2B()
+    return(oBin)
+/*method D2B*/
 
 /*
     method:B2D
@@ -3576,11 +3801,14 @@ return(oBin)
     Descricao:Converte Bin para Dec
     Sintaxe:tBigNumber():B2D(cHexB) -> oDec
 */
-method B2D(cHexB) class tBigNumber
-    local oHex:=self:B2H(cHexB)
-    local oDec:=oHex:H2D()
-return(oDec)
-
+method B2D(cHexB AS CHARACTER) class tBigNumber
+    local oHex  AS OBJECT
+    local oDec  AS OBJECT
+    oHex:=self:B2H(cHexB)
+    oDec:=oHex:H2D()
+    return(oDec)
+/*method B2D*/
+    
 /*
     method:Randomize
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3590,25 +3818,30 @@ return(oDec)
 */
 method Randomize(uB,uE) class tBigNumber
 
-    local oB:=s__o0:Clone()
-    local oE:=s__o0:Clone()
-    local oT:=s__o0:Clone()
-    local oR:=s__o0:Clone()
+    local oB    AS OBJECT
+    local oE    AS OBJECT
+    local oT    AS OBJECT
+    local oR    AS OBJECT
 
-    local cN
-    local cR
-    Local cT
+    local cN    AS CHARACTER
+    local cR    AS CHARACTER
+    local cT    AS CHARACTER
 
     DEFAULT uB:="1"
     DEFAULT uE:="99999999999999999999999999999999"
 
+    oB:=s__o0:Clone()
     oB:SetValue(uB)
+    
+    oE:=s__o0:Clone()
     oE:SetValue(uE)
 
     oB:SetValue(oB:Int(.T.):Abs(.T.))
     oE:SetValue(oE:Int(.T.):Abs(.T.))
 
+    oT:=s__o0:Clone()
     oT:SetValue(oB:Min(oE))
+    
     oE:SetValue(oB:Max(oE))
     oB:SetValue(oT)
 
@@ -3627,6 +3860,7 @@ method Randomize(uB,uE) class tBigNumber
         end while
     #endif
 
+    oR:=s__o0:Clone()
     oR:SetValue(oR:Add(cR))
 
     oT:SetValue(oB)
@@ -3668,8 +3902,10 @@ method Randomize(uB,uE) class tBigNumber
         oR:SetValue(oT)
     end while
 
-return(oR)
+    return(oR)
 
+/*method Randomize*/    
+    
 /*
     function:__Random
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3704,10 +3940,12 @@ static function __Random(nB AS NUMERIC,nE AS NUMERIC) AS NUMERIC
     #endif //__HARBOUR__
 
 #ifdef __HARBOUR__
-return(nR) AS NUMERIC
+    return(nR) AS NUMERIC
 #else //__PROTHEUS__
-return(nR)
+    return(nR)
 #endif //__HARBOUR__
+
+/*static function __Random*/
 
 /*
     method:millerRabin
@@ -3719,21 +3957,24 @@ return(nR)
 */
 method millerRabin(uI) class tBigNumber
 
-    local oN:=self:Clone()
-    local oD:=tBigNumber():New(oN:Sub(s__o1))
-    local oS:=s__o0:Clone()
-    local oI:=s__o0:Clone()
-    local oA:=s__o0:Clone()
+    local oN    AS OBJECT
+    local oD    AS OBJECT
+    local oS    AS OBJECT
+    local oA    AS OBJECT
+    local oI    AS OBJECT
 
-    local lPrime:=.T.
+    local lPrime    AS LOGICAL
 
     begin sequence
 
+        oN:=self:Clone()
         if oN:lte(s__o1)
             lPrime:=.F.
             break
         endif
 
+        oS:=s__o0:Clone()
+        oD:=tBigNumber():New(oN:Sub(s__o1))
         while oD:Mod(s__o2):eq(s__o0)
             //-------------------------------------------------------------------------------------
             //(Div(2)==Mult(.5)
@@ -3742,7 +3983,10 @@ method millerRabin(uI) class tBigNumber
         end while
 
         DEFAULT uI:=s__o2:Clone()
-
+        DEFAULT lPrime:=.T.
+        
+        oA:=s__o0:Clone()
+        oI:=s__o0:Clone()
         oI:SetValue(uI)
         while oI:gt(s__o0)
             oA:SetValue(oA:Randomize(s__o1,oN))
@@ -3755,8 +3999,10 @@ method millerRabin(uI) class tBigNumber
 
     end sequence
 
-return(lPrime)
+    return(lPrime)
 
+/*method millerRabin*/    
+    
 /*
     function:mrPass
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3767,23 +4013,30 @@ return(lPrime)
 */
 static function mrPass(uA,uS,uD,uN)
 
-    local oA:=tBigNumber():New(uA)
-    local oS:=tBigNumber():New(uS)
-    local oD:=tBigNumber():New(uD)
-    local oN:=tBigNumber():New(uN)
-    local oM:=tBigNumber():New(oN:Sub(s__o1))
+    local oA    AS OBJECT
+    local oS    AS OBJECT
+    local oD    AS OBJECT
+    local oN    AS OBJECT
+    local oM    AS OBJECT
 
-    local oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
-    local oW:=tBigNumber():New(oS:Sub(s__o1))
+    local oP    AS OBJECT
+    local oW    AS OBJECT
 
-    local lmrP:=.T.
+    local lmrP  AS LOGICAL
 
     begin sequence
-
+    
+        oN:=tBigNumber():New(uN)
+        oD:=tBigNumber():New(uD)
+        oA:=tBigNumber():New(uA)
+        oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
         if oP:eq(s__o1)
             break
         endif
 
+        oM:=tBigNumber():New(oN:Sub(s__o1))
+        oS:=tBigNumber():New(uS)
+        oW:=tBigNumber():New(oS:Sub(s__o1))
         while oW:gt(s__o0)
             lmrP:=oP:eq(oM)
             if lmrP
@@ -3796,9 +4049,14 @@ static function mrPass(uA,uS,uD,uN)
         lmrP:=oP:eq(oM)
 
     end sequence
+    
+    DEFAULT lmrP:=.T.
 
-return(lmrP)
+    return(lmrP)
 
+/*static function mrPass*/    
+    
+    
 /*
     method:FI
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3823,12 +4081,13 @@ return(lmrP)
 */
 method FI() class tBigNumber
 
-    local oC:=self:Clone()
-    local oT:=tBigNumber():New(oC:Int(.T.))
+    local oC    AS OBJECT    
+    local oT    AS OBJECT
+    local oI    AS OBJECT
+    local oN    AS OBJECT
 
-    local oI
-    local oN
-
+    oC:=self:Clone()
+    oT:=tBigNumber():New(oC:Int(.T.))
     if oT:lte(s__oMinFI)
         oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
     else
@@ -3848,11 +4107,15 @@ method FI() class tBigNumber
         endif
     endif
 
-return(oT)
+    return(oT)
+/*method FI*/
+
 #ifdef __PROTHEUS__
-    static function TBIGNFI(n)
-        local i:=2
-        local fi:=n
+    static function TBIGNFI(n AS NUMERIC)
+        local i     AS NUMERIC
+        local fi    AS NUMERIC
+        fi:=n
+        i:=2
         while ((i*i)<=n)
             if ((n%i)==0)
                 fi-=Int(fi/i)
@@ -3865,7 +4128,8 @@ return(oT)
         if (n>1)
             fi-=Int(fi/n)
         endif
-    return(fi)
+        return(fi)
+    /*static function TBIGNFI*/
 #endif //__PROTHEUS__
 
 /*
@@ -3877,25 +4141,38 @@ return(oT)
 */
 method PFactors() class tBigNumber
 
-    local aPFactors:=Array(0)
+    local aPFactors AS ARRAY
 
-    local cP:=""
+    local cP        AS CHARACTER
 
-    local oN:=self:Clone()
-    local oP:=s__o0:Clone()
-    local oT:=s__o0:Clone()
+    local oN        AS OBJECT
+    local oP        AS OBJECT
+    local oT        AS OBJECT
 
-    local otP:=tPrime():New()
+    local otP       AS OBJECT
 
-    local nP
-    local nC:=0
+    local nP        AS NUMERIC
+    local nC        AS NUMERIC
 
-    local lPrime:=.T.
+    local lPrime    AS LOGICAL
 
-    otP:IsPReset()
-    otP:nextPReset()
+    aPFactors:=Array(0)
+    
+    oT:=s__o0:Clone()
+    oN:=self:Clone()
+    oP:=s__o0:Clone()
 
-    while otP:nextPrime(cP)
+    nC:=0
+
+    lPrime:=.T.
+
+    otP:=tPrime():New()
+    otP:IsPReset()    
+    otP:NextPReset()
+
+    cP:=""
+    
+    while otP:NextPrime(cP)
         cP:=LTrim(otP:cPrime)
         oP:SetValue(cP)
         if oP:gte(oN).or.if(lPrime,lPrime:=otP:IsPrime(oN:cInt),lPrime.or.(++nC>1.and.oN:gte(otP:cLPrime)))
@@ -3919,8 +4196,11 @@ method PFactors() class tBigNumber
         endif
     end while
 
-return(aPFactors)
+    return(aPFactors)
 
+/*method PFactors*/
+    
+    
 /*
     method:Factorial
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3932,12 +4212,15 @@ return(aPFactors)
                  http://www.luschny.de/math/factorial/index.html
 */
 method Factorial() class tBigNumber
-    local oN:=self:Clone():Int(.T.,.F.)
+    local oN    AS OBJECT
+    oN:=self:Clone():Int(.T.,.F.)
     if oN:eq(s__o0)
         return(s__o1:Clone())
     endif
-return(recFact(s__o1:Clone(),oN))
-
+    return(recFact(s__o1:Clone(),oN))
+/*method Factorial*/
+    
+    
 /*
     function:recFact
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -3946,22 +4229,22 @@ return(recFact(s__o1:Clone(),oN))
     Sintaxe:recFact(oS,oN)
     Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
 */
-static function recFact(oS,oN)
+static function recFact(oS AS OBJECT,oN AS OBJECT)
 
 #ifdef __PTCOMPAT__
-    local oSN
+    local oSN   AS OBJECT
 #endif //__PTCOMPAT__
 
-    local oI
+    local oI    AS OBJECT
 
-    local oR
-    local oSI
-    local oNI
+    local oR    AS OBJECT
+    local oSI   AS OBJECT
+    local oNI   AS OBJECT
 
 #ifndef __PTCOMPAT__
-    local nB
-    local nI
-    local nSN
+    local nB    AS NUMERIC
+    local nI    AS NUMERIC
+    local nSN   AS NUMERIC
 #endif //__PTCOMPAT__
 
     oR:=s__o0:Clone()
@@ -4006,8 +4289,10 @@ static function recFact(oS,oN)
     oNI:=oN:Clone()
     oNI:SetValue(oNI:iSub(oI))
 
-return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
+    return(recFact(oS,oI):iMult(recFact(oSI,oNI)))
 
+/*static function recFact*/    
+    
 /*
     method:Fibonacci
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4032,15 +4317,15 @@ for number in range(1,t,int(math.sqrt(t)/2)):
 
 */
 method Fibonacci() class tBigNumber
-    Local aFibonacci:=Array(0)
-    Local oN:=self
-    Local oA:=tBigNumber():New("0")
-    Local oB:=tBigNumber():New("1")
-#ifdef __HARBOUR__
-    Local oT
-#else
-    Local oT:=tBigNumber():New("0")
-#endif //__PROTEUS__
+    local aFibonacci    AS ARRAY
+    local oN            AS OBJECT
+    local oA            AS OBJECT
+    local oB            AS OBJECT
+    local oT            AS OBJECT
+    aFibonacci:=Array(0)
+    oB:=tBigNumber():New("1")
+    oN:=self:Clone()
+    oA:=tBigNumber():New("0")
 #ifdef __HARBOUR__
     While (oA<oN)
         aAdd(aFibonacci,oA:ExactValue())
@@ -4049,6 +4334,7 @@ method Fibonacci() class tBigNumber
         oA:=oT
    End While
 #else //__PROTEUS__
+    oT:=tBigNumber():New("0")
     While (oA:lt(oN))
         aAdd(aFibonacci,oA:ExactValue())
         oT:SetValue(oB)
@@ -4056,7 +4342,8 @@ method Fibonacci() class tBigNumber
         oA:SetValue(oT)
     End While
 #endif
-return(aFibonacci)
+    return(aFibonacci)
+/*method Fibonacci*/
 
 /*
     function:egMult
@@ -4066,19 +4353,27 @@ return(aFibonacci)
     Sintaxe:egMult(cN1,cN2,nBase,nAcc) -> oMTP
     Obs.:Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
 */
-static function egMult(cN1,cN2,nBase)
+static function egMult(cN1 AS CHARACTER,cN2 AS CHARACTER,nBase AS NUMERIC)
 
 #ifdef __PTCOMPAT__
 
-    local aeMT:=Array(0)
+    local aeMT  AS ARRAY
 
-    local nI:=0
-    local nCmp
+    local nI    AS NUMERIC
+    local nCmp  AS NUMERIC
 
-    local oN1:=tBigNumber():New(cN1,nBase)
-    local oMTM:=s__o1:Clone()
-    local oMTP:=tBigNumber():New(cN2,nBase)
+    local oN1   AS OBJECT
+    local oMTM  AS OBJECT
+    local oMTP  AS OBJECT
 
+    aeMT:=Array(0)
+    
+    nI:=0
+    
+    oMTP:=tBigNumber():New(cN2,nBase)
+    oMTM:=s__o1:Clone()
+    oN1:=tBigNumber():New(cN1,nBase)
+    
     while oMTM:lte(oN1)
         ++nI
         aAdd(aeMT,{oMTM:Int(.F.,.F.),oMTP:Int(.F.,.F.)})
@@ -4104,13 +4399,16 @@ static function egMult(cN1,cN2,nBase)
 
 #else
 
-    local oMTP:=s__o0:Clone()
+    local oMTP  AS OBJECT
+    oMTP:=s__o0:Clone()
     oMTP:__cInt(TBIGNegMult(cN1,cN2,hb_bLen(cN1),nBase))
 
 #endif //__PTCOMPAT__
 
-return(oMTP)
+    return(oMTP)
 
+/*static function egMult*/    
+    
 /*
     function:rMult
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4152,12 +4450,16 @@ return(oMTP)
     result:   42500
 
 */
-static function rMult(cA,cB,nBase)
+static function rMult(cA AS CHARACTER,cB AS CHARACTER,nBase AS NUMERIC)
 
-    local oa:=tBigNumber():New(cA,nBase)
-    local ob:=tBigNumber():New(cB,nBase)
-    local oR:=s__o0:Clone()
-
+    local oa    AS OBJECT
+    local ob    AS OBJECT
+    local oR    AS OBJECT
+    
+    oR:=s__o0:Clone()
+    ob:=tBigNumber():New(cB,nBase)
+    oa:=tBigNumber():New(cA,nBase)
+    
     while oa:ne(s__o0)
         if oa:Mod(s__o2):gt(s__o0)
             oR:__cInt(oR:Add(ob):__cInt())
@@ -4167,8 +4469,10 @@ static function rMult(cA,cB,nBase)
         ob:__cInt(ob:Mult(s__o2):__cInt())
     end while
 
-return(oR)
+    return(oR)
 
+/*static function rMult*/    
+    
 /*
     function:egDiv
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4176,18 +4480,18 @@ return(oR)
     Descricao:Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
     Sintaxe:egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> oeDivQ
 */
-static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
+static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS NUMERIC,nAcc AS NUMERIC,lFloat AS LOGICAL)
 
 #ifdef __PTCOMPAT__
-    local aeDV:=Array(0)
-    local nI:=0
-    local nCmp
-    local oeDivN
+    local aeDV      AS ARRAY
+    local nI        AS NUMERIC     
+    local nCmp      AS NUMERIC
+    local oeDivN    AS OBJECT
 #endif //__PTCOMPAT__
 
-    local cRDiv
-    local oeDivR
-    local oeDivQ
+    local cRDiv     AS OBJECT
+    local oeDivR    AS OBJECT
+    local oeDivQ    AS OBJECT
 
 #ifndef __PTCOMPAT__
     local cQDiv
@@ -4206,6 +4510,10 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
     oeDivR:=s__o0:Clone()
     oeDivR:SetValue(cD,nBase,NIL,NIL,nAcc)
 
+    aeDV:=Array(0)
+    
+    nI:=0
+    
     while .T.
         ++nI
         aAdd(aeDV,{oeDivQ:Int(.F.,.F.),oeDivR:Int(.F.,.F.)})
@@ -4260,8 +4568,10 @@ static function egDiv(cN,cD,nSize,nBase,nAcc,lFloat)
         oeDivQ:SetValue(oeDivQ,nBase,cRDiv,NIL,nAcc)
     endif
 
-return(oeDivQ)
+    return(oeDivQ)
 
+/*static function egDiv*/    
+    
 /*
     function:ecDiv
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4269,28 +4579,24 @@ return(oeDivQ)
     Descricao:Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
     Sintaxe:ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q
  */
-static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
+static function ecDiv(pA AS CHARACTER,pB AS CHARACTER,nSize AS NUMERIC,nBase AS NUMERIC,nAcc AS NUMERIC,lFloat AS LOGICAL)
 
 #ifdef __PTCOMPAT__
 
-   local a:=tBigNumber():New(pA,nBase)
-   local b:=tBigNumber():New(pB,nBase)
-   local r:=a:Clone()
-
-#else
-
-    local r:=s__o0:Clone()
+   local a  AS OBJECT
+   local b  AS OBJECT
 
 #endif
 
-   local q:=s__o0:Clone()
+   local r AS OBJECT
+   local q  AS OBJECT
 
 #ifdef __PTCOMPAT__
 
-   local n:=s__o1:Clone()
-   local aux:=s__o0:Clone()
-   local tmp:=s__o0:Clone()
-   local base:=tBigNumber():New(hb_ntos(nBase),nBase)
+   local n      AS OBJECT
+   local aux    AS OBJECT
+   local tmp    AS OBJECT
+   local base   AS OBJECT
 
 #endif
 
@@ -4303,7 +4609,20 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 #ifdef __PTCOMPAT__
 
    SYMBOL_UNUSED(nSize)
+   
+   tmp:=s__o0:Clone()
+   base:=tBigNumber():New(hb_ntos(nBase),nBase)
 
+   q:=s__o0:Clone()
+   
+   aux:=s__o0:Clone()
+   n:=s__o1:Clone()
+   
+   a:=tBigNumber():New(pA,nBase)
+   r:=a:Clone()
+   
+   b:=tBigNumber():New(pB,nBase)
+   
     while r:gte(b)
         aux:SetValue(b:Mult(n))
         if aux:lte(a)
@@ -4330,7 +4649,10 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
 
     cQDiv:=tBIGNecDiv(pA,pB,@cRDiv,nSize,nBase)
 
+    q:=s__o0:Clone()
     q:__cInt(cQDiv)
+    
+    r:=s__o0:Clone()
     r:__cInt(cRDiv)
 
 #endif
@@ -4346,8 +4668,10 @@ static function ecDiv(pA,pB,nSize,nBase,nAcc,lFloat)
         q:SetValue(q,nBase,cRDiv,NIL,nAcc)
     endif
 
-return(q)
+    return(q)
 
+/*static function ecDiv*/    
+    
 /*
     function:nthRoot
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4355,9 +4679,10 @@ return(q)
     Descricao:Metodo Newton-Raphson
     Sintaxe:nthRoot(oRootB,oRootE,oAcc) -> othRoot
 */
-static function nthRoot(oRootB,oRootE,oAcc)
-return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
-
+static function nthRoot(oRootB AS OBJECT,oRootE AS OBJECT,oAcc AS OBJECT)
+    return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
+/*static function nthRoot*/
+    
 /*
     function:__Pow
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4367,21 +4692,22 @@ return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
     Ref.:http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function
         :http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
 */
-static function __Pow(base,expR,EPS)
+static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
 
-    local acc
-    local sqr
-    local tmp
+    local acc   AS OBJECT
+    local sqr   AS OBJECT
+    local tmp   AS OBJECT
 
-    local low
-    local mid
-    local lst
-    local high
+    local low   AS OBJECT
+    local mid   AS OBJECT
+    local lst   AS OBJECT
+    local high  AS OBJECT
 
-    local lDo
+    local lDo   AS LOGICAL
 
-    local exp:=expR:Clone()
+    local exp   AS OBJECT
 
+    exp:=expR:Clone()
     if base:eq(s__o1).or.exp:eq(s__o0)
         return(s__o1:Clone())
     elseif base:eq(s__o0)
@@ -4432,8 +4758,10 @@ static function __Pow(base,expR,EPS)
         end while
     endif
 
-return(acc)
+    return(acc)
 
+/*static function __Pow*/    
+    
 /*
     function:__SQRT
     Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4442,15 +4770,16 @@ return(acc)
     Sintaxe:__SQRT(p) -> oSQRT
 */
 static function __SQRT(p)
-    local l
-    local r
-    local t
-    local s
-    local n
-    local x
-    local y
-    local EPS
-    local q:=tBigNumber():New(p)
+    local l     AS OBJECT
+    local r     AS OBJECT
+    local t     AS OBJECT
+    local s     AS OBJECT
+    local n     AS OBJECT
+    local x     AS OBJECT
+    local y     AS OBJECT
+    local EPS   AS OBJECT
+    local q     AS OBJECT
+    q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
         #ifdef __PROTEUS__
             r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
@@ -4502,8 +4831,10 @@ static function __SQRT(p)
             l:SetValue(t)
         end while
     endif
-return(r)
+    return(r)
 
+/*static function __SQRT*/
+        
 #ifdef TBN_DBFILE
 
     /*
@@ -4513,20 +4844,24 @@ return(r)
         Descricao:Adicao
         Sintaxe:Add(a,b,n,nBase) -> cNR
     */
-    static function Add(a,b,n,nBase)
+    static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS CHARACTER)
 
-        local c
+        local c AS CHARACTER
 
-        local y:=n+1
-        local k:=y
+        local y AS NUMERIC
+        local k AS NUMERIC
 
-        local s:=""
+        local s AS CHARACTER
 
         #ifdef __HARBOUR__
             FIELD FN
         #endif
-
+        
+        y:=n+1
+        
         s__IncS0(y)
+        
+        k:=y
 
         c:=aNumber(Left(s__cN0,y),y,"ADD_C")
 
@@ -4553,9 +4888,12 @@ return(r)
         end while
 
         (c)->(dbGoTop())
+        s:=""
         (c)->(dbEval({||s+=hb_ntos(FN)}))
 
-    return(s)
+        return(s)
+        
+    /*static function Add*/
 
     /*
         function:Sub
@@ -4564,23 +4902,27 @@ return(r)
         Descricao:Subtracao
         Sintaxe:Sub(a,b,n,nBase) -> cNR
     */
-    static function Sub(a,b,n,nBase)
+    static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-        local c
+        local c AS CHARACTER
 
-        local y:=n
-        local k:=y
+        local y AS NUMERIC
+        local k AS NUMERIC
 
-        local s:=""
+        local s AS CHARACTER
 
         #ifdef __HARBOUR__
             FIELD FN
         #endif
 
+        y:=n
+        
         s__IncS0(y)
 
         c:=aNumber(Left(s__cN0,y),y,"SUB_C")
 
+        k:=y
+        
         while n>0
             (c)->(dbGoTo(k))
             if (c)->(rLock())
@@ -4604,9 +4946,12 @@ return(r)
         end while
 
         (c)->(dbGoTop())
+        s:=""
         (c)->(dbEval({||s+=hb_ntos(FN)}))
 
-    return(s)
+        return(s)
+        
+    /*static function Sub*/
 
     /*
         function:Mult
@@ -4616,31 +4961,41 @@ return(r)
         Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
         Obs.:Mais rapida,usa a multiplicacao nativa
     */
-    static function Mult(cN1,cN2,n,nBase)
+    static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-        local c
+        local c AS CHARACTER
 
-        local a:=tBigNInvert(cN1,n)
-        local b:=tBigNInvert(cN2,n)
-        local y:=n+n
+        local a AS ARRAY
+        local b AS ARRAY
+        local y AS NUMERIC
 
-        local i:=1
-        local k:=1
-        local l:=2
+        local i AS NUMERIC
+        local k AS NUMERIC
+        local l AS NUMERIC
 
-        local s
-        local x
-        local j
-        local w
+        local s AS NUMERIC
+        local x AS NUMERIC
+        local j AS NUMERIC
+        local w AS NUMERIC
 
         #ifdef __HARBOUR__
             FIELD FN
         #endif
+        
+        y:=n+n
 
         s__IncS0(y)
 
         c:=aNumber(Left(s__cN0,y),y,"MULT_C")
+        
+        a:=tBigNInvert(cN1,n)
+        b:=tBigNInvert(cN2,n)
 
+        k:=1
+        l:=2
+
+        i:=1
+        
         while i<=n
             s:=1
             j:=i
@@ -4705,7 +5060,9 @@ return(r)
 
         s:=dbGetcN(c,y)
 
-    return(s)
+        return(s)
+        
+    /*static function Mult*/
 
     /*
         function:aNumber
@@ -4714,16 +5071,18 @@ return(r)
         Descricao:db OF Numbers
         Sintaxe:aNumber(c,n,o) -> a
     */
-    static function aNumber(c,n,o)
+    static function aNumber(c AS CHARACTER,n AS NUMERIC,o AS CHARACTER)
 
-        local a:=dbNumber(o)
+        local a AS CHARACTER
 
-        local y:=0
+        local y AS NUMERIC
 
         #ifdef __HARBOUR__
             FIELD FN
         #endif
 
+        a:=dbNumber(o)
+        y:=0
         while ++y<=n
             (a)->(dbAppend(.T.))
         #ifdef __PROTHEUS__
@@ -4734,7 +5093,9 @@ return(r)
             (a)->(dbUnLock())
         end while
 
-    return(a)
+        return(a)
+        
+    /*static function aNumber*/
 
     /*
         function:dbGetcN
@@ -4743,15 +5104,19 @@ return(r)
         Descricao:Montar a String de Retorno
         Sintaxe:dbGetcN(a,x) -> s
     */
-    static function dbGetcN(a,n)
+    static function dbGetcN(a AS CHARACTER,n AS NUMERIC)
 
-        local s:=""
-        local y:=n
+        local s AS CHARACTER
+        
+        local y AS NUMERIC
 
         #ifdef __HARBOUR__
             FIELD FN
         #endif
 
+        s:=""
+        y:=n
+        
         while y>=1
             (a)->(dbGoTo(y))
             while y>=1.and.(a)->FN==0
@@ -4771,20 +5136,23 @@ return(r)
             s:=PadL(s,n,"0")
         endif
 
-    return(s)
+        return(s)
+        
+    /*static function dbGetcN*/
 
-    static function dbNumber(cAlias)
-        local aStru:={{"FN","N",18,0}}
-        local cFile
+    static function dbNumber(cAlias AS CHARACTER)
+        local aStru     AS ARRAY
+        local cFile     AS CHARACTER
     #ifndef __HARBOUR__
-        local cLDriver
-        local cRDD:=if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS")
-    #else
+        local cRDD      AS CHARACTER
+        local cLDriver  AS CHARACTER
+    #else 
         #ifndef TBN_MEMIO
-        local cRDD:="DBFCDX"
+            local cRDD  AS CHARACTER
         #endif
     #endif
     #ifndef __HARBOUR__
+        cRDD:=if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS")
         if .not.(Type("__localDriver")=="C")
             private __localDriver
         endif
@@ -4792,6 +5160,7 @@ return(r)
         __localDriver:=cRDD
     #endif
         if Select(cAlias)==0
+            aStru:={{"FN","N",18,0}}
     #ifndef __HARBOUR__
             cFile:=CriaTrab(aStru,.T.,GetdbExtension())
             if .not.(GetdbExtension()$cFile)
@@ -4800,6 +5169,7 @@ return(r)
             dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
     #else
             #ifndef TBN_MEMIO
+                cRDD:="DBFCDX"
                 cFile:=CriaTrab(aStru,cRDD)
                 dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
             #else
@@ -4822,14 +5192,18 @@ return(r)
             __localDriver:=cLDriver
         endif
     #endif
-    return(cAlias)
+        return(cAlias)
+    /*static function dbNumber*/
 
     #ifdef __HARBOUR__
         #ifndef TBN_MEMIO
-            static function CriaTrab(aStru,cRDD)
-                local cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
-                local cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
-                local lSuccess:=.F.
+            static function CriaTrab(aStru AS ARRAY,cRDD AS CHARACTER)
+                local cFolder   AS CHARACTER
+                local cFile     AS CHARACTER
+                local lSuccess  AS LOGICAL
+                cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
+                cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                lSuccess:=.F.
                 while .not.(lSuccess)
                     Try
                       MakeDir(cFolder)
@@ -4840,11 +5214,14 @@ return(r)
                       cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
-            return(cFile)
+                return(cFile)
+            /*static function CriaTrab*/
         #else
-            static function CriaTrab(aStru,cAlias)
-                local cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
-                local lSuccess:=.F.
+            static function CriaTrab(aStru AS ARRAY,cAlias AS CHARACTER)
+                local cFile     AS CHARACTER
+                local lSuccess  AS LOGICAL
+                cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                lSuccess:=.F.
                 while .not.(lSuccess)
                     Try
                       dbCreate(cFile,aStru,NIL,.T.,cAlias)
@@ -4854,7 +5231,8 @@ return(r)
                       cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
-            return(cFile)
+                return(cFile)
+            /*static function CriaTrab*/
         #endif
     #endif
 
@@ -4869,12 +5247,18 @@ return(r)
             Descricao:Adicao
             Sintaxe:Add(a,b,n,nBase) -> cNR
         */
-        static function Add(a,b,n,nBase)
+        static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-            local y:=n+1
-            local c:=aFill(aSize(ths_aZAdd,y),0)
-            local k:=y
-            local s:=""
+            local c AS ARRAY
+
+            local s AS CHARACTER
+            
+            local k AS NUMERIC
+            local y AS NUMERIC
+            
+            y:=n+1
+            k:=y
+            c:=aFill(aSize(ths_aZAdd,y),0)
 
             while n>0
             #ifdef __PROTHEUS__
@@ -4890,9 +5274,17 @@ return(r)
                 --n
             end while
 
-            aEval(c,{|v|s+=hb_ntos(v)})
+            s:=""
+            
+            #ifdef __PROTHEUS__
+                aEval(c,{|v|s+=hb_ntos(v)})
+            #else /*__HARBOUR__*/
+                aEval(c,{|v AS NUMERIC|s+=hb_ntos(v)})
+            #endif
 
-        return(s)
+            return(s)
+        
+        /*static function Add*/
 
         /*
             function:Sub
@@ -4901,12 +5293,18 @@ return(r)
             Descricao:Subtracao
             Sintaxe:Sub(a,b,n,nBase) -> cNR
         */
-        static function Sub(a,b,n,nBase)
+        static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-            local y:=n
-            local c:=aFill(aSize(ths_aZSub,y),0)
-            local k:=y
-            local s:=""
+            local c AS ARRAY
+
+            local s AS CHARACTER
+
+            local k AS NUMERIC
+            local y AS NUMERIC
+            
+            y:=n
+            k:=y
+            c:=aFill(aSize(ths_aZSub,y),0)
 
             while n>0
             #ifdef __PROTHEUS__
@@ -4921,10 +5319,18 @@ return(r)
                 --k
                 --n
             end while
+            
+            s:=""
 
-            aEval(c,{|v|s+=hb_ntos(v)})
+            #ifdef __PROTHEUS__
+                aEval(c,{|v|s+=hb_ntos(v)})
+            #else /*__HARBOUR__*/
+                aEval(c,{|v AS NUMERIC|s+=hb_ntos(v)})
+            #endif
 
-        return(s)
+            return(s)
+        
+        /*static function Sub*/
 
         /*
             function:Mult
@@ -4934,22 +5340,34 @@ return(r)
             Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
             Obs.:Mais rapida,usa a multiplicacao nativa
         */
-        static function Mult(cN1,cN2,n,nBase)
+        static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-            local a:=tBigNInvert(cN1,n)
-            local b:=tBigNInvert(cN2,n)
+            local c AS ARRAY
 
-            local y:=n+n
-            local c:=aFill(aSize(ths_aZMult,y),0)
+            local a AS CHARACTER
+            local b AS CHARACTER
 
-            local i:=1
-            local k:=1
-            local l:=2
+            local y AS NUMERIC
 
-            local s
-            local x
-            local j
+            local i AS NUMERIC
+            local k AS NUMERIC
+            local l AS NUMERIC
 
+            local s AS NUMERIC
+            local x AS NUMERIC
+            local j AS NUMERIC
+
+            a:=tBigNInvert(cN1,n)
+            b:=tBigNInvert(cN2,n)
+
+            y:=n+n
+            c:=aFill(aSize(ths_aZMult,y),0)
+            
+            k:=1
+            l:=2
+
+            i:=1
+            
             while i<=n
                 s:=1
                 j:=i
@@ -4990,8 +5408,10 @@ return(r)
                 l++
             end while
 
-        return(aGetcN(c,y))
-
+            return(aGetcN(c,y))
+        
+        /*static function Mult*/
+            
         /*
             function:aGetcN
             Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -4999,11 +5419,15 @@ return(r)
             Descricao:Montar a String de Retorno
             Sintaxe:aGetcN(a,x) -> s
         */
-        static function aGetcN(a,n)
+        static function aGetcN(a AS ARRAY,n AS NUMERIC)
 
-            local s:=""
-            local y:=n
+            local s AS CHARACTER
+            
+            local y AS NUMERIC
 
+            s:=""
+            y:=n
+            
             while y>=1
                 while y>=1.and.a[y]==0
                     y--
@@ -5022,8 +5446,10 @@ return(r)
                 s:=PadL(s,n,"0")
             endif
 
-        return(s)
-
+            return(s)
+        
+        /*static function aGetcN*/
+        
     #else /*String*/
 
         /*
@@ -5034,20 +5460,26 @@ return(r)
             Sintaxe:Add(a,b,n,nBase) -> cNR
         */
         #ifdef __PTCOMPAT__
-            static function Add(a,b,n,nBase)
+            static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-                local c
+                local c     AS CHARACTER
 
-                local y:=n+1
-                local k:=y
+                local y     AS NUMERIC
+                local k     AS NUMERIC
 
-                local v:=0
-                local v1
+                local v     AS NUMERIC
+                local v1    AS NUMERIC
+
+                y:=n+1
 
                 s__IncS0(y)
 
                 c:=Left(s__cN0,y)
 
+                k:=y
+
+                v:=0
+                
                 while n>0
                     #ifdef __PROTHEUS__
                         v+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
@@ -5072,10 +5504,14 @@ return(r)
                     --n
                 end while
 
-            return(c)
+                return(c)
+            
+            /*static function Add*/
+            
         #else //__HARBOUR__
-            static function Add(a,b,n,nB)
-            return(tBIGNADD(a,b,n,n,nB))
+            static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
+                return(tBIGNADD(a,b,n,n,nB))
+            /*static function Add*/
         #endif //__PTCOMPAT__
 
         /*
@@ -5086,20 +5522,26 @@ return(r)
             Sintaxe:Sub(a,b,n,nBase) -> cNR
         */
         #ifdef __PTCOMPAT__
-            static function Sub(a,b,n,nBase)
+            static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-                local c
+                local c     AS CHARACTER
 
-                local y:=n
-                local k:=y
+                local y     AS NUMERIC
+                local k     AS NUMERIC
 
-                local v:=0
-                local v1
+                local v     AS NUMERIC
+                local v1    AS NUMERIC
 
+                y:=n
+                
                 s__IncS0(y)
 
                 c:=Left(s__cN0,y)
 
+                k:=y
+
+                v:=0
+                
                 while n>0
                     #ifdef __PROTHEUS__
                         v+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
@@ -5122,10 +5564,14 @@ return(r)
                     --n
                 end while
 
-            return(c)
+                return(c)
+            
+            /*static function Sub*/
+            
         #else //__HARBOUR__
-            static function Sub(a,b,n,nB)
-            return(tBIGNSUB(a,b,n,nB))
+            static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
+                    return(tBIGNSUB(a,b,n,nB))
+            /*static function Sub*/
         #endif //__PTCOMPAT__
         /*
             function:Mult
@@ -5136,29 +5582,41 @@ return(r)
             Obs.:Mais rapida, usa a multiplicacao nativa
         */
         #ifdef __PTCOMPAT__
-            static function Mult(cN1,cN2,n,nBase)
+            static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
-                local c
+                local c     AS CHARACTER
 
-                local a:=tBigNInvert(cN1,n)
-                local b:=tBigNInvert(cN2,n)
+                local a     AS CHARACTER
+                local b     AS CHARACTER
 
-                local y:=n+n
+                local y     AS NUMERIC
 
-                local i:=1
-                local k:=1
-                local l:=2
+                local i     AS NUMERIC
+                local k     AS NUMERIC
+                local l     AS NUMERIC
 
-                local s
-                local j
+                local s     AS NUMERIC
+                local j     AS NUMERIC
 
-                local v:=0
-                local v1
+                local v     AS NUMERIC
+                local v1    AS NUMERIC
 
+                a:=tBigNInvert(cN1,n)
+                b:=tBigNInvert(cN2,n)
+
+                k:=1
+                l:=2
+
+                v:=0
+
+                y:=n+n
+                
                 s__IncS0(y)
 
                 c:=Left(s__cN0,y)
 
+                i:=1
+                
                 while i<=n
                     s:=1
                     j:=i
@@ -5217,12 +5675,18 @@ return(r)
                     l++
                 end while
 
-            return(cGetcN(c,y))
+                return(cGetcN(c,y))
+            
+            /*static function Mult*/
+            
         #else //__HARBOUR__
-            static function Mult(a,b,n,nB)
-                local y:=n
-                local cN:=tBIGNMULT(a,b,n,y,nB)
-            return(cN)
+            static function Mult(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
+                local cN    AS CHARACTER
+                local y     AS NUMERIC                
+                y:=n
+                cN:=tBIGNMULT(a,b,n,y,nB)
+                return(cN)
+            /*static function Mult*/
         #endif //__PTCOMPAT__
 
         /*
@@ -5233,9 +5697,14 @@ return(r)
             Sintaxe:cGetcN(c,n) -> s
         */
         #ifdef __PTCOMPAT__
-            static function cGetcN(c,n)
-                local s:=""
-                local y:=n
+            static function cGetcN(c AS CHARACTER,n AS NUMERIC)
+                
+                local s AS CHARACTER
+                local y AS NUMERIC
+
+                s:=""
+                y:=n
+
                 while y>=1
                 #ifdef __PROTHEUS__
                     while y>=1.and.SubStr(c,y,1)=="0"
@@ -5261,7 +5730,10 @@ return(r)
                     s:=PadL(s,n,"0")
                 endif
 
-            return(s)
+                return(s)
+                
+            /*static function cGetcN*/
+            
         #endif //__PTCOMPAT__
 
     #endif /*String*/
@@ -5269,24 +5741,33 @@ return(r)
 #endif
 
 #ifndef __PTCOMPAT__
-    static function thAdd(oN,oP)
-    return(oN:Add(oP))
-    static function thDiv(oN,oD,lFloat)
-    return(oN:Div(oD,lFloat))
-    static function thMod0(oN,oD)
-    return(oN:Mod(oD):eq(s__o0))
-    static function thnthRoot(oN,oE)
-    return(oN:nthRoot(oE))
-    static function thMult(oN,oM)
-    return(oN:Mult(oM))
-    static function thPow(oN,oB)
-    return(oN:Pow(oB))
-    static function th2Mult(oN)
-    return(s__o2:Mult(oN))
-    static function thiMult(oN,oM)
-    return(oN:iMult(oM))
-    static function thLogN(oN,oB)
-    return(oN:LogN(oB))
+    static function thAdd(oN AS OBJECT,oP AS OBJECT)
+        return(oN:Add(oP))
+    /*static function thAdd*/
+    static function thDiv(oN AS OBJECT,oD AS OBJECT,lFloat AS LOGICAL)
+        return(oN:Div(oD,lFloat))
+    /*static function thDiv*/
+    static function thMod0(oN AS OBJECT,oD AS OBJECT)
+        return(oN:Mod(oD):eq(s__o0))
+    /*static function thMod0*/
+    static function thnthRoot(oN AS OBJECT,oE AS OBJECT)
+        return(oN:nthRoot(oE))
+    /*static function thnthRoot*/
+    static function thMult(oN AS OBJECT,oM AS OBJECT)
+        return(oN:Mult(oM))
+    /*static function thMult*/
+    static function thPow(oN AS OBJECT,oB AS OBJECT)
+        return(oN:Pow(oB))
+    /*static function thPow*/
+    static function th2Mult(oN AS OBJECT)
+        return(s__o2:Mult(oN))
+    /*static function th2Mult*/
+    static function thiMult(oN AS OBJECT,oM AS OBJECT)
+        return(oN:iMult(oM))
+    /*static function thiMult*/
+    static function thLogN(oN AS OBJECT,oB AS OBJECT)
+        return(oN:LogN(oB))
+    /*static function thLogN*/
 #endif //__PTCOMPAT__
 
 /*
@@ -5296,13 +5777,13 @@ return(r)
     Descricao:Exponenciação de Números Inteiros
     Sintaxe:Power(oB,oE,lIPower)
 */
-static function Power(oB,oE,lIPower)
+static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 #ifdef TBIGN_RECPOWER
     /*
         TODO:   This application has requested the Runtime to terminate it in an unusual way
                 Please contact the application's support team for more information.
     */
-    return(recPower(oB,oE,lIPower))
+    return(recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL))
     /*
         function:recPower
         Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
@@ -5325,13 +5806,15 @@ static function Power(oB,oE,lIPower)
                                             2048
         //-------------------------------------------------------------------------------------
     */
-    static function recPower(oB,oE,lIPower)
+    static function recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
-        local oR:=oB:Clone()
+        local oR    AS OBJECT
 
-        local oI
-        local oE1
-        local oE2
+        local oI    AS OBJECT
+        local oE1   AS OBJECT
+        local oE2   AS OBJECT
+        
+        oR:=oB:Clone()
 
         if oE:lte(s__o2)
             #ifdef __PTCOMPAT__
@@ -5365,9 +5848,17 @@ static function Power(oB,oE,lIPower)
         oE2:SetValue(oE2:Sub(oE1))
 
         return(recPower(oB,oE1,lIPower):Mult(recPower(oB,oE2,lIPower)))
+        
+    /*static function recPower*/
+    
 #else
-    local oR:=oB:Clone()
-    local oI:=oE:Clone()
+    
+    local oR    AS OBJECT
+    local oI    AS OBJECT
+    
+    oR:=oB:Clone()
+    oI:=oE:Clone()
+
     #ifdef __PTCOMPAT__
         SYMBOL_UNUSED(lIPower)
         while oI:gt(s__o1)
@@ -5385,7 +5876,11 @@ static function Power(oB,oE,lIPower)
             oR:SetValue(TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase()))
         endif
     #endif //__PTCOMPAT__
-return(oR)
+    
+    return(oR)
+
+/*static function recPower*/
+
 #endif
 
 /*
@@ -5396,9 +5891,13 @@ return(oR)
     Sintaxe:tBigNInvert(c,n) -> s
 */
 #ifdef __PTCOMPAT__
-    static function tBigNInvert(c,n)
-        local s:=""
-        local y:=n
+    static function tBigNInvert(c AS CHARACTER,n AS NUMERIC)
+        
+        local s AS CHARACTER
+        local y AS NUMERIC
+        
+        s:=""
+        y:=n
         while y>0
         #ifdef __PROTHEUS__
             s+=SubStr(c,y--,1)
@@ -5406,10 +5905,15 @@ return(oR)
             s+=c[y--]
         #endif
         end while
-    return(s)
+    
+        return(s)
+        
+    /*static function tBigNInvert*/
+    
 #else //__HARBOUR__
-    static function tBigNInvert(c,n)
-    return(tBigNReverse(c,n))
+    static function tBigNInvert(c AS CHARACTER,n AS NUMERIC)
+        return(tBigNReverse(c,n))
+    /*static function tBigNInvert*/
 #endif //__PTCOMPAT__
 
 /*
@@ -5419,35 +5923,50 @@ return(oR)
     Descricao:Operacoes matematicas
     Sintaxe:MathO(uBigN1,cOperator,uBigN2,lRetObject)
 */
-static function MathO(uBigN1,cOperator,uBigN2,lRetObject)
+static function MathO(uBigN1,cOperator AS CHARACTER,uBigN2,lRetObject AS LOGICAL)
 
-    local oBigNR:=s__o0:Clone()
+    local bAsc      AS BLOCK
+    
+    local oBigNR    AS OBJECT
 
-    local oBigN1:=tBigNumber():New(uBigN1)
-    local oBigN2:=tBigNumber():New(uBigN2)
+    local oBigN1    AS OBJECT
+    local oBigN2    AS OBJECT
 
+    oBigNR:=s__o0:Clone()
+
+    oBigN1:=tBigNumber():New(uBigN1)
+    oBigN2:=tBigNumber():New(uBigN2)
+    
+    #ifdef __PROTEUS__
+        bAsc:={|cOp|cOperator==cOp}
+    #else /*__HARBOUR__*/
+        bAsc:={|cOp AS CHARACTER|cOperator==cOp}
+    #endif
+    
     do case
-        case (aScan(OPERATOR_ADD,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_ADD,bAsc)>0)
             oBigNR:SetValue(oBigN1:Add(oBigN2))
-        case (aScan(OPERATOR_SUBTRACT,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_SUBTRACT,bAsc)>0)
             oBigNR:SetValue(oBigN1:Sub(oBigN2))
-        case (aScan(OPERATOR_MULTIPLY,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_MULTIPLY,bAsc)>0)
             oBigNR:SetValue(oBigN1:Mult(oBigN2))
-        case (aScan(OPERATOR_DIVIDE,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_DIVIDE,bAsc)>0)
             oBigNR:SetValue(oBigN1:Div(oBigN2))
-        case (aScan(OPERATOR_POW,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_POW,bAsc)>0)
             oBigNR:SetValue(oBigN1:Pow(oBigN2))
-        case (aScan(OPERATOR_MOD,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_MOD,bAsc)>0)
             oBigNR:SetValue(oBigN1:Mod(oBigN2))
-        case (aScan(OPERATOR_ROOT,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_ROOT,bAsc)>0)
             oBigNR:SetValue(oBigN1:nthRoot(oBigN2))
-        case (aScan(OPERATOR_SQRT,{|cOp|cOperator==cOp})>0)
+        case (aScan(OPERATOR_SQRT,bAsc)>0)
             oBigNR:SetValue(oBigN1:SQRT())
     endcase
 
     DEFAULT lRetObject:=.T.
 
-return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
+    return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
+
+/*static function MathO*/        
 
 // -------------------- assign thread static values -------------------------
 #ifdef __THREAD_STATIC__
@@ -5465,11 +5984,12 @@ return(if(lRetObject,oBigNR,oBigNR:ExactValue()))
             #endif
         #endif
         ths_lsdSet:=.T.
-    return
+        return
+    /*static procedure __Initsthd*/
 #endif //__THREAD_STATIC__
 
 // -------------------- assign static values --------------------------------
-static procedure __InitstbN(nBase)
+static procedure __InitstbN(nBase AS NUMERIC)
     s__lstbNSet:=.F.
     *                10        20        30        40        50        60        70        80        90       100       110       120       130       140       150
     *        123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -5490,9 +6010,44 @@ static procedure __InitstbN(nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
     s__lstbNSet:=.T.
-return
+    s_aH2B:={;
+                {"0","00000"},;
+                {"1","00001"},;
+                {"2","00010"},;
+                {"3","00011"},;
+                {"4","00100"},;
+                {"5","00101"},;
+                {"6","00110"},;
+                {"7","00111"},;
+                {"8","01000"},;
+                {"9","01001"},;
+                {"A","01010"},;
+                {"B","01011"},;
+                {"C","01100"},;
+                {"D","01101"},;
+                {"E","01110"},;
+                {"F","01111"},;
+                {"G","10000"},;
+                {"H","10001"},;
+                {"I","10010"},;
+                {"J","10011"},;
+                {"K","10100"},;
+                {"L","10101"},;
+                {"M","10110"},;
+                {"N","10111"},;
+                {"O","11000"},;
+                {"P","11001"},;
+                {"Q","11010"},;
+                {"R","11011"},;
+                {"S","11100"},;
+                {"T","11101"},;
+                {"U","11110"},;
+                {"V","11111"};
+    }
+    return
+/*static procedure __InitstbN*/    
 
-static procedure s__IncS0(n)
+static procedure s__IncS0(n AS NUMERIC)
     while n>s__nN0
         if hb_mutexLock(s__MTXcN0)
             s__cN0+=s__cN0
@@ -5500,9 +6055,10 @@ static procedure s__IncS0(n)
             hb_mutexUnLock(s__MTXcN0)
         endif
     end while
-return
+    return
+/*static procedure s__IncS0*/
 
-static procedure s__IncS9(n)
+static procedure s__IncS9(n AS NUMERIC)
     while n>s__nN9
         if hb_mutexLock(s__MTXcN9)
             s__cN9+=s__cN9
@@ -5510,24 +6066,29 @@ static procedure s__IncS9(n)
             hb_mutexUnLock(s__MTXcN9)
         endif
     end while
-return
+    return
+/*static procedure s__IncS9*/
 
 #ifdef __PROTHEUS__
 
     static function __eTthD()
-    return(staticCall(__pteTthD,__eTthD))
+        return(staticCall(__pteTthD,__eTthD))
+    /*static function __eTthD*/
     static function __PITthD()
-    return(staticCall(__ptPITthD,__PITthD))
-
+        return(staticCall(__ptPITthD,__PITthD))
+    /*static function __PITthD*/
+    
 #else //__HARBOUR__
 
     static function __eTthD()
-    return(__hbeTthD())
+        return(__hbeTthD())
+    /*return(__hbeTthD())*/
     static function __PITthD()
-    return(__hbPITthD())
+        return(__hbPITthD())
+    /*static function __PITthD*/
 
     /* warning: 'void hb_FUN_...()'  defined but not used [-Wunused-function]...*/
-    static function __Dummy(lDummy)
+    static function __Dummy(lDummy AS LOGICAL)
         lDummy:=.F.
         if (lDummy)
             __Dummy()
@@ -5572,7 +6133,8 @@ return
                 THLOGN()
             #endif
         endif
-    return(lDummy)
+        return(lDummy)
+    /*static function __Dummy*/
 
 #endif //__PROTHEUS__
 

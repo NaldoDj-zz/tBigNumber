@@ -233,7 +233,6 @@
             const char * szF=hb_parc(1);
             const HB_SIZE s=(HB_SIZE)hb_parnint(2);
             char * szR=tBIGNReverse(szF,s);
-            hb_xfree((void*)szF);
             #if 0
                 hb_retclen(szR,( HB_SIZE )s);
                 hb_xfree(szR);

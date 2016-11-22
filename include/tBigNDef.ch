@@ -18,7 +18,7 @@
             #define __MT__
         #endif
     #endif
-    
+
     #ifndef SYMBOL_UNUSED
         #define SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
     #endif
@@ -37,7 +37,7 @@
                                         OPERATOR_ADD,      ;
                                         OPERATOR_SUBTRACT, ;
                                         OPERATOR_MULTIPLY, ;
-                                        OPERATOR_DIVIDE,   ;    
+                                        OPERATOR_DIVIDE,   ;
                                         OPERATOR_POW,      ;
                                         OPERATOR_MOD,      ;
                                         OPERATOR_EXP,      ;
@@ -53,5 +53,5 @@
                         iif( <uVar1> == NIL , hb_Default(@<uVar1>,<uVal1>) , );
                         [; iif( <uVarN> == NIL , hb_Default(@<uVarN>,<uValN>) , ) ]
     #endif
-                                            
+
 #endif /*_hb_TBigNDef_CH*/
