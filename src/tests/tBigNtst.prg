@@ -4623,10 +4623,6 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
-       __oRTime1:SetRemaining(nJ)
-       hb_mutexUnLock(__phMutex)
-    endif
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
@@ -4634,6 +4630,11 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
     
     nJ:=Len(aACN_MERSENNE_POW)
 
+    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+       __oRTime1:SetRemaining(nJ)
+       hb_mutexUnLock(__phMutex)
+    endif
+    
     for nD:=1 to nJ
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
            __oRTime2:SetRemaining(1)
