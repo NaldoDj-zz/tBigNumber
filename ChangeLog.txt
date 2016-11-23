@@ -10,6 +10,10 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-23 10:29 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/common/tbignumber.prg
+  * src/hb/c/tbigNumber.c
+ 
 2016-11-22 17:11 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNDef.ch
   * src/common/tbignumber.prg

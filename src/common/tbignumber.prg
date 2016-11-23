@@ -5825,6 +5825,15 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                     oI:OpDec()
                 end while
             #else //__HARBOUR__
+                if (lIPower)
+                    #ifdef TBN_DBFILE
+                        lIPower:=.F.
+                    #else
+                        #ifdef TBN_ARRAY
+                            lIPower:=.F.
+                        #endif
+                    #endif
+                endif            
                 if .not.(lIPower)
                     oI:=oE:Clone()
                     while oI:gt(s__o1)
@@ -5866,6 +5875,15 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
             oI:OpDec()
         end while
     #else //__HARBOUR__
+        if (lIPower)
+            #ifdef TBN_DBFILE
+                lIPower:=.F.
+            #else
+                #ifdef TBN_ARRAY
+                    lIPower:=.F.
+                #endif
+            #endif
+        endif            
         if .not.(lIPower)
             while oI:gt(s__o1)
                 oR:SetValue(oR:Mult(oB))
