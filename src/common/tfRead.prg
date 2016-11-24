@@ -105,7 +105,7 @@ METHOD Open( cFile , nMode , nLocal ) CLASS tfRead
     IF self:nfHandle == -1
         IF Empty( self:cFile ) .and. .NOT.(Empty(cFile))
             self:cFile := cFile
-        EndIF    
+        EndIF
         // Only open the file if it isn't already open.
         IF nMode == NIL
             nMode := FO_READ + FO_SHARED   // Default to shared read-only mode
@@ -118,8 +118,8 @@ METHOD Open( cFile , nMode , nLocal ) CLASS tfRead
             self:nfHandle    := FOPEN( self:cFile, nMode, nLocal )   // Try to open the file
         #else
             SYMBOL_UNUSED(nLocal)
-            self:nfHandle    := FOPEN( self:cFile, nMode )           // Try to open the file    
-        #endif    
+            self:nfHandle    := FOPEN( self:cFile, nMode )           // Try to open the file
+        #endif
         IF self:nfHandle == -1
             self:nError := FERROR()       // It didn't work
             self:lEOF   := .T.            // So force EOF
@@ -154,7 +154,7 @@ METHOD Seek(nOffset,nOrigin) CLASS tfRead
         nPosition        := FSEEK( self:nfHandle , nOffset , nOrigin )
         self:nError     := FERROR()
     EndIF
-    
+
 Return( nPosition )
 
 METHOD ReadLine() CLASS tfRead

@@ -9,10 +9,10 @@
 #include "tBigNumber.ch"
 Class tRemaining FROM tTimeCalc
 
-#ifndef __PROTHEUS__    
+#ifndef __PROTHEUS__
     PROTECTED:
 #endif
-    
+
     DATA cAverageTime   AS CHARACTER INIT "00:00:00:000" HIDDEN
     DATA cEndTime       AS CHARACTER INIT "00:00:00"     HIDDEN
     DATA cStartTime     AS CHARACTER INIT "00:00:00"     HIDDEN
@@ -25,21 +25,21 @@ Class tRemaining FROM tTimeCalc
     DATA nTotal         AS NUMERIC   INIT 0              HIDDEN
     DATA nStep          AS NUMERIC   INIT 1              HIDDEN
     DATA lForceStep     AS LOGICAL   INIT .F.            HIDDEN
-    
+
 #ifndef __PROTHEUS__
     EXPORTED:
-#endif    
+#endif
 
-    Method New(nTotal) CONSTRUCTOR
-    
+    Method New(nTotal AS NUMERIC) CONSTRUCTOR
+
     Method ClassName()
 
-    Method SetStep(nStep)
-    Method ForceStep(lSet)
-    Method SetRemaining(nTotal)
+    Method SetStep(nStep AS NUMERIC)
+    Method ForceStep(lSet AS LOGICAL)
+    Method SetRemaining(nTotal AS NUMERIC)
 
-    Method Calcule(lProgress)
-    
+    Method Calcule(lProgress AS LOGICAL)
+
     Method GetcAverageTime()
     Method GetcEndTime()
     Method GetcStartTime()
@@ -50,25 +50,33 @@ Class tRemaining FROM tTimeCalc
     Method GetnProgress()
     Method GetnSRemaining()
     Method GetnTotal()
-    
+
 EndClass
 
-Method New(nTotal) Class tRemaining
+Method New(nTotal AS NUMERIC) Class tRemaining
 #ifdef __PROTHEUS__
     _Super:New()
 #else
     ::super:New()
-#endif    
+#endif
     self:SetStep()
     self:SetRemaining(@nTotal)
-Return(self)
+    Return(self)
+/*Method New*/
+
+#ifdef __PROTHEUS__
+    Function u_tRemaining(nTotal AS NUMERIC)
+        Return(tRemaining():New(nTotal))
+    /*Function u_tRemaining*/
+#endif
 
 Method ClassName() Class tRemaining
-Return("TREMAINING")
+    Return("TREMAINING")
+/*Method ClassName*/
 
-Method SetRemaining(nTotal) Class tRemaining
+Method SetRemaining(nTotal AS NUMERIC) Class tRemaining
     DEFAULT nTotal:=1
-    self:cAverageTime:="00:00:00:000"    
+    self:cAverageTime:="00:00:00:000"
     self:cEndTime:="00:00:00"
     self:cStartTime:=Time()
     self:cTimeDiff:="00:00:00"
@@ -80,40 +88,48 @@ Method SetRemaining(nTotal) Class tRemaining
     self:nTotal:=nTotal
     self:SetStep()
     self:ForceStep()
-Return(self)
+    Return(self)
+/*Method SetRemaining*/
 
-Method SetStep(nStep) Class tRemaining
+Method SetStep(nStep AS NUMERIC) Class tRemaining
     DEFAULT nStep:=1
     self:nStep:=nStep
-Return(self)
+    Return(self)
+/*Method SetStep*/
 
-Method ForceStep(lSet) Class tRemaining
-    local lLast:=self:lForceStep
+Method ForceStep(lSet AS LOGICAL) Class tRemaining
+    local lLast AS LOGICAL
+    lLast:=self:lForceStep
     DEFAULT lSet:=.F.
     self:lForceStep:=lSet
-Return(lLast)
+    Return(lLast)
+/*Method ForceStep*/
 
-Method Calcule(lProgress) Class tRemaining
+Method Calcule(lProgress AS LOGICAL) Class tRemaining
 
-    Local aEndTime
+    Local aEndTime      AS ARRAY
 
-    Local cTime:=Time()
-    Local dDate:=Date()
+    Local cTime         AS CHARACTER
+    Local dDate         AS DATE
 
-    Local nIncTime:=0
-    
-    Local nTime
-    Local nTimeEnd
-    Local nTimeDiff
-    Local nStartTime
+    Local nIncTime      AS NUMERIC
+
+    Local nTime         AS NUMERIC
+    Local nTimeEnd      AS NUMERIC
+    Local nTimeDiff     AS NUMERIC
+    Local nStartTime    AS NUMERIC
+
+    dDate:=Date()
+    cTime:=Time()
+    nIncTime:=0
 
     IF .NOT.(dDate==Self:dStartTime)
         nIncTime:=abs(dDate-self:dStartTime)
         nIncTime*=24
-    EndIF    
+    EndIF
 
     nTime:=(self:TimeToSecs(cTime)+IF(nIncTime>0,self:HrsToSecs(nIncTime),0))
-    nStartTime:=self:TimeToSecs(self:cStartTime)    
+    nStartTime:=self:TimeToSecs(self:cStartTime)
 
     nTimeDiff:=abs(nTime-nStartTime)
     self:cTimeDiff:=self:SecsToTime(nTimeDiff)
@@ -127,7 +143,7 @@ Method Calcule(lProgress) Class tRemaining
     EndIF
 
     self:cAverageTime:=self:AverageTime(self:cTimeDiff,self:nProgress,.T.)
-    
+
     nTimeEnd:=(((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
     self:cEndTime:=self:SecsToTime(nTimeEnd)
     self:cEndTime:=self:IncTime(cTime,NIL,NIL,self:TimeToSecs(self:cEndTime))
@@ -141,35 +157,46 @@ Method Calcule(lProgress) Class tRemaining
             self:nProgress:=0
         EndIF
     EndIF
-    
-Return(self)
+
+    Return(self)
+/*Method Calcule*/
 
 Method GetcAverageTime() Class tRemaining
-Return(self:cAverageTime)
+    Return(self:cAverageTime)
+/*Method GetcAverageTime*/
 
 Method GetcEndTime() Class tRemaining
-Return(self:cEndTime)
+    Return(self:cEndTime)
+/*Method GetcEndTime*/
 
 Method GetcStartTime() Class tRemaining
-Return(self:cStartTime)
+    Return(self:cStartTime)
+/*Method GetcStartTime*/
 
 Method GetcTimeDiff() Class tRemaining
-Return(self:cTimeDiff)
+    Return(self:cTimeDiff)
+/*Method GetcTimeDiff*/
 
 Method GetcTRemaining() Class tRemaining
-Return(self:cTRemaining)
+    Return(self:cTRemaining)
+/*Method GetcTRemaining*/
 
 Method GetdEndTime() Class tRemaining
-Return(self:dEndTime)
+    Return(self:dEndTime)
+/*Method GetdEndTime*/
 
 Method GetdStartTime() Class tRemaining
-Return(self:dStartTime)
+    Return(self:dStartTime)
+/*Method GetdStartTime*/
 
 Method GetnProgress() Class tRemaining
-Return(self:nProgress)
+    Return(self:nProgress)
+/*Method GetnProgress*/
 
 Method GetnSRemaining() Class tRemaining
-Return(self:nSRemaining)
+    Return(self:nSRemaining)
+/*Method GetnSRemaining*/
 
 Method GetnTotal() Class tRemaining
-Return(self:nTotal)
+    Return(self:nTotal)
+/*Method GetnTotal*/

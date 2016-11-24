@@ -10,21 +10,30 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-11-23 23:41 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/common/tbignumber.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+  * src/tests/tBigNtst.prg
+
 2016-11-23 12:43 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
-  
+
 2016-11-23 10:29 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
- 
+
 2016-11-22 17:11 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNDef.ch
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-11-21 01:32 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip

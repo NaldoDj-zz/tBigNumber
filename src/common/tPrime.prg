@@ -2,45 +2,45 @@
 #include "directry.ch"
 #include "tBigNumber.ch"
 
-THREAD Static __aPTables
-THREAD Static __nPTables
+THREAD Static __aPTables    AS ARRAY
+THREAD Static __nPTables    AS NUMERIC
 
-THREAD Static __oIPfRead
-THREAD Static __nIPfRead
-THREAD Static __aIPLRead
+THREAD Static __oIPfRead    AS OBJECT
+THREAD Static __nIPfRead    AS NUMERIC
+THREAD Static __aIPLRead    AS ARRAY
 
-THREAD Static __oNPfRead
-THREAD Static __nNPfRead
-THREAD Static __aNPLRead
+THREAD Static __oNPfRead    AS OBJECT
+THREAD Static __nNPfRead    AS NUMERIC
+THREAD Static __aNPLRead    AS ARRAY
 
 /*
-    Class        : tPrime
-    Autor        : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data         : 16/03/2013
-    Descricao    : Instancia um novo objeto do tipo tPrime
-    Sintaxe      : tPrime():New() -> self
-    Obs.         : Obter os Numeros Primos a Partir das Tabelas de Numeros Primos 
+    Class:tPrime
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Instancia um novo objeto do tipo tPrime
+    Sintaxe:tPrime():New() -> self
+    Obs.:Obter os Numeros Primos a Partir das Tabelas de Numeros Primos
                    fornecidas por primes.utm.edu (http://primes.utm.edu/lists/small/millions/)
-    TODO         : Implementar primesieve
+    TODO:Implementar primesieve
                    http://sweet.ua.pt/tos/software/prime_sieve.html#p
                    https://code.google.com/p/primesieve/
 */
 CLASS tPrime
 
-    DATA cPrime
-    DATA cFPrime
-    DATA cLPrime
-    
-    DATA nSize
+    DATA cPrime     AS CHARACTER
+    DATA cFPrime    AS CHARACTER
+    DATA cLPrime    AS CHARACTER
 
-    Method New(cPath,nLocal) CONSTRUCTOR
+    DATA nSize      AS NUMERIC
+
+    Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CONSTRUCTOR
 
     Method ClassName()
 
-    Method IsPrime(cN,lForce)
+    Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL)
     Method IsPReset()
 
-    Method NextPrime(cN,lForce)
+    Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL)
     Method NextPReset()
 
     Method ResetAll()
@@ -48,40 +48,42 @@ CLASS tPrime
 END CLASS
 
 /*
-    Function     : tPrime():New
-    Autor        : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data         : 16/03/2013
-    Descricao    : Instancia um novo Objeto tPrime
-    Sintaxe      : tPrime():New() -> self
+    Function:tPrime():New
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Instancia um novo Objeto tPrime
+    Sintaxe:tPrime():New() -> self
 */
 #IFDEF __PROTHEUS__
-    User Function tPrime(cPath)
-    Return(tPrime():New(cPath))
+    Function u_tPrime(cPath CHARACTER)
+        Return(tPrime():New(cPath CHARACTER))
+    /*Function u_tPrime*/
 #ENDIF
 
 /*
-    Method       : New
-    Autor        : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data         : 16/03/2013
-    Descricao    : CONSTRUCTOR
-    Sintaxe      : tPrime():New(cPath) -> self
+    Method:New
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:CONSTRUCTOR
+    Sintaxe:tPrime():New(cPath) -> self
 */
-Method New(cPath,nLocal) CLASS tPrime 
+Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CLASS tPrime
 
-    Local aLine
-    Local aFiles
-    
-    Local cLine
-    Local cFile
+    Local aLine     AS ARRAY
+    Local aFiles    AS ARRAY
 
-    Local cFPrime
-    Local cLPrime
+    Local cLine     AS CHARACTER
+    Local cFile     AS CHARACTER
 
-    Local nSize
-    Local nLine
-    Local nFile
-    Local nFiles
-    Local ofRead
+    Local cFPrime   AS CHARACTER
+    Local cLPrime   AS CHARACTER
+
+    Local nSize     AS NUMERIC
+    Local nLine     AS NUMERIC
+    Local nFile     AS NUMERIC
+    Local nFiles    AS NUMERIC
+
+    Local ofRead    AS OBJECT
 
     DEFAULT __aPTables:=Array(0)
 
@@ -94,7 +96,7 @@ Method New(cPath,nLocal) CLASS tPrime
         #ENDIF
         aFiles:=Directory(cPath+"prime*.txt")
         nFiles:=Len(aFiles)
-        nSize:=10    
+        nSize:=10
         ofRead:=tfRead():New()
         For nFile:=1 To nFiles
             cFile:=cPath+aFiles[nFile][F_NAME]
@@ -109,7 +111,7 @@ Method New(cPath,nLocal) CLASS tPrime
                 nLine:=Max(nLine,Len(cLine))
                 While "  " $ cLine
                     cLine:=StrTran(cLine,"  "," ")
-                End While    
+                End While
                 While SubStr(cLine,1,1)==" "
                     cLine:=SubStr(cLine,2)
                 End While
@@ -135,7 +137,7 @@ Method New(cPath,nLocal) CLASS tPrime
                 nLine:=Max(nLine,Len(cLine))
                 While "  " $ cLine
                     cLine:=StrTran(cLine,"  "," ")
-                End While    
+                End While
                 While SubStr(cLine,1,1)==" "
                     cLine:=SubStr(cLine,2)
                 End While
@@ -168,7 +170,7 @@ Method New(cPath,nLocal) CLASS tPrime
             aSort(__aPTables,NIL,NIL,{|x,y|x[2]<y[2]})
             self:cFPrime:=__aPTables[1][2]
             self:cLPrime:=__aPTables[nFiles][3]
-        EndIF    
+        EndIF
 
         __nPTables:=nFiles
 
@@ -188,7 +190,7 @@ Method New(cPath,nLocal) CLASS tPrime
     IF self:cFPrime==NIL
         self:cFPrime:=""
     EndIF
-    
+
     IF self:cLPrime==NIL
         self:cLPrime:=""
     EndIF
@@ -197,35 +199,37 @@ Method New(cPath,nLocal) CLASS tPrime
         self:nSize:=Len(self:cLPrime)
     EndIF
 
-Return(self)
+    Return(self)
+/*Method New*/
 
 /*
-    Method      : ClassName
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : ClassName
-    Sintaxe     : tPrime():ClassName() -> cClassName
+    Method:ClassName
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:ClassName
+    Sintaxe:tPrime():ClassName() -> cClassName
 */
 Method ClassName() CLASS tPrime
-Return("TPRIME")
+    Return("TPRIME")
+/*Method ClassName*/
 
 /*
-    Method      : IsPrime
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
-    Sintaxe     : tPrime():IsPrime(cN,lForce) -> lPrime
+    Method:IsPrime
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
+    Sintaxe:tPrime():IsPrime(cN,lForce) -> lPrime
 */
-Method IsPrime(cN,lForce) CLASS tPrime
+Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
 
-    Local aLine
+    Local aLine     AS ARRAY
 
-    Local cLine
-    
-    Local lPrime:=.F.
-    
-    Local nPrime
-    Local nTable
+    Local cLine     AS CHARACTER
+
+    Local lPrime    AS LOGICAL
+
+    Local nPrime    AS NUMERIC
+    Local nTable    AS NUMERIC
 
     BEGIN SEQUENCE
 
@@ -237,7 +241,7 @@ Method IsPrime(cN,lForce) CLASS tPrime
         cN:=PadL(cN,self:nSize)
 
         nTable:=aScan(__aPTables,{|x|cN>=x[2].and.cN<=x[3]})
-        
+
         IF nTable==0
             BREAK
         ENDIF
@@ -262,7 +266,7 @@ Method IsPrime(cN,lForce) CLASS tPrime
         nPrime:=aScan(__aIPLRead,{|x|PadL(x,self:nSize)==cN})
         IF (lPrime:=nPrime>0)
             BREAK
-        EndIF    
+        EndIF
 
         While __oIPfRead:MoreToRead()
             cLine:=__oIPfRead:ReadLine()
@@ -271,7 +275,7 @@ Method IsPrime(cN,lForce) CLASS tPrime
             EndIF
             While "  " $ cLine
                 cLine:=StrTran(cLine,"  "," ")
-            End While    
+            End While
             While SubStr(cLine,1,1)==" "
                 cLine:=SubStr(cLine,2)
             End While
@@ -286,7 +290,7 @@ Method IsPrime(cN,lForce) CLASS tPrime
             nPrime:=aScan(aLine,{|x|PadL(x,self:nSize)==cN})
             IF (lPrime:=nPrime>0)
                 EXIT
-            EndIF    
+            EndIF
             IF aScan(aLine,{|x|PadL(x,self:nSize)>cN})>0
                 EXIT
             EndIF
@@ -301,43 +305,47 @@ Method IsPrime(cN,lForce) CLASS tPrime
 
     END SEQUENCE
 
-Return(lPrime)
+    DEFAULT lPrime:=.F.
+
+    Return(lPrime)
+/*Method IsPrime*/
 
 /*
-    Method      : IsPReset
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : Reset IsPrime Cache
-    Sintaxe     : tPrime():IsPReset() -> .T.
+    Method:IsPReset
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Reset IsPrime Cache
+    Sintaxe:tPrime():IsPReset() -> .T.
 */
 Method IsPReset() CLASS tPrime
     __nIPfRead:=NIL
     IF .NOT.(__aIPLRead==NIL)
         aSize(__aIPLRead,0)
     EndIF
-Return(.T.)
+    Return(.T.)
+/*Method IsPReset*/
 
 /*
-    Method      : NextPrime
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : Obtem o Proximo Numero da Tabela de Numeros Primos
-    Sintaxe     : tPrime():NextPrime(cN,lForce) -> lPrime
+    Method:NextPrime
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Obtem o Proximo Numero da Tabela de Numeros Primos
+    Sintaxe:tPrime():NextPrime(cN,lForce) -> lPrime
 */
-Method NextPrime(cN,lForce) CLASS tPrime
+Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
 
-    Local aLine
+    Local aLine     AS ARRAY
 
-    Local cLine
-    Local cPrime
-    
-    Local lPrime:=.F.
-    
-    Local nPrime
-    Local nTable
+    Local cLine     AS CHARACTER
+    Local cPrime    AS CHARACTER
+
+    Local lPrime    AS LOGICAL
+
+    Local nPrime    AS NUMERIC
+    Local nTable    AS NUMERIC
 
     BEGIN SEQUENCE
-    
+
         IF Empty(__aPTables)
             BREAK
         EndIF
@@ -350,7 +358,7 @@ Method NextPrime(cN,lForce) CLASS tPrime
             nTable:=1
         Else
             nTable:=aScan(__aPTables,{|x|cN>=x[2].and.cN<=x[3]})
-        EndIF    
+        EndIF
 
         IF nTable==0
             BREAK
@@ -377,7 +385,7 @@ Method NextPrime(cN,lForce) CLASS tPrime
         IF (lPrime:=nPrime>0)
             self:cPrime:=cPrime
             BREAK
-        EndIF    
+        EndIF
 
         While __oNPfRead:MoreToRead()
             cLine:=__oNPfRead:ReadLine()
@@ -386,7 +394,7 @@ Method NextPrime(cN,lForce) CLASS tPrime
             EndIF
             While "  " $ cLine
                 cLine:=StrTran(cLine,"  "," ")
-            End While    
+            End While
             While SubStr(cLine,1,1)==" "
                 cLine:=SubStr(cLine,2)
             End While
@@ -401,7 +409,7 @@ Method NextPrime(cN,lForce) CLASS tPrime
             nPrime:=aScan(aLine,{|x|(cPrime:=PadL(x,self:nSize))>cN})
             IF (lPrime:=nPrime>0)
                 EXIT
-            EndIF    
+            EndIF
         End While
 
         aSize(__aNPLRead, 0)
@@ -416,28 +424,32 @@ Method NextPrime(cN,lForce) CLASS tPrime
 
     END SEQUENCE
 
-Return(lPrime)
+    DEFAULT lPrime:=.F.
+
+    Return(lPrime)
+/*Method NextPrime*/
 
 /*
-    Method      : NextPReset
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : Reset NextPrime Cache
-    Sintaxe     : tPrime():NextPReset() -> .T.
+    Method:NextPReset
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Reset NextPrime Cache
+    Sintaxe:tPrime():NextPReset() -> .T.
 */
 Method NextPReset() CLASS tPrime
     __nNPfRead:=0
     IF .NOT.(__aNPLRead==NIL)
-        aSize(__aNPLRead,0)        
+        aSize(__aNPLRead,0)
     EndIF
-Return(.T.)
+    Return(.T.)
+/*Method NextPReset*/
 
 /*
-    Method      : ResetAll
-    Autor       : Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data        : 16/03/2013
-    Descricao   : Reset All Cache
-    Sintaxe     : tPrime():ResetAll() -> .T.
+    Method:ResetAll
+    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+    Data:16/03/2013
+    Descricao:Reset All Cache
+    Sintaxe:tPrime():ResetAll() -> .T.
 */
 Method ResetAll() CLASS tPrime
     __nPTables:=0
@@ -446,4 +458,5 @@ Method ResetAll() CLASS tPrime
     EndIF
     Self:IsPReset()
     Self:NextPReset()
-Return(.T.)
+    Return(.T.)
+/*Method ResetAll*/

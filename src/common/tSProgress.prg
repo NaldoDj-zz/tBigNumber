@@ -16,67 +16,70 @@
 */
 Class tSProgress
 
-#IFNDEF __PROTHEUS__    
+#IFNDEF __PROTHEUS__
     PROTECTED:
-#endif    
-    
+#endif
+
     DATA aMethods   AS ARRAY INIT Array(0) HIDDEN
     DATA aProgress  AS ARRAY INIT Array(0) HIDDEN
 
     DATA lRandom    AS LOGICAL INIT .F.    HIDDEN
-    
+
     DATA nMax       AS NUMERIC INIT 0      HIDDEN
     DATA nMethod    AS NUMERIC INIT 0      HIDDEN
     DATA nMethods   AS NUMERIC INIT 0      HIDDEN
     DATA nProgress  AS NUMERIC INIT 0      HIDDEN
-    
+
     DATA lShuttle   AS LOGICAL INIT .F.    HIDDEN
-    
+
 #IFNDEF __PROTHEUS__
     EXPORTED:
 #endif
 
-    Method New(cProgress,cToken)  CONSTRUCTOR
+    Method New(cProgress AS CHARACTER,cToken AS CHARACTER)  CONSTRUCTOR
 
     Method ClassName()
 
-    Method SetProgress(cProgress,cToken)
+    Method SetProgress(cProgress AS CHARACTER,cToken AS CHARACTER)
 
-    Method Eval(cMethod,cAlign)
+    Method Eval(cMethod AS CHARACTER,cAlign AS CHARACTER)
     Method Progress()
-    Method Increment(cAlign)
-    Method Decrement(cAlign)
-    Method Shuttle(cAlign)
-    Method Junction(cAlign)
-    Method Dispersion(cAlign)
-    Method Disjunction(cAlign)
-    Method Union(cAlign)
-    Method Occult(cAlign)
-    Method Random(cAlign)
-    
+    Method Increment(cAlign AS CHARACTER)
+    Method Decrement(cAlign AS CHARACTER)
+    Method Shuttle(cAlign AS CHARACTER)
+    Method Junction(cAlign AS CHARACTER)
+    Method Dispersion(cAlign AS CHARACTER)
+    Method Disjunction(cAlign AS CHARACTER)
+    Method Union(cAlign AS CHARACTER)
+    Method Occult(cAlign AS CHARACTER)
+    Method Random(cAlign AS CHARACTER)
+
     Method GetnMax()
     Method GetnProgress()
-    
-    Method SetRandom(lSet)
+
+    Method SetRandom(lSet AS LOGICAL)
 
 EndClass
 
 #ifdef __PROTHEUS__
-    User Function tSProgress(cProgress,cToken)
-    Return(tSProgress():New(@cProgress,@cToken))
+    Function u_tSProgress(cProgress AS CHARACTER,cToken AS CHARACTER)
+        Return(tSProgress():New(@cProgress,@cToken))
+    /*Function u_tSProgress*/
 #endif
 
-Method New(cProgress,cToken) Class tSProgress
+Method New(cProgress AS CHARACTER,cToken AS CHARACTER) Class tSProgress
     self:SetProgress(@cProgress,@cToken)
-Return(self)
+    Return(self)
+/*Method New*/
 
 Method ClassName() Class tSProgress
-Return("TSPROGRESS")
+    Return("TSPROGRESS")
+/*Method ClassName*/
 
-Method SetProgress(cProgress,cToken) Class tSProgress
-    Local lMacro
+Method SetProgress(cProgress AS CHARACTER,cToken AS CHARACTER) Class tSProgress
+    Local lMacro    AS LOGICAL
     DEFAULT cProgress:="-;\;|;/"
-    DEFAULT cToken:=";"    
+    DEFAULT cToken:=";"
     lMacro:=(SubStr(cProgress,1,1)=="&")
     IF (lMacro)
         cProgress:=SubStr(cProgress,2)
@@ -102,11 +105,12 @@ Method SetProgress(cProgress,cToken) Class tSProgress
     self:nMethod:=0
     self:nMax:=Len(self:aProgress)
     self:nProgress:=0
-Return(self)
+    Return(self)
+/*Method SetProgress*/
 
-Method Eval(cMethod,cAlign) Class tSProgress
-    Local cEval
-    Local nMethod
+Method Eval(cMethod AS CHARACTER,cAlign AS CHARACTER) Class tSProgress
+    Local cEval     AS CHARACTER
+    Local nMethod   AS NUMERIC
     DEFAULT cMethod:="PROGRESS"
     cMethod:=Upper(AllTrim(cMethod))
     nMethod:=Max(aScan(self:aMethods,{|m|m==cMethod}),1)
@@ -118,9 +122,9 @@ Method Eval(cMethod,cAlign) Class tSProgress
         cEval:=self:Increment(@cAlign)
     CASE (cMethod=="DECREMENT")
         cEval:=self:Decrement(@cAlign)
-    CASE (cMethod=="SHUTTLE")    
+    CASE (cMethod=="SHUTTLE")
         cEval:=self:Shuttle(@cAlign)
-    CASE (cMethod=="JUNCTION")    
+    CASE (cMethod=="JUNCTION")
         cEval:=self:Junction(@cAlign)
     CASE (cMethod=="DISPERSION")
         cEval:=self:Dispersion(@cAlign)
@@ -135,16 +139,18 @@ Method Eval(cMethod,cAlign) Class tSProgress
     OTHERWISE
         cEval:=self:Progress()
     ENDCASE
-Return(cEval)
+    Return(cEval)
+/*Method Eval*/
 
 Method Progress() Class tSProgress
-Return(self:aProgress[IF(++self:nProgress>self:nMax,self:nProgress:=1,self:nProgress)])
+    Return(self:aProgress[IF(++self:nProgress>self:nMax,self:nProgress:=1,self:nProgress)])
+/*Method Progress*/
 
-Method Increment(cAlign) Class tSProgress
-    Local cPADFunc:="PAD"
-    Local cProgress:=""
-    Local nProgress
-    Local nsProgress
+Method Increment(cAlign AS CHARACTER) Class tSProgress
+    Local cPADFunc      AS CHARACTER
+    Local cProgress     AS CHARACTER
+    Local nProgress     AS NUMERIC
+    Local nsProgress    AS NUMERIC
     DEFAULT cAlign:="R" //L,C,R
     IF Empty(cAlign)
         cAlign:="R"
@@ -159,42 +165,47 @@ Method Increment(cAlign) Class tSProgress
             nsProgress:=1
         EndIF
     EndIF
+    cProgress:=""
     For nProgress:=1 To nsProgress
         IF self:lRandom.and.((__Random(nProgress,self:nMax)%__Random(1,5))==0)
             cProgress+=Space(Len(self:aProgress[nProgress]))
         Else
             cProgress+=self:aProgress[nProgress]
-        EndIF    
+        EndIF
     Next nProgress
+    cPADFunc:="PAD"
     cPADFunc+=cAlign
-Return(&cPADFunc.(cProgress,self:nMax))
+    Return(&cPADFunc.(cProgress,self:nMax))
+/*Method Increment*/
 
-Method Decrement(cAlign) Class tSProgress
+Method Decrement(cAlign AS CHARACTER) Class tSProgress
     DEFAULT cAlign:="L"
-Return(self:Increment(cAlign))
+    Return(self:Increment(cAlign))
+/*Method Decrement*/
 
-Method Shuttle(cAlign) Class tSProgress
-    Local cEval
+Method Shuttle(cAlign AS CHARACTER) Class tSProgress
+    Local cEval AS CHARACTER
     IF (.NOT.(self:lShuttle).and.(self:nProgress>=self:nMax))
         self:lShuttle:=.T.
     ElseIF (self:lShuttle.and.(self:nProgress>=self:nMax))
         self:lShuttle:=.F.
     EndIF
     IF (self:lShuttle)
-        cEval:="DECREMENT" 
+        cEval:="DECREMENT"
         cAlign:="L"
     Else
         cEval:="INCREMENT"
         cAlign:="R"
     EndIF
-Return(self:Eval(cEval,@cAlign))
+    Return(self:Eval(cEval,@cAlign))
+/*Method Shuttle*/
 
-Method Junction(cAlign) Class tSProgress
-    Local cLToR:=""
-    Local cRToL:=""    
-    Local cProgress:=""
-    Local cPADFunc:="PAD"
-    Local nProgress
+Method Junction(cAlign AS CHARACTER) Class tSProgress
+    Local cLToR     AS CHARACTER
+    Local cRToL     AS CHARACTER
+    Local cProgress AS CHARACTER
+    Local cPADFunc  AS CHARACTER
+    Local nProgress AS NUMERIC
     DEFAULT cAlign:="R" //L,C,R
     IF Empty(cAlign)
         cAlign:="R"
@@ -202,30 +213,34 @@ Method Junction(cAlign) Class tSProgress
     IF (++self:nProgress>self:nMax)
         self:nProgress:=1
     EndIF
-    For nProgress:=1 To self:nProgress 
+    cLToR:=""
+    cRToL:=""
+    For nProgress:=1 To self:nProgress
         IF self:lRandom.and.((__Random(nProgress,self:nMax)%__Random(1,5))==0)
             cLToR+=Space(Len(self:aProgress[nProgress]))
         Else
             cLToR+=self:aProgress[nProgress]
-        EndIF    
+        EndIF
     Next nProgress
     For nProgress:=self:nMax To Min(((self:nMax-self:nProgress)+1),self:nMax) STEP (-1)
         IF self:lRandom.and.((__Random(nProgress,self:nMax)%__Random(1,5))==0)
-            cRToL+=Space(Len(self:aProgress[nProgress]))    
+            cRToL+=Space(Len(self:aProgress[nProgress]))
         Else
             cRToL+=self:aProgress[nProgress]
-        EndIF    
+        EndIF
     Next nProgress
     self:nProgress+=Len(cRToL)
     self:nProgress:=Min(self:nProgress,self:nMax)
-    cProgress+=cLToR
+    cProgress:=cLToR
     cProgress+=Space(self:nMax-self:nProgress)
     cProgress+=cRToL
+    cPADFunc:="PAD"
     cPADFunc+=cAlign
-Return(&cPADFunc.(cProgress,self:nMax))
+    Return(&cPADFunc.(cProgress,self:nMax))
+/*Method Junction*/
 
-Method Dispersion(cAlign) Class tSProgress
-    Local cEval
+Method Dispersion(cAlign AS CHARACTER) Class tSProgress
+    Local cEval AS CHARACTER
     DEFAULT cAlign:="R" //L,C,R
     IF Empty(cAlign)
         cAlign:="R"
@@ -234,13 +249,14 @@ Method Dispersion(cAlign) Class tSProgress
         cEval:="INCREMENT"
     Else
         cEval:="DECREMENT"
-    EndIF    
-Return(self:Eval(cEval,"C"))
+    EndIF
+    Return(self:Eval(cEval,"C"))
+/*Method Dispersion*/
 
-Method Disjunction(cAlign) Class tSProgress
-    Local cPADFunc:="PAD"
-    Local cProgress:=""
-    Local nAT
+Method Disjunction(cAlign AS CHARACTER) Class tSProgress
+    Local cPADFunc  AS CHARACTER
+    Local cProgress AS CHARACTER
+    Local nAT       AS NUMERIC
     DEFAULT cAlign:="C" //L,C,R
     IF Empty(cAlign)
         cAlign:="C"
@@ -248,20 +264,23 @@ Method Disjunction(cAlign) Class tSProgress
     IF (++self:nProgress>self:nMax)
         self:nProgress:=1
     EndIF
+    cProgress:=""
     aEval(self:aProgress,{|p,n|cProgress+=IF(self:lRandom.and.((__Random(n,self:nMax)%__Random(1,5))==0),Space(Len(p)),p)})
     IF (self:nProgress>1)
         nAT:=Int(self:nMax/self:nProgress)
         cProgress:=SubStr(cProgress,1,nAT)
         cProgress+=Space(self:nProgress-1)+cProgress
     EndIF
+    cPADFunc:="PAD"
     cPADFunc+=cAlign
-Return(&cPADFunc.(cProgress,self:nMax))
+    Return(&cPADFunc.(cProgress,self:nMax))
+/*Method Disjunction*/
 
-Method Union(cAlign) Class tSProgress
-    Local cPADFunc:="PAD"
-    Local cProgress:=""
-    Local nAT
-    Local nQT
+Method Union(cAlign AS CHARACTER) Class tSProgress
+    Local cPADFunc  AS CHARACTER
+    Local cProgress AS CHARACTER
+    Local nAT       AS NUMERIC
+    Local nQT       AS NUMERIC
     DEFAULT cAlign:="C" //L,C,R
     IF Empty(cAlign)
         cAlign:="C"
@@ -269,6 +288,7 @@ Method Union(cAlign) Class tSProgress
     IF (++self:nProgress>self:nMax)
         self:nProgress:=1
     EndIF
+    cProgress:=""
     aEval(self:aProgress,{|p,n|cProgress+=IF(self:lRandom.and.((__Random(n,self:nMax)%__Random(1,5))==0),Space(Len(p)),p)})
     IF (self:nProgress>1)
         nAT:=Round(self:nMax/self:nProgress,0)
@@ -279,14 +299,16 @@ Method Union(cAlign) Class tSProgress
         EndIF
         cProgress:=Stuff(cProgress,nAT,nQT,"")
     EndIF
+    cPADFunc:="PAD"
     cPADFunc+=cAlign
-Return(&cPADFunc.(cProgress,self:nMax))
+    Return(&cPADFunc.(cProgress,self:nMax))
+/*Method Union*/
 
-Method Occult(cAlign) Class tSProgress
-    Local cPADFunc:="PAD"
-    Local cProgress:=""
-    Local nProgress 
-    Local nsProgress
+Method Occult(cAlign AS CHARACTER) Class tSProgress
+    Local cPADFunc      AS CHARACTER
+    Local cProgress     AS CHARACTER
+    Local nProgress     AS NUMERIC
+    Local nsProgress    AS NUMERIC
     DEFAULT cAlign:="L" //L,C,R
     IF Empty(cAlign)
         cAlign:="L"
@@ -301,39 +323,47 @@ Method Occult(cAlign) Class tSProgress
             nsProgress:=1
         EndIF
     EndIF
+    cProgress:=""
     For nProgress:=self:nMax To nsProgress STEP (-1)
         IF self:lRandom.and.((__Random(nProgress,self:nMax)%__Random(1,5))==0)
-            cProgress+=Space(Len(self:aProgress[(self:nMax-nProgress)+1]))            
+            cProgress+=Space(Len(self:aProgress[(self:nMax-nProgress)+1]))
         Else
             cProgress+=self:aProgress[(self:nMax-nProgress)+1]
-        EndIF    
+        EndIF
     Next nProgress
+    cPADFunc:="PAD"
     cPADFunc+=cAlign
-Return(&cPADFunc.(cProgress,self:nMax))
+    Return(&cPADFunc.(cProgress,self:nMax))
+/*Method Occult*/
 
-Method Random(cAlign) Class tSProgress
+Method Random(cAlign AS CHARACTER) Class tSProgress
     IF ((self:nMethod==0) .or. (self:nProgress>=self:nMax))
         self:nMethod:=Min(__Random(1,self:nMethods+1),self:nMethods)
         While (("RANDOM"$self:aMethods[self:nMethod]).or.("PROGRESS"$self:aMethods[self:nMethod]))
             self:nMethod:=Min(__Random(1,self:nMethods+1),self:nMethods)
         End While
     EndIF
-Return(self:Eval(self:aMethods[self:nMethod],@cAlign))
+    Return(self:Eval(self:aMethods[self:nMethod],@cAlign))
+/*Method Random*/
 
-Method SetRandom(lSet) Class tSProgress
-    Local lRandom:=self:lRandom
+Method SetRandom(lSet AS LOGICAL) Class tSProgress
+    Local lRandom   AS LOGICAL
+    lRandom:=self:lRandom
     DEFAULT lSet:=.T.
     self:lRandom:=lSet
-Return(lRandom)
+    Return(lRandom)
+/*Method SetRandom*/
 
 Method GetnMax() Class tSProgress
-Return(self:nMax)
+    Return(self:nMax)
+/*Method GetnMax*/
 
 Method GetnProgress() Class tSProgress
-Return(self:nProgress)
+    Return(self:nProgress)
+/*Method GetnProgress*/
 
-Static Function _StrToKArr(cStr,cToken)
-    Local cDToken
+Static Function _StrToKArr(cStr AS CHARACTER,cToken AS CHARACTER)
+    Local cDToken   AS CHARACTER
     DEFAULT cStr:=""
     DEFAULT cToken:=";"
     cDToken:=(cToken+cToken)
@@ -341,14 +371,15 @@ Static Function _StrToKArr(cStr,cToken)
         cStr:=StrTran(cStr,cDToken,cToken+" "+cToken)
     End While
 #ifdef PROTHEUS
-Return(StrTokArr2(cStr,cToken))
+    Return(StrTokArr2(cStr,cToken))
 #else
-Return(hb_aTokens(cStr,cToken))
+    Return(hb_aTokens(cStr,cToken))
 #endif
+/*Static Function*/
 
-Static Function __Random(nB,nE)
+Static Function __Random(nB AS NUMERIC,nE AS NUMERIC)
 
-    Local nR
+    Local nR    AS NUMERIC
 
     IF nB==0
         nB:=1
@@ -362,6 +393,7 @@ Static Function __Random(nB,nE)
         nR:=Abs(HB_RandomInt(nB,nE))
     #else //__PROTHEUS__
         nR:=Randomize(nB,nE)
-    #endif    
+    #endif
 
-Return(nR)
+    Return(nR)
+/*Static Function __Random*/

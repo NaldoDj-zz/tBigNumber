@@ -4618,6 +4618,10 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
     Local nD        AS NUMERIC
     Local nJ        AS NUMERIC
 
+    #ifdef __HARBOUR__
+        Local nStep AS NUMERIC
+    #endif
+
     otBigW:=tBigNumber():New("2")
     otBigM:=tBigNumber():New("0")
 
@@ -4627,20 +4631,21 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
-    
+
     nJ:=Len(aACN_MERSENNE_POW)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
        __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     endif
-    
+
     for nD:=1 to nJ
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
            __oRTime2:SetRemaining(1)
            #ifdef __HARBOUR__
-               __oRTime2:SetStep(1/1000)
-               __oRTime2:ForceStep(.T.)
+                nStep:=(1/1000)
+                __oRTime2:SetStep(nStep)
+                __oRTime2:ForceStep(.T.)
            #endif /*__HARBOUR__*/
            hb_mutexUnLock(__phMutex)
         endif
@@ -4657,7 +4662,11 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)
-            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+            #ifdef __HARBOUR__
+                __ConOut(fhLog,"AVG TIME: "+__oRTime2:SecsToTime(__oRTime2:TimeToSecs(__oRTime2:GetcAverageTime())*Min(__oRTime2:GetnTotal(),Max(__oRTime2:GetnProgress(),0))))
+            #else /*__PROTHEUS__*/
+                __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+            #endif
             hb_mutexUnLock(__phMutex)
         endif
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
