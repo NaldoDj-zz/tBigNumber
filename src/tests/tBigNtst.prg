@@ -4663,7 +4663,7 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)
             #ifdef __HARBOUR__
-                __ConOut(fhLog,"AVG TIME: "+__oRTime2:SecsToTime(__oRTime2:TimeToSecs(__oRTime2:GetcAverageTime())*Min(__oRTime2:GetnTotal(),Max(__oRTime2:GetnProgress(),0))))
+                __ConOut(fhLog,"AVG TIME: "+__oRTime2:SecsToTime(__oRTime2:TimeToSecs(__oRTime2:GetcAverageTime())*Min(__oRTime2:GetnTotal(),Max(__oRTime2:GetnProgress(),1))))
             #else /*__PROTHEUS__*/
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             #endif
