@@ -1,5 +1,5 @@
 #ifdef PROTHEUS
-    #define __PROTHEUS__
+    #define __ADVPL__
     #include "protheus.ch"
 #else
     #ifdef __HARBOUR__
@@ -7,196 +7,411 @@
     #endif
 #endif
 #include "tBigNumber.ch"
+
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Class:tRemaining
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:29/12/2013
+        Descricao:Instancia um novo objeto do tipo tRemaining
+        Sintaxe:tRemaining():New() -> self
+    */
+//--------------------------------------------------------------------------------------------------------
 Class tRemaining FROM tTimeCalc
 
-#ifndef __PROTHEUS__
-    PROTECTED:
-#endif
+    #ifndef __ADVPL__
+        PROTECTED:
+    #endif
 
-    DATA cAverageTime   AS CHARACTER INIT "00:00:00:000" HIDDEN
-    DATA cEndTime       AS CHARACTER INIT "00:00:00"     HIDDEN
-    DATA cStartTime     AS CHARACTER INIT "00:00:00"     HIDDEN
-    DATA cTimeDiff      AS CHARACTER INIT "00:00:00"     HIDDEN
-    DATA cTRemaining    AS CHARACTER INIT "00:00:00"     HIDDEN
-    DATA dEndTime       AS DATE      INIT Ctod("//")     HIDDEN
-    DATA dStartTime     AS DATE      INIT Ctod("//")     HIDDEN
-    DATA nProgress      AS NUMERIC   INIT 0              HIDDEN
-    DATA nSRemaining    AS NUMERIC   INIT 0              HIDDEN
-    DATA nTotal         AS NUMERIC   INIT 0              HIDDEN
-    DATA nStep          AS NUMERIC   INIT 1              HIDDEN
-    DATA lForceStep     AS LOGICAL   INIT .F.            HIDDEN
+        #ifdef __HARBOUR__
+            DATA cAverageTime   AS CHARACTER INIT "00:00:00:000" HIDDEN
+        #else /*__ADVPL__*/
+            DATA cAverageTime   AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-#ifndef __PROTHEUS__
-    EXPORTED:
-#endif
+        #ifdef __HARBOUR__
+            DATA cEndTime       AS CHARACTER INIT "00:00:00"     HIDDEN
+        #else /*__ADVPL__*/
+            DATA cEndTime       AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-    Method New(nTotal AS NUMERIC) CONSTRUCTOR
+        #ifdef __HARBOUR__
+            DATA cStartTime     AS CHARACTER INIT "00:00:00"     HIDDEN
+        #else /*__ADVPL__*/
+            DATA cStartTime     AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-    Method ClassName()
+        #ifdef __HARBOUR__
+            DATA cTimeDiff      AS CHARACTER INIT "00:00:00"     HIDDEN
+        #else /*__ADVPL__*/
+            DATA cTimeDiff      AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-    Method SetStep(nStep AS NUMERIC)
-    Method ForceStep(lSet AS LOGICAL)
-    Method SetRemaining(nTotal AS NUMERIC)
+        #ifdef __HARBOUR__
+            DATA cTRemaining    AS CHARACTER INIT "00:00:00"     HIDDEN
+        #else /*__ADVPL__*/
+            DATA cTRemaining    AS CHARACTER
+        #endif /*__HARBOUR__*/
 
-    Method Calcule(lProgress AS LOGICAL)
+        #ifdef __HARBOUR__
+            DATA dEndTime       AS DATE      INIT Ctod("//")     HIDDEN
+        #else /*__ADVPL__*/
+            DATA dEndTime       AS DATE
+        #endif /*__HARBOUR__*/
 
-    Method GetcAverageTime()
-    Method GetcEndTime()
-    Method GetcStartTime()
-    Method GetcTimeDiff()
-    Method GetcTRemaining()
-    Method GetdEndTime()
-    Method GetdStartTime()
-    Method GetnProgress()
-    Method GetnSRemaining()
-    Method GetnTotal()
+        #ifdef __HARBOUR__
+            DATA dStartTime     AS DATE      INIT Ctod("//")     HIDDEN
+        #else /*__ADVPL__*/
+            DATA dStartTime     AS DATE
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            DATA nProgress      AS NUMERIC   INIT 0              HIDDEN
+        #else /*__ADVPL__*/
+            DATA nProgress      AS NUMERIC
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            DATA nSRemaining    AS NUMERIC   INIT 0              HIDDEN
+        #else /*__ADVPL__*/
+            DATA nSRemaining    AS NUMERIC
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            DATA nTotal         AS NUMERIC   INIT 0              HIDDEN
+        #else /*__ADVPL__*/
+            DATA nTotal         AS NUMERIC
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            DATA nStep          AS NUMERIC   INIT 1              HIDDEN
+        #else /*__ADVPL__*/
+            DATA nStep          AS NUMERIC
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            DATA lForceStep     AS LOGICAL   INIT .F.            HIDDEN
+        #else /*__ADVPL__*/
+            DATA lForceStep     AS LOGICAL
+        #endif /*__HARBOUR__*/
+
+    #ifndef __ADVPL__
+        EXPORTED:
+    #endif
+
+        #ifdef __HARBOUR__
+            Method New(nTotal AS NUMERIC) CONSTRUCTOR
+        #else /*__ADVPL__*/
+            Method New(nTotal) CONSTRUCTOR
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method ClassName()
+        #else /*__ADVPL__*/
+            Method ClassName()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method SetStep(nStep AS NUMERIC)
+        #else /*__ADVPL__*/
+            Method SetStep(nStep)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method ForceStep(lSet AS LOGICAL)
+        #else /*__ADVPL__*/
+            Method ForceStep(lSet)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method SetRemaining(nTotal AS NUMERIC)
+        #else /*__ADVPL__*/
+            Method SetRemaining(nTotal)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method Calcule(lProgress AS LOGICAL)
+        #else /*__ADVPL__*/
+            Method Calcule(lProgress)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetcAverageTime()
+        #else /*__ADVPL__*/
+            Method GetcAverageTime()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetcEndTime()
+        #else /*__ADVPL__*/
+            Method GetcEndTime()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetcStartTime()
+        #else /*__ADVPL__*/
+            Method GetcStartTime()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetcTimeDiff()
+        #else /*__ADVPL__*/
+            Method GetcTimeDiff()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetcTRemaining()
+        #else /*__ADVPL__*/
+            Method GetcTRemaining()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetdEndTime()
+        #else /*__ADVPL__*/
+            Method GetdEndTime()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetdStartTime()
+        #else /*__ADVPL__*/
+            Method GetdStartTime()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetnProgress()
+        #else /*__ADVPL__*/
+            Method GetnProgress()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetnSRemaining()
+        #else /*__ADVPL__*/
+            Method GetnSRemaining()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            Method GetnTotal()
+        #else /*__ADVPL__*/
+            Method GetnTotal()
+        #endif /*__HARBOUR__*/
 
 EndClass
 
-Method New(nTotal AS NUMERIC) Class tRemaining
-#ifdef __PROTHEUS__
-    _Super:New()
-#else
-    ::super:New()
-#endif
-    self:SetStep()
-    self:SetRemaining(@nTotal)
-    Return(self)
+#ifdef __HARBOUR__
+    Method New(nTotal AS NUMERIC) Class tRemaining
+        ::super:New()
+#else /*__ADVPL__*/
+    Method New(nTotal) Class tRemaining
+        _Super:New()
+        PARAMETER nTotal AS NUMERIC
+#endif /*__HARBOUR__*/
+        self:SetStep()
+        self:SetRemaining(@nTotal)
+        Return(self)
 /*Method New*/
 
-#ifdef __PROTHEUS__
+#ifdef __ADVPL__
     Function u_tRemaining(nTotal AS NUMERIC)
         Return(tRemaining():New(nTotal))
     /*Function u_tRemaining*/
 #endif
 
-Method ClassName() Class tRemaining
-    Return("TREMAINING")
+#ifdef __HARBOUR__
+    Method ClassName() Class tRemaining
+#else /*__ADVPL__*/
+    Method ClassName() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return("TREMAINING")
 /*Method ClassName*/
 
-Method SetRemaining(nTotal AS NUMERIC) Class tRemaining
-    DEFAULT nTotal:=1
-    self:cAverageTime:="00:00:00:000"
-    self:cEndTime:="00:00:00"
-    self:cStartTime:=Time()
-    self:cTimeDiff:="00:00:00"
-    self:cTRemaining:="00:00:00"
-    self:dEndTime:=CToD("//")
-    self:dStartTime:=Date()
-    self:nProgress:=0
-    self:nSRemaining:=0
-    self:nTotal:=nTotal
-    self:SetStep()
-    self:ForceStep()
-    Return(self)
+#ifdef __HARBOUR__
+    Method SetRemaining(nTotal AS NUMERIC) Class tRemaining
+#else /*__ADVPL__*/
+    Method SetRemaining(nTotal) Class tRemaining
+        nTotal AS NUMERIC
+#endif /*__HARBOUR__*/
+        self:cAverageTime:="00:00:00:000"
+        self:cEndTime:="00:00:00"
+        self:cStartTime:=Time()
+        self:cTimeDiff:="00:00:00"
+        self:cTRemaining:="00:00:00"
+        self:dEndTime:=CToD("//")
+        self:dStartTime:=Date()
+        self:nProgress:=0
+        self:nSRemaining:=0
+        DEFAULT nTotal:=1
+        self:nTotal:=nTotal
+        self:SetStep()
+        self:ForceStep()
+        Return(self)
 /*Method SetRemaining*/
 
-Method SetStep(nStep AS NUMERIC) Class tRemaining
-    DEFAULT nStep:=1
-    self:nStep:=nStep
-    Return(self)
+#ifdef __HARBOUR__
+    Method SetStep(nStep AS NUMERIC) Class tRemaining
+#else /*__ADVPL__*/
+    Method SetStep(nStep) Class tRemaining
+        PARAMETER nStep AS NUMERIC
+#endif /*__HARBOUR__*/
+        DEFAULT nStep:=1
+        self:nStep:=nStep
+        Return(self)
 /*Method SetStep*/
 
-Method ForceStep(lSet AS LOGICAL) Class tRemaining
-    local lLast AS LOGICAL
-    lLast:=self:lForceStep
-    DEFAULT lSet:=.F.
-    self:lForceStep:=lSet
-    Return(lLast)
+#ifdef __HARBOUR__
+    Method ForceStep(lSet AS LOGICAL) Class tRemaining
+#else /*__ADVPL__*/
+    Method ForceStep(lSet) Class tRemaining
+#endif /*__HARBOUR__*/
+        local lLast AS LOGICAL
+        #ifdef __ADVPL__
+            PARAMETER lSet AS LOGICAL
+        #endif /*__ADVPL__*/
+        lLast:=self:lForceStep
+        DEFAULT lSet:=.F.
+        self:lForceStep:=lSet
+        Return(lLast)
 /*Method ForceStep*/
 
-Method Calcule(lProgress AS LOGICAL) Class tRemaining
+#ifdef __HARBOUR__
+    Method Calcule(lProgress AS LOGICAL) Class tRemaining
+#else /*__ADVPL__*/
+    Method Calcule(lProgress) Class tRemaining
+#endif /*__HARBOUR__*/
 
-    Local aEndTime      AS ARRAY
+        Local aEndTime      AS ARRAY
 
-    Local cTime         AS CHARACTER
-    Local dDate         AS DATE
+        Local cTime         AS CHARACTER
+        Local dDate         AS DATE
 
-    Local nIncTime      AS NUMERIC
+        Local nIncTime      AS NUMERIC
 
-    Local nTime         AS NUMERIC
-    Local nTimeEnd      AS NUMERIC
-    Local nTimeDiff     AS NUMERIC
-    Local nStartTime    AS NUMERIC
+        Local nTime         AS NUMERIC
+        Local nTimeEnd      AS NUMERIC
+        Local nTimeDiff     AS NUMERIC
+        Local nStartTime    AS NUMERIC
 
-    dDate:=Date()
-    cTime:=Time()
-    nIncTime:=0
+        #ifdef __ADVPL__
+            PARAMETER lProgress AS LOGICAL
+        #endif /*__ADVPL__*/
 
-    IF .NOT.(dDate==Self:dStartTime)
-        nIncTime:=abs(dDate-self:dStartTime)
-        nIncTime*=24
-    EndIF
+        dDate:=Date()
+        cTime:=Time()
+        nIncTime:=0
 
-    nTime:=(self:TimeToSecs(cTime)+IF(nIncTime>0,self:HrsToSecs(nIncTime),0))
-    nStartTime:=self:TimeToSecs(self:cStartTime)
-
-    nTimeDiff:=abs(nTime-nStartTime)
-    self:cTimeDiff:=self:SecsToTime(nTimeDiff)
-    self:cTRemaining:=self:SecsToTime(abs(nTimeDiff-nStartTime))
-    self:nSRemaining:=nTimeDiff
-
-    DEFAULT lProgress:=.T.
-    IF (lProgress).or.(self:lForceStep)
-        self:nProgress+=self:nStep
-        self:nProgress:=Min(self:nProgress,self:nTotal)
-    EndIF
-
-    self:cAverageTime:=self:AverageTime(self:cTimeDiff,self:nProgress,.T.)
-
-    nTimeEnd:=(((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
-    self:cEndTime:=self:SecsToTime(nTimeEnd)
-    self:cEndTime:=self:IncTime(cTime,NIL,NIL,self:TimeToSecs(self:cEndTime))
-    aEndTime:=self:Time2NextDay(self:cEndTime,dDate)
-    self:cEndTime:=aEndTime[1]
-    self:dEndTime:=aEndTime[2]
-
-    IF (self:lForceStep)
-        IF (self:nProgress>=self:nTotal)
-            self:nTotal+=self:nProgress
-            self:nProgress:=0
+        IF .NOT.(dDate==Self:dStartTime)
+            nIncTime:=abs(dDate-self:dStartTime)
+            nIncTime*=24
         EndIF
-    EndIF
 
-    Return(self)
+        nTime:=(self:TimeToSecs(cTime)+IF(nIncTime>0,self:HrsToSecs(nIncTime),0))
+        nStartTime:=self:TimeToSecs(self:cStartTime)
+
+        nTimeDiff:=abs(nTime-nStartTime)
+        self:cTimeDiff:=self:SecsToTime(nTimeDiff)
+        self:cTRemaining:=self:SecsToTime(abs(nTimeDiff-nStartTime))
+        self:nSRemaining:=nTimeDiff
+
+        DEFAULT lProgress:=.T.
+        IF (lProgress).or.(self:lForceStep)
+            self:nProgress+=self:nStep
+            self:nProgress:=Min(self:nProgress,self:nTotal)
+        EndIF
+
+        self:cAverageTime:=self:AverageTime(self:cTimeDiff,self:nProgress,.T.)
+
+        nTimeEnd:=(((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
+        self:cEndTime:=self:SecsToTime(nTimeEnd)
+        self:cEndTime:=self:IncTime(cTime,NIL,NIL,self:TimeToSecs(self:cEndTime))
+        aEndTime:=self:Time2NextDay(self:cEndTime,dDate)
+        self:cEndTime:=aEndTime[1]
+        self:dEndTime:=aEndTime[2]
+
+        IF (self:lForceStep)
+            IF (self:nProgress>=self:nTotal)
+                self:nTotal+=self:nProgress
+                self:nProgress:=0
+            EndIF
+        EndIF
+
+        Return(self)
 /*Method Calcule*/
 
-Method GetcAverageTime() Class tRemaining
-    Return(self:cAverageTime)
+#ifdef __HARBOUR
+    Method GetcAverageTime() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetcAverageTime() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:cAverageTime)
 /*Method GetcAverageTime*/
 
-Method GetcEndTime() Class tRemaining
-    Return(self:cEndTime)
+#ifdef __HARBOUR
+    Method GetcEndTime() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetcEndTime() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:cEndTime)
 /*Method GetcEndTime*/
 
-Method GetcStartTime() Class tRemaining
-    Return(self:cStartTime)
+#ifdef __HARBOUR
+    Method GetcStartTime() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetcStartTime() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:cStartTime)
 /*Method GetcStartTime*/
 
-Method GetcTimeDiff() Class tRemaining
-    Return(self:cTimeDiff)
+#ifdef __HARBOUR
+    Method GetcTimeDiff() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetcTimeDiff() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:cTimeDiff)
 /*Method GetcTimeDiff*/
 
-Method GetcTRemaining() Class tRemaining
-    Return(self:cTRemaining)
+#ifdef __HARBOUR
+    Method GetcTRemaining() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetcTRemaining() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:cTRemaining)
 /*Method GetcTRemaining*/
 
-Method GetdEndTime() Class tRemaining
-    Return(self:dEndTime)
+#ifdef __HARBOUR
+    Method GetdEndTime() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetdEndTime() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:dEndTime)
 /*Method GetdEndTime*/
 
-Method GetdStartTime() Class tRemaining
-    Return(self:dStartTime)
+#ifdef __HARBOUR
+    Method GetdStartTime() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetdStartTime() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:dStartTime)
 /*Method GetdStartTime*/
 
-Method GetnProgress() Class tRemaining
-    Return(self:nProgress)
+#ifdef __HARBOUR
+    Method GetnProgress() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetnProgress() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:nProgress)
 /*Method GetnProgress*/
 
-Method GetnSRemaining() Class tRemaining
-    Return(self:nSRemaining)
+#ifdef __HARBOUR
+    Method GetnSRemaining() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetnSRemaining() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:nSRemaining)
 /*Method GetnSRemaining*/
 
-Method GetnTotal() Class tRemaining
-    Return(self:nTotal)
+#ifdef __HARBOUR
+    Method GetnTotal() Class tRemaining
+#else /*__ADVPL__*/
+    Method GetnTotal() Class tRemaining
+#endif /*__HARBOUR__*/
+        Return(self:nTotal)
 /*Method GetnTotal*/

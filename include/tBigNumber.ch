@@ -5,7 +5,8 @@
     #ifndef _hb_TBigNDef_CH
         #include "tbigNDef.ch"
     #endif
-    #ifdef __PROTHEUS__
+
+    #ifdef __ADVPL__
         #include "pt_tBigNumber.ch"
     #else
         #ifdef __HARBOUR__
@@ -18,7 +19,7 @@
     #include "tbignthread.ch"
     #include "tbignmessage.ch"
     
-    #ifdef __PROTHEUS__
+    #ifdef __ADVPL__
         //-------------------------------------------------------------------------------------
         #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
         #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
@@ -34,7 +35,7 @@
         #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
         #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
         //-------------------------------------------------------------------------------------
-    #endif //__PROTHEUS__    
+    #endif /*__ADVPL__*/    
 
     #define MAX_DECIMAL_PRECISION    99999999999999999999999999999 //99.999.999.999.999.999.999.999.999.999
 

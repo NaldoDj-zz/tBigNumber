@@ -2,29 +2,31 @@
 #include "directry.ch"
 #include "tBigNumber.ch"
 
-THREAD Static __aPTables    AS ARRAY
-THREAD Static __nPTables    AS NUMERIC
+THREAD Static s_aPTables    AS ARRAY
+THREAD Static s_nPTables    AS NUMERIC
 
-THREAD Static __oIPfRead    AS OBJECT
-THREAD Static __nIPfRead    AS NUMERIC
-THREAD Static __aIPLRead    AS ARRAY
+THREAD Static s_oIPfRead    AS OBJECT
+THREAD Static s_nIPfRead    AS NUMERIC
+THREAD Static s_aIPLRead    AS ARRAY
 
-THREAD Static __oNPfRead    AS OBJECT
-THREAD Static __nNPfRead    AS NUMERIC
-THREAD Static __aNPLRead    AS ARRAY
+THREAD Static s_oNPfRead    AS OBJECT
+THREAD Static s_nNPfRead    AS NUMERIC
+THREAD Static s_aNPLRead    AS ARRAY
 
-/*
-    Class:tPrime
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Instancia um novo objeto do tipo tPrime
-    Sintaxe:tPrime():New() -> self
-    Obs.:Obter os Numeros Primos a Partir das Tabelas de Numeros Primos
-                   fornecidas por primes.utm.edu (http://primes.utm.edu/lists/small/millions/)
-    TODO:Implementar primesieve
-                   http://sweet.ua.pt/tos/software/prime_sieve.html#p
-                   https://code.google.com/p/primesieve/
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Class:tPrime
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Instancia um novo objeto do tipo tPrime
+        Sintaxe:tPrime():New() -> self
+        Obs.:Obter os Numeros Primos a Partir das Tabelas de Numeros Primos
+                       fornecidas por primes.utm.edu (http://primes.utm.edu/lists/small/millions/)
+        TODO:Implementar primesieve
+                       http://sweet.ua.pt/tos/software/prime_sieve.html#p
+                       https://code.google.com/p/primesieve/
+    */
+//--------------------------------------------------------------------------------------------------------
 CLASS tPrime
 
     DATA cPrime     AS CHARACTER
@@ -33,430 +35,573 @@ CLASS tPrime
 
     DATA nSize      AS NUMERIC
 
-    Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CONSTRUCTOR
+    #ifdef __HARBOUR__
+        Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CONSTRUCTOR
+    #else /*__ADVPL__*/
+        Method New(cPath,nLocal) CONSTRUCTOR
+    #endif /*__HARBOUR__*/
 
-    Method ClassName()
+    #ifdef __HARBOUR__
+        Method ClassName()
+    #else /*__ADVPL__*/
+        Method ClassName()
+    #endif /*__HARBOUR__*/
 
-    Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL)
-    Method IsPReset()
+    #ifdef __HARBOUR__
+        Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL)
+    #else /*__ADVPL__*/
+        Method IsPrime(cN,lForce)
+    #endif /*__HARBOUR__*/
 
-    Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL)
-    Method NextPReset()
+    #ifdef __HARBOUR__
+        Method IsPReset()
+    #else /*__ADVPL__*/
+        Method IsPReset()
+    #endif /*__HARBOUR__*/
 
-    Method ResetAll()
+    #ifdef __HARBOUR__
+        Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL)
+    #else /*__ADVPL__*/
+        Method NextPrime(cN,lForce)
+    #endif /*__HARBOUR__*/
 
-END CLASS
+    #ifdef __HARBOUR__
+        Method NextPReset()
+    #else /*__ADVPL__*/
+        Method NextPReset()
+    #endif /*__HARBOUR__*/
 
-/*
-    Function:tPrime():New
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Instancia um novo Objeto tPrime
-    Sintaxe:tPrime():New() -> self
-*/
-#IFDEF __PROTHEUS__
-    Function u_tPrime(cPath CHARACTER)
-        Return(tPrime():New(cPath CHARACTER))
+    #ifdef __HARBOUR__
+        Method ResetAll()
+    #else /*__ADVPL__*/
+        Method ResetAll()
+    #endif /*__HARBOUR__*/
+
+ENDCLASS
+
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Function:tPrime():New
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Instancia um novo Objeto tPrime
+        Sintaxe:tPrime():New() -> self
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __ADVPL__
+    Function u_tPrime(cPath AS CHARACTER)
+        Return(tPrime():New(cPath))
     /*Function u_tPrime*/
-#ENDIF
+#endif
 
-/*
-    Method:New
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:CONSTRUCTOR
-    Sintaxe:tPrime():New(cPath) -> self
-*/
-Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CLASS tPrime
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:New
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:CONSTRUCTOR
+        Sintaxe:tPrime():New(cPath) -> self
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method New(cPath AS CHARACTER,nLocal AS NUMERIC) CLASS tPrime
+#else /*__ADVPL__*/
+    Method New(cPath,nLocal) CLASS tPrime
+#endif /*__HARBOUR__*/
+        Local aLine     AS ARRAY
+        Local aFiles    AS ARRAY
 
-    Local aLine     AS ARRAY
-    Local aFiles    AS ARRAY
+        Local bSPTables AS BLOCK
 
-    Local cLine     AS CHARACTER
-    Local cFile     AS CHARACTER
+        Local cLine     AS CHARACTER
+        Local cFile     AS CHARACTER
 
-    Local cFPrime   AS CHARACTER
-    Local cLPrime   AS CHARACTER
+        Local cFPrime   AS CHARACTER
+        Local cLPrime   AS CHARACTER
 
-    Local nSize     AS NUMERIC
-    Local nLine     AS NUMERIC
-    Local nFile     AS NUMERIC
-    Local nFiles    AS NUMERIC
+        Local nSize     AS NUMERIC
+        Local nLine     AS NUMERIC
+        Local nFile     AS NUMERIC
+        Local nFiles    AS NUMERIC
 
-    Local ofRead    AS OBJECT
+        Local ofRead    AS OBJECT
 
-    DEFAULT __aPTables:=Array(0)
+        #ifdef __ADVPL__
+            PARAMETER cPath     AS CHARACTER
+            PARAMETER nLocal    AS NUMERIC
+        #endif /*__ADVPL__*/
 
-    IF Empty(__aPTables)
-        self:nSize:=10
-        #IFDEF __HARBOUR__
-            DEFAULT cPath:=hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir()+hb_ps()+"PrimesTables"+hb_ps()+"txt"+hb_ps()
-        #ELSE //__PROTHEUS__
-            DEFAULT cPath:="\PrimesTables\txt\"
-        #ENDIF
-        aFiles:=Directory(cPath+"prime*.txt")
-        nFiles:=Len(aFiles)
-        nSize:=10
-        ofRead:=tfRead():New()
-        For nFile:=1 To nFiles
-            cFile:=cPath+aFiles[nFile][F_NAME]
-            nLine:=0
-            ofRead:Open(cFile,NIL,nLocal)
-            ofRead:ReadLine()
-            While ofRead:MoreToRead()
-                cLine:=ofRead:ReadLine()
-                IF Empty(cLine)
-                    Loop
+        DEFAULT s_aPTables:=Array(0)
+
+        IF Empty(s_aPTables)
+            self:nSize:=10
+            #ifdef __HARBOUR__
+                DEFAULT cPath:=hb_CurDrive()+hb_osDriveSeparator()+hb_ps()+CurDir()+hb_ps()+"PrimesTables"+hb_ps()+"txt"+hb_ps()
+            #else /*__ADVPL__*/
+                DEFAULT cPath:="\PrimesTables\txt\"
+            #endif
+            aFiles:=Directory(cPath+"prime*.txt")
+            nFiles:=Len(aFiles)
+            nSize:=10
+            ofRead:=tfRead():New()
+            For nFile:=1 To nFiles
+                cFile:=cPath+aFiles[nFile][F_NAME]
+                nLine:=0
+                ofRead:Open(cFile,NIL,nLocal)
+                ofRead:ReadLine()
+                While ofRead:MoreToRead()
+                    cLine:=ofRead:ReadLine()
+                    IF Empty(cLine)
+                        Loop
+                    EndIF
+                    nLine:=Max(nLine,Len(cLine))
+                    While "  "$cLine
+                        cLine:=StrTran(cLine,"  "," ")
+                    End While
+                    While SubStr(cLine,1,1)==" "
+                        cLine:=SubStr(cLine,2)
+                    End While
+                    While SubStr(cLine,-1)==" "
+                        cLine:=SubStr(cLine,1,Len(cLine)-1)
+                    End While
+                    #ifdef __HARBOUR__
+                         aLine:=hb_ATokens(cLine," ")
+                    #else /*__ADVPL__*/
+                         aLine:=StrTokArr2(cLine," ")
+                    #endif /*__HARBOUR__*/
+                    cFPrime:=aLine[1]
+                    nSize:=Max(Len(cFPrime),nSize)
+                    cFPrime:=PadL(cFPrime,nSize)
+                    EXIT
+                End While
+                ofRead:Seek(-nLine,FS_END)
+                While ofRead:MoreToRead()
+                    cLine:=ofRead:ReadLine()
+                    IF Empty(cLine)
+                        Loop
+                    EndIF
+                    nLine:=Max(nLine,Len(cLine))
+                    While "  "$cLine
+                        cLine:=StrTran(cLine,"  "," ")
+                    End While
+                    While SubStr(cLine,1,1)==" "
+                        cLine:=SubStr(cLine,2)
+                    End While
+                    While SubStr(cLine,-1)==" "
+                        cLine:=SubStr(cLine,1,Len(cLine)-1)
+                    End While
+                    #ifdef __HARBOUR__
+                         aLine:=hb_ATokens(cLine," ")
+                    #else /*__ADVPL__*/
+                         aLine:=StrTokArr2(cLine," ")
+                    #endif /*__HARBOUR__*/
+                    cLPrime:=aLine[Len(aLine)]
+                    nSize:=Max(Len(cFPrime),nSize)
+                    cLPrime:=PadL(cLPrime,nSize)
+                    EXIT
+                End While
+                ofRead:Close(.T.)
+                aAdd(s_aPTables,{cFile,cFPrime,cLPrime,nLine})
+            Next nFile
+
+            nFiles:=Len(s_aPTables)
+            IF nFiles>0
+                IF nSize>self:nSize
+                    self:nSize:=nSize
+                    For nFile:=1 To nFiles
+                        s_aPTables[nFile][2]:=PadL(s_aPTables[nFile][2],nSize)
+                        s_aPTables[nFile][3]:=PadL(s_aPTables[nFile][3],nSize)
+                    Next nFile
                 EndIF
-                nLine:=Max(nLine,Len(cLine))
-                While "  " $ cLine
-                    cLine:=StrTran(cLine,"  "," ")
-                End While
-                While SubStr(cLine,1,1)==" "
-                    cLine:=SubStr(cLine,2)
-                End While
-                While SubStr(cLine,-1)==" "
-                    cLine:=SubStr(cLine,1,Len(cLine)-1)
-                End While
-                #IFDEF __HARBOUR__
-                     aLine:=hb_ATokens(cLine," ")
-                #ELSE //__PROTHEUS__
-                     aLine:=StrTokArr22(cLine," ")
-                #ENDIF
-                cFPrime:=aLine[1]
-                nSize:=Max(Len(cFPrime),nSize)
-                cFPrime:=PadL(cFPrime,nSize)
-                EXIT
-            End While
-            ofRead:Seek(-nLine,FS_END)
-            While ofRead:MoreToRead()
-                cLine:=ofRead:ReadLine()
-                IF Empty(cLine)
-                    Loop
-                EndIF
-                nLine:=Max(nLine,Len(cLine))
-                While "  " $ cLine
-                    cLine:=StrTran(cLine,"  "," ")
-                End While
-                While SubStr(cLine,1,1)==" "
-                    cLine:=SubStr(cLine,2)
-                End While
-                While SubStr(cLine,-1)==" "
-                    cLine:=SubStr(cLine,1,Len(cLine)-1)
-                End While
-                #IFDEF __HARBOUR__
-                     aLine:=hb_ATokens(cLine," ")
-                #ELSE //__PROTHEUS__
-                     aLine:=StrTokArr22(cLine," ")
-                #ENDIF
-                cLPrime:=aLine[Len(aLine)]
-                nSize:=Max(Len(cFPrime),nSize)
-                cLPrime:=PadL(cLPrime,nSize)
-                EXIT
-            End While
-            ofRead:Close(.T.)
-            aAdd(__aPTables,{cFile,cFPrime,cLPrime,nLine})
-        Next nFile
-
-        nFiles:=Len(__aPTables)
-        IF nFiles>0
-            IF nSize>self:nSize
-                self:nSize:=nSize
-                For nFile:=1 To nFiles
-                    __aPTables[nFile][2]:=PadL(__aPTables[nFile][2],nSize)
-                    __aPTables[nFile][3]:=PadL(__aPTables[nFile][3],nSize)
-                Next nFile
+                #ifdef __HARBOUR__
+                    bSPTables:={|x AS ARRAY,y AS ARRAY|x[2]<y[2]}
+                #else /*__ADVPL__*/
+                    bSPTables:={|x,y|x[2]<y[2]}
+                #endif /*__HARBOUR__*/
+                aSort(s_aPTables,NIL,NIL,bSPTables)
+                self:cFPrime:=s_aPTables[1][2]
+                self:cLPrime:=s_aPTables[nFiles][3]
             EndIF
-            aSort(__aPTables,NIL,NIL,{|x,y|x[2]<y[2]})
-            self:cFPrime:=__aPTables[1][2]
-            self:cLPrime:=__aPTables[nFiles][3]
+
+            s_nPTables:=nFiles
+
+        Else
+
+            nFiles:=s_nPTables
+            IF nFiles>0
+                self:cFPrime:=s_aPTables[1][2]
+                self:cLPrime:=s_aPTables[nFiles][3]
+                self:nSize:=Len(self:cLPrime)
+            EndIF
+
         EndIF
 
-        __nPTables:=nFiles
+        self:cPrime:=""
 
-    Else
+        IF self:cFPrime==NIL
+            self:cFPrime:=""
+        EndIF
 
-        nFiles:=__nPTables
-        IF nFiles>0
-            self:cFPrime:=__aPTables[1][2]
-            self:cLPrime:=__aPTables[nFiles][3]
+        IF self:cLPrime==NIL
+            self:cLPrime:=""
+        EndIF
+
+        IF self:nSize==NIL
             self:nSize:=Len(self:cLPrime)
         EndIF
 
-    EndIF
-
-    self:cPrime:=""
-
-    IF self:cFPrime==NIL
-        self:cFPrime:=""
-    EndIF
-
-    IF self:cLPrime==NIL
-        self:cLPrime:=""
-    EndIF
-
-    IF self:nSize==NIL
-        self:nSize:=Len(self:cLPrime)
-    EndIF
-
-    Return(self)
+        Return(self)
 /*Method New*/
 
-/*
-    Method:ClassName
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:ClassName
-    Sintaxe:tPrime():ClassName() -> cClassName
-*/
-Method ClassName() CLASS tPrime
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:ClassName
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:ClassName
+        Sintaxe:tPrime():ClassName() -> cClassName
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method ClassName() CLASS tPrime
+#else /*__ADVPL__*/
+    Method ClassName() CLASS tPrime
+#endif /*__HARBOUR__*/
     Return("TPRIME")
 /*Method ClassName*/
 
-/*
-    Method:IsPrime
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
-    Sintaxe:tPrime():IsPrime(cN,lForce) -> lPrime
-*/
-Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:IsPrime
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Verifica se o Numero passado por Parametro consta nas Tabelas de Numeros Primo
+        Sintaxe:tPrime():IsPrime(cN,lForce) -> lPrime
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method IsPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
+#else /*__ADVPL__*/
+    Method IsPrime(cN,lForce) CLASS tPrime
+#endif /*__HARBOUR__*/
 
-    Local aLine     AS ARRAY
+        Local aLine     AS ARRAY
 
-    Local cLine     AS CHARACTER
+        Local bSPTables AS BLOCK
+        Local bSIPLRead AS BLOCK
+        Local bLineAddN AS BLOCK
+        Local bLineFeqN AS BLOCK
+        Local bLineFgtN AS BLOCK
 
-    Local lPrime    AS LOGICAL
+        Local cLine     AS CHARACTER
 
-    Local nPrime    AS NUMERIC
-    Local nTable    AS NUMERIC
+        Local lPrime    AS LOGICAL
 
-    BEGIN SEQUENCE
+        Local nPrime    AS NUMERIC
+        Local nTable    AS NUMERIC
 
-        IF Empty(__aPTables)
-            BREAK
-        EndIF
+        #ifdef __ADVPL__
+            PARAMETER cN        AS CHARACTER
+            PARAMETER lForce    AS LOGICAL
+        #endif /*__ADVPL__*/
 
-        DEFAULT cN:=self:cPrime
-        cN:=PadL(cN,self:nSize)
+        BEGIN SEQUENCE
 
-        nTable:=aScan(__aPTables,{|x|cN>=x[2].and.cN<=x[3]})
-
-        IF nTable==0
-            BREAK
-        ENDIF
-
-        DEFAULT __oIPfRead:=tfRead():New()
-        DEFAULT __aIPLRead:=Array(0)
-
-        DEFAULT lForce:=.F.
-        IF (lForce)
-            Self:IsPReset()
-        EndIF
-
-        IF .NOT.(__nIPfRead==nTable)
-            Self:IsPReset()
-            __nIPfRead:=nTable
-            __oIPfRead:Close(.T.)
-            __oIPfRead:Open(__aPTables[nTable][1])
-            __oIPfRead:nReadSize:=MIN(65535,(__aPTables[nTable][4]+2)*64)
-            __oIPfRead:ReadLine()
-        EndIF
-
-        nPrime:=aScan(__aIPLRead,{|x|PadL(x,self:nSize)==cN})
-        IF (lPrime:=nPrime>0)
-            BREAK
-        EndIF
-
-        While __oIPfRead:MoreToRead()
-            cLine:=__oIPfRead:ReadLine()
-            IF Empty(cLine)
-                Loop
+            IF Empty(s_aPTables)
+                BREAK
             EndIF
-            While "  " $ cLine
-                cLine:=StrTran(cLine,"  "," ")
-            End While
-            While SubStr(cLine,1,1)==" "
-                cLine:=SubStr(cLine,2)
-            End While
-            While SubStr(cLine,-1)==" "
-                cLine:=SubStr(cLine,1,Len(cLine)-1)
-            End While
-            #IFDEF __HARBOUR__
-                 aLine:=hb_ATokens(cLine," ")
-            #ELSE //__PROTHEUS__
-                aLine:=StrTokArr22(cLine," ")
-            #ENDIF
-            nPrime:=aScan(aLine,{|x|PadL(x,self:nSize)==cN})
+
+            DEFAULT cN:=self:cPrime
+            cN:=PadL(cN,self:nSize)
+
+            #ifdef __HARBOUR__
+                bSPTables:={|x AS ARRAY|cN>=x[2].and.cN<=x[3]}
+            #else /*__ADVPL__*/
+                bSPTables:={|x|cN>=x[2].and.cN<=x[3]}
+            #endif /*__HARBOUR__*/
+
+            nTable:=aScan(s_aPTables,bSPTables)
+
+            IF nTable==0
+                BREAK
+            ENDIF
+
+            DEFAULT s_oIPfRead:=tfRead():New()
+            DEFAULT s_aIPLRead:=Array(0)
+
+            DEFAULT lForce:=.F.
+            IF (lForce)
+                Self:IsPReset()
+            EndIF
+
+            IF .NOT.(s_nIPfRead==nTable)
+                Self:IsPReset()
+                s_nIPfRead:=nTable
+                s_oIPfRead:Close(.T.)
+                s_oIPfRead:Open(s_aPTables[nTable][1])
+                s_oIPfRead:nReadSize:=MIN(65535,(s_aPTables[nTable][4]+2)*64)
+                s_oIPfRead:ReadLine()
+            EndIF
+
+            #ifdef __HARBOUR__
+                bSIPLRead:={|x AS CHARACTER|PadL(x,self:nSize)==cN}
+            #else /*__ADVPL__*/
+                bSIPLRead:={|x AS CHARACTER|PadL(x,self:nSize)==cN}
+            #endif /*__HARBOUR__*/
+
+            nPrime:=aScan(s_aIPLRead,bSIPLRead)
             IF (lPrime:=nPrime>0)
-                EXIT
+                BREAK
             EndIF
-            IF aScan(aLine,{|x|PadL(x,self:nSize)>cN})>0
-                EXIT
+
+            #ifdef __HARBOUR__
+                bLineFeqN:={|x AS CHARACTER|PadL(x,self:nSize)==cN}
+                bLineFgtN:={|x AS CHARACTER|PadL(x,self:nSize)>cN}
+            #else /*__ADVPL__*/
+                bLineFeqN:={|x|PadL(x,self:nSize)==cN}
+                bLineFgtN:={|x|PadL(x,self:nSize)>cN}
+            #endif /*__HARBOUR__*/
+
+            While s_oIPfRead:MoreToRead()
+                cLine:=s_oIPfRead:ReadLine()
+                IF Empty(cLine)
+                    Loop
+                EndIF
+                While "  "$cLine
+                    cLine:=StrTran(cLine,"  "," ")
+                End While
+                While SubStr(cLine,1,1)==" "
+                    cLine:=SubStr(cLine,2)
+                End While
+                While SubStr(cLine,-1)==" "
+                    cLine:=SubStr(cLine,1,Len(cLine)-1)
+                End While
+                #ifdef __HARBOUR__
+                     aLine:=hb_ATokens(cLine," ")
+                #else /*__ADVPL__*/
+                    aLine:=StrTokArr2(cLine," ")
+                #endif
+                nPrime:=aScan(aLine,bLineFeqN)
+                IF (lPrime:=nPrime>0)
+                    EXIT
+                EndIF
+                IF aScan(aLine,bLineFgtN)>0
+                    EXIT
+                EndIF
+            End While
+
+            aSize(s_aIPLRead,0)
+
+            IF .NOT.(Empty(aLine))
+                #ifdef __HARBOUR__
+                    bLineAddN:={|x AS CHARACTER|aAdd(s_aIPLRead,x)}
+                #else /*__ADVPL__*/
+                    bLineAddN:={|x|aAdd(s_aIPLRead,x)}
+                #endif /*__HARBOUR__*/
+                aEval(aLine,bLineAddN)
+                aSize(aLine,0)
             EndIF
-        End While
 
-        aSize(__aIPLRead, 0)
+        END SEQUENCE
 
-        IF .NOT.(Empty(aLine))
-            aEval(aLine,{|x|aAdd(__aIPLRead,x)})
-            aSize(aLine,0)
-        EndIF
+        DEFAULT lPrime:=.F.
 
-    END SEQUENCE
-
-    DEFAULT lPrime:=.F.
-
-    Return(lPrime)
+        Return(lPrime)
 /*Method IsPrime*/
 
-/*
-    Method:IsPReset
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Reset IsPrime Cache
-    Sintaxe:tPrime():IsPReset() -> .T.
-*/
-Method IsPReset() CLASS tPrime
-    __nIPfRead:=NIL
-    IF .NOT.(__aIPLRead==NIL)
-        aSize(__aIPLRead,0)
-    EndIF
-    Return(.T.)
+//-------------------------------------------------------------------------------------------------------
+    /*
+        Method:IsPReset
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Reset IsPrime Cache
+        Sintaxe:tPrime():IsPReset() -> .T.
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method IsPReset() CLASS tPrime
+#else /*__ADVPL__*/
+    Method IsPReset() CLASS tPrime
+#endif /*__HARBOUR__*/
+        s_nIPfRead:=NIL
+        IF .NOT.(s_aIPLRead==NIL)
+            aSize(s_aIPLRead,0)
+        EndIF
+        Return(.T.)
 /*Method IsPReset*/
 
-/*
-    Method:NextPrime
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Obtem o Proximo Numero da Tabela de Numeros Primos
-    Sintaxe:tPrime():NextPrime(cN,lForce) -> lPrime
-*/
-Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:NextPrime
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Obtem o Proximo Numero da Tabela de Numeros Primos
+        Sintaxe:tPrime():NextPrime(cN,lForce) -> lPrime
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method NextPrime(cN AS CHARACTER,lForce AS LOGICAL) CLASS tPrime
+#else /*__ADVPL__*/
+    Method NextPrime(cN,lForce) CLASS tPrime
+#endif /*__HARBOUR__*/
 
-    Local aLine     AS ARRAY
+        Local aLine     AS ARRAY
 
-    Local cLine     AS CHARACTER
-    Local cPrime    AS CHARACTER
+        Local bSPTables AS BLOCK
+        Local bSNPLRead AS BLOCK
+        lOCAL bLinefgtN AS BLOCK
 
-    Local lPrime    AS LOGICAL
+        Local cLine     AS CHARACTER
+        Local cPrime    AS CHARACTER
 
-    Local nPrime    AS NUMERIC
-    Local nTable    AS NUMERIC
+        Local lPrime    AS LOGICAL
 
-    BEGIN SEQUENCE
+        Local nPrime    AS NUMERIC
+        Local nTable    AS NUMERIC
 
-        IF Empty(__aPTables)
-            BREAK
-        EndIF
+        #ifdef __ADVPL__
+            PARAMETER cN        AS CHARACTER
+            PARAMETER lForce    AS LOGICAL
+        #endif /*__ADVPL__*/
 
-        DEFAULT cN:=self:cPrime
-        cN:=PadL(cN,self:nSize)
-        self:cPrime:=cN
+        BEGIN SEQUENCE
 
-        IF Empty(cN)
-            nTable:=1
-        Else
-            nTable:=aScan(__aPTables,{|x|cN>=x[2].and.cN<=x[3]})
-        EndIF
-
-        IF nTable==0
-            BREAK
-        ENDIF
-
-        DEFAULT __oNPfRead:=tfRead():New()
-        DEFAULT __aNPLRead:=Array(0)
-
-        DEFAULT lForce:=.F.
-        IF (lForce)
-            Self:NextPReset()
-        EndIF
-
-        IF .NOT.(__nNPfRead==nTable)
-            Self:NextPReset()
-            __nNPfRead:=nTable
-            __oNPfRead:Close(.T.)
-            __oNPfRead:Open(__aPTables[nTable][1])
-            __oNPfRead:nReadSize:=MIN(65535,(__aPTables[nTable][4]+2)*64)
-            __oNPfRead:ReadLine()
-        EndIF
-
-        nPrime:=aScan(__aNPLRead,{|x|(cPrime:=PadL(x,self:nSize))>cN})
-        IF (lPrime:=nPrime>0)
-            self:cPrime:=cPrime
-            BREAK
-        EndIF
-
-        While __oNPfRead:MoreToRead()
-            cLine:=__oNPfRead:ReadLine()
-            IF Empty(cLine)
-                Loop
+            IF Empty(s_aPTables)
+                BREAK
             EndIF
-            While "  " $ cLine
-                cLine:=StrTran(cLine,"  "," ")
-            End While
-            While SubStr(cLine,1,1)==" "
-                cLine:=SubStr(cLine,2)
-            End While
-            While SubStr(cLine,-1)==" "
-                cLine:=SubStr(cLine,1,Len(cLine)-1)
-            End While
-            #IFDEF __HARBOUR__
-                 aLine:=hb_ATokens(cLine," ")
-            #ELSE //__PROTHEUS__
-                aLine:=StrTokArr22(cLine," ")
-            #ENDIF
-            nPrime:=aScan(aLine,{|x|(cPrime:=PadL(x,self:nSize))>cN})
+
+            DEFAULT cN:=self:cPrime
+            cN:=PadL(cN,self:nSize)
+            self:cPrime:=cN
+
+            IF Empty(cN)
+                nTable:=1
+            Else
+                #ifdef __HARBOUR__
+                    bSPTables:={|x AS ARRAY|cN>=x[2].and.cN<=x[3]}
+                #else /*__ADVPL__*/
+                    bSPTables:={|x|cN>=x[2].and.cN<=x[3]}
+                #endif  /*__HARBOUR__*/
+                nTable:=aScan(s_aPTables,bSPTables)
+            EndIF
+
+            IF nTable==0
+                BREAK
+            ENDIF
+
+            DEFAULT s_oNPfRead:=tfRead():New()
+            DEFAULT s_aNPLRead:=Array(0)
+
+            DEFAULT lForce:=.F.
+            IF (lForce)
+                Self:NextPReset()
+            EndIF
+
+            IF .NOT.(s_nNPfRead==nTable)
+                Self:NextPReset()
+                s_nNPfRead:=nTable
+                s_oNPfRead:Close(.T.)
+                s_oNPfRead:Open(s_aPTables[nTable][1])
+                s_oNPfRead:nReadSize:=MIN(65535,(s_aPTables[nTable][4]+2)*64)
+                s_oNPfRead:ReadLine()
+            EndIF
+
+            #ifdef __HARBOUR__
+                bSNPLRead:={|x AS CHARACTER|(cPrime:=PadL(x,self:nSize))>cN}
+                bLinefgtN:=bSNPLRead
+            #else /*__ADVPL__*/
+                bSNPLRead:={|x|(cPrime:=PadL(x,self:nSize))>cN}
+                bLinefgtN:=bSNPLRead
+            #endif /*__HARBOUR__*/
+
+            nPrime:=aScan(s_aNPLRead,bSNPLRead)
             IF (lPrime:=nPrime>0)
-                EXIT
+                self:cPrime:=cPrime
+                BREAK
             EndIF
-        End While
 
-        aSize(__aNPLRead, 0)
+            While s_oNPfRead:MoreToRead()
+                cLine:=s_oNPfRead:ReadLine()
+                IF Empty(cLine)
+                    Loop
+                EndIF
+                While "  "$cLine
+                    cLine:=StrTran(cLine,"  "," ")
+                End While
+                While SubStr(cLine,1,1)==" "
+                    cLine:=SubStr(cLine,2)
+                End While
+                While SubStr(cLine,-1)==" "
+                    cLine:=SubStr(cLine,1,Len(cLine)-1)
+                End While
+                #ifdef __HARBOUR__
+                     aLine:=hb_ATokens(cLine," ")
+                #else /*__ADVPL__*/
+                    aLine:=StrTokArr2(cLine," ")
+                #endif
+                nPrime:=aScan(aLine,bLinefgtN)
+                IF (lPrime:=nPrime>0)
+                    EXIT
+                EndIF
+            End While
 
-        IF .NOT.(Empty(aLine))
-            aEval(aLine,{|x|aAdd(__aNPLRead,x)})
-            aSize(aLine,0)
-        EndIF
+            aSize(s_aNPLRead,0)
 
-        DEFAULT cPrime:=""
-        self:cPrime:=cPrime
+            IF .NOT.(Empty(aLine))
+                aEval(aLine,{|x|aAdd(s_aNPLRead,x)})
+                aSize(aLine,0)
+            EndIF
 
-    END SEQUENCE
+            DEFAULT cPrime:=""
+            self:cPrime:=cPrime
 
-    DEFAULT lPrime:=.F.
+        END SEQUENCE
 
-    Return(lPrime)
+        DEFAULT lPrime:=.F.
+
+        Return(lPrime)
 /*Method NextPrime*/
 
-/*
-    Method:NextPReset
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Reset NextPrime Cache
-    Sintaxe:tPrime():NextPReset() -> .T.
-*/
-Method NextPReset() CLASS tPrime
-    __nNPfRead:=0
-    IF .NOT.(__aNPLRead==NIL)
-        aSize(__aNPLRead,0)
-    EndIF
-    Return(.T.)
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:NextPReset
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Reset NextPrime Cache
+        Sintaxe:tPrime():NextPReset() -> .T.
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method NextPReset() CLASS tPrime
+#else /*__ADVPL__*/
+    Method NextPReset() CLASS tPrime
+#endif /*__HARBOUR__*/
+        s_nNPfRead:=0
+        IF .NOT.(s_aNPLRead==NIL)
+            aSize(s_aNPLRead,0)
+        EndIF
+        Return(.T.)
 /*Method NextPReset*/
 
-/*
-    Method:ResetAll
-    Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
-    Data:16/03/2013
-    Descricao:Reset All Cache
-    Sintaxe:tPrime():ResetAll() -> .T.
-*/
-Method ResetAll() CLASS tPrime
-    __nPTables:=0
-    IF .NOT.(__aPTables==NIL)
-        aSize(__aPTables,0)
-    EndIF
-    Self:IsPReset()
-    Self:NextPReset()
-    Return(.T.)
+//--------------------------------------------------------------------------------------------------------
+    /*
+        Method:ResetAll
+        Autor:Marinaldo de Jesus [ http://www.blacktdn.com.br ]
+        Data:16/03/2013
+        Descricao:Reset All Cache
+        Sintaxe:tPrime():ResetAll() -> .T.
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    Method ResetAll() CLASS tPrime
+#else /*__ADVPL__*/
+    Method ResetAll() CLASS tPrime
+#endif /*__HARBOUR__*/
+        s_nPTables:=0
+        IF .NOT.(s_aPTables==NIL)
+            aSize(s_aPTables,0)
+        EndIF
+        Self:IsPReset()
+        Self:NextPReset()
+        Return(.T.)
 /*Method ResetAll*/

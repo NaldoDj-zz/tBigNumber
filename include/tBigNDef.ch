@@ -2,12 +2,18 @@
 
     #define _hb_TBigNDef_CH
 
+    #ifdef TOTVS
+        #ifndef PROTHEUS
+            #define PROTHEUS
+        #endif
+    #endif    
+   
     #ifdef PROTHEUS
-        #ifndef __PROTHEUS__
-            #define __PROTHEUS__
-            #ifndef __PTCOMPAT__
-                #define __PTCOMPAT__
-            #endif
+        #ifndef __ADVPL__
+            #define __ADVPL__
+        #endif
+        #ifndef __PTCOMPAT__
+            #define __PTCOMPAT__
         #endif
     #else
         #ifndef __HARBOUR__

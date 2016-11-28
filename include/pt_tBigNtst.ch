@@ -2,7 +2,7 @@
 
     #define _pt_tBigNtst_CH
 
-    #ifdef __PROTHEUS__
+    #ifdef __ADVPL__
         #xcommand ? <e> => ConOut(<e>)
         #xcommand MEMVAR <m> =>
     #endif  

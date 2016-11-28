@@ -83,7 +83,7 @@
          //1..38,(#...49) Mersenne prime List
         #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
     #endif /*__PTCOMPAT__*/
-#else /*__PROTHEUS__*/
+#else /*__ADVPL__*/
     //1..15,(#...49) Mersenne prime List
     #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
 #endif /*__HARBOUR__*/
@@ -157,9 +157,11 @@
         #endif
 
         cIni:="tBigNtst.ini"
-        hIni:=hb_iniRead(cIni)
-
-        if .NOT.(File(cIni)).or. Empty(hIni)
+        if File(cIni)
+            hIni:=hb_iniRead(cIni)
+        endif
+        
+        if .NOT.(File(cIni)).or.Empty(hIni)
             hIni["GENERAL"]:=hb_Hash()
             hIni["GENERAL"]["ACC_SET"]:=ACC_SET
             hIni["GENERAL"]["ROOT_ACC_SET"]:=ROOT_ACC_SET
@@ -174,7 +176,10 @@
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
             hIni["GENERAL"]["ACN_MERSENNE_POW"]:=ACN_MERSENNE_POW
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#end of file")
-        else
+            hIni:=hb_iniRead(cIni)
+        endif        
+
+        if (File(cIni)).and.(.not.(Empty(hIni)))
             for each cSection IN hIni:Keys
                 aSect:=hIni[cSection]
                 for each cKey IN aSect:Keys
@@ -231,7 +236,7 @@
         lL_LOGPROCESS:=if(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(ACN_MERSENNE_POW),","),aACN_MERSENNE_POW)
+        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(ACN_MERSENNE_POW,"#","")),","),aACN_MERSENNE_POW)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -363,6 +368,7 @@
         return
     /*static procedure tBigtstThread*/
 
+    //--------------------------------------------------------------------------------------------------------
     static procedure tBigtstEval(atBigNtst AS ARRAY,nMaxScrRow AS NUMERIC,nMaxScrCol AS NUMERIC)
         Local pGT   AS POINTER
         pGT:=hb_gtSelect(atBigNtst[3])
@@ -406,7 +412,7 @@
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigNtst(atBigNtst AS ARRAY)
 
-#else /*__PROTHEUS__*/
+#else /*__ADVPL__*/
         //--------------------------------------------------------------------------------------------------------
         #xtranslate ExeName() => ProcName()
         //----------------------------------------------------------
@@ -441,7 +447,6 @@
             cIni:="tBigNtst.ini"
 
             if Findfunction("U_TFINI") //NDJLIB020.PRG
-                otFIni:=u_TFINI(cIni)
                 if .NOT.File(cIni)
                     otFIni:AddNewSession("GENERAL")
                     otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
@@ -457,7 +462,8 @@
                     otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
                     otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)
                     otFIni:SaveAs(cIni)
-                else
+                endif
+                if (otFIni:=u_TFINI(cIni))
                     nACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
                     nROOT_ACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
                     nACC_ALOG:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
@@ -484,7 +490,7 @@
             lL_LOGPROCESS:=if(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
             cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
             aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-            aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(ACN_MERSENNE_POW,","),aACN_MERSENNE_POW)
+            aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(StrTran(ACN_MERSENNE_POW,";",""),","),aACN_MERSENNE_POW)
             __nSLEEP:=Max(__nSLEEP,10)
 
             if ((__nSLEEP)<10)
@@ -500,7 +506,7 @@
     //--------------------------------------------------------------------------------------------------------
     static procedure tBigNtst(atBigNtst AS ARRAY)
 
-#endif /*__PROTHEUS__*/
+#endif /*__ADVPL__*/
 
         #ifdef __HARBOUR__
             Local tsBegin           AS DATETIME
@@ -519,7 +525,7 @@
             Local pttProgress       AS POINTER
             Local ptfftProgress     AS POINTER
             Local pttftProgress     AS POINTER
-        #else /*__PROTHEUS__*/
+        #else /*__ADVPL__*/
             Local cLog              AS CHARACTER
         #endif /*__HARBOUR__*/
 
@@ -581,7 +587,7 @@
 
             MakeDir(cFld)
 
-        #else /*__PROTHEUS__*/
+        #else /*__ADVPL__*/
 
             cLog:=GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 
@@ -728,7 +734,7 @@
                 fClose(fhLog)
             endif
 
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             #ifdef TBN_DBFILE
                 tBigNGC()
             #endif
@@ -745,7 +751,7 @@
                 WAIT "Press any key to end"
             endif
             CLS
-        #endif /*__PROTHEUS__*/
+        #endif /*__ADVPL__*/
 
         return
     /*static procedure tBigNtst*/
@@ -1588,7 +1594,7 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
     otBigW:=tBigNumber():New()
     otBigX:=tBigNumber():New()
 
-    #ifndef __PROTHEUS__
+    #ifndef __ADVPL__
         __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
 
         otBigN:SetDecimals(nACC_SET)
@@ -1749,7 +1755,7 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
         endif
         For x:=1 To Len(aPFact)
             ASSIGN cW:=aPFact[x][2]
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
             otBigW:=cW
             while otBigW>o0
 #else
@@ -1782,7 +1788,7 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
     aPFact:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif /*__PROTHEUS__*/
+    #endif /*__ADVPL__*/
 
     __ConOut(fhLog,"")
 
@@ -1852,7 +1858,7 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
     aPrimes:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif /*__PROTHEUS__*/
+    #endif /*__ADVPL__*/
 
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
@@ -2050,7 +2056,7 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 
     ASSIGN n:=1
 
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
     otBigN:=o1
 #else
     otBigN:SetValue(o1)
@@ -2069,7 +2075,7 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
         ASSIGN n+=9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN+="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
@@ -2139,7 +2145,7 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
         ASSIGN n+=9999.9999999999
         __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN+="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Add("9999.9999999999"))
@@ -2205,7 +2211,7 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
         ASSIGN n+=-9999.9999999999
         __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN+="-9999.9999999999"
 #else
         otBigN:SetValue(otBigN:add("-9999.9999999999"))
@@ -2271,7 +2277,7 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
         ASSIGN n-=9999.9999999999
         __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN-="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
@@ -2335,7 +2341,7 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
         ASSIGN n-=9999.9999999999
         __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN-="9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("9999.9999999999"))
@@ -2399,7 +2405,7 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
         ASSIGN n-=-9999.9999999999
         __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN-="-9999.9999999999"
 #else
         otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
@@ -2485,7 +2491,7 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
         ASSIGN n*=1.5
         __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN*="1.5"
 #else
         otBigN:SetValue(otBigN:Mult("1.5"))
@@ -2568,7 +2574,7 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
         ASSIGN n*=1.5
         __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN*="1.5"
 #else
         otBigN:SetValue(otBigN:Mult("1.5"))
@@ -2725,7 +2731,7 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
         end while
         __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
         ASSIGN cN:=otBigW:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigW*="3.555"
 #else
         otBigW:SetValue(otBigW:Mult("3.555"))
@@ -2961,7 +2967,7 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
             hb_mutexUnLock(__phMutex)
         endif
         ASSIGN cN:=hb_NtoS(n)
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             otBigN:SetValue(cN)
         #else
             otBigN:=cN
@@ -3101,7 +3107,7 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
         For x:=0 TO nISQRT Step nISQRT
             ASSIGN cX:=hb_NtoS(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_NtoS(n/x))
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
             otBigN:=cN
             otBigW:=(otBigN/cX)
             __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+otBigW:ExactValue())
@@ -3187,7 +3193,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
         ASSIGN n   /=1.5
         __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_NtoS(n))
         ASSIGN cN:=otBigN:ExactValue()
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN/="1.5"
 #else
         otBigN:SetValue(otBigN:Div("1.5"))
@@ -3259,7 +3265,7 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
         ASSIGN cN:=hb_NtoS(x)
         otBigN:SetValue(cN)
         __ConOut(fhLog,cN+"/3","RESULT: "+hb_NtoS(x/3))
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN/=o3
 #else
         otBigN:SetValue(otBigN:Div(o3))
@@ -3472,7 +3478,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
         ASSIGN n:=x
         ASSIGN cN:=hb_NtoS(n)
         __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NtoS(SQRT(n)))
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
         otBigN:=cN
         otBigN:=otBigN:SQRT()
 #else
@@ -3546,7 +3552,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
         ASSIGN n:=x
         ASSIGN cN:=hb_NtoS(n)
         __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_NtoS(Exp(n)))
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
     otBigN:=cN
 #else
     otBigN:SetValue(cN)
@@ -3615,7 +3621,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
-    //Tem um BUG aqui. Servidor __PROTHEUS__ Fica Maluco se (0^-n) e Senta..........
+    //Tem um BUG aqui. Servidor __ADVPL__ Fica Maluco se (0^-n) e Senta..........
     For x:=if(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT
         ASSIGN cN:=hb_NtoS(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3627,14 +3633,14 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
             ASSIGN n:=x
             ASSIGN n:=(n^w)
             __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
             otBigN:=cN
 #else
             otBigN:SetValue(cN)
 #endif
             ASSIGN cN:=otBigN:ExactValue()
 
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
             otBigN^=cW
 #else
             otBigN:SetValue(otBigN:Pow(cW))
@@ -3719,13 +3725,13 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
             ASSIGN n:=x
             ASSIGN n:=(n^(w+.5))
             __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
-            #ifndef __PROTHEUS__
+            #ifndef __ADVPL__
                 otBigN:=cN
             #else
                 otBigN:SetValue(cN)
             #endif
             ASSIGN cN:=otBigN:ExactValue()
-            #ifndef __PROTHEUS__
+            #ifndef __ADVPL__
                 otBigN^=cW
             #else
                 otBigN:SetValue(otBigN:Pow(cW))
@@ -4527,7 +4533,7 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
     aFibonacci:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif /*__PROTHEUS__*/
+    #endif /*__ADVPL__*/
 
     __ConOut(fhLog,"")
 
@@ -4595,7 +4601,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
     aFibonacci:=NIL
     #ifdef __HARBOUR__
         tBigNGC()
-    #endif /*__PROTHEUS__*/
+    #endif /*__ADVPL__*/
 
     __ConOut(fhLog,"")
 
@@ -4664,7 +4670,7 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
             __ConOut(fhLog,__cSep)
             #ifdef __HARBOUR__
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:SecsToTime(__oRTime2:TimeToSecs(__oRTime2:GetcAverageTime())*Min(__oRTime2:GetnTotal(),Max(__oRTime2:GetnProgress(),1))))
-            #else /*__PROTHEUS__*/
+            #else /*__ADVPL__*/
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             #endif
             hb_mutexUnLock(__phMutex)

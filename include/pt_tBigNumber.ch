@@ -2,7 +2,7 @@
 
     #define _pt_TBigNumber_CH   
 
-    #ifdef __PROTHEUS__
+    #ifdef __ADVPL__
 
         #include "totvs.ch"
 

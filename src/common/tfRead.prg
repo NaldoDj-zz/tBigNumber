@@ -1,5 +1,5 @@
 #ifdef PROTHEUS
-    #define __PROTHEUS__
+    #define __ADVPL__
     #include "protheus.ch"
     #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
 #else
@@ -86,7 +86,7 @@ METHOD New( cFile, nSize ) CLASS tfRead
 
 RETURN Self
 
-#ifdef __PROTHEUS__
+#ifdef __ADVPL__
     User Function tfRead(cFile,nSize)
     Return( tfRead():New(@cFile,@nSize) )
 #endif
@@ -111,7 +111,7 @@ METHOD Open( cFile , nMode , nLocal ) CLASS tfRead
             nMode := FO_READ + FO_SHARED   // Default to shared read-only mode
         ENDIF
         self:nLastOp     := oF_OPEN_FILE
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             //----------------------------------------------------------------------------
             //if(nLocal,0/*Client*/,1/*Server*/)
             DEFAULT nLocal  := 0

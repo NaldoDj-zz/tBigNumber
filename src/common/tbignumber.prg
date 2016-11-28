@@ -1,67 +1,68 @@
-/*
- *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
- * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
- *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr
- *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
- *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
- *
- * Copyright 2013-2015 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
- * www - http://www.blacktdn.com.br
- *
- * Harbour Project license:
- * www - http://harbour-project.org
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this software; see the file COPYING.txt.  If not, write to
- * the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA (or visit the web site http://www.gnu.org/).
- *
- * As a special exception, the Harbour Project gives permission for
- * additional uses of the text contained in its release of Harbour.
- *
- * The exception is that, if you link the Harbour libraries with other
- * files to produce an executable, this does not by itself cause the
- * resulting executable to be covered by the GNU General Public License.
- * Your use of that executable is in no way restricted on account of
- * linking the Harbour library code into it.
- *
- * This exception does not however invalidate any other reasons why
- * the executable file might be covered by the GNU General Public License.
- *
- * This exception applies only to the code released by the Harbour
- * Project under the name Harbour.  If you copy code from other
- * Harbour Project or Free Software Foundation releases into a copy of
- * Harbour, as the General Public License permits, the exception does
- * not apply to the code that you add in this way.  To avoid misleading
- * anyone as to the status of such modified files, you must delete
- * this exception notice from them.
- *
- * If you write modifications of your own for Harbour, it is your choice
- * whether to permit this exception to apply to your modifications.
- * If you do not wish that, delete this exception notice.
- *
-*/
-
+//--------------------------------------------------------------------------------------------------------
+    /*
+     *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
+     * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
+     *  t    bbbb     i    g ggg  n n n  u   u  m m m  bbbb   eeee   rrrr
+     *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
+     *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
+     *
+     * Copyright 2013-2015 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
+     * www - http://www.blacktdn.com.br
+     *
+     * Harbour Project license:
+     * www - http://harbour-project.org
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License as published by
+     * the Free Software Foundation; either version 2, or (at your option)
+     * any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * GNU General Public License for more details.
+     *
+     * You should have received a copy of the GNU General Public License
+     * along with this software; see the file COPYING.txt.  If not, write to
+     * the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+     * Boston, MA 02111-1307 USA (or visit the web site http://www.gnu.org/).
+     *
+     * As a special exception, the Harbour Project gives permission for
+     * additional uses of the text contained in its release of Harbour.
+     *
+     * The exception is that, if you link the Harbour libraries with other
+     * files to produce an executable, this does not by itself cause the
+     * resulting executable to be covered by the GNU General Public License.
+     * Your use of that executable is in no way restricted on account of
+     * linking the Harbour library code into it.
+     *
+     * This exception does not however invalidate any other reasons why
+     * the executable file might be covered by the GNU General Public License.
+     *
+     * This exception applies only to the code released by the Harbour
+     * Project under the name Harbour.  If you copy code from other
+     * Harbour Project or Free Software Foundation releases into a copy of
+     * Harbour, as the General Public License permits, the exception does
+     * not apply to the code that you add in this way.  To avoid misleading
+     * anyone as to the status of such modified files, you must delete
+     * this exception notice from them.
+     *
+     * If you write modifications of your own for Harbour, it is your choice
+     * whether to permit this exception to apply to your modifications.
+     * If you do not wish that, delete this exception notice.
+     *
+    */
+//--------------------------------------------------------------------------------------------------------
 #include "tBigNumber.ch"
 
  #ifdef __HARBOUR__
-    //-------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------
         #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
         #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
         #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
         #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
-   //-------------------------------------------------------------------------------------
-#endif //__HARBOUR__
+    //--------------------------------------------------------------------------------------------------------
+#endif /*__HARBOUR__*/
 
 #ifndef __DIVMETHOD__
     #define __DIVMETHOD__ 1
@@ -135,345 +136,764 @@ static s__MTXSQR    AS POINTER
 
 #define MAX_SYS_FI      MAX_SYS_iMULT
 
-/*
-*    Alternative Compile Options: -d
-*
-*    #ifdef __PROTHEUS__
-*        -dTBN_ARRAY
-*        -dTBN_DBFILE
-*        -d__TBN_DYN_OBJ_SET__
-*    #else //__HARBOUR__
-*        -dTBN_ARRAY
-*        -dTBN_DBFILE
-*        -dTBN_MEMIO
-*        -d__TBN_DYN_OBJ_SET__
-*        -d__PTCOMPAT__
-*    #endif
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+    *    Alternative Compile Options: -d
+    *
+    *    #ifdef __ADVPL__
+    *        -dTBN_ARRAY
+    *        -dTBN_DBFILE
+    *        -d__TBN_DYN_OBJ_SET__
+    *    #else /*__HARBOUR__*/
+    *        -dTBN_ARRAY
+    *        -dTBN_DBFILE
+    *        -dTBN_MEMIO
+    *        -d__TBN_DYN_OBJ_SET__
+    *        -d__PTCOMPAT__
+    *    #endif
+    */
+//--------------------------------------------------------------------------------------------------------
 
-/*
-    class:tBigNumber
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Instancia um novo objeto do tipo BigNumber
-    Sintaxe:tBigNumber():New(uBigN) -> self
-*/
-#ifdef __PROTHEUS__
-class tBigNumber from LongClassName
-#else //__HARBOUR__
-class tBigNumber from hbClass
-#endif //__PROTHEUS__
+//--------------------------------------------------------------------------------------------------------
+    /*
+        class:tBigNumber
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Instancia um novo objeto do tipo BigNumber
+        Sintaxe:tBigNumber():New(uBigN) -> self
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __ADVPL__
+    class tBigNumber from LongClassName
+#else /*__HARBOUR__*/
+    class tBigNumber from hbClass
+#endif /*__ADVPL__*/
 
-#ifndef __PROTHEUS__
-    #ifndef __TBN_DYN_OBJ_SET__
-        #ifndef __ALT_D__
-            PROTECTED:
+    #ifndef __ADVPL__
+        #ifndef __TBN_DYN_OBJ_SET__
+            #ifndef __ALT_D__
+                PROTECTED:
+            #endif
         #endif
     #endif
-#endif
-    /* Keep in alphabetical order */
-    DATA cDec  AS CHARACTER INIT "0"
-    DATA cInt  AS CHARACTER INIT "0"
-    DATA cRDiv AS CHARACTER INIT "0"
-    DATA cSig  AS CHARACTER INIT ""
-    DATA lNeg  AS LOGICAL   INIT .F.
-    DATA nBase AS NUMERIC   INIT 10
-    DATA nDec  AS NUMERIC   INIT 1
-    DATA nInt  AS NUMERIC   INIT 1
-    DATA nSize AS NUMERIC   INIT 2
+        //--------------------------------------------------------------------------------------------------------
+        /* Keep in alphabetical order */
+        #ifdef __HARBOUR__
+            DATA cDec  AS CHARACTER INIT "0"
+        #else /*__ADVPL__*/
+            DATA cDec  AS CHARACTER
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA cInt  AS CHARACTER INIT "0"
+        #else /*__ADVPL__*/
+            DATA cInt  AS CHARACTER
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA cRDiv AS CHARACTER INIT "0"
+        #else /*__ADVPL__*/
+            DATA cRDiv AS CHARACTER
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA cSig  AS CHARACTER INIT ""
+        #else /*__ADVPL__*/
+            DATA cSig  AS CHARACTER
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA lNeg  AS LOGICAL   INIT .F.
+        #else /*__ADVPL__*/
+            DATA lNeg  AS LOGICAL
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA nBase AS NUMERIC   INIT 10
+        #else /*__ADVPL__*/
+            DATA nBase AS NUMERIC
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA nDec  AS NUMERIC   INIT 1
+        #else /*__ADVPL__*/
+            DATA nDec  AS NUMERIC
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA nInt  AS NUMERIC   INIT 1
+        #else /*__ADVPL__*/
+            DATA nInt  AS NUMERIC
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            DATA nSize AS NUMERIC   INIT 2
+        #else /*__ADVPL__*/
+            DATA nSize AS NUMERIC
+        #endif /*__HARBOUR__*/
 
-#ifndef __PROTHEUS__
-    EXPORTED:
-#endif
-
-    method New(uBigN,nBase AS NUMERIC) CONSTRUCTOR /*( /!\ )*/
-
-#ifndef __PROTHEUS__
-    #ifdef TBN_DBFILE
-        DESTRUCTOR tBigNGC
+    #ifndef __ADVPL__
+        EXPORTED:
     #endif
-#endif
 
-    method Normalize(oBigN AS OBJECT)
+        #ifdef __HARBOUR__
+            method New(uBigN,nBase AS NUMERIC) CONSTRUCTOR /*( /!\ )*/
+        #else /*__ADVPL__*/
+            method New(uBigN,nBase) CONSTRUCTOR /*( /!\ )*/
+        #endif /*__HARBOUR__*/
+            
+        #ifndef __ADVPL__
+            #ifdef TBN_DBFILE
+                DESTRUCTOR tBigNGC
+            #endif
+        #endif
 
-    method __cDec(cDec AS CHARACTER)    SETGET
-    method __cInt(cInt AS CHARACTER)    SETGET
-    method __cRDiv(cRDiv AS CHARACTER)  SETGET
-    method __cSig(cSig AS CHARACTER)    SETGET
-    method __lNeg(lNeg AS LOGICAL)      SETGET
-    method __nBase(nBase AS NUMERIC)    SETGET
-    method __nDec(nDec AS NUMERIC)      SETGET
-    method __nInt(nInt AS NUMERIC)      SETGET
-    method __nSize(nSize AS NUMERIC)    SETGET
+        #ifdef __HARBOUR__
+            method Normalize(oBigN AS OBJECT)
+        #else /*__ADVPL__*/
+            method Normalize(oBigN)
+        #endif /*__HARBOUR__*/
 
-    method Clone()
-    method className()
+        #ifdef __HARBOUR__    
+            method __cDec(cDec AS CHARACTER)    SETGET
+        #else /*__ADVPL__*/
+            method __cDec(cDec)
+        #endif /*__HARBOUR__*/
 
-    method SetDecimals(nSet AS NUMERIC)
+        #ifdef __HARBOUR__
+            method __cInt(cInt AS CHARACTER)    SETGET
+        #else /*__ADVPL__*/
+            method __cInt(cInt)
+        #endif /*__HARBOUR__*/
 
-    method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
-    method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL)
-    method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL)
+        #ifdef __HARBOUR__
+            method __cRDiv(cRDiv AS CHARACTER)  SETGET
+        #else /*__ADVPL__*/
+            method __cRDiv(cRDiv)            
+        #endif /*__HARBOUR__*/
 
-    method Abs(lObj AS LOGICAL)
+        #ifdef __HARBOUR__
+            method __cSig(cSig AS CHARACTER)    SETGET
+        #else /*__ADVPL__*/
+            method __cSig(cSig)
+        #endif /*__HARBOUR__*/
 
-    method Int(lObj AS LOGICAL,lSig AS LOGICAL)
-    method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL)
+        #ifdef __HARBOUR__
+            method __lNeg(lNeg AS LOGICAL)      SETGET
+        #else /*__ADVPL__*/
+            method __lNeg(lNeg)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method __nBase(nBase AS NUMERIC)    SETGET
+        #else /*__ADVPL__*/
+            method __nBase(nBase)
+        #endif /*__HARBOUR__*/
 
-    method eq(uBigN)
-    method ne(uBigN)
-    method gt(uBigN)
-    method lt(uBigN)
-    method gte(uBigN)
-    method lte(uBigN)
-    method cmp(uBigN)
-    method btw(uBigS,uBigE)
-    method ibtw(uiBigS,uiBigE)
+        #ifdef __HARBOUR__
+            method __nDec(nDec AS NUMERIC)      SETGET
+        #else /*__ADVPL__*/
+            method __nDec(nDec)
+        #endif /*__HARBOUR__*/
 
-    method Max(uBigN)
-    method Min(uBigN)
+        #ifdef __HARBOUR__
+            method __nInt(nInt AS NUMERIC)      SETGET
+        #else /*__ADVPL__*/
+            method __nInt(nInt)
+        #endif /*__HARBOUR__*/
 
-    method Add(uBigN)
-#ifndef __PROTHEUS__
-    method Plus(uBigN) INLINE self:Add(uBigN)
-#else
-    method Plus(uBigN)
-#endif
+        #ifdef __HARBOUR__
+            method __nSize(nSize AS NUMERIC)    SETGET
+        #else /*__ADVPL__*/
+            method __nSize(nSize)
+        #endif /*__HARBOUR__*/
+        
+        
+        #ifdef __HARBOUR__
+            method Clone()
+        #else /*__ADVPL__*/
+            method Clone()
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method className()
+        #else /*__ADVPL__*/
+            method className()
+        #endif /*__HARBOUR__*/
 
-    method iAdd(uBigN)
-#ifndef __PROTHEUS__
-    method iPlus(uBigN) INLINE self:iAdd(uBigN)
-#else
-    method iPlus(uBigN)
-#endif
+        
+        #ifdef __HARBOUR__
+            method SetDecimals(nSet AS NUMERIC)
+        #else /*__ADVPL__*/
+            method SetDecimals(nSet AS NUMERIC)
+        #endif /*__HARBOUR__*/
 
-    method Sub(uBigN)
-#ifndef __PROTHEUS__
-    method Minus(uBigN) INLINE self:Sub(uBigN)
-#else
-    method Minus(uBigN)
-#endif
+        
+        #ifdef __HARBOUR__
+            method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
+        #else /*__ADVPL__*/
+            method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL)
+        #else /*__ADVPL__*/
+            method GetValue(lAbs,lObj)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL)
+        #else /*__ADVPL__*/
+            method ExactValue(lAbs,lObj)
+        #endif /*__HARBOUR__*/
 
-    method iSub(uBigN)
-#ifndef __PROTHEUS__
-    method iMinus(uBigN) INLINE self:iSub(uBigN)
-#else
-    method iMinus(uBigN)
-#endif
+        #ifdef __HARBOUR__
+            method Abs(lObj AS LOGICAL)
+        #else /*__ADVPL__*/
+            method Abs(lObj)
+        #endif /*__HARBOUR__*/
 
-    method Mult(uBigN)
-#ifndef __PROTHEUS__
-    method Multiply(uBigN) INLINE self:Mult(uBigN)
-#else
-    method Multiply(uBigN)
-#endif
+        
+        #ifdef __HARBOUR__
+            method Int(lObj AS LOGICAL,lSig AS LOGICAL)
+        #else /*__ADVPL__*/
+            method Int(lObj,lSig)
+        #endif /*__HARBOUR__*/
 
-    method iMult(uBigN)
-#ifndef __PROTHEUS__
-    method iMultiply(uBigN) INLINE self:iMult(uBigN)
-#else
-    method iMultiply(uBigN)
-#endif
+        #ifdef __HARBOUR__
+            method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL)
+        #else /*__ADVPL__*/
+            method Dec(lObj,lSig,lNotZ)
+        #endif /*__HARBOUR__*/
 
-    method egMult(uBigN)
-#ifndef __PROTHEUS__
-    method egMultiply(uBigN) INLINE self:egMult(uBigN)
-#else
-    method egMultiply(uBigN)
-#endif
+            
+        #ifdef __HARBOUR__    
+            method eq(uBigN)
+        #else /*__ADVPL__*/
+            method eq(uBigN)
+        #endif /*__HARBOUR__*/
+            
+        #ifdef __HARBOUR__
+            method ne(uBigN)
+        #else /*__ADVPL__*/
+            method ne(uBigN)
+        #endif /*__HARBOUR__*/
+            
+        #ifdef __HARBOUR__
+            method gt(uBigN)
+        #else /*__ADVPL__*/
+            method gt(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method lt(uBigN)
+        #else /*__ADVPL__*/
+            method lt(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method gte(uBigN)
+        #else /*__ADVPL__*/
+            method gte(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method lte(uBigN)
+        #else /*__ADVPL__*/
+            method lte(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method cmp(uBigN)
+        #else /*__ADVPL__*/
+            method cmp(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method btw(uBigS,uBigE)
+        #else /*__ADVPL__*/
+            method btw(uBigS,uBigE)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method ibtw(uiBigS,uiBigE)
+        #else /*__ADVPL__*/
+            method ibtw(uiBigS,uiBigE)
+        #endif /*__HARBOUR__*/
 
-    method rMult(uBigN)
-#ifndef __PROTHEUS__
-    method rMultiply(uBigN) INLINE self:rMult(uBigN)
-#else
-    method rMultiply(uBigN)
-#endif
+        
+        #ifdef __HARBOUR__
+            method Max(uBigN)
+        #else /*__ADVPL__*/
+            method Max(uBigN)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method Min(uBigN)
+        #else /*__ADVPL__*/
+            method Min(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Div(uBigN,lFloat AS LOGICAL)
-#ifndef __PROTHEUS__
-    method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
-#else
-    method Divide(uBigN,lFloat AS LOGICAL)
-#endif
+        #ifdef __HARBOUR__
+            method Add(uBigN)
+        #else /*__ADVPL__*/
+            method Add(uBigN)
+        #endif /*__HARBOUR__*/
+            
+    
+        #ifdef __HARBOUR__
+            method Plus(uBigN) INLINE self:Add(uBigN)
+        #else /*__ADVPL__*/
+            method Plus(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Divmethod(nMethod AS NUMERIC)
+        #ifdef __HARBOUR__
+            method iAdd(uBigN)
+            method iPlus(uBigN) INLINE self:iAdd(uBigN)
+        #else /*__ADVPL__*/
+            method iAdd(uBigN)
+            method iPlus(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Mod(uBigN)
+        
+        #ifdef __HARBOUR__
+            method Sub(uBigN)
+            method Minus(uBigN) INLINE self:Sub(uBigN)
+        #else /*__ADVPL__*/
+            method Sub(uBigN)
+            method Minus(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Pow(uBigN,lIPower AS LOGICAL)
-    method iPow(uBigN)
+        
+        #ifdef __HARBOUR__
+            method iSub(uBigN)
+            method iMinus(uBigN) INLINE self:iSub(uBigN)
+        #else /*__ADVPL__*/
+            method iSub(uBigN)
+            method iMinus(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method OpInc()
-    method OpDec()
+        
+        #ifdef __HARBOUR__
+            method Mult(uBigN)
+            method Multiply(uBigN) INLINE self:Mult(uBigN)
+        #else /*__ADVPL__*/
+            method Mult(uBigN)
+            method Multiply(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method e(lforce AS LOGICAL)
+        
+        #ifdef __HARBOUR__
+            method iMult(uBigN)
+            method iMultiply(uBigN) INLINE self:iMult(uBigN)
+        #else /*__ADVPL__*/
+            method iMult(uBigN)
+            method iMultiply(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Exp(lforce AS LOGICAL)
+        
+        #ifdef __HARBOUR__
+            method egMult(uBigN)
+            method egMultiply(uBigN) INLINE self:egMult(uBigN)
+        #else /*__ADVPL__*/
+            method egMult(uBigN)
+            method egMultiply(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method PI(lforce AS LOGICAL)    //TODO: Implementar o calculo.
+        
+        #ifdef __HARBOUR__
+            method rMult(uBigN)
+            method rMultiply(uBigN) INLINE self:rMult(uBigN)
+        #else /*__ADVPL__*/
+            method rMult(uBigN)
+            method rMultiply(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method GCD(uBigN)
-    method LCM(uBigN)
+        
+        #ifdef __HARBOUR__
+            method Div(uBigN,lFloat AS LOGICAL)
+            method Divide(uBigN,lFloat) INLINE self:Div(uBigN,lFloat)
+        #else /*__ADVPL__*/
+            method Div(uBigN,lFloat)
+            method Divide(uBigN,lFloat AS LOGICAL)
+        #endif /*__HARBOUR__*/
 
-    method nthRoot(uBigN)
-    method nthRootPF(uBigN)
-    method nthRootAcc(nSet AS NUMERIC)
+        #ifdef __HARBOUR__
+            method Divmethod(nMethod AS NUMERIC)
+        #else /*__ADVPL__*/
+            method Divmethod(nMethod)
+        #endif /*__HARBOUR__*/
 
-    method SQRT()
-    method SysSQRT(uSet)
+        #ifdef __HARBOUR__
+            method Mod(uBigN)
+        #else /*__ADVPL__*/
+            method Mod(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Log(uBigNB)
-    method LogN(uBigNB)
+        #ifdef __HARBOUR__
+            method Pow(uBigN,lIPower AS LOGICAL)
+        #else /*__ADVPL__*/
+            method Pow(uBigN,lIPower)
+        #endif /*__HARBOUR__*/
 
-    method __Log(uBigNB)
-    method __LogN(uBigNB)   //TODO: Validar Calculo.
+        #ifdef __HARBOUR__
+            method iPow(uBigN)
+        #else /*__ADVPL__*/
+            method iPow(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Log2()           //TODO: Validar Calculo.
-    method Log10()          //TODO: Validar Calculo.
+        #ifdef __HARBOUR__
+            method OpInc()
+        #else /*__ADVPL__*/
+            method OpInc()
+        #endif /*__HARBOUR__*/
 
-    method Ln()             //TODO: Validar Calculo.
+        #ifdef __HARBOUR__
+            method OpDec()
+        #else /*__ADVPL__*/
+            method OpDec()
+        #endif /*__HARBOUR__*/
 
-    method MathC(uBigN1,cOperator AS CHARACTER,uBigN2)
-    method MathN(uBigN1,cOperator AS CHARACTER,uBigN2)
+        #ifdef __HARBOUR__
+            method e(lforce AS LOGICAL)
+        #else /*__ADVPL__*/
+            method e(lforce)
+        #endif /*__HARBOUR__*/
 
-    method Rnd(nAcc AS NUMERIC)
-    method NoRnd(nAcc AS NUMERIC)
-    method Truncate(nAcc AS NUMERIC)
-    method Floor(nAcc AS NUMERIC)   //TODO: Verificar regra a partir de referencias bibliograficas.
-    method Ceiling(nAcc AS NUMERIC) //TODO: Verificar regra a partir de referencias bibliograficas.
+        #ifdef __HARBOUR__
+            method Exp(lforce AS LOGICAL)
+        #else /*__ADVPL__*/
+            method Exp(lforce)
+        #endif /*__HARBOUR__*/
 
-    method D2H(cHexB AS CHARACTER)
-    method H2D()
+        #ifdef __HARBOUR__
+            method PI(lforce AS LOGICAL)    //TODO: Implementar o calculo.
+        #else /*__ADVPL__*/
+            method PI(lforce)               //TODO: Implementar o calculo.
+        #endif /*__HARBOUR__*/
 
-    method H2B()
-    method B2H(cHexB AS CHARACTER)
+        #ifdef __HARBOUR__
+            method GCD(uBigN)
+        #else /*__ADVPL__*/
+            method GCD(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method D2B(cHexB AS CHARACTER)
-    method B2D(cHexB AS CHARACTER)
+        #ifdef __HARBOUR__
+            method LCM(uBigN)
+        #else /*__ADVPL__*/
+            method LCM(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method Randomize(uB,uE)
+        #ifdef __HARBOUR__
+            method nthRoot(uBigN)
+        #else /*__ADVPL__*/
+            method nthRoot(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method millerRabin(uI)
+        #ifdef __HARBOUR__
+            method nthRootPF(uBigN)
+        #else /*__ADVPL__*/
+            method nthRootPF(uBigN)
+        #endif /*__HARBOUR__*/
 
-    method FI()
+        #ifdef __HARBOUR__
+            method nthRootAcc(nSet AS NUMERIC)
+        #else /*__ADVPL__*/
+            method nthRootAcc(nSet)
+        #endif /*__HARBOUR__*/
 
-    method PFactors()
-    method Factorial()    //TODO: Otimizar+
+        #ifdef __HARBOUR__
+            method SQRT()
+        #else /*__ADVPL__*/
+            method SQRT()
+        #endif /*__HARBOUR__*/
 
-    method Fibonacci()
+        #ifdef __HARBOUR__
+            method SysSQRT(uSet)
+        #else /*__ADVPL__*/
+            method SysSQRT(uSet)
+        #endif /*__HARBOUR__*/
 
-#ifndef __PROTHEUS__
+        #ifdef __HARBOUR__
+            method Log(uBigNB)
+        #else /*__ADVPL__*/
+            method Log(uBigNB)
+        #endif /*__HARBOUR__*/
+        
+        #ifdef __HARBOUR__
+            method LogN(uBigNB)
+        #else /*__ADVPL__*/
+            method LogN(uBigNB)
+        #endif /*__HARBOUR__*/
 
-         /* Operators Overloading:
-             "+"     =>__OpPlus
-             "-"     =>__OpMinus
-             "*"     =>__OpMult
-             "/"     =>__OpDivide
-             "%"     =>__OpMod
-             "^"     =>__OpPower
-             "**"    =>__OpPower
-             "++"    =>__OpInc
-             "--"    =>__OpDec
-             "=="    =>__OpEqual
-             "="     =>__OpEqual (same as "==")
-             "!="    =>__OpNotEqual
-             "<>"    =>__OpNotEqual (same as "!=")
-             "#"     =>__OpNotEqual (same as "!=")
-             "<"     =>__OpLess
-             "<="    =>__OpLessEqual
-             ">"     =>__OpGreater
-             ">="    =>__OpGreaterEqual
-             "$"     =>__OpInstring
-             "$$"    =>__OpInclude
-             "!"     =>__OpNot
-             ".not." =>__OpNot (same as "!")
-             ".and." =>__OpAnd
-             ".or."  =>__OpOr
-             ":="    =>__OpAssign
-             "[]"    =>__OpArrayIndex
-        */
+        #ifdef __HARBOUR__
+            method __Log(uBigNB)
+        #else /*__ADVPL__*/
+            method __Log(uBigNB)
+        #endif /*__HARBOUR__*/
 
-/*(*)*/ /* OPERATORS NOT IMPLEMENTED: hb_APICLS.H, CLASSES.C AND HVM.C */
+        #ifdef __HARBOUR__
+            method __LogN(uBigNB)   //TODO: Validar Calculo.
+        #else /*__ADVPL__*/
+            method __LogN(uBigNB)   //TODO: Validar Calculo.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "=="  ARG uBigN INLINE __OpEqual(self,uBigN)
-        OPERATOR "="   ARG uBigN INLINE __OpEqual(self,uBigN)        //(same as "==")
+        #ifdef __HARBOUR__
+            method Log2()           //TODO: Validar Calculo.
+        #else /*__ADVPL__*/
+            method Log2()           //TODO: Validar Calculo.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "!="  ARG uBigN INLINE __OpNotEqual(self,uBigN)
-        OPERATOR "#"   ARG uBigN INLINE __OpNotEqual(self,uBigN)     //(same as "!=")
-        OPERATOR "<>"  ARG uBigN INLINE __OpNotEqual(self,uBigN)     //(same as "!=")
+        #ifdef __HARBOUR__
+            method Log10()          //TODO: Validar Calculo.
+        #else /*__ADVPL__*/
+            method Log10()          //TODO: Validar Calculo.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR ">"   ARG uBigN INLINE __OpGreater(self,uBigN)
-        OPERATOR ">="  ARG uBigN INLINE __OpGreaterEqual(self,uBigN)
+        #ifdef __HARBOUR__
+            method Ln()             //TODO: Validar Calculo.
+        #else /*__ADVPL__*/
+            method Ln()             //TODO: Validar Calculo.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "<"   ARG uBigN INLINE __OpLess(self,uBigN)
-        OPERATOR "<="  ARG uBigN INLINE __OpLessEqual(self,uBigN)
+        #ifdef __HARBOUR__
+            method MathC(uBigN1,cOperator AS CHARACTER,uBigN2)
+        #else /*__ADVPL__*/
+            method MathC(uBigN1,cOperator,uBigN2)
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "++"  INLINE __OpInc(self)
-        OPERATOR "--"  INLINE __OpDec(self)
+        #ifdef __HARBOUR__
+            method MathN(uBigN1,cOperator AS CHARACTER,uBigN2)
+        #else /*__ADVPL__*/
+            method MathN(uBigN1,cOperator,uBigN2)
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
-/*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
+        #ifdef __HARBOUR__
+            method Rnd(nAcc AS NUMERIC)
+        #else /*__ADVPL__*/
+            method Rnd(nAcc)
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
-/*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
+        #ifdef __HARBOUR__        
+            method NoRnd(nAcc AS NUMERIC)
+        #else /*__ADVPL__*/
+            method NoRnd(nAcc)
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
-/*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
+        #ifdef __HARBOUR__
+            method Truncate(nAcc AS NUMERIC)
+        #else /*__ADVPL__*/
+            method Truncate(nAcc)
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
-/*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
+        #ifdef __HARBOUR__
+            method Floor(nAcc AS NUMERIC)   //TODO: Verificar regra a partir de referencias bibliograficas.
+        #else /*__ADVPL__*/
+            method Floor(nAcc)              //TODO: Verificar regra a partir de referencias bibliograficas.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
-/*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
+        #ifdef __HARBOUR__
+            method Ceiling(nAcc AS NUMERIC) //TODO: Verificar regra a partir de referencias bibliograficas.
+        #else /*__ADVPL__*/
+            method Ceiling(nAcc)            //TODO: Verificar regra a partir de referencias bibliograficas.
+        #endif /*__HARBOUR__*/
 
-        OPERATOR "^"   ARGS uBigN,lIPower INLINE __OpPower("^",self,uBigN,lIPower)
-        OPERATOR "**"  ARGS uBigN,lIPower INLINE __OpPower("**",self,uBigN,lIPower)     //(same as "^")
+        #ifdef __HARBOUR__
+            method D2H(cHexB AS CHARACTER)
+        #else /*__ADVPL__*/
+            method D2H(cHexB)
+        #endif /*__HARBOUR__*/
 
-/*(*)*/ OPERATOR "^="  ARGS uBigN,lIPower INLINE __OpPower("^=",self,uBigN,lIPower)
-/*(*)*/ OPERATOR "**=" ARGS uBigN,lIPower INLINE __OpPower("**=",self,uBigN,lIPower)    //(same as "^=")
+        #ifdef __HARBOUR__
+            method H2D()
+        #else /*__ADVPL__*/
+            method H2D()
+        #endif /*__HARBOUR__*/
 
-        OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
+        #ifdef __HARBOUR__
+            method H2B()
+        #else /*__ADVPL__*/
+            method H2B()
+        #endif /*__HARBOUR__*/
 
-#endif //__PROTHEUS__
+        #ifdef __HARBOUR__
+            method B2H(cHexB AS CHARACTER)
+        #else /*__ADVPL__*/
+            method B2H(cHexB)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method D2B(cHexB AS CHARACTER)
+        #else /*__ADVPL__*/
+            method D2B(cHexB)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method B2D(cHexB AS CHARACTER)
+        #else /*__ADVPL__*/
+            method B2D(cHexB)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method Randomize(uB,uE)
+        #else /*__ADVPL__*/
+            method Randomize(uB,uE)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method millerRabin(uI)
+        #else /*__ADVPL__*/
+            method millerRabin(uI)
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method FI()
+        #else /*__ADVPL__*/
+            method FI()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method PFactors()
+        #else /*__ADVPL__*/
+            method PFactors()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method Factorial()    //TODO: Otimizar+
+        #else /*__ADVPL__*/
+            method Factorial()    //TODO: Otimizar+
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method Fibonacci()
+        #else /*__ADVPL__*/
+            method Fibonacci()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+
+                 //--------------------------------------------------------------------------------------------------------
+                 /* Operators Overloading:
+                     "+"     =>__OpPlus
+                     "-"     =>__OpMinus
+                     "*"     =>__OpMult
+                     "/"     =>__OpDivide
+                     "%"     =>__OpMod
+                     "^"     =>__OpPower
+                     "**"    =>__OpPower
+                     "++"    =>__OpInc
+                     "--"    =>__OpDec
+                     "=="    =>__OpEqual
+                     "="     =>__OpEqual (same as "==")
+                     "!="    =>__OpNotEqual
+                     "<>"    =>__OpNotEqual (same as "!=")
+                     "#"     =>__OpNotEqual (same as "!=")
+                     "<"     =>__OpLess
+                     "<="    =>__OpLessEqual
+                     ">"     =>__OpGreater
+                     ">="    =>__OpGreaterEqual
+                     "$"     =>__OpInstring
+                     "$$"    =>__OpInclude
+                     "!"     =>__OpNot
+                     ".not." =>__OpNot (same as "!")
+                     ".and." =>__OpAnd
+                     ".or."  =>__OpOr
+                     ":="    =>__OpAssign
+                     "[]"    =>__OpArrayIndex
+                */
+                //--------------------------------------------------------------------------------------------------------
+
+        /*(*)*/ /* OPERATORS NOT IMPLEMENTED: hb_APICLS.H, CLASSES.C AND HVM.C */
+
+                OPERATOR "=="  ARG uBigN INLINE __OpEqual(self,uBigN)
+                OPERATOR "="   ARG uBigN INLINE __OpEqual(self,uBigN)        //(same as "==")
+
+                OPERATOR "!="  ARG uBigN INLINE __OpNotEqual(self,uBigN)
+                OPERATOR "#"   ARG uBigN INLINE __OpNotEqual(self,uBigN)     //(same as "!=")
+                OPERATOR "<>"  ARG uBigN INLINE __OpNotEqual(self,uBigN)     //(same as "!=")
+
+                OPERATOR ">"   ARG uBigN INLINE __OpGreater(self,uBigN)
+                OPERATOR ">="  ARG uBigN INLINE __OpGreaterEqual(self,uBigN)
+
+                OPERATOR "<"   ARG uBigN INLINE __OpLess(self,uBigN)
+                OPERATOR "<="  ARG uBigN INLINE __OpLessEqual(self,uBigN)
+
+                OPERATOR "++"  INLINE __OpInc(self)
+                OPERATOR "--"  INLINE __OpDec(self)
+
+                OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
+        /*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
+
+                OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
+        /*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
+
+                OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
+        /*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
+
+                OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
+        /*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
+
+                OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
+        /*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
+
+                OPERATOR "^"   ARGS uBigN,lIPower INLINE __OpPower("^",self,uBigN,lIPower)
+                OPERATOR "**"  ARGS uBigN,lIPower INLINE __OpPower("**",self,uBigN,lIPower)     //(same as "^")
+
+        /*(*)*/ OPERATOR "^="  ARGS uBigN,lIPower INLINE __OpPower("^=",self,uBigN,lIPower)
+        /*(*)*/ OPERATOR "**=" ARGS uBigN,lIPower INLINE __OpPower("**=",self,uBigN,lIPower)    //(same as "^=")
+
+                OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
+
+        #endif /*__HARBOUR__*/
 
 endclass
 
-#ifndef __PROTHEUS__
+#ifndef __ADVPL__
 
+    //--------------------------------------------------------------------------------------------------------
     /* overloaded methods/functions */
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpEqual(oSelf AS OBJECT,uBigN)
         return(oSelf:eq(uBigN))
     /*static function __OpEqual*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpNotEqual(oSelf AS OBJECT,uBigN)
         return(oSelf:ne(uBigN))
     /*static function __OpNotEqual*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpGreater(oSelf AS OBJECT,uBigN)
         return(oSelf:gt(uBigN))
     /*static function __OpGreater*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpGreaterEqual(oSelf AS OBJECT,uBigN)
         return(oSelf:gte(uBigN))
     /*static function __OpGreaterEqual*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpLess(oSelf AS OBJECT,uBigN)
         return(oSelf:lt(uBigN))
     /*static function __OpLess*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpLessEqual(oSelf AS OBJECT,uBigN)
         return(oSelf:lte(uBigN))
     /*static function __OpLessEqual*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpInc(oSelf AS OBJECT)
         return(oSelf:OpInc())
     /*static function __OpInc*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpDec(oSelf AS OBJECT)
         return(oSelf:OpDec())
     /*static function __OpDec*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpPlus(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
         local oOpPlus   AS OBJECT
         if cOp=="+="
@@ -484,6 +904,7 @@ endclass
         return(oOpPlus)
     /*static function __OpPlus*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpMinus(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
         local oOpMinus  AS OBJECT
         if cOp=="-="
@@ -494,6 +915,7 @@ endclass
         return(oOpMinus)
     /*static function __OpMinus*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpMult(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
         local oOpMult   AS OBJECT
         if cOp=="*="
@@ -504,6 +926,7 @@ endclass
         return(oOpMult)
     /*static function __OpMult*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpDivide(cOp AS CHARACTER,oSelf AS OBJECT,uBigN,lFloat AS LOGICAL)
         local oOpDivide AS OBJECT
         if cOp=="/="
@@ -514,6 +937,7 @@ endclass
         return(oOpDivide)
     /*static function __OpDivide*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpMod(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
         local oOpMod    AS OBJECT
         if cOp=="%="
@@ -524,6 +948,7 @@ endclass
         return(oOpMod)
     /*static function __OpMod*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpPower(cOp AS CHARACTER,oSelf AS OBJECT,uBigN)
         local oOpPower  AS OBJECT
         switch cOp
@@ -537,117 +962,141 @@ endclass
         return(oOpPower)
     /*static function __OpPower*/
 
+    //--------------------------------------------------------------------------------------------------------
     static function __OpAssign(oSelf AS OBJECT,uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
         return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
     /*static function __OpAssign*/
 
-#else //INLINE HARBOUR METHODS
+#else /*__ADVPL__*//*INLINE HARBOUR/ADVPL METHODS*/
 
+    //--------------------------------------------------------------------------------------------------------
     method Plus(uBigN) class tBigNumber
         return(self:Add(uBigN))
     /*method Plus*/
 
+    //--------------------------------------------------------------------------------------------------------
     method iPlus(uBigN) class tBigNumber
         return(self:iAdd(uBigN))
     /*method iPlus*/
 
+    //--------------------------------------------------------------------------------------------------------
     method Minus(uBigN) class tBigNumber
         return(self:Sub(uBigN))
     /*method Minus*/
 
+    //--------------------------------------------------------------------------------------------------------
     method iMinus(uBigN) class tBigNumber
         return(self:iSub(uBigN))
     /*method iMinus*/
 
+    //--------------------------------------------------------------------------------------------------------
     method Multiply(uBigN)  class tBigNumber
         return(self:Mult(uBigN))
     /*method Multiply*/
 
+    //--------------------------------------------------------------------------------------------------------
     method iMultiply(uBigN)  class tBigNumber
         return(self:iMult(uBigN))
     /*method iMultiply*/
 
+    //--------------------------------------------------------------------------------------------------------
     method egMultiply(uBigN) class tBigNumber
         return(self:egMult(uBigN))
     /*method egMultiply*/
 
+    //--------------------------------------------------------------------------------------------------------
     method rMultiply(uBigN) class tBigNumber
         return(self:rMult(uBigN))
     /*method rMultiply*/
 
+    //--------------------------------------------------------------------------------------------------------
     method Divide(uBigN,lFloat AS LOGICAL) class tBigNumber
         return(self:Div(uBigN,lFloat))
     /*method Divide*/
 
-#endif //__PROTHEUS__
+#endif /*__ADVPL__*/
 
-/*
-    function:u_tBigNumber()
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Instancia um novo Objeto tBigNumber
-    Sintaxe:u_tBigNumber(uBigN,nBase) -> otBigNumber
-*/
-#ifdef __PROTHEUS__
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:u_tBigNumber()
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Instancia um novo Objeto tBigNumber
+        Sintaxe:u_tBigNumber(uBigN,nBase) -> otBigNumber
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __ADVPL__
     function u_tBigNumber(uBigN,nBase AS NUMERIC) AS OBJECT
         return(tBigNumber():New(uBigN,nBase))
     /*function u_tBigNumber*/
 #endif
 
-/*
-    method:New
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:CONSTRUCTOR
-    Sintaxe:tBigNumber():New(uBigN,nBase) -> self
-*/
-method New(uBigN,nBase AS NUMERIC) class tBigNumber
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:New
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:CONSTRUCTOR
+        Sintaxe:tBigNumber():New(uBigN,nBase) -> self
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method New(uBigN,nBase AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method New(uBigN,nBase) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    if s__lstbNSet==NIL
-        DEFAULT s__MTXcN0:=hb_mutexCreate()
-        DEFAULT s__MTXcN9:=hb_mutexCreate()
-        DEFAULT s__MTXACC:=hb_mutexCreate()
-        DEFAULT s__MTXDEC:=hb_mutexCreate()
-        DEFAULT s__MTXSQR:=hb_mutexCreate()
-    endif
-
-    DEFAULT nBase:=10
-    self:nBase:=nBase
-
-    if s__nDecSet==NIL
-        self:SetDecimals()
-    endif
-
-    if s__nthRAcc==NIL
-        self:nthRootAcc()
-    endif
-
-    // -------------------- assign thread static values -------------------------
-    #ifdef __THREAD_STATIC__
-        if ths_lsdSet==NIL
-            __Initsthd()
+        if s__lstbNSet==NIL
+            DEFAULT s__MTXcN0:=hb_mutexCreate()
+            DEFAULT s__MTXcN9:=hb_mutexCreate()
+            DEFAULT s__MTXACC:=hb_mutexCreate()
+            DEFAULT s__MTXDEC:=hb_mutexCreate()
+            DEFAULT s__MTXSQR:=hb_mutexCreate()
         endif
-    #endif //__THREAD_STATIC__
 
-    DEFAULT uBigN:="0"
-    self:SetValue(uBigN,nBase)
+        #ifdef __ADVPL__
+            PARAMETER nBase AS NUMERIC        
+        #endif /*__ADVPL__*/
+        
+        DEFAULT nBase:=10
+        self:nBase:=nBase
 
-     // -------------------- assign static values --------------------------------
-    if s__lstbNSet==NIL
-        __InitstbN(nBase)
-        self:Divmethod(__DIVMETHOD__)
-    endif
+        if s__nDecSet==NIL
+            self:SetDecimals()
+        endif
 
-    return(self)
+        if s__nthRAcc==NIL
+            self:nthRootAcc()
+        endif
+
+        // -------------------- assign thread static values -------------------------
+        #ifdef __THREAD_STATIC__
+            if ths_lsdSet==NIL
+                __Initsthd()
+            endif
+        #endif //__THREAD_STATIC__
+
+        DEFAULT uBigN:="0"
+        self:SetValue(uBigN,nBase)
+
+         // -------------------- assign static values --------------------------------
+        if s__lstbNSet==NIL
+            __InitstbN(nBase)
+            self:Divmethod(__DIVMETHOD__)
+        endif
+
+        return(self)
 
 /*method New*/
 
-/*
-    method:tBigNGC
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:03/03/2013
-    Descricao:DESTRUCTOR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:tBigNGC
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:03/03/2013
+        Descricao:DESTRUCTOR
+    */
+//--------------------------------------------------------------------------------------------------------
 #ifdef TBN_DBFILE
     #ifdef __HARBOUR__
         procedure tBigNGC() class tBigNumber
@@ -677,100 +1126,130 @@ method New(uBigN,nBase AS NUMERIC) class tBigNumber
         /*static procedure tBigNGC*/
 #endif
 
-/*
-    method:__cDec
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__cDec
-    Sintaxe:tBigNumber():__cDec() -> cDec
-*/
-method __cDec(cDec AS CHARACTER) class tBigNumber
-    if .not.(cDec==NIL)
-        self:lNeg:=Left(cDec,1)=="-"
-        if self:lNeg
-            cDec:=SubStr(cDec,2)
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__cDec
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__cDec
+        Sintaxe:tBigNumber():__cDec() -> cDec
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method __cDec(cDec AS CHARACTER) class tBigNumber
+#else /*__ADVPL__*/
+    method __cDec(cDec) class tBigNumber
+        PARAMETER cDec AS CHARACTER
+#endif /*__HARBOUR__*/    
+        if .not.(cDec==NIL)
+            self:lNeg:=Left(cDec,1)=="-"
+            if self:lNeg
+                cDec:=SubStr(cDec,2)
+            endif
+            self:cDec:=cDec
+            self:nDec:=hb_bLen(cDec)
+            self:nSize:=self:nInt+self:nDec
+            if self:eq(s__o0)
+                self:lNeg:=.F.
+                self:cSig:=""
+            endif
         endif
-        self:cDec:=cDec
-        self:nDec:=hb_bLen(cDec)
-        self:nSize:=self:nInt+self:nDec
-        if self:eq(s__o0)
-            self:lNeg:=.F.
-            self:cSig:=""
-        endif
-    endif
-    return(self:cDec)
+        return(self:cDec)
 /*method __cDec*/
 
-/*
-    method:__cInt
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__cDec
-    Sintaxe:tBigNumber():__cInt() -> cInt
-*/
-method __cInt(cInt AS CHARACTER) class tBigNumber
-    if .not.(cInt==NIL)
-        self:lNeg:=Left(cInt,1)=="-"
-        if self:lNeg
-            cInt:=SubStr(cInt,2)
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__cInt
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__cDec
+        Sintaxe:tBigNumber():__cInt() -> cInt
+    */
+//--------------------------------------------------------------------------------------------------------3
+#ifdef __HARBOUR__
+    method __cInt(cInt AS CHARACTER) class tBigNumber
+#else /*__ADVPL__*/
+    method __cInt(cInt) class tBigNumber
+        PARAMETER cInt AS CHARACTER
+#endif /*__HARBOUR__*/    
+        if .not.(cInt==NIL)
+            self:lNeg:=Left(cInt,1)=="-"
+            if self:lNeg
+                cInt:=SubStr(cInt,2)
+            endif
+            self:cInt:=cInt
+            self:nInt:=hb_bLen(cInt)
+            self:nSize:=self:nInt+self:nDec
+            if self:eq(s__o0)
+                self:lNeg:=.F.
+                self:cSig:=""
+            endif
         endif
-        self:cInt:=cInt
-        self:nInt:=hb_bLen(cInt)
-        self:nSize:=self:nInt+self:nDec
-        if self:eq(s__o0)
-            self:lNeg:=.F.
-            self:cSig:=""
-        endif
-    endif
-    return(self:cInt)
+        return(self:cInt)
 /*method __cInt*/
 
-/*
-    method:__cRDiv
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:30/03/2014
-    Descricao:__cRDiv
-    Sintaxe:tBigNumber():__cRDiv() -> __cRDiv
-*/
-method __cRDiv(cRDiv AS CHARACTER) class tBigNumber
-    if .not.(cRDiv==NIL)
-        if Empty(cRDiv)
-            cRDiv:="0"
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__cRDiv
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:30/03/2014
+        Descricao:__cRDiv
+        Sintaxe:tBigNumber():__cRDiv() -> __cRDiv
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method __cRDiv(cRDiv AS CHARACTER) class tBigNumber
+#else /*__ADVPL__
+    method __cRDiv(cRDiv) class tBigNumber
+        PARAMETER cRDiv AS CHARACTER
+#endif /*__HARBOUR__*/ 
+        if .not.(cRDiv==NIL)
+            if Empty(cRDiv)
+                cRDiv:="0"
+            endif
+            self:cRDiv:=cRDiv
         endif
-        self:cRDiv:=cRDiv
-    endif
-    return(self:cRDiv)
+        return(self:cRDiv)
 /*method __cRDiv*/
 
-/*
-    method:__cSig
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__cSig
-    Sintaxe:tBigNumber():__cSig() -> cSig
-*/
-method __cSig(cSig AS CHARACTER) class tBigNumber
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__cSig
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__cSig
+        Sintaxe:tBigNumber():__cSig() -> cSig
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method __cSig(cSig AS CHARACTER) class tBigNumber
+#else /*__ADVPL__*/
+    method __cSig(cSig) class tBigNumber
+        PARAMETER cSig AS CHARACTER
+#endif /*__HARBOUR__*/
     if .not.(cSig==NIL)
-        self:cSig:=cSig
-        self:lNeg:=(cSig=="-")
-        if self:eq(s__o0)
-            self:lNeg:=.F.
-            self:cSig:=""
+            self:cSig:=cSig
+            self:lNeg:=(cSig=="-")
+            if self:eq(s__o0)
+                self:lNeg:=.F.
+                self:cSig:=""
+            endif
+            if .not.(self:lNeg)
+                self:cSig:=""
+            endif
         endif
-        if .not.(self:lNeg)
-            self:cSig:=""
-        endif
-    endif
-    return(self:cSig)
+        return(self:cSig)
 /*method __cSig*/
 
-/*
-    method:__lNeg
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__lNeg
-    Sintaxe:tBigNumber():__lNeg() -> lNeg
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__lNeg
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__lNeg
+        Sintaxe:tBigNumber():__lNeg() -> lNeg
+    */
+//--------------------------------------------------------------------------------------------------------
 method __lNeg(lNeg AS LOGICAL) class tBigNumber
     if .not.(lNeg==NIL)
         self:lNeg:=lNeg
@@ -785,13 +1264,15 @@ method __lNeg(lNeg AS LOGICAL) class tBigNumber
     return(self:lNeg)
 /*method __lNeg*/
 
-/*
-    method:__nBase
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__nBase
-    Sintaxe:tBigNumber():__nBase() -> nBase
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__nBase
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__nBase
+        Sintaxe:tBigNumber():__nBase() -> nBase
+    */
+//--------------------------------------------------------------------------------------------------------
 method __nBase(nBase AS NUMERIC) class tBigNumber
     if .not.(nBase==NIL)
         self:nBase:=nBase
@@ -799,13 +1280,15 @@ method __nBase(nBase AS NUMERIC) class tBigNumber
     return(self:nBase)
 /*method __nBase*/
 
-/*
-    method:__nDec
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__nDec
-    Sintaxe:tBigNumber():__nDec() -> nDec
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__nDec
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__nDec
+        Sintaxe:tBigNumber():__nDec() -> nDec
+    */
+//--------------------------------------------------------------------------------------------------------
 method __nDec(nDec AS NUMERIC) class tBigNumber
     if .not.(nDec==NIL)
         if nDec>self:nDec
@@ -819,13 +1302,15 @@ method __nDec(nDec AS NUMERIC) class tBigNumber
     return(self:nDec)
 /*method __nDec*/
 
-/*
-    method:__nInt
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:__nInt
-    Sintaxe:tBigNumber():__nInt() -> nInt
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__nInt
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:__nInt
+        Sintaxe:tBigNumber():__nInt() -> nInt
+    */
+//--------------------------------------------------------------------------------------------------------
 method __nInt(nInt AS NUMERIC) class tBigNumber
     if .not.(nInt==NIL)
         if nInt>self:nInt
@@ -837,13 +1322,15 @@ method __nInt(nInt AS NUMERIC) class tBigNumber
     return(self:nInt)
 /*method __nInt*/
 
-/*
-    method:__nSize
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:17/02/2014
-    Descricao:nSize
-    Sintaxe:tBigNumber():__nSize() -> nSize
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__nSize
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:17/02/2014
+        Descricao:nSize
+        Sintaxe:tBigNumber():__nSize() -> nSize
+    */
+//--------------------------------------------------------------------------------------------------------
 method __nSize(nSize AS NUMERIC) class tBigNumber
     if .not.(nSize==NIL)
         if nSize>self:nInt+self:nDec
@@ -860,13 +1347,15 @@ method __nSize(nSize AS NUMERIC) class tBigNumber
     return(self:nSize)
 /*method __nSize*/
 
-/*
-    method:Clone
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:27/03/2013
-    Descricao:Clone
-    Sintaxe:tBigNumber():Clone() -> oClone
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Clone
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:27/03/2013
+        Descricao:Clone
+        Sintaxe:tBigNumber():Clone() -> oClone
+    */
+//--------------------------------------------------------------------------------------------------------
 method Clone() class tBigNumber
     local oClone    AS OBJECT
     #ifdef __THREAD_STATIC__
@@ -874,44 +1363,48 @@ method Clone() class tBigNumber
             if ths_lsdSet==NIL
                 oClone:=tBigNumber():New(self)
             else
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     oClone:=tBigNumber():New(self)
-                #else  //__HARBOUR__
+                #else  /*__HARBOUR__*/
                     oClone:=__objClone(self)
-                #endif //__PROTHEUS__
+                #endif /*__ADVPL__*/
             endif
         catch
             ths_lsdSet:=NIL
             oClone:=tBigNumber():New(self)
         end
     #else
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             oClone:=tBigNumber():New(self)
-        #else  //__HARBOUR__
+        #else  /*__HARBOUR__*/
             oClone:=__objClone(self)
-        #endif //__PROTHEUS__
+        #endif /*__ADVPL__*/
     #endif //__THREAD_STATIC__
     return(oClone)
 /*method Clone*/
 
-/*
-    method:className
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:className
-    Sintaxe:tBigNumber():className() -> cclassName
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:className
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:className
+        Sintaxe:tBigNumber():className() -> cclassName
+    */
+//--------------------------------------------------------------------------------------------------------
 method className() class tBigNumber
     return("TBIGNUMBER")
 /*method className*/
 
-/*
-    method:SetDecimals
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Setar o Numero de Casas Decimais
-    Sintaxe:tBigNumber():SetDecimals(nSet) -> nLastSet
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:SetDecimals
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Setar o Numero de Casas Decimais
+        Sintaxe:tBigNumber():SetDecimals(nSet) -> nLastSet
+    */
+//--------------------------------------------------------------------------------------------------------
 method SetDecimals(nSet AS NUMERIC) class tBigNumber
 
     local nLastSet  AS NUMERIC
@@ -942,13 +1435,15 @@ method SetDecimals(nSet AS NUMERIC) class tBigNumber
 
 /*method SetDecimals*/
 
-/*
-    method:nthRootAcc
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Setar a Precisao para nthRoot
-    Sintaxe:tBigNumber():nthRootAcc(nSet) -> nLastSet
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:nthRootAcc
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Setar a Precisao para nthRoot
+        Sintaxe:tBigNumber():nthRootAcc(nSet) -> nLastSet
+    */
+//--------------------------------------------------------------------------------------------------------
 method nthRootAcc(nSet AS NUMERIC) class tBigNumber
 
     local nLastSet  AS NUMERIC
@@ -977,13 +1472,15 @@ method nthRootAcc(nSet AS NUMERIC) class tBigNumber
 
 /*method nthRootAcc*/
 
-/*
-    method:SetValue
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:SetValue
-    Sintaxe:tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:SetValue
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:SetValue
+        Sintaxe:tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
+    */
+//--------------------------------------------------------------------------------------------------------
 method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC) class tBigNumber
 
     local cType AS CHARACTER
@@ -1006,7 +1503,7 @@ method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc
 
         #ifdef __TBN_DYN_OBJ_SET__
 
-            #ifdef __PROTHEUS__
+            #ifdef __ADVPL__
 
                 oThis:=self
                 uBigN:=classDataArr(uBigN)
@@ -1151,7 +1648,7 @@ method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc
             while self:nInt>1.and.Left(self:cInt,1)=="0"
                 self:cInt:=Right(self:cInt,--self:nInt)
             end while
-        #endif //__HARBOUR__
+        #endif /*__HARBOUR__*/
     endif
 
     DEFAULT nAcc:=s__nDecSet
@@ -1170,13 +1667,15 @@ method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc
 
 /*method SetValue*/
 
-/*
-    method:GetValue
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:GetValue
-    Sintaxe:tBigNumber():GetValue(lAbs,lObj) -> uNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:GetValue
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:GetValue
+        Sintaxe:tBigNumber():GetValue(lAbs,lObj) -> uNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
     local uNR
@@ -1197,13 +1696,15 @@ method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
 /*method GetValue*/
 
-/*
-    method:ExactValue
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:ExactValue
-    Sintaxe:tBigNumber():ExactValue(lAbs) -> uNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:ExactValue
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:ExactValue
+        Sintaxe:tBigNumber():ExactValue(lAbs) -> uNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
     local cDec  AS CHARACTER
@@ -1231,24 +1732,28 @@ method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
 
 /*method ExactValue*/
 
-/*
-    method:Abs
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna o Valor Absoluto de um Numero
-    Sintaxe:tBigNumber():Abs() -> uNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Abs
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna o Valor Absoluto de um Numero
+        Sintaxe:tBigNumber():Abs() -> uNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Abs(lObj AS LOGICAL) class tBigNumber
     return(self:GetValue(.T.,lObj))
 /*method Abs*/
 
-/*
-    method:Int
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna a Parte Inteira de um Numero
-    Sintaxe:tBigNumber():Int(lObj,lSig) -> uNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Int
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna a Parte Inteira de um Numero
+        Sintaxe:tBigNumber():Int(lObj,lSig) -> uNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
     local uNR
     DEFAULT lObj:=.F.
@@ -1260,13 +1765,15 @@ method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
     return(uNR)
 /*method Int*/
 
-/*
-    method:Dec
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna a Parte Decimal de um Numero
-    Sintaxe:tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Dec
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna a Parte Decimal de um Numero
+        Sintaxe:tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
 
     local cDec  AS CHARACTER
@@ -1297,13 +1804,15 @@ method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
 
 /*method Dec*/
 
-/*
-    method:eq
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Compara se o valor corrente eh igual ao passado como parametro
-    Sintaxe:tBigNumber():eq(uBigN) -> leq
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:eq
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Compara se o valor corrente eh igual ao passado como parametro
+        Sintaxe:tBigNumber():eq(uBigN) -> leq
+    */
+//--------------------------------------------------------------------------------------------------------
 method eq(uBigN) class tBigNumber
 
     local leq   AS LOGICAL
@@ -1331,25 +1840,28 @@ method eq(uBigN) class tBigNumber
 
  /*method eq*/
 
-/*
-    method:ne
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Verifica se o valor corrente eh igual ao valor passado como parametro
-    Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:ne
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Verifica se o valor corrente eh igual ao valor passado como parametro
+        Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
+    */
+//--------------------------------------------------------------------------------------------------------
 method ne(uBigN) class tBigNumber
     return(.not.(self:eq(uBigN)))
 /*method ne*/
 
-
-/*
-    method:gt
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Verifica se o valor corrente eh maior que o valor passado como parametro
-    Sintaxe:tBigNumber():gt(uBigN) -> lgt
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:gt
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Verifica se o valor corrente eh maior que o valor passado como parametro
+        Sintaxe:tBigNumber():gt(uBigN) -> lgt
+    */
+//--------------------------------------------------------------------------------------------------------
 method gt(uBigN) class tBigNumber
 
     local lgt   AS LOGICAL
@@ -1389,13 +1901,15 @@ method gt(uBigN) class tBigNumber
 
 /*method gt*/
 
-/*
-    method:lt
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Verifica se o valor corrente eh menor que o valor passado como parametro
-    Sintaxe:tBigNumber():lt(uBigN) -> llt
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:lt
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Verifica se o valor corrente eh menor que o valor passado como parametro
+        Sintaxe:tBigNumber():lt(uBigN) -> llt
+    */
+//--------------------------------------------------------------------------------------------------------
 method lt(uBigN) class tBigNumber
 
     local llt   AS LOGICAL
@@ -1435,38 +1949,44 @@ method lt(uBigN) class tBigNumber
 
 /*method lt*/
 
-/*
-    method:gte
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Verifica se o valor corrente eh maior ou igual ao valor passado como parametro
-    Sintaxe:tBigNumber():gte(uBigN) -> lgte
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:gte
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Verifica se o valor corrente eh maior ou igual ao valor passado como parametro
+        Sintaxe:tBigNumber():gte(uBigN) -> lgte
+    */
+//--------------------------------------------------------------------------------------------------------
 method gte(uBigN) class tBigNumber
     return(self:cmp(uBigN)>=0)
 /*method gte(*/
 
-/*
-    method:lte
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Verifica se o valor corrente eh menor ou igual ao valor passado como parametro
-    Sintaxe:tBigNumber():lte(uBigN) -> lte
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:lte
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Verifica se o valor corrente eh menor ou igual ao valor passado como parametro
+        Sintaxe:tBigNumber():lte(uBigN) -> lte
+    */
+//--------------------------------------------------------------------------------------------------------
 method lte(uBigN) class tBigNumber
     return(self:cmp(uBigN)<=0)
 /*method lte*/
 
-/*
-    method:cmp
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:11/03/2014
-    Descricao:Compara self com valor passado como parametro e retorna:
-                  -1:self < que valor de referencia;
-                   0:self = valor de referencia;
-                   1:self > que valor de referencia;
-    Sintaxe:tBigNumber():cmp(uBigN) -> nCmp
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:cmp
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:11/03/2014
+        Descricao:Compara self com valor passado como parametro e retorna:
+                      -1:self < que valor de referencia;
+                       0:self = valor de referencia;
+                       1:self > que valor de referencia;
+        Sintaxe:tBigNumber():cmp(uBigN) -> nCmp
+    */
+//--------------------------------------------------------------------------------------------------------
 method cmp(uBigN) class tBigNumber
 
     local nCmp  AS NUMERIC
@@ -1539,25 +2059,28 @@ method cmp(uBigN) class tBigNumber
 
 /*method cmp*/
 
-
-/*
-    method:btw (between)
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:01/04/2014
-    Descricao:Retorna .T. se self estiver no intervalo passado.
-    Sintaxe:tBigNumber():btw(uBigS,uBigE) -> lRet
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:btw (between)
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:01/04/2014
+        Descricao:Retorna .T. se self estiver no intervalo passado.
+        Sintaxe:tBigNumber():btw(uBigS,uBigE) -> lRet
+    */
+//--------------------------------------------------------------------------------------------------------
 method btw(uBigS,uBigE) class tBigNumber
     return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
 /*method btw*/
 
-/*
-    method:ibtw (integer between)
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:11/03/2014
-    Descricao:Retorna .T. se self estiver no intervalo passado.
-    Sintaxe:tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:ibtw (integer between)
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:11/03/2014
+        Descricao:Retorna .T. se self estiver no intervalo passado.
+        Sintaxe:tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
+    */
+//--------------------------------------------------------------------------------------------------------
 method ibtw(uiBigS,uiBigE) class tBigNumber
     local lbtw      AS LOGICAL
     local oibtwS    AS OBJECT
@@ -1575,13 +2098,15 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
     return(lbtw)
 /*method ibtw*/
 
-/*
-    method:Max
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna o maior valor entre o valor corrente e o valor passado como parametro
-    Sintaxe:tBigNumber():Max(uBigN) -> oMax
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Max
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna o maior valor entre o valor corrente e o valor passado como parametro
+        Sintaxe:tBigNumber():Max(uBigN) -> oMax
+    */
+//--------------------------------------------------------------------------------------------------------
 method Max(uBigN) class tBigNumber
     local oMax  AS OBJECT
     oMax:=tBigNumber():New(uBigN)
@@ -1591,14 +2116,15 @@ method Max(uBigN) class tBigNumber
     return(oMax)
 /*method Max*/
 
-
-/*
-    method:Min
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna o menor valor entre o valor corrente e o valor passado como parametro
-    Sintaxe:tBigNumber():Min(uBigN) -> oMin
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Min
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna o menor valor entre o valor corrente e o valor passado como parametro
+        Sintaxe:tBigNumber():Min(uBigN) -> oMin
+    */
+//--------------------------------------------------------------------------------------------------------
 method Min(uBigN) class tBigNumber
     local oMin  AS OBJECT
     oMin:=tBigNumber():New(uBigN)
@@ -1608,14 +2134,15 @@ method Min(uBigN) class tBigNumber
     return(oMin)
 /*method Min*/
 
-
-/*
-    method:Add
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Soma
-    Sintaxe:tBigNumber():Add(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Add
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Soma
+        Sintaxe:tBigNumber():Add(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Add(uBigN) class tBigNumber
 
     local cInt  AS CHARACTER
@@ -1662,7 +2189,7 @@ method Add(uBigN) class tBigNumber
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
-        #endif //__HARBOUR__
+        #endif /*__HARBOUR__*/
         lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
         if lInv
             cNT:=cN1
@@ -1699,13 +2226,15 @@ method Add(uBigN) class tBigNumber
 
 /*method Add*/
 
-/*
-    method:iAdd
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:18/02/2015
-    Descricao:Soma de Inteiros
-    Sintaxe:tBigNumber():iAdd(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:iAdd
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/02/2015
+        Descricao:Soma de Inteiros
+        Sintaxe:tBigNumber():iAdd(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method iAdd(uBigN) class tBigNumber
 
     local cN1   AS CHARACTER
@@ -1744,7 +2273,7 @@ method iAdd(uBigN) class tBigNumber
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
-        #endif //__HARBOUR__
+        #endif /*__HARBOUR__*/
         lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
         if lInv
             cNT:=cN1
@@ -1774,13 +2303,15 @@ method iAdd(uBigN) class tBigNumber
 
 /*method iAdd*/
 
-/*
-    method:Sub
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Subtracao
-    Sintaxe:tBigNumber():Sub(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Sub
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Subtracao
+        Sintaxe:tBigNumber():Sub(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Sub(uBigN) class tBigNumber
 
     local cInt  AS CHARACTER
@@ -1830,7 +2361,7 @@ method Sub(uBigN) class tBigNumber
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
-        #endif //__HARBOUR__
+        #endif /*__HARBOUR__*/
         lNeg:=osbN1:lNeg.or.lInv
         if lInv
             cNT:=cN1
@@ -1864,14 +2395,15 @@ method Sub(uBigN) class tBigNumber
 
 /*method Sub*/
 
-
-/*
-    method:iSub
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:18/02/2015
-    Descricao:Subtracao de Inteiros
-    Sintaxe:tBigNumber():iSub(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:iSub
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/02/2015
+        Descricao:Subtracao de Inteiros
+        Sintaxe:tBigNumber():iSub(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method iSub(uBigN) class tBigNumber
 
     local cN1   AS CHARACTER
@@ -1913,7 +2445,7 @@ method iSub(uBigN) class tBigNumber
             lInv:=tBIGNmemcmp(cN1,cN2)==-1
         #else //__PROTEUS__
             lInv:=cN1<cN2
-        #endif //__HARBOUR__
+        #endif /*__HARBOUR__*/
         lNeg:=osbN1:lNeg.or.lInv
         if lInv
             cNT:=cN1
@@ -1940,14 +2472,15 @@ method iSub(uBigN) class tBigNumber
 
 /*method iSub*/
 
-
-/*
-    method:Mult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Multiplicacao
-    Sintaxe:tBigNumber():Mult(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Mult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao
+        Sintaxe:tBigNumber():Mult(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Mult(uBigN) class tBigNumber
 
     local cInt  AS CHARACTER
@@ -2015,13 +2548,15 @@ method Mult(uBigN) class tBigNumber
 
 /*method Mult*/
 
-/*
-    method:iMult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:18/02/2015
-    Descricao:Multiplicacao
-    Sintaxe:tBigNumber():iMult(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:iMult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/02/2015
+        Descricao:Multiplicacao
+        Sintaxe:tBigNumber():iMult(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method iMult(uBigN) class tBigNumber
 
     local cN1   AS CHARACTER
@@ -2069,13 +2604,15 @@ method iMult(uBigN) class tBigNumber
 
 /*method iMult*/
 
-/*
-    method:egMult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Multiplicacao Egipcia
-    Sintaxe:tBigNumber():egMult(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:egMult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao Egipcia
+        Sintaxe:tBigNumber():egMult(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method egMult(uBigN) class tBigNumber
 
     local cInt  AS CHARACTER
@@ -2140,13 +2677,15 @@ method egMult(uBigN) class tBigNumber
 
 /*method egMult*/
 
-/*
-    method:rMult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Multiplicacao Russa
-    Sintaxe:tBigNumber():rMult(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:rMult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao Russa
+        Sintaxe:tBigNumber():rMult(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method rMult(uBigN) class tBigNumber
 
     local cInt  AS CHARACTER
@@ -2211,13 +2750,15 @@ method rMult(uBigN) class tBigNumber
 
 /*method rMult*/
 
-/*
-    method:Div
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Divisao
-    Sintaxe:tBigNumber():Div(uBigN,lFloat) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Div
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Divisao
+        Sintaxe:tBigNumber():Div(uBigN,lFloat) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
 
     local cDec  AS CHARACTER
@@ -2366,13 +2907,15 @@ method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
     return(odvNR)
 /*method Div*/
 
-/*
-    method:Divmethod
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:24/03/2014
-    Descricao:Setar o metodo de Divisao a ser utilizado
-    Sintaxe:tBigNumber():Divmethod(nMethod) -> nLstmethod
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Divmethod
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:24/03/2014
+        Descricao:Setar o metodo de Divisao a ser utilizado
+        Sintaxe:tBigNumber():Divmethod(nMethod) -> nLstmethod
+    */
+//--------------------------------------------------------------------------------------------------------
 method Divmethod(nMethod AS NUMERIC) class tBigNumber
     local nLstmethod    AS NUMERIC
     DEFAULT s__nDivMTD:=__DIVMETHOD__
@@ -2382,13 +2925,15 @@ method Divmethod(nMethod AS NUMERIC) class tBigNumber
     return(nLstmethod)
 /*method Divmethod*/
 
-/*
-    method:Mod
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2013
-    Descricao:Resto da Divisao
-    Sintaxe:tBigNumber():Mod(uBigN) -> oMod
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Mod
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2013
+        Descricao:Resto da Divisao
+        Sintaxe:tBigNumber():Mod(uBigN) -> oMod
+    */
+//--------------------------------------------------------------------------------------------------------
 method Mod(uBigN) class tBigNumber
     local oMod  AS OBJECT
     local nCmp  AS NUMERIC
@@ -2405,14 +2950,15 @@ method Mod(uBigN) class tBigNumber
     return(oMod)
 /*method Mod*/
 
-
-/*
-    method:Pow
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2013
-    Descricao:Calculo de Potencia n^x
-    Sintaxe:tBigNumber():Pow(uBigN,lIPower) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Pow
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2013
+        Descricao:Calculo de Potencia n^x
+        Sintaxe:tBigNumber():Pow(uBigN,lIPower) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Pow(uBigN,lIPower AS LOGICAL) class tBigNumber
 
     local oSelf AS OBJECT
@@ -2515,24 +3061,28 @@ method Pow(uBigN,lIPower AS LOGICAL) class tBigNumber
     return(opwNR)
 /*method Pow*/
 
-/*
-    method:iPow
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:19/09/2016
-    Descricao:Calculo de Potencia de Inteiros n^x
-    Sintaxe:tBigNumber():iPow(uBigN) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:iPow
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:19/09/2016
+        Descricao:Calculo de Potencia de Inteiros n^x
+        Sintaxe:tBigNumber():iPow(uBigN) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method iPow(uBigN) class tBigNumber
     return(self:Pow(uBigN,.T.))
 /*method iPow*/
 
-/*
-    method:OpInc
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Incrementa em 1
-    Sintaxe:tBigNumber():OpInc() -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:OpInc
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Incrementa em 1
+        Sintaxe:tBigNumber():OpInc() -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method OpInc() class tBigNumber
 #ifdef __PTCOMPAT__
     return(self:SetValue(self:iAdd(s__o1)))
@@ -2541,13 +3091,15 @@ method OpInc() class tBigNumber
 #endif
 /*method OpInc()*/
 
-/*
-    method:OpDec
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Decrementa em 1
-    Sintaxe:tBigNumber():OpDec() -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:OpDec
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Decrementa em 1
+        Sintaxe:tBigNumber():OpDec() -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method OpDec() class tBigNumber
 #ifdef __PTCOMPAT__
     return(self:SetValue(self:iSub(s__o1)))
@@ -2556,14 +3108,16 @@ method OpDec() class tBigNumber
 #endif
 /*method OpDec*/
 
-/*
-    method:e
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/02/2013
-    Descricao:Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
-    Sintaxe:tBigNumber():e(lforce) -> oeTthD
-    (((n+1)^(n+1))/(n^n))-((n^n)/((n-1)^(n-1)))
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:e
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/02/2013
+        Descricao:Retorna o Numero de Neper (2.718281828459045235360287471352662497757247...)
+        Sintaxe:tBigNumber():e(lforce) -> oeTthD
+        (((n+1)^(n+1))/(n^n))-((n^n)/((n-1)^(n-1)))
+    */
+//--------------------------------------------------------------------------------------------------------
 method e(lforce AS LOGICAL) class tBigNumber
 
     local oeTthD    AS OBJECT
@@ -2618,14 +3172,15 @@ method e(lforce AS LOGICAL) class tBigNumber
 
  /*method e*/
 
-
-/*
-    method:Exp
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/02/2013
-    Descricao:Potencia do Numero de Neper e^cN
-    Sintaxe:tBigNumber():Exp(lforce) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Exp
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/02/2013
+        Descricao:Potencia do Numero de Neper e^cN
+        Sintaxe:tBigNumber():Exp(lforce) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Exp(lforce AS LOGICAL) class tBigNumber
 
     local oBigNe    AS OBJECT
@@ -2637,13 +3192,15 @@ method Exp(lforce AS LOGICAL) class tBigNumber
     return(oBigNR)
 /*method Exp*/
 
-/*
-    method:PI
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
-    Sintaxe:tBigNumber():PI(lforce) -> oPITthD
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:PI
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Retorna o Numero Irracional PI (3.1415926535897932384626433832795...)
+        Sintaxe:tBigNumber():PI(lforce) -> oPITthD
+    */
+//--------------------------------------------------------------------------------------------------------
 method PI(lforce AS LOGICAL) class tBigNumber
 
     local oPITthD   AS OBJECT
@@ -2670,13 +3227,15 @@ method PI(lforce AS LOGICAL) class tBigNumber
     return(oPITthD)
 /*method PI*/
 
-/*
-    method:GCD
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:23/02/2013
-    Descricao:Retorna o GCD/MDC
-    Sintaxe:tBigNumber():GCD(uBigN) -> oGCD
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:GCD
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:23/02/2013
+        Descricao:Retorna o GCD/MDC
+        Sintaxe:tBigNumber():GCD(uBigN) -> oGCD
+    */
+//--------------------------------------------------------------------------------------------------------
 method GCD(uBigN) class tBigNumber
 
     local oX    AS OBJECT
@@ -2716,7 +3275,7 @@ static function cGCD(nX AS NUMERIC,nY AS NUMERIC)
     #ifndef __PTCOMPAT__
         local nGCD  AS NUMERIC
         nGCD:=TBIGNGCD(nX,nY)
-    #else //__PROTHEUS__
+    #else /*__ADVPL__*/
         local nGCD  AS NUMERIC
         nGCD:=nX
         nX:=Max(nY,nGCD)
@@ -2738,13 +3297,15 @@ static function cGCD(nX AS NUMERIC,nY AS NUMERIC)
 
 /*static function cGCD*/
 
-/*
-    method:LCM
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:23/02/2013
-    Descricao:Retorna o LCM/MMC
-    Sintaxe:tBigNumber():LCM(uBigN) -> oLCM
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:LCM
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:23/02/2013
+        Descricao:Retorna o LCM/MMC
+        Sintaxe:tBigNumber():LCM(uBigN) -> oLCM
+    */
+//--------------------------------------------------------------------------------------------------------
 method LCM(uBigN) class tBigNumber
 
     local oX    AS OBJECT
@@ -2795,7 +3356,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         local nLCM  AS NUMERIC
         nLCM:=TBIGNLCM(nX,nY)
 
-    #else //__PROTHEUS__
+    #else /*__ADVPL__*/
 
         local nLCM  AS NUMERIC
         local nI    AS NUMERIC
@@ -2832,14 +3393,16 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
 /*static function cLCM*/
 
-/*
+//--------------------------------------------------------------------------------------------------------
+    /*
 
-    method:nthRoot
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2013
-    Descricao:Radiciacao
-    Sintaxe:tBigNumber():nthRoot(uBigN) -> othRoot
-*/
+        method:nthRoot
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2013
+        Descricao:Radiciacao
+        Sintaxe:tBigNumber():nthRoot(uBigN) -> othRoot
+    */
+//--------------------------------------------------------------------------------------------------------
 method nthRoot(uBigN) class tBigNumber
 
     local cFExit    AS CHARACTER
@@ -2898,14 +3461,16 @@ method nthRoot(uBigN) class tBigNumber
 
 /*method nthRoot*/
 
-/*
+//--------------------------------------------------------------------------------------------------------
+    /*
 
-    method:nthRootPF
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2013
-    Descricao:Radiciacao utilizando Fatores Primos
-    Sintaxe:tBigNumber():nthRootPF(uBigN) -> othRoot
-*/
+        method:nthRootPF
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2013
+        Descricao:Radiciacao utilizando Fatores Primos
+        Sintaxe:tBigNumber():nthRootPF(uBigN) -> othRoot
+    */
+//--------------------------------------------------------------------------------------------------------
 method nthRootPF(uBigN) class tBigNumber
 
     local aIPF      AS ARRAY
@@ -3036,13 +3601,15 @@ method nthRootPF(uBigN) class tBigNumber
 
 /*method nthRootPF*/
 
-/*
-    method:SQRT
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/03/2013
-    Descricao:Retorna a Raiz Quadrada (radix quadratum -> O Lado do Quadrado) do Numero passado como parametro
-    Sintaxe:tBigNumber():SQRT() -> oSQRT
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:SQRT
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/03/2013
+        Descricao:Retorna a Raiz Quadrada (radix quadratum -> O Lado do Quadrado) do Numero passado como parametro
+        Sintaxe:tBigNumber():SQRT() -> oSQRT
+    */
+//--------------------------------------------------------------------------------------------------------
 method SQRT() class tBigNumber
 
     local oSQRT AS OBJECT
@@ -3067,13 +3634,15 @@ method SQRT() class tBigNumber
 
 /*method SQRT*/
 
-/*
-    method:SysSQRT
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/03/2013
-    Descricao:Define o valor maximo para calculo da SQRT considerando a funcao padrao
-    Sintaxe:tBigNumber():SysSQRT(uSet) -> oSysSQRT
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:SysSQRT
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/03/2013
+        Descricao:Define o valor maximo para calculo da SQRT considerando a funcao padrao
+        Sintaxe:tBigNumber():SysSQRT(uSet) -> oSysSQRT
+    */
+//--------------------------------------------------------------------------------------------------------
 method SysSQRT(uSet) class tBigNumber
 
     local cType AS CHARACTER
@@ -3093,24 +3662,28 @@ method SysSQRT(uSet) class tBigNumber
 
 /*method SysSQRT*/
 
-/*
-    method:Log
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe:tBigNumber():Log(BigNB) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Log
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo na Base N DEFAULT e
+        Sintaxe:tBigNumber():Log(BigNB) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Log(uBigNB) class tBigNumber
     return(self:LogN(uBigNB))
 /*method Log*/
 
-/*
-    method:LogN
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe:tBigNumber():LogN(BigNB) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:LogN
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo na Base N DEFAULT e
+        Sintaxe:tBigNumber():LogN(BigNB) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method LogN(uBigNB) class tBigNumber
     local oB    AS OBJECT
     local oR    AS OBJECT
@@ -3130,26 +3703,29 @@ method LogN(uBigNB) class tBigNumber
     return(oR)
 /*method LogN*/
 
-
-/*
-    method:__Log
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe:tBigNumber():__Log(BigNB) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__Log
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo na Base N DEFAULT e
+        Sintaxe:tBigNumber():__Log(BigNB) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method __Log(uBigNB) class tBigNumber
     return(self:__LogN(uBigNB))
 /*method __Log*/
 
-/*
-    method:__LogN
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo na Base N DEFAULT e
-    Sintaxe:tBigNumber():__LogN(BigNB) -> oBigNR
-    Referencia://http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:__LogN
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo na Base N DEFAULT e
+        Sintaxe:tBigNumber():__LogN(BigNB) -> oBigNR
+        Referencia://http://www.vivaolinux.com.br/script/Calculo-de-logaritmo-de-um-numero-por-um-terceiro-metodo-em-C
+    */
+//--------------------------------------------------------------------------------------------------------
 method __LogN(uBigNB) class tBigNumber
 
     local oS        AS OBJECT
@@ -3239,72 +3815,84 @@ method __LogN(uBigNB) class tBigNumber
     return(oS)
 /*method __LogN*/
 
-/*
-    method:Log2
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo Base 2
-    Sintaxe:tBigNumber():Log2() -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Log2
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo Base 2
+        Sintaxe:tBigNumber():Log2() -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Log2() class tBigNumber
     local ob2   AS OBJECT
     ob2:=s__o2:Clone()
     return(self:LogN(ob2))
 /*method Log2*/
 
-/*
-    method:Log10
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Retorna o logaritmo Base 10
-    Sintaxe:tBigNumber():Log10() -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Log10
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Retorna o logaritmo Base 10
+        Sintaxe:tBigNumber():Log10() -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Log10() class tBigNumber
     local ob10  AS OBJECT
     ob10:=s__o10:Clone()
     return(self:LogN(ob10))
 /*method Log10*/
 
-/*
-    method:Ln
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:20/02/2013
-    Descricao:Logaritmo Natural
-    Sintaxe:tBigNumber():Ln() -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Ln
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:20/02/2013
+        Descricao:Logaritmo Natural
+        Sintaxe:tBigNumber():Ln() -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Ln() class tBigNumber
     return(self:LogN(s__o1:Exp()))
 /*method Ln*/
 
-/*
-    method:MathC
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2013
-    Descricao:Operacoes Matematicas
-    Sintaxe:tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:MathC
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2013
+        Descricao:Operacoes Matematicas
+        Sintaxe:tBigNumber():MathC(uBigN1,cOperator,uBigN2) -> cNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method MathC(uBigN1,cOperator AS CHARACTER,uBigN2) class tBigNumber
     return(MathO(uBigN1,cOperator,uBigN2,.F.))
 /*method MathC*/
 
-/*
-    method:MathN
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Operacoes Matematicas
-    Sintaxe:tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:MathN
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Operacoes Matematicas
+        Sintaxe:tBigNumber():MathN(uBigN1,cOperator,uBigN2) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method MathN(uBigN1,cOperator AS CHARACTER,uBigN2) class tBigNumber
     return(MathO(uBigN1,cOperator,uBigN2,.T.))
 /*method MathN*/
 
-/*
-    method:Rnd
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/02/2013
-    Descricao:Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
-    Sintaxe:tBigNumber():Rnd(nAcc) -> oRND
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Rnd
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/02/2013
+        Descricao:Rnd arredonda um numero decimal, "para cima", se o digito da precisao definida for >= 5, caso contrario, truca.
+        Sintaxe:tBigNumber():Rnd(nAcc) -> oRND
+    */
+//--------------------------------------------------------------------------------------------------------
 method Rnd(nAcc AS NUMERIC) class tBigNumber
 
     local oRnd  AS OBJECT
@@ -3332,24 +3920,28 @@ method Rnd(nAcc AS NUMERIC) class tBigNumber
     return(oRnd)
 /*method Rnd*/
 
-/*
-    method:NoRnd
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/02/2013
-    Descricao:NoRnd trunca um numero decimal
-    Sintaxe:tBigNumber():NoRnd(nAcc) -> oBigNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:NoRnd
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/02/2013
+        Descricao:NoRnd trunca um numero decimal
+        Sintaxe:tBigNumber():NoRnd(nAcc) -> oBigNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method NoRnd(nAcc AS NUMERIC) class tBigNumber
     return(self:Truncate(nAcc))
 /*method NoRnd*/
 
-/*
-    method:Floor
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2014
-    Descricao:Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
-    Sintaxe:tBigNumber():Floor(nAcc) -> oFloor
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Floor
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2014
+        Descricao:Retorna o "Piso" de um Numero Real de acordo com o Arredondamento para "baixo"
+        Sintaxe:tBigNumber():Floor(nAcc) -> oFloor
+    */
+//--------------------------------------------------------------------------------------------------------
 method Floor(nAcc AS NUMERIC) class tBigNumber
 
     local oInt      AS OBJECT
@@ -3365,13 +3957,15 @@ method Floor(nAcc AS NUMERIC) class tBigNumber
     return(oFloor)
 /*method Floor*/
 
-/*
-    method:Ceiling
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:05/03/2014
-    Descricao:Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
-    Sintaxe:tBigNumber():Ceiling(nAcc) -> oCeiling
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Ceiling
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:05/03/2014
+        Descricao:Retorna o "Teto" de um Numero Real de acordo com o Arredondamento para "cima"
+        Sintaxe:tBigNumber():Ceiling(nAcc) -> oCeiling
+    */
+//--------------------------------------------------------------------------------------------------------
 method Ceiling(nAcc AS NUMERIC) class tBigNumber
 
     local oInt      AS OBJECT
@@ -3387,13 +3981,15 @@ method Ceiling(nAcc AS NUMERIC) class tBigNumber
     return(oCeiling)
 /*method Ceiling(nAcc)*/
 
-/*
-    method:Truncate
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:06/02/2013
-    Descricao:Truncate trunca um numero decimal
-    Sintaxe:tBigNumber():Truncate(nAcc) -> oTrc
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Truncate
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:06/02/2013
+        Descricao:Truncate trunca um numero decimal
+        Sintaxe:tBigNumber():Truncate(nAcc) -> oTrc
+    */
+//--------------------------------------------------------------------------------------------------------
 method Truncate(nAcc AS NUMERIC) class tBigNumber
 
     local oTrc  AS OBJECT
@@ -3411,13 +4007,15 @@ method Truncate(nAcc AS NUMERIC) class tBigNumber
     return(oTrc)
 /*method Truncate*/
 
-/*
-    method:Normalize
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Normaliza os Dados
-    Sintaxe:tBigNumber():Normalize(oBigN) -> self
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Normalize
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Normaliza os Dados
+        Sintaxe:tBigNumber():Normalize(oBigN) -> self
+    */
+//--------------------------------------------------------------------------------------------------------
 method Normalize(oBigN AS OBJECT) class tBigNumber
 #ifdef __PTCOMPAT__
     local nPadL AS NUMERIC
@@ -3468,13 +4066,15 @@ method Normalize(oBigN AS OBJECT) class tBigNumber
     return(self)
 /*method Normalize*/
 
-/*
-    method:D2H
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:07/02/2013
-    Descricao:Converte Decimal para Hexa
-    Sintaxe:tBigNumber():D2H(cHexB) -> cHexN
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:D2H
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:07/02/2013
+        Descricao:Converte Decimal para Hexa
+        Sintaxe:tBigNumber():D2H(cHexB) -> cHexN
+    */
+//--------------------------------------------------------------------------------------------------------
 method D2H(cHexB AS CHARACTER) class tBigNumber
 
     local otH   AS OBJECT
@@ -3534,13 +4134,15 @@ method D2H(cHexB AS CHARACTER) class tBigNumber
     return(oHexN)
 /*method D2H*/
 
-/*
-    method:H2D
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:07/02/2013
-    Descricao:Converte Hexa para Decimal
-    Sintaxe:tBigNumber():H2D() -> otNR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:H2D
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:07/02/2013
+        Descricao:Converte Hexa para Decimal
+        Sintaxe:tBigNumber():H2D() -> otNR
+    */
+//--------------------------------------------------------------------------------------------------------
 method H2D() class tBigNumber
 
     local otH   AS OBJECT
@@ -3613,13 +4215,15 @@ method H2D() class tBigNumber
     return(otNR)
 /*method H2D*/
 
-/*
-    method:H2B
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:07/02/2013
-    Descricao:Converte Hex para Bin
-    Sintaxe:tBigNumber():H2B(cHexN) -> cBin
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:H2B
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:07/02/2013
+        Descricao:Converte Hex para Bin
+        Sintaxe:tBigNumber():H2B(cHexN) -> cBin
+    */
+//--------------------------------------------------------------------------------------------------------
 method H2B() class tBigNumber
 
     local aH2B  AS ARRAY
@@ -3698,13 +4302,15 @@ method H2B() class tBigNumber
     return(oBin)
 /*method H2B*/
 
-/*
-    method:B2H
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:07/02/2013
-    Descricao:Converte Bin para Hex
-    Sintaxe:tBigNumber():B2H(cHexB) -> cHexN
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:B2H
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:07/02/2013
+        Descricao:Converte Bin para Hex
+        Sintaxe:tBigNumber():B2H(cHexB) -> cHexN
+    */
+//--------------------------------------------------------------------------------------------------------
 method B2H(cHexB AS CHARACTER) class tBigNumber
 
     local aH2B  AS ARRAY
@@ -3779,13 +4385,15 @@ method B2H(cHexB AS CHARACTER) class tBigNumber
     return(oHexN)
 /*method B2H*/
 
-/*
-    method:D2B
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:23/03/2013
-    Descricao:Converte Dec para Bin
-    Sintaxe:tBigNumber():D2B(cHexB) -> oBin
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:D2B
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:23/03/2013
+        Descricao:Converte Dec para Bin
+        Sintaxe:tBigNumber():D2B(cHexB) -> oBin
+    */
+//--------------------------------------------------------------------------------------------------------
 method D2B(cHexB AS CHARACTER) class tBigNumber
     local oHex  AS OBJECT
     local oBin  AS OBJECT
@@ -3794,13 +4402,15 @@ method D2B(cHexB AS CHARACTER) class tBigNumber
     return(oBin)
 /*method D2B*/
 
-/*
-    method:B2D
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:23/03/2013
-    Descricao:Converte Bin para Dec
-    Sintaxe:tBigNumber():B2D(cHexB) -> oDec
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:B2D
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:23/03/2013
+        Descricao:Converte Bin para Dec
+        Sintaxe:tBigNumber():B2D(cHexB) -> oDec
+    */
+//--------------------------------------------------------------------------------------------------------
 method B2D(cHexB AS CHARACTER) class tBigNumber
     local oHex  AS OBJECT
     local oDec  AS OBJECT
@@ -3809,13 +4419,15 @@ method B2D(cHexB AS CHARACTER) class tBigNumber
     return(oDec)
 /*method B2D*/
 
-/*
-    method:Randomize
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:03/03/2013
-    Descricao:Randomize BigN Integer
-    Sintaxe:tBigNumber():Randomize(uB,uE) -> oR
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Randomize
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:03/03/2013
+        Descricao:Randomize BigN Integer
+        Sintaxe:tBigNumber():Randomize(uB,uE) -> oR
+    */
+//--------------------------------------------------------------------------------------------------------
 method Randomize(uB,uE) class tBigNumber
 
     local oB    AS OBJECT
@@ -3906,55 +4518,59 @@ method Randomize(uB,uE) class tBigNumber
 
 /*method Randomize*/
 
-/*
-    function:__Random
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:03/03/2013
-    Descricao:Define a chamada para a funcao Random Padrao
-    Sintaxe:__Random(nB,nE)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:__Random
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:03/03/2013
+        Descricao:Define a chamada para a funcao Random Padrao
+        Sintaxe:__Random(nB,nE)
+    */
+//--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
-static function __Random(nB AS NUMERIC,nE AS NUMERIC)
-#else //__PROTHEUS__
-static function __Random(nB AS NUMERIC,nE AS NUMERIC) AS NUMERIC
-#endif //__HARBOUR__
+    static function __Random(nB AS NUMERIC,nE AS NUMERIC)
+#else /*__ADVPL__*/
+    static function __Random(nB AS NUMERIC,nE AS NUMERIC) AS NUMERIC
+#endif /*__HARBOUR__*/
 
-    local nR AS NUMERIC
+        local nR AS NUMERIC
 
-    if (nB==0)
-        nB:=1
-    endif
+        if (nB==0)
+            nB:=1
+        endif
 
-    if (nB==nE)
-        ++nE
-    elseif (nB>nE)
-        nR:=nB
-        nB:=nE
-        nE:=nR
-    endif
+        if (nB==nE)
+            ++nE
+        elseif (nB>nE)
+            nR:=nB
+            nB:=nE
+            nE:=nR
+        endif
 
-    #ifdef __HARBOUR__
-        nR:=Abs(hb_RandomInt(nB,nE))
-    #else //__PROTHEUS__
-        nR:=Randomize(nB,nE)
-    #endif //__HARBOUR__
+        #ifdef __HARBOUR__
+            nR:=Abs(hb_RandomInt(nB,nE))
+        #else /*__ADVPL__*/
+            nR:=Randomize(nB,nE)
+        #endif /*__HARBOUR__*/
 
 #ifdef __HARBOUR__
-    return(nR) AS NUMERIC
-#else //__PROTHEUS__
-    return(nR)
-#endif //__HARBOUR__
+        return(nR) AS NUMERIC
+#else /*__ADVPL__*/
+        return(nR)
+#endif /*__HARBOUR__*/
 
 /*static function __Random*/
 
-/*
-    method:millerRabin
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:03/03/2013
-    Descricao:Miller-Rabin method (Primality test)
-    Sintaxe:tBigNumber():millerRabin(uI) -> lPrime
-    Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:millerRabin
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:03/03/2013
+        Descricao:Miller-Rabin method (Primality test)
+        Sintaxe:tBigNumber():millerRabin(uI) -> lPrime
+        Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
+    */
+//--------------------------------------------------------------------------------------------------------
 method millerRabin(uI) class tBigNumber
 
     local oN    AS OBJECT
@@ -4003,14 +4619,16 @@ method millerRabin(uI) class tBigNumber
 
 /*method millerRabin*/
 
-/*
-    function:mrPass
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:03/03/2013
-    Descricao:Miller-Rabin Pass (Primality test)
-    Sintaxe:mrPass(uA,uS,uD,uN)
-    Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:mrPass
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:03/03/2013
+        Descricao:Miller-Rabin Pass (Primality test)
+        Sintaxe:mrPass(uA,uS,uD,uN)
+        Ref.::http://en.literateprograms.org/Miller-Rabin_primality_test_(Python)
+    */
+//--------------------------------------------------------------------------------------------------------
 static function mrPass(uA,uS,uD,uN)
 
     local oA    AS OBJECT
@@ -4056,29 +4674,30 @@ static function mrPass(uA,uS,uD,uN)
 
 /*static function mrPass*/
 
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:FI
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:10/03/2013
+        Descricao:Euler's totient function
+        Sintaxe:tBigNumber():FI() -> oT
+        Ref.::(Euler's totient function) http://community.topcoder.com/tc?module=static&d1=tutorials&d2=primeNumbers
+        Consultar:http://www.javascripter.net/math/calculators/eulertotientfunction.htm para otimizar.
 
-/*
-    method:FI
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:10/03/2013
-    Descricao:Euler's totient function
-    Sintaxe:tBigNumber():FI() -> oT
-    Ref.::(Euler's totient function) http://community.topcoder.com/tc?module=static&d1=tutorials&d2=primeNumbers
-    Consultar:http://www.javascripter.net/math/calculators/eulertotientfunction.htm para otimizar.
+        int fi(int n)
+         {
+           int result=n;
+           for(int i=2;i*i<=n;i++)
+           {
+             if (n%i==0) result-=result/i;
+             while (n%i==0) n/=i;
+          }
+           if (n>1) result-=result/n;
+           return result;
+        }
 
-    int fi(int n)
-     {
-       int result=n;
-       for(int i=2;i*i<=n;i++)
-       {
-         if (n%i==0) result-=result/i;
-         while (n%i==0) n/=i;
-      }
-       if (n>1) result-=result/n;
-       return result;
-    }
-
-*/
+    */
+//--------------------------------------------------------------------------------------------------------
 method FI() class tBigNumber
 
     local oC    AS OBJECT
@@ -4110,7 +4729,7 @@ method FI() class tBigNumber
     return(oT)
 /*method FI*/
 
-#ifdef __PROTHEUS__
+#ifdef __ADVPL__
     static function TBIGNFI(n AS NUMERIC)
         local i     AS NUMERIC
         local fi    AS NUMERIC
@@ -4130,15 +4749,17 @@ method FI() class tBigNumber
         endif
         return(fi)
     /*static function TBIGNFI*/
-#endif //__PROTHEUS__
+#endif /*__ADVPL__*/
 
-/*
-    method:PFactors
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:19/03/2013
-    Descricao:Fatores Primos
-    Sintaxe:tBigNumber():PFactors() -> aPFactors
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:PFactors
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:19/03/2013
+        Descricao:Fatores Primos
+        Sintaxe:tBigNumber():PFactors() -> aPFactors
+    */
+//--------------------------------------------------------------------------------------------------------
 method PFactors() class tBigNumber
 
     local aPFactors AS ARRAY
@@ -4200,17 +4821,18 @@ method PFactors() class tBigNumber
 
 /*method PFactors*/
 
-
-/*
-    method:Factorial
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:19/03/2013
-    Descricao: Fatorial de Numeros Inteiros
-    Sintaxe: tBigNumber():Factorial() -> oF
-    TODO   : Otimizar++
-    Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
-                 http://www.luschny.de/math/factorial/index.html
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Factorial
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:19/03/2013
+        Descricao: Fatorial de Numeros Inteiros
+        Sintaxe: tBigNumber():Factorial() -> oF
+        TODO   : Otimizar++
+        Referencias: http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+                     http://www.luschny.de/math/factorial/index.html
+    */
+//--------------------------------------------------------------------------------------------------------
 method Factorial() class tBigNumber
     local oN    AS OBJECT
     oN:=self:Clone():Int(.T.,.F.)
@@ -4220,15 +4842,16 @@ method Factorial() class tBigNumber
     return(recFact(s__o1:Clone(),oN))
 /*method Factorial*/
 
-
-/*
-    function:recFact
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/01/2014
-    Descricao:Fatorial de Numeros Inteiros
-    Sintaxe:recFact(oS,oN)
-    Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:recFact
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/01/2014
+        Descricao:Fatorial de Numeros Inteiros
+        Sintaxe:recFact(oS,oN)
+        Referencias:http://www.luschny.de/math/factorial/FastFactorialfunctions.htm
+    */
+//--------------------------------------------------------------------------------------------------------
 static function recFact(oS AS OBJECT,oN AS OBJECT)
 
 #ifdef __PTCOMPAT__
@@ -4293,29 +4916,31 @@ static function recFact(oS AS OBJECT,oN AS OBJECT)
 
 /*static function recFact*/
 
-/*
-    method:Fibonacci
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:18/05/2015
-    Descricao: Retorna a Sequencia de Fibonacci
-    Sintaxe: tBigNumber():Fibonacci() -> aFibonacci
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:Fibonacci
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/05/2015
+        Descricao: Retorna a Sequencia de Fibonacci
+        Sintaxe: tBigNumber():Fibonacci() -> aFibonacci
 
-#fib.py
-#-----------------------------------------------------
-import math
-def fib(n):
-     a, b = 0, 1
-     print(n,':')
-     while a < n:
-         print(a, end=' ')
-         a, b = b, a+b
-     print()
-#-----------------------------------------------------
-t=1000
-for number in range(1,t,int(math.sqrt(t)/2)):
-    fib(number)
+    #fib.py
+    #-----------------------------------------------------
+    import math
+    def fib(n):
+         a, b = 0, 1
+         print(n,':')
+         while a < n:
+             print(a, end=' ')
+             a, b = b, a+b
+         print()
+    #-----------------------------------------------------
+    t=1000
+    for number in range(1,t,int(math.sqrt(t)/2)):
+        fib(number)
 
-*/
+    */
+//--------------------------------------------------------------------------------------------------------
 method Fibonacci() class tBigNumber
     local aFibonacci    AS ARRAY
     local oN            AS OBJECT
@@ -4345,14 +4970,16 @@ method Fibonacci() class tBigNumber
     return(aFibonacci)
 /*method Fibonacci*/
 
-/*
-    function:egMult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-    Sintaxe:egMult(cN1,cN2,nBase,nAcc) -> oMTP
-    Obs.:Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:egMult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao Egipcia (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
+        Sintaxe:egMult(cN1,cN2,nBase,nAcc) -> oMTP
+        Obs.:Interessante+lenta... Utiliza Soma e Subtracao para obter o resultado
+    */
+//--------------------------------------------------------------------------------------------------------
 static function egMult(cN1 AS CHARACTER,cN2 AS CHARACTER,nBase AS NUMERIC)
 
 #ifdef __PTCOMPAT__
@@ -4409,47 +5036,49 @@ static function egMult(cN1 AS CHARACTER,cN2 AS CHARACTER,nBase AS NUMERIC)
 
 /*static function egMult*/
 
-/*
-    function:rMult
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Multiplicacao Russa (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
-    Sintaxe:rMult(cN1,cN2,nBase) -> oNR
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:rMult
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Multiplicacao Russa (http://cognosco.blogs.sapo.pt/arquivo/1015743.html)
+        Sintaxe:rMult(cN1,cN2,nBase) -> oNR
 
-    Exemplo em PowerShell:
-    //-----------------------------------------------------------------------------------
-    function ps_rMult([int]$a,[int]$b){
-        $r=0;
-        do {
-            "$a x $b";
-            if (($a%2)-and($a -gt 0)){
-                $r+=$b;
-                "`t+$b";
-                $a--;
-            }
-            $a=$a/2;
-            $b=$b*2;
-        } until ($a -eq 0);
-        "result:$r";
-    }
-    ps_rMult 340 125
+        Exemplo em PowerShell:
+        //-----------------------------------------------------------------------------------
+        function ps_rMult([int]$a,[int]$b){
+            $r=0;
+            do {
+                "$a x $b";
+                if (($a%2)-and($a -gt 0)){
+                    $r+=$b;
+                    "`t+$b";
+                    $a--;
+                }
+                $a=$a/2;
+                $b=$b*2;
+            } until ($a -eq 0);
+            "result:$r";
+        }
+        ps_rMult 340 125
 
-    340 x 125
-    170 x 250
-     85 x 500
-                +500
-     42 x 1000
-     21 x 2000
-                +2000
-     10 x 4000
-     5 x 8000
-                +8000
-     2 x 16000
-     1 x 32000
-               +32000
-    result:   42500
+        340 x 125
+        170 x 250
+         85 x 500
+                    +500
+         42 x 1000
+         21 x 2000
+                    +2000
+         10 x 4000
+         5 x 8000
+                    +8000
+         2 x 16000
+         1 x 32000
+                   +32000
+        result:   42500
 
-*/
+    */
+//--------------------------------------------------------------------------------------------------------
 static function rMult(cA AS CHARACTER,cB AS CHARACTER,nBase AS NUMERIC)
 
     local oa    AS OBJECT
@@ -4473,13 +5102,15 @@ static function rMult(cA AS CHARACTER,cB AS CHARACTER,nBase AS NUMERIC)
 
 /*static function rMult*/
 
-/*
-    function:egDiv
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
-    Sintaxe:egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> oeDivQ
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:egDiv
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Divisao Egipcia (http://cognosco.blogs.sapo.pt/13236.html)
+        Sintaxe:egDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> oeDivQ
+    */
+//--------------------------------------------------------------------------------------------------------
 static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS NUMERIC,nAcc AS NUMERIC,lFloat AS LOGICAL)
 
 #ifdef __PTCOMPAT__
@@ -4545,7 +5176,7 @@ static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS 
 
     oeDivR:SetValue(oeDivN:Sub(oeDivR),nBase,"0",NIL,nAcc)
 
-#else //__HARBOUR__
+#else /*__HARBOUR__*/
 
     cQDiv:=tBIGNegDiv(cN,cD,@cRDiv,nSize,nBase)
 
@@ -4572,13 +5203,15 @@ static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS 
 
 /*static function egDiv*/
 
-/*
-    function:ecDiv
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:18/03/2014
-    Descricao:Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
-    Sintaxe:ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q
- */
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:ecDiv
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/03/2014
+        Descricao:Divisao Euclidiana (http://compoasso.free.fr/primelistweb/page/prime/euclide_en.php)
+        Sintaxe:ecDiv(cN,cD,nSize,nBase,nAcc,lFloat) -> q
+    */
+//--------------------------------------------------------------------------------------------------------
 static function ecDiv(pA AS CHARACTER,pB AS CHARACTER,nSize AS NUMERIC,nBase AS NUMERIC,nAcc AS NUMERIC,lFloat AS LOGICAL)
 
 #ifdef __PTCOMPAT__
@@ -4672,26 +5305,30 @@ static function ecDiv(pA AS CHARACTER,pB AS CHARACTER,nSize AS NUMERIC,nBase AS 
 
 /*static function ecDiv*/
 
-/*
-    function:nthRoot
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:10/02/2013
-    Descricao:Metodo Newton-Raphson
-    Sintaxe:nthRoot(oRootB,oRootE,oAcc) -> othRoot
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:nthRoot
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:10/02/2013
+        Descricao:Metodo Newton-Raphson
+        Sintaxe:nthRoot(oRootB,oRootE,oAcc) -> othRoot
+    */
+//--------------------------------------------------------------------------------------------------------
 static function nthRoot(oRootB AS OBJECT,oRootE AS OBJECT,oAcc AS OBJECT)
     return(__Pow(oRootB,s__o1:Div(oRootE),oAcc))
 /*static function nthRoot*/
 
-/*
-    function:__Pow
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:10/02/2013
-    Descricao:Metodo Newton-Raphson
-    Sintaxe:__Pow(base,exp,EPS) -> oPow
-    Ref.:http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function
-        :http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:__Pow
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:10/02/2013
+        Descricao:Metodo Newton-Raphson
+        Sintaxe:__Pow(base,exp,EPS) -> oPow
+        Ref.:http://stackoverflow.com/questions/3518973/floating-point-exponentiation-without-power-function
+            :http://stackoverflow.com/questions/2882706/how-can-i-write-a-power-function-myself
+    */
+//--------------------------------------------------------------------------------------------------------
 static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
 
     local acc   AS OBJECT
@@ -4762,13 +5399,15 @@ static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
 
 /*static function __Pow*/
 
-/*
-    function:__SQRT
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:10/02/2013
-    Descricao:SQRT
-    Sintaxe:__SQRT(p) -> oSQRT
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:__SQRT
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:10/02/2013
+        Descricao:SQRT
+        Sintaxe:__SQRT(p) -> oSQRT
+    */
+//--------------------------------------------------------------------------------------------------------
 static function __SQRT(p)
     local l     AS OBJECT
     local r     AS OBJECT
@@ -4783,7 +5422,7 @@ static function __SQRT(p)
     if q:lte(q:SysSQRT())
         #ifdef __PROTEUS__
             r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
-        #else //__HARBOUR__
+        #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
                 r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
             #else
@@ -4798,7 +5437,7 @@ static function __SQRT(p)
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
         #ifdef __PROTEUS__
             r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
-        #else //__HARBOUR__
+        #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
                 r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
             #else
@@ -4807,7 +5446,7 @@ static function __SQRT(p)
         #endif //__PROTEUS__
 #ifdef __PROTEUS__
         if r:eq(s__o0).or."*"$r:GetValue()
-#else //__HARBOUR__
+#else /*__HARBOUR__*/
     #ifdef __PTCOMPAT__
         if r:eq(s__o0).or."*"$r:GetValue()
     #else
@@ -4837,13 +5476,15 @@ static function __SQRT(p)
 
 #ifdef TBN_DBFILE
 
-    /*
-        function:Add
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:04/02/2013
-        Descricao:Adicao
-        Sintaxe:Add(a,b,n,nBase) -> cNR
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:Add
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Adicao
+            Sintaxe:Add(a,b,n,nBase) -> cNR
+        */
+    //--------------------------------------------------------------------------------------------------------    
     static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS CHARACTER)
 
         local c AS CHARACTER
@@ -4868,7 +5509,7 @@ static function __SQRT(p)
         while n>0
             (c)->(dbGoTo(k))
             if (c)->(rLock())
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     (c)->FN+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
                 #else
                     (c)->FN+=Val(a[n])+Val(b[n])
@@ -4895,13 +5536,15 @@ static function __SQRT(p)
 
     /*static function Add*/
 
-    /*
-        function:Sub
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:04/02/2013
-        Descricao:Subtracao
-        Sintaxe:Sub(a,b,n,nBase) -> cNR
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:Sub
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Subtracao
+            Sintaxe:Sub(a,b,n,nBase) -> cNR
+        */
+    //--------------------------------------------------------------------------------------------------------
     static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
         local c AS CHARACTER
@@ -4926,7 +5569,7 @@ static function __SQRT(p)
         while n>0
             (c)->(dbGoTo(k))
             if (c)->(rLock())
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     (c)->FN+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
                 #else
                     (c)->FN+=Val(a[n])-Val(b[n])
@@ -4953,14 +5596,16 @@ static function __SQRT(p)
 
     /*static function Sub*/
 
-    /*
-        function:Mult
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:04/02/2013
-        Descricao:Multiplicacao de Inteiros
-        Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
-        Obs.:Mais rapida,usa a multiplicacao nativa
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:Mult
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Multiplicacao de Inteiros
+            Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+            Obs.:Mais rapida,usa a multiplicacao nativa
+        */
+    //--------------------------------------------------------------------------------------------------------
     static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
         local c AS CHARACTER
@@ -5002,7 +5647,7 @@ static function __SQRT(p)
             (c)->(dbGoTo(k))
             if (c)->(rLock())
                 while s<=i
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         (c)->FN+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
                     #else
                         (c)->FN+=Val(a[s++])*Val(b[j--])
@@ -5032,7 +5677,7 @@ static function __SQRT(p)
             (c)->(dbGoTo(k))
             if (c)->(rLock())
                 while s>=l
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     (c)->FN+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                 #else
                     (c)->FN+=Val(a[s--])*Val(b[j++])
@@ -5064,13 +5709,15 @@ static function __SQRT(p)
 
     /*static function Mult*/
 
-    /*
-        function:aNumber
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:04/02/2013
-        Descricao:db OF Numbers
-        Sintaxe:aNumber(c,n,o) -> a
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:aNumber
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:db OF Numbers
+            Sintaxe:aNumber(c,n,o) -> a
+        */
+    //--------------------------------------------------------------------------------------------------------
     static function aNumber(c AS CHARACTER,n AS NUMERIC,o AS CHARACTER)
 
         local a AS CHARACTER
@@ -5085,7 +5732,7 @@ static function __SQRT(p)
         y:=0
         while ++y<=n
             (a)->(dbAppend(.T.))
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             (a)->FN:=Val(SubStr(c,y,1))
         #else
             (a)->FN:=Val(c[y])
@@ -5097,13 +5744,15 @@ static function __SQRT(p)
 
     /*static function aNumber*/
 
-    /*
-        function:dbGetcN
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:04/02/2013
-        Descricao:Montar a String de Retorno
-        Sintaxe:dbGetcN(a,x) -> s
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:dbGetcN
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:04/02/2013
+            Descricao:Montar a String de Retorno
+            Sintaxe:dbGetcN(a,x) -> s
+        */
+    //--------------------------------------------------------------------------------------------------------
     static function dbGetcN(a AS CHARACTER,n AS NUMERIC)
 
         local s AS CHARACTER
@@ -5240,13 +5889,15 @@ static function __SQRT(p)
 
     #ifdef TBN_ARRAY
 
-        /*
-            function:Add
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Adicao
-            Sintaxe:Add(a,b,n,nBase) -> cNR
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Add
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Adicao
+                Sintaxe:Add(a,b,n,nBase) -> cNR
+            */
+        //--------------------------------------------------------------------------------------------------------
         static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
             local c AS ARRAY
@@ -5261,7 +5912,7 @@ static function __SQRT(p)
             c:=aFill(aSize(ths_aZAdd,y),0)
 
             while n>0
-            #ifdef __PROTHEUS__
+            #ifdef __ADVPL__
                 c[k]+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
             #else
                 c[k]+=Val(a[n])+Val(b[n])
@@ -5276,7 +5927,7 @@ static function __SQRT(p)
 
             s:=""
 
-            #ifdef __PROTHEUS__
+            #ifdef __ADVPL__
                 aEval(c,{|v|s+=hb_ntos(v)})
             #else /*__HARBOUR__*/
                 aEval(c,{|v AS NUMERIC|s+=hb_ntos(v)})
@@ -5286,13 +5937,15 @@ static function __SQRT(p)
 
         /*static function Add*/
 
-        /*
-            function:Sub
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Subtracao
-            Sintaxe:Sub(a,b,n,nBase) -> cNR
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Sub
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Subtracao
+                Sintaxe:Sub(a,b,n,nBase) -> cNR
+            */
+        //--------------------------------------------------------------------------------------------------------
         static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
             local c AS ARRAY
@@ -5307,7 +5960,7 @@ static function __SQRT(p)
             c:=aFill(aSize(ths_aZSub,y),0)
 
             while n>0
-            #ifdef __PROTHEUS__
+            #ifdef __ADVPL__
                 c[k]+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
             #else
                 c[k]+=Val(a[n])-Val(b[n])
@@ -5322,7 +5975,7 @@ static function __SQRT(p)
 
             s:=""
 
-            #ifdef __PROTHEUS__
+            #ifdef __ADVPL__
                 aEval(c,{|v|s+=hb_ntos(v)})
             #else /*__HARBOUR__*/
                 aEval(c,{|v AS NUMERIC|s+=hb_ntos(v)})
@@ -5332,14 +5985,16 @@ static function __SQRT(p)
 
         /*static function Sub*/
 
-        /*
-            function:Mult
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Multiplicacao de Inteiros
-            Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
-            Obs.:Mais rapida,usa a multiplicacao nativa
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Mult
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Multiplicacao de Inteiros
+                Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+                Obs.:Mais rapida,usa a multiplicacao nativa
+            */
+        //--------------------------------------------------------------------------------------------------------
         static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
             local c AS ARRAY
@@ -5372,7 +6027,7 @@ static function __SQRT(p)
                 s:=1
                 j:=i
                 while s<=i
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     c[k]+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
                 #else
                     c[k]+=Val(a[s++])*Val(b[j--])
@@ -5391,7 +6046,7 @@ static function __SQRT(p)
                 s:=n
                 j:=l
                 while s>=l
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     c[k]+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                 #else
                     c[k]+=Val(a[s--])*Val(b[j++])
@@ -5412,13 +6067,15 @@ static function __SQRT(p)
 
         /*static function Mult*/
 
-        /*
-            function:aGetcN
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Montar a String de Retorno
-            Sintaxe:aGetcN(a,x) -> s
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:aGetcN
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Montar a String de Retorno
+                Sintaxe:aGetcN(a,x) -> s
+            */
+        //--------------------------------------------------------------------------------------------------------
         static function aGetcN(a AS ARRAY,n AS NUMERIC)
 
             local s AS CHARACTER
@@ -5452,13 +6109,15 @@ static function __SQRT(p)
 
     #else /*String*/
 
-        /*
-            function:Add
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Adicao
-            Sintaxe:Add(a,b,n,nBase) -> cNR
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Add
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Adicao
+                Sintaxe:Add(a,b,n,nBase) -> cNR
+            */
+        //--------------------------------------------------------------------------------------------------------
         #ifdef __PTCOMPAT__
             static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
@@ -5481,7 +6140,7 @@ static function __SQRT(p)
                 v:=0
 
                 while n>0
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         v+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
                     #else
                         v+=Val(a[n])+Val(b[n])
@@ -5492,7 +6151,7 @@ static function __SQRT(p)
                     else
                         v1:=0
                     endif
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         c:=Stuff(c,k,1,hb_ntos(v))
                         c:=Stuff(c,k-1,1,hb_ntos(v1))
                     #else
@@ -5508,19 +6167,21 @@ static function __SQRT(p)
 
             /*static function Add*/
 
-        #else //__HARBOUR__
+        #else /*__HARBOUR__*/
             static function Add(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
                 return(tBIGNADD(a,b,n,n,nB))
             /*static function Add*/
         #endif //__PTCOMPAT__
 
-        /*
-            function:Sub
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Subtracao
-            Sintaxe:Sub(a,b,n,nBase) -> cNR
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Sub
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Subtracao
+                Sintaxe:Sub(a,b,n,nBase) -> cNR
+            */
+        //--------------------------------------------------------------------------------------------------------
         #ifdef __PTCOMPAT__
             static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
@@ -5543,7 +6204,7 @@ static function __SQRT(p)
                 v:=0
 
                 while n>0
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         v+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
                     #else
                         v+=Val(a[n])-Val(b[n])
@@ -5554,7 +6215,7 @@ static function __SQRT(p)
                     else
                         v1:=0
                     endif
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         c:=Stuff(c,k,1,hb_ntos(v))
                     #else
                         c[k]:=hb_ntos(v)
@@ -5568,19 +6229,21 @@ static function __SQRT(p)
 
             /*static function Sub*/
 
-        #else //__HARBOUR__
+        #else /*__HARBOUR__*/
             static function Sub(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
                     return(tBIGNSUB(a,b,n,nB))
             /*static function Sub*/
         #endif //__PTCOMPAT__
-        /*
-            function:Mult
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Multiplicacao de Inteiros
-            Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
-            Obs.:Mais rapida, usa a multiplicacao nativa
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:Mult
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Multiplicacao de Inteiros
+                Sintaxe:Mult(cN1,cN2,n,nBase) -> cNR
+                Obs.:Mais rapida, usa a multiplicacao nativa
+            */
+        //--------------------------------------------------------------------------------------------------------
         #ifdef __PTCOMPAT__
             static function Mult(cN1 AS CHARACTER,cN2 AS CHARACTER,n AS NUMERIC,nBase AS NUMERIC)
 
@@ -5621,7 +6284,7 @@ static function __SQRT(p)
                     s:=1
                     j:=i
                     while s<=i
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         v+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
                     #else
                         v+=Val(a[s++])*Val(b[j--])
@@ -5633,7 +6296,7 @@ static function __SQRT(p)
                     else
                         v1:=0
                     endif
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         c:=Stuff(c,k,1,hb_ntos(v))
                         c:=Stuff(c,k+1,1,hb_ntos(v1))
                     #else
@@ -5649,7 +6312,7 @@ static function __SQRT(p)
                     s:=n
                     j:=l
                     while s>=l
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         v+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                     #else
                         v+=Val(a[s--])*Val(b[j++])
@@ -5661,7 +6324,7 @@ static function __SQRT(p)
                     else
                         v1:=0
                     endif
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         c:=Stuff(c,k,1,hb_ntos(v))
                         c:=Stuff(c,k+1,1,hb_ntos(v1))
                     #else
@@ -5679,7 +6342,7 @@ static function __SQRT(p)
 
             /*static function Mult*/
 
-        #else //__HARBOUR__
+        #else /*__HARBOUR__*/
             static function Mult(a AS CHARACTER,b AS CHARACTER,n AS NUMERIC,nB AS NUMERIC)
                 local cN    AS CHARACTER
                 local y     AS NUMERIC
@@ -5689,13 +6352,15 @@ static function __SQRT(p)
             /*static function Mult*/
         #endif //__PTCOMPAT__
 
-        /*
-            function:cGetcN
-            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-            Data:04/02/2013
-            Descricao:Montar a String de Retorno
-            Sintaxe:cGetcN(c,n) -> s
-        */
+        //--------------------------------------------------------------------------------------------------------
+            /*
+                function:cGetcN
+                Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+                Data:04/02/2013
+                Descricao:Montar a String de Retorno
+                Sintaxe:cGetcN(c,n) -> s
+            */
+        //--------------------------------------------------------------------------------------------------------
         #ifdef __PTCOMPAT__
             static function cGetcN(c AS CHARACTER,n AS NUMERIC)
 
@@ -5706,7 +6371,7 @@ static function __SQRT(p)
                 y:=n
 
                 while y>=1
-                #ifdef __PROTHEUS__
+                #ifdef __ADVPL__
                     while y>=1.and.SubStr(c,y,1)=="0"
                 #else
                     while y>=1.and.c[y]=="0"
@@ -5714,7 +6379,7 @@ static function __SQRT(p)
                         y--
                     end while
                     while y>=1
-                    #ifdef __PROTHEUS__
+                    #ifdef __ADVPL__
                         s+=SubStr(c,y,1)
                     #else
                         s+=c[y]
@@ -5770,13 +6435,15 @@ static function __SQRT(p)
     /*static function thLogN*/
 #endif //__PTCOMPAT__
 
-/*
-    function:Power
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:26/08/2014
-    Descricao:Exponenciação de Números Inteiros
-    Sintaxe:Power(oB,oE,lIPower)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:Power
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:26/08/2014
+        Descricao:Exponenciação de Números Inteiros
+        Sintaxe:Power(oB,oE,lIPower)
+    */
+//--------------------------------------------------------------------------------------------------------
 static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 #ifdef TBIGN_RECPOWER
     /*
@@ -5784,28 +6451,30 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                 Please contact the application's support team for more information.
     */
     return(recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL))
-    /*
-        function:recPower
-        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-        Data:26/08/2014
-        Descricao:Exponenciação de Números Inteiros
-        Sintaxe:recPower(oB,oE)
-        Referencias:Baseada em recFact
-        //-------------------------------------------------------------------------------------
-        2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
-                 4  *  4  *  4  *  4  *  4
-                      16     *    16  *  4
-                                 256  *  4
-                                      1024
-        //-------------------------------------------------------------------------------------
-        2^11-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)*(1*2)
-                 4  *  4  *  4  *  4  *  4  *  2
-                      16     *    16  *  4  *  2
-                                 256  *  4  *  2
-                                      1024  *  2
-                                            2048
-        //-------------------------------------------------------------------------------------
-    */
+    //--------------------------------------------------------------------------------------------------------
+        /*
+            function:recPower
+            Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+            Data:26/08/2014
+            Descricao:Exponenciação de Números Inteiros
+            Sintaxe:recPower(oB,oE)
+            Referencias:Baseada em recFact
+            //-------------------------------------------------------------------------------------
+            2^10-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)
+                     4  *  4  *  4  *  4  *  4
+                          16     *    16  *  4
+                                     256  *  4
+                                          1024
+            //-------------------------------------------------------------------------------------
+            2^11-> (2*2)*(2*2)*(2*2)*(2*2)*(2*2)*(1*2)
+                     4  *  4  *  4  *  4  *  4  *  2
+                          16     *    16  *  4  *  2
+                                     256  *  4  *  2
+                                          1024  *  2
+                                                2048
+            //-------------------------------------------------------------------------------------
+        */
+    //--------------------------------------------------------------------------------------------------------
     static function recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
         local oR    AS OBJECT
@@ -5824,7 +6493,7 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                     oR:SetValue(oR:Mult(oB))
                     oI:OpDec()
                 end while
-            #else //__HARBOUR__
+            #else /*__HARBOUR__*/
                 if (lIPower)
                     #ifdef TBN_DBFILE
                         lIPower:=.F.
@@ -5874,7 +6543,7 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
             oR:SetValue(oR:Mult(oB))
             oI:OpDec()
         end while
-    #else //__HARBOUR__
+    #else /*__HARBOUR__*/
         if (lIPower)
             #ifdef TBN_DBFILE
                 lIPower:=.F.
@@ -5901,13 +6570,15 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
 #endif
 
-/*
-    function:tBigNInvert
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Inverte o Numero
-    Sintaxe:tBigNInvert(c,n) -> s
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:tBigNInvert
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Inverte o Numero
+        Sintaxe:tBigNInvert(c,n) -> s
+    */
+//--------------------------------------------------------------------------------------------------------
 #ifdef __PTCOMPAT__
     static function tBigNInvert(c AS CHARACTER,n AS NUMERIC)
 
@@ -5917,7 +6588,7 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
         s:=""
         y:=n
         while y>0
-        #ifdef __PROTHEUS__
+        #ifdef __ADVPL__
             s+=SubStr(c,y--,1)
         #else
             s+=c[y--]
@@ -5928,19 +6599,21 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
     /*static function tBigNInvert*/
 
-#else //__HARBOUR__
+#else /*__HARBOUR__*/
     static function tBigNInvert(c AS CHARACTER,n AS NUMERIC)
         return(tBigNReverse(c,n))
     /*static function tBigNInvert*/
 #endif //__PTCOMPAT__
 
-/*
-    function:MathO
-    Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
-    Data:04/02/2013
-    Descricao:Operacoes matematicas
-    Sintaxe:MathO(uBigN1,cOperator,uBigN2,lRetObject)
-*/
+//--------------------------------------------------------------------------------------------------------
+    /*
+        function:MathO
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:04/02/2013
+        Descricao:Operacoes matematicas
+        Sintaxe:MathO(uBigN1,cOperator,uBigN2,lRetObject)
+    */
+//--------------------------------------------------------------------------------------------------------
 static function MathO(uBigN1,cOperator AS CHARACTER,uBigN2,lRetObject AS LOGICAL)
 
     local bAsc      AS BLOCK
@@ -6087,7 +6760,7 @@ static procedure s__IncS9(n AS NUMERIC)
     return
 /*static procedure s__IncS9*/
 
-#ifdef __PROTHEUS__
+#ifdef __ADVPL__
 
     static function __eTthD()
         return(staticCall(__pteTthD,__eTthD))
@@ -6096,7 +6769,7 @@ static procedure s__IncS9(n AS NUMERIC)
         return(staticCall(__ptPITthD,__PITthD))
     /*static function __PITthD*/
 
-#else //__HARBOUR__
+#else /*__HARBOUR__*/
 
     static function __eTthD()
         return(__hbeTthD())
@@ -6154,7 +6827,7 @@ static procedure s__IncS9(n AS NUMERIC)
         return(lDummy)
     /*static function __Dummy*/
 
-#endif //__PROTHEUS__
+#endif /*__ADVPL__*/
 
 #ifdef __HARBOUR__
     #include "..\src\hb\c\tbigNumber.c"
