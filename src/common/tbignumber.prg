@@ -1199,7 +1199,7 @@ endclass
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     method __cRDiv(cRDiv AS CHARACTER) class tBigNumber
-#else /*__ADVPL__
+#else /*__ADVPL__*/
     method __cRDiv(cRDiv) class tBigNumber
         PARAMETER cRDiv AS CHARACTER
 #endif /*__HARBOUR__*/ 
@@ -1250,18 +1250,23 @@ endclass
         Sintaxe:tBigNumber():__lNeg() -> lNeg
     */
 //--------------------------------------------------------------------------------------------------------
-method __lNeg(lNeg AS LOGICAL) class tBigNumber
-    if .not.(lNeg==NIL)
-        self:lNeg:=lNeg
-        if self:eq(s__o0)
-            self:lNeg:=.F.
-            self:cSig:=""
+#ifdef __HARBOUR__
+    method __lNeg(lNeg AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method __lNeg(lNeg) class tBigNumber
+        PARAMETER lNeg AS LOGICAL
+#endif /*__HARBOUR__*/    
+        if .not.(lNeg==NIL)
+            self:lNeg:=lNeg
+            if self:eq(s__o0)
+                self:lNeg:=.F.
+                self:cSig:=""
+            endif
+            if lNeg
+                self:cSig:="-"
+            endif
         endif
-        if lNeg
-            self:cSig:="-"
-        endif
-    endif
-    return(self:lNeg)
+        return(self:lNeg)
 /*method __lNeg*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1273,11 +1278,16 @@ method __lNeg(lNeg AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():__nBase() -> nBase
     */
 //--------------------------------------------------------------------------------------------------------
-method __nBase(nBase AS NUMERIC) class tBigNumber
-    if .not.(nBase==NIL)
-        self:nBase:=nBase
-    endif
-    return(self:nBase)
+#ifdef __HARBOUR__
+    method __nBase(nBase AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method __nBase(nBase) class tBigNumber
+        PARAMETER nBase AS NUMERIC
+#endif /*__HARBOUR__*/
+        if .not.(nBase==NIL)
+            self:nBase:=nBase
+        endif
+        return(self:nBase)
 /*method __nBase*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1289,17 +1299,22 @@ method __nBase(nBase AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():__nDec() -> nDec
     */
 //--------------------------------------------------------------------------------------------------------
-method __nDec(nDec AS NUMERIC) class tBigNumber
-    if .not.(nDec==NIL)
-        if nDec>self:nDec
-            self:cDec:=PadR(self:cDec,nDec,"0")
-        else
-            self:cDec:=Left(self:cDec,nDec)
+#ifdef __HARBOUR__
+    method __nDec(nDec AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method __nDec(nDec) class tBigNumber
+        PARAMETER nDec AS NUMERIC
+#endif /*__HARBOUR__*/
+        if .not.(nDec==NIL)
+            if nDec>self:nDec
+                self:cDec:=PadR(self:cDec,nDec,"0")
+            else
+                self:cDec:=Left(self:cDec,nDec)
+            endif
+            self:nDec:=nDec
+            self:nSize:=self:nInt+self:nDec
         endif
-        self:nDec:=nDec
-        self:nSize:=self:nInt+self:nDec
-    endif
-    return(self:nDec)
+        return(self:nDec)
 /*method __nDec*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1311,15 +1326,20 @@ method __nDec(nDec AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():__nInt() -> nInt
     */
 //--------------------------------------------------------------------------------------------------------
-method __nInt(nInt AS NUMERIC) class tBigNumber
-    if .not.(nInt==NIL)
-        if nInt>self:nInt
-            self:cInt:=PadL(self:cInt,nInt,"0")
-            self:nInt:=nInt
-            self:nSize:=self:nInt+self:nDec
+#ifdef __HARBOUR__
+    method __nInt(nInt AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method __nInt(nInt) class tBigNumber
+        PARAMETER nInt AS NUMERIC
+#endif /*__HARBOUR__*/
+        if .not.(nInt==NIL)
+            if nInt>self:nInt
+                self:cInt:=PadL(self:cInt,nInt,"0")
+                self:nInt:=nInt
+                self:nSize:=self:nInt+self:nDec
+            endif
         endif
-    endif
-    return(self:nInt)
+        return(self:nInt)
 /*method __nInt*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1331,20 +1351,25 @@ method __nInt(nInt AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():__nSize() -> nSize
     */
 //--------------------------------------------------------------------------------------------------------
-method __nSize(nSize AS NUMERIC) class tBigNumber
-    if .not.(nSize==NIL)
-        if nSize>self:nInt+self:nDec
-            if self:nInt>self:nDec
-                self:nInt:=nSize-self:nDec
-                self:cInt:=PadL(self:cInt,self:nInt,"0")
-            else
-                 self:nDec:=nSize-self:nInt
-                 self:cDec:=PadR(self:cDec,self:nDec,"0")
+#ifdef __HARBOUR__
+    method __nSize(nSize AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/    
+    method __nSize(nSize) class tBigNumber
+        PARAMETER nSize AS NUMERIC
+#endif /*__HARBOUR__*/
+        if .not.(nSize==NIL)
+            if nSize>self:nInt+self:nDec
+                if self:nInt>self:nDec
+                    self:nInt:=nSize-self:nDec
+                    self:cInt:=PadL(self:cInt,self:nInt,"0")
+                else
+                     self:nDec:=nSize-self:nInt
+                     self:cDec:=PadR(self:cDec,self:nDec,"0")
+                endif
+                self:nSize:=nSize
             endif
-            self:nSize:=nSize
         endif
-    endif
-    return(self:nSize)
+        return(self:nSize)
 /*method __nSize*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1356,31 +1381,35 @@ method __nSize(nSize AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():Clone() -> oClone
     */
 //--------------------------------------------------------------------------------------------------------
-method Clone() class tBigNumber
-    local oClone    AS OBJECT
-    #ifdef __THREAD_STATIC__
-        try
-            if ths_lsdSet==NIL
-                oClone:=tBigNumber():New(self)
-            else
-                #ifdef __ADVPL__
+#ifdef __HARBOUR__
+    method Clone() class tBigNumber
+#else /*__ADVPL__*/    
+    method Clone() class tBigNumber
+#endif /*__HARBOUR__*/
+        local oClone    AS OBJECT
+        #ifdef __THREAD_STATIC__
+            try
+                if ths_lsdSet==NIL
                     oClone:=tBigNumber():New(self)
-                #else  /*__HARBOUR__*/
-                    oClone:=__objClone(self)
-                #endif /*__ADVPL__*/
-            endif
-        catch
-            ths_lsdSet:=NIL
-            oClone:=tBigNumber():New(self)
-        end
-    #else
-        #ifdef __ADVPL__
-            oClone:=tBigNumber():New(self)
-        #else  /*__HARBOUR__*/
-            oClone:=__objClone(self)
-        #endif /*__ADVPL__*/
-    #endif //__THREAD_STATIC__
-    return(oClone)
+                else
+                    #ifdef __ADVPL__
+                        oClone:=tBigNumber():New(self)
+                    #else  /*__HARBOUR__*/
+                        oClone:=__objClone(self)
+                    #endif /*__ADVPL__*/
+                endif
+            catch
+                ths_lsdSet:=NIL
+                oClone:=tBigNumber():New(self)
+            end
+        #else
+            #ifdef __ADVPL__
+                oClone:=tBigNumber():New(self)
+            #else  /*__HARBOUR__*/
+                oClone:=__objClone(self)
+            #endif /*__ADVPL__*/
+        #endif //__THREAD_STATIC__
+        return(oClone)
 /*method Clone*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1392,8 +1421,12 @@ method Clone() class tBigNumber
         Sintaxe:tBigNumber():className() -> cclassName
     */
 //--------------------------------------------------------------------------------------------------------
-method className() class tBigNumber
-    return("TBIGNUMBER")
+#ifdef __HARBOUR__
+    method className() class tBigNumber
+#else /*__ADVPL__*/    
+    method className() class tBigNumber
+#endif /*__HARBOUR__*/
+        return("TBIGNUMBER")
 /*method className*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1405,33 +1438,41 @@ method className() class tBigNumber
         Sintaxe:tBigNumber():SetDecimals(nSet) -> nLastSet
     */
 //--------------------------------------------------------------------------------------------------------
-method SetDecimals(nSet AS NUMERIC) class tBigNumber
+#ifdef __HARBOUR__
+    method SetDecimals(nSet AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/    
+    method SetDecimals(nSet) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local nLastSet  AS NUMERIC
+        local nLastSet  AS NUMERIC
+        
+        #ifdef __ADVPL__
+            PARAMETER nSet AS NUMERIC
+        #endif /*__ADVPL__*/
 
-    if hb_mutexLock(s__MTXDEC)
+        if hb_mutexLock(s__MTXDEC)
 
-        nLastSet:=s__nDecSet
+            nLastSet:=s__nDecSet
 
-        DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
-        DEFAULT nSet:=s__nDecSet
-        DEFAULT nLastSet:=nSet
+            DEFAULT s__nDecSet:=if(nSet==NIL,32,nSet)
+            DEFAULT nSet:=s__nDecSet
+            DEFAULT nLastSet:=nSet
 
-        #ifdef _0
-            if nSet>MAX_DECIMAL_PRECISION
-                nSet:=MAX_DECIMAL_PRECISION
-            endif
-        #endif
+            #ifdef _0
+                if nSet>MAX_DECIMAL_PRECISION
+                    nSet:=MAX_DECIMAL_PRECISION
+                endif
+            #endif
 
-        s__nDecSet:=nSet
+            s__nDecSet:=nSet
 
-        hb_mutexUnLock(s__MTXDEC)
+            hb_mutexUnLock(s__MTXDEC)
 
-    endif
+        endif
 
-    DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
+        DEFAULT nLastSet:=if(nSet==NIL,32,nSet)
 
-    return(nLastSet)
+        return(nLastSet)
 
 /*method SetDecimals*/
 
