@@ -10,6 +10,12 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-02 09:18 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * ChangeLog.txt
+ 
+2016-12-02 09:09 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/common/tbignumber.prg
+ 
 2016-11-30 22:50 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
  
@@ -680,6 +686,3 @@
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
-
-2016-12-02 09:09 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
-  * src/common/tbignumber.prg
