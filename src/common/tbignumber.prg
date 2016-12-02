@@ -1485,31 +1485,39 @@ endclass
         Sintaxe:tBigNumber():nthRootAcc(nSet) -> nLastSet
     */
 //--------------------------------------------------------------------------------------------------------
-method nthRootAcc(nSet AS NUMERIC) class tBigNumber
+#ifdef __HARBOUR__
+    method nthRootAcc(nSet AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/    
+    method nthRootAcc(nSet) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local nLastSet  AS NUMERIC
+        local nLastSet  AS NUMERIC
+        
+        #ifdef __ADVPL__
+            PARAMETER nSet AS NUMERIC
+        #endif /*__ADVPL__*/
 
-    if hb_mutexLock(s__MTXACC)
+        if hb_mutexLock(s__MTXACC)
 
-        nLastSet:=s__nthRAcc
+            nLastSet:=s__nthRAcc
 
-        DEFAULT s__nthRAcc:=if(nSet==NIL,6,nSet)
-        DEFAULT nSet:=s__nthRAcc
-        DEFAULT nLastSet:=nSet
+            DEFAULT s__nthRAcc:=if(nSet==NIL,6,nSet)
+            DEFAULT nSet:=s__nthRAcc
+            DEFAULT nLastSet:=nSet
 
-        if nSet>MAX_DECIMAL_PRECISION
-            nSet:=MAX_DECIMAL_PRECISION
+            if nSet>MAX_DECIMAL_PRECISION
+                nSet:=MAX_DECIMAL_PRECISION
+            endif
+
+            s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
+
+            hb_mutexUnLock(s__MTXACC)
+
         endif
 
-        s__nthRAcc:=Min(self:SetDecimals()-1,nSet)
+        DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
 
-        hb_mutexUnLock(s__MTXACC)
-
-    endif
-
-    DEFAULT nLastSet:=if(nSet==NIL,6,nSet)
-
-    return(nLastSet)
+        return(nLastSet)
 
 /*method nthRootAcc*/
 
@@ -1522,32 +1530,76 @@ method nthRootAcc(nSet AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():SetValue(uBigN,nBase,cRDiv,lLZRmv) -> self
     */
 //--------------------------------------------------------------------------------------------------------
-method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC) class tBigNumber
+#ifdef __HARBOUR__
+    method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cType AS CHARACTER
+        local cType AS CHARACTER
 
-    local nFP   AS NUMERIC
-
-    #ifdef __TBN_DYN_OBJ_SET__
-        local nP    AS NUMERIC
-        #ifdef __HARBOUR__
-            MEMVAR oThis
-        #endif
-        private oThis   AS OBJECT
-    #endif
-
-    cType:=ValType(uBigN)
-
-    if cType=="O"
-
-        DEFAULT cRDiv:=uBigN:cRDiv
+        local nFP   AS NUMERIC
+        
+        #ifdef __ADVPL__
+            PARAMETER nBase     AS NUMERIC
+            PARAMETER cRDiv     AS CHARACTER
+            PARAMETER lLZRmv    AS LOGICAL
+            PARAMETER nAcc      AS NUMERIC
+        #endif /*__ADVPL__*/
 
         #ifdef __TBN_DYN_OBJ_SET__
+            local nP    AS NUMERIC
+            #ifdef __HARBOUR__
+                MEMVAR oThis
+            #endif
+            private oThis   AS OBJECT
+        #endif
 
-            #ifdef __ADVPL__
+        cType:=ValType(uBigN)
+
+        if cType=="O"
+
+            DEFAULT cRDiv:=uBigN:cRDiv
+
+            #ifdef __TBN_DYN_OBJ_SET__
+
+                #ifdef __ADVPL__
+
+                    oThis:=self
+                    uBigN:=classDataArr(uBigN)
+                    nFP:=hb_bLen(uBigN)
+
+                    for nP:=1 to nFP
+                        &("oThis:"+uBigN[nP][1]):=uBigN[nP][2]
+                    next nP
+
+                #else
+
+                    __objSetValueList(self,__objGetValueList(uBigN))
+
+                #endif
+
+            #else
+
+                self:cDec:=uBigN:cDec
+                self:cInt:=uBigN:cInt
+                self:cRDiv:=uBigN:cRDiv
+                self:cSig:=uBigN:cSig
+                self:lNeg:=uBigN:lNeg
+                self:nBase:=uBigN:nBase
+                self:nDec:=uBigN:nDec
+                self:nInt:=uBigN:nInt
+                self:nSize:=uBigN:nSize
+
+            #endif
+
+        elseif cType=="A"
+
+            DEFAULT cRDiv:=uBigN[3][2]
+
+            #ifdef __TBN_DYN_OBJ_SET__
 
                 oThis:=self
-                uBigN:=classDataArr(uBigN)
                 nFP:=hb_bLen(uBigN)
 
                 for nP:=1 to nFP
@@ -1556,157 +1608,124 @@ method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc
 
             #else
 
-                __objSetValueList(self,__objGetValueList(uBigN))
+                self:cDec:=uBigN[1][2]
+                self:cInt:=uBigN[2][2]
+                self:cRDiv:=uBigN[3][2]
+                self:cSig:=uBigN[4][2]
+                self:lNeg:=uBigN[5][2]
+                self:nBase:=uBigN[6][2]
+                self:nDec:=uBigN[7][2]
+                self:nInt:=uBigN[8][2]
+                self:nSize:=uBigN[9][2]
 
             #endif
 
-        #else
+        elseif cType=="C"
 
-            self:cDec:=uBigN:cDec
-            self:cInt:=uBigN:cInt
-            self:cRDiv:=uBigN:cRDiv
-            self:cSig:=uBigN:cSig
-            self:lNeg:=uBigN:lNeg
-            self:nBase:=uBigN:nBase
-            self:nDec:=uBigN:nDec
-            self:nInt:=uBigN:nInt
-            self:nSize:=uBigN:nSize
-
-        #endif
-
-    elseif cType=="A"
-
-        DEFAULT cRDiv:=uBigN[3][2]
-
-        #ifdef __TBN_DYN_OBJ_SET__
-
-            oThis:=self
-            nFP:=hb_bLen(uBigN)
-
-            for nP:=1 to nFP
-                &("oThis:"+uBigN[nP][1]):=uBigN[nP][2]
-            next nP
-
-        #else
-
-            self:cDec:=uBigN[1][2]
-            self:cInt:=uBigN[2][2]
-            self:cRDiv:=uBigN[3][2]
-            self:cSig:=uBigN[4][2]
-            self:lNeg:=uBigN[5][2]
-            self:nBase:=uBigN[6][2]
-            self:nDec:=uBigN[7][2]
-            self:nInt:=uBigN[8][2]
-            self:nSize:=uBigN[9][2]
-
-        #endif
-
-    elseif cType=="C"
-
-        while " "$uBigN
-            uBigN:=StrTran(uBigN," ","")
-        end while
-
-        self:lNeg:=Left(uBigN,1)=="-"
-
-        if self:lNeg
-            uBigN:=SubStr(uBigN,2)
-            self:cSig:="-"
-        else
-            self:cSig:=""
-        endif
-
-        nFP:=AT(".",uBigN)
-
-        DEFAULT nBase:=self:nBase
-
-        self:cInt:="0"
-        self:cDec:="0"
-
-        do case
-        case nFP==0
-            self:cInt:=uBigN
-            self:cDec:="0"
-        case nFP==1
-            self:cInt:="0"
-            self:cDec:=SubStr(uBigN,nFP+1)
-            if "0"==Left(self:cDec,1)
-                nFP:=hb_bLen(self:cDec)
-                s__IncS0(nFP)
-                if self:cDec==Left(s__cN0,nFP)
-                    self:cDec:="0"
-                endif
-            endif
-        otherwise
-            self:cInt:=Left(uBigN,nFP-1)
-            self:cDec:=SubStr(uBigN,nFP+1)
-            if "0"==Left(self:cDec,1)
-                nFP:=hb_bLen(self:cDec)
-                s__IncS0(nFP)
-                if self:cDec==Left(s__cN0,nFP)
-                    self:cDec:="0"
-                endif
-            endif
-        endcase
-
-        if self:cInt=="0".and.(self:cDec=="0".or.self:cDec=="")
-            self:lNeg:=.F.
-            self:cSig:=""
-        endif
-
-        self:nInt:=hb_bLen(self:cInt)
-        self:nDec:=hb_bLen(self:cDec)
-
-    endif
-
-    if self:cInt==""
-        self:cInt:="0"
-        self:nInt:=1
-    endif
-
-    if self:cDec==""
-        self:cDec:="0"
-        self:nDec:=1
-    endif
-
-    if Empty(cRDiv)
-        cRDiv:="0"
-    endif
-    self:cRDiv:=cRDiv
-
-    DEFAULT lLZRmv:=(self:nBase==10)
-    if lLZRmv
-        #ifdef __HARBOUR__
-            if self:nInt>1.and.Left(self:cInt,1)=="0"
-                self:cInt:=RemLeft(self:cInt,"0")
-                self:nInt:=hb_bLen(self:cInt)
-                if (self:nInt==0)
-                    self:cInt:="0"
-                    self:nInt:=1
-                endif
-            endif
-        #else //__PROTEUS__
-            while self:nInt>1.and.Left(self:cInt,1)=="0"
-                self:cInt:=Right(self:cInt,--self:nInt)
+            while " "$uBigN
+                uBigN:=StrTran(uBigN," ","")
             end while
-        #endif /*__HARBOUR__*/
-    endif
 
-    DEFAULT nAcc:=s__nDecSet
-    if self:nDec>nAcc
-        self:nDec:=nAcc
-        self:cDec:=Left(self:cDec,self:nDec)
+            self:lNeg:=Left(uBigN,1)=="-"
+
+            if self:lNeg
+                uBigN:=SubStr(uBigN,2)
+                self:cSig:="-"
+            else
+                self:cSig:=""
+            endif
+
+            nFP:=AT(".",uBigN)
+
+            DEFAULT nBase:=self:nBase
+
+            self:cInt:="0"
+            self:cDec:="0"
+
+            do case
+            case nFP==0
+                self:cInt:=uBigN
+                self:cDec:="0"
+            case nFP==1
+                self:cInt:="0"
+                self:cDec:=SubStr(uBigN,nFP+1)
+                if "0"==Left(self:cDec,1)
+                    nFP:=hb_bLen(self:cDec)
+                    s__IncS0(nFP)
+                    if self:cDec==Left(s__cN0,nFP)
+                        self:cDec:="0"
+                    endif
+                endif
+            otherwise
+                self:cInt:=Left(uBigN,nFP-1)
+                self:cDec:=SubStr(uBigN,nFP+1)
+                if "0"==Left(self:cDec,1)
+                    nFP:=hb_bLen(self:cDec)
+                    s__IncS0(nFP)
+                    if self:cDec==Left(s__cN0,nFP)
+                        self:cDec:="0"
+                    endif
+                endif
+            endcase
+
+            if self:cInt=="0".and.(self:cDec=="0".or.self:cDec=="")
+                self:lNeg:=.F.
+                self:cSig:=""
+            endif
+
+            self:nInt:=hb_bLen(self:cInt)
+            self:nDec:=hb_bLen(self:cDec)
+
+        endif
+
+        if self:cInt==""
+            self:cInt:="0"
+            self:nInt:=1
+        endif
+
         if self:cDec==""
             self:cDec:="0"
             self:nDec:=1
         endif
-    endif
 
-    self:nSize:=(self:nInt+self:nDec)
+        if Empty(cRDiv)
+            cRDiv:="0"
+        endif
+        self:cRDiv:=cRDiv
 
-    return(self)
+        DEFAULT lLZRmv:=(self:nBase==10)
+        if lLZRmv
+            #ifdef __HARBOUR__
+                if self:nInt>1.and.Left(self:cInt,1)=="0"
+                    self:cInt:=RemLeft(self:cInt,"0")
+                    self:nInt:=hb_bLen(self:cInt)
+                    if (self:nInt==0)
+                        self:cInt:="0"
+                        self:nInt:=1
+                    endif
+                endif
+            #else //__PROTEUS__
+                while self:nInt>1.and.Left(self:cInt,1)=="0"
+                    self:cInt:=Right(self:cInt,--self:nInt)
+                end while
+            #endif /*__HARBOUR__*/
+        endif
 
-/*method SetValue*/
+        DEFAULT nAcc:=s__nDecSet
+        if self:nDec>nAcc
+            self:nDec:=nAcc
+            self:cDec:=Left(self:cDec,self:nDec)
+            if self:cDec==""
+                self:cDec:="0"
+                self:nDec:=1
+            endif
+        endif
+
+        self:nSize:=(self:nInt+self:nDec)
+
+        return(self)
+
+    /*method SetValue*/
 
 //--------------------------------------------------------------------------------------------------------
     /*
@@ -1717,23 +1736,32 @@ method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc
         Sintaxe:tBigNumber():GetValue(lAbs,lObj) -> uNR
     */
 //--------------------------------------------------------------------------------------------------------
-method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
+#ifdef __HARBOUR__
+    method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method GetValue(lAbs,lObj) class tBigNumber
+#endif /*__HARBOUR__*/
+    
+        local uNR
+        
+        #ifdef __ADVPL__
+            PARAMETER lAbs AS LOGICAL
+            PARAMETER lObj AS LOGICAL
+        #endif /*__ADVPL__*/
 
-    local uNR
+        DEFAULT lAbs:=.F.
+        DEFAULT lObj:=.F.
 
-    DEFAULT lAbs:=.F.
-    DEFAULT lObj:=.F.
+        uNR:=if(lAbs,"",self:cSig)
+        uNR+=self:cInt
+        uNR+="."
+        uNR+=self:cDec
 
-    uNR:=if(lAbs,"",self:cSig)
-    uNR+=self:cInt
-    uNR+="."
-    uNR+=self:cDec
+        if lObj
+            uNR:=tBigNumber():New(uNR)
+        endif
 
-    if lObj
-        uNR:=tBigNumber():New(uNR)
-    endif
-
-    return(uNR)
+        return(uNR)
 
 /*method GetValue*/
 
@@ -1746,30 +1774,39 @@ method GetValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():ExactValue(lAbs) -> uNR
     */
 //--------------------------------------------------------------------------------------------------------
-method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
+#ifdef __HARBOUR__
+    method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method ExactValue(lAbs,lObj) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cDec  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local uNR
+        local uNR
+        
+        #ifdef __ADVPL__
+            PARAMETER lAbs AS LOGICAL
+            PARAMETER lObj AS LOGICAL
+        #endif /*__ADVPL__*/
 
-    DEFAULT lAbs:=.F.
-    DEFAULT lObj:=.F.
+        DEFAULT lAbs:=.F.
+        DEFAULT lObj:=.F.
 
-    uNR:=if(lAbs,"",self:cSig)
+        uNR:=if(lAbs,"",self:cSig)
 
-    uNR+=self:cInt
-    cDec:=self:Dec(NIL,NIL,self:nBase==10)
+        uNR+=self:cInt
+        cDec:=self:Dec(NIL,NIL,self:nBase==10)
 
-    if .not.(cDec=="")
-        uNR+="."
-        uNR+=cDec
-    endif
+        if .not.(cDec=="")
+            uNR+="."
+            uNR+=cDec
+        endif
 
-    if lObj
-        uNR:=tBigNumber():New(uNR)
-    endif
+        if lObj
+            uNR:=tBigNumber():New(uNR)
+        endif
 
-    return(uNR)
+        return(uNR)
 
 /*method ExactValue*/
 
@@ -1782,8 +1819,13 @@ method ExactValue(lAbs AS LOGICAL,lObj AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():Abs() -> uNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Abs(lObj AS LOGICAL) class tBigNumber
-    return(self:GetValue(.T.,lObj))
+#ifdef __HARBOUR__
+    method Abs(lObj AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method Abs(lObj) class tBigNumber
+        PARAMETER lObj AS LOGICAL
+#endif /*__HARBOUR__*/
+        return(self:GetValue(.T.,lObj))
 /*method Abs*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1795,15 +1837,23 @@ method Abs(lObj AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():Int(lObj,lSig) -> uNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
-    local uNR
-    DEFAULT lObj:=.F.
-    DEFAULT lSig:=.F.
-    uNR:=if(lSig,self:cSig,"")+self:cInt
-    if lObj
-        uNR:=tBigNumber():New(uNR)
-    endif
-    return(uNR)
+#ifdef __HARBOUR__
+    method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method Int(lObj,lSig) class tBigNumber
+#endif /*__HARBOUR__*/
+        local uNR
+        #ifdef __ADVPL__
+            PARAMETER lObj AS LOGICAL
+            PARAMETER lSig AS LOGICAL
+        #endif /*__ADVPL__*/
+        DEFAULT lObj:=.F.
+        DEFAULT lSig:=.F.
+        uNR:=if(lSig,self:cSig,"")+self:cInt
+        if lObj
+            uNR:=tBigNumber():New(uNR)
+        endif
+        return(uNR)
 /*method Int*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1815,33 +1865,43 @@ method Int(lObj AS LOGICAL,lSig AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():Dec(lObj,lSig,lNotZ) -> uNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
+#ifdef __HARBOUR__
+    method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method Dec(lObj,lSig,lNotZ) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cDec  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local nDec
+        local nDec
 
-    local uNR
+        local uNR
+        
+        #ifdef __ADVPL__
+            PARAMETER lObj    AS LOGICAL
+            PARAMETER lSig    AS LOGICAL
+            PARAMETER lNotZ   AS LOGICAL
+        #endif /*__ADVPL__*/
 
-    cDec:=self:cDec
+        cDec:=self:cDec
 
-    DEFAULT lNotZ:=.F.
-    if lNotZ
-        nDec:=self:nDec
-        while Right(cDec,1)=="0"
-            cDec:=Left(cDec,--nDec)
-        end while
-    endif
+        DEFAULT lNotZ:=.F.
+        if lNotZ
+            nDec:=self:nDec
+            while Right(cDec,1)=="0"
+                cDec:=Left(cDec,--nDec)
+            end while
+        endif
 
-    DEFAULT lObj:=.F.
-    DEFAULT lSig:=.F.
-    if lObj
-        uNR:=tBigNumber():New(if(lSig,self:cSig,"")+"0."+cDec)
-    else
-        uNR:=if(lSig,self:cSig,"")+cDec
-    endif
+        DEFAULT lObj:=.F.
+        DEFAULT lSig:=.F.
+        if lObj
+            uNR:=tBigNumber():New(if(lSig,self:cSig,"")+"0."+cDec)
+        else
+            uNR:=if(lSig,self:cSig,"")+cDec
+        endif
 
-    return(uNR)
+        return(uNR)
 
 /*method Dec*/
 
@@ -1854,30 +1914,34 @@ method Dec(lObj AS LOGICAL,lSig AS LOGICAL,lNotZ AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():eq(uBigN) -> leq
     */
 //--------------------------------------------------------------------------------------------------------
-method eq(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method eq(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method eq(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local leq   AS LOGICAL
+        local leq   AS LOGICAL
 
-    local oeqN1 AS OBJECT
-    local oeqN2 AS OBJECT
+        local oeqN1 AS OBJECT
+        local oeqN2 AS OBJECT
 
-    oeqN1:=s__o0:Clone()
-    oeqN1:SetValue(self)
+        oeqN1:=s__o0:Clone()
+        oeqN1:SetValue(self)
 
-    oeqN2:=s__o0:Clone()
-    oeqN2:SetValue(uBigN)
+        oeqN2:=s__o0:Clone()
+        oeqN2:SetValue(uBigN)
 
-    leq:=oeqN1:lNeg==oeqN2:lNeg
-    if leq
-        oeqN1:Normalize(@oeqN2)
-        #ifdef __PTCOMPAT__
-            leq:=oeqN1:GetValue(.T.)==oeqN2:GetValue(.T.)
-        #else
-            leq:=tBIGNmemcmp(oeqN1:GetValue(.T.),oeqN2:GetValue(.T.))==0
-        #endif
-    endif
+        leq:=oeqN1:lNeg==oeqN2:lNeg
+        if leq
+            oeqN1:Normalize(@oeqN2)
+            #ifdef __PTCOMPAT__
+                leq:=oeqN1:GetValue(.T.)==oeqN2:GetValue(.T.)
+            #else
+                leq:=tBIGNmemcmp(oeqN1:GetValue(.T.),oeqN2:GetValue(.T.))==0
+            #endif
+        endif
 
-    return(leq)
+        return(leq)
 
  /*method eq*/
 
@@ -1890,8 +1954,12 @@ method eq(uBigN) class tBigNumber
         Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
     */
 //--------------------------------------------------------------------------------------------------------
-method ne(uBigN) class tBigNumber
-    return(.not.(self:eq(uBigN)))
+#ifdef __HARBOUR__
+    method ne(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method ne(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        return(.not.(self:eq(uBigN)))
 /*method ne*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -1903,42 +1971,46 @@ method ne(uBigN) class tBigNumber
         Sintaxe:tBigNumber():gt(uBigN) -> lgt
     */
 //--------------------------------------------------------------------------------------------------------
-method gt(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method gt(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method gt(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local lgt   AS LOGICAL
+        local lgt   AS LOGICAL
 
-    local ogtN1 AS OBJECT
-    local ogtN2 AS OBJECT
+        local ogtN1 AS OBJECT
+        local ogtN2 AS OBJECT
 
-    ogtN1:=s__o0:Clone()
-    ogtN1:SetValue(self)
+        ogtN1:=s__o0:Clone()
+        ogtN1:SetValue(self)
 
-    ogtN2:=s__o0:Clone()
-    ogtN2:SetValue(uBigN)
+        ogtN2:=s__o0:Clone()
+        ogtN2:SetValue(uBigN)
 
-    if ogtN1:lNeg.or.ogtN2:lNeg
-        if ogtN1:lNeg.and.ogtN2:lNeg
+        if ogtN1:lNeg.or.ogtN2:lNeg
+            if ogtN1:lNeg.and.ogtN2:lNeg
+                ogtN1:Normalize(@ogtN2)
+                #ifdef __PTCOMPAT__
+                    lgt:=ogtN1:GetValue(.T.)<ogtN2:GetValue(.T.)
+                #else
+                    lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==-1
+                #endif
+            elseif ogtN1:lNeg.and.(.not.(ogtN2:lNeg))
+                lgt:=.F.
+            elseif .not.(ogtN1:lNeg).and.ogtN2:lNeg
+                lgt:=.T.
+            endif
+        else
             ogtN1:Normalize(@ogtN2)
             #ifdef __PTCOMPAT__
-                lgt:=ogtN1:GetValue(.T.)<ogtN2:GetValue(.T.)
+                lgt:=ogtN1:GetValue(.T.)>ogtN2:GetValue(.T.)
             #else
-                lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==-1
+                lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==1
             #endif
-        elseif ogtN1:lNeg.and.(.not.(ogtN2:lNeg))
-            lgt:=.F.
-        elseif .not.(ogtN1:lNeg).and.ogtN2:lNeg
-            lgt:=.T.
         endif
-    else
-        ogtN1:Normalize(@ogtN2)
-        #ifdef __PTCOMPAT__
-            lgt:=ogtN1:GetValue(.T.)>ogtN2:GetValue(.T.)
-        #else
-            lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==1
-        #endif
-    endif
 
-    return(lgt)
+        return(lgt)
 
 /*method gt*/
 
@@ -1951,42 +2023,46 @@ method gt(uBigN) class tBigNumber
         Sintaxe:tBigNumber():lt(uBigN) -> llt
     */
 //--------------------------------------------------------------------------------------------------------
-method lt(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method lt(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method lt(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local llt   AS LOGICAL
+        local llt   AS LOGICAL
 
-    local oltN1 AS OBJECT
-    local oltN2 AS OBJECT
+        local oltN1 AS OBJECT
+        local oltN2 AS OBJECT
 
-    oltN1:=s__o0:Clone()
-    oltN1:SetValue(self)
+        oltN1:=s__o0:Clone()
+        oltN1:SetValue(self)
 
-    oltN2:=s__o0:Clone()
-    oltN2:SetValue(uBigN)
+        oltN2:=s__o0:Clone()
+        oltN2:SetValue(uBigN)
 
-    if oltN1:lNeg.or.oltN2:lNeg
-        if oltN1:lNeg.and.oltN2:lNeg
+        if oltN1:lNeg.or.oltN2:lNeg
+            if oltN1:lNeg.and.oltN2:lNeg
+                oltN1:Normalize(@oltN2)
+                #ifdef __PTCOMPAT__
+                    llt:=oltN1:GetValue(.T.)>oltN2:GetValue(.T.)
+                #else
+                    llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1
+                #endif
+            elseif oltN1:lNeg.and.(.not.(oltN2:lNeg))
+                llt:=.T.
+            elseif .not.(oltN1:lNeg).and.oltN2:lNeg
+                llt:=.F.
+            endif
+        else
             oltN1:Normalize(@oltN2)
             #ifdef __PTCOMPAT__
-                llt:=oltN1:GetValue(.T.)>oltN2:GetValue(.T.)
+                llt:=oltN1:GetValue(.T.)<oltN2:GetValue(.T.)
             #else
-                llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1
+                llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==-1
             #endif
-        elseif oltN1:lNeg.and.(.not.(oltN2:lNeg))
-            llt:=.T.
-        elseif .not.(oltN1:lNeg).and.oltN2:lNeg
-            llt:=.F.
         endif
-    else
-        oltN1:Normalize(@oltN2)
-        #ifdef __PTCOMPAT__
-            llt:=oltN1:GetValue(.T.)<oltN2:GetValue(.T.)
-        #else
-            llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==-1
-        #endif
-    endif
 
-    return(llt)
+        return(llt)
 
 /*method lt*/
 
@@ -1999,8 +2075,12 @@ method lt(uBigN) class tBigNumber
         Sintaxe:tBigNumber():gte(uBigN) -> lgte
     */
 //--------------------------------------------------------------------------------------------------------
-method gte(uBigN) class tBigNumber
-    return(self:cmp(uBigN)>=0)
+#ifdef __HARBOUR__
+    method gte(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method gte(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        return(self:cmp(uBigN)>=0)
 /*method gte(*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2012,8 +2092,12 @@ method gte(uBigN) class tBigNumber
         Sintaxe:tBigNumber():lte(uBigN) -> lte
     */
 //--------------------------------------------------------------------------------------------------------
-method lte(uBigN) class tBigNumber
-    return(self:cmp(uBigN)<=0)
+#ifdef __HARBOUR__
+    method lte(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method lte(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        return(self:cmp(uBigN)<=0)
 /*method lte*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2028,75 +2112,79 @@ method lte(uBigN) class tBigNumber
         Sintaxe:tBigNumber():cmp(uBigN) -> nCmp
     */
 //--------------------------------------------------------------------------------------------------------
-method cmp(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method cmp(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method cmp(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local nCmp  AS NUMERIC
-    local iCmp  AS NUMERIC
+        local nCmp  AS NUMERIC
+        local iCmp  AS NUMERIC
 
-    local llt   AS LOGICAL
-    local leq   AS LOGICAL
+        local llt   AS LOGICAL
+        local leq   AS LOGICAL
 
-    local ocmpN1    AS OBJECT
-    local ocmpN2    AS OBJECT
+        local ocmpN1    AS OBJECT
+        local ocmpN2    AS OBJECT
 
-    ocmpN1:=s__o0:Clone()
-    ocmpN1:SetValue(self)
+        ocmpN1:=s__o0:Clone()
+        ocmpN1:SetValue(self)
 
-    ocmpN2:=s__o0:Clone()
-    ocmpN2:SetValue(uBigN)
+        ocmpN2:=s__o0:Clone()
+        ocmpN2:SetValue(uBigN)
 
-#ifdef __PTCOMPAT__
-    ocmpN1:Normalize(@ocmpN2)
-#endif
-
-    leq:=ocmpN1:lNeg==ocmpN2:lNeg
-    if leq
-        #ifndef __PTCOMPAT__
+        #ifdef __PTCOMPAT__
             ocmpN1:Normalize(@ocmpN2)
         #endif
-        #ifdef __PTCOMPAT__
-            iCmp:=if(ocmpN1:GetValue(.T.)==ocmpN2:GetValue(.T.),0,NIL)
-        #else
-            iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
-        #endif
-        leq:=iCmp==0
-    endif
 
-    if leq
-        nCmp:=0
-    else
-        if ocmpN1:lNeg.or.ocmpN2:lNeg
-            if ocmpN1:lNeg.and.ocmpN2:lNeg
-                if iCmp==NIL
-                    #ifndef __PTCOMPAT__
-                        ocmpN1:Normalize(@ocmpN2)
-                    #endif
-                    #ifdef __PTCOMPAT__
-                        iCmp:=if(ocmpN1:GetValue(.T.)>ocmpN2:GetValue(.T.),1,-1)
-                    #else
-                        iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
-                    #endif
-                endif
-                llt:=iCmp==1
-            elseif ocmpN1:lNeg.and.(.not.(ocmpN2:lNeg))
-                llt:=.T.
-            elseif .not.(ocmpN1:lNeg).and.ocmpN2:lNeg
-                llt:=.F.
-            endif
-        else
-            #ifdef __PTCOMPAT__
-                iCmp:=if(ocmpN1:GetValue(.T.)<ocmpN2:GetValue(.T.),-1,1)
+        leq:=ocmpN1:lNeg==ocmpN2:lNeg
+        if leq
+            #ifndef __PTCOMPAT__
+                ocmpN1:Normalize(@ocmpN2)
             #endif
-            llt:=iCmp==-1
+            #ifdef __PTCOMPAT__
+                iCmp:=if(ocmpN1:GetValue(.T.)==ocmpN2:GetValue(.T.),0,NIL)
+            #else
+                iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+            #endif
+            leq:=iCmp==0
         endif
-        if llt
-            nCmp:=-1
-        else
-            nCmp:=1
-        endif
-    endif
 
-    return(nCmp)
+        if leq
+            nCmp:=0
+        else
+            if ocmpN1:lNeg.or.ocmpN2:lNeg
+                if ocmpN1:lNeg.and.ocmpN2:lNeg
+                    if iCmp==NIL
+                        #ifndef __PTCOMPAT__
+                            ocmpN1:Normalize(@ocmpN2)
+                        #endif
+                        #ifdef __PTCOMPAT__
+                            iCmp:=if(ocmpN1:GetValue(.T.)>ocmpN2:GetValue(.T.),1,-1)
+                        #else
+                            iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+                        #endif
+                    endif
+                    llt:=iCmp==1
+                elseif ocmpN1:lNeg.and.(.not.(ocmpN2:lNeg))
+                    llt:=.T.
+                elseif .not.(ocmpN1:lNeg).and.ocmpN2:lNeg
+                    llt:=.F.
+                endif
+            else
+                #ifdef __PTCOMPAT__
+                    iCmp:=if(ocmpN1:GetValue(.T.)<ocmpN2:GetValue(.T.),-1,1)
+                #endif
+                llt:=iCmp==-1
+            endif
+            if llt
+                nCmp:=-1
+            else
+                nCmp:=1
+            endif
+        endif
+
+        return(nCmp)
 
 /*method cmp*/
 
@@ -2109,8 +2197,12 @@ method cmp(uBigN) class tBigNumber
         Sintaxe:tBigNumber():btw(uBigS,uBigE) -> lRet
     */
 //--------------------------------------------------------------------------------------------------------
-method btw(uBigS,uBigE) class tBigNumber
-    return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
+#ifdef __HARBOUR__
+    method btw(uBigS,uBigE) class tBigNumber
+#else /*__ADVPL__*/
+    method btw(uBigS,uBigE) class tBigNumber
+#endif /*__HARBOUR__*/
+        return(self:cmp(uBigS)>=0.and.self:cmp(uBigE)<=0)
 /*method btw*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2122,21 +2214,25 @@ method btw(uBigS,uBigE) class tBigNumber
         Sintaxe:tBigNumber():ibtw(uiBigS,uiBigE) -> lRet
     */
 //--------------------------------------------------------------------------------------------------------
-method ibtw(uiBigS,uiBigE) class tBigNumber
-    local lbtw      AS LOGICAL
-    local oibtwS    AS OBJECT
-    local oibtwE    AS OBJECT
-    lbtw:=.F.
-    if self:Dec(.T.,.F.,.T.):eq(s__o0)
-        oibtwS:=s__o0:Clone()
-        oibtwS:SetValue(uiBigS)
-        oibtwE:=s__o0:Clone()
-        oibtwE:SetValue(uiBigE)
-        if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0).and.oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
-            lbtw:=self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
+#ifdef __HARBOUR__
+    method ibtw(uiBigS,uiBigE) class tBigNumber
+#else /*__ADVPL__*/
+    method ibtw(uiBigS,uiBigE) class tBigNumber
+#endif /*__HARBOUR__*/
+        local lbtw      AS LOGICAL
+        local oibtwS    AS OBJECT
+        local oibtwE    AS OBJECT
+        lbtw:=.F.
+        if self:Dec(.T.,.F.,.T.):eq(s__o0)
+            oibtwS:=s__o0:Clone()
+            oibtwS:SetValue(uiBigS)
+            oibtwE:=s__o0:Clone()
+            oibtwE:SetValue(uiBigE)
+            if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0).and.oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
+                lbtw:=self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
+            endif
         endif
-    endif
-    return(lbtw)
+        return(lbtw)
 /*method ibtw*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2148,13 +2244,17 @@ method ibtw(uiBigS,uiBigE) class tBigNumber
         Sintaxe:tBigNumber():Max(uBigN) -> oMax
     */
 //--------------------------------------------------------------------------------------------------------
-method Max(uBigN) class tBigNumber
-    local oMax  AS OBJECT
-    oMax:=tBigNumber():New(uBigN)
-    if self:gt(oMax)
-        oMax:SetValue(self)
-    endif
-    return(oMax)
+#ifdef __HARBOUR__
+    method Max(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Max(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        local oMax  AS OBJECT
+        oMax:=tBigNumber():New(uBigN)
+        if self:gt(oMax)
+            oMax:SetValue(self)
+        endif
+        return(oMax)
 /*method Max*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2166,13 +2266,17 @@ method Max(uBigN) class tBigNumber
         Sintaxe:tBigNumber():Min(uBigN) -> oMin
     */
 //--------------------------------------------------------------------------------------------------------
-method Min(uBigN) class tBigNumber
-    local oMin  AS OBJECT
-    oMin:=tBigNumber():New(uBigN)
-    if self:lt(oMin)
-        oMin:SetValue(self)
-    endif
-    return(oMin)
+#ifdef __HARBOUR__
+    method Min(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Min(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        local oMin  AS OBJECT
+        oMin:=tBigNumber():New(uBigN)
+        if self:lt(oMin)
+            oMin:SetValue(self)
+        endif
+        return(oMin)
 /*method Min*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2184,86 +2288,90 @@ method Min(uBigN) class tBigNumber
         Sintaxe:tBigNumber():Add(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Add(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method Add(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Add(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cInt  AS CHARACTER
-    local cDec  AS CHARACTER
+        local cInt  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lInv  AS LOGICAL
-    local lAdd  AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lInv  AS LOGICAL
+        local lAdd  AS LOGICAL
 
-    local nDec  AS NUMERIC
-    local nSize AS NUMERIC
+        local nDec  AS NUMERIC
+        local nSize AS NUMERIC
 
-    local oadNR AS OBJECT
+        local oadNR AS OBJECT
 
-    local oadN1 AS OBJECT
-    local oadN2 AS OBJECT
+        local oadN1 AS OBJECT
+        local oadN2 AS OBJECT
 
-    oadN1:=s__o0:Clone()
-    oadN1:SetValue(self)
+        oadN1:=s__o0:Clone()
+        oadN1:SetValue(self)
 
-    oadN2:=s__o0:Clone()
-    oadN2:SetValue(uBigN)
+        oadN2:=s__o0:Clone()
+        oadN2:SetValue(uBigN)
 
-    oadN1:Normalize(@oadN2)
+        oadN1:Normalize(@oadN2)
 
-    nDec:=oadN1:nDec
-    nSize:=oadN1:nSize
+        nDec:=oadN1:nDec
+        nSize:=oadN1:nSize
 
-    cN1:=oadN1:cInt
-    cN1+=oadN1:cDec
+        cN1:=oadN1:cInt
+        cN1+=oadN1:cDec
 
-    cN2:=oadN2:cInt
-    cN2+=oadN2:cDec
+        cN2:=oadN2:cInt
+        cN2+=oadN2:cDec
 
-    lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
+        lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
-    if lNeg
-        lAdd:=.F.
-        #ifdef __HARBOUR__
-            lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTEUS__
-            lInv:=cN1<cN2
-        #endif /*__HARBOUR__*/
-        lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
-        if lInv
-            cNT:=cN1
-            cN1:=cN2
-            cN2:=cNT
-            cNT:=NIL
+        if lNeg
+            lAdd:=.F.
+            #ifdef __HARBOUR__
+                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+            #else //__PROTEUS__
+                lInv:=cN1<cN2
+            #endif /*__HARBOUR__*/
+            lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
+            if lInv
+                cNT:=cN1
+                cN1:=cN2
+                cN2:=cNT
+                cNT:=NIL
+            endif
+        else
+            lAdd:=.T.
+            lNeg:=oadN1:lNeg
         endif
-    else
-        lAdd:=.T.
-        lNeg:=oadN1:lNeg
-    endif
 
-    if lAdd
-        cNT:=Add(cN1,cN2,nSize,self:nBase)
-    else
-        cNT:=Sub(cN1,cN2,nSize,self:nBase)
-    endif
+        if lAdd
+            cNT:=Add(cN1,cN2,nSize,self:nBase)
+        else
+            cNT:=Sub(cN1,cN2,nSize,self:nBase)
+        endif
 
-    cDec:=Right(cNT,nDec)
-    cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+        cDec:=Right(cNT,nDec)
+        cInt:=Left(cNT,hb_bLen(cNT)-nDec)
 
-    cNT:=cInt
-    cNT+="."
-    cNT+=cDec
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
 
-    oadNR:=s__o0:Clone()
-    oadNR:SetValue(cNT)
+        oadNR:=s__o0:Clone()
+        oadNR:SetValue(cNT)
 
-    if lNeg
-        oadNR:__cSig("-")
-    endif
+        if lNeg
+            oadNR:__cSig("-")
+        endif
 
-    return(oadNR)
+        return(oadNR)
 
 /*method Add*/
 
@@ -2276,71 +2384,75 @@ method Add(uBigN) class tBigNumber
         Sintaxe:tBigNumber():iAdd(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method iAdd(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method iAdd(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method iAdd(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lInv  AS LOGICAL
-    local lAdd  AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lInv  AS LOGICAL
+        local lAdd  AS LOGICAL
 
-    local nSize AS NUMERIC
+        local nSize AS NUMERIC
 
-    local oadNR AS OBJECT
+        local oadNR AS OBJECT
 
-    local oadN1 AS OBJECT
-    local oadN2 AS OBJECT
+        local oadN1 AS OBJECT
+        local oadN2 AS OBJECT
 
-    oadN1:=s__o0:Clone()
-    oadN1:SetValue(self)
+        oadN1:=s__o0:Clone()
+        oadN1:SetValue(self)
 
-    oadN2:=s__o0:Clone()
-    oadN2:SetValue(uBigN)
+        oadN2:=s__o0:Clone()
+        oadN2:SetValue(uBigN)
 
-    oadN1:Normalize(@oadN2)
+        oadN1:Normalize(@oadN2)
 
-    nSize:=oadN1:nInt
+        nSize:=oadN1:nInt
 
-    cN1:=oadN1:cInt
-    cN2:=oadN2:cInt
+        cN1:=oadN1:cInt
+        cN2:=oadN2:cInt
 
-    lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
+        lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
-    if lNeg
-        lAdd:=.F.
-        #ifdef __HARBOUR__
-            lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTEUS__
-            lInv:=cN1<cN2
-        #endif /*__HARBOUR__*/
-        lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
-        if lInv
-            cNT:=cN1
-            cN1:=cN2
-            cN2:=cNT
-            cNT:=NIL
+        if lNeg
+            lAdd:=.F.
+            #ifdef __HARBOUR__
+                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+            #else //__PROTEUS__
+                lInv:=cN1<cN2
+            #endif /*__HARBOUR__*/
+            lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
+            if lInv
+                cNT:=cN1
+                cN1:=cN2
+                cN2:=cNT
+                cNT:=NIL
+            endif
+        else
+            lAdd:=.T.
+            lNeg:=oadN1:lNeg
         endif
-    else
-        lAdd:=.T.
-        lNeg:=oadN1:lNeg
-    endif
 
-    if lAdd
-        cNT:=Add(cN1,cN2,nSize,self:nBase)
-    else
-        cNT:=Sub(cN1,cN2,nSize,self:nBase)
-    endif
+        if lAdd
+            cNT:=Add(cN1,cN2,nSize,self:nBase)
+        else
+            cNT:=Sub(cN1,cN2,nSize,self:nBase)
+        endif
 
-    oadNR:=s__o0:Clone()
-    oadNR:SetValue(cNT)
+        oadNR:=s__o0:Clone()
+        oadNR:SetValue(cNT)
 
-    if lNeg
-        oadNR:__cSig("-")
-    endif
+        if lNeg
+            oadNR:__cSig("-")
+        endif
 
-    return(oadNR)
+        return(oadNR)
 
 /*method iAdd*/
 
@@ -2353,86 +2465,90 @@ method iAdd(uBigN) class tBigNumber
         Sintaxe:tBigNumber():Sub(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Sub(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method Sub(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Sub(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cInt  AS CHARACTER
-    local cDec  AS CHARACTER
+        local cInt  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lInv  AS LOGICAL
-    local lSub  AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lInv  AS LOGICAL
+        local lSub  AS LOGICAL
 
-    local nDec  AS NUMERIC
-    local nSize AS NUMERIC
+        local nDec  AS NUMERIC
+        local nSize AS NUMERIC
 
-    local osbNR AS NUMERIC
+        local osbNR AS NUMERIC
 
-    local osbN1 AS NUMERIC
-    local osbN2 AS NUMERIC
+        local osbN1 AS NUMERIC
+        local osbN2 AS NUMERIC
 
-    osbN1:=s__o0:Clone()
-    osbN1:SetValue(self)
+        osbN1:=s__o0:Clone()
+        osbN1:SetValue(self)
 
-    osbN2:=s__o0:Clone()
-    osbN2:SetValue(uBigN)
+        osbN2:=s__o0:Clone()
+        osbN2:SetValue(uBigN)
 
-    osbN1:Normalize(@osbN2)
+        osbN1:Normalize(@osbN2)
 
-    nDec:=osbN1:nDec
-    nSize:=osbN1:nSize
+        nDec:=osbN1:nDec
+        nSize:=osbN1:nSize
 
-    cN1:=osbN1:cInt
-    cN1+=osbN1:cDec
+        cN1:=osbN1:cInt
+        cN1+=osbN1:cDec
 
-    cN2:=osbN2:cInt
-    cN2+=osbN2:cDec
+        cN2:=osbN2:cInt
+        cN2+=osbN2:cDec
 
-    lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
+        lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
-    if lNeg
-        lSub:=.F.
-        lNeg:=osbN1:lNeg
-    else
-        lSub:=.T.
-        #ifdef __HARBOUR__
-            lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTEUS__
-            lInv:=cN1<cN2
-        #endif /*__HARBOUR__*/
-        lNeg:=osbN1:lNeg.or.lInv
-        if lInv
-            cNT:=cN1
-            cN1:=cN2
-            cN2:=cNT
-            cNT:=NIL
+        if lNeg
+            lSub:=.F.
+            lNeg:=osbN1:lNeg
+        else
+            lSub:=.T.
+            #ifdef __HARBOUR__
+                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+            #else //__PROTEUS__
+                lInv:=cN1<cN2
+            #endif /*__HARBOUR__*/
+            lNeg:=osbN1:lNeg.or.lInv
+            if lInv
+                cNT:=cN1
+                cN1:=cN2
+                cN2:=cNT
+                cNT:=NIL
+            endif
         endif
-    endif
 
-    if lSub
-        cNT:=Sub(cN1,cN2,nSize,self:nBase)
-    else
-        cNT:=Add(cN1,cN2,nSize,self:nBase)
-    endif
+        if lSub
+            cNT:=Sub(cN1,cN2,nSize,self:nBase)
+        else
+            cNT:=Add(cN1,cN2,nSize,self:nBase)
+        endif
 
-    cDec:=Right(cNT,nDec)
-    cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+        cDec:=Right(cNT,nDec)
+        cInt:=Left(cNT,hb_bLen(cNT)-nDec)
 
-    cNT:=cInt
-    cNT+="."
-    cNT+=cDec
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
 
-    osbNR:=s__o0:Clone()
-    osbNR:SetValue(cNT)
+        osbNR:=s__o0:Clone()
+        osbNR:SetValue(cNT)
 
-    if lNeg
-        osbNR:__cSig("-")
-    endif
+        if lNeg
+            osbNR:__cSig("-")
+        endif
 
-    return(osbNR)
+        return(osbNR)
 
 /*method Sub*/
 
@@ -2445,71 +2561,75 @@ method Sub(uBigN) class tBigNumber
         Sintaxe:tBigNumber():iSub(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method iSub(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method iSub(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method iSub(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lInv  AS LOGICAL
-    local lSub  AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lInv  AS LOGICAL
+        local lSub  AS LOGICAL
 
-    local nSize AS NUMERIC
+        local nSize AS NUMERIC
 
-    local osbNR AS NUMERIC
+        local osbNR AS NUMERIC
 
-    local osbN1 AS NUMERIC
-    local osbN2 AS NUMERIC
+        local osbN1 AS NUMERIC
+        local osbN2 AS NUMERIC
 
-    osbN1:=s__o0:Clone()
-    osbN1:SetValue(self)
+        osbN1:=s__o0:Clone()
+        osbN1:SetValue(self)
 
-    osbN2:=s__o0:Clone()
-    osbN2:SetValue(uBigN)
+        osbN2:=s__o0:Clone()
+        osbN2:SetValue(uBigN)
 
-    osbN1:Normalize(@osbN2)
+        osbN1:Normalize(@osbN2)
 
-    nSize:=osbN1:nInt
+        nSize:=osbN1:nInt
 
-    cN1:=osbN1:cInt
-    cN2:=osbN2:cInt
+        cN1:=osbN1:cInt
+        cN2:=osbN2:cInt
 
-    lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
+        lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
-    if lNeg
-        lSub:=.F.
-        lNeg:=osbN1:lNeg
-    else
-        lSub:=.T.
-        #ifdef __HARBOUR__
-            lInv:=tBIGNmemcmp(cN1,cN2)==-1
-        #else //__PROTEUS__
-            lInv:=cN1<cN2
-        #endif /*__HARBOUR__*/
-        lNeg:=osbN1:lNeg.or.lInv
-        if lInv
-            cNT:=cN1
-            cN1:=cN2
-            cN2:=cNT
-            cNT:=NIL
+        if lNeg
+            lSub:=.F.
+            lNeg:=osbN1:lNeg
+        else
+            lSub:=.T.
+            #ifdef __HARBOUR__
+                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+            #else //__PROTEUS__
+                lInv:=cN1<cN2
+            #endif /*__HARBOUR__*/
+            lNeg:=osbN1:lNeg.or.lInv
+            if lInv
+                cNT:=cN1
+                cN1:=cN2
+                cN2:=cNT
+                cNT:=NIL
+            endif
         endif
-    endif
 
-    if lSub
-        cNT:=Sub(cN1,cN2,nSize,self:nBase)
-    else
-        cNT:=Add(cN1,cN2,nSize,self:nBase)
-    endif
+        if lSub
+            cNT:=Sub(cN1,cN2,nSize,self:nBase)
+        else
+            cNT:=Add(cN1,cN2,nSize,self:nBase)
+        endif
 
-    osbNR:=s__o0:Clone()
-    osbNR:SetValue(cNT)
+        osbNR:=s__o0:Clone()
+        osbNR:SetValue(cNT)
 
-    if lNeg
-        osbNR:__cSig("-")
-    endif
+        if lNeg
+            osbNR:__cSig("-")
+        endif
 
-    return(osbNR)
+        return(osbNR)
 
 /*method iSub*/
 
@@ -2522,70 +2642,74 @@ method iSub(uBigN) class tBigNumber
         Sintaxe:tBigNumber():Mult(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Mult(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method Mult(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Mult(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cInt  AS CHARACTER
-    local cDec  AS CHARACTER
+        local cInt  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lNeg1 AS LOGICAL
-    local lNeg2 AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lNeg1 AS LOGICAL
+        local lNeg2 AS LOGICAL
 
-    local nDec  AS NUMERIC
-    local nSize AS NUMERIC
+        local nDec  AS NUMERIC
+        local nSize AS NUMERIC
 
-    local omtNR AS OBJECT
+        local omtNR AS OBJECT
 
-    local omtN1 AS OBJECT
-    local omtN2 AS OBJECT
+        local omtN1 AS OBJECT
+        local omtN2 AS OBJECT
 
-    omtN1:=s__o0:Clone()
-    omtN1:SetValue(self)
+        omtN1:=s__o0:Clone()
+        omtN1:SetValue(self)
 
-    omtN2:=s__o0:Clone()
-    omtN2:SetValue(uBigN)
+        omtN2:=s__o0:Clone()
+        omtN2:SetValue(uBigN)
 
-    omtN1:Normalize(@omtN2)
+        omtN1:Normalize(@omtN2)
 
-    lNeg1:=omtN1:lNeg
-    lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
+        lNeg1:=omtN1:lNeg
+        lNeg2:=omtN2:lNeg
+        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
-    cN1:=omtN1:cInt
-    cN1+=omtN1:cDec
+        cN1:=omtN1:cInt
+        cN1+=omtN1:cDec
 
-    cN2:=omtN2:cInt
-    cN2+=omtN2:cDec
+        cN2:=omtN2:cInt
+        cN2+=omtN2:cDec
 
-    nDec:=omtN1:nDec*2
-    nSize:=omtN1:nSize
+        nDec:=omtN1:nDec*2
+        nSize:=omtN1:nSize
 
-    cNT:=Mult(cN1,cN2,nSize,self:nBase)
+        cNT:=Mult(cN1,cN2,nSize,self:nBase)
 
-    if nDec>0
-        cDec:=Right(cNT,nDec)
-        cInt:=Left(cNT,hb_bLen(cNT)-nDec)
-        cNT:=cInt
-        cNT+="."
-        cNT+=cDec
-    endif
+        if nDec>0
+            cDec:=Right(cNT,nDec)
+            cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+            cNT:=cInt
+            cNT+="."
+            cNT+=cDec
+        endif
 
-    omtNR:=s__o0:Clone()
-    omtNR:SetValue(cNT)
+        omtNR:=s__o0:Clone()
+        omtNR:SetValue(cNT)
 
-    cNT:=omtNR:ExactValue()
+        cNT:=omtNR:ExactValue()
 
-    omtNR:SetValue(cNT)
+        omtNR:SetValue(cNT)
 
-    if lNeg
-        omtNR:__cSig("-")
-    endif
+        if lNeg
+            omtNR:__cSig("-")
+        endif
 
-    return(omtNR)
+        return(omtNR)
 
 /*method Mult*/
 
@@ -2598,50 +2722,54 @@ method Mult(uBigN) class tBigNumber
         Sintaxe:tBigNumber():iMult(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method iMult(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method iMult(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method iMult(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lNeg1 AS LOGICAL
-    local lNeg2 AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lNeg1 AS LOGICAL
+        local lNeg2 AS LOGICAL
 
-    local nSize AS NUMERIC
+        local nSize AS NUMERIC
 
-    local omtNR AS OBJECT
+        local omtNR AS OBJECT
 
-    local omtN1 AS OBJECT
-    local omtN2 AS OBJECT
+        local omtN1 AS OBJECT
+        local omtN2 AS OBJECT
 
-    omtN1:=s__o0:Clone()
-    omtN1:SetValue(self)
+        omtN1:=s__o0:Clone()
+        omtN1:SetValue(self)
 
-    omtN2:=s__o0:Clone()
-    omtN2:SetValue(uBigN)
+        omtN2:=s__o0:Clone()
+        omtN2:SetValue(uBigN)
 
-    omtN1:Normalize(@omtN2)
+        omtN1:Normalize(@omtN2)
 
-    lNeg1:=omtN1:lNeg
-    lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
+        lNeg1:=omtN1:lNeg
+        lNeg2:=omtN2:lNeg
+        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
-    cN1:=omtN1:cInt
-    cN2:=omtN2:cInt
+        cN1:=omtN1:cInt
+        cN2:=omtN2:cInt
 
-    nSize:=omtN1:nInt
+        nSize:=omtN1:nInt
 
-    cNT:=Mult(cN1,cN2,nSize,self:nBase)
+        cNT:=Mult(cN1,cN2,nSize,self:nBase)
 
-    omtNR:=s__o0:Clone()
-    omtNR:SetValue(cNT)
+        omtNR:=s__o0:Clone()
+        omtNR:SetValue(cNT)
 
-    if lNeg
-        omtNR:__cSig("-")
-    endif
+        if lNeg
+            omtNR:__cSig("-")
+        endif
 
-    return(omtNR)
+        return(omtNR)
 
 /*method iMult*/
 
@@ -2654,67 +2782,71 @@ method iMult(uBigN) class tBigNumber
         Sintaxe:tBigNumber():egMult(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method egMult(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method egMult(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method egMult(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cInt  AS CHARACTER
-    local cDec  AS CHARACTER
+        local cInt  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lNeg1 AS LOGICAL
-    local lNeg2 AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lNeg1 AS LOGICAL
+        local lNeg2 AS LOGICAL
 
-    local nDec  AS NUMERIC
+        local nDec  AS NUMERIC
 
-    local omtNR AS OBJECT
+        local omtNR AS OBJECT
 
-    local omtN1 AS OBJECT
-    local omtN2 AS OBJECT
+        local omtN1 AS OBJECT
+        local omtN2 AS OBJECT
 
-    omtN1:=s__o0:Clone()
-    omtN1:SetValue(self)
+        omtN1:=s__o0:Clone()
+        omtN1:SetValue(self)
 
-    omtN2:=s__o0:Clone()
-    omtN2:SetValue(uBigN)
+        omtN2:=s__o0:Clone()
+        omtN2:SetValue(uBigN)
 
-    omtN1:Normalize(@omtN2)
+        omtN1:Normalize(@omtN2)
 
-    lNeg1:=omtN1:lNeg
-    lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
+        lNeg1:=omtN1:lNeg
+        lNeg2:=omtN2:lNeg
+        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
-    cN1:=omtN1:cInt
-    cN1+=omtN1:cDec
+        cN1:=omtN1:cInt
+        cN1+=omtN1:cDec
 
-    cN2:=omtN2:cInt
-    cN2+=omtN2:cDec
+        cN2:=omtN2:cInt
+        cN2+=omtN2:cDec
 
-    nDec:=omtN1:nDec*2
+        nDec:=omtN1:nDec*2
 
-    cNT:=egMult(cN1,cN2,self:nBase):__cInt()
+        cNT:=egMult(cN1,cN2,self:nBase):__cInt()
 
-    cDec:=Right(cNT,nDec)
-    cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+        cDec:=Right(cNT,nDec)
+        cInt:=Left(cNT,hb_bLen(cNT)-nDec)
 
-    cNT:=cInt
-    cNT+="."
-    cNT+=cDec
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
 
-    omtNR:=s__o0:Clone()
-    omtNR:SetValue(cNT)
+        omtNR:=s__o0:Clone()
+        omtNR:SetValue(cNT)
 
-    cNT:=omtNR:ExactValue()
+        cNT:=omtNR:ExactValue()
 
-    omtNR:SetValue(cNT)
+        omtNR:SetValue(cNT)
 
-    if lNeg
-        omtNR:__cSig("-")
-    endif
+        if lNeg
+            omtNR:__cSig("-")
+        endif
 
-    return(omtNR)
+        return(omtNR)
 
 /*method egMult*/
 
@@ -2727,67 +2859,71 @@ method egMult(uBigN) class tBigNumber
         Sintaxe:tBigNumber():rMult(uBigN) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method rMult(uBigN) class tBigNumber
+#ifdef __HARBOUR__
+    method rMult(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method rMult(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cInt  AS CHARACTER
-    local cDec  AS CHARACTER
+        local cInt  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNT   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNT   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lNeg1 AS LOGICAL
-    local lNeg2 AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lNeg1 AS LOGICAL
+        local lNeg2 AS LOGICAL
 
-    local nDec  AS NUMERIC
+        local nDec  AS NUMERIC
 
-    local omtNR AS OBJECT
+        local omtNR AS OBJECT
 
-    local omtN1 AS OBJECT
-    local omtN2 AS OBJECT
+        local omtN1 AS OBJECT
+        local omtN2 AS OBJECT
 
-    omtN1:=s__o0:Clone()
-    omtN1:SetValue(self)
+        omtN1:=s__o0:Clone()
+        omtN1:SetValue(self)
 
-    omtN2:=s__o0:Clone()
-    omtN2:SetValue(uBigN)
+        omtN2:=s__o0:Clone()
+        omtN2:SetValue(uBigN)
 
-    omtN1:Normalize(@omtN2)
+        omtN1:Normalize(@omtN2)
 
-    lNeg1:=omtN1:lNeg
-    lNeg2:=omtN2:lNeg
-    lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
+        lNeg1:=omtN1:lNeg
+        lNeg2:=omtN2:lNeg
+        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
-    cN1:=omtN1:cInt
-    cN1+=omtN1:cDec
+        cN1:=omtN1:cInt
+        cN1+=omtN1:cDec
 
-    cN2:=omtN2:cInt
-    cN2+=omtN2:cDec
+        cN2:=omtN2:cInt
+        cN2+=omtN2:cDec
 
-    nDec:=omtN1:nDec*2
+        nDec:=omtN1:nDec*2
 
-    cNT:=rMult(cN1,cN2,self:nBase):__cInt()
+        cNT:=rMult(cN1,cN2,self:nBase):__cInt()
 
-    cDec:=Right(cNT,nDec)
-    cInt:=Left(cNT,hb_bLen(cNT)-nDec)
+        cDec:=Right(cNT,nDec)
+        cInt:=Left(cNT,hb_bLen(cNT)-nDec)
 
-    cNT:=cInt
-    cNT+="."
-    cNT+=cDec
+        cNT:=cInt
+        cNT+="."
+        cNT+=cDec
 
-    omtNR:=s__o0:Clone()
-    omtNR:SetValue(cNT)
+        omtNR:=s__o0:Clone()
+        omtNR:SetValue(cNT)
 
-    cNT:=omtNR:ExactValue()
+        cNT:=omtNR:ExactValue()
 
-    omtNR:SetValue(cNT)
+        omtNR:SetValue(cNT)
 
-    if lNeg
-        omtNR:__cSig("-")
-    endif
+        if lNeg
+            omtNR:__cSig("-")
+        endif
 
-    return(omtNR)
+        return(omtNR)
 
 /*method rMult*/
 
@@ -2800,121 +2936,92 @@ method rMult(uBigN) class tBigNumber
         Sintaxe:tBigNumber():Div(uBigN,lFloat) -> oBigNR
     */
 //--------------------------------------------------------------------------------------------------------
-method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
+#ifdef __HARBOUR__
+    method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
+#else /*__ADVPL__*/
+    method Div(uBigN,lFloat) class tBigNumber
+#endif /*__HARBOUR__*/
 
-    local cDec  AS CHARACTER
+        local cDec  AS CHARACTER
 
-    local cN1   AS CHARACTER
-    local cN2   AS CHARACTER
-    local cNR   AS CHARACTER
+        local cN1   AS CHARACTER
+        local cN2   AS CHARACTER
+        local cNR   AS CHARACTER
 
-    local lNeg  AS LOGICAL
-    local lNeg1 AS LOGICAL
-    local lNeg2 AS LOGICAL
+        local lNeg  AS LOGICAL
+        local lNeg1 AS LOGICAL
+        local lNeg2 AS LOGICAL
 
-    local nAcc  AS NUMERIC
-    local nDec  AS NUMERIC
+        local nAcc  AS NUMERIC
+        local nDec  AS NUMERIC
 
-    local odvN1 AS OBJECT
-    local odvN2 AS OBJECT
+        local odvN1 AS OBJECT
+        local odvN2 AS OBJECT
 
-    local odvRD AS OBJECT
-    local odvNR AS OBJECT
+        local odvRD AS OBJECT
+        local odvNR AS OBJECT
 
-    begin sequence
+        #ifdef __ADVPL__
+            PARAMETER lFloat AS LOGICAL
+        #endif /*__ADVPL__*/
+        
+        begin sequence
 
-        odvNR:=s__o0:Clone()
+            odvNR:=s__o0:Clone()
 
-        if s__o0:eq(uBigN)
-            odvNR:SetValue(s__o0)
-            break
-        endif
-
-        odvN1:=s__o0:Clone()
-        odvN1:SetValue(self)
-
-        odvN2:=s__o0:Clone()
-        odvN2:SetValue(uBigN)
-
-        DEFAULT lFloat:=.T.
-
-        if odvN2:eq(s__o2)
-            //-------------------------------------------------------------------------------------
-            //(Div(2)==Mult(.5)
-            odvNR:SetValue(odvN1:Mult(s__od2))
-            if .not.(lFloat)
-                odvNR:__cDec("0")
-                odvNR:__cInt(odvNR:Int(.F.,.T.))
-                odvNR:__cRDiv(odvN1:Sub(odvN2:Mult(odvNR:Int(.T.,.F.))):ExactValue(.T.))
+            if s__o0:eq(uBigN)
+                odvNR:SetValue(s__o0)
+                break
             endif
-            break
-        endif
 
-        odvN1:Normalize(@odvN2)
+            odvN1:=s__o0:Clone()
+            odvN1:SetValue(self)
 
-        lNeg1:=odvN1:lNeg
-        lNeg2:=odvN2:lNeg
-        lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
+            odvN2:=s__o0:Clone()
+            odvN2:SetValue(uBigN)
 
-        cN1:=odvN1:cInt
-        cN1+=odvN1:cDec
+            DEFAULT lFloat:=.T.
 
-        cN2:=odvN2:cInt
-        cN2+=odvN2:cDec
+            if odvN2:eq(s__o2)
+                //-------------------------------------------------------------------------------------
+                //(Div(2)==Mult(.5)
+                odvNR:SetValue(odvN1:Mult(s__od2))
+                if .not.(lFloat)
+                    odvNR:__cDec("0")
+                    odvNR:__cInt(odvNR:Int(.F.,.T.))
+                    odvNR:__cRDiv(odvN1:Sub(odvN2:Mult(odvNR:Int(.T.,.F.))):ExactValue(.T.))
+                endif
+                break
+            endif
 
-        nAcc:=s__nDecSet
+            odvN1:Normalize(@odvN2)
 
-        if s__nDivMTD==2
-            odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
-        else
-            odvNR:SetValue(egDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
-        endif
+            lNeg1:=odvN1:lNeg
+            lNeg2:=odvN2:lNeg
+            lNeg:=(lNeg1.and.(.not.(lNeg2))).or.(.not.(lNeg1).and.lNeg2)
 
-        if lFloat
+            cN1:=odvN1:cInt
+            cN1+=odvN1:cDec
 
-            odvRD:=s__o0:Clone()
-            odvRD:SetValue(odvNR:cRDiv,NIL,NIL,.F.)
+            cN2:=odvN2:cInt
+            cN2+=odvN2:cDec
 
-            if odvRD:gt(s__o0)
+            nAcc:=s__nDecSet
 
-                cDec:=""
+            if s__nDivMTD==2
+                odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
+            else
+                odvNR:SetValue(egDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
+            endif
 
-                odvN2:SetValue(cN2)
+            if lFloat
 
-                while odvRD:lt(odvN2)
-                    odvRD:cInt+="0"
-                    odvRD:nInt++
-                    odvRD:nSize++
-                    if odvRD:lt(odvN2)
-                        cDec+="0"
-                    endif
-                end while
+                odvRD:=s__o0:Clone()
+                odvRD:SetValue(odvNR:cRDiv,NIL,NIL,.F.)
 
-                while odvRD:gte(odvN2)
+                if odvRD:gt(s__o0)
 
-                    odvRD:Normalize(@odvN2)
-
-                    cN1:=odvRD:cInt
-                    cN1+=odvRD:cDec
-
-                    cN2:=odvN2:cInt
-                    cN2+=odvN2:cDec
-
-                    if s__nDivMTD==2
-                        odvRD:SetValue(ecDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
-                    else
-                        odvRD:SetValue(egDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
-                    endif
-
-                    cDec+=odvRD:ExactValue(.T.)
-                    nDec:=hb_bLen(cDec)
-
-                    odvRD:SetValue(odvRD:cRDiv,NIL,NIL,.F.)
-                    odvRD:SetValue(odvRD:ExactValue(.T.))
-
-                    if odvRD:eq(s__o0).or.nDec>=nAcc
-                        exit
-                    endif
+                    cDec:=""
 
                     odvN2:SetValue(cN2)
 
@@ -2927,25 +3034,62 @@ method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
                         endif
                     end while
 
-                end while
+                    while odvRD:gte(odvN2)
 
-                cNR:=odvNR:__cInt()
-                cNR+="."
-                cNR+=Left(cDec,nAcc)
+                        odvRD:Normalize(@odvN2)
 
-                odvNR:SetValue(cNR,NIL,odvRD:ExactValue(.T.))
+                        cN1:=odvRD:cInt
+                        cN1+=odvRD:cDec
+
+                        cN2:=odvN2:cInt
+                        cN2+=odvN2:cDec
+
+                        if s__nDivMTD==2
+                            odvRD:SetValue(ecDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
+                        else
+                            odvRD:SetValue(egDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
+                        endif
+
+                        cDec+=odvRD:ExactValue(.T.)
+                        nDec:=hb_bLen(cDec)
+
+                        odvRD:SetValue(odvRD:cRDiv,NIL,NIL,.F.)
+                        odvRD:SetValue(odvRD:ExactValue(.T.))
+
+                        if odvRD:eq(s__o0).or.nDec>=nAcc
+                            exit
+                        endif
+
+                        odvN2:SetValue(cN2)
+
+                        while odvRD:lt(odvN2)
+                            odvRD:cInt+="0"
+                            odvRD:nInt++
+                            odvRD:nSize++
+                            if odvRD:lt(odvN2)
+                                cDec+="0"
+                            endif
+                        end while
+
+                    end while
+
+                    cNR:=odvNR:__cInt()
+                    cNR+="."
+                    cNR+=Left(cDec,nAcc)
+
+                    odvNR:SetValue(cNR,NIL,odvRD:ExactValue(.T.))
+
+                endif
 
             endif
 
-        endif
+            if lNeg
+                odvNR:__cSig("-")
+            endif
 
-        if lNeg
-            odvNR:__cSig("-")
-        endif
+        end sequence
 
-    end sequence
-
-    return(odvNR)
+        return(odvNR)
 /*method Div*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2957,13 +3101,20 @@ method Div(uBigN,lFloat AS LOGICAL) class tBigNumber
         Sintaxe:tBigNumber():Divmethod(nMethod) -> nLstmethod
     */
 //--------------------------------------------------------------------------------------------------------
-method Divmethod(nMethod AS NUMERIC) class tBigNumber
-    local nLstmethod    AS NUMERIC
-    DEFAULT s__nDivMTD:=__DIVMETHOD__
-    DEFAULT nMethod:=s__nDivMTD
-    nLstmethod:=s__nDivMTD
-    s__nDivMTD:=nMethod
-    return(nLstmethod)
+#ifdef __HARBOUR__
+    method Divmethod(nMethod AS NUMERIC) class tBigNumber
+#else /*__ADVPL__*/
+    method Divmethod(nMethod) class tBigNumber
+#endif /*__HARBOUR__*/
+        local nLstmethod    AS NUMERIC
+        #ifdef __ADVPL__
+            PARAMETER nMethod AS NUMERIC
+        #endif /*__ADVPL__*/
+        DEFAULT s__nDivMTD:=__DIVMETHOD__
+        DEFAULT nMethod:=s__nDivMTD
+        nLstmethod:=s__nDivMTD
+        s__nDivMTD:=nMethod
+        return(nLstmethod)
 /*method Divmethod*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -2975,20 +3126,24 @@ method Divmethod(nMethod AS NUMERIC) class tBigNumber
         Sintaxe:tBigNumber():Mod(uBigN) -> oMod
     */
 //--------------------------------------------------------------------------------------------------------
-method Mod(uBigN) class tBigNumber
-    local oMod  AS OBJECT
-    local nCmp  AS NUMERIC
-    oMod:=tBigNumber():New(uBigN)
-    nCmp:=self:cmp(oMod)
-    if nCmp==-1
-        oMod:SetValue(self)
-    elseif nCmp==0
-        oMod:SetValue(s__o0)
-    else
-        oMod:SetValue(self:Div(oMod,.F.))
-        oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
-    endif
-    return(oMod)
+#ifdef __HARBOUR__
+    method Mod(uBigN) class tBigNumber
+#else /*__ADVPL__*/
+    method Mod(uBigN) class tBigNumber
+#endif /*__HARBOUR__*/
+        local oMod  AS OBJECT
+        local nCmp  AS NUMERIC
+        oMod:=tBigNumber():New(uBigN)
+        nCmp:=self:cmp(oMod)
+        if nCmp==-1
+            oMod:SetValue(self)
+        elseif nCmp==0
+            oMod:SetValue(s__o0)
+        else
+            oMod:SetValue(self:Div(oMod,.F.))
+            oMod:SetValue(oMod:cRDiv,NIL,NIL,.F.)
+        endif
+        return(oMod)
 /*method Mod*/
 
 //--------------------------------------------------------------------------------------------------------
