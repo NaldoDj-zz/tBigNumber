@@ -60,7 +60,7 @@ Class tRemaining FROM tTimeCalc
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA dStartTime     AS DATE      INIT Ctod("//")     HIDDEN
+            DATA dStartTime     AS DATE      INIT Date()         HIDDEN
         #else /*__ADVPL__*/
             DATA dStartTime     AS DATE
         #endif /*__HARBOUR__*/
@@ -211,7 +211,7 @@ EndClass
         self:cTimeDiff:="00:00:00"
         self:cTRemaining:="00:00:00"
         self:dEndTime:=Ctod("//")
-        self:dStartTime:=Ctod("//")
+        self:dStartTime:=Date()
         self:nProgress:=0
         self:nSRemaining:=0
         self:nTotal:=0

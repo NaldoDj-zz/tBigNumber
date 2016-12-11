@@ -173,7 +173,6 @@
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
             hIni["GENERAL"]["ACN_MERSENNE_POW"]:=ACN_MERSENNE_POW
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#end of file")
-            hIni:=hb_iniRead(cIni)
         endif        
 
         if (File(cIni)).and.(.not.(Empty(hIni)))
@@ -1517,13 +1516,7 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    __ConOut(fhLog,"")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste MOD 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1534,15 +1527,18 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
     endif
 
     otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     For x:=1 TO nN_TEST Step nISQRT
+        cX:=hb_NtoS(x)
+        otBigN:SetValue(cX)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(nN_TEST)
             __oRTime2:SetStep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
-        cX:=hb_NtoS(x)
-        otBigN:SetValue(cX)
         For n:=nN_TEST To 1 Step -nISQRT
             cN:=hb_NtoS(n)
             otBigM:=otBigN:MOD(cN)
@@ -1592,6 +1588,8 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
     #ifndef __ADVPL__
 
         __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
+        
+        __ConOut(fhLog,"")
 
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C*/
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -4515,10 +4513,12 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
 static procedure tBigNtst37(fhLog AS NUMERIC)
 
     Local cN            AS CHARACTER
-    Local cW            AS CHARACTER
+    Local cF            AS CHARACTER
 
-    Local n             AS NUMERIC
-    Local x             AS NUMERIC
+    Local f             AS NUMERIC
+    
+    Local nD            AS NUMERIC
+    Local nJ            AS NUMERIC
 
     Local aFibonacci    AS ARRAY
 
@@ -4526,24 +4526,25 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
+    nJ:=Len(aACN_MERSENNE_POW)
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
-        __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
-        hb_mutexUnLock(__phMutex)
+       __oRTime1:SetRemaining(nJ)
+       hb_mutexUnLock(__phMutex)
     endif
     
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To Len(aACN_MERSENNE_POW)
-        cN:=aACN_MERSENNE_POW[n]
+    For nD:=1 To nJ
+        cN:=aACN_MERSENNE_POW[nD]
         aFibonacci:=Fibonacci(cN)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(Len(aFibonacci))
             hb_mutexUnLock(__phMutex)
         endif
-        For x:=1 To Len(aFibonacci)
-            cW:=aFibonacci[x]
-            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(x),"RESULT: "+cW)
+        For f:=1 To Len(aFibonacci)
+            cF:=aFibonacci[f]
+            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(f),"RESULT: "+cF)
             if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
@@ -4597,6 +4598,8 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
+    nJ:=Len(aACN_MERSENNE_POW)
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
        __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
@@ -4606,8 +4609,6 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
     otBigM:=tBigNumber():New("0")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-    
-    nJ:=Len(aACN_MERSENNE_POW)
     
     for nD:=1 to nJ
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
