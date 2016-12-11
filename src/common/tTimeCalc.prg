@@ -217,9 +217,17 @@ EndClass
         Local nHours    AS NUMERIC
         Local nMinuts   AS NUMERIC
         Local nSeconds  AS NUMERIC
+
         #ifdef __ADVPL__
+
             PARAMETER nSecs AS NUMERIC
+
+            nHours:=0
+            nMinuts:=0
+            nSeconds:=0
+
         #endif /*__ADVPL__*/
+
         self:SecsToHMS(nSecs,@nHours,@nMinuts,@nSeconds)
         Return(self:HMSToTime(nHours,nMinuts,nSeconds))
 /*Method SecsToTime*/
@@ -234,7 +242,13 @@ EndClass
         Local nSeconds  AS NUMERIC
 
         #ifdef __ADVPL__
+
             PARAMETER cTime AS CHARACTER
+
+            nHours:=0
+            nMinuts:=0
+            nSeconds:=0
+
         #endif /*__ADVPL__*/
 
         DEFAULT cTime:="00:00:00"
@@ -255,6 +269,7 @@ EndClass
         Local nHours AS NUMERIC
         #ifdef __ADVPL__
             PARAMETER nSeconds AS NUMERIC
+            DEFAULT nSeconds:=0
         #endif /*__ADVPL__*/
         nHours:=(nSeconds/3600)
         nHours:=Int(nHours)
@@ -266,6 +281,7 @@ EndClass
 #else /*__ADVPL__*/
     Method HrsToSecs(nHours) Class tTimeCalc
         PARAMETER nHours AS NUMERIC
+        DEFAULT nHours:=0
 #endif /*__HARBOUR__*/
         Return((nHours*3600))
 /*Method HrsToSecs*/
@@ -278,6 +294,7 @@ EndClass
         Local nMinuts
         #ifdef __ADVPL__
             PARAMETER nSeconds AS NUMERIC
+            DEFAULT nSeconds:=0
         #endif /*__ADVPL__*/
         nMinuts:=(nSeconds/60)
         nMinuts:=Int(nMinuts)
@@ -290,6 +307,7 @@ EndClass
 #else /*__ADVPL__*/
     Method MinToSecs(nMinuts) Class tTimeCalc
         PARAMETER nMinuts AS NUMERIC
+        DEFAULT nMinuts:=0
 #endif /*__HARBOUR__*/
         Return((nMinuts*60))
 /*Method MinToSecs*/
@@ -304,10 +322,16 @@ EndClass
         Local nHours
 
         #ifdef __ADVPL__
+
             PARAMETER cTime         AS CHARACTER
             PARAMETER nIncHours     AS NUMERIC
             PARAMETER nIncMinuts    AS NUMERIC
             PARAMETER nIncSeconds   AS NUMERIC
+
+            DEFAULT nSeconds:=0
+            DEFAULT nMinuts:=0
+            DEFAULT nHours:=0
+
         #endif /*__ADVPL__*/
 
         self:ExtractTime(cTime,@nHours,@nMinuts,@nSeconds)
@@ -336,10 +360,16 @@ EndClass
         Local nHours    AS NUMERIC
 
         #ifdef __ADVPL__
+
             PARAMETER cTime         AS CHARACTER
             PARAMETER nDecHours     AS NUMERIC
             PARAMETER nDecMinuts    AS NUMERIC
             PARAMETER nDecSeconds   AS NUMERIC
+
+            DEFAULT nSeconds:=0
+            DEFAULT nMinuts:=0
+            DEFAULT nHours:=0
+
         #endif /*__ADVPL__*/
 
         self:ExtractTime(cTime,@nHours,@nMinuts,@nSeconds)
@@ -363,7 +393,9 @@ EndClass
 #else /*__ADVPL__*/
     Method Time2NextDay(cTime,dDate) Class tTimeCalc
             PARAMETER cTime AS CHARACTER
+            DEFAULT cTime:="00:00:00"
             PARAMETER dDate AS DATE
+            DEFAULT dDate:=Date()
 #endif /*__HARBOUR__*/
         While (Val(cTime)>=24)
             cTime:=self:DecTime(cTime,24)

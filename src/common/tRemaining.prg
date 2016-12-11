@@ -204,6 +204,19 @@ EndClass
     Method New(nTotal) Class tRemaining
         _Super:New()
         PARAMETER nTotal AS NUMERIC
+        DEFAULT nTotal:=0
+        self:cAverageTime:="00:00:00:000"
+        self:cEndTime:="00:00:00"
+        self:cStartTime:="00:00:00"
+        self:cTimeDiff:="00:00:00"
+        self:cTRemaining:="00:00:00"
+        self:dEndTime:=Ctod("//")
+        self:dStartTime:=Ctod("//")
+        self:nProgress:=0
+        self:nSRemaining:=0
+        self:nTotal:=0
+        self:nStep:=1
+        self:lForceStep:=.F.
 #endif /*__HARBOUR__*/
         self:SetStep()
         self:SetRemaining(@nTotal)
@@ -228,17 +241,8 @@ EndClass
     Method SetRemaining(nTotal AS NUMERIC) Class tRemaining
 #else /*__ADVPL__*/
     Method SetRemaining(nTotal) Class tRemaining
-        nTotal AS NUMERIC
+        PARAMETER nTotal AS NUMERIC
 #endif /*__HARBOUR__*/
-        self:cAverageTime:="00:00:00:000"
-        self:cEndTime:="00:00:00"
-        self:cStartTime:=Time()
-        self:cTimeDiff:="00:00:00"
-        self:cTRemaining:="00:00:00"
-        self:dEndTime:=CToD("//")
-        self:dStartTime:=Date()
-        self:nProgress:=0
-        self:nSRemaining:=0
         DEFAULT nTotal:=1
         self:nTotal:=nTotal
         self:SetStep()
@@ -321,7 +325,7 @@ EndClass
 
         nTimeEnd:=(((self:nTotal-self:nProgress)*self:nSRemaining)/self:nProgress)
         self:cEndTime:=self:SecsToTime(nTimeEnd)
-        self:cEndTime:=self:IncTime(cTime,NIL,NIL,self:TimeToSecs(self:cEndTime))
+        self:cEndTime:=self:IncTime(cTime,0,0,self:TimeToSecs(self:cEndTime))
         aEndTime:=self:Time2NextDay(self:cEndTime,dDate)
         self:cEndTime:=aEndTime[1]
         self:dEndTime:=aEndTime[2]
