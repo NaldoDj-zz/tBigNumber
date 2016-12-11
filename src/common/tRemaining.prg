@@ -245,6 +245,8 @@ EndClass
 #endif /*__HARBOUR__*/
         DEFAULT nTotal:=1
         self:nTotal:=nTotal
+        self:nProgress:=0
+        self:nSRemaining:=0
         self:SetStep()
         self:ForceStep()
         Return(self)

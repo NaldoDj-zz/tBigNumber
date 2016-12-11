@@ -4581,7 +4581,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst38(fhLog AS NUMERIC)
 
-    Local otBigW    AS OBJECT
+    Local otBig2    AS OBJECT
     Local otBigM    AS OBJECT
 
     Local cM        AS CHARACTER
@@ -4605,7 +4605,7 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
        hb_mutexUnLock(__phMutex)
     endif
 
-    otBigW:=tBigNumber():New("2")
+    otBig2:=tBigNumber():New("2")
     otBigM:=tBigNumber():New("0")
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
@@ -4622,10 +4622,10 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
         endif
         cM:=aACN_MERSENNE_POW[nD]
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',":...")
-        otBigM:SetValue(otBigW:iPow(cM))
+        otBigM:SetValue(otBig2:iPow(cM))
         cR:=otBigM:OpDec():ExactValue()
         otBigM:SetValue("0")
-        __ConOut(fhLog,otBigW:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
+        __ConOut(fhLog,otBig2:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             #ifdef __HARBOUR__
                 __oRTime2:ForceStep(.F.)

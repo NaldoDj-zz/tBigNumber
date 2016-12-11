@@ -334,7 +334,9 @@ EndClass
 
         #endif /*__ADVPL__*/
 
-        self:ExtractTime(cTime,@nHours,@nMinuts,@nSeconds)
+        DEFAULT cTime:="00:00:00"
+        
+        self:ExtractTime(@cTime,@nHours,@nMinuts,@nSeconds)
 
         DEFAULT nIncHours:=0
         nHours+=nIncHours
