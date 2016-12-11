@@ -10,6 +10,11 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-11 17:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * prj/mg/win/32/tBigNumber32.mip
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/tests/tBigNtst.prg
+ 
 2016-12-11 15:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
   * src/common/tTimeCalc.prg
