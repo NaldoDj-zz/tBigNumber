@@ -156,9 +156,7 @@
         #endif
 
         cIni:="tBigNtst.ini"
-        if File(cIni)
-            hIni:=hb_iniRead(cIni)
-        endif
+        hIni:=hb_iniRead(cIni)
         
         if .NOT.(File(cIni)).or.Empty(hIni)
             hIni["GENERAL"]:=hb_Hash()
@@ -1510,15 +1508,14 @@ static function Fibonacci(uN)
 static procedure tBigNtst01(fhLog AS NUMERIC)
 
     Local otBigN    AS OBJECT
+    Local otBigM    AS OBJECT
 
     Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    Local cM        AS CHARACTER
     Local cX        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
-
-    otBigN:=tBigNumber():New()
 
     __ConOut(fhLog,"")
 
@@ -1536,17 +1533,21 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    
     For x:=1 TO nN_TEST Step nISQRT
-        cX:=hb_NtoS(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(nN_TEST)
             __oRTime2:SetStep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
+        cX:=hb_NtoS(x)
+        otBigN:SetValue(cX)
         For n:=nN_TEST To 1 Step -nISQRT
             cN:=hb_NtoS(n)
-            cW:=otBigN:SetValue(cX):MOD(cN):ExactValue()
-            __ConOut(fhLog,cX+':tBigNumber():MOD('+cN+')',"RESULT: "+cW)
+            otBigM:=otBigN:MOD(cN)
+            cM:=otBigM:ExactValue()
+            __ConOut(fhLog,cX+':tBigNumber():MOD('+cN+')',"RESULT: "+cM)
             __ConOut(fhLog,__cSep)
             if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
                 __oRTime2:Calcule()
@@ -1588,18 +1589,9 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local w         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-    otBigX:=tBigNumber():New()
-
     #ifndef __ADVPL__
+
         __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
-
-        otBigN:SetDecimals(nACC_SET)
-        otBigW:SetDecimals(nACC_SET)
-        otBigX:SetDecimals(nACC_SET)
-
-        Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C*/
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -1607,6 +1599,17 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
             hb_mutexUnLock(__phMutex)
         endif
 
+        otBigN:=tBigNumber():New()
+        otBigN:SetDecimals(nACC_SET)
+        
+        otBigW:=tBigNumber():New()
+        otBigW:SetDecimals(nACC_SET)
+        
+        otBigX:=tBigNumber():New()
+        otBigX:SetDecimals(nACC_SET)
+
+        Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+        
         For w:=0 To 5
             cW:=hb_NtoS(w)
             otBigW:=cW
@@ -1721,19 +1724,9 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
 
     Local aPFact    AS ARRAY
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-
-    o0:=tBigNumber():New("0")
-
-   __ConOut(fhLog,"")
+    __ConOut(fhLog,"")
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1743,6 +1736,16 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    o0:=tBigNumber():New("0")
+    
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To nN_TEST STEP nISQRT
         y:=0
         cN:=hb_NtoS(n)
@@ -1808,6 +1811,10 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
 
     Local oPrime    AS OBJECT
 
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 1 -------------- ")
+
+    __ConOut(fhLog,"")
+
     aPrimes:={;
          "15485783","15485801","15485807","15485837","15485843","15485849","15485857","15485863",;
          "15487403","15487429","15487457","15487469","15487471","15487517","15487531","15487541",;
@@ -1816,23 +1823,18 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
          "67874921","67874959","67874969","67874987","67875007","67875019","67875029","67875061",;
          "982451501","982451549","982451567","982451579","982451581","982451609","982451629","982451653";
     }
-
-    oPrime:=tPrime():New()
-
-    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 1 -------------- ")
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
-    __ConOut(fhLog,"")
-
-    oPrime:IsPReset()
-    oPrime:NextPReset()
-
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(Len(aPrimes))
         hb_mutexUnLock(__phMutex)
     endif
-
+    
+    oPrime:=tPrime():New()
+    oPrime:IsPReset()
+    oPrime:NextPReset()
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To Len(aPrimes)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -1885,16 +1887,7 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
     Local otBH16    AS OBJECT
     Local otBBin    AS OBJECT
 
-    otBigN:=tBigNumber():New()
-
-    otBH16:=tBigNumber():New(NIL,16)
-    otBBin:=tBigNumber():New(NIL,2)
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX16 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1904,6 +1897,14 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    otBH16:=tBigNumber():New(NIL,16)
+    otBBin:=tBigNumber():New(NIL,2)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=0 TO (nISQRT*99) STEP 99
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -1962,16 +1963,7 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
     Local otBH32    AS OBJECT
     Local otBBin    AS OBJECT
 
-    otBigN:=tBigNumber():New()
-
-    otBH32:=tBigNumber():New(NIL,32)
-    otBBin:=tBigNumber():New(NIL,2)
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX32 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -1981,6 +1973,14 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    
+    otBH32:=tBigNumber():New(NIL,32)
+    otBBin:=tBigNumber():New(NIL,2)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))    
+    
     For x:=0 TO (nISQRT*99) STEP 99
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2041,18 +2041,18 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 1 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
 
     Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
     n:=1
+    
+    o1:=tBigNumber():New("1")
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
 
 #ifndef __ADVPL__
     otBigN:=o1
@@ -2114,19 +2114,9 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 2 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    cN:=("0."+Replicate("0",MIN(nACC_SET,10)))
-    n:=Val(cN)
-    otBigN:SetValue(cN)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
@@ -2134,6 +2124,15 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    cN:=("0."+Replicate("0",MIN(nACC_SET,10)))
+    n:=Val(cN)
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:SetValue(cN)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2184,13 +2183,7 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 3 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2201,6 +2194,11 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
     endif
 
     n:=0
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
     
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2252,13 +2250,7 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 1 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2270,6 +2262,11 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
     
     n:=0
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2320,14 +2317,10 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 2 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
+    __ConOut(fhLog,"")
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
@@ -2336,6 +2329,11 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
     
     n:=0
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2386,14 +2384,10 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 3 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
+    __ConOut(fhLog,"")
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
@@ -2401,6 +2395,11 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
     endif
     
     n:=0
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2456,30 +2455,30 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 1 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
-    __ConOut(fhLog,"")
-
-    n:=1
-    otBigN:SetValue(o1)
-    otBigW:SetValue(o1)
-
+   __ConOut(fhLog,"")
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
+    n:=1
+
+    o1:=tBigNumber():New("1")
+   
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:SetValue(o1)
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2542,20 +2541,9 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 2 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    n:=1
-    otBigN:SetValue(o1)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
@@ -2563,6 +2551,16 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    n:=1
+    
+    o1:=tBigNumber():New("1")
+    
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -2622,26 +2620,25 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigW:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 3 -------------- ")
 
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    n:=1
-    otBigW:SetValue(o1)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    n:=1
+    
+    o1:=tBigNumber():New("1")
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2699,26 +2696,25 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigW:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 4 -------------- ")
 
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    w:=1
-    otBigW:SetValue(o1)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    w:=1
+    
+    o1:=tBigNumber():New("1")
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2786,26 +2782,25 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigW:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 5 -------------- ")
 
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    w:=1
-    otBigW:SetValue(o1)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    w:=1
+    
+    o1:=tBigNumber():New("1")
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:SetValue(o1)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2869,26 +2864,25 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
     Local x         AS NUMERIC
     Local z         AS NUMERIC
 
-    otBigW:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 6 -------------- ")
 
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    w:=1
-    otBigW:SetValue(o1)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    w:=1
+    
+    o1:=tBigNumber():New("1")
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -2950,13 +2944,7 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
 
     Local n         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Factoring -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -2966,6 +2954,11 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     n:=0
     while (n<=nN_TEST)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3015,13 +3008,7 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste GCD/LCM 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3031,6 +3018,11 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))    
+    
     For x:=1 TO nN_TEST Step nISQRT
         cX:=hb_NtoS(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3085,15 +3077,7 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3103,6 +3087,14 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
        hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=0 TO nN_TEST Step nISQRT
         cN:=hb_NtoS(n)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3173,16 +3165,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 1 -------------- ")
 
-    otBigN:=tBigNumber():New()
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    cN:=hb_NtoS(n)
-    otBigN:SetValue(cN)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
@@ -3191,6 +3174,13 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
     endif  
     
     n:=19701215
+    cN:=hb_NtoS(n)
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:SetValue(cN)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3244,27 +3234,25 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
 
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
-    o1:=tBigNumber():New("1")
-    o3:=tBigNumber():New("3")
-
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 2 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    otBigN:SetValue(o1)
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
+    o1:=tBigNumber():New("1")
+    o3:=tBigNumber():New("3")
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:SetValue(o1)
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3312,16 +3300,9 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
 
     Local n         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
+    //http://www.javascripter.net/math/calculators/eulertotientfunction.htm
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste FI 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigW:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-    //http://www.javascripter.net/math/calculators/eulertotientfunction.htm
 
     __ConOut(fhLog,"")
 
@@ -3331,6 +3312,14 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3371,22 +3360,7 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-
-    __ConOut(fhLog,"")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 1 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3396,6 +3370,18 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:nthRootAcc(nROOT_ACC_SET)
+    otBigW:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3447,17 +3433,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
-    __ConOut(fhLog,"")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 2 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3467,6 +3443,13 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=1 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3524,15 +3507,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Exp 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3541,6 +3516,13 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=0 TO nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3600,15 +3582,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
     Local w         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3618,7 +3592,14 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
-    //Tem um BUG aqui. Servidor __ADVPL__ Fica Maluco se (0^-n) e Senta..........
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
+    //Tem (ou TINHA) um BUG aqui. Servidor __ADVPL__ Fica Maluco se (0^-n) e Senta..........
     For x:=if(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT
         cN:=hb_NtoS(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3692,15 +3673,7 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
     Local w         AS NUMERIC
     Local x         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 1 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3710,6 +3683,13 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For x:=0 TO nISQRT STEP 5
         cN:=hb_NtoS(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
@@ -3775,15 +3755,7 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
 
     Local n         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 2 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -3792,6 +3764,13 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To 2
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -3849,7 +3828,14 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     Local o9        AS OBJECT
     Local o10       AS OBJECT
 
-    otBigW:=tBigNumber():New()
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 0 -------------- ")
+
+    __ConOut(fhLog,"")
+
+    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        __oRTime1:SetRemaining(13)
+        hb_mutexUnLock(__phMutex)
+    endif
 
     o0:=tBigNumber():New("0")
     o1:=tBigNumber():New("1")
@@ -3862,22 +3848,13 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     o8:=tBigNumber():New("8")
     o9:=tBigNumber():New("9")
     o10:=tBigNumber():New("10")
-
-    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 0 -------------- ")
-
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
-        __oRTime1:SetRemaining(13)
-        hb_mutexUnLock(__phMutex)
-    endif
-
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
+    
+    otBigW:=tBigNumber():New()
     otBigW:SetDecimals(nACC_ALOG)
+    otBigW:SysSQRT(0)
     otBigW:nthRootAcc(nACC_ALOG-1)
-
-    __ConOut(fhLog,"")
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime2:SetRemaining(1)
@@ -4190,24 +4167,11 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
     Local n         AS NUMERIC
     Local w         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-    otBigW:=tBigNumber():New()
-
+    //Quer comparar o resultado:http://www.gyplclan.com/pt/logar_pt.html
+    
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 1 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-    otBigN:nthRootAcc(nROOT_ACC_SET)
-    otBigN:SysSQRT(0)
-
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    //Quer comparar o resultado:http://www.gyplclan.com/pt/logar_pt.html
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
@@ -4215,6 +4179,18 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+    otBigN:nthRootAcc(nROOT_ACC_SET)
+    otBigN:SysSQRT(0)
+
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:nthRootAcc(nROOT_ACC_SET)
+    otBigW:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))    
+    
     For w:=0 TO nN_TEST Step nISQRT
         cW:=hb_NtoS(w)
         otBigW:SetValue(cW)
@@ -4284,19 +4260,11 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
 
     Local w         AS NUMERIC
 
-    otBigW:=tBigNumber():New()
+    //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LN 1 -------------- ")
 
-    otBigW:SetDecimals(nACC_SET)
-    otBigW:nthRootAcc(nROOT_ACC_SET)
-    otBigW:SysSQRT(0)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
@@ -4304,6 +4272,13 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigW:=tBigNumber():New()
+    otBigW:SetDecimals(nACC_SET)
+    otBigW:nthRootAcc(nROOT_ACC_SET)
+    otBigW:SysSQRT(0)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For w:=0 TO nN_TEST Step nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -4351,28 +4326,26 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
     Local lMR       AS LOGICAL
     Local lPn       AS LOGICAL
 
-    otBigN:=tBigNumber():New()
-
-    o2:=tBigNumber():New("2")
-
-    oPrime:=tPrime():New()
-
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste millerRabin 0 -------------- ")
 
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    n:=0
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining((nISQRT/2)+1)
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    o2:=tBigNumber():New("2")
+
+    oPrime:=tPrime():New()
+    
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+
+    n:=0
 
     while (n<=nISQRT)
         if (n<3)
@@ -4425,13 +4398,7 @@ static procedure tBigNtst35(fhLog AS NUMERIC)
 
     Local n         AS NUMERIC
 
-    otBigN:=tBigNumber():New()
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
-
-    otBigN:SetDecimals(nACC_SET)
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4440,6 +4407,11 @@ static procedure tBigNtst35(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
 
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To nISQRT
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
@@ -4484,20 +4456,18 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
 
     Local aFibonacci    AS ARRAY
 
-    __ConOut(fhLog,"")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci -------------- ")
 
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
+    
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
         __oRTime1:SetRemaining(nN_TEST)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
     For n:=1 To nN_TEST STEP nISQRT
         cN:=hb_NtoS(n)
         aFibonacci:=Fibonacci(cN)
@@ -4552,11 +4522,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
 
     Local aFibonacci    AS ARRAY
 
-    __ConOut(fhLog,"")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci x Mersenne-------------- ")
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     __ConOut(fhLog,"")
 
@@ -4565,6 +4531,8 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
         __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
+    
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For n:=1 To Len(aACN_MERSENNE_POW)
         cN:=aACN_MERSENNE_POW[n]
@@ -4625,23 +4593,22 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
         Local nStep AS NUMERIC
     #endif
 
-    otBigW:=tBigNumber():New("2")
-    otBigM:=tBigNumber():New("0")
-
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
-
-    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
-
     __ConOut(fhLog,"")
-
-    nJ:=Len(aACN_MERSENNE_POW)
 
     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
        __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     endif
 
+    otBigW:=tBigNumber():New("2")
+    otBigM:=tBigNumber():New("0")
+
+    Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+    
+    nJ:=Len(aACN_MERSENNE_POW)
+    
     for nD:=1 to nJ
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
            __oRTime2:SetRemaining(1)
