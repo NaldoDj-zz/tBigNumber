@@ -1705,9 +1705,10 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
         otBigX:=NIL
         tBigNGC()
         __ConOut(fhLog,"------------ Teste Operator Overloading 0 -------------- end")
-    #endif
 
-    Set(_SET_DECIMALS,nSetDec)
+        Set(_SET_DECIMALS,nSetDec)
+
+    #endif
 
     return
 /*static procedure tBigNtst02*/
