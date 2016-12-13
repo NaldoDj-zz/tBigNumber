@@ -556,14 +556,14 @@
             hb_xfree(szInd);
             hb_xfree(szOne);
             #if 0               
-                hb_retc(szRet);
-                hb_xfree(szRet);
+                hb_retclen_buffer(szRet,( HB_SIZE )n);
             #else
                 #if 0
                     hb_retclen(szRet,( HB_SIZE )n);
                     hb_xfree(szRet);
                 #else
-                    hb_retclen_buffer(szRet,( HB_SIZE )n);
+                    hb_retc(szRet);
+                    hb_xfree(szRet);
                 #endif
             #endif
         }
