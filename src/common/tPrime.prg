@@ -1,3 +1,16 @@
+#include "tBigNDef.ch"
+
+#ifdef PROTHEUS
+    #ifndef __ADVPL__
+        #define __ADVPL__
+    #endif
+    #include "protheus.ch"
+#else
+    #ifdef __HARBOUR__
+        #include "hbclass.ch"
+    #endif
+#endif
+
 #include "fileio.ch"
 #include "directry.ch"
 #include "tBigNumber.ch"

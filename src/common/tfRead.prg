@@ -1,7 +1,10 @@
+#include "tBigNDef.ch"
+
 #ifdef PROTHEUS
-    #define __ADVPL__
+    #ifndef __ADVPL__
+        #define __ADVPL__
+    #endif
     #include "protheus.ch"
-    #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
 #else
     #ifdef __HARBOUR__
         #include "hbclass.ch"
@@ -9,10 +12,6 @@
 #endif
 
 #include "fileio.ch"
-
-#ifndef SYMBOL_UNUSED
-    #define SYMBOL_UNUSED( symbol ) ( symbol := ( symbol ) )
-#endif
 
 #define oF_CREATE_OBJECT      1
 #define oF_OPEN_FILE          2

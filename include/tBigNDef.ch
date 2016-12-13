@@ -11,10 +11,21 @@
     #ifdef PROTHEUS
         #ifndef __ADVPL__
             #define __ADVPL__
+            //TODO: Begin -> Remover #xcommand e xtranslate abaixo quando Tipagem 100% OK
+                #xcommand   PARAMETER <xVar> AS <xType> =>
+                #xtranslate PARAMETER <xVar> AS <xType> =>
+            //TODO: End   -> Remover #xcommand e xtranslate acima  quando Tipagem 100% OK
         #endif
         #ifndef __PTCOMPAT__
             #define __PTCOMPAT__
         #endif
+        #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
+        #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
+        #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
+        #xtranslate hb_mutexCreate()            => ThreadID()
+        #xtranslate hb_mutexLock([<prm,...>])   => AllWaysTrue([<prm>])
+        #xtranslate hb_mutexUnLock([<prm,...>]) => AllWaysTrue([<prm>])
+        #xtranslate method <methodName> SETGET  => method <methodName>
     #else
         #ifndef __HARBOUR__
             #define __HARBOUR__
@@ -23,6 +34,10 @@
         #ifndef __MT__
             #define __MT__
         #endif
+        #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
+        #xtranslate Right([<prm,...>])   => hb_bRight([<prm>])
+        #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])
+        #xtranslate AT([<prm,...>])      => hb_bAT([<prm>])
     #endif
 
     #ifndef SYMBOL_UNUSED

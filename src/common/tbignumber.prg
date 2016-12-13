@@ -1,3 +1,4 @@
+//--------------------------------------------------------------------------------------------------------
     /*
      *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
      * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
@@ -5,7 +6,7 @@
      *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
      *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
      *
-     * Copyright 2013-2015 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
+     * Copyright 2013-2016 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
      * www - http://www.blacktdn.com.br
      *
      * Harbour Project license:

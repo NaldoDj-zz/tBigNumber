@@ -1,12 +1,15 @@
+#include "tBigNDef.ch"
+
 #ifdef PROTHEUS
-    #define __ADVPL__
+    #ifndef __ADVPL__
+        #define __ADVPL__
+    #endif
     #include "protheus.ch"
 #else
     #ifdef __HARBOUR__
         #include "hbclass.ch"
     #endif
 #endif
-#include "tBigNumber.ch"
 
 //--------------------------------------------------------------------------------------------------------
     /*
@@ -247,6 +250,7 @@ EndClass
         self:nTotal:=nTotal
         self:nProgress:=0
         self:nSRemaining:=0
+        self:dStartTime:=Date()
         self:SetStep()
         self:ForceStep()
         Return(self)

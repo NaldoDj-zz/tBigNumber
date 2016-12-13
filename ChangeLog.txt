@@ -10,6 +10,16 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-12 22:19 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * include/tBigNDef.ch
+  * include/tBigNumber.ch
+  * src/common/tbignumber.prg
+  * src/common/tfRead.prg
+  * src/common/tPrime.prg
+  * src/common/tRemaining.prg
+  * src/common/tSProgress.prg
+  * src/common/tTimeCalc.prg
+ 
 2016-12-11 23:24 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
  

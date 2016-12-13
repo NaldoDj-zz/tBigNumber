@@ -1,13 +1,15 @@
+#include "tBigNDef.ch"
+
 #ifdef PROTHEUS
-    #define __ADVPL__
-    #include "protheus.ch"
+    #ifndef __ADVPL__
+        #define __ADVPL__
+    #endif
+    #include "protheus.ch"    
 #else /*__HARBOUR__*/
     #ifdef __HARBOUR__
         #include "hbclass.ch"
     #endif /*__HARBOUR__*/
 #endif /*PROTHEUS*/
-
-#include "tBigNumber.ch"
 
 //--------------------------------------------------------------------------------------------------------
     /*
