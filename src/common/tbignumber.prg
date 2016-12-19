@@ -6899,6 +6899,10 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
     //--------------------------------------------------------------------------------------------------------
     static function recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
+        #ifdef __HARBOUR__
+            local cR    AS CHARACTER
+        #endif /*__HARBOUR__*/
+        
         local oR    AS OBJECT
 
         local oI    AS OBJECT
@@ -6933,7 +6937,8 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                     end while
                 else
                     oB:Normalize(@oE)
-                    oR:SetValue(TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase()))
+                    cR:=TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase())
+                    oR:SetValue(cR)
                 endif
             #endif //__PTCOMPAT__
             return(oR)
@@ -6953,6 +6958,10 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
 #else
 
+    #ifdef __HARBOUR__
+        local cR    AS CHARACTER
+    #endif /*__HARBOUR__*/
+    
     local oR    AS OBJECT
     local oI    AS OBJECT
 
@@ -6982,7 +6991,8 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
             end while
         else
             oB:Normalize(@oE)
-            oR:SetValue(TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase()))
+            cR:=TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase())
+            oR:SetValue(cR)
         endif
     #endif //__PTCOMPAT__
 

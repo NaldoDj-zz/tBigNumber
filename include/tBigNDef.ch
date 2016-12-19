@@ -12,8 +12,9 @@
         #ifndef __ADVPL__
             #define __ADVPL__
             //TODO: Begin -> Remover #xcommand e xtranslate abaixo quando Tipagem 100% OK
-                #xcommand   PARAMETER <xVar> AS <xType> =>
+                #xtranslate PARAMTYPE <nParam> VAR <xVar> AS <xType,...> =>
                 #xtranslate PARAMETER <xVar> AS <xType> =>
+                #xtranslate AS <\xType\> =>
             //TODO: End   -> Remover #xcommand e xtranslate acima  quando Tipagem 100% OK
         #endif
         #ifndef __PTCOMPAT__

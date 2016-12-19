@@ -4,7 +4,7 @@
 #-d__ALT_D__
 -dTBIGN_RECPOWER
 #-d__LMETHOD__
--cflag=-DHB_TR_LEVEL_DEBUG
+#-cflag=-DHB_TR_LEVEL_DEBUG
 
 -mt
 

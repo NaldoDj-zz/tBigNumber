@@ -23,7 +23,7 @@ return(self)
 
 method function ExecFromArray(xExec,bError) class tBigNExecFromArray
 return(ExecFromArray(xExec,bError))
-static function ExecFromArray(xExec,bError)
+static function ExecFromArray(xExec AS ARRAY,BLOCK,CHARACTER,LOGICAL,NUMBER,DATE,OBJECT,bError)
     local nD
     local nJ
     local aPrm

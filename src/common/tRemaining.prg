@@ -39,7 +39,7 @@ Class tRemaining FROM tTimeCalc
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA cStartTime     AS CHARACTER INIT "00:00:00"     HIDDEN
+            DATA cStartTime     AS CHARACTER INIT Time()        HIDDEN
         #else /*__ADVPL__*/
             DATA cStartTime     AS CHARACTER
         #endif /*__HARBOUR__*/
@@ -210,7 +210,7 @@ EndClass
         DEFAULT nTotal:=0
         self:cAverageTime:="00:00:00:000"
         self:cEndTime:="00:00:00"
-        self:cStartTime:="00:00:00"
+        self:cStartTime:=Time()
         self:cTimeDiff:="00:00:00"
         self:cTRemaining:="00:00:00"
         self:dEndTime:=Ctod("//")
@@ -250,6 +250,7 @@ EndClass
         self:nTotal:=nTotal
         self:nProgress:=0
         self:nSRemaining:=0
+        self:cStartTime:=Time()
         self:dStartTime:=Date()
         self:SetStep()
         self:ForceStep()

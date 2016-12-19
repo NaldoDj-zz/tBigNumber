@@ -10,6 +10,15 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-19 20:25 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * hbp/tBigNtst.hbp
+  * include/tBigNDef.ch
+  * src/common/tbignumber.prg
+  * src/common/tRemaining.prg
+  * src/hb/c/tbigNumber.c
+  * src/pt/tbigNExecFromArray.prg
+  * src/tests/tBigNtst.prg
+ 
 2016-12-13 08:46 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg

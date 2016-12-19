@@ -499,11 +499,16 @@
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             char * szRet=tBIGNMult(pValue1,pValue2,n,y,nB);
             n=( HB_SIZE )strlen(szRet);
-            #if 0
-                hb_retclen(szRet,( HB_SIZE )n);
-                hb_xfree(szRet);
-            #else
+            #if 0               
                 hb_retclen_buffer(szRet,( HB_SIZE )n);
+            #else
+                #if 0
+                    hb_retclen(szRet,( HB_SIZE )n);
+                    hb_xfree(szRet);
+                #else
+                    hb_retc(szRet);
+                    hb_xfree(szRet);
+                #endif
             #endif
         }
 
