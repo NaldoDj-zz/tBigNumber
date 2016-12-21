@@ -35,6 +35,7 @@
         #ifndef __MT__
             #define __MT__
         #endif
+        #include "hbserial.ch"
         #xtranslate Left([<prm,...>])    => hb_bLeft([<prm>])
         #xtranslate Right([<prm,...>])   => hb_bRight([<prm>])
         #xtranslate SubStr([<prm,...>])  => hb_bSubStr([<prm>])

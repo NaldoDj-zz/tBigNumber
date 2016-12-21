@@ -71,6 +71,7 @@
         static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB);
         static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB);
         static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB);
+        static char * tBigNPower(const char * szBas,const char * szExp,HB_SIZE * p,HB_SIZE y,const HB_MAXINT nB);
         static void tBIGNegMult(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeMult pegMult);
         static char * tBigN2Mult(char * sN,const HB_MAXINT isN,const HB_MAXINT nB);
         static char * tBigNiMult(char * sN,const HB_MAXINT m,const HB_SIZE isN,const HB_MAXINT nB);
@@ -120,7 +121,7 @@
                        *pc = cFill;
                  }
               }
-              pcRet[( sRetLen > sStrLen ? sRetLen : sStrLen )]='\0';
+              pcRet[( sRetLen > sStrLen ? sRetLen : sStrLen )]=HB_CHAR_EOS;
               return pcRet;
         }
 
@@ -196,7 +197,7 @@
               {
                   char * pcRet=(char*)hb_xgrab(( HB_SIZE )sRetLen+1);
                   hb_xmemcpy(pcRet,pcTmp,sRetLen);
-                  pcRet[sRetLen]='\0';
+                  pcRet[sRetLen]=HB_CHAR_EOS;
                   return pcRet;
               }
         }
@@ -225,7 +226,7 @@
             for(;f;){
                 szT[t++]=szF[--f];
             }
-            szT[t]='\0';
+            szT[t]=HB_CHAR_EOS;
             return szT;
         }
 
@@ -247,7 +248,7 @@
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
-            c[y]='\0';
+            c[y]=HB_CHAR_EOS;
             while (--n>=0){
                 v+=(*(&a[n])-'0')+(*(&b[n])-'0');
                 if ( v>=nB ){
@@ -288,7 +289,7 @@
             HB_MAXINT v;
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
-            sN[i]='\0';
+            sN[i]=HB_CHAR_EOS;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 if (bAdd){
@@ -335,7 +336,7 @@
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
-            c[y]='\0';
+            c[y]=HB_CHAR_EOS;
             while (--n>=0){
                 v+=(*(&a[n])-'0')-(*(&b[n])-'0');
                 if ( v<0 ){
@@ -506,24 +507,30 @@
                     hb_retclen(szRet,( HB_SIZE )n);
                     hb_xfree(szRet);
                 #else
-                    hb_retc(szRet);
-                    hb_xfree(szRet);
+                    #if 0
+                        hb_retc_buffer(szRet);
+                    #else
+                        hb_retc(szRet);
+                        hb_xfree(szRet);
+                    #endif
                 #endif
             #endif
         }
+        
+        static char * tBigNPower(const char * szBas,const char * szExp,HB_SIZE * p,HB_SIZE y,const HB_MAXINT nB){
 
-        HB_FUNC_STATIC( TBIGNPOWER ){
-            const char * szBas=hb_parc(1);
-            const char * szExp=hb_parc(2);
-            HB_SIZE n=(HB_SIZE)hb_parnint(3);
+            HB_SIZE n=*p;
             HB_SIZE k=n;
-            HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            
+            HB_TRACE(HB_TR_DEBUG,("tBigNPower(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)",szBas,szExp,n,y,nB));
+            
             char * szInd=hb_strdup(szExp);
             char * szRet=hb_strdup(szBas);
             char * szPow=hb_strdup(szBas);
-            char * szOne=tBIGNPadL("1",k,"0");
-            int iCmp=hb_strnicmp(szInd,szOne,k);
+            char * szOne=tBIGNPadL("1",n,"0");
+            
+            int iCmp=hb_strnicmp(szInd,szOne,n);            
+            
             while (iCmp&&iCmp>0)
             {
                     HB_SIZE t=n;
@@ -557,18 +564,37 @@
                     }
                     y=(n*2);
             }
+
             hb_xfree(szPow);
             hb_xfree(szInd);
             hb_xfree(szOne);
+
+            *p=n;
+            
+        return szRet;
+        
+        }
+
+        HB_FUNC_STATIC( TBIGNPOWER ){
+            const char * szBas=hb_parc(1);
+            const char * szExp=hb_parc(2);
+            HB_SIZE n=(HB_SIZE)hb_parnint(3);
+            HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
+            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            char * szRet=tBigNPower(szBas,szExp,&n,y,nB);
             #if 0               
-                hb_retclen_buffer(szRet,( HB_SIZE )n);
+                hb_retclen_buffer(szRet,n);
             #else
                 #if 0
-                    hb_retclen(szRet,( HB_SIZE )n);
+                    hb_retclen(szRet,n);
                     hb_xfree(szRet);
                 #else
-                    hb_retc(szRet);
-                    hb_xfree(szRet);
+                    #if 0
+                        hb_retc_buffer(szRet);
+                    #else
+                        hb_retc(szRet);
+                        hb_xfree(szRet);
+                    #endif
                 #endif
             #endif
         }
@@ -729,7 +755,7 @@
             HB_MAXINT v;
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
-            sN[i]='\0';
+            sN[i]=HB_CHAR_EOS;
             while(--i>=0){
                 v=(*(&sN[i])-'0');
                 v*=m;

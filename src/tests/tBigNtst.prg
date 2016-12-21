@@ -214,7 +214,7 @@
                             aAC_TSTEXEC:=_StrTokArr(AllTrim(aSect[cKey]),",")
                             EXIT
                         case "ACN_MERSENNE_POW"
-                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(aSect[cKey]),",")
+                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(StrTran(aSect[cKey],"#","")),",")
                             EXIT
                     endswitch
                 next cKey
@@ -459,7 +459,7 @@
                     otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
                     otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                     otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
-                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)
+                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",StrTran(ACN_MERSENNE_POW,";",""))
                     otFIni:SaveAs(cIni)
                     otFIni:=u_TFINI(cIni)
                 endif
@@ -475,7 +475,7 @@
                     lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                     cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
                     aAC_TSTEXEC:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
-                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)),",")
+                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(ACN_MERSENNE_POW,";",""))),",")
                 endif
             endif
 
@@ -1863,7 +1863,8 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
         cN:=PadL(cP,oPrime:nSize)
         __ConOut(fhLog,'tPrime():NextPrime('+cP+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))
         __ConOut(fhLog,'tPrime():NextPrime('+cP+')',"RESULT: "+oPrime:cPrime)
-        __ConOut(fhLog,'tPrime():IsPrime('+oPrime:cPrime+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
+        cP:=LTrim(oPrime:cPrime)
+        __ConOut(fhLog,'tPrime():IsPrime('+cP+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()

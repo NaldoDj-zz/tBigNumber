@@ -3292,7 +3292,9 @@ endclass
 #else /*__ADVPL__*/
     method iPow(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
-        return(self:Pow(uBigN,.T.))
+        local lIPower AS LOGICAL
+        lIPower:=.T.
+        return(self:Pow(uBigN,lIPower))
 /*method iPow*/
 
 //--------------------------------------------------------------------------------------------------------
