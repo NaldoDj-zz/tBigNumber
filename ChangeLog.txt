@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-21 22:12 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/common/tRemaining.prg
+ 
 2016-12-21 21:59 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
   * src/common/tTimeCalc.prg

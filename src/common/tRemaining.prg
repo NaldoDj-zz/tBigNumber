@@ -253,10 +253,12 @@ EndClass
         self:nTotal:=nTotal
         self:nProgress:=0
         self:nSRemaining:=0
-        self:cStartTime:=Time()
-        self:dStartTime:=Date()
+        self:cAverageTime:="00:00:00:000"
+        self:cAverageStep:="00:00:00:000"
         self:SetStep()
         self:ForceStep()
+        self:cStartTime:=Time()
+        self:dStartTime:=Date()
         Return(self)
 /*Method SetRemaining*/
 
