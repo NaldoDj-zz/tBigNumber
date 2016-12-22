@@ -1708,20 +1708,14 @@ endclass
 
         DEFAULT lLZRmv:=(self:nBase==10)
         if lLZRmv
-            #ifdef __HARBOUR__
-                if self:nInt>1.and.Left(self:cInt,1)=="0"
-                    self:cInt:=RemLeft(self:cInt,"0")
-                    self:nInt:=hb_bLen(self:cInt)
-                    if (self:nInt==0)
-                        self:cInt:="0"
-                        self:nInt:=1
-                    endif
+            if self:nInt>1.and.Left(self:cInt,1)=="0"
+                self:cInt:=RemLeft(self:cInt,"0")
+                self:nInt:=hb_bLen(self:cInt)
+                if (self:nInt==0)
+                    self:cInt:="0"
+                    self:nInt:=1
                 endif
-            #else //__PROTEUS__
-                while self:nInt>1.and.Left(self:cInt,1)=="0"
-                    self:cInt:=Right(self:cInt,--self:nInt)
-                end while
-            #endif /*__HARBOUR__*/
+            endif
         endif
 
         DEFAULT nAcc:=s__nDecSet
@@ -4375,7 +4369,9 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 #else /*__ADVPL__*/
     method Normalize(oBigN) class tBigNumber
 #endif /*__HARBOUR__*/
+
         #ifdef __PTCOMPAT__
+
             local nPadL AS NUMERIC
             local nPadR AS NUMERIC
             local nSize AS NUMERIC
@@ -4387,6 +4383,24 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 PARAMETER oBigN AS OBJECT
             #endif /*__ADVPL__*/
 
+            if self:nInt>1.and.Left(self:cInt,1)=="0"
+                self:cInt:=RemLeft(self:cInt,"0")
+                self:nInt:=hb_bLen(self:cInt)
+                if (self:nInt==0)
+                    self:cInt:="0"
+                    self:nInt:=1
+                endif
+            endif
+
+            if oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0"
+                oBigN:cInt:=RemLeft(oBigN:cInt,"0")
+                oBigN:nInt:=hb_bLen(oBigN:cInt)
+                if (oBigN:nInt==0)
+                    oBigN:cInt:="0"
+                    oBigN:nInt:=1
+                endif
+            endif
+            
             nPadL:=Max(self:nInt,oBigN:nInt)
             nPadR:=Max(self:nDec,oBigN:nDec)
             nSize:=(nPadL+nPadR)
@@ -4422,9 +4436,31 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 endif
                 oBigN:nSize:=nSize
             endif
+
         #else /*__HARBOUR__*/
+
+            if self:nInt>1.and.Left(self:cInt,1)=="0"
+                self:cInt:=RemLeft(self:cInt,"0")
+                self:nInt:=hb_bLen(self:cInt)
+                if (self:nInt==0)
+                    self:cInt:="0"
+                    self:nInt:=1
+                endif
+            endif
+            
+            if oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0"
+                oBigN:cInt:=RemLeft(oBigN:cInt,"0")
+                oBigN:nInt:=hb_bLen(oBigN:cInt)
+                if (oBigN:nInt==0)
+                    oBigN:cInt:="0"
+                    oBigN:nInt:=1
+                endif
+            endif
+        
             tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
+    
         #endif /*__PTCOMPAT__*/
+
     return(self)
 /*method Normalize*/
 
@@ -7196,15 +7232,28 @@ static procedure s__IncS9(n AS NUMERIC)
 
 #ifdef __ADVPL__
 
-    static function __eTthD()
+    static function RemLeft(cStr AS CHARACTER,cChr AS CHARACTER,nSiz AS NUMERIC) AS CHARACTER
+        local nChr AS NUMERIC
+        DEFAULT cStr:=""
+        DEFAULT cChr:=" "
+        DEFAULT nSiz:=Len(cStr)
+        nChr:=Len(cChr)
+        while (Left(cStr,nChr)==cChr)
+            nSiz-=nChr
+            cStr:=Right(cStr,nSiz)
+        end while
+        return(cStr)
+    /*static function RemLeft*/
+    
+    static function __eTthD() AS CHARACTER
         return(staticCall(__pteTthD,__eTthD))
     /*static function __eTthD*/
-    static function __PITthD()
+    static function __PITthD() AS CHARACTER
         return(staticCall(__ptPITthD,__PITthD))
     /*static function __PITthD*/
 
     /*warning W0010 Static Function ...() never called*/
-    static function __Dummy(lDummy AS LOGICAL)
+    static function __Dummy(lDummy AS LOGICAL) AS LOGICAL
         DEFAULT lDummy:=.F.
         lDummy:=if(lDummy,(.not.(lDummy)),.F.)
         if (lDummy)
