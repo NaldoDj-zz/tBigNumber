@@ -4746,12 +4746,7 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)
-            #ifdef __HARBOUR__
-                //TODO: Ajustar o calculo de tempo em tRemaining quando ForceStep(.T.)
-                __ConOut(fhLog,"AVG TIME: "+__oRTime2:SecsToTime(__oRTime2:TimeToSecs(__oRTime2:GetcAverageTime())*Min(__oRTime2:GetnTotal(),Max(__oRTime2:GetnProgress(),1))))
-            #else /*__ADVPL__*/
-                __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
-            #endif
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
         endif
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())

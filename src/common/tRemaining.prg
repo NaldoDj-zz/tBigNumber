@@ -28,8 +28,10 @@ Class tRemaining FROM tTimeCalc
 
         #ifdef __HARBOUR__
             DATA cAverageTime   AS CHARACTER INIT "00:00:00:000" HIDDEN
+            DATA cAverageStep   AS CHARACTER INIT "00:00:00:000" HIDDEN
         #else /*__ADVPL__*/
             DATA cAverageTime   AS CHARACTER
+            DATA cAverageStep   AS CHARACTER
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -209,6 +211,7 @@ EndClass
         PARAMETER nTotal AS NUMERIC
         DEFAULT nTotal:=0
         self:cAverageTime:="00:00:00:000"
+        self:cAverageStep:="00:00:00:000"
         self:cEndTime:="00:00:00"
         self:cStartTime:=Time()
         self:cTimeDiff:="00:00:00"
@@ -309,7 +312,7 @@ EndClass
         cTime:=Time()
         nIncTime:=0
 
-        IF .NOT.(dDate==Self:dStartTime)
+        IF .NOT.(dDate==self:dStartTime)
             nIncTime:=abs(dDate-self:dStartTime)
             nIncTime*=24
         EndIF
@@ -338,12 +341,18 @@ EndClass
         self:dEndTime:=aEndTime[2]
 
         IF (self:lForceStep)
-            IF (self:nProgress>=self:nTotal)
+            IF (self:nProgress>=self:nTotal)                
+                self:cAverageStep:=self:IncTime(self:cAverageStep,0,0,self:TimeToSecs(self:cAverageTime))
+                self:cAverageTime:="00:00:00:000"
                 self:nTotal+=self:nProgress
                 self:nProgress:=0
+                self:dStartTime:=Date()
+                self:cStartTime:=Time()              
             EndIF
         EndIF
 
+        self:cAverageTime:=self:IncTime(self:cAverageTime,0,0,self:TimeToSecs(self:cAverageStep))
+        
         Return(self)
 /*Method Calcule*/
 

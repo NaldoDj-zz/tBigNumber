@@ -437,13 +437,20 @@ EndClass
         Else
             nHours:=Val(SubStr(cTime,1,nAT-1))
             cTime:=SubStr(cTime,nAT+1)
-            nAT:=(At(":",cTime))
+            nAT:=(AT(":",cTime))
             IF (nAT==0)
                 nMinutes:=Val(cTime)
                 nSeconds:=0
             Else
                 nMinutes:=Val(SubStr(cTime,1,nAT-1))
-                nSeconds:=Val(SubStr(cTime,nAT+1))
+                cTime:=SubStr(cTime,nAT+1)
+                nAT:=(AT(":",cTime))
+                IF (nAT==0)
+                    nSeconds:=Val(cTime)
+                Else
+                    nSeconds:=Val(SubStr(cTime,1,nAT-1))                    
+                    nSeconds+=(Val(SubStr(cTime,nAT+1))/1000)
+                EndIF
             EndIF
         EndIF
 
