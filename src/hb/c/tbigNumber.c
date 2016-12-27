@@ -487,7 +487,6 @@
             hb_xfree(c);
 
             char * r=remLeft(tmp,y,"0");
-            hb_xfree((void*)tmp);
 
             return r;
         }
@@ -548,11 +547,9 @@
                     {
                        hb_xmemcpy(szRet,pow,n);
                     }
-                    hb_xfree((char*)pow);
                     t=k;
                     const char * tmp=tBigNiSUB(szInd,1,k,nB);
                     szInd=remLeft(tmp,k,"0");
-                    hb_xfree((char*)tmp);
                     k=(HB_SIZE)strlen(szInd);
                     if (!(k==t))
                     {
