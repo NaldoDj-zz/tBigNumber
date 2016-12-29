@@ -10,6 +10,9 @@
      * Change, ! Fix, % Optimization, + Addition, * Removal, ; Comment
  */
 
+2016-12-29 00:17 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * include/tBigNDef.ch
+ 
 2016-12-27 21:47 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
  

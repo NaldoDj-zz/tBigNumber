@@ -11,11 +11,23 @@
     #ifdef PROTHEUS
         #ifndef __ADVPL__
             #define __ADVPL__
+            //--------------------------------------------------------------------------------------------------------
             //TODO: Begin -> Remover #xcommand e xtranslate abaixo quando Tipagem 100% OK
+            //--------------------------------------------------------------------------------------------------------
                 #xtranslate PARAMTYPE <nParam> VAR <xVar> AS <xType,...> =>
                 #xtranslate PARAMETER <xVar> AS <xType> =>
+            //--------------------------------------------------------------------------------------------------------
+                #xtranslate local    <xVar> as <xType>    => local    <xVar>
+                #xtranslate static   <xVar> as <xType>    => static   <xVar>
+                #xtranslate public   <xVar> as <xType>    => public   <xVar>
+                #xtranslate private  <xVar> as <xType>    => private  <xVar>
+            //--------------------------------------------------------------------------------------------------------
                 #xtranslate AS <\xType\> =>
+            //--------------------------------------------------------------------------------------------------------
+            // #xtranslate function <xFun> as <xType>    => function <xFun>
+            //--------------------------------------------------------------------------------------------------------
             //TODO: End   -> Remover #xcommand e xtranslate acima  quando Tipagem 100% OK
+            //--------------------------------------------------------------------------------------------------------
         #endif
         #ifndef __PTCOMPAT__
             #define __PTCOMPAT__
