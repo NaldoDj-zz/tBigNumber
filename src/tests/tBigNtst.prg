@@ -214,7 +214,7 @@
                             aAC_TSTEXEC:=_StrTokArr(AllTrim(aSect[cKey]),",")
                             EXIT
                         case "ACN_MERSENNE_POW"
-                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(StrTran(aSect[cKey],"#","")),",")
+                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(StrTran(StrTran(aSect[cKey],"#",""),CRLF,"")),",")
                             EXIT
                     endswitch
                 next cKey
@@ -232,7 +232,7 @@
         lL_LOGPROCESS:=if(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(ACN_MERSENNE_POW,"#","")),","),aACN_MERSENNE_POW)
+        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(StrTran(ACN_MERSENNE_POW,"#",""),CRLF,"")),","),aACN_MERSENNE_POW)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -459,7 +459,7 @@
                     otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
                     otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                     otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
-                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",StrTran(ACN_MERSENNE_POW,";",""))
+                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""))
                     otFIni:SaveAs(cIni)
                     otFIni:=u_TFINI(cIni)
                 endif
@@ -475,7 +475,7 @@
                     lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                     cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
                     aAC_TSTEXEC:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
-                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(ACN_MERSENNE_POW,";",""))),",")
+                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""))),",")
                 endif
             endif
 
@@ -490,7 +490,7 @@
             lL_LOGPROCESS:=if(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
             cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
             aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-            aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(StrTran(ACN_MERSENNE_POW,";",""),","),aACN_MERSENNE_POW)
+            aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""),","),aACN_MERSENNE_POW)
             __nSLEEP:=Max(__nSLEEP,10)
 
             if ((__nSLEEP)<10)

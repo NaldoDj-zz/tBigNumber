@@ -4994,7 +4994,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         #endif /*__HARBOUR__*/
 
 #ifdef __HARBOUR__
-        return(nR) AS NUMERIC
+        return(nR)
 #else /*__ADVPL__*/
         return(nR)
 #endif /*__HARBOUR__*/
