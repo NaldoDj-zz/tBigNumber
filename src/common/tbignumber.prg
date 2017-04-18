@@ -1,4 +1,3 @@
-//--------------------------------------------------------------------------------------------------------
     /*
      *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
      * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
@@ -1113,7 +1112,7 @@ endclass
     #ifdef __HARBOUR__
         procedure tBigNGC() class tBigNumber
     #else
-        static procedure tBigNGC()
+        static function tBigNGC() as logical
     #endif
             local nFile     AS NUMERIC
             local nFiles    AS NUMERIC
@@ -1134,7 +1133,11 @@ endclass
                 #endif
             next nFile
             aSize(ths_aFiles,0)
+    #ifdef __HARBOUR__
             return
+    #else
+            return(.T.)
+    #endif
         /*static procedure tBigNGC*/
 #endif
 
