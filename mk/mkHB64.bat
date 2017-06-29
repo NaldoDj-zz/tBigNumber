@@ -10,7 +10,7 @@ SETLOCAL ENABLEEXTENSIONS
     SET > env_mkHB64.txt
         SET HB_PATH=D:\GitHub\core\
         SET MinGW64_PATH=D:\mingw64\bin\
-        SET PATH=%MinGW64_PATH%;;%HB_PATH%;%PATH%;
+        SET PATH=%MinGW64_PATH%;%HB_PATH%;%PATH%;
         SET HB_CPU=x86_64
         SET HB_PLATFORM=win
         SET HB_COMPILER=mingw64
