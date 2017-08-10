@@ -397,6 +397,9 @@
     //--------------------------------------------------------------------------------------------------------
     static procedure myGTIEvent(nEvent AS NUMERIC)
         DEFAULT nEvent:=0
+        #ifndef HB_GTE_CLOSE
+            #define HB_GTE_CLOSE 4
+        #endif
         switch nEvent
             case HB_GTE_CLOSE
                 QUIT

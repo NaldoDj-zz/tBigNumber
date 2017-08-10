@@ -61,12 +61,14 @@ ChangeLog.txt ident
 *.txt       text
 *.ucf       text
 *.vbs       text
+*.xdt       text
 *.xml       text
 *.xsl       text
 *.y         text
 *.yml       text
 *.yyc       text
 *.yyh       text
+
 
 # text files with fixed EOL requirements
 *.bat     text eol=crlf

@@ -1,0 +1,17 @@
+#-b
+#-d__HB_Q_SQRT__
+#-d__PTCOMPAT__
+#-d__ALT_D__
+-dTBIGN_RECPOWER
+#-d__LMETHOD__
+#-cflag=-DHB_TR_LEVEL_DEBUG
+
+-mt
+
+-i../../harbour-core/include
+-i../../harbour-core/contrib/xhb
+
+../src/tests/tBigNtst.prg ../rc/tBigNtst.rc
+../src/common/tBigNumber.prg
+
+-o../exe/${hb_plat}/${hb_comp}/${hb_name}

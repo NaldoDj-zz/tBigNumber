@@ -1,0 +1,19 @@
+-hblib
+-inc
+
+-w3 -es2
+
+../src/hb/__hbeTthD.prg
+../src/hb/__hbPITthD.prg
+../src/hb/tBigNError.prg
+../src/hb/tBigNSleep.prg
+../src/hb/tbigNThread.prg
+../src/hb/tBigNErrorSys.prg
+
+../src/common/tfread.prg
+../src/common/tprime.prg
+../src/common/tTimeCalc.prg
+../src/common/tSProgress.prg
+../src/common/tRemaining.prg
+
+-o../lib/${hb_plat}/${hb_comp}/${hb_name}

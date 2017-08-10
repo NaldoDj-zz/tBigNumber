@@ -2,6 +2,56 @@
  * $Id$
  */
 
+2017-08-10 14:15 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * .gitattributes
+  + hbpvz/_tbigNumber.hbp
+  + hbpvz/tBigNtst_array_assignv_dyn_obj.hbp
+  + hbpvz/tBigNtst_array_assignv.hbp
+  + hbpvz/tBigNtst_array_dyn_obj.hbp
+  + hbpvz/tBigNtst_array.hbp
+  + hbpvz/tBigNtst_assignv_dyn_obj.hbp
+  + hbpvz/tBigNtst_assignv.hbp
+  + hbpvz/tBigNtst_dbfile_assignv.hbp
+  + hbpvz/tBigNtst_dbfile_dyn_obj.hbp
+  + hbpvz/tBigNtst_dbfile_memio_assignv.hbp
+  + hbpvz/tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
+  + hbpvz/tBigNtst_dbfile_memio_dyn_obj.hbp
+  + hbpvz/tBigNtst_dbfile_memio.hbp
+  + hbpvz/tBigNtst_dbfile.hbp
+  + hbpvz/tBigNtst_dyn_obj.hbp
+  + hbpvz/tBigNtst.hbp
+  + hbpvz/tBigNtst.xdt
+  + mkvz/__mkHB-msvc.bat
+  + mkvz/__mkHB-msvc64.bat
+  + mkvz/env_mk.txt
+  + mkvz/mk-msvc.bat
+  + mkvz/mk-msvc64.bat
+  + mkvz/mk.bat
+  + mkvz/mk64.bat
+  + mkvz/mkAll-Trace.bat
+  + mkvz/mkAll.bat
+  + mkvz/mkAllLib.bat
+  + mkvz/mkARM.bat
+  + mkvz/mkHB-msvc.bat
+  + mkvz/mkHB-msvc64.bat
+  + mkvz/mkHB.bat
+  + mkvz/mkHB64.bat
+  + mkvz/mkHBAll-Trace.bat
+  + mkvz/mkHBAll.bat
+  + mkvz/mkLib-msvc.bat
+  + mkvz/mkLib-msvc64.bat
+  + mkvz/mkLib.bat
+  + mkvz/mkLib64.bat
+  + mkvz/mkLibARM.bat
+  + mkvz/mkopenSSL.sh
+  + mkvz/mkopenSSL64.sh
+  + mkvz/hbmk.hbm
+  * src/tests/tBigNtst.prg
+  * ChangeLog.txt
+ 
+2017-08-10 14:10 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/tests/tBigNtst.prg
+ 
 /* Read doc/howtorep.txt and use this format for entry headers:
    YYYY*MM*DD HH:MM UTC[*|+]hhmm Your Full Name (your_email address)
    2013*12*31 13:59 UTC+0100 Foo Bar (foo.bar foobar.org)
