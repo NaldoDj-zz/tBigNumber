@@ -2095,6 +2095,7 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
         hb_mutexUnLock(__phMutex)
     endif
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2167,6 +2168,7 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2237,6 +2239,7 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2307,6 +2310,7 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2377,6 +2381,7 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2447,6 +2452,7 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2527,6 +2533,7 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2611,6 +2618,7 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2692,6 +2700,7 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2770,6 +2779,7 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2858,6 +2868,7 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -2942,6 +2953,7 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             __oRTime2:SetStep()
@@ -3252,6 +3264,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=1 TO nN_TEST Step nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -3607,6 +3620,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     For x:=0 TO nISQRT
+        SYMBOL_UNUSED(x)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
