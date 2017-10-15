@@ -2,6 +2,12 @@
  * $Id$
  */
 
+2017-10-15 15:42 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * mk/mkAll-Trace.bat
+  * mk/mkHBAll-Trace.bat
+  * mkvz/mkAll-Trace.bat
+  * mkvz/mkHBAll-Trace.bat
+ 
 2017-10-10 22:37 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   - mkvz/env_mk.txt
   * mk/hbmk.hbm

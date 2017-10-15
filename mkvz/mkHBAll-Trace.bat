@@ -11,7 +11,7 @@ SETLOCAL ENABLEEXTENSIONS
         SETLOCAL ENABLEEXTENSIONS
             rem ============================================================================
             SET HB_BUILD_MODE=cpp
-            SET HB_USER_CFLAGS=-DHB_FM_STATISTICS
+            SET HB_USER_CFLAGS=-DHB_FM_STATISTICS -DHB_PARANOID_MEM_CHECK
             SET HB_TR_LEVEL=HB_TR_DEBUG
             SET HB_TR_SYSOUT=Y
             SET HB_TR_WINOUT=1
