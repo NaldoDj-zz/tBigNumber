@@ -685,6 +685,7 @@
                 hb_xfree(peMTArr[nI]);
             }
             hb_xfree(peMTArr);
+            *peMTArr=NULL;
             peMTArr=NULL;
 
             hb_xfree(pegMultTmp);
@@ -875,6 +876,7 @@
                 hb_xfree(peDVArr[nI]);
             }
             hb_xfree(peDVArr);
+            *peDVArr=NULL;
             peDVArr=NULL;
 
             pegDivTmp->cDivR=tBIGNSub(pN,pegDiv->cDivR,n,( HB_SIZE )n,nB);

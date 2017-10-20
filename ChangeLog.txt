@@ -2,6 +2,9 @@
  * $Id$
  */
 
+2017-10-20 20:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
+  * src/hb/c/tbigNumber.c
+ 
 2017-10-15 15:42 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/mkAll-Trace.bat
   * mk/mkHBAll-Trace.bat
