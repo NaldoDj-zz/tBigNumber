@@ -6941,7 +6941,9 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
     static function recPower(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
         #ifdef __HARBOUR__
-            local cR    AS CHARACTER
+            #ifndef __PTCOMPAT__
+                local cR    AS CHARACTER
+            #endif /*__PTCOMPAT__*/    
         #endif /*__HARBOUR__*/
         
         local oR    AS OBJECT
@@ -7000,7 +7002,9 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 #else
 
     #ifdef __HARBOUR__
-        local cR    AS CHARACTER
+        #ifndef __PTCOMPAT__
+            local cR    AS CHARACTER
+        #endif /*__PTCOMPAT__*/    
     #endif /*__HARBOUR__*/
     
     local oR    AS OBJECT
@@ -7063,9 +7067,9 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
         while y>0
         #ifdef __ADVPL__
             s+=SubStr(c,y--,1)
-        #else
+        #else /*__HARBOUR__*/
             s+=c[y--]
-        #endif
+        #endif /*__ADVPL__*/
         end while
 
         return(s)
@@ -7105,7 +7109,7 @@ static function MathO(uBigN1,cOperator AS CHARACTER,uBigN2,lRetObject AS LOGICAL
         bAsc:={|cOp|cOperator==cOp}
     #else /*__HARBOUR__*/
         bAsc:={|cOp AS CHARACTER|cOperator==cOp}
-    #endif
+    #endif /*__PROTEUS__*/
 
     do case
         case (aScan(OPERATOR_ADD,bAsc)>0)
