@@ -97,7 +97,7 @@
               HB_SIZE sStrLen = ( HB_SIZE ) strlen( pcString );
               HB_SIZE sRetLen = ( HB_SIZE ) nRetLen;
 
-              pcRet = ( char * ) hb_xgrab( ( HB_SIZE )sRetLen + 1 );
+              pcRet = ( char * ) hb_xgrabz( ( HB_SIZE )sRetLen + 1 );
 
               if( iSwitch == DO_PAD_PADLEFT )
               {
@@ -195,7 +195,7 @@
                  return tBIGNPadL("0",1,"0");
               else
               {
-                  char * pcRet=(char*)hb_xgrab(( HB_SIZE )sRetLen+1);
+                  char * pcRet=(char*)hb_xgrabz(( HB_SIZE )sRetLen+1);
                   hb_xmemcpy(pcRet,pcTmp,sRetLen);
                   pcRet[sRetLen]=HB_CHAR_EOS;
                   return pcRet;
@@ -222,7 +222,7 @@
             HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%" HB_PFS "u)",szF,s));
             HB_SIZE f=s;
             HB_SIZE t=0;
-            char * szT=(char*)hb_xgrab(( HB_SIZE )s+1);
+            char * szT=(char*)hb_xgrabz(( HB_SIZE )s+1);
             for(;f;){
                 szT[t++]=szF[--f];
             }
@@ -244,7 +244,7 @@
 
         static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
+            char * c=(char*)hb_xgrabz(( HB_SIZE )y+1);
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
@@ -332,7 +332,7 @@
 
         static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
+            char * c=(char*)hb_xgrabz(( HB_SIZE )y+1);
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
@@ -604,8 +604,8 @@
             HB_MAXINT szptBIGNeMult=sizeof(ptBIGNeMult*);
             HB_MAXINT szstBIGNeMult=sizeof(stBIGNeMult);
 
-            ptBIGNeMult *peMTArr=(ptBIGNeMult*)hb_xgrab(( HB_SIZE )szptBIGNeMult);
-            ptBIGNeMult pegMultTmp=(ptBIGNeMult)hb_xgrab(( HB_SIZE )szstBIGNeMult);
+            ptBIGNeMult *peMTArr=(ptBIGNeMult*)hb_xgrabz(( HB_SIZE )szptBIGNeMult);
+            ptBIGNeMult pegMultTmp=(ptBIGNeMult)hb_xgrabz(( HB_SIZE )szstBIGNeMult);
 
             char * Tmp=tBIGNPadL("1",( HB_SIZE )n,"0");
             pegMultTmp->cMultM=hb_strdup(Tmp);
@@ -623,7 +623,7 @@
             do {
 
                 peMTArr=(ptBIGNeMult*)hb_xrealloc(peMTArr,(( HB_SIZE )nI+1)*( HB_SIZE )szptBIGNeMult);
-                peMTArr[nI]=(ptBIGNeMult)hb_xgrab(( HB_SIZE )szstBIGNeMult);
+                peMTArr[nI]=(ptBIGNeMult)hb_xgrabz(( HB_SIZE )szstBIGNeMult);
 
                 peMTArr[nI]->cMultM=hb_strdup(pegMultTmp->cMultM);
                 peMTArr[nI]->cMultP=hb_strdup(pegMultTmp->cMultP);
@@ -685,7 +685,6 @@
                 hb_xfree(peMTArr[nI]);
             }
             hb_xfree(peMTArr);
-            *peMTArr=NULL;
             peMTArr=NULL;
 
             hb_xfree(pegMultTmp);
@@ -699,7 +698,7 @@
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
 
-            ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrab(( HB_SIZE )sizeof(stBIGNeMult));
+            ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrabz(( HB_SIZE )sizeof(stBIGNeMult));
 
             tBIGNegMult(pN,pD,n,nB,pegMult);
 
@@ -795,8 +794,8 @@
             HB_MAXINT szptBIGNeDiv=sizeof(ptBIGNeDiv*);
             HB_MAXINT szstBIGNeDiv=sizeof(stBIGNeDiv);
 
-            ptBIGNeDiv *peDVArr=(ptBIGNeDiv*)hb_xgrab(( HB_SIZE )szptBIGNeDiv);
-            ptBIGNeDiv pegDivTmp=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )szstBIGNeDiv);
+            ptBIGNeDiv *peDVArr=(ptBIGNeDiv*)hb_xgrabz(( HB_SIZE )szptBIGNeDiv);
+            ptBIGNeDiv pegDivTmp=(ptBIGNeDiv)hb_xgrabz(( HB_SIZE )szstBIGNeDiv);
 
             char * Tmp=tBIGNPadL("1",( HB_SIZE )n,"0");
             pegDivTmp->cDivQ=hb_strdup(Tmp);
@@ -809,7 +808,7 @@
             do {
 
                 peDVArr=(ptBIGNeDiv*)hb_xrealloc(peDVArr,(( HB_SIZE )nI+1)*( HB_SIZE )szptBIGNeDiv);
-                peDVArr[nI]=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )szstBIGNeDiv);
+                peDVArr[nI]=(ptBIGNeDiv)hb_xgrabz(( HB_SIZE )szstBIGNeDiv);
 
                 peDVArr[nI]->cDivQ=hb_strdup(pegDivTmp->cDivQ);
                 peDVArr[nI]->cDivR=hb_strdup(pegDivTmp->cDivR);
@@ -876,7 +875,6 @@
                 hb_xfree(peDVArr[nI]);
             }
             hb_xfree(peDVArr);
-            *peDVArr=NULL;
             peDVArr=NULL;
 
             pegDivTmp->cDivR=tBIGNSub(pN,pegDiv->cDivR,n,( HB_SIZE )n,nB);
@@ -891,7 +889,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1);
             char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
-            ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
+            ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrabz(( HB_SIZE )sizeof(stBIGNeDiv));
             int iCmp=memcmp(pN,pD,( HB_SIZE )n);
 
             switch(iCmp){
@@ -937,13 +935,13 @@
 
             HB_MAXINT v1;
 
-            ptBIGNeDiv  pecDivTmp=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
+            ptBIGNeDiv  pecDivTmp=(ptBIGNeDiv)hb_xgrabz(( HB_SIZE )sizeof(stBIGNeDiv));
 
             HB_MAXINT szHB_MAXINT=sizeof(HB_MAXINT);
             HB_MAXINT snHB_MAXINT=ipN*szHB_MAXINT;
 
-            HB_MAXINT *ipA=(HB_MAXINT*)hb_xgrab(( HB_SIZE )snHB_MAXINT);
-            HB_MAXINT *iaux=(HB_MAXINT*)hb_xgrab(( HB_SIZE )snHB_MAXINT);
+            HB_MAXINT *ipA=(HB_MAXINT*)hb_xgrabz(( HB_SIZE )snHB_MAXINT);
+            HB_MAXINT *iaux=(HB_MAXINT*)hb_xgrabz(( HB_SIZE )snHB_MAXINT);
 
             HB_MAXINT i=ipN;
             while(--i>=0){
@@ -1026,7 +1024,7 @@
             hb_xfree(sN2);
             hb_xfree(pecDivTmp);
 
-            pecDiv->cDivQ=(char*)hb_xgrab(( HB_SIZE )ipN+1);
+            pecDiv->cDivQ=(char*)hb_xgrabz(( HB_SIZE )ipN+1);
 
             i=ipN;
             while(--i>=0){
@@ -1044,7 +1042,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(4)+1);
             char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
-            ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
+            ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrabz(( HB_SIZE )sizeof(stBIGNeDiv));
             int iCmp=memcmp(pN,pD,( HB_SIZE )n);
 
             switch(iCmp){
@@ -1343,7 +1341,7 @@
               if (ldArg<=0)
               {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1359,7 +1357,7 @@
                     if( hb_mathGetError(&hb_exc,"SQRTL",(double)ldArg,0.0,(double)ldResult))
                     {
                         std::string str=to_string(0.0);
-                        char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                         std::strcpy(cstr,str.c_str());
                         #if 0
                             hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1371,7 +1369,7 @@
                     else
                     {
                         std::string str=to_string(ldResult);
-                        char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                         std::strcpy(cstr,str.c_str());
                         #if 0
                             hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1385,7 +1383,7 @@
            else
            {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1409,7 +1407,7 @@
                 if( hb_mathGetError(&hb_exc,"LOG10L",(double)ldArgN,(double)ldArgB,(double)ldResult))
                 {
                     std::string str=to_string(0.0);
-                    char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                     std::strcpy(cstr,str.c_str());
                     #if 0
                         hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1425,7 +1423,7 @@
                     {
                         str=to_string(0.0);
                     }
-                    char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                     std::strcpy(cstr,str.c_str());
                     #if 0
                         hb_retclen(cstr,( HB_SIZE )strlen(cstr));
@@ -1438,7 +1436,7 @@
            else
            {
                 std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrab(( HB_SIZE )str.length()+1);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
                 std::strcpy(cstr,str.c_str());
                 #if 0
                     hb_retclen(cstr,( HB_SIZE )strlen(cstr));
