@@ -66,6 +66,7 @@
 
 #include "error.ch"
 #include "fileio.ch"
+#include "hbver.ch"
 #include "hbmemory.ch"
 #include "tBigNumber.ch"
 
@@ -370,10 +371,10 @@ STATIC FUNCTION LogError( oerr )
       FWriteLine( nHandle, "Operating system...:" + OS() )
 #ifdef __XHARBOUR__
       FWriteLine( nHandle, "xHarbour version...:" + Version() )
-      FWriteLine( nHandle, "xHarbour built on..:" + hb_BuildDate() ) 
+      FWriteLine( nHandle, "xHarbour built on..:" + hb_Version( HB_VERSION_BUILD_DATE_STR ) ) 
 #else
       FWriteLine( nHandle, "Harbour version....:" + Version() )
-      FWriteLine( nHandle, "Harbour built on...:" + hb_BuildDate() ) 
+      FWriteLine( nHandle, "Harbour built on...:" + hb_Version( HB_VERSION_BUILD_DATE_STR ) ) 
 #endif      
       FWriteLine( nHandle, "C/C++ compiler.....:" + hb_Compiler() )
 

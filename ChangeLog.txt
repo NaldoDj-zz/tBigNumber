@@ -2,6 +2,9 @@
  * $Id$
  */
 
+2017-11-16 13:31 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * src/hb/tBigNError.prg
+ 
 2017-11-10 09:11 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
  
