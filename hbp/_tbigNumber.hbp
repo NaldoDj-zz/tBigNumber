@@ -1,7 +1,20 @@
+#-b
+#-d__HB_Q_SQRT__
+#-d__PTCOMPAT__
+#-d__ALT_D__
+-dTBIGN_RECPOWER
+#-d__LMETHOD__
+#-cflag=-DHB_TR_LEVEL_DEBUG
+
+-mt
+
 -hblib
 -inc
 
 -w3 -es2
+
+-i../include
+-i../../core/contrib/xhb
 
 ../src/hb/__hbeTthD.prg
 ../src/hb/__hbPITthD.prg
@@ -15,5 +28,6 @@
 ../src/common/tTimeCalc.prg
 ../src/common/tSProgress.prg
 ../src/common/tRemaining.prg
+../src/common/tBigNumber.prg
 
 -o../lib/${hb_plat}/${hb_comp}/${hb_name}

@@ -2,6 +2,40 @@
  * $Id$
  */
 
+2018-01-04 00:52 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * hbp/_tbigNumber.hbp
+  * hbp/tBigNtst_array_assignv_dyn_obj.hbp
+  * hbp/tBigNtst_array_assignv.hbp
+  * hbp/tBigNtst_array_dyn_obj.hbp
+  * hbp/tBigNtst_array.hbp
+  * hbp/tBigNtst_assignv_dyn_obj.hbp
+  * hbp/tBigNtst_assignv.hbp
+  * hbp/tBigNtst_dbfile_assignv.hbp
+  * hbp/tBigNtst_dbfile_dyn_obj.hbp
+  * hbp/tBigNtst_dbfile_memio_assignv.hbp
+  * hbp/tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
+  * hbp/tBigNtst_dbfile_memio_dyn_obj.hbp
+  * hbp/tBigNtst_dbfile_memio.hbp
+  * hbp/tBigNtst_dbfile.hbp
+  * hbp/tBigNtst_dyn_obj.hbp
+  * hbp/tBigNtst.hbp
+  * hbpvz/_tbigNumber.hbp
+  * hbpvz/tBigNtst_array_assignv_dyn_obj.hbp
+  * hbpvz/tBigNtst_array_assignv.hbp
+  * hbpvz/tBigNtst_array_dyn_obj.hbp
+  * hbpvz/tBigNtst_array.hbp
+  * hbpvz/tBigNtst_assignv_dyn_obj.hbp
+  * hbpvz/tBigNtst_assignv.hbp
+  * hbpvz/tBigNtst_dbfile_assignv.hbp
+  * hbpvz/tBigNtst_dbfile_dyn_obj.hbp
+  * hbpvz/tBigNtst_dbfile_memio_assignv.hbp
+  * hbpvz/tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
+  * hbpvz/tBigNtst_dbfile_memio_dyn_obj.hbp
+  * hbpvz/tBigNtst_dbfile_memio.hbp
+  * hbpvz/tBigNtst_dbfile.hbp
+  * hbpvz/tBigNtst_dyn_obj.hbp
+  * hbpvz/tBigNtst.hbp
+ 
 2017-11-16 13:31 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/tBigNError.prg
  
