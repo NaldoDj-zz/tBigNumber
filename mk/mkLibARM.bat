@@ -13,7 +13,7 @@ SETLOCAL ENABLEEXTENSIONS
     SET PATH=%PATH%;%HB_PATH%comp\mingwarm\libexec\gcc\arm-mingw32ce\4.4.0\
     SET PATH=%PATH%;%cygwin_PATH%bin\
     SET PATH=%PATH%;%cygwin_PATH%usr\bin\
-        %HB_PATH%bin\hbmk2.exe -jobs=10 -cpp -compr=no -comp=mingwarm -xhb ..\hbp\tbigNumber.hbp
+        %HB_PATH%bin\hbmk2.exe -jobs=10 -cpp -compr=no -comp=mingwarm -xhb ..\hbp\_tbigNumber.hbp
     SET cygwin_PATH=%_cygwin_PATH%
     SET HB_PATH=%_HB_PATH%
     SET PATH=%_PATH%

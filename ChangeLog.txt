@@ -2,6 +2,47 @@
  * $Id$
  */
 
+2018-01-05 07:26 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * mk/mk-msvc.bat
+  * mk/mk-msvc64.bat
+  * mk/mk.bat
+  * mk/mk64.bat
+  * mk/mkLib-msvc.bat
+  * mk/mkLib-msvc64.bat
+  * mk/mkLib.bat
+  * mk/mkLib64.bat
+  * mk/mkLibARM.bat
+  * hbc/tbigNumber_array_assignv_dyn_obj.hbc -> hbc/_tbigNumber_array_assignv_dyn_obj.hbc
+  * hbc/tbigNumber_array_assignv.hbc -> hbc/_tbigNumber_array_assignv.hbc
+  * hbc/tbigNumber_array_dyn_obj.hbc -> hbc/_tbigNumber_array_dyn_obj.hbc
+  * hbc/tbigNumber_array.hbc -> hbc/_tbigNumber_array.hbc
+  * hbc/tbigNumber_assignv_dyn_obj.hbc -> hbc/_tbigNumber_assignv_dyn_obj.hbc
+  * hbc/tbigNumber_assignv.hbc -> hbc/_tbigNumber_assignv.hbc
+  * hbc/tbigNumber_dbfile_assignv.hbc -> hbc/_tbigNumber_dbfile_assignv.hbc
+  * hbc/tbigNumber_dbfile_dyn_obj.hbc -> hbc/_tbigNumber_dbfile_dyn_obj.hbc
+  * hbc/tbigNumber_dbfile_memio_assignv.hbc -> hbc/_tbigNumber_dbfile_memio_assignv.hbc
+  * hbc/tbigNumber_dbfile_memio_dyn_obj_assignv.hbc -> hbc/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
+  * hbc/tbigNumber_dbfile_memio_dyn_obj.hbc -> hbc/_tbigNumber_dbfile_memio_dyn_obj.hbc
+  * hbc/tbigNumber_dbfile_memio.hbc -> hbc/_tbigNumber_dbfile_memio.hbc
+  * hbc/tbigNumber_dbfile.hbc -> hbc/_tbigNumber_dbfile.hbc
+  * hbc/tbigNumber_dyn_obj.hbc -> hbc/_tbigNumber_dyn_obj.hbc
+  * hbc/tbigNumber.hbc -> hbc/_tbigNumber.hbc
+  * hbp/tbigNumber_array_assignv_dyn_obj.hbp -> hbp/_tbigNumber_array_assignv_dyn_obj.hbp
+  * hbp/tbigNumber_array_assignv.hbp -> hbp/_tbigNumber_array_assignv.hbp
+  * hbp/tbigNumber_array_dyn_obj.hbp -> hbp/_tbigNumber_array_dyn_obj.hbp
+  * hbp/tbigNumber_array.hbp -> hbp/_tbigNumber_array.hbp
+  * hbp/tbigNumber_assignv_dyn_obj.hbp -> hbp/_tbigNumber_assignv_dyn_obj.hbp
+  * hbp/tbigNumber_assignv.hbp -> hbp/_tbigNumber_assignv.hbp
+  * hbp/tbigNumber_dbfile_assignv.hbp -> hbp/_tbigNumber_dbfile_assignv.hbp
+  * hbp/tbigNumber_dbfile_dyn_obj.hbp -> hbp/_tbigNumber_dbfile_dyn_obj.hbp
+  * hbp/tbigNumber_dbfile_memio_assignv.hbp -> hbp/_tbigNumber_dbfile_memio_assignv.hbp
+  * hbp/tbigNumber_dbfile_memio_dyn_obj_assignv.hbp -> hbp/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbp
+  * hbp/tbigNumber_dbfile_memio_dyn_obj.hbp -> hbp/_tbigNumber_dbfile_memio_dyn_obj.hbp
+  * hbp/tbigNumber_dbfile_memio.hbp -> hbp/_tbigNumber_dbfile_memio.hbp
+  * hbp/tbigNumber_dbfile.hbp -> hbp/_tbigNumber_dbfile.hbp
+  * hbp/tbigNumber_dyn_obj.hbp -> hbp/_tbigNumber_dyn_obj.hbp
+  * hbp/tbigNumber.hbp -> hbp/_tbigNumber.hbp
+  
 2018-01-05 00:54 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
  
@@ -947,3 +988,44 @@
   * src/common/tbignumber.prg
   * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
+
+2018-01-05 07:26 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * mk/mk-msvc.bat
+  * mk/mk-msvc64.bat
+  * mk/mk.bat
+  * mk/mk64.bat
+  * mk/mkLib-msvc.bat
+  * mk/mkLib-msvc64.bat
+  * mk/mkLib.bat
+  * mk/mkLib64.bat
+  * mk/mkLibARM.bat
+  * hbc/tbigNumber_array_assignv_dyn_obj.hbc -> hbc/_tbigNumber_array_assignv_dyn_obj.hbc
+  * hbc/tbigNumber_array_assignv.hbc -> hbc/_tbigNumber_array_assignv.hbc
+  * hbc/tbigNumber_array_dyn_obj.hbc -> hbc/_tbigNumber_array_dyn_obj.hbc
+  * hbc/tbigNumber_array.hbc -> hbc/_tbigNumber_array.hbc
+  * hbc/tbigNumber_assignv_dyn_obj.hbc -> hbc/_tbigNumber_assignv_dyn_obj.hbc
+  * hbc/tbigNumber_assignv.hbc -> hbc/_tbigNumber_assignv.hbc
+  * hbc/tbigNumber_dbfile_assignv.hbc -> hbc/_tbigNumber_dbfile_assignv.hbc
+  * hbc/tbigNumber_dbfile_dyn_obj.hbc -> hbc/_tbigNumber_dbfile_dyn_obj.hbc
+  * hbc/tbigNumber_dbfile_memio_assignv.hbc -> hbc/_tbigNumber_dbfile_memio_assignv.hbc
+  * hbc/tbigNumber_dbfile_memio_dyn_obj_assignv.hbc -> hbc/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
+  * hbc/tbigNumber_dbfile_memio_dyn_obj.hbc -> hbc/_tbigNumber_dbfile_memio_dyn_obj.hbc
+  * hbc/tbigNumber_dbfile_memio.hbc -> hbc/_tbigNumber_dbfile_memio.hbc
+  * hbc/tbigNumber_dbfile.hbc -> hbc/_tbigNumber_dbfile.hbc
+  * hbc/tbigNumber_dyn_obj.hbc -> hbc/_tbigNumber_dyn_obj.hbc
+  * hbc/tbigNumber.hbc -> hbc/_tbigNumber.hbc
+  * hbp/tbigNumber_array_assignv_dyn_obj.hbp -> hbp/_tbigNumber_array_assignv_dyn_obj.hbp
+  * hbp/tbigNumber_array_assignv.hbp -> hbp/_tbigNumber_array_assignv.hbp
+  * hbp/tbigNumber_array_dyn_obj.hbp -> hbp/_tbigNumber_array_dyn_obj.hbp
+  * hbp/tbigNumber_array.hbp -> hbp/_tbigNumber_array.hbp
+  * hbp/tbigNumber_assignv_dyn_obj.hbp -> hbp/_tbigNumber_assignv_dyn_obj.hbp
+  * hbp/tbigNumber_assignv.hbp -> hbp/_tbigNumber_assignv.hbp
+  * hbp/tbigNumber_dbfile_assignv.hbp -> hbp/_tbigNumber_dbfile_assignv.hbp
+  * hbp/tbigNumber_dbfile_dyn_obj.hbp -> hbp/_tbigNumber_dbfile_dyn_obj.hbp
+  * hbp/tbigNumber_dbfile_memio_assignv.hbp -> hbp/_tbigNumber_dbfile_memio_assignv.hbp
+  * hbp/tbigNumber_dbfile_memio_dyn_obj_assignv.hbp -> hbp/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbp
+  * hbp/tbigNumber_dbfile_memio_dyn_obj.hbp -> hbp/_tbigNumber_dbfile_memio_dyn_obj.hbp
+  * hbp/tbigNumber_dbfile_memio.hbp -> hbp/_tbigNumber_dbfile_memio.hbp
+  * hbp/tbigNumber_dbfile.hbp -> hbp/_tbigNumber_dbfile.hbp
+  * hbp/tbigNumber_dyn_obj.hbp -> hbp/_tbigNumber_dyn_obj.hbp
+  * hbp/tbigNumber.hbp -> hbp/_tbigNumber.hbp

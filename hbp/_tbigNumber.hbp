@@ -1,17 +1,15 @@
 #-b
-#-d__HB_Q_SQRT__
-#-d__PTCOMPAT__
-#-d__ALT_D__
--dTBIGN_RECPOWER
-#-d__LMETHOD__
+#-D__HB_Q_SQRT__
+#-D__PTCOMPAT__
+#-D__ALT_D__
+-DTBIGN_RECPOWER
+#-D__LMETHOD__
 #-cflag=-DHB_TR_LEVEL_DEBUG
 
 -hblib
 -inc
 
 -w3 -es2
-
--dTBN_ARRAY
 
 -i../include
 -i../../core/contrib/xhb

@@ -16,21 +16,21 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=mingw
         SET HB_CCPATH=%MinGW_PATH%
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst.hbp -l ../hbc/tbigNumber.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array.hbp -l ../hbc/tbigNumber_array.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_assignv.hbp -l ../hbc/tbigNumber_array_assignv.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp -l ../hbc/tbigNumber_array_assignv_dyn_obj.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_dyn_obj.hbp -l ../hbc/tbigNumber_array_dyn_obj.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_assignv.hbp -l ../hbc/tbigNumber_assignv.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_assignv_dyn_obj.hbp -l ../hbc/tbigNumber_assignv_dyn_obj.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile.hbp -l ../hbc/tbigNumber_dbfile.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_assignv.hbp -l ../hbc/tbigNumber_dbfile_assignv.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_dyn_obj.hbp -l ../hbc/tbigNumber_dbfile_dyn_obj.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio.hbp -l ../hbc/tbigNumber_dbfile_memio.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_assignv.hbp -l ../hbc/tbigNumber_dbfile_memio_assignv.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp -l ../hbc/tbigNumber_dbfile_memio_dyn_obj.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp -l ../hbc/tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
-        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dyn_obj.hbp -l ../hbc/tbigNumber_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst.hbp -l ../hbc/_tbigNumber.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array.hbp -l ../hbc/_tbigNumber_array.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_assignv.hbp -l ../hbc/_tbigNumber_array_assignv.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp -l ../hbc/_tbigNumber_array_assignv_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_array_dyn_obj.hbp -l ../hbc/_tbigNumber_array_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_assignv.hbp -l ../hbc/_tbigNumber_assignv.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_assignv_dyn_obj.hbp -l ../hbc/_tbigNumber_assignv_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile.hbp -l ../hbc/_tbigNumber_dbfile.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_assignv.hbp -l ../hbc/_tbigNumber_dbfile_assignv.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_dyn_obj.hbp -l ../hbc/_tbigNumber_dbfile_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio.hbp -l ../hbc/_tbigNumber_dbfile_memio.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_assignv.hbp -l ../hbc/_tbigNumber_dbfile_memio_assignv.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp -l ../hbc/_tbigNumber_dbfile_memio_dyn_obj.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp -l ../hbc/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
+        %HB_PATH%bin\win\mingw\hbmk2.exe -plat=win -cpu=x86 -strip- -jobs=10 -cpp  -compr=max -comp=mingw -gui ..\hbp\tBigNtst_dyn_obj.hbp -l ../hbc/_tbigNumber_dyn_obj.hbc
     D:
     CD D:\GitHub\tBigNumber\mk\
     for /f %%e in (env_mk.txt) do (
