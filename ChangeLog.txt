@@ -2,6 +2,9 @@
  * $Id$
  */
 
+2018-01-05 00:54 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * src/hb/c/tbigNumber.c
+ 
 2018-01-05 00:43 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   + hbc/tbigNumber_array_assignv_dyn_obj.hbc
   + hbc/tbigNumber_array_assignv.hbc

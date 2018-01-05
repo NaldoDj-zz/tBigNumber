@@ -7,7 +7,7 @@
     #pragma -km+
     #pragma -ko+
     /* Force HB_MT */
-    #require "hbvmmt"
+    /*#require "hbvmmt"*/
     request HB_MT
 
     /*
