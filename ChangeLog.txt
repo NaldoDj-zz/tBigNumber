@@ -2,6 +2,36 @@
  * $Id$
  */
 
+2018-01-05 00:43 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  + hbc/tbigNumber_array_assignv_dyn_obj.hbc
+  + hbc/tbigNumber_array_assignv.hbc
+  + hbc/tbigNumber_array_dyn_obj.hbc
+  + hbc/tbigNumber_array.hbc
+  + hbc/tbigNumber_assignv_dyn_obj.hbc
+  + hbc/tbigNumber_assignv.hbc
+  + hbc/tbigNumber_dbfile_assignv.hbc
+  + hbc/tbigNumber_dbfile_dyn_obj.hbc
+  + hbc/tbigNumber_dbfile_memio_assignv.hbc
+  + hbc/tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
+  + hbc/tbigNumber_dbfile_memio_dyn_obj.hbc
+  + hbc/tbigNumber_dbfile_memio.hbc
+  + hbc/tbigNumber_dbfile.hbc
+  + hbc/tbigNumber_dyn_obj.hbc
+  + hbp/tbigNumber_array_assignv_dyn_obj.hbp
+  + hbp/tbigNumber_array_assignv.hbp
+  + hbp/tbigNumber_array_dyn_obj.hbp
+  + hbp/tbigNumber_array.hbp
+  + hbp/tbigNumber_assignv_dyn_obj.hbp
+  + hbp/tbigNumber_assignv.hbp
+  + hbp/tbigNumber_dbfile_assignv.hbp
+  + hbp/tbigNumber_dbfile_dyn_obj.hbp
+  + hbp/tbigNumber_dbfile_memio_assignv.hbp
+  + hbp/tbigNumber_dbfile_memio_dyn_obj_assignv.hbp
+  + hbp/tbigNumber_dbfile_memio_dyn_obj.hbp
+  + hbp/tbigNumber_dbfile_memio.hbp
+  + hbp/tbigNumber_dbfile.hbp
+  + hbp/tbigNumber_dyn_obj.hbp
+ 
 2018-01-05 00:39 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst_dbfile_memio_dyn_obj.hbp
   * mk/hbmk.hbm
