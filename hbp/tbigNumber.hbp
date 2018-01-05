@@ -6,8 +6,6 @@
 #-d__LMETHOD__
 #-cflag=-DHB_TR_LEVEL_DEBUG
 
--mt
-
 -hblib
 -inc
 

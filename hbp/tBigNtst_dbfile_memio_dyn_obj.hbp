@@ -12,7 +12,6 @@
 -i../include
 -i../../core/contrib/xhb
 
-
 ../src/tests/tBigNtst.prg ../rc/tBigNtst.rc
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

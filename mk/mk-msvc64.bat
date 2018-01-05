@@ -30,21 +30,21 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=msvc64
         SET HB_CCPATH=%msvc64_PATH%
-        %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_assignv.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_dyn_obj.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_assignv.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_assignv_dyn_obj.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_assignv.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_dyn_obj.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_assignv.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp
-        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dyn_obj.hbp
+        %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst.hbp -l ../hbc/tbigNumber.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array.hbp -l ../hbc/tbigNumber_array.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_assignv.hbp -l ../hbc/tbigNumber_array_assignv.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp -l ../hbc/tbigNumber_array_assignv_dyn_obj.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_array_dyn_obj.hbp -l ../hbc/tbigNumber_array_dyn_obj.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_assignv.hbp -l ../hbc/tbigNumber_assignv.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_assignv_dyn_obj.hbp -l ../hbc/tbigNumber_assignv_dyn_obj.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile.hbp -l ../hbc/tbigNumber_dbfile.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_assignv.hbp -l ../hbc/tbigNumber_dbfile_assignv.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_dyn_obj.hbp -l ../hbc/tbigNumber_dbfile_dyn_obj.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio.hbp -l ../hbc/tbigNumber_dbfile_memio.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_assignv.hbp -l ../hbc/tbigNumber_dbfile_memio_assignv.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj.hbp -l ../hbc/tbigNumber_dbfile_memio_dyn_obj.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dbfile_memio_dyn_obj_assignv.hbp -l ../hbc/tbigNumber_dbfile_memio_dyn_obj_assignv.hbc
+        rem %HB_PATH%bin\win\msvc64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc64 -gui ..\hbp\tBigNtst_dyn_obj.hbp -l ../hbc/tbigNumber_dyn_obj.hbc
     D:
     CD D:\GitHub\tBigNumber\mk\
     for /f %%e in (env_mk_msvc64.txt) do (

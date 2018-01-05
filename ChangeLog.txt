@@ -2,6 +2,22 @@
  * $Id$
  */
 
+2018-01-05 00:39 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * hbp/tBigNtst_dbfile_memio_dyn_obj.hbp
+  * mk/hbmk.hbm
+  * mk/mk-msvc.bat
+  * mk/mk-msvc64.bat
+  * mk/mk.bat
+  * mk/mk64.bat
+  * mk/mkARM.bat
+  * mk/mkLib-msvc.bat
+  * mk/mkLib-msvc64.bat
+  * mk/mkLib.bat
+  * mk/mkLib64.bat
+  * mk/mkLibARM.bat
+  * hbc/_tbigNumber.hbc -> hbc/tbigNumber.hbc
+  * hbp/_tbigNumber.hbp -> hbp/tbigNumber.hbp
+ 
 2018-01-04 00:52 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbp/_tbigNumber.hbp
   * hbp/tBigNtst_array_assignv_dyn_obj.hbp
