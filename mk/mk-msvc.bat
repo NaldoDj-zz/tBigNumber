@@ -30,7 +30,7 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=msvc
         SET HB_CCPATH=%msvc_PATH%
-        rem %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc -gui ..\hbp\tBigNtst.hbp -l ../hbc/_tbigNumber.hbc
+        %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc -gui ..\hbp\tBigNtst.hbp -l ../hbc/_tbigNumber.hbc
         rem %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc -gui ..\hbp\tBigNtst_array.hbp -l ../hbc/_tbigNumber_array.hbc
         rem %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc -gui ..\hbp\tBigNtst_array_assignv.hbp -l ../hbc/_tbigNumber_array_assignv.hbc
         rem %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=max -comp=msvc -gui ..\hbp\tBigNtst_array_assignv_dyn_obj.hbp -l ../hbc/_tbigNumber_array_assignv_dyn_obj.hbc

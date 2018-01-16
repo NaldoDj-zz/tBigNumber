@@ -16,7 +16,21 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=mingw64
         SET HB_CCPATH=%MinGW64_PATH%
-           %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 ..\hbpvz\_tbigNumber.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_array.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_array_assignv.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_array_assignv_dyn_obj.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_array_dyn_obj.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_assignv.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_assignv_dyn_obj.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_assignv.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_dyn_obj.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_memio.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_memio_assignv.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_memio_dyn_obj.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dbfile_memio_dyn_obj_assignv.hbp
+            %HB_PATH%bin\win\mingw64\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=mingw64 -xhb ..\hbpvz\_tbigNumber_dyn_obj.hbp
     D:
     CD D:\GitHub\tBigNumber\mkvz
     for /f %%e in (env_mkLib64.txt) do (

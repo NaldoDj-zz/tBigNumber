@@ -2,6 +2,25 @@
  * $Id$
  */
 
+2018-01-16 07:04 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * hbpvz/_tbigNumber.hbp
+  * mk/mk-msvc.bat
+  * mkvz/hbmk.hbm
+  * mkvz/mk-msvc.bat
+  * mkvz/mk-msvc64.bat
+  * mkvz/mk.bat
+  * mkvz/mk64.bat
+  * mkvz/mkARM.bat
+  * mkvz/mkLib-msvc.bat
+  * mkvz/mkLib-msvc64.bat
+  * mkvz/mkLib.bat
+  * mkvz/mkLib64.bat
+  * mkvz/mkLibARM.bat
+  - mk/__mkHB-msvc.bat
+  - mk/__mkHB-msvc64.bat
+  - mkvz/__mkHB-msvc.bat
+  - mkvz/__mkHB-msvc64.bat
+ 
 2018-01-05 07:26 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * mk/mk-msvc.bat
   * mk/mk-msvc64.bat

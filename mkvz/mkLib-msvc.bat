@@ -30,7 +30,7 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=msvc
         SET HB_CCPATH=%msvc_PATH%
-           %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=msvc ..\hbpvz\_tbigNumber.hbp
+           %HB_PATH%bin\win\msvc\hbmk2.exe -plat=win -cpu=x86_64 -jobs=10 -cpp -compr=no -comp=msvc -xhb ..\hbpvz\_tbigNumber.hbp
     D:
     CD D:\GitHub\tBigNumber\mkvz
     for /f %%e in (env_mkLib_msvc.txt) do (
