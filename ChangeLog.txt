@@ -2,6 +2,22 @@
  * $Id$
  */
 
+2018-01-16 07:06 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  + hbpvz/_tbigNumber_array_assignv_dyn_obj.hbp
+  + hbpvz/_tbigNumber_array_assignv.hbp
+  + hbpvz/_tbigNumber_array_dyn_obj.hbp
+  + hbpvz/_tbigNumber_array.hbp
+  + hbpvz/_tbigNumber_assignv_dyn_obj.hbp
+  + hbpvz/_tbigNumber_assignv.hbp
+  + hbpvz/_tbigNumber_dbfile_assignv.hbp
+  + hbpvz/_tbigNumber_dbfile_dyn_obj.hbp
+  + hbpvz/_tbigNumber_dbfile_memio_assignv.hbp
+  + hbpvz/_tbigNumber_dbfile_memio_dyn_obj_assignv.hbp
+  + hbpvz/_tbigNumber_dbfile_memio_dyn_obj.hbp
+  + hbpvz/_tbigNumber_dbfile_memio.hbp
+  + hbpvz/_tbigNumber_dbfile.hbp
+  + hbpvz/_tbigNumber_dyn_obj.hbp
+ 
 2018-01-16 07:04 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbpvz/_tbigNumber.hbp
   * mk/mk-msvc.bat
