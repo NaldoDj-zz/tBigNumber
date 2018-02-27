@@ -47,6 +47,17 @@
         #define DO_REMOVE_REMALL    0
         #define DO_REMOVE_REMLEFT   1
         #define DO_REMOVE_REMRIGHT  2
+        
+        static const char * st__sNumber="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+        static const char * st__cNumber[62]={"0","1","2","3","4","5","6","7","8","9"
+                                        ,"A","B","C","D","E","F","G","H","I","J"
+                                        ,"K","L","M","N","O","P","Q","R","S","T"
+                                        ,"U","V","W","X","Y","Z","a","b","c","d"
+                                        ,"e","f","g","h","i","j","k","l","m","n"
+                                        ,"o","p","q","r","s","t","u","v","w","x"
+                                        ,"y","z"
+                            };
 
         typedef struct{
             char * cMultM;
@@ -58,6 +69,7 @@
             char * cDivR;
         } stBIGNeDiv,* ptBIGNeDiv;
 
+        static int toNumber(const char * cNumber);
         static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill );
         static char * tBIGNPadL(const char * szItem,HB_SIZE nLen,const char * szPad);
         static char * tBIGNPadR(const char * szItem,HB_SIZE nLen,const char * szPad);
@@ -89,6 +101,36 @@
             return sstr.str();
         }
 
+        static int toNumber(const char * cNumber){
+ 
+            int iNumber;
+ 
+            try {
+                
+                iNumber=(*(cNumber)-'0');
+            
+            } catch(_exception& e) {
+            
+                int i;
+                int j=-1;
+                
+                for (i=0;(i<63);i++)
+                {
+                    if (strncmp(cNumber,st__cNumber[i],1)==0)
+                    {
+                        j=i;
+                        break;
+                    }
+                }           
+
+                iNumber=( j >= 0 ? j : 0 );
+                
+            }
+
+            return(iNumber);
+        }
+        
+        
         static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill )
         {
 
@@ -250,18 +292,16 @@
             HB_MAXINT v1;
             c[y]=HB_CHAR_EOS;
             while (--n>=0){
-                v+=(*(&a[n])-'0')+(*(&b[n])-'0');
-                if ( v>=nB ){
+                v+=(toNumber(&a[n])+toNumber(&b[n]));
+                if (v>=nB){
                     v-=nB;
                     v1=1;
                 }
                 else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                c[k]="0123456789"[v];
-                /* TODO: Rever este conceito */
-                c[k-1]="0123456789"[v1];
+                c[k]=st__sNumber[v];
+                c[k-1]=st__sNumber[v1];
                 v=v1;
                 --k;
             }
@@ -291,7 +331,7 @@
             HB_MAXINT i=isN;
             sN[i]=HB_CHAR_EOS;
             while(--i>=0){
-                v=(*(&sN[i])-'0');
+                v=toNumber(&sN[i]);
                 if (bAdd){
                     v+=a;
                     bAdd=HB_FALSE;
@@ -304,8 +344,7 @@
                 else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                sN[i]="0123456789"[v];
+                sN[i]=st__sNumber[v];
                 if (v1==0){
                     break;
                 }
@@ -338,7 +377,7 @@
             HB_MAXINT v1;
             c[y]=HB_CHAR_EOS;
             while (--n>=0){
-                v+=(*(&a[n])-'0')-(*(&b[n])-'0');
+                v+=(toNumber(&a[n])-toNumber(&b[n]));
                 if ( v<0 ){
                     v+=nB;
                     v1=-1;
@@ -346,10 +385,8 @@
                 else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                c[k]="0123456789"[v];
-                /* TODO: Rever este conceito */
-                c[k-1]="0123456789"[v1];
+                c[k]=st__sNumber[v];
+                c[k-1]=st__sNumber[v1];
                 v=v1;
                 --k;
             }
@@ -378,7 +415,7 @@
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
             while(--i>=0){
-                v=(*(&sN[i])-'0');
+                v=toNumber(&sN[i]);
                 if (bSub){
                     v-=s;
                     bSub=HB_FALSE;
@@ -391,8 +428,7 @@
                 else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                sN[i]="0123456789"[v];
+                sN[i]=st__sNumber[v];
                 if (v1==0){
                     break;
                 }
@@ -440,7 +476,7 @@
                 s=0;
                 j=i;
                 while (s<=i){
-                    v+=(*(&a[s++])-'0')*(*(&b[j--])-'0');
+                    v+=(toNumber(&a[s++])*toNumber(&b[j--]));
                 }
                 if (v>=nB){
                     v1=v/nB;
@@ -448,10 +484,8 @@
                 }else{
                     v1=0;
                 };
-                /* TODO: Rever este conceito */
-                c[k]="0123456789"[v];
-                /* TODO: Rever este conceito */
-                c[k+1]="0123456789"[v1];
+                c[k]=st__sNumber[v];
+                c[k+1]=st__sNumber[v1];
                 v=v1;
                 k++;
                 i++;
@@ -461,7 +495,7 @@
                 s=n;
                 j=l;
                 while (s>=l){
-                    v+=(*(&a[s--])-'0')*(*(&b[j++])-'0');
+                    v+=(toNumber(&a[s--])*toNumber(&b[j++]));
                 }
                 if (v>=nB){
                     v1=v/nB;
@@ -469,10 +503,8 @@
                 }else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                c[k]="0123456789"[v];
-                /* TODO: Rever este conceito */
-                c[k+1]="0123456789"[v1];
+                c[k]=st__sNumber[v];
+                c[k+1]=st__sNumber[v1];
                 v=v1;
                 if (++k>=y){
                     break;
@@ -721,7 +753,7 @@
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
             while(--i>=0){
-                v=(*(&sN[i])-'0');
+                v=toNumber(&sN[i]);
                 v<<=1;
                 v+=v1;
                 if (v>=nB){
@@ -730,8 +762,7 @@
                 }else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                sN[i]="0123456789"[v];
+                sN[i]=st__sNumber[v];
             }
             return sN;
         }
@@ -755,7 +786,7 @@
             HB_MAXINT i=isN;
             sN[i]=HB_CHAR_EOS;
             while(--i>=0){
-                v=(*(&sN[i])-'0');
+                v=toNumber(&sN[i]);
                 v*=m;
                 v+=v1;
                 if (v>=nB){
@@ -764,8 +795,7 @@
                 }else{
                     v1=0;
                 }
-                /* TODO: Rever este conceito */
-                sN[i]="0123456789"[v];
+                sN[i]=st__sNumber[v];
             }
             return sN;
         }
@@ -945,8 +975,8 @@
 
             HB_MAXINT i=ipN;
             while(--i>=0){
-                ipA[i]=(*(&pecDiv->cDivR[i])-'0');
-                iaux[i]=(*(&aux[i])-'0');
+                ipA[i]=toNumber(&pecDiv->cDivR[i]);
+                iaux[i]=toNumber(&aux[i]);
             }
 
             while (memcmp(iaux,ipA,( HB_SIZE )ipN)<=0){
@@ -970,8 +1000,7 @@
 
             i=ipN;
             while(--i>=0){
-                /* TODO: Rever este conceito */
-                aux[i]="0123456789"[iaux[i]];
+                aux[i]=st__sNumber[iaux[i]];
             }
 
             hb_xfree(iaux);
@@ -1028,8 +1057,7 @@
 
             i=ipN;
             while(--i>=0){
-                /* TODO: Rever este conceito */
-                pecDiv->cDivQ[i]="0123456789"[idivQ[i]];
+                pecDiv->cDivQ[i]=st__sNumber[idivQ[i]];
             }
 
             free(idivQ);

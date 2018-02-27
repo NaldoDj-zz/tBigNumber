@@ -83,14 +83,14 @@
 #ifdef __HARBOUR__
     #ifdef __PTCOMPAT__
         //1..15,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+"#,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+"#ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
     #else
          //1..38,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#ACN_MERSENNE_POW=13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
     #endif /*__PTCOMPAT__*/
 #else /*__ADVPL__*/
     //1..15,(#...49) Mersenne prime List
-    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
 #endif /*__HARBOUR__*/
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
@@ -174,6 +174,7 @@
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
             hIni["GENERAL"]["ACN_MERSENNE_POW"]:=ACN_MERSENNE_POW
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#end of file")
+            hIni:=hb_iniRead(cIni)
         endif
 
         if (File(cIni)).and.(.not.(Empty(hIni)))
@@ -215,7 +216,7 @@
                             aAC_TSTEXEC:=_StrTokArr(AllTrim(aSect[cKey]),",")
                             EXIT
                         case "ACN_MERSENNE_POW"
-                            aACN_MERSENNE_POW:=_StrTokArr(AllTrim(StrTran(StrTran(aSect[cKey],"#",""),CRLF,"")),",")
+                            aACN_MERSENNE_POW:=_StrTokArr(aSect[cKey],",")
                             EXIT
                     endswitch
                 next cKey
@@ -233,7 +234,7 @@
         lL_LOGPROCESS:=if(Empty(lL_LOGPROCESS),L_LOGPROCESS=="1",lL_LOGPROCESS)
         cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
-        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(StrTran(ACN_MERSENNE_POW,"#",""),CRLF,"")),","),aACN_MERSENNE_POW)
+        aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(StrTran(subStr(ACN_MERSENNE_POW,1,rAT("#ACN_MERSENNE_POW",ACN_MERSENNE_POW)-1),"#",""),CRLF,"")),","),aACN_MERSENNE_POW)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -264,7 +265,7 @@
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
-        *hb_gtInfo(HB_GTI_NOTifIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
+        *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
 
         ChkIntTstExec(@aAC_TSTEXEC,__PADL_T__)
         atBigNtst:=GettBigNtst(cC_GT_MODE,aAC_TSTEXEC)
@@ -385,7 +386,7 @@
         /* set window title*/
         hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
-        *hb_gtInfo(HB_GTI_NOTifIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
+        *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
         myGTIEvent()
         tBigNtst({atBigNtst})
         hb_gtSelect(pGT)
@@ -464,7 +465,7 @@
                     otFIni:AddNewProperty("GENERAL","L_LOGPROCESS",L_LOGPROCESS)
                     otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                     otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
-                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""))
+                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)
                     otFIni:SaveAs(cIni)
                     otFIni:=u_TFINI(cIni)
                 endif
@@ -480,7 +481,7 @@
                     lL_LOGPROCESS:=(oTFINI:GetPropertyValue("GENERAL","L_LOGPROCESS",L_LOGPROCESS)=="1")
                     cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
                     aAC_TSTEXEC:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
-                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""))),",")
+                    aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(subStr(ACN_MERSENNE_POW,1,rAT(";ACN_MERSENNE_POW",ACN_MERSENNE_POW)-1),";",""),CRLF,""))),",")
                 endif
             endif
 
@@ -886,7 +887,7 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
                 atBigNtst[nD][3]:=hb_gtCreate(THREAD_GT)
                 pGT:=hb_gtSelect(atBigNtst[nD][3])
                 hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
-                *hb_gtInfo(HB_GTI_NOTifIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
+                *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
                 hb_gtSelect(pGT)
                 atBigNtst[nD][4]:=nD
                 atBigNtst[nD][5]:=hb_NtoS(nD)

@@ -2,6 +2,11 @@
  * $Id$
  */
 
+ 2018-02-27 07:10 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * src/common/tbignumber.prg
+  * src/hb/c/tbigNumber.c
+  * src/tests/tBigNtst.prg
+
 2018-01-16 07:06 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   + hbpvz/_tbigNumber_array_assignv_dyn_obj.hbp
   + hbpvz/_tbigNumber_array_assignv.hbp
