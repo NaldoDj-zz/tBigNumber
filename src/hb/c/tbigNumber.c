@@ -26,6 +26,9 @@
 
         #include <stdio.h>
         #include <string.h>
+        
+        #include <ctype.h>
+
         #include <hbapi.h>
         #include <hbdefs.h>
         #include <hbstack.h>
@@ -69,7 +72,8 @@
             char * cDivR;
         } stBIGNeDiv,* ptBIGNeDiv;
 
-        static int toNumber(const char * cNumber);
+        static char cNumber(const HB_SIZE iNumber);
+        static HB_SIZE iNumber(const char * cNumber);
         static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill );
         static char * tBIGNPadL(const char * szItem,HB_SIZE nLen,const char * szPad);
         static char * tBIGNPadR(const char * szItem,HB_SIZE nLen,const char * szPad);
@@ -94,35 +98,68 @@
         static HB_MAXINT tBIGNFI(HB_MAXINT n);
 
         template <typename tTO_STRING>
-        static std::string to_string(tTO_STRING const& value){
+        static std::string to_string(tTO_STRING const &value){
             std::stringstream sstr;
             sstr.precision(std::numeric_limits<long double>::digits10+100);
             sstr<<std::fixed<<value;
             return sstr.str();
         }
 
-        static int toNumber(const char * cNumber){
- 
-            int iNumber;
- 
+        static char cNumber(const HB_SIZE iNumber){
+            
+            char cNumber;
+            
             try {
                 
-                iNumber=(*(cNumber)-'0');
-            
-            } catch(_exception& e) {
-            
-                int i;
-                int j=-1;
+                cNumber=st__sNumber[iNumber];
+    
+            } catch(_exception &e) {
+        
+                cNumber=st__sNumber[0];
                 
-                for (i=0;(i<63);i++)
-                {
-                    if (strncmp(cNumber,st__cNumber[i],1)==0)
-                    {
-                        j=i;
-                        break;
-                    }
-                }           
+            }
 
+            return(cNumber);
+        
+        }
+        
+        static HB_SIZE iNumber(const char * cNumber){
+ 
+            const char cN=*(cNumber);
+
+            HB_SIZE iNumber;
+ 
+            if (isdigit(cN)){
+                
+                iNumber=(cN-'0');
+            
+            } else {
+
+                int j=(-1);
+
+                if (isalpha(cN)){
+
+                    try {
+                        
+                        HB_SIZE i;
+                        
+                        for (i=0;(i<sizeof(st__cNumber));i++)
+                        {
+                            if (strncmp(cNumber,st__cNumber[i],1)==0)
+                            {
+                                j=i;
+                                break;
+                            }
+                        }           
+            
+                    } catch(_exception &e) {
+                
+                        j=(-1);
+                    
+                    }
+                
+                }
+            
                 iNumber=( j >= 0 ? j : 0 );
                 
             }
@@ -292,7 +329,7 @@
             HB_MAXINT v1;
             c[y]=HB_CHAR_EOS;
             while (--n>=0){
-                v+=(toNumber(&a[n])+toNumber(&b[n]));
+                v+=(iNumber(&a[n])+iNumber(&b[n]));
                 if (v>=nB){
                     v-=nB;
                     v1=1;
@@ -300,8 +337,8 @@
                 else{
                     v1=0;
                 }
-                c[k]=st__sNumber[v];
-                c[k-1]=st__sNumber[v1];
+                c[k]=cNumber(v);
+                c[k-1]=cNumber(v1);
                 v=v1;
                 --k;
             }
@@ -331,20 +368,20 @@
             HB_MAXINT i=isN;
             sN[i]=HB_CHAR_EOS;
             while(--i>=0){
-                v=toNumber(&sN[i]);
+                v=iNumber(&sN[i]);
                 if (bAdd){
                     v+=a;
                     bAdd=HB_FALSE;
                 }
                 v+=v1;
-                if ( v>=nB ){
+                if (v>=nB){
                     v-=nB;
                     v1=1;
                 }
                 else{
                     v1=0;
                 }
-                sN[i]=st__sNumber[v];
+                sN[i]=cNumber(v);
                 if (v1==0){
                     break;
                 }
@@ -377,16 +414,16 @@
             HB_MAXINT v1;
             c[y]=HB_CHAR_EOS;
             while (--n>=0){
-                v+=(toNumber(&a[n])-toNumber(&b[n]));
-                if ( v<0 ){
+                v+=(iNumber(&a[n])-iNumber(&b[n]));
+                if (v<0){
                     v+=nB;
                     v1=-1;
                 }
                 else{
                     v1=0;
                 }
-                c[k]=st__sNumber[v];
-                c[k-1]=st__sNumber[v1];
+                c[k]=cNumber(v);
+                c[k-1]=cNumber(v1);
                 v=v1;
                 --k;
             }
@@ -415,20 +452,20 @@
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
             while(--i>=0){
-                v=toNumber(&sN[i]);
+                v=iNumber(&sN[i]);
                 if (bSub){
                     v-=s;
                     bSub=HB_FALSE;
                 }
                 v+=v1;
-                if ( v<0 ){
+                if (v<0){
                     v+=nB;
                     v1=-1;
                 }
                 else{
                     v1=0;
                 }
-                sN[i]=st__sNumber[v];
+                sN[i]=cNumber(v);
                 if (v1==0){
                     break;
                 }
@@ -450,6 +487,7 @@
         }
 
         HB_FUNC_STATIC( TBIGNLSUB ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNLSUB(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
             hb_retnint((HB_MAXINT)hb_parnint(1)-(HB_MAXINT)hb_parnint(2));
         }
 
@@ -476,7 +514,7 @@
                 s=0;
                 j=i;
                 while (s<=i){
-                    v+=(toNumber(&a[s++])*toNumber(&b[j--]));
+                    v+=(iNumber(&a[s++])*iNumber(&b[j--]));
                 }
                 if (v>=nB){
                     v1=v/nB;
@@ -484,8 +522,8 @@
                 }else{
                     v1=0;
                 };
-                c[k]=st__sNumber[v];
-                c[k+1]=st__sNumber[v1];
+                c[k]=cNumber(v);
+                c[k+1]=cNumber(v1);
                 v=v1;
                 k++;
                 i++;
@@ -495,7 +533,7 @@
                 s=n;
                 j=l;
                 while (s>=l){
-                    v+=(toNumber(&a[s--])*toNumber(&b[j++]));
+                    v+=(iNumber(&a[s--])*iNumber(&b[j++]));
                 }
                 if (v>=nB){
                     v1=v/nB;
@@ -503,8 +541,8 @@
                 }else{
                     v1=0;
                 }
-                c[k]=st__sNumber[v];
-                c[k+1]=st__sNumber[v1];
+                c[k]=cNumber(v);
+                c[k+1]=cNumber(v1);
                 v=v1;
                 if (++k>=y){
                     break;
@@ -529,6 +567,7 @@
             HB_SIZE n=(HB_SIZE)hb_parnint(3);
             HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            HB_TRACE(HB_TR_DEBUG,("TBIGNMULT(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)",pValue1,pValue2,n,y,nB));
             char * szRet=tBIGNMult(pValue1,pValue2,n,y,nB);
             #if 0               
                 n=( HB_SIZE )strlen(szRet);
@@ -611,6 +650,7 @@
             HB_SIZE n=(HB_SIZE)hb_parnint(3);
             HB_SIZE y=(HB_SIZE)(hb_parnint(4)*2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            HB_TRACE(HB_TR_DEBUG,("TBIGNPOWER(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)",szBas,szExp,n,y,nB));
             char * szRet=tBigNPower(szBas,szExp,&n,y,nB);
             #if 0               
                 hb_retclen_buffer(szRet,n);
@@ -753,7 +793,7 @@
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
             while(--i>=0){
-                v=toNumber(&sN[i]);
+                v=iNumber(&sN[i]);
                 v<<=1;
                 v+=v1;
                 if (v>=nB){
@@ -762,7 +802,7 @@
                 }else{
                     v1=0;
                 }
-                sN[i]=st__sNumber[v];
+                sN[i]=cNumber(v);
             }
             return sN;
         }
@@ -786,7 +826,7 @@
             HB_MAXINT i=isN;
             sN[i]=HB_CHAR_EOS;
             while(--i>=0){
-                v=toNumber(&sN[i]);
+                v=iNumber(&sN[i]);
                 v*=m;
                 v+=v1;
                 if (v>=nB){
@@ -795,7 +835,7 @@
                 }else{
                     v1=0;
                 }
-                sN[i]=st__sNumber[v];
+                sN[i]=cNumber(v);
             }
             return sN;
         }
@@ -814,6 +854,7 @@
         }
 
         HB_FUNC_STATIC( TBIGNLMULT ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNLMULT(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
             hb_retnint((HB_MAXINT)hb_parnint(1)*(HB_MAXINT)hb_parnint(2));
         }
 
@@ -975,8 +1016,8 @@
 
             HB_MAXINT i=ipN;
             while(--i>=0){
-                ipA[i]=toNumber(&pecDiv->cDivR[i]);
-                iaux[i]=toNumber(&aux[i]);
+                ipA[i]=iNumber(&pecDiv->cDivR[i]);
+                iaux[i]=iNumber(&aux[i]);
             }
 
             while (memcmp(iaux,ipA,( HB_SIZE )ipN)<=0){
@@ -1000,7 +1041,7 @@
 
             i=ipN;
             while(--i>=0){
-                aux[i]=st__sNumber[iaux[i]];
+                aux[i]=cNumber(iaux[i]);
             }
 
             hb_xfree(iaux);
@@ -1057,7 +1098,7 @@
 
             i=ipN;
             while(--i>=0){
-                pecDiv->cDivQ[i]=st__sNumber[idivQ[i]];
+                pecDiv->cDivQ[i]=cNumber(idivQ[i]);
             }
 
             free(idivQ);
@@ -1169,6 +1210,7 @@
         }
 
         HB_FUNC_STATIC( TBIGNGCD ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNGCD(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
             hb_retnint(tBIGNGCD((HB_MAXINT)hb_parnint(1),(HB_MAXINT)hb_parnint(2)));
         }
 
@@ -1214,6 +1256,7 @@
         }
 
         HB_FUNC_STATIC( TBIGNLCM ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNLCM(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
             hb_retnint(tBIGNLCM((HB_MAXINT)hb_parnint(1),(HB_MAXINT)hb_parnint(2)));
         }
 
@@ -1236,6 +1279,7 @@
         }
 
         HB_FUNC_STATIC( TBIGNFI ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNFI(%" PFHL ")",hb_parnint(1)));
             hb_retnint(tBIGNFI((HB_MAXINT)hb_parnint(1)));
         }
 
@@ -1248,10 +1292,12 @@
         }
 
         HB_FUNC_STATIC( TBIGNMAX ){
+           HB_TRACE(HB_TR_DEBUG,("TBIGNMAX(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2))); 
            hb_retnint(HB_MAX(hb_parnint(1),hb_parnint(2)));
         }
 
         HB_FUNC_STATIC( TBIGNMIN ){
+           HB_TRACE(HB_TR_DEBUG,("TBIGNMAX(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));  
            hb_retnint(HB_MIN(hb_parnint(1),hb_parnint(2)));
         }
 
