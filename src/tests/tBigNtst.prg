@@ -83,14 +83,14 @@
 #ifdef __HARBOUR__
     #ifdef __PTCOMPAT__
         //1..15,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+"#ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+"#ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
     #else
          //1..38,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#ACN_MERSENNE_POW=13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#ACN_MERSENNE_POW=13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
     #endif /*__PTCOMPAT__*/
 #else /*__ADVPL__*/
     //1..15,(#...49) Mersenne prime List
-    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281"
+    #define ACN_MERSENNE_POW     "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+";ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
 #endif /*__HARBOUR__*/
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
@@ -262,7 +262,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
@@ -384,7 +384,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
         myGTIEvent()
@@ -993,7 +993,7 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
     lTBeg:=("BEGIN ------------"$p)
 
     if (lTBeg)
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br]["+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     endif
 
@@ -1476,7 +1476,7 @@ static function IsHb()
     //--------------------------------------------------------------------------------------------------------
     static procedure BuildScreen(fhLog AS NUMERIC,nMaxCol AS NUMERIC)
         CLEAR SCREEN
-        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br]",nMaxCol)) //1
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
         ShowTime(2,nMaxCol-8,.F.,"r+/n",.F.,.F.)
         return
