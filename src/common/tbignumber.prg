@@ -1,3 +1,4 @@
+//--------------------------------------------------------------------------------------------------------
     /*
      *  t    bbbb   iiiii  ggggg  n   n  u   u  mm mm  bbbb   eeeee  rrrr
      * ttt   b   b    i    g      nn  n  u   u  mm mm  b   b  e      r   r
@@ -62,6 +63,7 @@
         #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
         #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
         #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
+        #xtranslate Val([<prm,...>])     => hb_Val([<prm>])
     //--------------------------------------------------------------------------------------------------------
 #endif /*__HARBOUR__*/
 
