@@ -24,6 +24,9 @@ SETLOCAL ENABLEEXTENSIONS
         IF EXIST D:\mxml (
             SET HB_WITH_MXML=D:\mxml
         )
+        IF EXIST D:\libgd (
+            SET HB_WITH_GD=D:\libgd\include
+        )
         rem SET HB_BUILD_VERBOSE=yes
            D:
            CD %HB_PATH%
