@@ -2,6 +2,10 @@
  * $Id$
  */
 
+2018-08-08 20:06 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * mk/mkHB.bat
+  * mk/mkHB64.bat
+ 
 2018-05-21 20:53 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   + ChangeLog.txt -> ChangeLog-00.txt
   * mk/mkHB.bat
