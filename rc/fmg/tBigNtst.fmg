@@ -1,0 +1,8 @@
+* Marinas-IDE Form Tool
+DEFINE WINDOW TEMPLATE 
+   ROW 238             
+   COL 256             
+   WIDTH 405           
+   HEIGHT 218          
+   CAPTION 'Marinas-Ide - Empty Sample Form'
+END WINDOW
