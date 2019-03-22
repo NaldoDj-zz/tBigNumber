@@ -24,6 +24,7 @@ ChangeLog.txt ident
 *.csv       text
 *.def       text
 *.dif       text
+*.fmg       text
 *.h         text
 *.hb        text
 *.hbc       text

@@ -2,6 +2,21 @@
  * $Id$
  */
 
+2019-03-22 14:33 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * .gitattributes
+  * ChangeLog.txt
+  * rc/fmg/tBigNtst.fmg
+
+2019-03-16 11:41 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * .gitattributes
+  + mk/__mkHB-msvc.bat
+  + mk/__mkHB-msvc64.bat
+  + mkvz/__mkHB-msvc.bat
+  + mkvz/__mkHB-msvc64.bat
+  + mkvz/env_mk.txt
+  + mkvz/env_mkall.txt
+  + rc/fmg/tBigNtst.fmg
+
 2018-08-08 20:06 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * mk/mkHB.bat
   * mk/mkHB64.bat
