@@ -2,6 +2,9 @@
  * $Id$
  */
 
+2019-07-26 16:24 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
+  * prj/mg/win/64/tBigNumber64.mip
+
 2019-03-22 14:33 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * .gitattributes
   * ChangeLog.txt
