@@ -31,12 +31,12 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_COMPILER=msvc
         SET HB_CCPATH=%msvc_PATH%
         IF EXIST D:\OpenSSL (
-            SET HB_WITH_OPENSSL=D:\OpenSSL
-            IF EXIST D:\OpenSSL\MS (
-                SET HB_WITH_OPENSSL=%HB_WITH_OPENSSL%;D:\OpenSSL\MS'
+            IF EXIST D:\OpenSSL\INC32 (
+                SET HB_WITH_OPENSSL=D:\OpenSSL\INC32
+            ) ELSE IF EXIST D:\OpenSSL\INCLUDE (
+                SET HB_WITH_OPENSSL=D:\OpenSSL\INCLUDE
             )
         )
-        SET HB_WITH_OPENSSL
         IF EXIST D:\FreeImage\Dist\X32 (
             SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist\X32
         )

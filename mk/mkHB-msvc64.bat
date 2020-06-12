@@ -44,11 +44,11 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_CCPATH=%msvc64_PATH%
         SET HB_CCPATH
         IF EXIST D:\OpenSSL (
-            SET HB_WITH_OPENSSL=D:\OpenSSL
-            IF EXIST D:\OpenSSL\MS (
-                SET HB_WITH_OPENSSL=D:\OpenSSL\MS\
+            IF EXIST D:\OpenSSL\INC32 (
+                SET HB_WITH_OPENSSL=D:\OpenSSL\INC32
+            ) ELSE IF EXIST D:\OpenSSL\INCLUDE (
+                SET HB_WITH_OPENSSL=D:\OpenSSL\INCLUDE
             )
-            SET HB_WITH_OPENSSL
         )
         IF EXIST D:\FreeImage\Dist\x64 (
             SET HB_WITH_FREEIMAGE="D:\FreeImage\Dist\x64"
