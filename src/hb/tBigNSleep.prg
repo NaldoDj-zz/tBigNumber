@@ -20,5 +20,5 @@ Return
             TBIGNRELEASECPU()
         endif
     return(.F.)
-    #include "..\src\hb\c\tbigNidle.c"
+    #include "../src/hb/c/tbigNidle.c"
 #endif // __HARBOUR__

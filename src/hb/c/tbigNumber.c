@@ -19,13 +19,9 @@
 
     #pragma BEGINDUMP
 
-        #include <string>
-        #include <limits>
-        #include <cstring>
-        #include <sstream>
-
         #include <stdio.h>
         #include <string.h>
+        #include <stdbool.h>
         
         #include <ctype.h>
 
@@ -37,7 +33,11 @@
         #include <hbmather.h>
         #include <hbapierr.h>
 
-        #include <..\include\c\try_throw_catch.h>
+        #include <../include/c/try_throw_catch.h>
+
+        #define __STDC_FORMAT_MACROS
+        #define __USE_MINGW_ANSI_STDIO 1
+        #include <inttypes.h>
 
         #ifdef _MSC_VER
             #define _CRT_SECURE_NO_WARNINGS
@@ -50,17 +50,10 @@
         #define DO_REMOVE_REMALL    0
         #define DO_REMOVE_REMLEFT   1
         #define DO_REMOVE_REMRIGHT  2
-        
-        static const char * st__sNumber="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-        static const char * st__cNumber[62]={"0","1","2","3","4","5","6","7","8","9"
-                                        ,"A","B","C","D","E","F","G","H","I","J"
-                                        ,"K","L","M","N","O","P","Q","R","S","T"
-                                        ,"U","V","W","X","Y","Z","a","b","c","d"
-                                        ,"e","f","g","h","i","j","k","l","m","n"
-                                        ,"o","p","q","r","s","t","u","v","w","x"
-                                        ,"y","z"
-                            };
+        #define try bool __HadError=false;
+        #define catch(x) ExitJmp:if(__HadError)
+        #define throw(x) __HadError=true;goto ExitJmp;
 
         typedef struct{
             char * cMultM;
@@ -97,25 +90,22 @@
         static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y);
         static HB_MAXINT tBIGNFI(HB_MAXINT n);
 
-        template <typename tTO_STRING>
-        static std::string to_string(tTO_STRING const &value){
-            std::stringstream sstr;
-            sstr.precision(std::numeric_limits<long double>::digits10+100);
-            sstr<<std::fixed<<value;
-            return sstr.str();
-        }
 
         static char cNumber(const HB_SIZE iNumber){
             
             char cNumber;
+
+            static const char * st__sNumber="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             
             try {
-                
+
                 cNumber=st__sNumber[iNumber];
     
-            } catch(_exception &e) {
+            } catch(...) {
         
                 cNumber=st__sNumber[0];
+
+                throw(...)
                 
             }
 
@@ -129,7 +119,7 @@
 
             HB_SIZE iNumber;
  
-            if (isdigit(cN)){
+            if (isdigit(cN)) {
                 
                 iNumber=(cN-'0');
             
@@ -137,11 +127,20 @@
 
                 int j=(-1);
 
-                if (isalpha(cN)){
+                if (isalpha(cN)) {
 
                     try {
                         
                         HB_SIZE i;
+
+                        static const char * st__cNumber[62]={"0","1","2","3","4","5","6","7","8","9"
+                                                        ,"A","B","C","D","E","F","G","H","I","J"
+                                                        ,"K","L","M","N","O","P","Q","R","S","T"
+                                                        ,"U","V","W","X","Y","Z","a","b","c","d"
+                                                        ,"e","f","g","h","i","j","k","l","m","n"
+                                                        ,"o","p","q","r","s","t","u","v","w","x"
+                                                        ,"y","z"
+                                            };
                         
                         for (i=0;(i<sizeof(st__cNumber));i++)
                         {
@@ -152,9 +151,11 @@
                             }
                         }           
             
-                    } catch(_exception &e) {
+                    } catch(...) {
                 
                         j=(-1);
+                    
+                        throw(..)
                     
                     }
                 
@@ -239,7 +240,6 @@
                 hb_retclen_buffer(szRet,( HB_SIZE )nLen);
             #endif
         }
-
 
         static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
         {
@@ -808,7 +808,7 @@
         }
 
         HB_FUNC_STATIC( TBIGN2MULT ){
-            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
+            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)*2);
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(2);
             #if 0
@@ -1288,7 +1288,8 @@
         }
 
         HB_FUNC_STATIC( TBIGNMEMCMP ){
-           hb_retnint(memcmp(hb_parc(1),hb_parc(2),hb_parclen(1)));
+           int iCmp=memcmp(hb_parc(1),hb_parc(2),hb_parclen(1));
+           hb_retnint(iCmp);
         }
 
         HB_FUNC_STATIC( TBIGNMAX ){
@@ -1414,14 +1415,14 @@
               long double ldArg=strtold(hb_parc(1),NULL);
               if (ldArg<=0)
               {
-                std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                std::strcpy(cstr,str.c_str());
+                char str[100];
+                char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                hb_xmemcpy(szstr,str,strlen(str));
                 #if 0
-                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                    hb_xfree(cstr);
+                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                    hb_xfree(szstr);
                 #else
-                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                 #endif
               }
               else
@@ -1430,40 +1431,42 @@
                     ldResult=sqrtl(ldArg);
                     if( hb_mathGetError(&hb_exc,"SQRTL",(double)ldArg,0.0,(double)ldResult))
                     {
-                        std::string str=to_string(0.0);
-                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                        std::strcpy(cstr,str.c_str());
+                        char str[]={'0'};
+                        char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                        hb_xmemcpy(szstr,str,strlen(str));
                         #if 0
-                            hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                            hb_xfree(cstr);
+                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                            hb_xfree(szstr);
                         #else
-                            hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                         #endif
                     }
                     else
                     {
-                        std::string str=to_string(ldResult);
-                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                        std::strcpy(cstr,str.c_str());
+                        char str[100];
+                        char tformat[100];
+                        char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                        sprintf(str,tformat,ldResult);
+                        hb_xmemcpy(szstr,str,strlen(str));
                         #if 0
-                            hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                            hb_xfree(cstr);
+                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                            hb_xfree(szstr);
                         #else
-                            hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                         #endif
                     }
               }
            }
            else
            {
-                std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                std::strcpy(cstr,str.c_str());
+                char str[]={'0'};
+                char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                hb_xmemcpy(szstr,str,strlen(str));
                 #if 0
-                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                    hb_xfree(cstr);
+                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                    hb_xfree(szstr);
                 #else
-                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                 #endif
             }
         }
@@ -1480,43 +1483,55 @@
                 ldResult=(log10l(ldArgN)/log10l(ldArgB));
                 if( hb_mathGetError(&hb_exc,"LOG10L",(double)ldArgN,(double)ldArgB,(double)ldResult))
                 {
-                    std::string str=to_string(0.0);
-                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                    std::strcpy(cstr,str.c_str());
+                    char str[100];
+                    char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                    hb_xmemcpy(szstr,str,strlen(str));
                     #if 0
-                        hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                        hb_xfree(cstr);
+                        hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                        hb_xfree(szstr);
                     #else
-                        hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                     #endif
                 }
                 else
                 {
-                    std::string str=to_string(ldResult);
-                    if (str.find("inf")!=std::string::npos||str.find("nan")!=std::string::npos)
+                    char str[100];
+                    char tformat[100];
+                    sprintf(str,tformat,ldResult);                    
+                    if (strstr(str,"inf")||strstr(str,"nan"))
                     {
-                        str=to_string(0.0);
+                        char str[]={'0'};
+                        char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                        hb_xmemcpy(szstr,str,strlen(str));
+                        #if 0
+                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                            hb_xfree(szstr);
+                        #else
+                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                        #endif
                     }
-                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                    std::strcpy(cstr,str.c_str());
-                    #if 0
-                        hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                        hb_xfree(cstr);
-                    #else
-                        hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
-                    #endif
+                    else {
+                        char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                        hb_xmemcpy(szstr,str,strlen(str));
+                        #if 0
+                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                            hb_xfree(szstr);
+                        #else
+                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                        #endif
+                    }
                 }
            }
            else
            {
-                std::string str=to_string(0.0);
-                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
-                std::strcpy(cstr,str.c_str());
+                char str[]={'0'};
+                char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
+                hb_xmemcpy(szstr,str,strlen(str));
                 #if 0
-                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
-                    hb_xfree(cstr);
+                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
+                    hb_xfree(szstr);
                 #else
-                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                 #endif
             }
         }

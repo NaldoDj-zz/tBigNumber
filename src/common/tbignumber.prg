@@ -825,25 +825,25 @@ static s__MTXSQR    AS POINTER
                 OPERATOR "--"  INLINE __OpDec(self)
 
                 OPERATOR "+"   ARG uBigN INLINE __OpPlus("+",self,uBigN)
-        /*(*)*/ OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
+                OPERATOR "+="  ARG uBigN INLINE __OpPlus("+=",self,uBigN)
 
                 OPERATOR "-"   ARG uBigN INLINE __OpMinus("-",self,uBigN)
-        /*(*)*/ OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
+                OPERATOR "-="  ARG uBigN INLINE __OpMinus("-=",self,uBigN)
 
                 OPERATOR "*"   ARG uBigN INLINE __OpMult("*",self,uBigN)
-        /*(*)*/ OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
+                OPERATOR "*="  ARG uBigN INLINE __OpMult("*=",self,uBigN)
 
                 OPERATOR "/"   ARGS uBigN,lFloat INLINE __OpDivide("/",self,uBigN,lFloat)
-        /*(*)*/ OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
+                OPERATOR "/="  ARGS uBigN,lFloat INLINE __OpDivide("/=",self,uBigN,lFloat)
 
                 OPERATOR "%"   ARG uBigN INLINE __OpMod("%",self,uBigN)
-        /*(*)*/ OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
+                OPERATOR "%="  ARG uBigN INLINE __OpMod("%=",self,uBigN)
 
                 OPERATOR "^"   ARGS uBigN,lIPower INLINE __OpPower("^",self,uBigN,lIPower)
                 OPERATOR "**"  ARGS uBigN,lIPower INLINE __OpPower("**",self,uBigN,lIPower)     //(same as "^")
 
-        /*(*)*/ OPERATOR "^="  ARGS uBigN,lIPower INLINE __OpPower("^=",self,uBigN,lIPower)
-        /*(*)*/ OPERATOR "**=" ARGS uBigN,lIPower INLINE __OpPower("**=",self,uBigN,lIPower)    //(same as "^=")
+                OPERATOR "^="  ARGS uBigN,lIPower INLINE __OpPower("^=",self,uBigN,lIPower)
+                OPERATOR "**=" ARGS uBigN,lIPower INLINE __OpPower("**=",self,uBigN,lIPower)    //(same as "^=")
 
                 OPERATOR ":="  ARGS uBigN,nBase,cRDiv,lLZRmv,nAcc INLINE __OpAssign(self,uBigN,nBase,cRDiv,lLZRmv,nAcc)
 
@@ -1945,13 +1945,13 @@ endclass
         oeqN2:=s__o0:Clone()
         oeqN2:SetValue(uBigN)
 
-        leq:=oeqN1:lNeg==oeqN2:lNeg
-        if leq
-            oeqN1:Normalize(@oeqN2)
+        leq:=(oeqN1:lNeg==oeqN2:lNeg)
+        if (leq)
             #ifdef __PTCOMPAT__
-                leq:=oeqN1:GetValue(.T.)==oeqN2:GetValue(.T.)
+                oeqN1:Normalize(@oeqN2)
+                leq:=(oeqN1:GetValue(.T.)==oeqN2:GetValue(.T.))
             #else
-                leq:=tBIGNmemcmp(oeqN1:GetValue(.T.),oeqN2:GetValue(.T.))==0
+                leq:=(__tBIGNmemcmp(oeqN1:GetValue(.T.),oeqN2:GetValue(.T.))==0)
             #endif
         endif
 
@@ -1967,7 +1967,7 @@ endclass
         Descricao:Verifica se o valor corrente eh igual ao valor passado como parametro
         Sintaxe:tBigNumber():ne(uBigN) -> .not.(leq)
     */
-//--------------------------------------------------------------------------------------------------------
+//------------------------------3--------------------------------------------------------------------------
 #ifdef __HARBOUR__
     method ne(uBigN) class tBigNumber
 #else /*__ADVPL__*/
@@ -2008,7 +2008,7 @@ endclass
                 #ifdef __PTCOMPAT__
                     lgt:=ogtN1:GetValue(.T.)<ogtN2:GetValue(.T.)
                 #else
-                    lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==-1
+                    lgt:=(__tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==(-1))
                 #endif
             elseif ogtN1:lNeg.and.(.not.(ogtN2:lNeg))
                 lgt:=.F.
@@ -2020,7 +2020,7 @@ endclass
             #ifdef __PTCOMPAT__
                 lgt:=ogtN1:GetValue(.T.)>ogtN2:GetValue(.T.)
             #else
-                lgt:=tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==1
+                lgt:=(__tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==1)
             #endif
         endif
 
@@ -2060,7 +2060,7 @@ endclass
                 #ifdef __PTCOMPAT__
                     llt:=oltN1:GetValue(.T.)>oltN2:GetValue(.T.)
                 #else
-                    llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1
+                    llt:=(__tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1)
                 #endif
             elseif oltN1:lNeg.and.(.not.(oltN2:lNeg))
                 llt:=.T.
@@ -2072,7 +2072,7 @@ endclass
             #ifdef __PTCOMPAT__
                 llt:=oltN1:GetValue(.T.)<oltN2:GetValue(.T.)
             #else
-                llt:=tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==-1
+                llt:=(__tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==(-1))
             #endif
         endif
 
@@ -2159,7 +2159,7 @@ endclass
             #ifdef __PTCOMPAT__
                 iCmp:=if(ocmpN1:GetValue(.T.)==ocmpN2:GetValue(.T.),0,NIL)
             #else
-                iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+                iCmp:=(__tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.)))
             #endif
             leq:=iCmp==0
         endif
@@ -2176,7 +2176,7 @@ endclass
                         #ifdef __PTCOMPAT__
                             iCmp:=if(ocmpN1:GetValue(.T.)>ocmpN2:GetValue(.T.),1,-1)
                         #else
-                            iCmp:=tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.))
+                            iCmp:=(__tBIGNmemcmp(ocmpN1:GetValue(.T.),ocmpN2:GetValue(.T.)))
                         #endif
                     endif
                     llt:=iCmp==1
@@ -2349,7 +2349,7 @@ endclass
         if lNeg
             lAdd:=.F.
             #ifdef __HARBOUR__
-                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+                lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
             #else //__PROTEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
@@ -2437,7 +2437,7 @@ endclass
         if lNeg
             lAdd:=.F.
             #ifdef __HARBOUR__
-                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+                lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
             #else //__PROTEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
@@ -2529,7 +2529,7 @@ endclass
         else
             lSub:=.T.
             #ifdef __HARBOUR__
-                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+                lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
             #else //__PROTEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
@@ -2617,7 +2617,7 @@ endclass
         else
             lSub:=.T.
             #ifdef __HARBOUR__
-                lInv:=tBIGNmemcmp(cN1,cN2)==-1
+                lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
             #else //__PROTEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
@@ -7086,6 +7086,16 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
     /*static function tBigNInvert*/
 #endif //__PTCOMPAT__
 
+#ifdef __HARBOUR__
+    static function __tBIGNmemcmp(cN1 as character,cN2 as character)
+        local nN1 as numeric
+        local nN2 as numeric
+        nN1:=len(cN1)
+        nN2:=len(cN2)
+        tBIGNNormalize(@cN1,@nN1,"",0,@nN1,@cN2,@nN2,"",0,@nN2)
+    return(tBIGNmemcmp(cN1,cN2))
+#endif /*__HARBOUR__*/
+
 //--------------------------------------------------------------------------------------------------------
     /*
         function:MathO
@@ -7365,5 +7375,5 @@ static procedure s__IncS9(n AS NUMERIC)
 #endif /*__ADVPL__*/
 
 #ifdef __HARBOUR__
-    #include "..\src\hb\c\tbigNumber.c"
+    #include "../src/hb/c/tbigNumber.c"
 #endif // __HARBOUR__

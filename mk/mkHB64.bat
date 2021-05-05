@@ -15,11 +15,11 @@ SETLOCAL ENABLEEXTENSIONS
         SET HB_PLATFORM=win
         SET HB_COMPILER=mingw64
         SET HB_CCPATH=%MinGW64_PATH%
-        IF EXIST D:\OpenSSL (
-            IF EXIST D:\OpenSSL\INC32 (
-                SET HB_WITH_OPENSSL=D:\OpenSSL\INC32
-            ) ELSE IF EXIST D:\OpenSSL\INCLUDE (
-                SET HB_WITH_OPENSSL=D:\OpenSSL\INCLUDE
+        IF EXIST D:\OpenSSL64 (
+            IF EXIST D:\OpenSSL64\INC32 (
+                SET HB_WITH_OpenSSL64=D:\OpenSSL64\INC32
+            ) ELSE IF EXIST D:\OpenSSL64\INCLUDE (
+                SET HB_WITH_OpenSSL64=D:\OpenSSL64\INCLUDE
             )
         )
         IF EXIST D:\FreeImage\Dist\x64 (

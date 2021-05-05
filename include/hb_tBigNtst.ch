@@ -23,7 +23,6 @@
             #define HBSHELL_GTSELECT "GTXWC"
             #define __HBSHELL_USR_DEF_GT 2
         #endif
-        
     #endif
         
 #endif

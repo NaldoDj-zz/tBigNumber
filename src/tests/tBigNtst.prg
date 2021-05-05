@@ -14,9 +14,14 @@
     //--------------------------------------------------------------------------------------------------------
         #pragma -w3
     //--------------------------------------------------------------------------------------------------------
+        #require "xhb"
         #require "hbct"
+        #require "hbwin"
         #require "hbvmmt"
-        request HB_MT
+        #require "hbgtqtc"
+        
+        REQUEST HB_MT
+
     //--------------------------------------------------------------------------------------------------------
         #include "inkey.ch"
         #include "setcurs.ch"
@@ -153,8 +158,16 @@
 
         lDispML:=.T.
 
-        #ifdef __HBSHELL_USR_DEF_GT
-            hbshell_gtSelect(HBSHELL_GTSELECT)
+        #if defined( __HBSCRIPT__HBSHELL )
+           #if defined( __PLATFORM__WINDOWS )
+              hbshell_gtSelect( "GTWVT" )
+           #elif defined( __PLATFORM__UNIX )
+              hbshell_gtSelect( "GTXWC" )
+           #endif
+        #else
+            #ifdef __HBSHELL_USR_DEF_GT
+                hbshell_gtSelect(HBSHELL_GTSELECT)
+            #endif
         #endif
 
         cIni:="tBigNtst.ini"
@@ -263,7 +276,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
@@ -385,7 +398,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
         myGTIEvent()
@@ -553,7 +566,7 @@
             #endif /*__ALT_D__*/
 
             Private __nMaxRow       AS NUMERIC
-            __nMaxRow:=(MaxRow()-9)
+            __nMaxRow:=(MaxRow()-13)
 
             Private __nMaxCol       AS NUMERIC
             __nMaxCol:=MaxCol()
@@ -994,7 +1007,7 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
     lTBeg:=("BEGIN ------------"$p)
 
     if (lTBeg)
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     endif
 
@@ -1438,6 +1451,10 @@ static function IsHb()
 
         aAnim:=GetBigNAnim()
 
+#if defined( __PLATFORM__LINUX )
+        aSize(aAnim,0)
+#endif        
+
         nRow:=0
         nRowC:=0
         nAnimes:=Len(aAnim)
@@ -1477,7 +1494,7 @@ static function IsHb()
     //--------------------------------------------------------------------------------------------------------
     static procedure BuildScreen(fhLog AS NUMERIC,nMaxCol AS NUMERIC)
         CLEAR SCREEN
-        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(WAPI_GETCURRENTPROCESSID())+"]",nMaxCol)) //1
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
         ShowTime(2,nMaxCol-8,.F.,"r+/n",.F.,.F.)
         return
@@ -1493,7 +1510,7 @@ static function IsHb()
         return(/*hb_gcAll(.T.)*/NIL)
     /*static function tBigNGC*/
 
-    #include "..\src\tests\hb\tBigNAnim.prg"
+    #include "../src/tests/hb/tBigNAnim.prg"
 #else
     #ifdef TBN_DBFILE
         static function tBigNGC()
@@ -1632,15 +1649,15 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
             For n:=1 To nISQRT Step Int(nISQRT/2)
                 cN:=hb_NtoS(n)
                 __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
-/*(*)*/            __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW^="+cN,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cN,"RESULT: "+(otBigX:=(otBigW+=cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW^="+cN,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+="+cN,"RESULT: "+(otBigX:=(otBigW+=cN),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW++","RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
                 __ConOut(fhLog,"++otBigW","RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW-="+cN,"RESULT: "+(otBigX:=(otBigW-=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW*="+cN,"RESULT: "+(otBigX:=(otBigW*=cN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW-="+cN,"RESULT: "+(otBigX:=(otBigW-=cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW*="+cN,"RESULT: "+(otBigX:=(otBigW*=cN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+="+cW,"RESULT: "+(otBigX:=(otBigW+=cW),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW++","RESULT: "+(otBigX:=(otBigW++),otBigX:ExactValue()))
                 __ConOut(fhLog,"++otBigW","RESULT: "+(otBigX:=(++otBigW),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW--","RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
@@ -1676,20 +1693,20 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
                 __ConOut(fhLog,"otBigW*otBigN","RESULT: "+(otBigX:=(otBigW*otBigN),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW/otBigN","RESULT: "+(otBigX:=(otBigW/otBigN),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW%otBigN","RESULT: "+(otBigX:=(otBigW%otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN++","RESULT: "+(otBigX:=(otBigW+=otBigN++),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=++otBigN","RESULT: "+(otBigX:=(otBigW+=++otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW-=otBigN","RESULT: "+(otBigX:=(otBigW-=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW*=otBigN","RESULT: "+(otBigX:=(otBigW*=otBigN),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=otBigN++","RESULT: "+(otBigX:=(otBigW+=otBigN++),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=++otBigN","RESULT: "+(otBigX:=(otBigW+=++otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW-=otBigN","RESULT: "+(otBigX:=(otBigW-=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW*=otBigN","RESULT: "+(otBigX:=(otBigW*=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=otBigN","RESULT: "+(otBigX:=(otBigW+=otBigN),otBigX:ExactValue()))
                 otBigN:=cW
                 __ConOut(fhLog,"otBigN:="+cW,"RESULT: "+otBigN:ExactValue())
                 __ConOut(fhLog,"otBigN=="+cW,"RESULT: "+cValToChar(otBigN==cW))
-/*(*)*/            __ConOut(fhLog,"otBigN^=otBigN","RESULT: "+(otBigX:=(otBigN^=otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigN^=otBigN","RESULT: "+(otBigX:=(otBigN^=otBigN),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW--","RESULT: "+(otBigX:=(otBigW--),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=otBigN--","RESULT: "+(otBigX:=(otBigW+=otBigN--),otBigX:ExactValue()))
-/*(*)*/            __ConOut(fhLog,"otBigW+=--otBigN","RESULT: "+(otBigX:=(otBigW+=--otBigN),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=otBigN--","RESULT: "+(otBigX:=(otBigW+=otBigN--),otBigX:ExactValue()))
+                __ConOut(fhLog,"otBigW+=--otBigN","RESULT: "+(otBigX:=(otBigW+=--otBigN),otBigX:ExactValue()))
                 __ConOut(fhLog,__cSep)
                 if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
                     __oRTime2:Calcule()
@@ -2066,6 +2083,7 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
 static procedure tBigNtst07(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2110,9 +2128,11 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN+="9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:Add("9999.9999999999"))
+        cR:=otBigN:Add("9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2144,6 +2164,7 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 static procedure tBigNtst08(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2183,9 +2204,11 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN+="9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:Add("9999.9999999999"))
+        cR:=otBigN:Add("9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2217,6 +2240,7 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
 static procedure tBigNtst09(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2254,9 +2278,11 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN+="-9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:add("-9999.9999999999"))
+        cR:=otBigN:add("-9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2288,6 +2314,7 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
 static procedure tBigNtst10(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2325,9 +2352,11 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN-="9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:Sub("9999.9999999999"))
+        cR:=otBigN:Sub("9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2359,6 +2388,7 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
 static procedure tBigNtst11(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2396,9 +2426,11 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN-="9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:Sub("9999.9999999999"))
+        cR:=otBigN:Sub("9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2430,6 +2462,7 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
 static procedure tBigNtst12(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2467,9 +2500,11 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN-="-9999.9999999999"
 #else
-        otBigN:SetValue(otBigN:Sub("-9999.9999999999"))
+        cR:=otBigN:Sub("-9999.9999999999"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2501,6 +2536,7 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
 static procedure tBigNtst13(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2556,12 +2592,15 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN*="1.5"
 #else
-        otBigN:SetValue(otBigN:Mult("1.5"))
+        cR:=otBigN:Mult("1.5"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+cR)
         cN:=otBigW:ExactValue()
-        otBigW:SetValue(otBigW:egMult("1.5"))
-        __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+otBigW:ExactValue())
+        cR:=otBigW:egMult("1.5"):ExactValue()
+        cR:=otBigW:SetValue(cR):ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -2591,6 +2630,7 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
 static procedure tBigNtst14(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -2641,9 +2681,11 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN*="1.5"
 #else
-        otBigN:SetValue(otBigN:Mult("1.5"))
+        cR:=otBigN:Mult("1.5"):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -3240,6 +3282,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -3279,9 +3322,11 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN/="1.5"
 #else
-        otBigN:SetValue(otBigN:Div("1.5"))
+        cR:=otBigN:Div("1.5")
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -3313,6 +3358,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 static procedure tBigNtst23(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local x         AS NUMERIC
     Local nSetDec   AS NUMERIC
@@ -3351,9 +3397,11 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
 #ifndef __ADVPL__
         otBigN/=o3
 #else
-        otBigN:SetValue(otBigN:Div(o3))
+        cR:=otBigN:Div(o3):ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        __ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
         if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
             __oRTime2:Calcule()
@@ -3522,6 +3570,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -3559,10 +3608,11 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
         otBigN:=otBigN:SQRT()
 #else
         otBigN:SetValue(cN)
-        otBigN:SetValue(otBigN:SQRT())
+        cR:=otBigN:SQRT():ExactValue()
+        otBigN:SetValue(cR)
 #endif
-        cW:=otBigN:ExactValue()
-        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cR)
         cW:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         cW:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
@@ -3599,6 +3649,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
 
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local x         AS NUMERIC
@@ -3636,8 +3687,10 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
 #else
     otBigN:SetValue(cN)
 #endif
-        otBigN:SetValue(otBigN:Exp():ExactValue())
-        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+otBigN:ExactValue())
+        cR:=otBigN:Exp():ExactValue()
+        otBigN:SetValue(cR)
+        cR:=otBigN:ExactValue()
+        __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cR)
         cW:=otBigN:Rnd(nACC_SET):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
         cW:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
@@ -3677,6 +3730,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
     Local cN        AS CHARACTER
     Local cW        AS CHARACTER
     Local cX        AS CHARACTER
+    Local cR        AS CHARACTER
 
     Local n         AS NUMERIC
     Local w         AS NUMERIC
@@ -3724,9 +3778,11 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
 #ifndef __ADVPL__
             otBigN^=cW
 #else
-            otBigN:SetValue(otBigN:Pow(cW))
+            cR:=otBigN:Pow(cW):ExactValue()
+            otBigN:SetValue(cR)
 #endif
-            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+otBigN:ExactValue())
+            cR:=otBigN:ExactValue()
+            __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cR)
             cX:=otBigN:Rnd(nACC_SET):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             cX:=otBigN:NoRnd(Min(__SETDEC__,nACC_SET)):ExactValue()
@@ -4789,3 +4845,12 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
 
     return
 /*static procedure tBigNtst38*/
+
+#ifdef __HARBOUR__
+    static function GETCURRENTPROCESSID()
+    #if defined( __PLATFORM__WINDOWS )
+       return(WAPI_GETCURRENTPROCESSID())
+    #else
+       return(ExecPIDNum())
+    #endif
+ #endif

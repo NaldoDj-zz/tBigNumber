@@ -1,16 +1,39 @@
 #-b
-#-d__HB_Q_SQRT__
-#-d__PTCOMPAT__
-#-d__ALT_D__
--dTBIGN_RECPOWER
-#-d__LMETHOD__
+#-D__HB_Q_SQRT__
+#-D__PTCOMPAT__
+#-D__ALT_D__
+-DTBIGN_RECPOWER
+#-D__LMETHOD__
 #-cflag=-DHB_TR_LEVEL_DEBUG
+#/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp 
+#xterm -maximized -mk_width +cm -fbx +fullscreen -j +t -cjk_width -e /bin/bash -l -c ./exe/linux/gcc/tBigNtst
 
 -mt
+
+-w3 -es2
+
+-cpp 
+-gui
+-compr=max
 
 -i../include
 -i../../core/contrib/xhb
 
-../src/tests/tBigNtst.prg ../rc/tBigNtst.rc
+../src/hb/__hbeTthD.prg
+../src/hb/__hbPITthD.prg
+../src/hb/tBigNError.prg
+../src/hb/tBigNSleep.prg
+../src/hb/tbigNThread.prg
+../src/hb/tBigNErrorSys.prg
+
+../src/common/tfread.prg
+../src/common/tprime.prg
+../src/common/tTimeCalc.prg
+../src/common/tSProgress.prg
+../src/common/tRemaining.prg
+../src/common/tBigNumber.prg
+
+../rc/tBigNtst.rc
+../src/tests/tBigNtst.prg hbct.hbc xhb.hbc hbwin.hbc hbfship.hbc
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}

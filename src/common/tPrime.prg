@@ -114,6 +114,7 @@ ENDCLASS
         Data:16/03/2013
         Descricao:CONSTRUCTOR
         Sintaxe:tPrime():New(cPath) -> self
+        ref.: https://primes.utm.edu/lists/small/
     */
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
