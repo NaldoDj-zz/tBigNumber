@@ -29,37 +29,37 @@
     //--------------------------------------------------------------------------------------------------------
         #xtranslate Val([<prm,...>])     => hb_Val([<prm>])
     //--------------------------------------------------------------------------------------------------------
-        MEMVAR aAC_TSTEXEC
-        MEMVAR aC_OOPROGRESS
-        MEMVAR aACN_MERSENNE_POW
+        memvar aAC_TSTEXEC
+        memvar aC_OOPROGRESS
+        memvar aACN_MERSENNE_POW
 
-        MEMVAR __cSep
-        MEMVAR __CRLF
-        MEMVAR cC_GT_MODE
+        memvar __cSep
+        memvar __CRLF
+        memvar cC_GT_MODE
 
-        MEMVAR nISQRT
-        MEMVAR nN_TEST
-        MEMVAR __nSLEEP
-        MEMVAR nACC_SET
-        MEMVAR nACC_ALOG
-        MEMVAR nROOT_ACC_SET
+        memvar nISQRT
+        memvar nN_TEST
+        memvar __nSLEEP
+        memvar nACC_SET
+        memvar nACC_ALOG
+        memvar nROOT_ACC_SET
 
-        MEMVAR lDispML
-        MEMVAR lL_OOPROGRAND
-        MEMVAR lL_ROPROGRESS
-        MEMVAR lL_LOGPROCESS
+        memvar lDispML
+        memvar lL_OOPROGRAND
+        memvar lL_ROPROGRESS
+        memvar lL_LOGPROCESS
 
-        MEMVAR __nCol
-        MEMVAR __nRow
-        MEMVAR __nMaxRow
-        MEMVAR __nMaxCol
-        MEMVAR __noProgress
+        memvar __nCol
+        memvar __nRow
+        memvar __nMaxRow
+        memvar __nMaxCol
+        memvar __noProgress
 
-        MEMVAR __oRTime1
-        MEMVAR __oRTime2
-        MEMVAR __oRTimeProc
+        memvar __oRTime1
+        memvar __oRTime2
+        memvar __oRTimeProc
 
-        MEMVAR __phMutex
+        memvar __phMutex
     //--------------------------------------------------------------------------------------------------------
 #endif /*__HARBOUR__*/
 //--------------------------------------------------------------------------------------------------------
@@ -102,35 +102,35 @@
 #ifdef __HARBOUR__
     function Main()
 
-        Local aSect             AS ARRAY
-        Local aScreen           AS ARRAY
-        Local atBigNtst         AS ARRAY
+        local aSect             as array
+        local aScreen           as array
+        local atBigNtst         as array
 
-        Local cIni              AS CHARACTER
+        local cIni              as character
 
-        Local cKey              AS CHARACTER
-        Local cSection          AS CHARACTER
-        Local cChrDOut          AS CHARACTER
-        Local cDispOut          AS CHARACTER
+        local cKey              as character
+        local cSection          as character
+        local cChrDOut          as character
+        local cDispOut          as character
 
-        Local hIni              AS HASH
+        local hIni              as hash
 
-        Local nRow              AS NUMERIC
-        Local nCol              AS NUMERIC
-        Local nSRow             AS NUMERIC
-        Local nSCol             AS NUMERIC
-        Local nScreen           AS NUMERIC
-        Local nMaxScrRow        AS NUMERIC
-        Local nMaxScrCol        AS NUMERIC
-        Local nSMaxScrRow       AS NUMERIC
-        Local nSMaxScrCol       AS NUMERIC
-        Local nTMaxRolCol       AS NUMERIC
+        local nRow              as numeric
+        local nCol              as numeric
+        local nSRow             as numeric
+        local nSCol             as numeric
+        local nScreen           as numeric
+        local nMaxScrRow        as numeric
+        local nMaxScrCol        as numeric
+        local nSMaxScrRow       as numeric
+        local nSMaxScrCol       as numeric
+        local nTMaxRolCol       as numeric
 
-        Local lChangeC          AS LOGICAL
-        Local lFinalize         AS LOGICAL
+        local lChangeC          as logical
+        local lFinalize         as logical
 
-        Local ptftBigtstThread  AS POINTER
-        Local ptttBigtstThread  AS POINTER
+        local ptftBigtstThread  as pointer
+        local ptttBigtstThread  as pointer
 
         CLS
 
@@ -139,22 +139,22 @@
             AltD()          // Invokes the debugger
         #endif
 
-        Private aAC_TSTEXEC         AS ARRAY
-        Private aACN_MERSENNE_POW   AS ARRAY
-        Private aC_OOPROGRESS       AS ARRAY
+        private aAC_TSTEXEC         as array
+        private aACN_MERSENNE_POW   as array
+        private aC_OOPROGRESS       as array
 
-        Private cC_GT_MODE          AS CHARACTER
+        private cC_GT_MODE          as character
 
-        Private nN_TEST             AS NUMERIC
-        Private __nSLEEP            AS NUMERIC
-        Private nACC_SET            AS NUMERIC
-        Private nACC_ALOG           AS NUMERIC
-        Private nROOT_ACC_SET       AS NUMERIC
+        private nN_TEST             as numeric
+        private __nSLEEP            as numeric
+        private nACC_SET            as numeric
+        private nACC_ALOG           as numeric
+        private nROOT_ACC_SET       as numeric
 
-        Private lDispML             AS LOGICAL
-        Private lL_OOPROGRAND       AS LOGICAL
-        Private lL_ROPROGRESS       AS LOGICAL
-        Private lL_LOGPROCESS       AS LOGICAL
+        private lDispML             as logical
+        private lL_OOPROGRAND       as logical
+        private lL_ROPROGRESS       as logical
+        private lL_LOGPROCESS       as logical
 
         lDispML:=.T.
 
@@ -173,7 +173,7 @@
         cIni:="tBigNtst.ini"
         hIni:=hb_iniRead(cIni)
 
-        if .NOT.(File(cIni)).or.Empty(hIni)
+        if (.NOT.(File(cIni)).or.Empty(hIni))
             hIni["GENERAL"]:=hb_Hash()
             hIni["GENERAL"]["ACC_SET"]:=ACC_SET
             hIni["GENERAL"]["ROOT_ACC_SET"]:=ROOT_ACC_SET
@@ -191,10 +191,10 @@
             hIni:=hb_iniRead(cIni)
         endif
 
-        if (File(cIni)).and.(.not.(Empty(hIni)))
-            for each cSection IN hIni:Keys
+        if (File(cIni)).and.(.NOT.(Empty(hIni)))
+            for each cSection in hIni:Keys
                 aSect:=hIni[cSection]
-                for each cKey IN aSect:Keys
+                for each cKey in aSect:Keys
                     switch Upper(cKey)
                         case "ACC_SET"
                             nACC_SET:=Val(aSect[cKey])
@@ -260,6 +260,8 @@
 
         /* set OEM font encoding for non unicode modes*/
         hb_gtInfo(HB_GTI_CODEPAGE,255)
+        hb_gtInfo(HB_GTI_BOXCP,hb_cdpSelect())
+        hb_gtInfo(HB_GTI_COMPATBUFFER,.T.)
         /* set EN CP-437 encoding*/
         hb_cdpSelect("EN")
         hb_setTermCP("EN")
@@ -306,35 +308,41 @@
             nSMaxScrCol:=(nMaxScrCol+1)
             nTMaxRolCol:=(nSMaxScrRow*nSMaxScrCol)
             aScreen:=Array(nSMaxScrRow,nSMaxScrCol)
-            aEval(aScreen,{|x AS ARRAY|aFill(x,.T.)})
+            aEval(aScreen,{|x as array|aFill(x,.T.)})
 
-            while .NOT.(lFinalize)
- #ifdef __0
-                if(++nCol>=nMaxScrCol)
-                    if (++nRow>=nMaxScrRow)
-                        nRow:=0
+            while (.NOT.(lFinalize))
+ 
+                DispBegin()
+     
+     #ifdef __0
+                    if(++nCol>=nMaxScrCol)
+                        if (++nRow>=nMaxScrRow)
+                            nRow:=0
+                        endif
+                        nCol:=0
                     endif
-                    nCol:=0
-                endif
-                nRow:=HB_RandomInt(nRow,nMaxScrRow)
-                nCol:=HB_RandomInt(nCol,nMaxScrCol)
-#else
-                nRow:=HB_RandomInt(0,nMaxScrRow)
-                nCol:=HB_RandomInt(0,nMaxScrCol)
-#endif /*__0*/
-                nSRow:=(nRow+1)
-                nSCol:=(nCol+1)
-                if (aScreen[nSRow][nSCol])
-                    nScreen:=0
-                    lChangeC:=.not.(lChangeC)
-                    DispOutAT(nRow,nCol,cDispOut,if(lChangeC,"w+/n","w+/n"))
-                    aScreen[nSRow][nSCol]:=.F.
-                    aEval(aScreen,{|x AS ARRAY|aEval(x,{|y AS NUMERIC|nScreen+=if(y,0,1)})})
-                    if (nScreen==nTMaxRolCol)
-                        cDispOut:=if(cDispOut==cChrDOut," ",cChrDOut)
-                        aEval(aScreen,{|x AS ARRAY|aFill(x,.T.)})
+                    nRow:=HB_RandomInt(nRow,nMaxScrRow)
+                    nCol:=HB_RandomInt(nCol,nMaxScrCol)
+    #else
+                    nRow:=HB_RandomInt(0,nMaxScrRow)
+                    nCol:=HB_RandomInt(0,nMaxScrCol)
+    #endif /*__0*/
+                    nSRow:=(nRow+1)
+                    nSCol:=(nCol+1)
+                    if (aScreen[nSRow][nSCol])
+                        nScreen:=0
+                        lChangeC:=(.NOT.(lChangeC))
+                        DispBegin()
+                        DispOutAT(nRow,nCol,cDispOut,if(lChangeC,"w+/n","w+/n"))
+                        DispEnd()
+                        aScreen[nSRow][nSCol]:=.F.
+                        aEval(aScreen,{|x as array|aEval(x,{|y as numeric|nScreen+=if(y,0,1)})})
+                        if (nScreen==nTMaxRolCol)
+                            cDispOut:=if(cDispOut==cChrDOut," ",cChrDOut)
+                            aEval(aScreen,{|x as array|aFill(x,.T.)})
+                        endif
                     endif
-                endif
+                DispEnd()
             end while
 
             hb_threadQuitRequest(ptttBigtstThread)
@@ -350,24 +358,24 @@
         return(0)
     /*function Main*/
     //--------------------------------------------------------------------------------------------------------
-    static procedure tBigtstThread(lFinalize AS LOGICAL,atBigNtst AS ARRAY,nMaxScrRow AS NUMERIC,nMaxScrCol AS NUMERIC)
+    static procedure tBigtstThread(lFinalize as logical,atBigNtst as array,nMaxScrRow as numeric,nMaxScrCol as numeric)
 
-        Local oThreads  AS OBJECT
+        local oThreads  as object
 
-        Local nThAT     AS NUMERIC
-        Local nThread   AS NUMERIC
-        Local nThreads  AS NUMERIC
+        local nThAT     as numeric
+        local nThread   as numeric
+        local nThreads  as numeric
 
         nThreads:=0
 
-        aEval(atBigNtst,{|e AS ARRAY|if(e[2],++nThreads,NIL)})
+        aEval(atBigNtst,{|e as array|if(e[2],++nThreads,NIL)})
 
         if (nThreads>0)
             //"Share publics and privates with child threads."
             oThreads:=tBigNThread():New()
             oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
             nThAT:=0
-            while ((nThAT:=aScan(atBigNtst,{|e AS ARRAY|e[2]},nThAT+1))>0)
+            while ((nThAT:=aScan(atBigNtst,{|e as array|e[2]},nThAT+1))>0)
                 nThread:=nThreads
                 oThreads:setEvent(nThread,{@tBigtstEval(),atBigNtst[nThAT],nMaxScrRow,nMaxScrCol})
                 --nThreads
@@ -383,12 +391,14 @@
     /*static procedure tBigtstThread*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure tBigtstEval(atBigNtst AS ARRAY,nMaxScrRow AS NUMERIC,nMaxScrCol AS NUMERIC)
-        Local pGT   AS POINTER
+    static procedure tBigtstEval(atBigNtst as array,nMaxScrRow as numeric,nMaxScrCol as numeric)
+        local pGT   as pointer
         pGT:=hb_gtSelect(atBigNtst[3])
         hb_gtInfo(HB_GTI_ICONRES,"AppIcon")
         /* set OEM font encoding for non unicode modes*/
         hb_gtInfo(HB_GTI_CODEPAGE,255)
+        hb_gtInfo(HB_GTI_BOXCP,hb_cdpSelect())
+        hb_gtInfo(HB_GTI_COMPATBUFFER,.T.)
         /* set EN CP-437 encoding*/
         hb_cdpSelect("EN")
         hb_setTermCP("EN")
@@ -411,7 +421,7 @@
     /*static procedure tBigtstEval*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure myGTIEvent(nEvent AS NUMERIC)
+    static procedure myGTIEvent(nEvent as numeric)
         DEFAULT nEvent:=0
         #ifndef HB_GTE_CLOSE
             #define HB_GTE_CLOSE 4
@@ -428,7 +438,7 @@
     /*static procedure myGTIEvent*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure tBigNtst(atBigNtst AS ARRAY)
+    static procedure tBigNtst(atBigNtst as array)
 
 #else /*__ADVPL__*/
         //--------------------------------------------------------------------------------------------------------
@@ -440,33 +450,33 @@
 
         User function tBigNtst()
 
-            Local atBigNtst             AS ARRAY
+            local atBigNtst             as array
 
-            Local cIni                  AS CHARACTER
+            local cIni                  as character
 
-            Local otFIni                AS OBJECT
+            local otFIni                as object
 
-            Private aAC_TSTEXEC         AS ARRAY
-            Private aC_OOPROGRESS       AS ARRAY
-            Private aACN_MERSENNE_POW   AS ARRAY
+            private aAC_TSTEXEC         as array
+            private aC_OOPROGRESS       as array
+            private aACN_MERSENNE_POW   as array
 
-            Private cC_GT_MODE          AS CHARACTER
+            private cC_GT_MODE          as character
 
-            Private nN_TEST             AS NUMERIC
-            Private __nSLEEP            AS NUMERIC
-            Private nACC_SET            AS NUMERIC
-            Private nACC_ALOG           AS NUMERIC
-            Private nROOT_ACC_SET       AS NUMERIC
+            private nN_TEST             as numeric
+            private __nSLEEP            as numeric
+            private nACC_SET            as numeric
+            private nACC_ALOG           as numeric
+            private nROOT_ACC_SET       as numeric
 
-            Private lL_OOPROGRAND       AS LOGICAL
-            Private lL_ROPROGRESS       AS LOGICAL
-            Private lL_LOGPROCESS       AS LOGICAL
+            private lL_OOPROGRAND       as logical
+            private lL_ROPROGRESS       as logical
+            private lL_LOGPROCESS       as logical
 
             cIni:="tBigNtst.ini"
 
-            if Findfunction("U_TFINI") //NDJLIB020.PRG
+            if (Findfunction("U_TFINI")) //NDJLIB020.PRG
                 otFIni:=u_TFINI(cIni)
-                if .NOT.File(cIni)
+                if (.NOT.File(cIni))
                     otFIni:AddNewSession("GENERAL")
                     otFIni:AddNewProperty("GENERAL","ACC_SET",ACC_SET)
                     otFIni:AddNewProperty("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET)
@@ -483,7 +493,7 @@
                     otFIni:SaveAs(cIni)
                     otFIni:=u_TFINI(cIni)
                 endif
-                if (.not.(otFIni:lHasError))
+                if (.NOT.(otFIni:lHasError))
                     nACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_SET",ACC_SET))
                     nROOT_ACC_SET:=Val(oTFINI:GetPropertyValue("GENERAL","ROOT_ACC_SET",ROOT_ACC_SET))
                     nACC_ALOG:=Val(oTFINI:GetPropertyValue("GENERAL","ACC_ALOG",ACC_ALOG))
@@ -524,37 +534,37 @@
         /*User function tBigNtst*/
 
     //--------------------------------------------------------------------------------------------------------
-    static function tBigNtst(atBigNtst AS ARRAY)
+    static function tBigNtst(atBigNtst as array)
 
 #endif /*__ADVPL__*/
 
         #ifdef __HARBOUR__
-            Local tsBegin           AS DATETIME
-            Local nsElapsed
+            local tsBegin           as datetime
+            local nsElapsed
         #endif
 
-            Local dStartDate        AS DATE
-            Local dEndDate          AS DATE
-            Local cStartTime        AS CHARACTER
-            Local cEndTime          AS CHARACTER
+            local dStartDate        as date
+            local dEndDate          as date
+            local cStartTime        as character
+            local cEndTime          as character
 
         #ifdef __HARBOUR__
-            Local cFld              AS CHARACTER
-            Local cLog              AS CHARACTER
-            Local ntBigNtst         AS NUMERIC
-            Local ptfProgress       AS POINTER
-            Local pttProgress       AS POINTER
-            Local ptfftProgress     AS POINTER
-            Local pttftProgress     AS POINTER
+            local cFld              as character
+            local cLog              as character
+            local ntBigNtst         as numeric
+            local ptfProgress       as pointer
+            local pttProgress       as pointer
+            local ptfftProgress     as pointer
+            local pttftProgress     as pointer
         #else /*__ADVPL__*/
-            Local cLog              AS CHARACTER
+            local cLog              as character
         #endif /*__HARBOUR__*/
 
-            Local fhLog             AS NUMERIC
+            local fhLog             as numeric
 
         #ifdef __HARBOUR__
 
-            Local lKillProgress     AS LOGICAL
+            local lKillProgress     as logical
 
             ptfProgress:=@Progress()
             ptfftProgress:=@ftProgress()
@@ -565,28 +575,28 @@
                 lKillProgress:=.F.
             #endif /*__ALT_D__*/
 
-            Private __nMaxRow       AS NUMERIC
+            private __nMaxRow       as numeric
             __nMaxRow:=(MaxRow()-13)
 
-            Private __nMaxCol       AS NUMERIC
+            private __nMaxCol       as numeric
             __nMaxCol:=MaxCol()
 
-            Private __nCol          AS NUMERIC
+            private __nCol          as numeric
             __nCol:=Int((__nMaxCol)/2)
 
-            Private __nRow          AS NUMERIC
+            private __nRow          as numeric
             __nRow:=0
 
-            Private __noProgress    AS NUMERIC
+            private __noProgress    as numeric
             __noProgress:=Int(((__nMaxCol)/3)-(__nCol/6))
 
-            Private __cSep          AS CHARACTER
+            private __cSep          as character
             __cSep:=Replicate("-",__nMaxCol)
 
             ntBigNtst:=0
-            aEval(atBigNtst,{|e AS ARRAY|if(e[2],++ntBigNtst,NIL)})
+            aEval(atBigNtst,{|e as array|if(e[2],++ntBigNtst,NIL)})
 
-            Private __oRTimeProc    AS OBJECT
+            private __oRTimeProc    as object
             __oRTimeProc:=tRemaining():New(ntBigNtst)
 
             cFld:=tbNCurrentFolder()+hb_ps()+"tbigN_log"+hb_ps()
@@ -602,23 +612,23 @@
 
             cLog:=GetTempPath()+"\tBigNtst_"+Dtos(Date())+"_"+StrTran(Time(),":","_")+"_"+StrZero(Randomize(1,999),3)+".log"
 
-            Private __cSep          AS CHARACTER
+            private __cSep          as character
             __cSep:="---------------------------------------------------------"
-            Private __oRTimeProc    AS OBJECT
+            private __oRTimeProc    as object
             __oRTimeProc:=tRemaining():New(1)
 
         #endif
 
-            Private __phMutex       AS POINTER
+            private __phMutex       as pointer
             __phMutex:=hb_mutexCreate()
 
-            Private __CRLF          AS CHARACTER
+            private __CRLF          as character
             __CRLF:=CRLF
 
-            Private __oRTime1       AS OBJECT
+            private __oRTime1       as object
             __oRTime1:=tRemaining():New()
 
-            Private __oRTime2       AS OBJECT
+            private __oRTime2       as object
             __oRTime2:=tRemaining():New()
 
             fhLog:=if(lL_LOGPROCESS,fCreate(cLog,FC_NORMAL),-1)
@@ -627,10 +637,11 @@
                 fhLog:=fOpen(cLog,FO_READWRITE+FO_SHARED)
             endif
 
-            Private nISQRT          AS NUMERIC
+            private nISQRT          as numeric
             nISQRT:=Int(SQRT(nN_TEST))
 
         #ifdef __HARBOUR__
+            DispBegin()
             SetColor("w+/n")
             SetCursor(SC_NONE)
             BuildScreen(fhLog,__nMaxCol)
@@ -696,12 +707,14 @@
 
         #ifdef __HARBOUR__
             __nRow:=__nMaxRow
+            DispEnd()
         #endif
 
             aEval(atBigNtst,{|e|if(e[2],Eval(e[1],fhLog),NIL)})
 
         #ifdef __HARBOUR__
             __nRow:=__nMaxRow
+            DispBegin()
         #endif /*__HARBOUR__*/
 
             __ConOut(fhLog,"end ")
@@ -712,7 +725,7 @@
             cEndTime:=Time()
             __ConOut(fhLog,"TIME    :",cEndTime)
 
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTimeProc:Calcule(.F.)
                 __ConOut(fhLog,"ELAPSED :",__oRTimeProc:GetcTimeDiff())
                 hb_mutexUnLock(__phMutex)
@@ -749,6 +762,7 @@
                 tBigNGC()
             #endif
         #else /*__HARBOUR__*/
+            DispEnd()
             lKillProgress:=.T.
             hb_threadQuitRequest(pttProgress)
             hb_threadQuitRequest(pttftProgress)
@@ -757,7 +771,7 @@
             tBigNGC()
             SET COLOR TO "r+/n"
             __tbnSleep(.5)
-            if .NOT.(cC_GT_MODE=="MT")
+            if (.NOT.(cC_GT_MODE=="MT"))
                 WAIT "Press any key to end"
             endif
             CLS
@@ -767,19 +781,19 @@
     /*static procedure tBigNtst*/
 
 //--------------------------------------------------------------------------------------------------------
-static function ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
+static function ChkIntTstExec(aAC_TSTEXEC as array,nPad as numeric)
 
-    Local aTmp  AS ARRAY
+    local aTmp  as array
 
-    Local bAsc  AS BLOCK
-    Local bSrt  AS BLOCK
+    local bAsc  as block
+    local bSrt  as block
 
-    Local nD    AS NUMERIC
-    Local nJ    AS NUMERIC
-    Local nTmp  AS NUMERIC
+    local nD    as numeric
+    local nJ    as numeric
+    local nTmp  as numeric
 
     nJ:=Len(aAC_TSTEXEC)
-    For nD:=1 To nJ
+    for nD:=1 to nJ
         if (":"$aAC_TSTEXEC[nD])
             aTmp:=_StrTokArr(AllTrim(aAC_TSTEXEC[nD]),":")
             nTmp:=Len(aTmp)
@@ -787,7 +801,7 @@ static function ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
                 if (nTmp==1)
                     aAC_TSTEXEC[nD]:=aTmp[1]
                 else
-                    For nTmp:=Val(aTmp[1]) To Val(aTmp[2])
+                    for nTmp:=Val(aTmp[1]) to Val(aTmp[2])
                         aAdd(aAC_TSTEXEC,hb_NtoS(nTmp))
                     next nTmp
                 endif
@@ -796,7 +810,7 @@ static function ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
     next nD
 
     #ifdef __HARBOUR__
-        bAsc:={|e AS CHARACTER|":"$e}
+        bAsc:={|e as character|":"$e}
     #else
         bAsc:={|e|":"$e}
     #endif /*__HARBOUR__*/
@@ -808,7 +822,7 @@ static function ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
     end while
 
     #ifdef __HARBOUR__
-        bSrt:={|x AS CHARACTER,y AS CHARACTER|PadL(x,nPad)<PadL(y,nPad)}
+        bSrt:={|x as character,y as character|PadL(x,nPad)<PadL(y,nPad)}
     #else
         DEFAULT nPad:=__PADL_T__
         bSrt:={|x,y|PadL(x,nPad)<PadL(y,nPad)}
@@ -820,25 +834,25 @@ static function ChkIntTstExec(aAC_TSTEXEC AS ARRAY,nPad AS NUMERIC)
 /*static procedure ChkIntTstExec*/
 
 //--------------------------------------------------------------------------------------------------------
-static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
+static function GettBigNtst(cC_GT_MODE as character,aAC_TSTEXEC as array)
 
-    local atBigNtst AS ARRAY
+    local atBigNtst as array
 
-    local bAsc      AS BLOCK
+    local bAsc      as block
 
-    local nD        AS NUMERIC
-    local nJ        AS NUMERIC
+    local nD        as numeric
+    local nJ        as numeric
 
-    local lAll      AS LOGICAL
+    local lAll      as logical
 
     #ifndef __PTCOMPAT__
-        local pGT   AS POINTER
+        local pGT   as pointer
     #endif
 
     nJ:=__NRTTST__
 
     #ifdef __HARBOUR__
-        bAsc:={|c AS CHARACTER|(c=="*")}
+        bAsc:={|c as character|(c=="*")}
     #else
         bAsc:={|c|(c=="*")}
     #endif /*__HARBOUR__*/
@@ -889,14 +903,14 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
     atBigNtst[38][1]:={|p|tBigNtst38(p)}
 
     #ifdef __HARBOUR__
-        bAsc:={|c AS CHARACTER|(nD==Val(c))}
+        bAsc:={|c as character|(nD==Val(c))}
     #else
         bAsc:={|c|(nD==Val(c))}
     #endif /*__HARBOUR__*/
 
     for nD:=1 to nJ
-        atBigNtst[nD][2]:=lAll.or.(aScan(aAC_TSTEXEC,bAsc)>0)
-        if atBigNtst[nD][2].and.(cC_GT_MODE=="MT")
+        atBigNtst[nD][2]:=(lAll.or.(aScan(aAC_TSTEXEC,bAsc)>0))
+        if ((atBigNtst[nD][2]).and.(cC_GT_MODE=="MT"))
             #ifndef __PTCOMPAT__
                 atBigNtst[nD][3]:=hb_gtCreate(THREAD_GT)
                 pGT:=hb_gtSelect(atBigNtst[nD][3])
@@ -913,8 +927,8 @@ static function GettBigNtst(cC_GT_MODE AS CHARACTER,aAC_TSTEXEC AS ARRAY)
 /*static function GettBigNtst*/
 
 //--------------------------------------------------------------------------------------------------------
-static function _StrTokArr(cStr AS CHARACTER,cToken AS CHARACTER)
-    Local cDToken   AS CHARACTER
+static function _StrTokArr(cStr as character,cToken as character)
+    local cDToken   as character
     DEFAULT cStr:=""
     DEFAULT cToken:=";"
     cDToken:=(cToken+cToken)
@@ -929,7 +943,7 @@ static function _StrTokArr(cStr AS CHARACTER,cToken AS CHARACTER)
 /*static function _StrTokArr*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure __tbnSleep(nSleep AS NUMERIC)
+static procedure __tbnSleep(nSleep as numeric)
     DEFAULT nSleep:=__nSLEEP
     if (.f.)
         __tbnSleep(@nSleep)
@@ -939,29 +953,29 @@ static procedure __tbnSleep(nSleep AS NUMERIC)
 /*static procedure __tbnSleep*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure __ConOut(fhLog AS NUMERIC,e,d)
+static procedure __ConOut(fhLog as numeric,e,d)
 
-    Local ld    AS LOGICAL
-    Local lTBeg AS LOGICAL
+    local ld    as logical
+    local lTBeg as logical
 
-    Local p     AS CHARACTER
+    local p     as character
 
-    Local nATd  AS NUMERIC
+    local nATd  as numeric
 
-    Local x
-    Local y
+    local x
+    local y
 
 #ifdef __HARBOUR__
 
-    Local cDOAt  AS CHARACTER
-    Local nLines AS NUMERIC
-    Local nCLine AS NUMERIC
-    Local lSep   AS LOGICAL
-    Local lMRow  AS LOGICAL
+    local cDOAt  as character
+    local nLines as numeric
+    local nCLine as numeric
+    local lSep   as logical
+    local lMRow  as logical
 
 #endif
 
-    ld:=.NOT.(Empty(d))
+    ld:=(.NOT.(Empty(d)))
 
     x:=cValToChar(e)
 
@@ -976,32 +990,34 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
 
 #ifdef __HARBOUR__
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         ShowFinalProc()
         hb_mutexUnLock(__phMutex)
     endif
 
+    DispBegin()
+
     DEFAULT __nRow:=0
     lSep:=(p==__cSep)
 
-    if lDispML
+    if (lDispML)
         nLines:=MLCount(p,__nMaxCol,NIL,.T.)
-        For nCLine:=1 TO nLines
+        for nCLine:=1 to nLines
             cDOAt:=MemoLine(p,__nMaxCol,nCLine,NIL,.T.)
-            if ++__nRow>=__nMaxRow
+            if (++__nRow>=__nMaxRow)
                 @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
                 __nRow:=__NROWAT
             endif
             lMRow:=(__nRow>=__NROWAT)
-            DispOutAT(__nRow,0,cDOAt,if(.NOT.(lSep).AND.lMRow,"w+/n",if(lSep.AND.lMRow,"c+/n","w+/n")))
+            DispOutAT(__nRow,0,cDOAt,if((.NOT.(lSep)).and.lMRow,"w+/n",if(lSep.and.lMRow,"c+/n","w+/n")))
         next nCLine
     else
-        if ++__nRow>=__nMaxRow
+        if (++__nRow>=__nMaxRow)
             @ __NROWAT,0 CLEAR TO __nMaxRow,__nMaxCol
             __nRow:=__NROWAT
         endif
         lMRow:=(__nRow>=__NROWAT)
-        DispOutAT(__nRow,0,p,if(.NOT.(lSep).AND.lMRow,"w+/n",if(lSep.AND.lMRow,"c+/n","w+/n")))
+        DispOutAT(__nRow,0,p,if((.NOT.(lSep)).and.lMRow,"w+/n",if(lSep.and.lMRow,"c+/n","w+/n")))
     endif
 
     lTBeg:=("BEGIN ------------"$p)
@@ -1011,7 +1027,9 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     endif
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    DispEnd()
+
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTimeProc:Calcule(lTBeg)
         hb_mutexUnLock(__phMutex)
     endif
@@ -1040,7 +1058,7 @@ static procedure __ConOut(fhLog AS NUMERIC,e,d)
 
 //--------------------------------------------------------------------------------------------------------
 static function IsHb()
-    Local lHarbour AS LOGICAL
+    local lHarbour as logical
     #ifdef __HARBOUR__
         lHarbour:=.T.
     #else
@@ -1052,7 +1070,7 @@ static function IsHb()
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     static function cValToChar(e)
-        Local s
+        local s
         switch ValType(e)
         case "C"
             s:=e
@@ -1076,34 +1094,34 @@ static function IsHb()
     /*static function cValToChar*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure Progress(lKillProgress AS LOGICAL,__oRTimeProc AS OBJECT,__phMutex AS POINTER,nCol AS NUMERIC,aProgress2 AS ARRAY,nProgress2 AS NUMERIC,nSLEEP AS NUMERIC,nMaxCol AS NUMERIC,lRandom AS LOGICAL,lPRandom AS LOGICAL)
+    static procedure Progress(lKillProgress as logical,__oRTimeProc as object,__phMutex as pointer,nCol as numeric,aProgress2 as array,nProgress2 as numeric,nSLEEP as numeric,nMaxCol as numeric,lRandom as logical,lPRandom as logical)
 
-        Local aRdnPG     AS ARRAY
-        Local aRdnAn     AS ARRAY
-        Local aSAnim     AS ARRAY
+        local aRdnPG     as array
+        local aRdnAn     as array
+        local aSAnim     as array
 
-        Local cAT        AS CHARACTER
-        Local cRTime     AS CHARACTER
-        Local cStuff     AS CHARACTER
-        Local cLRTime    AS CHARACTER
-        Local cProgress  AS CHARACTER
+        local cAT        as character
+        local cRTime     as character
+        local cStuff     as character
+        local cLRTime    as character
+        local cProgress  as character
 
-        Local lChange    AS LOGICAL
-        Local lCScreen   AS LOGICAL
+        local lChange    as logical
+        local lCScreen   as logical
 
-        Local nAT        AS NUMERIC
-        Local nQT        AS NUMERIC
-        Local nLenA      AS NUMERIC
-        Local nLenP      AS NUMERIC
-        Local nSAnim     AS NUMERIC
-        Local nSizeP     AS NUMERIC
-        Local nSizeP2    AS NUMERIC
-        Local nSizeP3    AS NUMERIC
-        Local nChange    AS NUMERIC
-        Local nProgress  AS NUMERIC
+        local nAT        as numeric
+        local nQT        as numeric
+        local nLenA      as numeric
+        local nLenP      as numeric
+        local nSAnim     as numeric
+        local nSizeP     as numeric
+        local nSizeP2    as numeric
+        local nSizeP3    as numeric
+        local nChange    as numeric
+        local nProgress  as numeric
 
-        Local oProgress1 AS OBJECT
-        Local oProgress2 AS OBJECT
+        local oProgress1 as object
+        local oProgress2 as object
 
         aRdnPG:=Array(0)
         aRdnAn:=Array(0)
@@ -1311,82 +1329,90 @@ static function IsHb()
 
         nChange:=0
 
-        while .NOT.(lKillProgress)
+        while (.NOT.(lKillProgress))
 
-            DispOutAT(3,nCol,oProgress1:Eval(),"r+/n")
+            DispBegin()
 
-            if (oProgress2:GetnProgress()==oProgress2:GetnMax())
-                lChange:=(.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
-                if (lChange)
-                    if ("SHUTTLE"$cProgress)
-                        nChange:=0
-                    endif
-                    if (lRandom)
-                        if (Len(aRdnAn)==nLenA)
-                            aSize(aRdnAn,0)
+                DispOutAT(3,nCol,oProgress1:Eval(),"r+/n")
+
+                if (oProgress2:GetnProgress()==oProgress2:GetnMax())
+                    lChange:=(.NOT.("SHUTTLE"$cProgress).or.(("SHUTTLE"$cProgress).and.(++nChange>1)))
+                    if (lChange)
+                        if ("SHUTTLE"$cProgress)
+                            nChange:=0
                         endif
-                        while (aScan(aRdnAn,{|r|r==(nSAnim:=abs(HB_RandomInt(1,nLenA)))})>0)
-                            __tbnSleep(nSLEEP)
-                        end while
-                        aAdd(aRdnAn,nSAnim)
-                        oProgress2:SetProgress(aSAnim[nSAnim])
-                        if (Len(aRdnPG)==nLenP)
-                            aSize(aRdnPG,0)
-                        endif
-                        while (aScan(aRdnPG,{|r|r==(nProgress:=abs(HB_RandomInt(1,nLenP)))})>0)
-                            __tbnSleep(nSLEEP)
-                        end while
-                        aAdd(aRdnPG,nProgress)
-                    else
-                        if (++nProgress>nLenP)
-                            nProgress:=1
-                            if (++nSAnim>nLenA)
-                                nSAnim:=1
+                        if (lRandom)
+                            if (Len(aRdnAn)==nLenA)
+                                aSize(aRdnAn,0)
                             endif
+                            while (aScan(aRdnAn,{|r|r==(nSAnim:=abs(HB_RandomInt(1,nLenA)))})>0)
+                                __tbnSleep(nSLEEP)
+                            end while
+                            aAdd(aRdnAn,nSAnim)
                             oProgress2:SetProgress(aSAnim[nSAnim])
+                            if (Len(aRdnPG)==nLenP)
+                                aSize(aRdnPG,0)
+                            endif
+                            while (aScan(aRdnPG,{|r|r==(nProgress:=abs(HB_RandomInt(1,nLenP)))})>0)
+                                __tbnSleep(nSLEEP)
+                            end while
+                            aAdd(aRdnPG,nProgress)
+                        else
+                            if (++nProgress>nLenP)
+                                nProgress:=1
+                                if (++nSAnim>nLenA)
+                                    nSAnim:=1
+                                endif
+                                oProgress2:SetProgress(aSAnim[nSAnim])
+                            endif
                         endif
+                        lCScreen:=.T.
+                        cProgress:=aProgress2[nProgress]
                     endif
-                    lCScreen:=.T.
-                    cProgress:=aProgress2[nProgress]
                 endif
-            endif
 
-            oProgress2:SetRandom(lPRandom)
+            DispEnd()
 
-            if (lCScreen)
-                lCScreen:=.F.
-                @ 12,0 CLEAR TO 12,nMaxCol
-            endif
+            DispBegin()
 
-            cStuff:=PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
-            nAT:=(AT("] [",cStuff)+3)
-            nQT:=(AT("] [",SubSTr(cStuff,nAT))-2)
-            cAT:=SubStr(cStuff,nAT,nQT+1)
-            cStuff:=Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
+                oProgress2:SetRandom(lPRandom)
 
-            DispOutAT(12,0,cStuff,"w+/n")
-            DispOutAT(12,nAT-1,cAT,"r+/n")
-
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
-                if (cRTime==cLRTime)
-                    __oRTime1:Calcule(.F.)
-                    __oRTime2:Calcule(.F.)
-                   __oRTimeProc:Calcule(.F.)
+                if (lCScreen)
+                    lCScreen:=.F.
+                    @ 12,0 CLEAR TO 12,nMaxCol
                 endif
-                ShowFinalProc()
-                cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
-                cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
-                cRTime+="["+DtoC(__oRTimeProc:GetdendTime())+"]"
-                cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
-                cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
-                cRTime+="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
-                cLRTime:=cRTime
-                hb_mutexUnLock(__phMutex)
-            endif
 
-            @ 07,15 CLEAR TO 07,nMaxCol
-            DispOutAT(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
-            DispOutAT(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
+                cStuff:=PADC("["+cProgress+"] ["+oProgress2:Eval(cProgress)+"] ["+cProgress+"]",nMaxCol)
+                nAT:=(AT("] [",cStuff)+3)
+                nQT:=(AT("] [",SubSTr(cStuff,nAT))-2)
+                cAT:=SubStr(cStuff,nAT,nQT+1)
+                cStuff:=Stuff(cStuff,nAT,Len(cAT),Space(Len(cAT)))
+
+                DispOutAT(12,0,cStuff,"w+/n")
+                DispOutAT(12,nAT-1,cAT,"r+/n")
+
+                if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+                    if (cRTime==cLRTime)
+                        __oRTime1:Calcule(.F.)
+                        __oRTime2:Calcule(.F.)
+                       __oRTimeProc:Calcule(.F.)
+                    endif
+                    ShowFinalProc()
+                    cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
+                    cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
+                    cRTime+="["+DtoC(__oRTimeProc:GetdendTime())+"]"
+                    cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
+                    cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
+                    cRTime+="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+                    cLRTime:=cRTime
+                    hb_mutexUnLock(__phMutex)
+                endif
+
+                @ 07,15 CLEAR TO 07,nMaxCol
+                DispOutAT(07,15,HB_TTOC(HB_DATETIME()),"r+/n")
+                DispOutAT(07,nMaxCol-Len(cRTime),cRTime,"r+/n")
+
+            DispEnd()
 
             __tbnSleep(nSLEEP)
 
@@ -1397,57 +1423,61 @@ static function IsHb()
 
     static procedure ShowFinalProc()
 
-        Local cDOAt AS CHARACTER
+        local cDOAt as character
 
-        @ 09,15 CLEAR TO 09,__nMaxCol
-        cDOAt:="["
-        cDOAt+=StrZero(__oRTime1:GetnProgress(),16)
-        cDOAt+="/"
-        cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
-        cDOAt+="]|["
-        cDOAt+=DtoC(__oRTime1:GetdendTime())
-        cDOAt+="]["+__oRTime1:GetcEndTime()
-        cDOAt+="]|["
-        cDOAt+=__oRTime1:GetcAverageTime()
-        cDOAt+="]["
-        cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
-        cDOAt+=" %]"
-        DispOutAT(09,15,cDOAt,"w+/n")
+        DispBegin()
 
-        @ 10,15 CLEAR TO 10,__nMaxCol
-        cDOAt:="["
-        cDOAt+=StrZero(__oRTime2:GetnProgress(),16)
-        cDOAt+="/"
-        cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
-        cDOAt+="]|["
-        cDOAt+=DtoC(__oRTime2:GetdendTime())
-        cDOAt+="]["+__oRTime2:GetcEndTime()
-        cDOAt+="]|["
-        cDOAt+=__oRTime2:GetcAverageTime()
-        cDOAt+="]["
-        cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
-        cDOAt+=" %]"
-        DispOutAT(10,15,cDOAt,"w+/n")
+            @ 09,15 CLEAR TO 09,__nMaxCol
+            cDOAt:="["
+            cDOAt+=StrZero(__oRTime1:GetnProgress(),16)
+            cDOAt+="/"
+            cDOAt+=StrZero(__oRTime1:GetnTotal(),16)
+            cDOAt+="]|["
+            cDOAt+=DtoC(__oRTime1:GetdendTime())
+            cDOAt+="]["+__oRTime1:GetcEndTime()
+            cDOAt+="]|["
+            cDOAt+=__oRTime1:GetcAverageTime()
+            cDOAt+="]["
+            cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
+            cDOAt+=" %]"
+            DispOutAT(09,15,cDOAt,"w+/n")
+
+            @ 10,15 CLEAR TO 10,__nMaxCol
+            cDOAt:="["
+            cDOAt+=StrZero(__oRTime2:GetnProgress(),16)
+            cDOAt+="/"
+            cDOAt+=StrZero(__oRTime2:GetnTotal(),16)
+            cDOAt+="]|["
+            cDOAt+=DtoC(__oRTime2:GetdendTime())
+            cDOAt+="]["+__oRTime2:GetcEndTime()
+            cDOAt+="]|["
+            cDOAt+=__oRTime2:GetcAverageTime()
+            cDOAt+="]["
+            cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
+            cDOAt+=" %]"
+            DispOutAT(10,15,cDOAt,"w+/n")
+
+        DispEnd()
 
         return
     /*static procedure ShowFinalProc*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure ftProgress(lKillProgress AS LOGICAL,nSLEEP AS NUMERIC,nMaxCol AS NUMERIC,nMaxRow AS NUMERIC)
+    static procedure ftProgress(lKillProgress as logical,nSLEEP as numeric,nMaxCol as numeric,nMaxRow as numeric)
 
-        Local aAnim    AS ARRAY
+        local aAnim    as array
 
-        Local cRow     AS CHARACTER
-        Local cAnim    AS CHARACTER
-        Local cRAnim   AS CHARACTER
+        local cRow     as character
+        local cAnim    as character
+        local cRAnim   as character
 
-        Local lBreak   AS LOGICAL
+        local lBreak   as logical
 
-        Local nRow     AS NUMERIC
-        Local nRowC    AS NUMERIC
-        Local nAnim    AS NUMERIC
-        Local nAnimes  AS NUMERIC
-        Local nRowAnim AS NUMERIC
+        local nRow     as numeric
+        local nRowC    as numeric
+        local nAnim    as numeric
+        local nAnimes  as numeric
+        local nRowAnim as numeric
 
         aAnim:=GetBigNAnim()
 
@@ -1460,25 +1490,27 @@ static function IsHb()
         nAnimes:=Len(aAnim)
         nRowAnim:=(nMaxRow+2)
 
-        while .NOT.(lKillProgress)
+        while (.NOT.(lKillProgress))
 
-            For nAnim:=1 To nAnimes
+            for nAnim:=1 to nAnimes
                 cAnim:=aAnim[nAnim]
-                for each cRow IN _StrTokArr(cAnim,"[\n]")
-                    lBreak:=(";"$cRow)
-                    if (lBreak)
-                        if ((nRowC==0).and.(.NOT.(nRow==0)))
-                            nRowC:=(nRowAnim+nRow)
+                for each cRow in _StrTokArr(cAnim,"[\n]")
+                    DispBegin()
+                        lBreak:=(";"$cRow)
+                        if (lBreak)
+                            if ((nRowC==0).and.(.NOT.(nRow==0)))
+                                nRowC:=(nRowAnim+nRow)
+                            endif
                         endif
-                    endif
-                    cRAnim:=PadC(StrTran(cRow,";",""),nMaxCol)
-                    DispOutAT(nRowAnim+nRow,0,cRAnim,if(lBreak,"w+/n","r+/n"))
-                    __tbnSleep(nSLEEP/2)
-                    if (lBreak)
-                        nRow:=0
-                    else
-                        ++nRow
-                    endif
+                        cRAnim:=PadC(StrTran(cRow,";",""),nMaxCol)
+                        DispOutAT(nRowAnim+nRow,0,cRAnim,if(lBreak,"w+/n","r+/n"))
+                        __tbnSleep(nSLEEP/2)
+                        if (lBreak)
+                            nRow:=0
+                        else
+                            ++nRow
+                        endif
+                    DispEnd()
                 next cRow
                 @ nRowAnim,0 CLEAR TO nRowC,nMaxCol
                 __tbnSleep(nSLEEP)
@@ -1492,7 +1524,7 @@ static function IsHb()
     /*static procedure ftProgress*/
 
     //--------------------------------------------------------------------------------------------------------
-    static procedure BuildScreen(fhLog AS NUMERIC,nMaxCol AS NUMERIC)
+    static procedure BuildScreen(fhLog as numeric,nMaxCol as numeric)
         CLEAR SCREEN
         __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
@@ -1501,7 +1533,7 @@ static function IsHb()
     /*static procedure BuildScreen*/
 
     //--------------------------------------------------------------------------------------------------------
-    static function FreeObj(oObj AS OBJECT)
+    static function FreeObj(oObj as object)
         oObj:=NIL
         return(tBigNGC())
     /*static function FreeObj*/
@@ -1521,32 +1553,32 @@ static function IsHb()
 
 //--------------------------------------------------------------------------------------------------------
 static function Fibonacci(uN)
-    Local oN:=tBigNumber():New(uN)
+    local oN:=tBigNumber():New(uN)
     return(oN:Fibonacci())
 /*static function Fibonacci*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst01(fhLog AS NUMERIC)
+static procedure tBigNtst01(fhLog as numeric)
 
-    Local otBigN    AS OBJECT
-    Local otBigM    AS OBJECT
+    local otBigN    as object
+    local otBigM    as object
 
-    Local cN        AS CHARACTER
-    Local cM        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cN        as character
+    local cM        as character
+    local cX        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
+    local n         as numeric
+    local x         as numeric
 
-    Local nSetDec   AS NUMERIC
+    local nSetDec   as numeric
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste MOD 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -1555,21 +1587,21 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         cX:=hb_NtoS(x)
         otBigN:SetValue(cX)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
-            __oRTime2:SetStep(nISQRT)
+            __oRTime2:Setstep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
-        For n:=nN_TEST To 1 Step -nISQRT
+        for n:=nN_TEST to 1 step -nISQRT
             cN:=hb_NtoS(n)
             otBigM:=otBigN:MOD(cN)
             cM:=otBigM:ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():MOD('+cN+')',"RESULT: "+cM)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -1578,7 +1610,7 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next n
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -1599,28 +1631,28 @@ static procedure tBigNtst01(fhLog AS NUMERIC)
 /*static procedure tBigNtst01*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst02(fhLog AS NUMERIC)
+static procedure tBigNtst02(fhLog as numeric)
 
     #ifndef __ADVPL__
 
-        Local otBigN    AS OBJECT
-        Local otBigW    AS OBJECT
-        Local otBigX    AS OBJECT
+        local otBigN    as object
+        local otBigW    as object
+        local otBigX    as object
 
-        Local cN        AS CHARACTER
-        Local cW        AS CHARACTER
+        local cN        as character
+        local cW        as character
 
-        Local n         AS NUMERIC
-        Local w         AS NUMERIC
+        local n         as numeric
+        local w         as numeric
 
-        Local nSetDec   AS NUMERIC
+        local nSetDec   as numeric
 
         __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Operator Overloading 0 -------------- ")
 
         __ConOut(fhLog,"")
 
 /*(*)*/ /* OPERATORS NOT IMPLEMENTED: HB_APICLS.H,CLASSES.C AND HVM.C*/
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:SetRemaining(5+1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -1636,17 +1668,17 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
 
         nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-        For w:=0 To 5
+        for w:=0 to 5
             cW:=hb_NtoS(w)
             otBigW:=cW
             __ConOut(fhLog,"otBigW:="+cW,"RESULT: "+otBigW:ExactValue())
             __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:SetRemaining(nISQRT)
-                __oRTime2:SetStep(Int(nISQRT/2))
+                __oRTime2:Setstep(Int(nISQRT/2))
                 hb_mutexUnLock(__phMutex)
             endif
-            For n:=1 To nISQRT Step Int(nISQRT/2)
+            for n:=1 to nISQRT step Int(nISQRT/2)
                 cN:=hb_NtoS(n)
                 __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
                 __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
@@ -1708,7 +1740,7 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
                 __ConOut(fhLog,"otBigW+=otBigN--","RESULT: "+(otBigX:=(otBigW+=otBigN--),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW+=--otBigN","RESULT: "+(otBigX:=(otBigW+=--otBigN),otBigX:ExactValue()))
                 __ConOut(fhLog,__cSep)
-                if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+                if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                     __oRTime2:Calcule()
                     __oRTime1:Calcule(.F.)
                     __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -1717,7 +1749,7 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
                 *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
                 __ConOut(fhLog,__cSep)
             next n
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime1:Calcule()
                 __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
                 hb_mutexUnLock(__phMutex)
@@ -1737,23 +1769,23 @@ static procedure tBigNtst02(fhLog AS NUMERIC)
 /*static procedure tBigNtst02*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst03(fhLog AS NUMERIC)
+static procedure tBigNtst03(fhLog as numeric)
 
-    Local aPFact    AS ARRAY
+    local aPFact    as array
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    local cN        as character
+    local cW        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local y         AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local y         as numeric
 
-    Local nSetDec   AS NUMERIC
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local otBigN    as object
+    local otBigW    as object
 
-    Local o0        AS OBJECT
+    local o0        as object
 
     __ConOut(fhLog,"")
 
@@ -1761,9 +1793,9 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -1777,28 +1809,27 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To nN_TEST STEP nISQRT
+    for n:=1 to nN_TEST step nISQRT
         y:=0
         cN:=hb_NtoS(n)
         aPFact:=otBigN:SetValue(cN):PFactors()
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(Len(aPFact))
             hb_mutexUnLock(__phMutex)
         endif
-        For x:=1 To Len(aPFact)
+        for x:=1 to Len(aPFact)
             cW:=aPFact[x][2]
 #ifndef __ADVPL__
             otBigW:=cW
             while otBigW>o0
 #else
             otBigW:SetValue(cW)
-            while otBigW:gt(o0)
+            while (otBigW:gt(o0))
 #endif
-
                 __ConOut(fhLog,cN+':tBigNumber():PFactors():'+hb_NtoS(x)+':'+otBigW:ExactValue()+':'+hb_NtoS(++y),"RESULT: "+aPFact[x][1])
                 otBigW:OpDec()
             end while
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 hb_mutexUnLock(__phMutex)
@@ -1808,7 +1839,7 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -1834,62 +1865,62 @@ static procedure tBigNtst03(fhLog AS NUMERIC)
 /*static procedure tBigNtst03*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst04(fhLog AS NUMERIC)
+static procedure tBigNtst04(fhLog as numeric)
 
-    Local aPrimes   AS ARRAY
+    local aPrimes   as array
 
-    Local cP        AS CHARACTER
-    Local cN        AS CHARACTER
+    local cP        as character
+    local cN        as character
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local oPrime    AS OBJECT
+    local oPrime    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Prime 1 -------------- ")
 
     __ConOut(fhLog,"")
 
     aPrimes:={;
-          "15485783","15485801","15485807","15485837","15485843","15485849","15485857","15485863",;
-          "15487403","15487429","15487457","15487469","15487471","15487517","15487531","15487541",;
-          "32458051","32458057","32458073","32458079","32458091","32458093","32458109","32458123",;
-          "49981171","49981199","49981219","49981237","49981247","49981249","49981259","49981271",;
-          "67874921","67874959","67874969","67874987","67875007","67875019","67875029","67875061",;
-         "982451501",;
-         "982451549",;
-         "982451567",;
-         "982451579",;
-         "982451581",;
-         "982451609",;
-         "982451629",;
-         "982451653";
+        "15485783","15485801","15485807","15485837","15485843","15485849","15485857","15485863",;
+        "15487403","15487429","15487457","15487469","15487471","15487517","15487531","15487541",;
+        "32458051","32458057","32458073","32458079","32458091","32458093","32458109","32458123",;
+        "49981171","49981199","49981219","49981237","49981247","49981249","49981259","49981271",;
+        "67874921","67874959","67874969","67874987","67875007","67875019","67875029","67875061",;
+        "982451501",;
+        "982451549",;
+        "982451567",;
+        "982451579",;
+        "982451581",;
+        "982451609",;
+        "982451629",;
+        "982451653";
     }
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(Len(aPrimes))
         hb_mutexUnLock(__phMutex)
     endif
 
     oPrime:=tPrime():New()
     oPrime:IsPReset()
-    oPrime:NextPReset()
+    oPrime:nextPReset()
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To Len(aPrimes)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for n:=1 to Len(aPrimes)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
         cP:=aPrimes[n]
         cN:=PadL(cP,oPrime:nSize)
-        __ConOut(fhLog,'tPrime():NextPrime('+cP+')',"RESULT: "+cValToChar(oPrime:NextPrime(cN)))
-        __ConOut(fhLog,'tPrime():NextPrime('+cP+')',"RESULT: "+oPrime:cPrime)
+        __ConOut(fhLog,'tPrime():nextPrime('+cP+')',"RESULT: "+cValToChar(oPrime:nextPrime(cN)))
+        __ConOut(fhLog,'tPrime():nextPrime('+cP+')',"RESULT: "+oPrime:cPrime)
         cP:=LTrim(oPrime:cPrime)
         __ConOut(fhLog,'tPrime():IsPrime('+cP+')',"RESULT: "+cValToChar(oPrime:IsPrime()))
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -1920,26 +1951,26 @@ static procedure tBigNtst04(fhLog AS NUMERIC)
 /*static procedure tBigNtst04*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst05(fhLog AS NUMERIC)
+static procedure tBigNtst05(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cHex      AS CHARACTER
+    local cN        as character
+    local cHex      as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBH16    AS OBJECT
-    Local otBBin    AS OBJECT
+    local otBigN    as object
+    local otBH16    as object
+    local otBBin    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX16 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT*99)
-        __oRTime1:SetStep(99)
+        __oRTime1:Setstep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -1951,8 +1982,8 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=0 TO (nISQRT*99) STEP 99
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for x:=0 to (nISQRT*99) step 99
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -1968,7 +1999,7 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
         cHex:=otBBin:SetValue(cN):B2H('16'):Int()
         __ConOut(fhLog,cN+':tBigNumber():B2H(16)',"RESULT: "+cHex)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -1998,26 +2029,26 @@ static procedure tBigNtst05(fhLog AS NUMERIC)
 /*static procedure tBigNtst05*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst06(fhLog AS NUMERIC)
+static procedure tBigNtst06(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cHex      AS CHARACTER
+    local cN        as character
+    local cHex      as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBH32    AS OBJECT
-    Local otBBin    AS OBJECT
+    local otBigN    as object
+    local otBH32    as object
+    local otBBin    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste HEX32 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT*99)
-        __oRTime1:SetStep(99)
+        __oRTime1:Setstep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2029,8 +2060,8 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=0 TO (nISQRT*99) STEP 99
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for x:=0 to (nISQRT*99) step 99
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2046,7 +2077,7 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
         cHex:=otBBin:SetValue(cN):B2H('32'):Int()
         __ConOut(fhLog,cN+':tBigNumber():B2H(32)',"RESULT: "+cHex)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2058,7 +2089,7 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
 
     FreeObj(@otBH32)
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
         hb_mutexUnLock(__phMutex)
@@ -2080,17 +2111,17 @@ static procedure tBigNtst06(fhLog AS NUMERIC)
 /*static procedure tBigNtst06*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst07(fhLog AS NUMERIC)
+static procedure tBigNtst07(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigN    AS OBJECT
+    local o1        as object
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 1 -------------- ")
 
@@ -2110,14 +2141,14 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 #else
     otBigN:SetValue(o1)
 #endif
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2134,7 +2165,7 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2161,24 +2192,24 @@ static procedure tBigNtst07(fhLog AS NUMERIC)
 /*static procedure tBigNtst07*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst08(fhLog AS NUMERIC)
+static procedure tBigNtst08(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2191,9 +2222,9 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2210,7 +2241,7 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Add(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2237,24 +2268,24 @@ static procedure tBigNtst08(fhLog AS NUMERIC)
 /*static procedure tBigNtst08*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst09(fhLog AS NUMERIC)
+static procedure tBigNtst09(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ ADD Teste 3 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2265,9 +2296,9 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2284,7 +2315,7 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():add(-9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2311,24 +2342,24 @@ static procedure tBigNtst09(fhLog AS NUMERIC)
 /*static procedure tBigNtst09*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst10(fhLog AS NUMERIC)
+static procedure tBigNtst10(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 1 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2339,9 +2370,9 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2358,7 +2389,7 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2385,24 +2416,24 @@ static procedure tBigNtst10(fhLog AS NUMERIC)
 /*static procedure tBigNtst10*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst11(fhLog AS NUMERIC)
+static procedure tBigNtst11(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2413,9 +2444,9 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2432,7 +2463,7 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Sub(9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2459,24 +2490,24 @@ static procedure tBigNtst11(fhLog AS NUMERIC)
 /*static procedure tBigNtst11*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst12(fhLog AS NUMERIC)
+static procedure tBigNtst12(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ SUB Teste 3 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2487,9 +2518,9 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2506,7 +2537,7 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Sub(-9999.9999999999)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2533,27 +2564,27 @@ static procedure tBigNtst12(fhLog AS NUMERIC)
 /*static procedure tBigNtst12*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst13(fhLog AS NUMERIC)
+static procedure tBigNtst13(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local o1        as object
+    local otBigN    as object
+    local otBigW    as object
 
    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 1 -------------- ")
 
    __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2571,9 +2602,9 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2602,7 +2633,7 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
         cR:=otBigW:SetValue(cR):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2627,26 +2658,26 @@ static procedure tBigNtst13(fhLog AS NUMERIC)
 /*static procedure tBigNtst13*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst14(fhLog AS NUMERIC)
+static procedure tBigNtst14(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigN    AS OBJECT
+    local o1        as object
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2660,9 +2691,9 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2687,7 +2718,7 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Mult(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2712,25 +2743,25 @@ static procedure tBigNtst14(fhLog AS NUMERIC)
 /*static procedure tBigNtst14*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst15(fhLog AS NUMERIC)
+static procedure tBigNtst15(fhLog as numeric)
 
-    Local cN        AS CHARACTER
+    local cN        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigW    AS OBJECT
+    local o1        as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 3 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2744,9 +2775,9 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2765,7 +2796,7 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
         otBigW:SetValue(otBigW:egMult("1.5"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+otBigW:ExactValue())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2790,26 +2821,26 @@ static procedure tBigNtst15(fhLog AS NUMERIC)
 /*static procedure tBigNtst15*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst16(fhLog AS NUMERIC)
+static procedure tBigNtst16(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    local cN        as character
+    local cW        as character
 
-    Local w         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local w         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigW    AS OBJECT
+    local o1        as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 4 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2823,9 +2854,9 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2854,7 +2885,7 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
         cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Mult(3.555)',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2879,26 +2910,26 @@ static procedure tBigNtst16(fhLog AS NUMERIC)
 /*static procedure tBigNtst16*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst17(fhLog AS NUMERIC)
+static procedure tBigNtst17(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    local cN        as character
+    local cW        as character
 
-    Local w         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local w         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigW    AS OBJECT
+    local o1        as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 5 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2912,9 +2943,9 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -2939,7 +2970,7 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
         cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -2964,26 +2995,26 @@ static procedure tBigNtst17(fhLog AS NUMERIC)
 /*static procedure tBigNtst17*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst18(fhLog AS NUMERIC)
+static procedure tBigNtst18(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    local cN        as character
+    local cW        as character
 
-    Local w         AS NUMERIC
-    Local x         AS NUMERIC
-    Local z         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local w         as numeric
+    local x         as numeric
+    local z         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local otBigW    AS OBJECT
+    local o1        as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 6 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2997,11 +3028,11 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
-            __oRTime2:SetStep()
+            __oRTime2:Setstep()
             hb_mutexUnLock(__phMutex)
         endif
         cN:=hb_NtoS(w)
@@ -3025,7 +3056,7 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
         cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3052,22 +3083,22 @@ static procedure tBigNtst18(fhLog AS NUMERIC)
 /*static procedure tBigNtst18*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst19(fhLog AS NUMERIC)
+static procedure tBigNtst19(fhLog as numeric)
 
-    Local cN        AS CHARACTER
+    local cN        as character
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Factoring -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3078,7 +3109,7 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
 
     n:=0
     while (n<=nN_TEST)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3090,7 +3121,7 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
         #endif
         __ConOut(fhLog,cN+':tBigNumber():Factorial()',"RESULT: "+otBigN:Factorial():ExactValue())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3116,25 +3147,25 @@ static procedure tBigNtst19(fhLog AS NUMERIC)
 /*static procedure tBigNtst19*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst20(fhLog AS NUMERIC)
+static procedure tBigNtst20(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cX        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste GCD/LCM 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3143,21 +3174,21 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         cX:=hb_NtoS(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
-            __oRTime2:SetStep(nISQRT)
+            __oRTime2:Setstep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
-        For n:=nN_TEST To 1 Step -nISQRT
+        for n:=nN_TEST to 1 step -nISQRT
             cN:=hb_NtoS(n)
             cW:=otBigN:SetValue(cX):GCD(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
             cW:=otBigN:LCM(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():LCM('+cN+')',"RESULT: "+cW)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3166,7 +3197,7 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next n
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -3187,26 +3218,26 @@ static procedure tBigNtst20(fhLog AS NUMERIC)
 /*static procedure tBigNtst20*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst21(fhLog AS NUMERIC)
+static procedure tBigNtst21(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cX        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local otBigN    as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
        hb_mutexUnLock(__phMutex)
     endif
 
@@ -3218,14 +3249,14 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=0 TO nN_TEST Step nISQRT
+    for n:=0 to nN_TEST step nISQRT
         cN:=hb_NtoS(n)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
-            __oRTime2:SetStep(nISQRT)
+            __oRTime2:Setstep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
-        For x:=0 TO nISQRT Step nISQRT
+        for x:=0 to nISQRT step nISQRT
             cX:=hb_NtoS(x)
             __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_NtoS(n/x))
 #ifndef __ADVPL__
@@ -3244,7 +3275,7 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
             cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Div('+cX+')',"RESULT: "+cW)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3253,7 +3284,7 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next x
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -3278,25 +3309,25 @@ static procedure tBigNtst21(fhLog AS NUMERIC)
 /*static procedure tBigNtst21*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst22(fhLog AS NUMERIC)
+static procedure tBigNtst22(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 1 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3309,9 +3340,9 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
+    for x:=1 to nN_TEST step nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3328,7 +3359,7 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Div(1.5)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3355,25 +3386,25 @@ static procedure tBigNtst22(fhLog AS NUMERIC)
 /*static procedure tBigNtst22*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst23(fhLog AS NUMERIC)
+static procedure tBigNtst23(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cR        as character
 
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local o1        AS OBJECT
-    Local o3        AS OBJECT
-    Local otBigN    AS OBJECT
+    local o1        as object
+    local o3        as object
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ DIV Teste 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3386,8 +3417,8 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for x:=1 to nN_TEST step nISQRT
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3403,7 +3434,7 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
         cR:=otBigN:ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Div(3)',"RESULT: "+cR)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3428,15 +3459,15 @@ static procedure tBigNtst23(fhLog AS NUMERIC)
 /*static procedure tBigNtst23*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst24(fhLog AS NUMERIC)
+static procedure tBigNtst24(fhLog as numeric)
 
-    Local cN        AS CHARACTER
+    local cN        as character
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local otBigN    as object
+    local otBigW    as object
 
     //http://www.javascripter.net/math/calculators/eulertotientfunction.htm
 
@@ -3444,9 +3475,9 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3458,15 +3489,15 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To nN_TEST Step nISQRT
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for n:=1 to nN_TEST step nISQRT
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
         cN:=hb_NtoS(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3489,25 +3520,25 @@ static procedure tBigNtst24(fhLog AS NUMERIC)
 /*static procedure tBigNtst24*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst25(fhLog AS NUMERIC)
+static procedure tBigNtst25(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
+    local cN        as character
+    local cW        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local otBigN    as object
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 1 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(((nISQRT*999)+999)-((nISQRT*999)-999))
-        __oRTime1:SetStep(99)
+        __oRTime1:Setstep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3523,8 +3554,8 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=((nISQRT*999)-999) TO ((nISQRT*999)+999) STEP 99
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for x:=((nISQRT*999)-999) TO ((nISQRT*999)+999) step 99
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3541,7 +3572,7 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
         cW:=otBigW:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3566,25 +3597,25 @@ static procedure tBigNtst25(fhLog AS NUMERIC)
 /*static procedure tBigNtst25*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst26(fhLog AS NUMERIC)
+static procedure tBigNtst26(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste SQRT 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3595,8 +3626,8 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=1 TO nN_TEST Step nISQRT
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for x:=1 to nN_TEST step nISQRT
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3620,7 +3651,7 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
         cW:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3645,23 +3676,23 @@ static procedure tBigNtst26(fhLog AS NUMERIC)
 /*static procedure tBigNtst26*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst27(fhLog AS NUMERIC)
+static procedure tBigNtst27(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Exp 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT+1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -3673,9 +3704,9 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=0 TO nISQRT
+    for x:=0 to nISQRT
         SYMBOL_UNUSED(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3698,7 +3729,7 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
         cW:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cN+':tBigNumber():Exp()',"RESULT: "+cW)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3725,27 +3756,27 @@ static procedure tBigNtst27(fhLog AS NUMERIC)
 /*static procedure tBigNtst27*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst28(fhLog AS NUMERIC)
+static procedure tBigNtst28(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cX        as character
+    local cR        as character
 
-    Local n         AS NUMERIC
-    Local w         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local w         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3757,13 +3788,13 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     //Tem (ou TINHA) um BUG aqui. Servidor __ADVPL__ Fica Maluco se (0^-n) e Senta..........
-    For x:=if(.NOT.(IsHb()),1,0) TO nN_TEST Step nISQRT
+    for x:=if(.NOT.(IsHb()),1,0) to nN_TEST step nISQRT
         cN:=hb_NtoS(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
-        For w:=-nISQRT To 0
+        for w:=-nISQRT To 0
             cW:=hb_NtoS(w)
             n:=x
             n:=(n^w)
@@ -3790,7 +3821,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
             cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3799,7 +3830,7 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next w
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -3822,26 +3853,26 @@ static procedure tBigNtst28(fhLog AS NUMERIC)
 /*static procedure tBigNtst28*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst29(fhLog AS NUMERIC)
+static procedure tBigNtst29(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cX        as character
 
-    Local n         AS NUMERIC
-    Local w         AS NUMERIC
-    Local x         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local w         as numeric
+    local x         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 1 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT)
-        __oRTime1:SetStep(5)
+        __oRTime1:Setstep(5)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3852,14 +3883,14 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For x:=0 TO nISQRT STEP 5
+    for x:=0 to nISQRT step 5
         cN:=hb_NtoS(x)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
-            __oRTime2:SetStep(5)
+            __oRTime2:Setstep(5)
             hb_mutexUnLock(__phMutex)
         endif
-        For w:=0 To nISQRT STEP 5
+        for w:=0 to nISQRT step 5
             cW:=hb_NtoS(w+.5)
             n:=x
             n:=(n^(w+.5))
@@ -3883,7 +3914,7 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
             cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cN+':tBigNumber():Pow('+cW+')',"RESULT: "+cX)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3892,7 +3923,7 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next w
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -3913,18 +3944,18 @@ static procedure tBigNtst29(fhLog AS NUMERIC)
 /*static procedure tBigNtst29*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst30(fhLog AS NUMERIC)
+static procedure tBigNtst30(fhLog as numeric)
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Pow 2 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(2)
         hb_mutexUnLock(__phMutex)
     endif
@@ -3936,8 +3967,8 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To 2
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for n:=1 To 2
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -3952,7 +3983,7 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
             __ConOut(fhLog,"otBigN:nthroot('0.5')","RESULT: "+otBigN:Rnd(2):ExactValue())
         endif
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -3977,31 +4008,31 @@ static procedure tBigNtst30(fhLog AS NUMERIC)
 /*static procedure tBigNtst30*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst31(fhLog AS NUMERIC)
+static procedure tBigNtst31(fhLog as numeric)
 
-    Local cX        AS CHARACTER
+    local cX        as character
 
-    Local nSetDec   AS NUMERIC
+    local nSetDec   as numeric
 
-    Local o0        AS OBJECT
-    Local o1        AS OBJECT
-    Local o2        AS OBJECT
-    Local o3        AS OBJECT
-    Local o4        AS OBJECT
-    Local o5        AS OBJECT
-    Local o6        AS OBJECT
-    Local o7        AS OBJECT
-    Local o8        AS OBJECT
-    Local o9        AS OBJECT
-    Local o10       AS OBJECT
+    local o0        as object
+    local o1        as object
+    local o2        as object
+    local o3        as object
+    local o4        as object
+    local o5        as object
+    local o6        as object
+    local o7        as object
+    local o8        as object
+    local o9        as object
+    local o10       as object
 
-    Local otBigW    AS OBJECT
+    local otBigW    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste LOG 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(13)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4025,7 +4056,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4035,7 +4066,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,__cSep)
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4047,7 +4078,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4056,7 +4087,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log2()',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4068,7 +4099,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4077,7 +4108,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log10()',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4089,7 +4120,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4098,7 +4129,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("1")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4110,7 +4141,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4119,7 +4150,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("2")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4131,7 +4162,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4140,7 +4171,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("3")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4152,7 +4183,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4161,7 +4192,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("4")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4173,7 +4204,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4182,7 +4213,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("5")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4194,7 +4225,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4203,7 +4234,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("6")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4215,7 +4246,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4224,7 +4255,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("7")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4236,7 +4267,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4245,7 +4276,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("8")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4257,7 +4288,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-     if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4266,7 +4297,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     __ConOut(fhLog,'100000000000000000000000000000:tBigNumber():Log("9")',"RESULT: "+cX)
 
     __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4278,7 +4309,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4299,7 +4330,7 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
     FreeObj(@o10)
 
    __ConOut(fhLog,__cSep)
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime2:Calcule()
         __oRTime1:Calcule()
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4326,18 +4357,18 @@ static procedure tBigNtst31(fhLog AS NUMERIC)
 /*static procedure tBigNtst31*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst32(fhLog AS NUMERIC)
+static procedure tBigNtst32(fhLog as numeric)
 
-    Local cN        AS CHARACTER
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cN        as character
+    local cW        as character
+    local cX        as character
 
-    Local n         AS NUMERIC
-    Local w         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local w         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
-    Local otBigW    AS OBJECT
+    local otBigN    as object
+    local otBigW    as object
 
     //Quer comparar o resultado:http://www.gyplclan.com/pt/logar_pt.html
 
@@ -4345,9 +4376,9 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -4363,7 +4394,7 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For w:=0 TO nN_TEST Step nISQRT
+    for w:=0 to nN_TEST step nISQRT
         cW:=hb_NtoS(w)
         otBigW:SetValue(cW)
         __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_NtoS(Log(w)))
@@ -4377,11 +4408,11 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
         cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(INT(MAX(nISQRT,5)/5)+1)
             hb_mutexUnLock(__phMutex)
         endif
-        For n:=0 TO INT(MAX(nISQRT,5)/5)
+        for n:=0 TO INT(MAX(nISQRT,5)/5)
             cN:=hb_NtoS(n)
             cX:=otBigW:SetValue(cW):Log(cN):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
@@ -4393,7 +4424,7 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
             cX:=otBigN:Rnd(Min(__SETDEC__,nACC_SET)):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             __ConOut(fhLog,__cSep)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4402,7 +4433,7 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
             *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
             __ConOut(fhLog,__cSep)
         next n
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -4425,15 +4456,15 @@ static procedure tBigNtst32(fhLog AS NUMERIC)
 /*static procedure tBigNtst32*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst33(fhLog AS NUMERIC)
+static procedure tBigNtst33(fhLog as numeric)
 
-    Local cW        AS CHARACTER
-    Local cX        AS CHARACTER
+    local cW        as character
+    local cX        as character
 
-    Local w         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local w         as numeric
+    local nSetDec   as numeric
 
-    Local otBigW    AS OBJECT
+    local otBigW    as object
 
     //Quer comparar o resultado:http://www.gyplan.com/pt/logar_pt.html
 
@@ -4441,9 +4472,9 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -4454,8 +4485,8 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For w:=0 TO nN_TEST Step nISQRT
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for w:=0 to nN_TEST step nISQRT
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -4463,7 +4494,7 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
         cX:=otBigW:SetValue(cW):Ln():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4488,25 +4519,25 @@ static procedure tBigNtst33(fhLog AS NUMERIC)
 /*static procedure tBigNtst33*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst34(fhLog AS NUMERIC)
+static procedure tBigNtst34(fhLog as numeric)
 
-    Local cN        AS CHARACTER
+    local cN        as character
 
-    Local lPn       AS LOGICAL
-    Local lMR       AS LOGICAL
+    local lPn       as logical
+    local lMR       as logical
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local o2        AS OBJECT
-    Local otBigN    AS OBJECT
-    Local oPrime    AS OBJECT
+    local o2        as object
+    local otBigN    as object
+    local oPrime    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste millerRabin 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining((nISQRT/2)+1)
         __oRTime2:SetRemaining(1)
         hb_mutexUnLock(__phMutex)
@@ -4527,7 +4558,7 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
         if (n<3)
             n+=1
         else
-            __oRTime1:SetStep(2)
+            __oRTime1:Setstep(2)
             n+=2
         endif
         cN:=hb_NtoS(n)
@@ -4536,7 +4567,7 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+if(lMR,"","   "))
         __ConOut(fhLog,cN+':tPrime():IsPrime()',"RESULT: "+cValToChar(lPn)+if(lPn,"","   "))
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4546,7 +4577,7 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
         __ConOut(fhLog,__cSep)
     end while
     oPrime:IsPReset()
-    oPrime:NextPReset()
+    oPrime:nextPReset()
 
     FreeObj(@oPrime)
 
@@ -4570,18 +4601,18 @@ static procedure tBigNtst34(fhLog AS NUMERIC)
 /*static procedure tBigNtst34*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst35(fhLog AS NUMERIC)
+static procedure tBigNtst35(fhLog as numeric)
 
-    Local n         AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local n         as numeric
+    local nSetDec   as numeric
 
-    Local otBigN    AS OBJECT
+    local otBigN    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste RANDOMIZE 0 -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
@@ -4591,8 +4622,8 @@ static procedure tBigNtst35(fhLog AS NUMERIC)
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To nISQRT
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    for n:=1 to nISQRT
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
@@ -4600,7 +4631,7 @@ static procedure tBigNtst35(fhLog AS NUMERIC)
         __ConOut(fhLog,'tBigNumber():Randomize(999999999999,9999999999999)',"RESULT: "+otBigN:Randomize("999999999999","9999999999999"):ExactValue())
         __ConOut(fhLog,'tBigNumber():Randomize(1,9999999999999999999999999999999999999999"',"RESULT: "+otBigN:Randomize("1","9999999999999999999999999999999999999999"):ExactValue())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
@@ -4627,40 +4658,40 @@ static procedure tBigNtst35(fhLog AS NUMERIC)
 /*static procedure tBigNtst35*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst36(fhLog AS NUMERIC)
+static procedure tBigNtst36(fhLog as numeric)
 
-    Local aFibonacci    AS ARRAY
+    local aFibonacci    as array
 
-    Local cN            AS CHARACTER
-    Local cW            AS CHARACTER
+    local cN            as character
+    local cW            as character
 
-    Local n             AS NUMERIC
-    Local x             AS NUMERIC
-    Local nSetDec       AS NUMERIC
+    local n             as numeric
+    local x             as numeric
+    local nSetDec       as numeric
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci -------------- ")
 
     __ConOut(fhLog,"")
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:SetStep(nISQRT)
+        __oRTime1:Setstep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For n:=1 To nN_TEST STEP nISQRT
+    for n:=1 to nN_TEST step nISQRT
         cN:=hb_NtoS(n)
         aFibonacci:=Fibonacci(cN)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(Len(aFibonacci))
             hb_mutexUnLock(__phMutex)
         endif
-        For x:=1 To Len(aFibonacci)
+        for x:=1 To Len(aFibonacci)
             cW:=aFibonacci[x]
             __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(x),"RESULT: "+cW)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 hb_mutexUnLock(__phMutex)
@@ -4670,7 +4701,7 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -4696,17 +4727,17 @@ static procedure tBigNtst36(fhLog AS NUMERIC)
 /*static procedure tBigNtst36*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst37(fhLog AS NUMERIC)
+static procedure tBigNtst37(fhLog as numeric)
 
-    Local aFibonacci    AS ARRAY
+    local aFibonacci    as array
 
-    Local cN            AS CHARACTER
-    Local cF            AS CHARACTER
+    local cN            as character
+    local cF            as character
 
-    Local f             AS NUMERIC
-    Local nD            AS NUMERIC
-    Local nJ            AS NUMERIC
-    Local nSetDec       AS NUMERIC
+    local f             as numeric
+    local nD            as numeric
+    local nJ            as numeric
+    local nSetDec       as numeric
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste Fibonacci x Mersenne-------------- ")
 
@@ -4714,24 +4745,24 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
 
     nJ:=Len(aACN_MERSENNE_POW)
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
        __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     endif
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
-    For nD:=1 To nJ
+    for nD:=1 To nJ
         cN:=aACN_MERSENNE_POW[nD]
         aFibonacci:=Fibonacci(cN)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(Len(aFibonacci))
             hb_mutexUnLock(__phMutex)
         endif
-        For f:=1 To Len(aFibonacci)
+        for f:=1 To Len(aFibonacci)
             cF:=aFibonacci[f]
             __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(f),"RESULT: "+cF)
-            if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
                 hb_mutexUnLock(__phMutex)
@@ -4741,7 +4772,7 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
         __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
         *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
         __ConOut(fhLog,__cSep)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime1:Calcule()
             __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
             hb_mutexUnLock(__phMutex)
@@ -4767,21 +4798,24 @@ static procedure tBigNtst37(fhLog AS NUMERIC)
 /*static procedure tBigNtst37*/
 
 //--------------------------------------------------------------------------------------------------------
-static procedure tBigNtst38(fhLog AS NUMERIC)
+static procedure tBigNtst38(fhLog as numeric)
 
-    Local cM        AS CHARACTER
-    Local cR        AS CHARACTER
+    local cM        as character
+    local cR        as character
 
-    Local nD        AS NUMERIC
-    Local nJ        AS NUMERIC
-    Local nSetDec   AS NUMERIC
+    local nD        as numeric
+    local nJ        as numeric
+    local nSetDec   as numeric
 
     #ifdef __HARBOUR__
-        Local nStep AS NUMERIC
+        local nstep as numeric
+        local ptftBigNtst38  as pointer
+        local ptttBigNtst38  as pointer
+        local lFinalize      as logical
     #endif
 
-    Local otBig2    AS OBJECT
-    Local otBigM    AS OBJECT
+    local otBig2    as object
+    local otBigM    as object
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
@@ -4789,7 +4823,7 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
 
     nJ:=Len(aACN_MERSENNE_POW)
 
-    if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
        __oRTime1:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     endif
@@ -4800,24 +4834,43 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for nD:=1 to nJ
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
            __oRTime2:SetRemaining(1)
            #ifdef __HARBOUR__
-                nStep:=(1/1000)
-                __oRTime2:SetStep(nStep)
-                __oRTime2:ForceStep(.T.)
+                nstep:=(1/1000)
+                __oRTime2:Setstep(nstep)
+                __oRTime2:forcestep(.T.)
            #endif /*__HARBOUR__*/
            hb_mutexUnLock(__phMutex)
         endif
         cM:=aACN_MERSENNE_POW[nD]
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',":...")
-        otBigM:SetValue(otBig2:iPow(cM))
-        cR:=otBigM:OpDec():ExactValue()
+        #ifdef __HARBOUR__
+            lFinalize:=.F.
+            ptftBigNtst38:=@tBigNtst38Thread()
+            ptttBigNtst38:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
+            ptftBigNtst38,@lFinalize,otBig2,cM,otBigM,@cR)
+            while (!lFinalize)
+                if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+                    #ifdef __HARBOUR__
+                        __oRTime2:forcestep(.F.)
+                    #endif /*__HARBOUR__*/
+                    __oRTime2:Calcule()
+                    __oRTime1:Calcule()
+                hb_mutexUnLock(__phMutex)
+        endif
+            end while
+            hb_threadQuitRequest(ptttBigNtst38)
+            hb_ThreadWait(ptttBigNtst38)
+        #else
+            otBigM:SetValue(otBig2:iPow(cM))
+            cR:=otBigM:OpDec():ExactValue()
+        #endif
         otBigM:SetValue("0")
         __ConOut(fhLog,otBig2:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
-        if hb_mutexLock(__phMutex,N_MTX_TIMEOUT)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             #ifdef __HARBOUR__
-                __oRTime2:ForceStep(.F.)
+                __oRTime2:forcestep(.F.)
             #endif /*__HARBOUR__*/
             __oRTime2:Calcule()
             __oRTime1:Calcule()
@@ -4847,10 +4900,38 @@ static procedure tBigNtst38(fhLog AS NUMERIC)
 /*static procedure tBigNtst38*/
 
 #ifdef __HARBOUR__
+
+    static procedure tBigNtst38Thread(lFinalize as logical,otBig2 as object,cM as character,otBigM as object,cR as character)
+
+        local aEvent    as array
+        
+        local oThreads  as object
+
+        //"Share publics and privates with child threads."
+        oThreads:=tBigNThread():New()
+        oThreads:Start(1,HB_THREAD_INHERIT_MEMVARS)
+        aEvent:={@tBigNtst38Eval(),otBig2,cM,otBigM,cR}
+        oThreads:setEvent(1,@aEvent)
+        oThreads:Notify()
+        oThreads:Wait()
+        oThreads:Join()
+
+        cR:=oThreads:getResult(1)
+
+        lFinalize:=.T.
+
+        return
+        
+    static function tBigNtst38Eval(otBig2 as object,cM as character,otBigM as object,cR as character)
+        otBigM:SetValue(otBig2:iPow(cM))
+        cR:=otBigM:OpDec():ExactValue()
+    return(cR)
+
     static function GETCURRENTPROCESSID()
     #if defined( __PLATFORM__WINDOWS )
        return(WAPI_GETCURRENTPROCESSID())
     #else
        return(ExecPIDNum())
     #endif
+ 
  #endif

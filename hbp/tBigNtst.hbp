@@ -7,6 +7,7 @@
 #-cflag=-DHB_TR_LEVEL_DEBUG
 #/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp 
 #xterm -maximized -mk_width +cm -fbx +fullscreen -j +t -cjk_width -e /bin/bash -l -c ./exe/linux/gcc/tBigNtst
+#./exe/linux/gcc/tBigNtst
 
 -mt
 

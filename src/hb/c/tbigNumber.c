@@ -602,31 +602,18 @@
             
             int iCmp=hb_strnicmp(szInd,szOne,n);            
             
+            hb_xfree(szOne);
+            
             while (iCmp&&iCmp>0)
             {
-                    HB_SIZE t=n;
                     const char * pow=tBIGNMult(szRet,szPow,n,y,nB);
                     n=(HB_SIZE)strlen(pow);
-                    if (!(n==t))
-                    {
-                        hb_xfree(szRet);
-                        szRet=tBIGNPadL(pow,n,"0");
-                        hb_xfree(szPow);
-                        szPow=tBIGNPadL(szBas,n,"0");
-                    }
-                    else
-                    {
-                       hb_xmemcpy(szRet,pow,n);
-                    }
-                    t=k;
+                    szRet=tBIGNPadL(pow,n,"0");
+                    szPow=tBIGNPadL(szBas,n,"0");
                     const char * tmp=tBigNiSUB(szInd,1,k,nB);
                     szInd=remLeft(tmp,k,"0");
                     k=(HB_SIZE)strlen(szInd);
-                    if (!(k==t))
-                    {
-                        hb_xfree(szOne);
-                        szOne=tBIGNPadL("1",k,"0");
-                    }
+                    char * szOne=tBIGNPadL("1",k,"0");
                     iCmp=hb_strnicmp(szInd,szOne,k);
                     if (iCmp<=0){
                         break;
@@ -636,7 +623,6 @@
 
             hb_xfree(szPow);
             hb_xfree(szInd);
-            hb_xfree(szOne);
 
             *p=n;
             

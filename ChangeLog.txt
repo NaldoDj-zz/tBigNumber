@@ -2,6 +2,21 @@
  * $Id$
  */
 
+2021-05-05 15:41 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
+  + compile.bat
+  + src/tests/hb/ASCII.art/StationTraffic.ASCII.art
+  * .gitignore
+  * hbp/tBigNtst.hbp
+  * include/hb_tBigNtst.ch
+  * mk/mkHB64.bat
+  * prj/mg/win/64/tBigNumber64.mip
+  * src/common/tbignumber.prg
+  * src/common/tPrime.prg
+  * src/hb/c/tbigNumber.c
+  * src/hb/tBigNSleep.prg
+  * src/tests/hb/tBigNAnim.prg
+  * src/tests/tBigNtst.prg
+
 2019-09-01 20:49 UTC-0300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   - mkvz/env_mk.txt
   - mkvz/env_mkall.txt
