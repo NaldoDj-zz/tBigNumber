@@ -92,7 +92,7 @@
         #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279"+CRLF+"#ACN_MERSENNE_POW=2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
     #else
          //1..38,(#...49) Mersenne prime List
-        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593"+CRLF+"#ACN_MERSENNE_POW=13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
+        #define ACN_MERSENNE_POW "2,3,4,5,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161,74207281,77232917"
     #endif /*__PTCOMPAT__*/
 #else /*__ADVPL__*/
     //1..15,(#...49) Mersenne prime List
@@ -4808,14 +4808,15 @@ static procedure tBigNtst38(fhLog as numeric)
     local nSetDec   as numeric
 
     #ifdef __HARBOUR__
-        local nstep as numeric
         local ptftBigNtst38  as pointer
         local ptttBigNtst38  as pointer
         local lFinalize      as logical
     #endif
 
+#ifndef __HARBOUR__
     local otBig2    as object
     local otBigM    as object
+#endif    
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Mersenne Number -------------- ")
 
@@ -4825,49 +4826,42 @@ static procedure tBigNtst38(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
        __oRTime1:SetRemaining(nJ)
+       __oRTime2:SetRemaining(nJ)
        hb_mutexUnLock(__phMutex)
     endif
 
+#ifndef __HARBOUR__
     otBig2:=tBigNumber():New("2")
     otBigM:=tBigNumber():New("0")
+#endif
 
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
+    ptftBigNtst38:=@tBigNtst38Thread()
+
     for nD:=1 to nJ
-        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-           __oRTime2:SetRemaining(1)
-           #ifdef __HARBOUR__
-                nstep:=(1/1000)
-                __oRTime2:Setstep(nstep)
-                __oRTime2:forcestep(.T.)
-           #endif /*__HARBOUR__*/
-           hb_mutexUnLock(__phMutex)
-        endif
         cM:=aACN_MERSENNE_POW[nD]
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',":...")
         #ifdef __HARBOUR__
             lFinalize:=.F.
-            ptftBigNtst38:=@tBigNtst38Thread()
             ptttBigNtst38:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-            ptftBigNtst38,@lFinalize,otBig2,cM,otBigM,@cR)
+            ptftBigNtst38,@lFinalize,cM,@cR)
             while (!lFinalize)
                 if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-                    #ifdef __HARBOUR__
-                        __oRTime2:forcestep(.F.)
-                    #endif /*__HARBOUR__*/
-                    __oRTime2:Calcule()
-                    __oRTime1:Calcule()
-                hb_mutexUnLock(__phMutex)
-        endif
+                    __oRTime2:forcestep(.F.)
+                    __oRTime2:Calcule(.F.)
+                    __oRTime1:Calcule(.F.)
+                    hb_mutexUnLock(__phMutex)
+                endif
             end while
             hb_threadQuitRequest(ptttBigNtst38)
             hb_ThreadWait(ptttBigNtst38)
         #else
             otBigM:SetValue(otBig2:iPow(cM))
             cR:=otBigM:OpDec():ExactValue()
+            otBigM:SetValue("0")
         #endif
-        otBigM:SetValue("0")
-        __ConOut(fhLog,otBig2:ExactValue()+':tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
+        __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             #ifdef __HARBOUR__
                 __oRTime2:forcestep(.F.)
@@ -4901,32 +4895,54 @@ static procedure tBigNtst38(fhLog as numeric)
 
 #ifdef __HARBOUR__
 
-    static procedure tBigNtst38Thread(lFinalize as logical,otBig2 as object,cM as character,otBigM as object,cR as character)
+    static procedure tBigNtst38Thread(lFinalize as logical,cM as character,cR as character)
 
         local aEvent    as array
+        local aThreads  as array
         
+        local nThread   as numeric
+        local nThreads  as numeric
+        
+        local oM        as object
         local oThreads  as object
+
+        oM:=tBigNumber():New(cM)
+        aThreads:=oM:SplitNumber()[1]
+        nThreads:=len(aThreads)
 
         //"Share publics and privates with child threads."
         oThreads:=tBigNThread():New()
-        oThreads:Start(1,HB_THREAD_INHERIT_MEMVARS)
-        aEvent:={@tBigNtst38Eval(),otBig2,cM,otBigM,cR}
-        oThreads:setEvent(1,@aEvent)
+        oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
+        
+        for nThread:=1 to nThreads
+            cM:=aThreads[nThread]
+            aEvent:={@tBigNtst38Eval(),cM}
+            oThreads:setEvent(nThread,@aEvent)
+        next nThread
+        
         oThreads:Notify()
         oThreads:Wait()
         oThreads:Join()
 
-        cR:=oThreads:getResult(1)
+        oM:SetValue("1")
+        for nThread:=1 to nThreads
+            cM:=oThreads:getResult(nThread)
+            oM*=cM
+        next nThread
+
+        cR:=oM:OpDec():ExactValue()
 
         lFinalize:=.T.
 
         return
         
-    static function tBigNtst38Eval(otBig2 as object,cM as character,otBigM as object,cR as character)
-        otBigM:SetValue(otBig2:iPow(cM))
-        cR:=otBigM:OpDec():ExactValue()
-    return(cR)
-
+    static function tBigNtst38Eval(cM as character)
+        local cR        as character
+        local otBig2    as object
+        otBig2:=tBigNumber():New("2")
+        cR:=otBig2:iPow(cM)
+        return(cR)
+    
     static function GETCURRENTPROCESSID()
     #if defined( __PLATFORM__WINDOWS )
        return(WAPI_GETCURRENTPROCESSID())

@@ -6,7 +6,7 @@
      *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
      *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
      *
-     * Copyright 2013-2016 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
+     * Copyright 2013-2021 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
      * www - http://www.blacktdn.com.br
      *
      * Harbour Project license:
@@ -324,13 +324,11 @@ static s__MTXSQR    AS POINTER
             method className()
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method SetDecimals(nSet AS NUMERIC)
         #else /*__ADVPL__*/
             method SetDecimals(nSet)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method SetValue(uBigN,nBase AS NUMERIC,cRDiv AS CHARACTER,lLZRmv AS LOGICAL,nAcc AS NUMERIC)
@@ -356,7 +354,6 @@ static s__MTXSQR    AS POINTER
             method Abs(lObj)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method Int(lObj AS LOGICAL,lSig AS LOGICAL)
         #else /*__ADVPL__*/
@@ -369,7 +366,6 @@ static s__MTXSQR    AS POINTER
             method Dec(lObj,lSig,lNotZ)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method eq(uBigN)
         #else /*__ADVPL__*/
@@ -424,7 +420,6 @@ static s__MTXSQR    AS POINTER
             method ibtw(uiBigS,uiBigE)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method Max(uBigN)
         #else /*__ADVPL__*/
@@ -442,7 +437,6 @@ static s__MTXSQR    AS POINTER
         #else /*__ADVPL__*/
             method Add(uBigN)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method Plus(uBigN) INLINE self:Add(uBigN)
@@ -458,7 +452,6 @@ static s__MTXSQR    AS POINTER
             method iPlus(uBigN)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method Sub(uBigN)
             method Minus(uBigN) INLINE self:Sub(uBigN)
@@ -466,7 +459,6 @@ static s__MTXSQR    AS POINTER
             method Sub(uBigN)
             method Minus(uBigN)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method iSub(uBigN)
@@ -476,7 +468,6 @@ static s__MTXSQR    AS POINTER
             method iMinus(uBigN)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method Mult(uBigN)
             method Multiply(uBigN) INLINE self:Mult(uBigN)
@@ -484,7 +475,6 @@ static s__MTXSQR    AS POINTER
             method Mult(uBigN)
             method Multiply(uBigN)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method iMult(uBigN)
@@ -494,7 +484,6 @@ static s__MTXSQR    AS POINTER
             method iMultiply(uBigN)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method egMult(uBigN)
             method egMultiply(uBigN) INLINE self:egMult(uBigN)
@@ -503,7 +492,6 @@ static s__MTXSQR    AS POINTER
             method egMultiply(uBigN)
         #endif /*__HARBOUR__*/
 
-
         #ifdef __HARBOUR__
             method rMult(uBigN)
             method rMultiply(uBigN) INLINE self:rMult(uBigN)
@@ -511,7 +499,6 @@ static s__MTXSQR    AS POINTER
             method rMult(uBigN)
             method rMultiply(uBigN)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method Div(uBigN,lFloat AS LOGICAL)
@@ -771,6 +758,10 @@ static s__MTXSQR    AS POINTER
             method Fibonacci()
         #else /*__ADVPL__*/
             method Fibonacci()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method splitNumber()
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -1049,7 +1040,7 @@ endclass
     method New(uBigN,nBase) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        if s__lstbNSet==NIL
+        if (s__lstbNSet==NIL)
             DEFAULT s__MTXcN0:=hb_mutexCreate()
             DEFAULT s__MTXcN9:=hb_mutexCreate()
             DEFAULT s__MTXACC:=hb_mutexCreate()
@@ -1076,17 +1067,17 @@ endclass
         DEFAULT nBase:=__NBASE__
         self:nBase:=nBase
 
-        if s__nDecSet==NIL
+        if (s__nDecSet==NIL)
             self:SetDecimals()
         endif
 
-        if s__nthRAcc==NIL
+        if (s__nthRAcc==NIL)
             self:nthRootAcc()
         endif
 
         // -------------------- assign thread static values -------------------------
         #ifdef __THREAD_STATIC__
-            if ths_lsdSet==NIL
+            if (ths_lsdSet==NIL)
                 __Initsthd()
             endif
         #endif //__THREAD_STATIC__
@@ -1095,7 +1086,7 @@ endclass
         self:SetValue(uBigN,nBase)
 
          // -------------------- assign static values --------------------------------
-        if s__lstbNSet==NIL
+        if (s__lstbNSet==NIL)
             __InitstbN(nBase)
             self:Divmethod(__DIVMETHOD__)
         endif
@@ -1163,7 +1154,7 @@ endclass
 
         if .not.(cDec==NIL)
             self:lNeg:=Left(cDec,1)=="-"
-            if self:lNeg
+            if (self:lNeg)
                 cDec:=SubStr(cDec,2)
             endif
             self:cDec:=cDec
@@ -1194,7 +1185,7 @@ endclass
 #endif /*__HARBOUR__*/
         if .not.(cInt==NIL)
             self:lNeg:=Left(cInt,1)=="-"
-            if self:lNeg
+            if (self:lNeg)
                 cInt:=SubStr(cInt,2)
             endif
             self:cInt:=cInt
@@ -1282,7 +1273,7 @@ endclass
                 self:lNeg:=.F.
                 self:cSig:=""
             endif
-            if lNeg
+            if (lNeg)
                 self:cSig:="-"
             endif
         endif
@@ -1577,7 +1568,7 @@ endclass
 
         cType:=ValType(uBigN)
 
-        if cType=="O"
+        if (cType=="O")
 
             DEFAULT cRDiv:=uBigN:cRDiv
 
@@ -1613,7 +1604,7 @@ endclass
 
             #endif
 
-        elseif cType=="A"
+        elseif (cType=="A")
 
             DEFAULT cRDiv:=uBigN[3][2]
 
@@ -1640,15 +1631,15 @@ endclass
 
             #endif
 
-        elseif cType=="C"
+        elseif (cType=="C")
 
-            while " "$uBigN
+            while (" "$uBigN)
                 uBigN:=StrTran(uBigN," ","")
             end while
 
             self:lNeg:=Left(uBigN,1)=="-"
 
-            if self:lNeg
+            if (self:lNeg)
                 uBigN:=SubStr(uBigN,2)
                 self:cSig:="-"
             else
@@ -1663,32 +1654,32 @@ endclass
             self:cDec:="0"
 
             do case
-            case nFP==0
+            case (nFP==0)
                 self:cInt:=uBigN
                 self:cDec:="0"
-            case nFP==1
+            case (nFP==1)
                 self:cInt:="0"
                 self:cDec:=SubStr(uBigN,nFP+1)
-                if "0"==Left(self:cDec,1)
+                if ("0"==Left(self:cDec,1))
                     nFP:=hb_bLen(self:cDec)
                     s__IncS0(nFP)
-                    if self:cDec==Left(s__cN0,nFP)
+                    if (self:cDec==Left(s__cN0,nFP))
                         self:cDec:="0"
                     endif
                 endif
             otherwise
                 self:cInt:=Left(uBigN,nFP-1)
                 self:cDec:=SubStr(uBigN,nFP+1)
-                if "0"==Left(self:cDec,1)
+                if ("0"==Left(self:cDec,1))
                     nFP:=hb_bLen(self:cDec)
                     s__IncS0(nFP)
-                    if self:cDec==Left(s__cN0,nFP)
+                    if (self:cDec==Left(s__cN0,nFP))
                         self:cDec:="0"
                     endif
                 endif
             endcase
 
-            if self:cInt=="0".and.(self:cDec=="0".or.self:cDec=="")
+            if (self:cInt=="0".and.(self:cDec=="0".or.self:cDec==""))
                 self:lNeg:=.F.
                 self:cSig:=""
             endif
@@ -1698,24 +1689,24 @@ endclass
 
         endif
 
-        if self:cInt==""
+        if (self:cInt=="")
             self:cInt:="0"
             self:nInt:=1
         endif
 
-        if self:cDec==""
+        if (self:cDec=="")
             self:cDec:="0"
             self:nDec:=1
         endif
 
-        if Empty(cRDiv)
+        if (Empty(cRDiv))
             cRDiv:="0"
         endif
         self:cRDiv:=cRDiv
 
         DEFAULT lLZRmv:=(self:nBase==__NBASE__)
-        if lLZRmv
-            if self:nInt>1.and.Left(self:cInt,1)=="0"
+        if (lLZRmv)
+            if (self:nInt>1.and.Left(self:cInt,1)=="0")
                 self:cInt:=RemLeft(self:cInt,"0")
                 self:nInt:=hb_bLen(self:cInt)
                 if (self:nInt==0)
@@ -1726,10 +1717,10 @@ endclass
         endif
 
         DEFAULT nAcc:=s__nDecSet
-        if self:nDec>nAcc
+        if (self:nDec>nAcc)
             self:nDec:=nAcc
             self:cDec:=Left(self:cDec,self:nDec)
-            if self:cDec==""
+            if (self:cDec=="")
                 self:cDec:="0"
                 self:nDec:=1
             endif
@@ -1771,7 +1762,7 @@ endclass
         uNR+="."
         uNR+=self:cDec
 
-        if lObj
+        if (lObj)
             uNR:=tBigNumber():New(uNR)
         endif
 
@@ -1811,12 +1802,12 @@ endclass
         uNR+=self:cInt
         cDec:=self:Dec(NIL,NIL,self:nBase==__NBASE__)
 
-        if .not.(cDec=="")
+        if (.not.(cDec==""))
             uNR+="."
             uNR+=cDec
         endif
 
-        if lObj
+        if (lObj)
             uNR:=tBigNumber():New(uNR)
         endif
 
@@ -1864,7 +1855,7 @@ endclass
         DEFAULT lObj:=.F.
         DEFAULT lSig:=.F.
         uNR:=if(lSig,self:cSig,"")+self:cInt
-        if lObj
+        if (lObj)
             uNR:=tBigNumber():New(uNR)
         endif
         return(uNR)
@@ -1900,16 +1891,16 @@ endclass
         cDec:=self:cDec
 
         DEFAULT lNotZ:=.F.
-        if lNotZ
+        if (lNotZ)
             nDec:=self:nDec
-            while Right(cDec,1)=="0"
+            while (Right(cDec,1)=="0")
                 cDec:=Left(cDec,--nDec)
             end while
         endif
 
         DEFAULT lObj:=.F.
         DEFAULT lSig:=.F.
-        if lObj
+        if (lObj)
             uNR:=tBigNumber():New(if(lSig,self:cSig,"")+"0."+cDec)
         else
             uNR:=if(lSig,self:cSig,"")+cDec
@@ -2002,17 +1993,17 @@ endclass
         ogtN2:=s__o0:Clone()
         ogtN2:SetValue(uBigN)
 
-        if ogtN1:lNeg.or.ogtN2:lNeg
-            if ogtN1:lNeg.and.ogtN2:lNeg
+        if (ogtN1:lNeg.or.ogtN2:lNeg)
+            if (ogtN1:lNeg.and.ogtN2:lNeg)
                 ogtN1:Normalize(@ogtN2)
                 #ifdef __PTCOMPAT__
                     lgt:=ogtN1:GetValue(.T.)<ogtN2:GetValue(.T.)
                 #else
                     lgt:=(__tBIGNmemcmp(ogtN1:GetValue(.T.),ogtN2:GetValue(.T.))==(-1))
                 #endif
-            elseif ogtN1:lNeg.and.(.not.(ogtN2:lNeg))
+            elseif (ogtN1:lNeg.and.(.not.(ogtN2:lNeg)))
                 lgt:=.F.
-            elseif .not.(ogtN1:lNeg).and.ogtN2:lNeg
+            elseif (.not.(ogtN1:lNeg).and.ogtN2:lNeg)
                 lgt:=.T.
             endif
         else
@@ -2054,17 +2045,17 @@ endclass
         oltN2:=s__o0:Clone()
         oltN2:SetValue(uBigN)
 
-        if oltN1:lNeg.or.oltN2:lNeg
-            if oltN1:lNeg.and.oltN2:lNeg
+        if (oltN1:lNeg.or.oltN2:lNeg)
+            if (oltN1:lNeg.and.oltN2:lNeg)
                 oltN1:Normalize(@oltN2)
                 #ifdef __PTCOMPAT__
                     llt:=oltN1:GetValue(.T.)>oltN2:GetValue(.T.)
                 #else
                     llt:=(__tBIGNmemcmp(oltN1:GetValue(.T.),oltN2:GetValue(.T.))==1)
                 #endif
-            elseif oltN1:lNeg.and.(.not.(oltN2:lNeg))
+            elseif (oltN1:lNeg.and.(.not.(oltN2:lNeg)))
                 llt:=.T.
-            elseif .not.(oltN1:lNeg).and.oltN2:lNeg
+            elseif (.not.(oltN1:lNeg).and.oltN2:lNeg)
                 llt:=.F.
             endif
         else
@@ -2152,7 +2143,7 @@ endclass
         #endif
 
         leq:=ocmpN1:lNeg==ocmpN2:lNeg
-        if leq
+        if (leq)
             #ifndef __PTCOMPAT__
                 ocmpN1:Normalize(@ocmpN2)
             #endif
@@ -2164,12 +2155,12 @@ endclass
             leq:=iCmp==0
         endif
 
-        if leq
+        if (leq)
             nCmp:=0
         else
-            if ocmpN1:lNeg.or.ocmpN2:lNeg
-                if ocmpN1:lNeg.and.ocmpN2:lNeg
-                    if iCmp==NIL
+            if (ocmpN1:lNeg.or.ocmpN2:lNeg)
+                if (ocmpN1:lNeg.and.ocmpN2:lNeg)
+                    if (iCmp==NIL)
                         #ifndef __PTCOMPAT__
                             ocmpN1:Normalize(@ocmpN2)
                         #endif
@@ -2180,9 +2171,9 @@ endclass
                         #endif
                     endif
                     llt:=iCmp==1
-                elseif ocmpN1:lNeg.and.(.not.(ocmpN2:lNeg))
+                elseif (ocmpN1:lNeg.and.(.not.(ocmpN2:lNeg)))
                     llt:=.T.
-                elseif .not.(ocmpN1:lNeg).and.ocmpN2:lNeg
+                elseif (.not.(ocmpN1:lNeg).and.ocmpN2:lNeg)
                     llt:=.F.
                 endif
             else
@@ -2191,7 +2182,7 @@ endclass
                 #endif
                 llt:=iCmp==-1
             endif
-            if llt
+            if (llt)
                 nCmp:=-1
             else
                 nCmp:=1
@@ -2237,12 +2228,12 @@ endclass
         local oibtwS    AS OBJECT
         local oibtwE    AS OBJECT
         lbtw:=.F.
-        if self:Dec(.T.,.F.,.T.):eq(s__o0)
+        if (self:Dec(.T.,.F.,.T.):eq(s__o0))
             oibtwS:=s__o0:Clone()
             oibtwS:SetValue(uiBigS)
             oibtwE:=s__o0:Clone()
             oibtwE:SetValue(uiBigE)
-            if oibtwS:Dec(.T.,.F.,.T.):eq(s__o0).and.oibtwE:Dec(.T.,.F.,.T.):eq(s__o0)
+            if (oibtwS:Dec(.T.,.F.,.T.):eq(s__o0).and.oibtwE:Dec(.T.,.F.,.T.):eq(s__o0))
                 lbtw:=self:cmp(oibtwS)>=0.and.self:cmp(oibtwE)<=0
             endif
         endif
@@ -2265,7 +2256,7 @@ endclass
 #endif /*__HARBOUR__*/
         local oMax  AS OBJECT
         oMax:=tBigNumber():New(uBigN)
-        if self:gt(oMax)
+        if (self:gt(oMax))
             oMax:SetValue(self)
         endif
         return(oMax)
@@ -2287,7 +2278,7 @@ endclass
 #endif /*__HARBOUR__*/
         local oMin  AS OBJECT
         oMin:=tBigNumber():New(uBigN)
-        if self:lt(oMin)
+        if (self:lt(oMin))
             oMin:SetValue(self)
         endif
         return(oMin)
@@ -2346,7 +2337,7 @@ endclass
 
         lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
-        if lNeg
+        if (lNeg)
             lAdd:=.F.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
@@ -2354,7 +2345,7 @@ endclass
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
-            if lInv
+            if (lInv)
                 cNT:=cN1
                 cN1:=cN2
                 cN2:=cNT
@@ -2365,7 +2356,7 @@ endclass
             lNeg:=oadN1:lNeg
         endif
 
-        if lAdd
+        if (lAdd)
             cNT:=Add(cN1,cN2,nSize,self:nBase)
         else
             cNT:=Sub(cN1,cN2,nSize,self:nBase)
@@ -2381,7 +2372,7 @@ endclass
         oadNR:=s__o0:Clone()
         oadNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             oadNR:__cSig("-")
         endif
 
@@ -2434,7 +2425,7 @@ endclass
 
         lNeg:=(oadN1:lNeg.and.(.not.(oadN2:lNeg))).or.(.not.(oadN1:lNeg).and.oadN2:lNeg)
 
-        if lNeg
+        if (lNeg)
             lAdd:=.F.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
@@ -2442,7 +2433,7 @@ endclass
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
-            if lInv
+            if (lInv)
                 cNT:=cN1
                 cN1:=cN2
                 cN2:=cNT
@@ -2453,7 +2444,7 @@ endclass
             lNeg:=oadN1:lNeg
         endif
 
-        if lAdd
+        if (lAdd)
             cNT:=Add(cN1,cN2,nSize,self:nBase)
         else
             cNT:=Sub(cN1,cN2,nSize,self:nBase)
@@ -2462,7 +2453,7 @@ endclass
         oadNR:=s__o0:Clone()
         oadNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             oadNR:__cSig("-")
         endif
 
@@ -2523,7 +2514,7 @@ endclass
 
         lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
-        if lNeg
+        if (lNeg)
             lSub:=.F.
             lNeg:=osbN1:lNeg
         else
@@ -2534,7 +2525,7 @@ endclass
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=osbN1:lNeg.or.lInv
-            if lInv
+            if (lInv)
                 cNT:=cN1
                 cN1:=cN2
                 cN2:=cNT
@@ -2542,7 +2533,7 @@ endclass
             endif
         endif
 
-        if lSub
+        if (lSub)
             cNT:=Sub(cN1,cN2,nSize,self:nBase)
         else
             cNT:=Add(cN1,cN2,nSize,self:nBase)
@@ -2558,7 +2549,7 @@ endclass
         osbNR:=s__o0:Clone()
         osbNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             osbNR:__cSig("-")
         endif
 
@@ -2611,7 +2602,7 @@ endclass
 
         lNeg:=(osbN1:lNeg.and.(.not.(osbN2:lNeg))).or.(.not.(osbN1:lNeg).and.osbN2:lNeg)
 
-        if lNeg
+        if (lNeg)
             lSub:=.F.
             lNeg:=osbN1:lNeg
         else
@@ -2622,7 +2613,7 @@ endclass
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=osbN1:lNeg.or.lInv
-            if lInv
+            if (lInv)
                 cNT:=cN1
                 cN1:=cN2
                 cN2:=cNT
@@ -2630,7 +2621,7 @@ endclass
             endif
         endif
 
-        if lSub
+        if (lSub)
             cNT:=Sub(cN1,cN2,nSize,self:nBase)
         else
             cNT:=Add(cN1,cN2,nSize,self:nBase)
@@ -2639,7 +2630,7 @@ endclass
         osbNR:=s__o0:Clone()
         osbNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             osbNR:__cSig("-")
         endif
 
@@ -2704,7 +2695,7 @@ endclass
 
         cNT:=Mult(cN1,cN2,nSize,self:nBase)
 
-        if nDec>0
+        if (nDec>0)
             cDec:=Right(cNT,nDec)
             cInt:=Left(cNT,hb_bLen(cNT)-nDec)
             cNT:=cInt
@@ -2719,7 +2710,7 @@ endclass
 
         omtNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             omtNR:__cSig("-")
         endif
 
@@ -2779,7 +2770,7 @@ endclass
         omtNR:=s__o0:Clone()
         omtNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             omtNR:__cSig("-")
         endif
 
@@ -2856,7 +2847,7 @@ endclass
 
         omtNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             omtNR:__cSig("-")
         endif
 
@@ -2933,7 +2924,7 @@ endclass
 
         omtNR:SetValue(cNT)
 
-        if lNeg
+        if (lNeg)
             omtNR:__cSig("-")
         endif
 
@@ -3022,33 +3013,33 @@ endclass
 
             nAcc:=s__nDecSet
 
-            if s__nDivMTD==2
+            if (s__nDivMTD==2)
                 odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
             else
                 odvNR:SetValue(egDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
             endif
 
-            if lFloat
+            if (lFloat)
 
                 odvRD:=s__o0:Clone()
                 odvRD:SetValue(odvNR:cRDiv,NIL,NIL,.F.)
 
-                if odvRD:gt(s__o0)
+                if (odvRD:gt(s__o0))
 
                     cDec:=""
 
                     odvN2:SetValue(cN2)
 
-                    while odvRD:lt(odvN2)
+                    while (odvRD:lt(odvN2))
                         odvRD:cInt+="0"
                         odvRD:nInt++
                         odvRD:nSize++
-                        if odvRD:lt(odvN2)
+                        if (odvRD:lt(odvN2))
                             cDec+="0"
                         endif
                     end while
 
-                    while odvRD:gte(odvN2)
+                    while (odvRD:gte(odvN2))
 
                         odvRD:Normalize(@odvN2)
 
@@ -3058,7 +3049,7 @@ endclass
                         cN2:=odvN2:cInt
                         cN2+=odvN2:cDec
 
-                        if s__nDivMTD==2
+                        if (s__nDivMTD==2)
                             odvRD:SetValue(ecDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
                         else
                             odvRD:SetValue(egDiv(cN1,cN2,odvRD:nSize,odvRD:nBase,nAcc,lFloat))
@@ -3070,17 +3061,17 @@ endclass
                         odvRD:SetValue(odvRD:cRDiv,NIL,NIL,.F.)
                         odvRD:SetValue(odvRD:ExactValue(.T.))
 
-                        if odvRD:eq(s__o0).or.nDec>=nAcc
+                        if (odvRD:eq(s__o0).or.nDec>=nAcc)
                             exit
                         endif
 
                         odvN2:SetValue(cN2)
 
-                        while odvRD:lt(odvN2)
+                        while (odvRD:lt(odvN2))
                             odvRD:cInt+="0"
                             odvRD:nInt++
                             odvRD:nSize++
-                            if odvRD:lt(odvN2)
+                            if (odvRD:lt(odvN2))
                                 cDec+="0"
                             endif
                         end while
@@ -3097,7 +3088,7 @@ endclass
 
             endif
 
-            if lNeg
+            if (lNeg)
                 odvNR:__cSig("-")
             endif
 
@@ -3149,9 +3140,9 @@ endclass
         local nCmp  AS NUMERIC
         oMod:=tBigNumber():New(uBigN)
         nCmp:=self:cmp(oMod)
-        if nCmp==-1
+        if (nCmp==-1)
             oMod:SetValue(self)
-        elseif nCmp==0
+        elseif (nCmp==0)
             oMod:SetValue(s__o0)
         else
             oMod:SetValue(self:Div(oMod,.F.))
@@ -3207,36 +3198,36 @@ endclass
             opwNP:=s__o0:Clone()
             lPoWN:=opwNP:SetValue(uBigN):lt(s__o0)
 
-            if oSelf:eq(s__o0).and.opwNP:eq(s__o0)
+            if (oSelf:eq(s__o0).and.opwNP:eq(s__o0))
                 opwNR:SetValue(s__o1)
                 break
             endif
 
-            if oSelf:eq(s__o0)
+            if (oSelf:eq(s__o0))
                 opwNR:SetValue(s__o0)
                 break
             endif
 
-            if opwNP:eq(s__o0)
+            if (opwNP:eq(s__o0))
                 opwNR:SetValue(s__o1)
                 break
             endif
 
-            if oSelf:eq(s__o1)
+            if (oSelf:eq(s__o1))
                 opwNR:SetValue(s__o1)
                 break
             endif
 
             opwNR:SetValue(oSelf)
 
-            if s__o1:eq(opwNP:SetValue(opwNP:Abs()))
+            if (s__o1:eq(opwNP:SetValue(opwNP:Abs())))
                 break
             endif
 
             opwA:=s__o0:Clone()
             lPowF:=opwA:SetValue(opwNP:cDec):gt(s__o0)
 
-            if lPowF
+            if (lPowF)
 
                 cPowA:=opwNP:cInt+opwNP:Dec(NIL,NIL,.T.)
                 opwA:SetValue(cPowA)
@@ -3250,7 +3241,7 @@ endclass
                 cPowB:=cM10
 
                 opwB:=s__o0:Clone()
-                if opwB:SetValue(cPowB):gt(s__o1)
+                if (opwB:SetValue(cPowB):gt(s__o1))
                     opwGCD:=s__o0:Clone()
                     opwGCD:SetValue(opwA:GCD(opwB))
                     opwA:SetValue(opwA:Div(opwGCD))
@@ -3266,13 +3257,13 @@ endclass
             DEFAULT lIPower:=.F.
             opwNR:SetValue(Power(opwNR,opwNP,lIPower))
 
-            if lPowF
+            if (lPowF)
                 opwNR:SetValue(opwNR:nthRoot(opwB))
             endif
 
         end sequence
 
-        if lPoWN
+        if (lPoWN)
             opwNR:SetValue(s__o1:Div(opwNR))
         endif
 
@@ -3377,7 +3368,7 @@ endclass
 
             oeTthD:=s__o0:Clone()
 
-            if .not.(lforce)
+            if (.not.(lforce))
 
                 oeTthD:SetValue(__eTthD())
 
@@ -3387,7 +3378,7 @@ endclass
 
             oBigNC:=self:Clone()
 
-            if oBigNC:eq(s__o0)
+            if (oBigNC:eq(s__o0))
                 oBigNC:SetValue(s__o1)
             endif
 
@@ -3467,7 +3458,7 @@ endclass
 
             lforce:=.F.    //TODO: Implementar o calculo.
 
-            if .not.(lforce)
+            if (.not.(lforce))
 
                 oPITthD:=s__o0:Clone()
                 oPITthD:SetValue(__PITthD())
@@ -3509,16 +3500,16 @@ endclass
         oX:=self:Clone()
         oX:SetValue(oY:Max(self))
 
-        if oY:eq(s__o0)
+        if (oY:eq(s__o0))
             oGCD:=oX
         else
             oGCD:=oY:Clone()
-            if oX:lte(s__oMinGCD).and.oY:lte(s__oMinGCD)
+            if (oX:lte(s__oMinGCD).and.oY:lte(s__oMinGCD))
                 oGCD:SetValue(cGCD(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
             else
-                while .T.
+                while (.T.)
                     oY:SetValue(oX:Mod(oY))
-                    if oY:eq(s__o0)
+                    if (oY:eq(s__o0))
                         exit
                     endif
                     oX:SetValue(oGCD)
@@ -3540,12 +3531,12 @@ static function cGCD(nX AS NUMERIC,nY AS NUMERIC)
         nGCD:=nX
         nX:=Max(nY,nGCD)
         nY:=Min(nGCD,nY)
-        if nY==0
+        if (nY==0)
             nGCD:=nX
         else
             nGCD:=nY
-            while .T.
-                if (nY:=(nX%nY))==0
+            while (.T.)
+                if ((nY:=(nX%nY))==0)
                     exit
                 endif
                 nX:=nGCD
@@ -3585,25 +3576,25 @@ static function cGCD(nX AS NUMERIC,nY AS NUMERIC)
         oX:=self:Clone()
         oY:=tBigNumber():New(uBigN)
         oLCM:=s__o1:Clone()
-        if oX:nInt<=s__nMinLCM.and.oY:nInt<=s__nMinLCM
+        if (oX:nInt<=s__nMinLCM.and.oY:nInt<=s__nMinLCM)
             oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
         else
             oI:=s__o2:Clone()
-            while .T.
+            while (.T.)
                lMX:=oX:Mod(oI):eq(s__o0)
                lMY:=oY:Mod(oI):eq(s__o0)
-                while lMX.or.lMY
+                while (lMX.or.lMY)
                     oLCM:SetValue(oLCM:Mult(oI))
-                    if lMX
+                    if (lMX)
                         oX:SetValue(oX:Div(oI,.F.))
                         lMX:=oX:Mod(oI):eq(s__o0)
                     endif
-                    if lMY
+                    if (lMY)
                         oY:SetValue(oY:Div(oI,.F.))
                         lMY:=oY:Mod(oI):eq(s__o0)
                     endif
                 end while
-                if oX:eq(s__o1).and.oY:eq(s__o1)
+                if (oX:eq(s__o1).and.oY:eq(s__o1))
                     exit
                 endif
                 oI:OpInc()
@@ -3631,21 +3622,21 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         nLCM:=1
         nI:=2
 
-        while .T.
+        while (.T.)
             lMX:=(nX%nI)==0
             lMY:=(nY%nI)==0
-            while lMX.or.lMY
+            while (lMX.or.lMY)
                 nLCM *=nI
-                if lMX
+                if (lMX)
                     nX:=Int(nX/nI)
                     lMX:=(nX%nI)==0
                 endif
-                if lMY
+                if (lMY)
                     nY:=Int(nY/nI)
                     lMY:=(nY%nI)==0
                 endif
             end while
-            if nX==1.and.nY==1
+            if (nX==1.and.nY==1)
                 exit
             endif
             ++nI
@@ -3693,22 +3684,22 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 break
             endif
 
-            if oRootB:lNeg
+            if (oRootB:lNeg)
                 break
             endif
 
-            if oRootB:eq(s__o1)
+            if (oRootB:eq(s__o1))
                 othRoot:SetValue(s__o1)
                 break
             endif
 
             oRootE:=tBigNumber():New(uBigN)
 
-            if oRootE:eq(s__o0)
+            if (oRootE:eq(s__o0))
                 break
             endif
 
-            if oRootE:eq(s__o1)
+            if (oRootE:eq(s__o1))
                 othRoot:SetValue(oRootB)
                 break
             endif
@@ -3773,26 +3764,26 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             othRoot:=s__o0:Clone()
 
             oRootB:=self:Clone()
-            if oRootB:eq(s__o0)
+            if (oRootB:eq(s__o0))
                 break
             endif
 
-            if oRootB:lNeg
+            if (oRootB:lNeg)
                 break
             endif
 
-            if oRootB:eq(s__o1)
+            if (oRootB:eq(s__o1))
                 othRoot:SetValue(s__o1)
                 break
             endif
 
             oRootE:=tBigNumber():New(uBigN)
 
-            if oRootE:eq(s__o0)
+            if (oRootE:eq(s__o0))
                 break
             endif
 
-            if oRootE:eq(s__o1)
+            if (oRootE:eq(s__o1))
                 othRoot:SetValue(oRootB)
                 break
             endif
@@ -3809,7 +3800,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
             lDec:=oRootB:Dec(.T.):gt(s__o0)
 
-            if lDec
+            if (lDec)
 
                 nZS:=hb_bLen(oRootB:Dec(NIL,NIL,.T.))
                 s__IncS0(nZS)
@@ -3829,12 +3820,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
             nPFs:=tBIGNaLen(aIPF)
 
-            if nPFs>0
+            if (nPFs>0)
                 othRoot:SetValue(s__o1)
                 othRootD:=s__o0:Clone()
                 oRootT:SetValue(s__o0)
                 for nPF:=1 to nPFs
-                    if oRootE:eq(aIPF[nPF][2])
+                    if (oRootE:eq(aIPF[nPF][2]))
                         othRoot:SetValue(othRoot:Mult(aIPF[nPF][1]))
                     else
                         oRootT:SetValue(aIPF[nPF][1])
@@ -3843,12 +3834,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                         othRoot:SetValue(othRoot:Mult(oRootT))
                     endif
                 next nPF
-                if .not.(Empty(aDPF))
+                if (.not.(Empty(aDPF)))
                     nPFs:=tBIGNaLen(aDPF)
-                    if nPFs>0
+                    if (nPFs>0)
                         othRootD:SetValue(s__o1)
                         for nPF:=1 to nPFs
-                            if oRootE:eq(aDPF[nPF][2])
+                            if (oRootE:eq(aDPF[nPF][2]))
                                 othRootD:SetValue(othRootD:Mult(aDPF[nPF][1]))
                             else
                                 oRootT:SetValue(aDPF[nPF][1])
@@ -3857,7 +3848,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                                 othRootD:SetValue(othRootD:Mult(oRootT))
                             endif
                         next nPF
-                        if othRootD:gt(s__o0)
+                        if (othRootD:gt(s__o0))
                             othRoot:SetValue(othRoot:Div(othRootD))
                         endif
                     endif
@@ -3893,12 +3884,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         begin sequence
 
             oSQRT:=self:Clone()
-            if oSQRT:lte(oSQRT:SysSQRT())
+            if (oSQRT:lte(oSQRT:SysSQRT()))
                 oSQRT:SetValue(__SQRT(hb_ntos(Val(oSQRT:GetValue()))))
                 break
             endif
 
-            if oSQRT:eq(s__o0)
+            if (oSQRT:eq(s__o0))
                 break
             endif
 
@@ -3928,10 +3919,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         local cType AS CHARACTER
 
         cType:=ValType(uSet)
-        if ( cType$"C|N|O" )
-            if hb_mutexLock(s__MTXSQR)
+        if (cType$"C|N|O")
+            if (hb_mutexLock(s__MTXSQR))
                 s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
-                if s__SysSQRT:gt(MAX_SYS_SQRT)
+                if (s__SysSQRT:gt(MAX_SYS_SQRT))
                     s__SysSQRT:SetValue(MAX_SYS_SQRT)
                 endif
                 hb_MutexUnLock(s__MTXSQR)
@@ -4046,12 +4037,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         oT:SetValue(uBigNB)
 
         noTcmp1:=oT:cmp(s__o1)
-        if noTcmp1==0
+        if (noTcmp1==0)
             return(s__o0:Clone())
         endif
 
         lflag:=.F.
-        if s__o0:lt(oT).and.noTcmp1==-1
+        if (s__o0:lt(oT).and.noTcmp1==-1)
              lflag:=.not.(lflag)
              oT:__cSig("")
              oT:SetValue(s__o1:Div(oT))
@@ -4060,7 +4051,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         oI:=s__o1:Clone()
         oY:=s__o0:Clone()
-        while oX:gt(oT).and.noTcmp1==1
+        while (oX:gt(oT).and.noTcmp1==1)
            oY:SetValue(oY:Add(oI))
            oX:SetValue(oX:Div(oT))
         end while
@@ -4077,9 +4068,9 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         oLT:=s__o0:Clone()
         noTcmp1:=oT:cmp(s__o1)
 
-        while noTcmp1==1
+        while (noTcmp1==1)
 
-            while oX:gt(oT).and.noTcmp1==1
+            while (oX:gt(oT).and.noTcmp1==1)
                 oY:SetValue(oY:Add(oI))
                 oX:SetValue(oX:Div(oT))
             end while
@@ -4092,7 +4083,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
             oT:SetValue(oT:nthRoot(s__o2))
 
-            if oT:eq(oLT)
+            if (oT:eq(oLT))
                 exit
             endif
 
@@ -4104,7 +4095,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         end while
 
-        if lflag
+        if (lflag)
             oS:__cSig("-")
         endif
 
@@ -4229,12 +4220,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         oRnd:=self:Clone()
         DEFAULT nAcc:=Max((Min(oRnd:nDec,s__nDecSet)-1),0)
 
-        if .not.(oRnd:eq(s__o0))
+        if (.not.(oRnd:eq(s__o0)))
             cAcc:=SubStr(oRnd:cDec,nAcc+1,1)
-            if cAcc==""
+            if (cAcc=="")
                 cAcc:=SubStr(oRnd:cDec,--nAcc+1,1)
             endif
-            if cAcc>="5"
+            if (cAcc>="5")
                 cAdd:="0."
                 s__IncS0(nAcc)
                 cAdd+=Left(s__cN0,nAcc)+"5"
@@ -4353,7 +4344,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         oTrc:=self:Clone()
 
         cDec:=oTrc:cDec
-        if .not.(s__o0:eq(cDec))
+        if (.not.(s__o0:eq(cDec)))
             DEFAULT nAcc:=Min(oTrc:nDec,s__nDecSet)
             cDec:=Left(cDec,nAcc)
             oTrc:SetValue(oTrc:cInt+"."+cDec)
@@ -4390,7 +4381,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 PARAMETER oBigN AS OBJECT
             #endif /*__ADVPL__*/
 
-            if self:nInt>1.and.Left(self:cInt,1)=="0"
+            if (self:nInt>1.and.Left(self:cInt,1)=="0")
                 self:cInt:=RemLeft(self:cInt,"0")
                 self:nInt:=hb_bLen(self:cInt)
                 if (self:nInt==0)
@@ -4399,7 +4390,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 endif
             endif
 
-            if oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0"
+            if (oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0")
                 oBigN:cInt:=RemLeft(oBigN:cInt,"0")
                 oBigN:nInt:=hb_bLen(oBigN:cInt)
                 if (oBigN:nInt==0)
@@ -4417,12 +4408,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             lPadR:=nPadR!=self:nDec
             lPadL:=nPadL!=self:nInt
 
-            if lPadL.or.lPadR
-                if lPadL
+            if (lPadL.or.lPadR)
+                if (lPadL)
                     self:cInt:=Left(s__cN0,nPadL-self:nInt)+self:cInt
                     self:nInt:=nPadL
                 endif
-                if lPadR
+                if (lPadR)
                     self:cDec+=Left(s__cN0,nPadR-self:nDec)
                     self:nDec:=nPadR
                 endif
@@ -4432,12 +4423,12 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             lPadL:=nPadL!=oBigN:nInt
             lPadR:=nPadR!=oBigN:nDec
 
-            if lPadL.or.lPadR
-                if lPadL
+            if (lPadL.or.lPadR)
+                if (lPadL)
                     oBigN:cInt:=Left(s__cN0,nPadL-oBigN:nInt)+oBigN:cInt
                     oBigN:nInt:=nPadL
                 endif
-                if lPadR
+                if (lPadR)
                     oBigN:cDec+=Left(s__cN0,nPadR-oBigN:nDec)
                     oBigN:nDec:=nPadR
                 endif
@@ -4446,7 +4437,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         #else /*__HARBOUR__*/
 
-            if self:nInt>1.and.Left(self:cInt,1)=="0"
+            if (self:nInt>1.and.Left(self:cInt,1)=="0")
                 self:cInt:=RemLeft(self:cInt,"0")
                 self:nInt:=hb_bLen(self:cInt)
                 if (self:nInt==0)
@@ -4455,7 +4446,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                 endif
             endif
             
-            if oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0"
+            if (oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0")
                 oBigN:cInt:=RemLeft(oBigN:cInt,"0")
                 oBigN:nInt:=hb_bLen(oBigN:cInt)
                 if (oBigN:nInt==0)
@@ -4463,7 +4454,6 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
                     oBigN:nInt:=1
                 endif
             endif
-        
             tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
     
         #endif /*__PTCOMPAT__*/
@@ -4514,13 +4504,13 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         cHexN:=""
         cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
 
-        while otN:gt(s__o0)
+        while (otN:gt(s__o0))
             otN:SetValue(otN:Div(otH,.F.))
             nAT:=Val(otN:cRDiv)+1
             cHexN:=SubStr(cHexC,nAT,1)+cHexN
         end while
 
-        if cHexN==""
+        if (cHexN=="")
             cHexN:="0"
         endif
 
@@ -4529,13 +4519,13 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         cHexN:=""
         otN:=tBigNumber():New(self:Dec(NIL,NIL,.T.))
 
-        while otN:gt(s__o0)
+        while (otN:gt(s__o0))
             otN:SetValue(otN:Div(otH,.F.))
             nAT:=Val(otN:cRDiv)+1
             cHexN:=SubStr(cHexC,nAT,1)+cHexN
         end while
 
-        if cHexN==""
+        if (cHexN=="")
             cHexN:="0"
         endif
 
@@ -4596,7 +4586,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
         nI:=nLn
-        while nI>0
+        while (nI>0)
             otNI:SetValue(hb_ntos(--nI))
             otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
             otPw:SetValue(otLN:Sub(otNI))
@@ -4614,7 +4604,7 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         otLN:SetValue(hb_ntos(nLn))
 
-        while nI>0
+        while (nI>0)
             otNI:SetValue(hb_ntos(--nI))
             otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
             otPw:SetValue(otLN:Sub(otNI))
@@ -4672,11 +4662,11 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             cBin:=""
 
             cHexB:=hb_ntos(self:nBase)
-            if Empty(cHexB)
+            if (Empty(cHexB))
                  break
             endif
 
-            if .not.(cHexB$"[16][32]")
+            if (.not.(cHexB$"[16][32]"))
                 break
             endif
 
@@ -4687,10 +4677,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             cHexN:=self:cInt
             nLn:=hb_bLen(cHexN)
             nI:=0
-            while ++nI<=nLn
+            while (++nI<=nLn)
                 cChr:=SubStr(cHexN,nI,1)
                 nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
-                if nAT>0
+                if (nAT>0)
                     cBin+=if(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
                 endif
             end while
@@ -4702,10 +4692,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             cHexN:=self:cDec
             nLn:=self:nDec
 
-            while ++nI<=nLn
+            while (++nI<=nLn)
                 cChr:=SubStr(cHexN,nI,1)
                 nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
-                if nAT>0
+                if (nAT>0)
                     cBin+=if(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
                 endif
             end while
@@ -4761,11 +4751,11 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
 
         begin sequence
 
-            if Empty(cHexB)
+            if (Empty(cHexB))
                 break
             endif
 
-            if .not.(cHexB$"[16][32]")
+            if (.not.(cHexB$"[16][32]"))
                 oHexN:=tBigNumber():New(NIL,16)
                 break
             endif
@@ -4779,10 +4769,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             nI:=1
             nLn:=hb_bLen(cBin)
 
-            while nI<=nLn
+            while (nI<=nLn)
                 cChr:=SubStr(cBin,nI,if(l16,4,5))
                 nAT:=aScan(aH2B,{|aE|(if(l16,SubStr(aE[2],2),aE[2])==cChr)})
-                if nAT>0
+                if (nAT>0)
                     cHexN+=aH2B[nAT][1]
                 endif
                 nI+=if(l16,4,5)
@@ -4795,10 +4785,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             nLn:=self:nDec
             cHexN:=""
 
-            while nI<=nLn
+            while (nI<=nLn)
                 cChr:=SubStr(cBin,nI,if(l16,4,5))
                 nAT:=aScan(aH2B,{|aE|(if(l16,SubStr(aE[2],2),aE[2])==cChr)})
-                if nAT>0
+                if (nAT>0)
                     cHexN+=aH2B[nAT][1]
                 endif
                 nI+=if(l16,4,5)
@@ -5035,14 +5025,14 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
         begin sequence
 
             oN:=self:Clone()
-            if oN:lte(s__o1)
+            if (oN:lte(s__o1))
                 lPrime:=.F.
                 break
             endif
 
             oS:=s__o0:Clone()
             oD:=tBigNumber():New(oN:Sub(s__o1))
-            while oD:Mod(s__o2):eq(s__o0)
+            while (oD:Mod(s__o2):eq(s__o0))
                 //-------------------------------------------------------------------------------------
                 //(Div(2)==Mult(.5)
                 oD:SetValue(oD:Mult(s__od2))
@@ -5055,10 +5045,10 @@ static function cLCM(nX AS NUMERIC,nY AS NUMERIC)
             oA:=s__o0:Clone()
             oI:=s__o0:Clone()
             oI:SetValue(uI)
-            while oI:gt(s__o0)
+            while (oI:gt(s__o0))
                 oA:SetValue(oA:Randomize(s__o1,oN))
                 lPrime:=mrPass(oA,oS,oD,oN)
-                if .not.(lPrime)
+                if (.not.(lPrime))
                     break
                 endif
                 oI:OpDec()
@@ -5099,16 +5089,18 @@ static function mrPass(uA,uS,uD,uN)
         oD:=tBigNumber():New(uD)
         oA:=tBigNumber():New(uA)
         oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
-        if oP:eq(s__o1)
+        
+        if (oP:eq(s__o1))
             break
         endif
 
         oM:=tBigNumber():New(oN:Sub(s__o1))
         oS:=tBigNumber():New(uS)
         oW:=tBigNumber():New(oS:Sub(s__o1))
-        while oW:gt(s__o0)
+        
+        while (oW:gt(s__o0))
             lmrP:=oP:eq(oM)
-            if lmrP
+            if (lmrP)
                 break
             endif
             oP:SetValue(oP:Mult(oP):Mod(oN))
@@ -5162,21 +5154,21 @@ static function mrPass(uA,uS,uD,uN)
 
         oC:=self:Clone()
         oT:=tBigNumber():New(oC:Int(.T.))
-        if oT:lte(s__oMinFI)
+        if (oT:lte(s__oMinFI))
             oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
         else
             oI:=s__o2:Clone()
             oN:=oT:Clone()
-            while oI:Mult(oI):lte(oC)
-                if oN:Mod(oI):eq(s__o0)
+            while (oI:Mult(oI):lte(oC))
+                if (oN:Mod(oI):eq(s__o0))
                     oT:SetValue(oT:Sub(oT:Div(oI,.F.)))
                 endif
-                while oN:Mod(oI):eq(s__o0)
+                while (oN:Mod(oI):eq(s__o0))
                     oN:SetValue(oN:Div(oI,.F.))
                 end while
                 oI:OpInc()
             end while
-            if oN:gt(s__o1)
+            if (oN:gt(s__o1))
                 oT:SetValue(oT:Sub(oT:Div(oN,.F.)))
             endif
         endif
@@ -5252,16 +5244,16 @@ static function mrPass(uA,uS,uD,uN)
 
         cP:=""
 
-        while otP:NextPrime(cP)
+        while (otP:NextPrime(cP))
             cP:=LTrim(otP:cPrime)
             oP:SetValue(cP)
-            if oP:gte(oN).or.if(lPrime,lPrime:=otP:IsPrime(oN:cInt),lPrime.or.(++nC>1.and.oN:gte(otP:cLPrime)))
+            if (oP:gte(oN).or.if(lPrime,lPrime:=otP:IsPrime(oN:cInt),lPrime.or.(++nC>1.and.oN:gte(otP:cLPrime))))
                 aAdd(aPFactors,{oN:cInt,"1"})
                 exit
             endif
-            while oN:Mod(oP):eq(s__o0)
+            while (oN:Mod(oP):eq(s__o0))
                 nP:=aScan(aPFactors,{|e|e[1]==cP})
-                if nP==0
+                if (nP==0)
                     aAdd(aPFactors,{cP,"1"})
                 else
                     oT:SetValue(aPFactors[nP][2])
@@ -5271,7 +5263,7 @@ static function mrPass(uA,uS,uD,uN)
                 nC:=0
                 lPrime:=.T.
             end while
-            if oN:lte(s__o1)
+            if (oN:lte(s__o1))
                 exit
             endif
         end while
@@ -5299,7 +5291,7 @@ static function mrPass(uA,uS,uD,uN)
 #endif /*__HARBOUR__*/
         local oN    AS OBJECT
         oN:=self:Clone():Int(.T.,.F.)
-        if oN:eq(s__o0)
+        if (oN:eq(s__o0))
             return(s__o1:Clone())
         endif
         return(recFact(s__o1:Clone(),oN))
@@ -5437,6 +5429,40 @@ static function recFact(oS AS OBJECT,oN AS OBJECT)
         return(aFibonacci)
 /*method Fibonacci*/
 
+#ifdef __HARBOUR__
+    method splitNumber()
+        local aInt  as array
+        local aDec  as array
+        local aRDiv as array
+        local cZero as character
+        local nSize as numeric
+        nSize:=self:nInt
+        aInt:=array(nSize)
+        cZero:=""
+        for nSize:=nSize to 1 step (-1)
+            aInt[nSize]:=self:cInt[nSize]
+            aInt[nSize]+=cZero
+            cZero+="0"
+        next nSize
+        nSize:=self:nDec
+        aDec:=array(nSize)
+        cZero:=""
+        for nSize:=nSize to 1 step (-1)
+            aDec[nSize]:=self:cDec[nSize]
+            aDec[nSize]+=cZero
+            cZero+="0"
+        next nSize
+        nSize:=len(self:cRDiv)
+        aRDiv:=array(nSize)
+        cZero:=""
+        for nSize:=nSize to 1 step (-1)
+            aRDiv[nSize]:=self:cRDiv[nSize]
+            aRDiv[nSize]+=cZero
+            cZero+="0"
+        next nSize
+        return({aInt,aDec,aRDiv})
+#endif __HARBOUR__
+
 //--------------------------------------------------------------------------------------------------------
     /*
         function:egMult
@@ -5478,7 +5504,7 @@ static function egMult(cN1 AS CHARACTER,cN2 AS CHARACTER,nBase AS NUMERIC)
     oMTM:__cInt("0")
     oMTP:__cInt("0")
 
-    while nI>0
+    while (nI>0)
         oMTM:__cInt(oMTM:Add(aeMT[nI][1]):__cInt())
         oMTP:__cInt(oMTP:Add(aeMT[nI][2]):__cInt())
         nCmp:=oMTM:cmp(oN1)
@@ -5612,7 +5638,7 @@ static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS 
 
     nI:=0
 
-    while .T.
+    while (.T.)
         ++nI
         aAdd(aeDV,{oeDivQ:Int(.F.,.F.),oeDivR:Int(.F.,.F.)})
         oeDivQ:SetValue(oeDivQ:Add(oeDivQ),nBase,"0",NIL,nAcc)
@@ -5626,7 +5652,7 @@ static function egDiv(cN AS CHARACTER,cD AS CHARACTER,nSize AS NUMERIC,nBase AS 
     oeDivQ:SetValue(s__o0)
     oeDivR:SetValue(s__o0)
 
-    while nI>0
+    while (nI>0)
         oeDivQ:SetValue(oeDivQ:Add(aeDV[nI][1]),nBase,"0",NIL,nAcc)
         oeDivR:SetValue(oeDivR:Add(aeDV[nI][2]),nBase,"0",NIL,nAcc)
         nCmp:=oeDivR:cmp(oeDivN)
@@ -5726,7 +5752,7 @@ static function ecDiv(pA AS CHARACTER,pB AS CHARACTER,nSize AS NUMERIC,nBase AS 
     while r:gte(b)
         aux:SetValue(b:Mult(n))
         if aux:lte(a)
-            while .T.
+            while (.T.)
                 n:SetValue(n:Mult(base))
                 tmp:SetValue(b:Mult(n))
                 if tmp:gt(a)
@@ -5812,22 +5838,22 @@ static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
     local exp   AS OBJECT
 
     exp:=expR:Clone()
-    if base:eq(s__o1).or.exp:eq(s__o0)
+    if (base:eq(s__o1).or.exp:eq(s__o0))
         return(s__o1:Clone())
-    elseif base:eq(s__o0)
+    elseif (base:eq(s__o0))
         return(s__o0:Clone())
-    elseif exp:lt(s__o0)
+    elseif (exp:lt(s__o0))
         acc:=__pow(base,exp:Abs(.T.),EPS)
         return(s__o1:Div(acc))
-    elseif exp:Mod(s__o2):eq(s__o0)
+    elseif (exp:Mod(s__o2):eq(s__o0))
         //-------------------------------------------------------------------------------------
         //(Div(2)==Mult(.5)
         acc:=__pow(base,exp:Mult(s__od2),EPS)
         return(acc:Mult(acc))
-    elseif exp:Dec(.T.):gt(s__o0).and.exp:Int(.T.):gt(s__o0)
+    elseif (exp:Dec(.T.):gt(s__o0).and.exp:Int(.T.):gt(s__o0))
         acc:=base:Pow(exp)
         return(acc)
-    elseif exp:gt(s__o1)
+    elseif (exp:gt(s__o1))
         acc:=base:Pow(exp)
         return(acc)
     else
@@ -5841,9 +5867,9 @@ static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
         tmp:=mid:Sub(exp):Abs(.T.)
         lst:=s__o0:Clone()
         lDo:=tmp:gte(EPS)
-        while lDo
+        while (lDo)
             sqr:SetValue(__SQRT(sqr))
-            if mid:lte(exp)
+            if (mid:lte(exp))
                 low:SetValue(mid)
                 acc:SetValue(acc:Mult(sqr))
             else
@@ -5855,7 +5881,7 @@ static function __Pow(base AS OBJECT,expR AS OBJECT,EPS AS OBJECT)
             mid:SetValue(low:Add(high):Mult(s__od2))
             tmp:SetValue(mid:Sub(exp):Abs(.T.))
             lDo:=tmp:gte(EPS)
-            if .not.(lDo).or.tmp:eq(lst)
+            if (.not.(lDo).or.tmp:eq(lst))
                 exit
             endif
             lst:SetValue(tmp)
@@ -5973,7 +5999,7 @@ static function __SQRT(p)
 
         c:=aNumber(Left(s__cN0,y),y,"ADD_C")
 
-        while n>0
+        while (n>0)
             (c)->(dbGoTo(k))
             if (c)->(rLock())
                 #ifdef __ADVPL__
@@ -6033,7 +6059,7 @@ static function __SQRT(p)
 
         k:=y
 
-        while n>0
+        while (n>0)
             (c)->(dbGoTo(k))
             if (c)->(rLock())
                 #ifdef __ADVPL__
@@ -6108,7 +6134,7 @@ static function __SQRT(p)
 
         i:=1
 
-        while i<=n
+        while (i<=n)
             s:=1
             j:=i
             (c)->(dbGoTo(k))
@@ -6138,12 +6164,12 @@ static function __SQRT(p)
             i++
         end while
 
-        while l<=n
+        while (l<=n)
             s:=n
             j:=l
             (c)->(dbGoTo(k))
             if (c)->(rLock())
-                while s>=l
+                while (s>=l)
                 #ifdef __ADVPL__
                     (c)->FN+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                 #else
@@ -6164,7 +6190,7 @@ static function __SQRT(p)
                 endif
                 (c)->(dbUnLock())
             endif
-            if ++k>=y
+            if (++k>=y)
                 exit
             endif
             l++
@@ -6197,7 +6223,7 @@ static function __SQRT(p)
 
         a:=dbNumber(o)
         y:=0
-        while ++y<=n
+        while (++y<=n)
             (a)->(dbAppend(.T.))
         #ifdef __ADVPL__
             (a)->FN:=Val(SubStr(c,y,1))
@@ -6233,22 +6259,22 @@ static function __SQRT(p)
         s:=""
         y:=n
 
-        while y>=1
+        while (y>=1)
             (a)->(dbGoTo(y))
-            while y>=1.and.(a)->FN==0
+            while ((y>=1).and.(a)->FN==0)
                 (a)->(dbGoTo(--y))
             end while
-            while y>=1
+            while (y>=1)
                 (a)->(dbGoTo(y--))
                 s+=hb_ntos((a)->FN)
             end while
         end while
 
-        if s==""
+        if (s=="")
             s:="0"
         endif
 
-        if hb_bLen(s)<n
+        if (hb_bLen(s)<n)
             s:=PadL(s,n,"0")
         endif
 
@@ -6275,11 +6301,11 @@ static function __SQRT(p)
         cLDriver:=__localDriver
         __localDriver:=cRDD
     #endif
-        if Select(cAlias)==0
+        if (Select(cAlias)==0)
             aStru:={{"FN","N",18,0}}
     #ifndef __HARBOUR__
             cFile:=CriaTrab(aStru,.T.,GetdbExtension())
-            if .not.(GetdbExtension()$cFile)
+            if (.not.(GetdbExtension()$cFile))
                 cFile+=GetdbExtension()
             endif
             dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
@@ -6304,7 +6330,7 @@ static function __SQRT(p)
             (cAlias)->(dbRUnLock())
         endif
     #ifndef __HARBOUR__
-        if .not.(Empty(cLDriver))
+        if (.not.(Empty(cLDriver)))
             __localDriver:=cLDriver
         endif
     #endif
@@ -6320,14 +6346,13 @@ static function __SQRT(p)
                 cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
                 cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
-                while .not.(lSuccess)
+                while (.not.(lSuccess))
                     Try
                       MakeDir(cFolder)
                       dbCreate(cFile,aStru,cRDD)
                       lSuccess:=.T.
                     Catch
-                      lSuccess:=.F.
-                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      lSuccess:=.F.                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
                 return(cFile)
@@ -6338,13 +6363,12 @@ static function __SQRT(p)
                 local lSuccess  AS LOGICAL
                 cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
-                while .not.(lSuccess)
+                while (.not.(lSuccess))
                     Try
                       dbCreate(cFile,aStru,NIL,.T.,cAlias)
                       lSuccess:=.T.
                     Catch
-                      lSuccess:=.F.
-                      cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      lSuccess:=.F.                      cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
                 return(cFile)
@@ -6378,13 +6402,13 @@ static function __SQRT(p)
             k:=y
             c:=aFill(aSize(ths_aZAdd,y),0)
 
-            while n>0
+            while (n>0)
             #ifdef __ADVPL__
                 c[k]+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
             #else
                 c[k]+=Val(a[n])+Val(b[n])
             #endif
-                if c[k]>=nBase
+                if (c[k]>=nBase)
                     c[k-1]+=1
                     c[k]-=nBase
                 endif
@@ -6426,13 +6450,13 @@ static function __SQRT(p)
             k:=y
             c:=aFill(aSize(ths_aZSub,y),0)
 
-            while n>0
+            while (n>0)
             #ifdef __ADVPL__
                 c[k]+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
             #else
                 c[k]+=Val(a[n])-Val(b[n])
             #endif
-                if c[k]<0
+                if (c[k]<0)
                     c[k-1]-=1
                     c[k]+=nBase
                 endif
@@ -6490,17 +6514,17 @@ static function __SQRT(p)
 
             i:=1
 
-            while i<=n
+            while (i<=n)
                 s:=1
                 j:=i
-                while s<=i
+                while (s<=i)
                 #ifdef __ADVPL__
                     c[k]+=Val(SubStr(a,s++,1))*Val(SubStr(b,j--,1))
                 #else
                     c[k]+=Val(a[s++])*Val(b[j--])
                 #endif
                 end while
-                if c[k]>=nBase
+                if (c[k]>=nBase)
                     x:=k+1
                     c[x]:=Int(c[k]/nBase)
                     c[k]-=(c[x]*nBase)
@@ -6509,22 +6533,22 @@ static function __SQRT(p)
                 i++
             end while
 
-            while l<=n
+            while (l<=n)
                 s:=n
                 j:=l
-                while s>=l
+                while (s>=l)
                 #ifdef __ADVPL__
                     c[k]+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                 #else
                     c[k]+=Val(a[s--])*Val(b[j++])
                 #endif
                 end while
-                if c[k]>=nBase
+                if (c[k]>=nBase)
                     x:=k+1
                     c[x]:=Int(c[k]/nBase)
                     c[k]-=(c[x]*nBase)
                 endif
-                if ++k>=y
+                if (++k>=y)
                     exit
                 endif
                 l++
@@ -6552,21 +6576,21 @@ static function __SQRT(p)
             s:=""
             y:=n
 
-            while y>=1
-                while y>=1.and.a[y]==0
+            while (y>=1)
+                while ((y>=1).and.a[y]==0)
                     y--
                 end while
-                while y>=1
+                while (y>=1)
                     s+=hb_ntos(a[y])
                     y--
                 end while
             end while
 
-            if s==""
+            if (s=="")
                 s:="0"
             endif
 
-            if hb_bLen(s)<n
+            if (hb_bLen(s)<n)
                 s:=PadL(s,n,"0")
             endif
 
@@ -6606,13 +6630,13 @@ static function __SQRT(p)
 
                 v:=0
 
-                while n>0
+                while (n>0)
                     #ifdef __ADVPL__
                         v+=Val(SubStr(a,n,1))+Val(SubStr(b,n,1))
                     #else
                         v+=Val(a[n])+Val(b[n])
                     #endif
-                    if v>=nBase
+                    if (v>=nBase)
                         v-=nBase
                         v1:=1
                     else
@@ -6670,13 +6694,13 @@ static function __SQRT(p)
 
                 v:=0
 
-                while n>0
+                while (n>0)
                     #ifdef __ADVPL__
                         v+=Val(SubStr(a,n,1))-Val(SubStr(b,n,1))
                     #else
                         v+=Val(a[n])-Val(b[n])
                     #endif
-                    if v<0
+                    if (v<0)
                         v+=nBase
                         v1:=-1
                     else
@@ -6747,7 +6771,7 @@ static function __SQRT(p)
 
                 i:=1
 
-                while i<=n
+                while (i<=n)
                     s:=1
                     j:=i
                     while s<=i
@@ -6757,7 +6781,7 @@ static function __SQRT(p)
                         v+=Val(a[s++])*Val(b[j--])
                     #endif
                     end while
-                    if v>=nBase
+                    if (v>=nBase)
                         v1:=Int(v/nBase)
                         v-=(v1*nBase)
                     else
@@ -6775,17 +6799,17 @@ static function __SQRT(p)
                     i++
                 end while
 
-                while l<=n
+                while (l<=n)
                     s:=n
                     j:=l
-                    while s>=l
+                    while (s>=l)
                     #ifdef __ADVPL__
                         v+=Val(SubStr(a,s--,1))*Val(SubStr(b,j++,1))
                     #else
                         v+=Val(a[s--])*Val(b[j++])
                     #endif
                     end while
-                    if v>=nBase
+                    if (v>=nBase)
                         v1:=Int(v/nBase)
                         v-=v1*nBase
                     else
@@ -6799,7 +6823,7 @@ static function __SQRT(p)
                         c[k+1]:=hb_ntos(v1)
                     #endif
                     v:=v1
-                    if ++k>=y
+                    if (++k>=y)
                         exit
                     endif
                     l++
@@ -6837,15 +6861,15 @@ static function __SQRT(p)
                 s:=""
                 y:=n
 
-                while y>=1
+                while (y>=1)
                 #ifdef __ADVPL__
-                    while y>=1.and.SubStr(c,y,1)=="0"
+                    while ((y>=1).and.SubStr(c,y,1)=="0")
                 #else
-                    while y>=1.and.c[y]=="0"
+                    while ((y>=1).and.c[y]=="0")
                 #endif
                         y--
                     end while
-                    while y>=1
+                    while (y>=1)
                     #ifdef __ADVPL__
                         s+=SubStr(c,y,1)
                     #else
@@ -6854,11 +6878,11 @@ static function __SQRT(p)
                         y--
                     end while
                 end while
-                if s==""
+                if (s=="")
                     s:="0"
                 endif
 
-                if hb_bLen(s)<n
+                if (hb_bLen(s)<n)
                     s:=PadL(s,n,"0")
                 endif
 
@@ -6958,11 +6982,11 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
         oR:=oB:Clone()
 
-        if oE:lte(s__o2)
+        if (oE:lte(s__o2))
             #ifdef __PTCOMPAT__
                 SYMBOL_UNUSED(lIPower)
                 oI:=oE:Clone()
-                while oI:gt(s__o1)
+                while (oI:gt(s__o1))
                     oR:SetValue(oR:Mult(oB))
                     oI:OpDec()
                 end while
@@ -6976,9 +7000,9 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                         #endif
                     #endif
                 endif
-                if .not.(lIPower)
+                if (.not.(lIPower))
                     oI:=oE:Clone()
-                    while oI:gt(s__o1)
+                    while (oI:gt(s__o1))
                         oR:SetValue(oR:Mult(oB))
                         oI:OpDec()
                     end while
@@ -7019,7 +7043,7 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
     #ifdef __PTCOMPAT__
         SYMBOL_UNUSED(lIPower)
-        while oI:gt(s__o1)
+        while (oI:gt(s__o1))
             oR:SetValue(oR:Mult(oB))
             oI:OpDec()
         end while
@@ -7033,8 +7057,8 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
                 #endif
             #endif
         endif
-        if .not.(lIPower)
-            while oI:gt(s__o1)
+        if (.not.(lIPower))
+            while (oI:gt(s__o1))
                 oR:SetValue(oR:Mult(oB))
                 oI:OpDec()
             end while
@@ -7068,7 +7092,7 @@ static function Power(oB AS OBJECT,oE AS OBJECT,lIPower AS LOGICAL)
 
         s:=""
         y:=n
-        while y>0
+        while (y>0)
         #ifdef __ADVPL__
             s+=SubStr(c,y--,1)
         #else /*__HARBOUR__*/

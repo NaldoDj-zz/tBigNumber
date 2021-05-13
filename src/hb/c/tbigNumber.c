@@ -550,10 +550,11 @@
                 l++;
             }
 
-            const char *tmp=tBIGNReverse(c,y);
-
             hb_xfree(a);
             hb_xfree(b);
+
+            const char *tmp=tBIGNReverse(c,y);
+
             hb_xfree(c);
 
             char * r=remLeft(tmp,y,"0");
@@ -603,6 +604,7 @@
             int iCmp=hb_strnicmp(szInd,szOne,n);            
             
             hb_xfree(szOne);
+            szOne=NULL;
             
             while (iCmp&&iCmp>0)
             {
@@ -615,6 +617,8 @@
                     k=(HB_SIZE)strlen(szInd);
                     char * szOne=tBIGNPadL("1",k,"0");
                     iCmp=hb_strnicmp(szInd,szOne,k);
+                    hb_xfree(szOne);
+                    szOne=NULL;
                     if (iCmp<=0){
                         break;
                     }
@@ -622,7 +626,9 @@
             }
 
             hb_xfree(szPow);
+            szPow=NULL;
             hb_xfree(szInd);
+            szInd=NULL;
 
             *p=n;
             
