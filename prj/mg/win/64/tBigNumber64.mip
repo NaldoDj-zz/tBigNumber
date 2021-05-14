@@ -1,5 +1,5 @@
 VERSION 05 06 03
-PRJ_VERSION 00 00 0259
+PRJ_VERSION 00 00 0299
 PROJECTFOLDER <ThisFolder>
 LASTLIBFOLDERm3gh 
 LASTLIBFOLDERm3wh D:\marinas-ide(64bits)\harbour\lib\win\mingw64
@@ -93,7 +93,7 @@ SHGLASTFOLDERIMG
 SHGOUTPUTTYPE NO
 SHGHTMLFOLDER 
 HOTLASTEXTERNALFILE 
-SOURCE D:\GitHub\tBigNumber\src\tests\tBigNtst.prg
+SOURCE <FR> D:\GitHub\tBigNumber\src\tests\tBigNtst.prg
 SOURCE <FR> D:\GitHub\tBigNumber\src\common\tbignumber.prg
 SOURCE D:\GitHub\tBigNumber\src\common\tfRead.prg
 SOURCE D:\GitHub\tBigNumber\src\common\tPrime.prg

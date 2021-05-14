@@ -292,8 +292,14 @@
 
             ptftBigtstThread:=@tBigtstThread()
 
-            ptttBigtstThread:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-            ptftBigtstThread,@lFinalize,atBigNtst,nMaxScrRow,nMaxScrCol)
+            ptttBigtstThread:=hb_threadStart(;
+                HB_THREAD_INHERIT_MEMVARS,;
+                ptftBigtstThread,;
+                @lFinalize,;
+                atBigNtst,;
+                nMaxScrRow,;
+                nMaxScrCol;
+            )
 
  #ifdef __0
             nRow:=Row()
@@ -699,10 +705,29 @@
             #define __NROWAT    15
 
             #ifdef __HARBOUR__
-                pttProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-                ptfProgress,@lKillProgress,@__oRTimeProc,@__phMutex,__nCol,aC_OOPROGRESS,__noProgress,__nSLEEP,__nMaxCol,lL_OOPROGRAND,lL_ROPROGRESS)
-                pttftProgress:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-                ptfftProgress,@lKillProgress,__nSLEEP,__nMaxCol,__nMaxRow)
+                pttProgress:=hb_threadStart(;
+                    HB_THREAD_INHERIT_MEMVARS,;
+                    ptfProgress,;
+                    @lKillProgress,;
+                    @__oRTimeProc,;
+                    @__phMutex,;
+                    __nCol,;
+                    aC_OOPROGRESS,;
+                    __noProgress,;
+                    __nSLEEP,;
+                    __nMaxCol,;
+                    lL_OOPROGRAND,;
+                    lL_ROPROGRESS;
+                )
+                
+                pttftProgress:=hb_threadStart(;
+                    HB_THREAD_INHERIT_MEMVARS,;
+                    ptfftProgress,;
+                    @lKillProgress,;
+                    __nSLEEP,;
+                    __nMaxCol,;
+                    __nMaxRow;
+                )
             #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -4844,11 +4869,9 @@ static procedure tBigNtst38(fhLog as numeric)
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',":...")
         #ifdef __HARBOUR__
             lFinalize:=.F.
-            ptttBigNtst38:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,;
-            ptftBigNtst38,@lFinalize,cM,@cR)
+            ptttBigNtst38:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,ptftBigNtst38,@lFinalize,cM,@cR)
             while (!lFinalize)
                 if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-                    __oRTime2:forcestep(.F.)
                     __oRTime2:Calcule(.F.)
                     __oRTime1:Calcule(.F.)
                     hb_mutexUnLock(__phMutex)
@@ -4863,9 +4886,6 @@ static procedure tBigNtst38(fhLog as numeric)
         #endif
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-            #ifdef __HARBOUR__
-                __oRTime2:forcestep(.F.)
-            #endif /*__HARBOUR__*/
             __oRTime2:Calcule()
             __oRTime1:Calcule()
             __ConOut(fhLog,__cSep)
@@ -4900,23 +4920,29 @@ static procedure tBigNtst38(fhLog as numeric)
         local aEvent    as array
         local aThreads  as array
         
+        local cP        as character
+        
         local nThread   as numeric
         local nThreads  as numeric
         
         local oM        as object
         local oThreads  as object
 
-        oM:=tBigNumber():New(cM)
+        oM:=tBigNumber():New(cM,nil,nil,.T.)
         aThreads:=oM:SplitNumber()[1]
         nThreads:=len(aThreads)
 
         //"Share publics and privates with child threads."
         oThreads:=tBigNThread():New()
+
         oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
-        
+
+        oM:setValue("2")
+
         for nThread:=1 to nThreads
-            cM:=aThreads[nThread]
-            aEvent:={@tBigNtst38Eval(),cM}
+            cM:=left(aThreads[nThread],1)
+            cP:="1"+subStr(aThreads[nThread],2)
+            aEvent:={@tBigNtst38Eval(),oM,cM,cP}
             oThreads:setEvent(nThread,@aEvent)
         next nThread
         
@@ -4936,11 +4962,30 @@ static procedure tBigNtst38(fhLog as numeric)
 
         return
         
-    static function tBigNtst38Eval(cM as character)
-        local cR        as character
-        local otBig2    as object
-        otBig2:=tBigNumber():New("2")
-        cR:=otBig2:iPow(cM)
+    static function tBigNtst38Eval(oM as object,cM as character,cP as character)
+        local cR    as character
+        local oCP   as object
+        local oCR   as object
+        local oCT   as object
+        local oM10  as object
+        local oD10  as object
+        local o100  as object
+        oCP:=tBigNumber():New(cP)
+        o100:=tBigNumber():New("100")
+        if (oCP<=o100)
+            cR:=oM:iPow(cM):iPow(cP):ExactValue()
+        else
+            oCR:=oM:iPow(cM)
+            oD10:=tBigNumber():New(oCP:Div("10"))
+            oM10:=tBigNumber():New(oCP:Div(oD10))
+            oCT:=oCR:iPow(oD10)
+            oCR:SetValue(oCT)
+            while (oM10>"1")
+               oCR*=oCT
+               oM10--
+            end while        
+            cR:=oCR:ExactValue()
+        endif
         return(cR)
     
     static function GETCURRENTPROCESSID()
