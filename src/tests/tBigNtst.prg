@@ -4942,7 +4942,7 @@ static procedure tBigNtst38(fhLog as numeric)
         for nThread:=1 to nThreads
             cM:=left(aThreads[nThread],1)
             cP:="1"+subStr(aThreads[nThread],2)
-            aEvent:={@tBigNtst38Eval(),oM,cM,cP}
+            aEvent:={@tBigNtst38Eval(),oM,cM,cP,.F.}
             oThreads:setEvent(nThread,@aEvent)
         next nThread
         
@@ -4962,7 +4962,7 @@ static procedure tBigNtst38(fhLog as numeric)
 
         return
         
-    static function tBigNtst38Eval(oM as object,cM as character,cP as character)
+    static function tBigNtst38Eval(oM as object,cM as character,cP as character,lMultiply as logical)
         local cR    as character
         local oCP   as object
         local oCR   as object
@@ -4978,12 +4978,17 @@ static procedure tBigNtst38(fhLog as numeric)
             oCR:=oM:iPow(cM)
             oD10:=tBigNumber():New(oCP:Div("10"))
             oM10:=tBigNumber():New(oCP:Div(oD10))
-            oCT:=oCR:iPow(oD10)
-            oCR:SetValue(oCT)
-            while (oM10>"1")
-               oCR*=oCT
-               oM10--
-            end while        
+            DEFAULT lMultiply:=.F.
+            if (lMultiply)
+                oCT:=oCR:iPow(oD10)
+                oCR:SetValue(oCT)
+                while (oM10>"1")
+                   oCR*=oCT
+                   oM10--
+                end while
+            else
+                oCR:=oCR:iPow(oD10):iPow(oM10)
+            endif
             cR:=oCR:ExactValue()
         endif
         return(cR)
