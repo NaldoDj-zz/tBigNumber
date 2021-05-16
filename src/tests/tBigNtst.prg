@@ -4942,7 +4942,7 @@ static procedure tBigNtst38(fhLog as numeric)
         for nThread:=1 to nThreads
             cM:=left(aThreads[nThread],1)
             cP:="1"+subStr(aThreads[nThread],2)
-            aEvent:={@tBigNtst38Eval(),oM,cM,cP,.F.}
+            aEvent:={@tBigNtst38Eval(),oM,cM,cP,.T.}
             oThreads:setEvent(nThread,@aEvent)
         next nThread
         
@@ -4963,34 +4963,75 @@ static procedure tBigNtst38(fhLog as numeric)
         return
         
     static function tBigNtst38Eval(oM as object,cM as character,cP as character,lMultiply as logical)
+
+        local aEv   as array
+
         local cR    as character
+        
+        local nTh   as numeric
+        local nThs  as numeric
+
         local oCP   as object
         local oCR   as object
         local oCT   as object
+
+        local oTh   as object
+
         local oM10  as object
         local oD10  as object
         local o100  as object
+
         oCP:=tBigNumber():New(cP)
         o100:=tBigNumber():New("100")
+
         if (oCP<=o100)
+        
             cR:=oM:iPow(cM):iPow(cP):ExactValue()
+        
         else
+            
             oCR:=oM:iPow(cM)
             oD10:=tBigNumber():New(oCP:Div("10"))
             oM10:=tBigNumber():New(oCP:Div(oD10))
+            
             DEFAULT lMultiply:=.F.
             if (lMultiply)
-                oCT:=oCR:iPow(oD10)
-                oCR:SetValue(oCT)
-                while (oM10>"1")
-                   oCR*=oCT
+                
+                nThs:=0
+                
+                while (oM10>"0")
                    oM10--
+                   nThs++
                 end while
+                
+                oTh:=tBigNThread():New()
+                oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+                
+                for nTh:=1 to nThs
+                    aEv:={@eval(),{|oCR,oD10|oCR:iPow(oD10)},oCR,oD10}
+                    oTh:setEvent(nTh,@aEv)
+                next nTh
+
+                oTh:Notify()
+                oTh:Wait()
+                oTh:Join()
+
+                oCR:SetValue("1")
+                for nTh:=1 to nThs
+                    oCT:=oTh:getResult(nTh)
+                    oCR*=oCT
+                next nTh
+
             else
+            
                 oCR:=oCR:iPow(oD10):iPow(oM10)
+        
             endif
+            
             cR:=oCR:ExactValue()
+        
         endif
+
         return(cR)
     
     static function GETCURRENTPROCESSID()
