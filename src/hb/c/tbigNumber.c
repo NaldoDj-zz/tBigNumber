@@ -67,10 +67,10 @@
 
         static char cNumber(const HB_SIZE iNumber);
         static HB_SIZE iNumber(const char * cNumber);
-        static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill );
+        static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill);
         static char * tBIGNPadL(const char * szItem,HB_SIZE nLen,const char * szPad);
         static char * tBIGNPadR(const char * szItem,HB_SIZE nLen,const char * szPad);
-        static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch );
+        static char * do_remove(int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch);
         /*static char * remAll( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );*/
         static char * remLeft( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );
         /*static char * remRight( const char * pcString, const HB_SIZE sStrLen, const char * cSearch );*/

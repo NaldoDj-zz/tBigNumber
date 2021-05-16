@@ -36,9 +36,9 @@ EndClass
 method new(nThreads) class tBigNThread
     DEFAULT nThreads:=0
     DEFAULT self:nThreads:=nThreads
-    self:aThreads:=if(self:nThreads>0,Array(self:aThreads,SIZ_TH),Array(0))
-    self:aResults:=Array(0)
-    self:aRChilds:=Array(0)
+    self:aThreads:=if(self:nThreads>0,array(self:aThreads,SIZ_TH),array(0))
+    self:aResults:=array(0)
+    self:aRChilds:=array(0)
     self:nMemMode:=NIL
     self:nThreadID:=hb_ThreadID()
 return(self)
@@ -56,7 +56,7 @@ method Start(nThreads,nMemMode) class tBigNThread
             nStart:=(self:nThreads+(nThreads-self:nThreads))
         endif
         While (nThreads>0)
-            aAdd(self:aThreads,Array(SIZ_TH))
+            aAdd(self:aThreads,array(SIZ_TH))
             ++self:nThreads
             --nThreads
         End While
@@ -85,17 +85,19 @@ method Start(nThreads,nMemMode) class tBigNThread
 return(self)
 
 method Notify() class tBigNThread
-    aEval(self:aThreads,{|ath,nTh|self:aThreads[nTh][TH_RES]:=NIL,self:aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)})
+    local bNotify as block
+    bNotify:={|ath,nTh|self:aThreads[nTh][TH_RES]:=NIL,self:aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)}
+    aEval(self:aThreads,bNotify)
 return(self)
 
 method Wait() class tBigNThread
     local nThread
     local nThreads:=self:nThreads
     local nThCount:=0
-    while .T.
+    while (.T.)
         for nThread:=1 to nThreads
-            if hb_mutexLock(self:aThreads[nThread][TH_MTX])
-                if self:aThreads[nThread][TH_END]
+            if (hb_mutexLock(self:aThreads[nThread][TH_MTX]))
+                if (self:aThreads[nThread][TH_END])
                     ++nThCount
                 endif
                 hb_MutexUnLock(self:aThreads[nThread][TH_MTX])
@@ -109,7 +111,9 @@ method Wait() class tBigNThread
 return(self)
 
 method Join() class tBigNThread
-    aEval(self:aThreads,{|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)})
+    local bJoin as block
+    bJoin:={|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)}
+    aEval(self:aThreads,bJoin)
 return(self)
 
 method addEvent(uthEvent) class tBigNThread
@@ -155,7 +159,7 @@ return(uResult)
 
 method getAllResults() class tBigNThread
     aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==NIL,NIL,aAdd(self:aResults,aTh[TH_RES]))})
-    if .not.(Empty(self:aRChilds))
+    if (.not.(Empty(self:aRChilds)))
         aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
     endif
 return(self:aResults)
@@ -169,25 +173,25 @@ static Procedure tbigNthRun(mtxJob,aThreads)
     local cTyp
     local xJob
     begin sequence
-        while .T.
-            if hb_mutexSubscribe(mtxJob,NIL,@xJob)
+        while (.T.)
+            if (hb_mutexSubscribe(mtxJob,NIL,@xJob))
                 cTyp:=ValType(xJob)
                 switch cTyp
-                case "B"
+                case ("B")
                     Eval(xJob)
                     exit
-                case "A"
-                    hb_ExecFromArray(xJob)
+                case ("A")
+                    hb_ExecFromarray(xJob)
                     exit
-                case "N"
+                case ("N")
                     while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
                     end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
                     switch cTyp
-                    case "A"
-                        aThreads[xJob][TH_RES]:=hb_ExecFromArray(aThreads[xJob][TH_EXE])
+                    case ("A")
+                        aThreads[xJob][TH_RES]:=hb_ExecFromarray(aThreads[xJob][TH_EXE])
                         exit
-                    case "B"
+                    case ("B")
                         aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
                         exit
                     otherwise

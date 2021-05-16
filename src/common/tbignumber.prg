@@ -71,7 +71,7 @@
     #define __DIVMETHOD__ 1
 #endif
 
-static s_aH2B   AS ARRAY
+static s_aH2B   as array
 
 static s__cN0   as character
 static s__nN0   as numeric
@@ -104,7 +104,7 @@ static s__MTXACC    as pointer
 static s__MTXDEC    as pointer
 static s__MTXSQR    as pointer
 
-#ifdef TBN_ARRAY
+#ifdef TBN_array
     #define __THREAD_STATIC__ 1
 #else
     #ifdef TBN_DBFILE
@@ -114,13 +114,13 @@ static s__MTXSQR    as pointer
 
 #ifdef __THREAD_STATIC__
     thread static ths_lsdSet            as logical
-    #ifdef TBN_ARRAY
-        thread static ths_aZAdd         AS ARRAY
-        thread static ths_aZSub         AS ARRAY
-        thread static ths_aZMult        AS ARRAY
+    #ifdef TBN_array
+        thread static ths_aZAdd         as array
+        thread static ths_aZSub         as array
+        thread static ths_aZMult        as array
     #else
         #ifdef TBN_DBFILE
-            thread static ths_aFiles    AS ARRAY
+            thread static ths_aFiles    as array
         #endif
     #endif
 #endif
@@ -144,11 +144,11 @@ static s__MTXSQR    as pointer
     *    Alternative Compile Options: -d
     *
     *    #ifdef __ADVPL__
-    *        -dTBN_ARRAY
+    *        -dTBN_array
     *        -dTBN_DBFILE
     *        -d__TBN_DYN_OBJ_SET__
     *    #else /*__HARBOUR__*/
-    *        -dTBN_ARRAY
+    *        -dTBN_array
     *        -dTBN_DBFILE
     *        -dTBN_MEMIO
     *        -d__TBN_DYN_OBJ_SET__
@@ -793,7 +793,7 @@ static s__MTXSQR    as pointer
                      ".and." =>__OpAnd
                      ".or."  =>__OpOr
                      ":="    =>__OpAssign
-                     "[]"    =>__OpArrayIndex
+                     "[]"    =>__OparrayIndex
                 */
                 //--------------------------------------------------------------------------------------------------------
 
@@ -1111,7 +1111,7 @@ endclass
     #endif
             local nFile     as numeric
             local nFiles    as numeric
-            DEFAULT ths_aFiles:=Array(0)
+            DEFAULT ths_aFiles:=array(0)
             nFiles:=tBIGNaLen(ths_aFiles)
             for nFile:=1 to nFiles
                 if Select(ths_aFiles[nFile][1])>0
@@ -3736,8 +3736,8 @@ static function cLCM(nX as numeric,nY as numeric)
     method nthRootPF(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aIPF      AS ARRAY
-        local aDPF      AS ARRAY
+        local aIPF      as array
+        local aDPF      as array
 
         local cFExit    as character
 
@@ -3814,7 +3814,7 @@ static function cLCM(nX as numeric,nY as numeric)
             else
 
                 aIPF:=oRootB:PFactors()
-                aDPF:=Array(0)
+                aDPF:=array(0)
 
             endif
 
@@ -4637,7 +4637,7 @@ static function cLCM(nX as numeric,nY as numeric)
     method H2B() class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aH2B  AS ARRAY
+        local aH2B  as array
 
         local cChr  as character
         local cBin  as character
@@ -4728,7 +4728,7 @@ static function cLCM(nX as numeric,nY as numeric)
     method B2H(cHexB) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aH2B  AS ARRAY
+        local aH2B  as array
 
         local cChr  as character
         local cInt  as character
@@ -5213,7 +5213,7 @@ static function mrPass(uA,uS,uD,uN)
     method PFactors() class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aPFactors AS ARRAY
+        local aPFactors as array
 
         local cP        as character
 
@@ -5228,7 +5228,7 @@ static function mrPass(uA,uS,uD,uN)
 
         local lPrime    as logical
 
-        aPFactors:=Array(0)
+        aPFactors:=array(0)
 
         oT:=s__o0:Clone()
         oN:=self:Clone()
@@ -5401,30 +5401,30 @@ static function recFact(oS as object,oN as object)
 #else /*__ADVPL__*/
     method Fibonacci() class tBigNumber
 #endif /*__HARBOUR__*/
-        local aFibonacci    AS ARRAY
+        local aFibonacci    as array
         local oN            as object
         local oA            as object
         local oB            as object
         local oT            as object
-        aFibonacci:=Array(0)
+        aFibonacci:=array(0)
         oB:=tBigNumber():New("1")
         oN:=self:Clone()
         oA:=tBigNumber():New("0")
         #ifdef __HARBOUR__
-            While (oA<oN)
+            while (oA<oN)
                 aAdd(aFibonacci,oA:ExactValue())
                 oT:=oB:Clone()
-                oB:=oA+oB
+                oB:=(oA+oB)
                 oA:=oT
-           End While
+           end while
         #else //__PROTEUS__
             oT:=tBigNumber():New("0")
-            While (oA:lt(oN))
+            while (oA:lt(oN))
                 aAdd(aFibonacci,oA:ExactValue())
                 oT:SetValue(oB)
                 oB:SetValue(oA:Add(oB))
                 oA:SetValue(oT)
-            End While
+            end while
         #endif
         return(aFibonacci)
 /*method Fibonacci*/
@@ -5477,7 +5477,7 @@ static function egMult(cN1 as character,cN2 as character,nBase as numeric)
 
 #ifdef __PTCOMPAT__
 
-    local aeMT  AS ARRAY
+    local aeMT  as array
 
     local nI    as numeric
     local nCmp  as numeric
@@ -5486,7 +5486,7 @@ static function egMult(cN1 as character,cN2 as character,nBase as numeric)
     local oMTM  as object
     local oMTP  as object
 
-    aeMT:=Array(0)
+    aeMT:=array(0)
 
     nI:=0
 
@@ -5607,7 +5607,7 @@ static function rMult(cA as character,cB as character,nBase as numeric)
 static function egDiv(cN as character,cD as character,nSize as numeric,nBase as numeric,nAcc as numeric,lFloat as logical)
 
 #ifdef __PTCOMPAT__
-    local aeDV      AS ARRAY
+    local aeDV      as array
     local nI        as numeric
     local nCmp      as numeric
     local oeDivN    as object
@@ -5634,7 +5634,7 @@ static function egDiv(cN as character,cD as character,nSize as numeric,nBase as 
     oeDivR:=s__o0:Clone()
     oeDivR:SetValue(cD,nBase,NIL,NIL,nAcc)
 
-    aeDV:=Array(0)
+    aeDV:=array(0)
 
     nI:=0
 
@@ -6103,8 +6103,8 @@ static function __SQRT(p)
 
         local c as character
 
-        local a AS ARRAY
-        local b AS ARRAY
+        local a as array
+        local b as array
         local y as numeric
 
         local i as numeric
@@ -6283,7 +6283,7 @@ static function __SQRT(p)
     /*static function dbGetcN*/
 
     static function dbNumber(cAlias as character)
-        local aStru     AS ARRAY
+        local aStru     as array
         local cFile     as character
     #ifndef __HARBOUR__
         local cRDD      as character
@@ -6318,7 +6318,7 @@ static function __SQRT(p)
                 cFile:=CriaTrab(aStru,cAlias)
             #endif
     #endif
-            DEFAULT ths_aFiles:=Array(0)
+            DEFAULT ths_aFiles:=array(0)
             aAdd(ths_aFiles,{cAlias,cFile})
         else
             (cAlias)->(dbRLock())
@@ -6339,7 +6339,7 @@ static function __SQRT(p)
 
     #ifdef __HARBOUR__
         #ifndef TBN_MEMIO
-            static function CriaTrab(aStru AS ARRAY,cRDD as character)
+            static function CriaTrab(aStru as array,cRDD as character)
                 local cFolder   as character
                 local cFile     as character
                 local lSuccess  as logical
@@ -6358,7 +6358,7 @@ static function __SQRT(p)
                 return(cFile)
             /*static function CriaTrab*/
         #else
-            static function CriaTrab(aStru AS ARRAY,cAlias as character)
+            static function CriaTrab(aStru as array,cAlias as character)
                 local cFile     as character
                 local lSuccess  as logical
                 cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
@@ -6378,7 +6378,7 @@ static function __SQRT(p)
 
 #else
 
-    #ifdef TBN_ARRAY
+    #ifdef TBN_array
 
         //--------------------------------------------------------------------------------------------------------
             /*
@@ -6391,7 +6391,7 @@ static function __SQRT(p)
         //--------------------------------------------------------------------------------------------------------
         static function Add(a as character,b as character,n as numeric,nBase as numeric)
 
-            local c AS ARRAY
+            local c as array
 
             local s as character
 
@@ -6439,7 +6439,7 @@ static function __SQRT(p)
         //--------------------------------------------------------------------------------------------------------
         static function Sub(a as character,b as character,n as numeric,nBase as numeric)
 
-            local c AS ARRAY
+            local c as array
 
             local s as character
 
@@ -6488,7 +6488,7 @@ static function __SQRT(p)
         //--------------------------------------------------------------------------------------------------------
         static function Mult(cN1 as character,cN2 as character,n as numeric,nBase as numeric)
 
-            local c AS ARRAY
+            local c as array
 
             local a as character
             local b as character
@@ -6567,7 +6567,7 @@ static function __SQRT(p)
                 Sintaxe:aGetcN(a,x) -> s
             */
         //--------------------------------------------------------------------------------------------------------
-        static function aGetcN(a AS ARRAY,n as numeric)
+        static function aGetcN(a as array,n as numeric)
 
             local s as character
 
@@ -6896,36 +6896,6 @@ static function __SQRT(p)
 
 #endif
 
-#ifndef __PTCOMPAT__
-    static function thAdd(oN as object,oP as object)
-        return(oN:Add(oP))
-    /*static function thAdd*/
-    static function thDiv(oN as object,oD as object,lFloat as logical)
-        return(oN:Div(oD,lFloat))
-    /*static function thDiv*/
-    static function thMod0(oN as object,oD as object)
-        return(oN:Mod(oD):eq(s__o0))
-    /*static function thMod0*/
-    static function thnthRoot(oN as object,oE as object)
-        return(oN:nthRoot(oE))
-    /*static function thnthRoot*/
-    static function thMult(oN as object,oM as object)
-        return(oN:Mult(oM))
-    /*static function thMult*/
-    static function thPow(oN as object,oB as object)
-        return(oN:Pow(oB))
-    /*static function thPow*/
-    static function th2Mult(oN as object)
-        return(s__o2:Mult(oN))
-    /*static function th2Mult*/
-    static function thiMult(oN as object,oM as object)
-        return(oN:iMult(oM))
-    /*static function thiMult*/
-    static function thLogN(oN as object,oB as object)
-        return(oN:LogN(oB))
-    /*static function thLogN*/
-#endif //__PTCOMPAT__
-
 //--------------------------------------------------------------------------------------------------------
     /*
         function:Power
@@ -6995,7 +6965,7 @@ static function Power(oB as object,oE as object,lIPower as logical)
                     #ifdef TBN_DBFILE
                         lIPower:=.F.
                     #else
-                        #ifdef TBN_ARRAY
+                        #ifdef TBN_array
                             lIPower:=.F.
                         #endif
                     #endif
@@ -7052,7 +7022,7 @@ static function Power(oB as object,oE as object,lIPower as logical)
             #ifdef TBN_DBFILE
                 lIPower:=.F.
             #else
-                #ifdef TBN_ARRAY
+                #ifdef TBN_array
                     lIPower:=.F.
                 #endif
             #endif
@@ -7178,14 +7148,14 @@ static function MathO(uBigN1,cOperator as character,uBigN2,lRetObject as logical
 #ifdef __THREAD_STATIC__
     static procedure __Initsthd()
         ths_lsdSet:=.F.
-        #ifdef TBN_ARRAY
-            ths_aZAdd:=Array(0)
-            ths_aZSub:=Array(0)
-            ths_aZMult:=Array(0)
+        #ifdef TBN_array
+            ths_aZAdd:=array(0)
+            ths_aZSub:=array(0)
+            ths_aZMult:=array(0)
         #else
             #ifdef TBN_DBFILE
                 if (ths_aFiles==NIL)
-                    ths_aFiles:=Array(0)
+                    ths_aFiles:=array(0)
                 endif
             #endif
         #endif
@@ -7381,17 +7351,6 @@ static procedure s__IncS9(n as numeric)
             TBIGNLOG()
             S__INCS9()
             TBIGNPOWER()
-            #ifndef __PTCOMPAT__
-                THADD()
-                THDIV()
-                THMOD0()
-                THNTHROOT()
-                THMULT()
-                THIMULT()
-                TH2MULT()
-                THPOW()
-                THLOGN()
-            #endif
         endif
         return(lDummy)
     /*static function __Dummy*/
