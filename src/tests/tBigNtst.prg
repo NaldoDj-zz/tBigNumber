@@ -5042,6 +5042,8 @@ static procedure tBigNtst38(fhLog as numeric)
                    oCR*=oCT
                    oM10--
                 end while
+                
+                exit
             
             otherwise
             

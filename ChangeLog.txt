@@ -2,11 +2,8 @@
  * $Id$
  */
 
-2021-05-16 17:50 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
+2021-05-16 17:54 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
   * prj/mg/win/64/tBigNumber64.mip
-  * src/common/tbignumber.prg
-  * src/hb/c/tbigNumber.c
-  * src/hb/tbigNThread.prg
   * src/tests/tBigNtst.prg
 
 2019-09-01 20:49 UTC-0300 NaldoDj (marinaldo.jesus blacktdn.com.br)
