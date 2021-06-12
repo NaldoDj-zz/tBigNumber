@@ -4928,42 +4928,44 @@ static procedure tBigNtst38(fhLog as numeric)
 
     static procedure tBigNtst38Thread(lFinalize as logical,cM as character,cR as character)
 
-        local aEvent    as array
-        local aThreads  as array
+        local aEv   as array
+        local aThs  as array
         
-        local cP        as character
+        local cP    as character
         
-        local nThread   as numeric
-        local nThreads  as numeric
+        local nTh   as numeric
+        local nThs  as numeric
         
-        local oM        as object
-        local oThreads  as object
+        local oM    as object
+        local oT    as object
+        local oTh   as object
 
         oM:=tBigNumber():New(cM,nil,nil,.T.)
-        aThreads:=oM:SplitNumber()[1]
-        nThreads:=len(aThreads)
+        aThs:=oM:SplitNumber()[1]
+        nThs:=len(aThs)
 
-        oThreads:=tBigNThread():New()
+        oTh:=tBigNThread():New()
 
-        oThreads:Start(nThreads,HB_THREAD_INHERIT_MEMVARS)
+        oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
 
         oM:setValue("2")
 
-        for nThread:=1 to nThreads
-            cM:=left(aThreads[nThread],1)
-            cP:="1"+remLeft(aThreads[nThread],cM)
-            aEvent:={@tBigNtst38Eval(),oM,cM,cP,nACN_MERSENNE_OPT}
-            oThreads:setEvent(nThread,@aEvent)
-        next nThread
+        for nTh:=1 to nThs
+            cM:=left(aThs[nTh],1)
+            cP:="1"+remLeft(aThs[nTh],cM)
+            aEv:={@tBigNtst38Eval(),oM,cM,cP,nACN_MERSENNE_OPT}
+            oTh:setEvent(nTh,@aEv)
+        next nTh
         
-        oThreads:Notify()
-        oThreads:Wait()
-        oThreads:Join()
+        oTh:Notify()
+        oTh:Wait()
+        oTh:Join()
 
         oM:SetValue("1")
-        for nThread:=1 to nThreads
-            oM*=oThreads:getResult(nThread)
-        next nThread
+        for nTh:=1 to nThs
+            oT:=oTh:getResult(nTh)
+            oM*=oT
+        next nTh
 
         cR:=oM:OpDec():ExactValue()
 
