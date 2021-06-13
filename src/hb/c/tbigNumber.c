@@ -215,12 +215,7 @@
             HB_SIZE nLen=(HB_SIZE)hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadL(szItem,nLen,szPad);
-            #if 0
-                hb_retclen(szRet,( HB_SIZE )nLen);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(szRet,( HB_SIZE )nLen);
-            #endif
+            hb_retclen_buffer(szRet,( HB_SIZE )nLen);
         }
 
         static char * tBIGNPadR(const char * szItem,HB_SIZE nLen, const char * szPad){
@@ -233,12 +228,7 @@
             HB_SIZE nLen=(HB_SIZE)hb_parns(2);
             const char * szPad=hb_parc(3);
             char * szRet=tBIGNPadR(szItem,nLen,szPad);
-            #if 0
-                hb_retclen(szRet,( HB_SIZE )nLen);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(szRet,( HB_SIZE )nLen);
-            #endif
+            hb_retclen_buffer(szRet,( HB_SIZE )nLen);
         }
 
         static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
@@ -313,12 +303,7 @@
             const char * szF=hb_parc(1);
             const HB_SIZE s=(HB_SIZE)hb_parnint(2);
             char * szR=tBIGNReverse(szF,s);
-            #if 0
-                hb_retclen(szR,( HB_SIZE )s);
-                hb_xfree(szR);
-            #else
-                hb_retclen_buffer(szR,( HB_SIZE )s);
-            #endif
+            hb_retclen_buffer(szR,( HB_SIZE )s);
         }
 
         static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
@@ -352,12 +337,7 @@
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)+1);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             char * szRet=tBIGNAdd(a,b,n,y,nB);
-            #if 0
-                hb_retclen(szRet,( HB_SIZE )y);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(szRet,( HB_SIZE )y);
-            #endif
+            hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
 
         static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB){
@@ -394,12 +374,7 @@
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
-            #if 0
-                hb_retclen(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
-            #endif
+            hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
         }
 
         HB_FUNC_STATIC( TBIGNLADD ){
@@ -437,12 +412,7 @@
             const HB_SIZE y=(HB_SIZE)n;
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
             char * szRet=tBIGNSub(a,b,n,y,nB);
-            #if 0
-                hb_retclen_buffer(szRet,( HB_SIZE )y);
-            #else
-                hb_retclen(szRet,( HB_SIZE )y);
-                hb_xfree(szRet);
-            #endif
+            hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
 
         static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB){
@@ -478,12 +448,7 @@
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT s=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
-            #if 0
-                hb_retclen(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
-            #endif
+            hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
         }
 
         HB_FUNC_STATIC( TBIGNLSUB ){
@@ -570,23 +535,8 @@
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             HB_TRACE(HB_TR_DEBUG,("TBIGNMULT(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)",pValue1,pValue2,n,y,nB));
             char * szRet=tBIGNMult(pValue1,pValue2,n,y,nB);
-            #if 0               
-                n=( HB_SIZE )strlen(szRet);
-                hb_retclen_buffer(szRet,( HB_SIZE )n);
-            #else
-                #if 0
-                    n=( HB_SIZE )strlen(szRet);
-                    hb_retclen(szRet,( HB_SIZE )n);
-                    hb_xfree(szRet);
-                #else
-                    #if 0
-                        hb_retc_buffer(szRet);
-                    #else
-                        hb_retc(szRet);
-                        hb_xfree(szRet);
-                    #endif
-                #endif
-            #endif
+            n=( HB_SIZE )strlen(szRet);
+            hb_retclen_buffer(szRet,n);
         }
         
         static char * tBigNPower(const char * szBas,const char * szExp,HB_SIZE * p,HB_SIZE y,const HB_MAXINT nB){
@@ -644,21 +594,7 @@
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             HB_TRACE(HB_TR_DEBUG,("TBIGNPOWER(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)",szBas,szExp,n,y,nB));
             char * szRet=tBigNPower(szBas,szExp,&n,y,nB);
-            #if 0               
-                hb_retclen_buffer(szRet,n);
-            #else
-                #if 0
-                    hb_retclen(szRet,n);
-                    hb_xfree(szRet);
-                #else
-                    #if 0
-                        hb_retc_buffer(szRet);
-                    #else
-                        hb_retc(szRet);
-                        hb_xfree(szRet);
-                    #endif
-                #endif
-            #endif
+            hb_retclen_buffer(szRet,n);
         }
 
        static void tBIGNegMult(const char * pN,const char * pD,HB_MAXINT n,const HB_MAXINT nB,ptBIGNeMult pegMult){
@@ -766,11 +702,7 @@
 
             tBIGNegMult(pN,pD,n,nB,pegMult);
 
-            #if 0
-                hb_retclen(pegMult->cMultP,( HB_SIZE )n);
-            #else
-                hb_retclen_buffer(hb_strdup(pegMult->cMultP),( HB_SIZE )n);
-            #endif
+            hb_retclen_buffer(hb_strdup(pegMult->cMultP),( HB_SIZE )n);
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -803,12 +735,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)*2);
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(2);
-            #if 0
-                hb_retclen(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
-            #endif
+            hb_retclen_buffer(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
         }
 
         static char * tBigNiMult(char * sN,const HB_MAXINT m,const HB_SIZE isN,const HB_MAXINT nB){
@@ -837,12 +764,7 @@
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             HB_MAXINT m=(HB_MAXINT)hb_parnint(2);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
-            #if 0
-                hb_retclen(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
-                hb_xfree(szRet);
-            #else
-                hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
-            #endif
+            hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
         }
 
         HB_FUNC_STATIC( TBIGNLMULT ){
@@ -972,13 +894,8 @@
                 }
             }
 
-            #if 0
-                hb_retclen(pegDiv->cDivQ,( HB_SIZE )n);
-                hb_storclen(pegDiv->cDivR,( HB_SIZE )n,3);
-            #else
-                hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),( HB_SIZE )n);
-                hb_storclen_buffer(hb_strdup(pegDiv->cDivR),( HB_SIZE )n,3);
-            #endif
+            hb_retclen_buffer(hb_strdup(pegDiv->cDivQ),( HB_SIZE )n);
+            hb_storclen_buffer(hb_strdup(pegDiv->cDivR),( HB_SIZE )n,3);
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -1123,13 +1040,8 @@
                 }
             }
 
-            #if 0
-                hb_retclen(pecDiv->cDivQ,( HB_SIZE )n);
-                hb_storclen(pecDiv->cDivR,( HB_SIZE )n,3);
-            #else
-                hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),( HB_SIZE )n);
-                hb_storclen_buffer(hb_strdup(pecDiv->cDivR),( HB_SIZE )n,3);
-            #endif
+            hb_retclen_buffer(hb_strdup(pecDiv->cDivQ),( HB_SIZE )n);
+            hb_storclen_buffer(hb_strdup(pecDiv->cDivR),( HB_SIZE )n,3);
 
             hb_xfree(pN);
             hb_xfree(pD);
@@ -1410,12 +1322,7 @@
                 char str[100];
                 char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                 hb_xmemcpy(szstr,str,strlen(str));
-                #if 0
-                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                    hb_xfree(szstr);
-                #else
-                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                #endif
+                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
               }
               else
               {
@@ -1426,12 +1333,7 @@
                         char str[]={'0'};
                         char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                         hb_xmemcpy(szstr,str,strlen(str));
-                        #if 0
-                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                            hb_xfree(szstr);
-                        #else
-                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                        #endif
+                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                     }
                     else
                     {
@@ -1440,12 +1342,7 @@
                         char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                         sprintf(str,tformat,ldResult);
                         hb_xmemcpy(szstr,str,strlen(str));
-                        #if 0
-                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                            hb_xfree(szstr);
-                        #else
-                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                        #endif
+                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                     }
               }
            }
@@ -1454,12 +1351,7 @@
                 char str[]={'0'};
                 char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                 hb_xmemcpy(szstr,str,strlen(str));
-                #if 0
-                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                    hb_xfree(szstr);
-                #else
-                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                #endif
+                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
             }
         }
 
@@ -1478,12 +1370,7 @@
                     char str[100];
                     char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                     hb_xmemcpy(szstr,str,strlen(str));
-                    #if 0
-                        hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                        hb_xfree(szstr);
-                    #else
-                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                    #endif
+                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                 }
                 else
                 {
@@ -1495,22 +1382,12 @@
                         char str[]={'0'};
                         char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                         hb_xmemcpy(szstr,str,strlen(str));
-                        #if 0
-                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                            hb_xfree(szstr);
-                        #else
-                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                        #endif
+                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                     }
                     else {
                         char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                         hb_xmemcpy(szstr,str,strlen(str));
-                        #if 0
-                            hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                            hb_xfree(szstr);
-                        #else
-                            hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                        #endif
+                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
                     }
                 }
            }
@@ -1519,12 +1396,7 @@
                 char str[]={'0'};
                 char * szstr=(char*)hb_xgrabz(( HB_SIZE )strlen(str)+1);
                 hb_xmemcpy(szstr,str,strlen(str));
-                #if 0
-                    hb_retclen(szstr,( HB_SIZE )strlen(szstr));
-                    hb_xfree(szstr);
-                #else
-                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                #endif
+                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
             }
         }
 

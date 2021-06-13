@@ -4934,40 +4934,54 @@ static procedure tBigNtst38(fhLog as numeric)
         local cP    as character
         
         local nTh   as numeric
-        local nThs  as numeric
+        local nThs  as numeric        
+        local nThM  as numeric
         
         local oM    as object
         local oT    as object
+        local oR    as object
+        
         local oTh   as object
 
         oM:=tBigNumber():New(cM,nil,nil,.T.)
+        
         aThs:=oM:SplitNumber()[1]
-        nThs:=len(aThs)
-
-        oTh:=tBigNThread():New()
-
-        oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+        
+        nThM:=len(aThs)
 
         oM:setValue("2")
+        oR:=tBigNumber():New("1")
 
-        for nTh:=1 to nThs
-            cM:=left(aThs[nTh],1)
-            cP:="1"+remLeft(aThs[nTh],cM)
-            aEv:={@tBigNtst38Eval(),oM,cM,cP,nACN_MERSENNE_OPT}
-            oTh:setEvent(nTh,@aEv)
-        next nTh
-        
-        oTh:Notify()
-        oTh:Wait()
-        oTh:Join()
+        while (nThM>0)
 
-        oM:SetValue("1")
-        for nTh:=1 to nThs
-            oT:=oTh:getResult(nTh)
-            oM*=oT
-        next nTh
+            nThs:=Min(5,nThM)
+            nThM-=nThs
 
-        cR:=oM:OpDec():ExactValue()
+            oTh:=tBigNThread():New()
+            oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+     
+            for nTh:=1 to nThs
+                cM:=left(aThs[nTh],1)
+                cP:="1"+remLeft(aThs[nTh],cM)
+                aEv:={@tBigNtst38Eval(),oM,cM,cP,nACN_MERSENNE_OPT}
+                oTh:setEvent(nTh,@aEv)
+            next nTh
+            
+            aDel(aThs,nThs)
+            aSize(aThs,nThM)
+            
+            oTh:Notify()
+            oTh:Wait()
+            oTh:Join()
+
+            for nTh:=1 to nThs
+                oT:=oTh:getResult(nTh)
+                oR*=oT
+            next nTh
+
+        end while
+
+        cR:=oR:OpDec():ExactValue()
 
         lFinalize:=.T.
 
@@ -4979,15 +4993,20 @@ static procedure tBigNtst38(fhLog as numeric)
         
         local nTh   as numeric
         local nThs  as numeric
+        local nThM  as numeric
 
+        local oCM   as object
         local oCP   as object
         local oCR   as object
         local oCT   as object
 
-        local oTh   as object
-
         local oM10  as object
         local oD10  as object
+
+        local oTh   as object
+
+        local o0    as object
+        local o1    as object
         local o100  as object
 
         oCP:=tBigNumber():New(cP)
@@ -4995,63 +5014,119 @@ static procedure tBigNtst38(fhLog as numeric)
 
         if (oCP<=o100)
         
-            oCR:=oM:iPow(cM):iPow(cP)
+            oCR:=oM:iPow(cM):iPow(oCP)
         
         else
             
-            oCR:=oM:iPow(cM)
+            oCM:=oM:iPow(cM)
             oD10:=tBigNumber():New(oCP:Div("10"))
             oM10:=tBigNumber():New(oCP:Div(oD10))
-            
-            DEFAULT nOption:=nACN_MERSENNE_OPT
-            
-            switch nOption
-            case (2)
-                
+                        
+            oCR:=tBigNumber():New("0")            
+                        
+            if (oM10<=o100)
+
                 nThs:=0
-                
-                while (oM10>"0")
+                    
+                o0:=tBigNumber():New("0")
+                while (oM10>o0)
                    oM10--
                    nThs++
                 end while
-                
-                oTh:=tBigNThread():New()
-                oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
-                
-                for nTh:=1 to nThs
-                    aEv:={@eval(),{|oCR,oD10|oCR:iPow(oD10)},oCR,oD10}
-                    oTh:setEvent(nTh,@aEv)
-                next nTh
 
-                oTh:Notify()
-                oTh:Wait()
-                oTh:Join()
-
+                nThM:=nThs
+                
                 oCR:SetValue("1")
-                for nTh:=1 to nThs
-                    oCT:=oTh:getResult(nTh)
-                    oCR*=oCT
-                next nTh
                 
-                exit
+                while (nThM>0)
 
-            case (1)
-            
-                oCT:=oCR:iPow(oD10)
-                oCR:SetValue(oCT)
-                while (oM10>"1")
-                   oCR*=oCT
-                   oM10--
-                end while
+                    nThs:=Min(5,nThM)
+                    nThM-=nThs
                 
-                exit
+                    oTh:=tBigNThread():New()
+                    oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+                    
+                    for nTh:=1 to nThs
+                        aEv:={@eval(),{|oCM,oD10|oCM:iPow(oD10)},oCM,oD10}
+                        oTh:setEvent(nTh,@aEv)
+                    next nTh
+
+                    oTh:Notify()
+                    oTh:Wait()
+                    oTh:Join()
+                    
+                    for nTh:=1 to nThs
+                        oCT:=oTh:getResult(nTh)
+                        oCR*=oCT
+                    next nTh
+
+                end while
+
+            else    
+      
+                DEFAULT nOption:=nACN_MERSENNE_OPT
+      
+                switch nOption
+                case (2)
+                    
+                    nThs:=0
+                    
+                    o0:=tBigNumber():New("0")
+                    while (oM10>o0)
+                       oM10--
+                       nThs++
+                    end while
+                    
+                    nThM:=nThs
+                    
+                    oCR:SetValue("1")
+                    
+                    while (nThM>0)
+
+                        nThs:=Min(5,nThM)
+                        nThM-=nThs
+                    
+                        oTh:=tBigNThread():New()
+                        oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+                        
+                        for nTh:=1 to nThs
+                            aEv:={@eval(),{|oCM,oD10|oCM:iPow(oD10)},oCM,oD10}
+                            oTh:setEvent(nTh,@aEv)
+                        next nTh
+
+                        oTh:Notify()
+                        oTh:Wait()
+                        oTh:Join()
+                        
+                        for nTh:=1 to nThs
+                            oCT:=oTh:getResult(nTh)
+                            oCR*=oCT
+                        next nTh
+
+                    end while
+                    
+                    exit
+
+                case (1)
+                
+                    o1:=tBigNumber():New("1")
+                    oCT:=oCM:iPow(oD10)
+                    oCR:SetValue(oCT)
+                    while (oM10>o1)
+                       oCR*=oCT
+                       oM10--
+                    end while
+                    
+                    exit
+                
+                otherwise
+                
+                    oCR:=oCM:iPow(oD10):iPow(oM10)
             
-            otherwise
+                endswitch
+
+            endif
             
-                oCR:=oCR:iPow(oD10):iPow(oM10)
-        
-            endswitch
-        
         endif
 
         return(oCR)

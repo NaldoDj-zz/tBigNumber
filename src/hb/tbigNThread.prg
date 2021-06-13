@@ -1,51 +1,52 @@
 #include "hbclass.ch"
+#include "hbthread.ch"
 #include "tBigNThread.ch"
 
-Class tBigNThread
+class tBigNThread
 
     PROTECTED:
     
-    data aThreads
-    data aResults
+    data aThreads   as array
+    data aResults   as array
 
-    data aRChilds
+    data aRChilds   as array
     
-    data nThreads
-    data nMemMode
-    data nThreadID
+    data nThreads   as numeric
+    data nMemMode   as numeric
+    data nThreadID  as numeric
 
     EXPORTED:
     
-    method New(nThreads) CONSTRUCTOR /*( /!\ )*/
+    method New(nThreads as numeric) CONSTRUCTOR /*( /!\ )*/
     
-    method Start(nThreads,nMemMode)
+    method Start(nThreads as numeric,nMemMode as numeric)
     method Notify()
     method Wait()
     method Join()
     
     method addEvent(uthEvent)
-    method setEvent(nThEvent,uthEvent)
+    method setEvent(nThEvent as numeric,uthEvent)
 
-    method getResult(nThEvent)
+    method getResult(nThEvent as numeric)
     method getAllResults()
     
     method clearAllResults()
     
-EndClass
+endclass
 
-method new(nThreads) class tBigNThread
+method new(nThreads as numeric) class tBigNThread
     DEFAULT nThreads:=0
     DEFAULT self:nThreads:=nThreads
     self:aThreads:=if(self:nThreads>0,array(self:aThreads,SIZ_TH),array(0))
     self:aResults:=array(0)
     self:aRChilds:=array(0)
-    self:nMemMode:=NIL
+    self:nMemMode:=hb_bitOr(HB_THREAD_INHERIT_PUBLIC,HB_THREAD_INHERIT_PRIVATE,HB_THREAD_INHERIT_MEMVARS,HB_THREAD_MEMVARS_COPY)
     self:nThreadID:=hb_ThreadID()
-return(self)
+    return(self)
 
-method Start(nThreads,nMemMode) class tBigNThread
-    local nStart
-    local nThread
+method Start(nThreads as numeric,nMemMode as numeric) class tBigNThread
+    local nStart    as numeric
+    local nThread   as numeric
     DEFAULT nThreads:=self:nThreads
     DEFAULT nMemMode:=self:nMemMode
     self:nMemMode:=nMemMode
@@ -55,45 +56,39 @@ method Start(nThreads,nMemMode) class tBigNThread
         else
             nStart:=(self:nThreads+(nThreads-self:nThreads))
         endif
-        While (nThreads>0)
+        while (nThreads>0)
             aAdd(self:aThreads,array(SIZ_TH))
             ++self:nThreads
             --nThreads
-        End While
+        end while
     else
         nStart:=1
     endif
     nThreads:=self:nThreads    
     for nThread:=nStart To nThreads
         self:aThreads[nThread][TH_MTX]:=hb_mutexCreate()
-        self:aThreads[nThread][TH_EXE]:=NIL
-        self:aThreads[nThread][TH_RES]:=NIL
+        self:aThreads[nThread][TH_EXE]:=nil
+        self:aThreads[nThread][TH_RES]:=nil
         self:aThreads[nThread][TH_END]:=.F.
-        if (nMemMode==NIL)
-            self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
-        else
+        self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+        while (self:aThreads[nThread][TH_NUM]==nil)
             self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
-        endif
-        while (self:aThreads[nThread][TH_NUM]==NIL)
-            if (nMemMode==NIL)
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
-            else
-                self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
-            endif
         end while
     next nThread
-return(self)
+    return(self)
 
 method Notify() class tBigNThread
     local bNotify as block
-    bNotify:={|ath,nTh|self:aThreads[nTh][TH_RES]:=NIL,self:aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)}
+    bNotify:={|ath,nTh|self:aThreads[nTh][TH_RES]:=nil,self:aThreads[nTh][TH_END]:=.F.,hb_mutexNotify(ath[TH_MTX],nTh)}
     aEval(self:aThreads,bNotify)
-return(self)
+    return(self)
 
 method Wait() class tBigNThread
-    local nThread
-    local nThreads:=self:nThreads
-    local nThCount:=0
+    local nThread   as numeric
+    local nThreads  as numeric
+    local nThCount  as numeric
+    nThreads:=self:nThreads
+    nThCount:=0
     while (.T.)
         for nThread:=1 to nThreads
             if (hb_mutexLock(self:aThreads[nThread][TH_MTX]))
@@ -108,20 +103,20 @@ method Wait() class tBigNThread
         endif
         nThCount:=0
     end while
-return(self)
+    return(self)
 
 method Join() class tBigNThread
     local bJoin as block
-    bJoin:={|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==NIL),hb_threadJoin(ath[TH_NUM]),NIL)}
+    bJoin:={|ath|hb_mutexNotify(ath[TH_MTX],{||break()}),if(.not.(ath[TH_NUM]==nil),hb_threadJoin(ath[TH_NUM]),nil)}
     aEval(self:aThreads,bJoin)
-return(self)
+    return(self)
 
 method addEvent(uthEvent) class tBigNThread
-    Local bEvent
-    Local nThEvent
-    Local oThreads
+    local bEvent    as block
+    local nThEvent  as numeric
+    local oThreads  as object
     if (self:nThreadID==hb_ThreadID())
-        bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==NIL)}
+        bEvent:={|aTh|.NOT.(aTh[TH_END]).and.(aTh[TH_EXE]==nil)}
         nThEvent:=aScan(self:aThreads,bEvent)
         while (nThEvent==0)
             self:Start(self:nThreads+1,self:nMemMode)
@@ -138,45 +133,45 @@ method addEvent(uthEvent) class tBigNThread
         oThreads:Join()
         aAdd(self:aRChilds,oThreads:getResult(nThEvent))
     endif
-return(nThEvent)
+    return(nThEvent)
 
-method setEvent(nThEvent,uthEvent) class tBigNThread
+method setEvent(nThEvent as numeric,uthEvent) class tBigNThread
     local uLEvent
     DEFAULT nThEvent:=0
     if ((nThEvent>0).and.(nThEvent<=self:nThreads))
         uLEvent:=self:aThreads[nThEvent][TH_EXE]
         self:aThreads[nThEvent][TH_EXE]:=uthEvent
     endif
-return(uLEvent)
+    return(uLEvent)
 
-method getResult(nThEvent) class tBigNThread
+method getResult(nThEvent as numeric) class tBigNThread
     local uResult
     DEFAULT nThEvent:=0
     if ((nThEvent>0).and.(nThEvent<=self:nThreads))
         uResult:=self:aThreads[nThEvent][TH_RES]
     endif
-return(uResult)
+    return(uResult)
 
 method getAllResults() class tBigNThread
-    aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==NIL,NIL,aAdd(self:aResults,aTh[TH_RES]))})
+    aEval(self:aThreads,{|aTh|if(aTh[TH_RES]==nil,nil,aAdd(self:aResults,aTh[TH_RES]))})
     if (.not.(Empty(self:aRChilds)))
         aEval(self:aRChilds,{|r|aAdd(self:aResults,r)})
     endif
-return(self:aResults)
+    return(self:aResults)
 
 method clearAllResults() class tBigNThread
     aSize(self:aRChilds,0)
     aSize(self:aResults,0)
-return(NIL)
+    return(nil)
 
-static Procedure tbigNthRun(mtxJob,aThreads)
-    local cTyp
+static procedure tbigNthRun(mtxJob as numeric,aThreads as array)
+    local cTyp as character
     local xJob
     begin sequence
         while (.T.)
-            if (hb_mutexSubscribe(mtxJob,NIL,@xJob))
+            if (hb_mutexSubscribe(mtxJob,nil,@xJob))
                 cTyp:=ValType(xJob)
-                switch cTyp
+                switch (cTyp)
                 case ("B")
                     Eval(xJob)
                     exit
@@ -184,10 +179,10 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                     hb_ExecFromarray(xJob)
                     exit
                 case ("N")
-                    while .not.(hb_mutexLock(aThreads[xJob][TH_MTX]))
+                    while (.not.(hb_mutexLock(aThreads[xJob][TH_MTX])))
                     end while
                     cTyp:=ValType(aThreads[xJob][TH_EXE])
-                    switch cTyp
+                    switch (cTyp)
                     case ("A")
                         aThreads[xJob][TH_RES]:=hb_ExecFromarray(aThreads[xJob][TH_EXE])
                         exit
@@ -195,7 +190,7 @@ static Procedure tbigNthRun(mtxJob,aThreads)
                         aThreads[xJob][TH_RES]:=Eval(aThreads[xJob][TH_EXE])
                         exit
                     otherwise
-                        aThreads[xJob][TH_RES]:=NIL
+                        aThreads[xJob][TH_RES]:=nil
                     endswitch
                     aThreads[xJob][TH_END]:=.T.
                     hb_MutexUnLock(aThreads[xJob][TH_MTX])
@@ -204,4 +199,4 @@ static Procedure tbigNthRun(mtxJob,aThreads)
             endif
         end while
     end sequence
-return
+    return
