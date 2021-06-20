@@ -5004,14 +5004,13 @@ static procedure tBigNtst38(fhLog as numeric)
         
         else
             
-            oCM:=oM:iPow(oCM)
+            oCM:SetValue(oM:iPow(oCM))
             
             oD10:=tBigNumber():New(oCP:Div("10"))
             oM10:=tBigNumber():New(oCP:Div(oD10))
  
-            oCR:=oCM:iPow(oM10)
-            oCM:setValue("0")
-            oCR:=oCR:iPow(oD10)
+            oCR:=tBigNumber():New("1")
+            oCR*=tBigNtst38Eval(oCM,oM10:ExactValue(),oD10:ExactValue())
         
         endif
 
