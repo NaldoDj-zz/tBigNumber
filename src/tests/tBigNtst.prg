@@ -43,7 +43,6 @@
         memvar nACC_SET
         memvar nACC_ALOG
         memvar nROOT_ACC_SET
-        memvar nACN_MERSENNE_OPT
 
         memvar lDispML
         memvar lL_OOPROGRAND
@@ -83,7 +82,6 @@
 #define L_LOGPROCESS     "1"
 #define C_GT_MODE        "ST"
 #define AC_TSTEXEC       "1:17,-18,19:38"
-#define ACN_MERSENNE_OPT "1"
 //--------------------------------------------------------------------------------------------------------
 //Mersenne:
 //http://mathworld.wolfram.com/MersennePrime.html
@@ -152,7 +150,6 @@
         private nACC_SET            as numeric
         private nACC_ALOG           as numeric
         private nROOT_ACC_SET       as numeric
-        private nACN_MERSENNE_OPT   as numeric
 
         private lDispML             as logical
         private lL_OOPROGRAND       as logical
@@ -190,7 +187,6 @@
             hIni["GENERAL"]["C_GT_MODE"]:=C_GT_MODE
             hIni["GENERAL"]["AC_TSTEXEC"]:=AC_TSTEXEC
             hIni["GENERAL"]["ACN_MERSENNE_POW"]:=ACN_MERSENNE_POW
-            hIni["GENERAL"]["ACN_MERSENNE_OPT"]:=ACN_MERSENNE_OPT
             hb_iniWrite(cIni,hIni,"#tBigNtst.ini","#end of file")
             hIni:=hb_iniRead(cIni)
         endif
@@ -236,9 +232,6 @@
                         case "ACN_MERSENNE_POW"
                             aACN_MERSENNE_POW:=_StrTokArr(aSect[cKey],",")
                             EXIT
-                        case "ACN_MERSENNE_OPT"
-                            nACN_MERSENNE_OPT:=Val(aSect[cKey])
-                            EXIT
                     endswitch
                 next cKey
             next cSection
@@ -256,7 +249,6 @@
         cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
         aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
         aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(AllTrim(StrTran(StrTran(subStr(ACN_MERSENNE_POW,1,rAT("#ACN_MERSENNE_POW",ACN_MERSENNE_POW)-1),"#",""),CRLF,"")),","),aACN_MERSENNE_POW)
-        nACN_MERSENNE_OPT:=if(empty(nACN_MERSENNE_OPT),0,nACN_MERSENNE_OPT)
 
         __SetCentury("ON")
         SET DATE TO BRITISH
@@ -504,7 +496,6 @@
                     otFIni:AddNewProperty("GENERAL","C_GT_MODE",C_GT_MODE)
                     otFIni:AddNewProperty("GENERAL","AC_TSTEXEC",AC_TSTEXEC)
                     otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_POW",ACN_MERSENNE_POW)
-                    otFIni:AddNewProperty("GENERAL","ACN_MERSENNE_OPT",ACN_MERSENNE_OPT)
                     otFIni:SaveAs(cIni)
                     otFIni:=u_TFINI(cIni)
                 endif
@@ -521,7 +512,6 @@
                     cC_GT_MODE:=Upper(AllTrim(oTFINI:GetPropertyValue("GENERAL","C_GT_MODE",C_GT_MODE)))
                     aAC_TSTEXEC:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","AC_TSTEXEC",AC_TSTEXEC)),",")
                     aACN_MERSENNE_POW:=_StrTokArr(AllTrim(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_POW",StrTran(StrTran(subStr(ACN_MERSENNE_POW,1,rAT(";ACN_MERSENNE_POW",ACN_MERSENNE_POW)-1),";",""),CRLF,""))),",")
-                    nACN_MERSENNE_OPT:=Val(oTFINI:GetPropertyValue("GENERAL","ACN_MERSENNE_OPT",ACN_MERSENNE_OPT))
                 endif
             endif
 
@@ -537,7 +527,7 @@
             cC_GT_MODE:=if(Empty(cC_GT_MODE),C_GT_MODE,cC_GT_MODE)
             aAC_TSTEXEC:=if(Empty(aAC_TSTEXEC),_StrTokArr(AllTrim(AC_TSTEXEC),","),aAC_TSTEXEC)
             aACN_MERSENNE_POW:=if(Empty(aACN_MERSENNE_POW),_StrTokArr(StrTran(StrTran(ACN_MERSENNE_POW,";",""),CRLF,""),","),aACN_MERSENNE_POW)
-            nACN_MERSENNE_OPT:=if(Empty(ACN_MERSENNE_OPT),0,nACN_MERSENNE_OPT)
+
             __nSLEEP:=Max(__nSLEEP,10)
 
             if ((__nSLEEP)<10)
@@ -4952,19 +4942,21 @@ static procedure tBigNtst38(fhLog as numeric)
         oM:setValue("2")
         oR:=tBigNumber():New("1")
 
+        oTh:=tBigNThread():New()
+
         while (nThM>0)
 
-            nThs:=Min(5,nThM)
+            nThs:=Min(15,nThM)
             nThM-=nThs
 
-            oTh:=tBigNThread():New()
             oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
      
             for nTh:=1 to nThs
                 cM:=left(aThs[nTh],1)
                 cP:="1"+remLeft(aThs[nTh],cM)
-                aEv:={@tBigNtst38Eval(),oM,cM,cP,nACN_MERSENNE_OPT}
-                oTh:setEvent(nTh,@aEv)
+                aEv:={@tBigNtst38Eval(),oM,cM,cP}
+                oTh:setEvent(nTh,aClone(aEv))
+                aSize(aEv,0)
             next nTh
             
             aDel(aThs,nThs)
@@ -4979,6 +4971,8 @@ static procedure tBigNtst38(fhLog as numeric)
                 oR*=oT
             next nTh
 
+            oTh:Clear()
+
         end while
 
         cR:=oR:OpDec():ExactValue()
@@ -4987,146 +4981,38 @@ static procedure tBigNtst38(fhLog as numeric)
 
         return
         
-    static function tBigNtst38Eval(oM as object,cM as character,cP as character,nOption as logical)
-
-        local aEv   as array
-        
-        local nTh   as numeric
-        local nThs  as numeric
-        local nThM  as numeric
-
+    static function tBigNtst38Eval(oM as object,cM as character,cP as character)
+ 
         local oCM   as object
         local oCP   as object
         local oCR   as object
-        local oCT   as object
 
         local oM10  as object
         local oD10  as object
 
-        local oTh   as object
-
-        local o0    as object
-        local o1    as object
         local o100  as object
 
+        oCM:=tBigNumber():New(cM)
         oCP:=tBigNumber():New(cP)
+
         o100:=tBigNumber():New("100")
 
         if (oCP<=o100)
         
-            oCR:=oM:iPow(cM):iPow(oCP)
+            oCR:=oM:iPow(oCM)
+            oCR:=oCR:iPow(oCP)
         
         else
             
-            oCM:=oM:iPow(cM)
+            oCM:=oM:iPow(oCM)
+            
             oD10:=tBigNumber():New(oCP:Div("10"))
             oM10:=tBigNumber():New(oCP:Div(oD10))
-                        
-            oCR:=tBigNumber():New("0")            
-                        
-            if (oM10<=o100)
-
-                nThs:=0
-                    
-                o0:=tBigNumber():New("0")
-                while (oM10>o0)
-                   oM10--
-                   nThs++
-                end while
-
-                nThM:=nThs
-                
-                oCR:SetValue("1")
-                
-                while (nThM>0)
-
-                    nThs:=Min(5,nThM)
-                    nThM-=nThs
-                
-                    oTh:=tBigNThread():New()
-                    oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
-                    
-                    for nTh:=1 to nThs
-                        aEv:={@eval(),{|oCM,oD10|oCM:iPow(oD10)},oCM,oD10}
-                        oTh:setEvent(nTh,@aEv)
-                    next nTh
-
-                    oTh:Notify()
-                    oTh:Wait()
-                    oTh:Join()
-                    
-                    for nTh:=1 to nThs
-                        oCT:=oTh:getResult(nTh)
-                        oCR*=oCT
-                    next nTh
-
-                end while
-
-            else    
-      
-                DEFAULT nOption:=nACN_MERSENNE_OPT
-      
-                switch nOption
-                case (2)
-                    
-                    nThs:=0
-                    
-                    o0:=tBigNumber():New("0")
-                    while (oM10>o0)
-                       oM10--
-                       nThs++
-                    end while
-                    
-                    nThM:=nThs
-                    
-                    oCR:SetValue("1")
-                    
-                    while (nThM>0)
-
-                        nThs:=Min(5,nThM)
-                        nThM-=nThs
-                    
-                        oTh:=tBigNThread():New()
-                        oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
-                        
-                        for nTh:=1 to nThs
-                            aEv:={@eval(),{|oCM,oD10|oCM:iPow(oD10)},oCM,oD10}
-                            oTh:setEvent(nTh,@aEv)
-                        next nTh
-
-                        oTh:Notify()
-                        oTh:Wait()
-                        oTh:Join()
-                        
-                        for nTh:=1 to nThs
-                            oCT:=oTh:getResult(nTh)
-                            oCR*=oCT
-                        next nTh
-
-                    end while
-                    
-                    exit
-
-                case (1)
-                
-                    o1:=tBigNumber():New("1")
-                    oCT:=oCM:iPow(oD10)
-                    oCR:SetValue(oCT)
-                    while (oM10>o1)
-                       oCR*=oCT
-                       oM10--
-                    end while
-                    
-                    exit
-                
-                otherwise
-                
-                    oCR:=oCM:iPow(oD10):iPow(oM10)
-            
-                endswitch
-
-            endif
-            
+ 
+            oCR:=oCM:iPow(oM10)
+            oCM:setValue("0")
+            oCR:=oCR:iPow(oD10)
+        
         endif
 
         return(oCR)

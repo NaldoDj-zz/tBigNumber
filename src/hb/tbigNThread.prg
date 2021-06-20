@@ -23,6 +23,7 @@ class tBigNThread
     method Notify()
     method Wait()
     method Join()
+    method Clear()
     
     method addEvent(uthEvent)
     method setEvent(nThEvent as numeric,uthEvent)
@@ -163,6 +164,12 @@ method clearAllResults() class tBigNThread
     aSize(self:aRChilds,0)
     aSize(self:aResults,0)
     return(nil)
+    
+method Clear() class tBigNThread
+    self:clearAllResults()
+    aSize(self:aThreads,0)
+    self:nThreads:=0
+    return(nil)    
 
 static procedure tbigNthRun(mtxJob as numeric,aThreads as array)
     local cTyp as character
