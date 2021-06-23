@@ -4990,14 +4990,14 @@ static procedure tBigNtst38(fhLog as numeric)
         local oM10  as object
         local oD10  as object
 
-        local o100  as object
+        local oDiv  as object
 
         oCM:=tBigNumber():New(cM)
         oCP:=tBigNumber():New(cP)
 
-        o100:=tBigNumber():New("100")
+        oDiv:=tBigNumber():New("1000")
 
-        if (oCP<=o100)
+        if (oCP<=oDiv)
         
             oCR:=oM:iPow(oCM)
             oCR:=oCR:iPow(oCP)
@@ -5006,7 +5006,7 @@ static procedure tBigNtst38(fhLog as numeric)
             
             oCM:SetValue(oM:iPow(oCM))
             
-            oD10:=tBigNumber():New(oCP:Div("10"))
+            oD10:=tBigNumber():New(oCP:Div(oDiv))
             oM10:=tBigNumber():New(oCP:Div(oD10))
  
             oCR:=tBigNumber():New("1")
