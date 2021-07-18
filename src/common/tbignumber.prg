@@ -3254,7 +3254,7 @@ endclass
 
             endif
 
-            DEFAULT lIPower:=.F.
+            DEFAULT lIPower:=(opwNP:Dec(.T.):eq(s__o0))
             opwNR:SetValue(Power(opwNR,opwNP,lIPower))
 
             if (lPowF)
@@ -3281,14 +3281,134 @@ endclass
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     method iPow(uBigN) class tBigNumber
+        local cR        as character
+        local ptfiPow   as pointer
+        local pttiPow   as pointer
+        local lFinalize as logical
 #else /*__ADVPL__*/
     method iPow(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
+        local oR      as object
         local lIPower as logical
         lIPower:=.T.
-        return(self:Pow(uBigN,lIPower))
+#ifdef __HARBOUR__        
+        lFinalize:=.F.
+        ptfiPow:=@tBigNiPowThread()
+        pttiPow:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,ptfiPow,@lFinalize,self,uBigN,lIPower,@cR)
+        while (!lFinalize)
+        end while
+        hb_threadQuitRequest(pttiPow)
+        hb_ThreadWait(pttiPow)
+        oR:=tBigNumber():New(cR)
+#else /*__ADVPL__*/
+        oR:=self:Pow(uBigN,lIPower)
+#endif        
+    return(oR)
 /*method iPow*/
 
+#ifdef __HARBOUR__
+
+    static procedure tBigNiPowThread(lFinalize as logical,oB as object,uBigN,lIPower as logical,cR as character)
+
+        local aEv   as array
+        local aThs  as array
+        
+        local cM    as character
+        local cP    as character
+        
+        local nTh   as numeric
+        local nThs  as numeric        
+        local nThM  as numeric
+        
+        local oM    as object
+        local oT    as object
+        local oR    as object
+        
+        local oTh   as object
+
+        oM:=tBigNumber():New(uBigN,nil,nil,.T.)
+        
+        aThs:=oM:SplitNumber()[1]
+        
+        nThM:=len(aThs)
+
+        oR:=tBigNumber():New("1")
+
+        oTh:=tBigNThread():New()
+
+        while (nThM>0)
+
+            nThs:=Min(15,nThM)
+            nThM-=nThs
+
+            oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
+     
+            for nTh:=1 to nThs
+                cM:=left(aThs[nTh],1)
+                cP:="1"+remLeft(aThs[nTh],cM)
+                aEv:={@tBigNiPowEval(),oB,cM,cP,lIPower}
+                oTh:setEvent(nTh,aClone(aEv))
+                aSize(aEv,0)
+            next nTh
+            
+            aDel(aThs,nThs)
+            aSize(aThs,nThM)
+            
+            oTh:Notify()
+            oTh:Wait()
+            oTh:Join()
+
+            for nTh:=1 to nThs
+                oT:=oTh:getResult(nTh)
+                oR*=oT
+            next nTh
+
+            oTh:Clear()
+
+        end while
+
+        cR:=oR:OpDec():ExactValue()
+
+        lFinalize:=.T.
+
+        return
+        
+    static function tBigNiPowEval(oM as object,cM as character,cP as character,lIPower)
+ 
+        local oCM   as object
+        local oCP   as object
+        local oCR   as object
+
+        local oM10  as object
+        local oD10  as object
+
+        local oDiv  as object
+
+        oCM:=tBigNumber():New(cM)
+        oCP:=tBigNumber():New(cP)
+
+        oDiv:=tBigNumber():New("1000")
+
+        if (oCP<=oDiv)
+        
+            oCR:=oM:Pow(oCM,lIPower)
+            oCR:=oCR:Pow(oCP,lIPower)
+        
+        else
+            
+            oCM:SetValue(oM:Pow(oCM,lIPower))
+            
+            oD10:=tBigNumber():New(oCP:Div(oDiv))
+            oM10:=tBigNumber():New(oCP:Div(oD10))
+ 
+            oCR:=tBigNumber():New("1")
+            oCR*=tBigNiPowEval(oCM,oM10:ExactValue(),oD10:ExactValue(),lIPower)
+        
+        endif
+
+        return(oCR)
+
+#endif        
 //--------------------------------------------------------------------------------------------------------
     /*
         method:OpInc

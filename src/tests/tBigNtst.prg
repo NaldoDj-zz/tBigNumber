@@ -4918,103 +4918,17 @@ static procedure tBigNtst38(fhLog as numeric)
 
     static procedure tBigNtst38Thread(lFinalize as logical,cM as character,cR as character)
 
-        local aEv   as array
-        local aThs  as array
-        
-        local cP    as character
-        
-        local nTh   as numeric
-        local nThs  as numeric        
-        local nThM  as numeric
-        
-        local oM    as object
-        local oT    as object
         local oR    as object
-        
-        local oTh   as object
-
-        oM:=tBigNumber():New(cM,nil,nil,.T.)
-        
-        aThs:=oM:SplitNumber()[1]
-        
-        nThM:=len(aThs)
-
-        oM:setValue("2")
-        oR:=tBigNumber():New("1")
-
-        oTh:=tBigNThread():New()
-
-        while (nThM>0)
-
-            nThs:=Min(15,nThM)
-            nThM-=nThs
-
-            oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
-     
-            for nTh:=1 to nThs
-                cM:=left(aThs[nTh],1)
-                cP:="1"+remLeft(aThs[nTh],cM)
-                aEv:={@tBigNtst38Eval(),oM,cM,cP}
-                oTh:setEvent(nTh,aClone(aEv))
-                aSize(aEv,0)
-            next nTh
-            
-            aDel(aThs,nThs)
-            aSize(aThs,nThM)
-            
-            oTh:Notify()
-            oTh:Wait()
-            oTh:Join()
-
-            for nTh:=1 to nThs
-                oT:=oTh:getResult(nTh)
-                oR*=oT
-            next nTh
-
-            oTh:Clear()
-
-        end while
+        local o2    as object 
+   
+        o2:=tBigNumber():New("2")
+        oR:=o2:iPow(cM)
 
         cR:=oR:OpDec():ExactValue()
 
         lFinalize:=.T.
 
         return
-        
-    static function tBigNtst38Eval(oM as object,cM as character,cP as character)
- 
-        local oCM   as object
-        local oCP   as object
-        local oCR   as object
-
-        local oM10  as object
-        local oD10  as object
-
-        local oDiv  as object
-
-        oCM:=tBigNumber():New(cM)
-        oCP:=tBigNumber():New(cP)
-
-        oDiv:=tBigNumber():New("1000")
-
-        if (oCP<=oDiv)
-        
-            oCR:=oM:iPow(oCM)
-            oCR:=oCR:iPow(oCP)
-        
-        else
-            
-            oCM:SetValue(oM:iPow(oCM))
-            
-            oD10:=tBigNumber():New(oCP:Div(oDiv))
-            oM10:=tBigNumber():New(oCP:Div(oD10))
- 
-            oCR:=tBigNumber():New("1")
-            oCR*=tBigNtst38Eval(oCM,oM10:ExactValue(),oD10:ExactValue())
-        
-        endif
-
-        return(oCR)
     
     static function GETCURRENTPROCESSID()
     #if defined( __PLATFORM__WINDOWS )
