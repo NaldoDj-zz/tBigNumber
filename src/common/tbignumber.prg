@@ -84,6 +84,7 @@ static s__o2    as object
 static s__o10   as object
 static s__o20   as object
 static s__od2   as object
+static s__o1000 as object
 
 static s__oMinFI    as object
 static s__oMinGCD   as object
@@ -3332,7 +3333,7 @@ endclass
         
         nThM:=len(aThs)
 
-        oR:=tBigNumber():New("1")
+        oR:=s__o1:Clone()
 
         oTh:=tBigNThread():New()
 
@@ -3367,7 +3368,7 @@ endclass
 
         end while
 
-        cR:=oR:OpDec():ExactValue()
+        cR:=oR:ExactValue()
 
         lFinalize:=.T.
 
@@ -3387,7 +3388,7 @@ endclass
         oCM:=tBigNumber():New(cM)
         oCP:=tBigNumber():New(cP)
 
-        oDiv:=tBigNumber():New("1000")
+        oDiv:=s__o1000:Clone()
 
         if (oCP<=oDiv)
         
@@ -3401,7 +3402,7 @@ endclass
             oD10:=tBigNumber():New(oCP:Div(oDiv))
             oM10:=tBigNumber():New(oCP:Div(oD10))
  
-            oCR:=tBigNumber():New("1")
+            oCR:=s__o1:Clone()
             oCR*=tBigNiPowEval(oCM,oM10:ExactValue(),oD10:ExactValue(),lIPower)
         
         endif
@@ -6472,7 +6473,8 @@ static function __SQRT(p)
                       dbCreate(cFile,aStru,cRDD)
                       lSuccess:=.T.
                     Catch
-                      lSuccess:=.F.                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      lSuccess:=.F.                      
+                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
                 return(cFile)
@@ -7301,6 +7303,7 @@ static procedure __InitstbN(nBase as numeric)
     s__o10:=tBigNumber():New("10",nBase)
     s__o20:=tBigNumber():New("20",nBase)
     s__od2:=tBigNumber():New("0.5",nBase)
+    s__o1000:=tBigNumber():New("1000",nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)

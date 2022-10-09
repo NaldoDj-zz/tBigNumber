@@ -22,6 +22,7 @@ SETLOCAL ENABLEEXTENSIONS
                 SET HB_WITH_OPENSSL=D:\OpenSSL\INCLUDE
             )
         )
+        SET HB_WITH_OPENSSL=D:\OpenSSL\INCLUDE
         IF EXIST D:\FreeImage\Dist\x32 (
             SET HB_WITH_FREEIMAGE=D:\FreeImage\Dist\x32
         )
