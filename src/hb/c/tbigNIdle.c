@@ -96,8 +96,6 @@
 
         static void tbigNreleaseCPU( void )
         {
-           HB_TRACE( HB_TR_DEBUG, ( "tbigNreleaseCPU()" ) );
-
            hb_threadReleaseCPU();
         }
 
@@ -247,4 +245,4 @@
         
     #pragma ENDDUMP
 
-#endif // __HARBOUR__        
+#endif /* __HARBOUR__*/

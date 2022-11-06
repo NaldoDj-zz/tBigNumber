@@ -1,10 +1,15 @@
 #-b
+#-D__ALT_D__
+-DHB_BUILD_DEBUG=yes
+-DHB_TR_LEVEL=debug
+-DHB_TR_OUTPUT=/c/tmp/hb_trace.log
+-DHB_TR_SYSOUT=yes
+-DHB_USER_CFLAGS=-DHB_FM_STATISTICS
+-DTBIGN_RECPOWER
+-cflag=-DHB_TR_LEVEL_DEBUG
 #-D__HB_Q_SQRT__
 #-D__PTCOMPAT__
-#-D__ALT_D__
--DTBIGN_RECPOWER
 #-D__LMETHOD__
-#-cflag=-DHB_TR_LEVEL_DEBUG
 #/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp 
 # export DISPLAY=:0 # in WSL 1
 # export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0 # in WSL 2

@@ -1566,7 +1566,8 @@ static function IsHb()
     /*static function FreeObj*/
 
     static function tBigNGC()
-        return(/*hb_gcAll(.T.)*/NIL)
+        hb_gcAll(.T.)
+        return(NIL)
     /*static function tBigNGC*/
 
     #include "../src/tests/hb/tBigNAnim.prg"

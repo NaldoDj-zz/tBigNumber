@@ -3292,7 +3292,7 @@ endclass
         local oR      as object
         local lIPower as logical
         lIPower:=.T.
-#ifdef __HARBOUR__        
+#ifdef __HARBOUR__
         lFinalize:=.F.
         ptfiPow:=@tBigNiPowThread()
         pttiPow:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,ptfiPow,@lFinalize,self,uBigN,lIPower,@cR)
@@ -3303,7 +3303,7 @@ endclass
         oR:=tBigNumber():New(cR)
 #else /*__ADVPL__*/
         oR:=self:Pow(uBigN,lIPower)
-#endif        
+#endif
     return(oR)
 /*method iPow*/
 
@@ -3313,24 +3313,24 @@ endclass
 
         local aEv   as array
         local aThs  as array
-        
+
         local cM    as character
         local cP    as character
-        
+
         local nTh   as numeric
-        local nThs  as numeric        
+        local nThs  as numeric
         local nThM  as numeric
-        
+
         local oM    as object
         local oT    as object
         local oR    as object
-        
+
         local oTh   as object
 
         oM:=tBigNumber():New(uBigN,nil,nil,.T.)
-        
+
         aThs:=oM:SplitNumber()[1]
-        
+
         nThM:=len(aThs)
 
         oR:=s__o1:Clone()
@@ -3339,22 +3339,22 @@ endclass
 
         while (nThM>0)
 
-            nThs:=Min(15,nThM)
+            nThs:=Min(150,nThM)
             nThM-=nThs
 
             oTh:Start(nThs,HB_THREAD_INHERIT_MEMVARS)
-     
+
+            aEv:=array(nThs)
             for nTh:=1 to nThs
                 cM:=left(aThs[nTh],1)
                 cP:="1"+remLeft(aThs[nTh],cM)
-                aEv:={@tBigNiPowEval(),oB,cM,cP,lIPower}
-                oTh:setEvent(nTh,aClone(aEv))
-                aSize(aEv,0)
+                aEv[nTh]:={@tBigNiPowEval(),oB,cM,cP,lIPower}
+                oTh:setEvent(nTh,aEv[nTh])
             next nTh
-            
+
             aDel(aThs,nThs)
             aSize(aThs,nThM)
-            
+
             oTh:Notify()
             oTh:Wait()
             oTh:Join()
@@ -3373,9 +3373,9 @@ endclass
         lFinalize:=.T.
 
         return
-        
+
     static function tBigNiPowEval(oM as object,cM as character,cP as character,lIPower)
- 
+
         local oCM   as object
         local oCP   as object
         local oCR   as object
@@ -3391,25 +3391,25 @@ endclass
         oDiv:=s__o1000:Clone()
 
         if (oCP<=oDiv)
-        
+
             oCR:=oM:Pow(oCM,lIPower)
             oCR:=oCR:Pow(oCP,lIPower)
-        
+
         else
-            
+
             oCM:SetValue(oM:Pow(oCM,lIPower))
-            
+
             oD10:=tBigNumber():New(oCP:Div(oDiv))
             oM10:=tBigNumber():New(oCP:Div(oD10))
- 
+
             oCR:=s__o1:Clone()
             oCR*=tBigNiPowEval(oCM,oM10:ExactValue(),oD10:ExactValue(),lIPower)
-        
+
         endif
 
         return(oCR)
 
-#endif        
+#endif
 //--------------------------------------------------------------------------------------------------------
     /*
         method:OpInc
@@ -4519,7 +4519,7 @@ static function cLCM(nX as numeric,nY as numeric)
                     oBigN:nInt:=1
                 endif
             endif
-            
+
             nPadL:=Max(self:nInt,oBigN:nInt)
             nPadR:=Max(self:nDec,oBigN:nDec)
             nSize:=(nPadL+nPadR)
@@ -4566,7 +4566,7 @@ static function cLCM(nX as numeric,nY as numeric)
                     self:nInt:=1
                 endif
             endif
-            
+
             if (oBigN:nInt>1.and.Left(oBigN:cInt,1)=="0")
                 oBigN:cInt:=RemLeft(oBigN:cInt,"0")
                 oBigN:nInt:=hb_bLen(oBigN:cInt)
@@ -4576,7 +4576,7 @@ static function cLCM(nX as numeric,nY as numeric)
                 endif
             endif
             tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
-    
+
         #endif /*__PTCOMPAT__*/
 
     return(self)
@@ -5210,7 +5210,7 @@ static function mrPass(uA,uS,uD,uN)
         oD:=tBigNumber():New(uD)
         oA:=tBigNumber():New(uA)
         oP:=tBigNumber():New(oA:Pow(oD):Mod(oN))
-        
+
         if (oP:eq(s__o1))
             break
         endif
@@ -5218,7 +5218,7 @@ static function mrPass(uA,uS,uD,uN)
         oM:=tBigNumber():New(oN:Sub(s__o1))
         oS:=tBigNumber():New(uS)
         oW:=tBigNumber():New(oS:Sub(s__o1))
-        
+
         while (oW:gt(s__o0))
             lmrP:=oP:eq(oM)
             if (lmrP)
@@ -6473,7 +6473,7 @@ static function __SQRT(p)
                       dbCreate(cFile,aStru,cRDD)
                       lSuccess:=.T.
                     Catch
-                      lSuccess:=.F.                      
+                      lSuccess:=.F.
                       cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
@@ -7063,14 +7063,20 @@ static function Power(oB as object,oE as object,lIPower as logical)
         #ifdef __HARBOUR__
             #ifndef __PTCOMPAT__
                 local cR    as character
-            #endif /*__PTCOMPAT__*/    
+            #endif /*__PTCOMPAT__*/
         #endif /*__HARBOUR__*/
-        
+
         local oR    as object
+        local oR1   as object
+        local oR2   as object
 
         local oI    as object
         local oE1   as object
         local oE2   as object
+
+        #ifndef __PTCOMPAT__
+            local oTh as object
+        #endif /*__PTCOMPAT__*/
 
         oR:=oB:Clone()
 
@@ -7115,7 +7121,29 @@ static function Power(oB as object,oE as object,lIPower as logical)
         oE1:SetValue(oE1:Mult(s__od2):Int(.T.,.F.))
         oE2:SetValue(oE2:Sub(oE1))
 
-        return(recPower(oB,oE1,lIPower):Mult(recPower(oB,oE2,lIPower)))
+        #ifdef __HARBOUR__
+            #ifndef __PTCOMPAT__
+                oTh:=tBigNThread():New()
+                oTh:Start(2,HB_THREAD_INHERIT_MEMVARS)
+                oTh:setEvent(1,{@recPower(),oB,oE2,lIPower})
+                oTh:setEvent(2,{@recPower(),oB,oE1,lIPower})
+                oTh:Notify()
+                oTh:Wait()
+                oTh:Join()
+                oR1:=oTh:getResult(1)
+                oR2:=oTh:getResult(2)
+            #else
+                oR1:=recPower(oB,oE2,lIPower)
+                oR2:=recPower(oB,oE1,lIPower)
+            #endif
+        #else
+            oR1:=recPower(oB,oE2,lIPower)
+            oR2:=recPower(oB,oE1,lIPower)
+        #endif
+
+        oR:=oR2:Mult(oR1)
+
+        return(oR)
 
     /*static function recPower*/
 
@@ -7124,9 +7152,9 @@ static function Power(oB as object,oE as object,lIPower as logical)
     #ifdef __HARBOUR__
         #ifndef __PTCOMPAT__
             local cR    as character
-        #endif /*__PTCOMPAT__*/    
+        #endif /*__PTCOMPAT__*/
     #endif /*__HARBOUR__*/
-    
+
     local oR    as object
     local oI    as object
 
@@ -7342,10 +7370,10 @@ static procedure __InitstbN(nBase as numeric)
                 {"T","0011101"},;
                 {"U","0011110"},;
                 {"V","0011111"},;
-                {"W","0100000"},;                
-                {"X","0100001"},;                
-                {"Y","0100010"},;                                
-                {"Z","0100011"},;                                                
+                {"W","0100000"},;
+                {"X","0100001"},;
+                {"Y","0100010"},;
+                {"Z","0100011"},;
                 {"a","0100100"},;
                 {"b","0100101"},;
                 {"b","0101110"},;
@@ -7368,9 +7396,9 @@ static procedure __InitstbN(nBase as numeric)
                 {"t","1000000"},;
                 {"u","1000001"},;
                 {"v","1000010"},;
-                {"w","1000011"},;                
-                {"x","1000100"},;                
-                {"y","1000101"},;                                
+                {"w","1000011"},;
+                {"x","1000100"},;
+                {"y","1000101"},;
                 {"z","1000110"};
     }
     return
@@ -7412,7 +7440,7 @@ static procedure s__IncS9(n as numeric)
         end while
         return(cStr)
     /*static function RemLeft*/
-    
+
     static function __eTthD() as character
         return(staticCall(__pteTthD,__eTthD))
     /*static function __eTthD*/
