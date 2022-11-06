@@ -261,13 +261,17 @@
             HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%" HB_PFS "u)",szF,s));
             char * szT=(char*)hb_xgrab(( HB_SIZE )s+1);
             hb_xmemcpy(szT,szF,s+1);
-            char *p1 = szT;
-            char *p2 = szT + s - 1;
-            while (p1 < p2) {
-                char tmp = *p1;
-                *p1++ = *p2;
-                *p2-- = tmp;
-            }
+            #if 0
+                char *p1 = szT;
+                char *p2 = szT + s - 1;
+                while (p1 < p2) {
+                    char tmp = *p1;
+                    *p1++ = *p2;
+                    *p2-- = tmp;
+                }
+            #else    
+                szT=strrev(szT);
+            #endif
             return szT;
         }
 
