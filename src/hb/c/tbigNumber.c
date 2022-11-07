@@ -270,7 +270,7 @@
                     *p2-- = tmp;
                 }
             #else    
-                szT=strrev(szT);
+                szT=_strrev(szT);
             #endif
             return szT;
         }
