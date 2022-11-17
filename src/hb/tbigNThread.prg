@@ -74,6 +74,7 @@ method Start(nThreads as numeric,nMemMode as numeric) class tBigNThread
         self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
         while (self:aThreads[nThread][TH_NUM]==nil)
             self:aThreads[nThread][TH_NUM]:=hb_threadStart(nMemMode,@tbigNthRun(),self:aThreads[nThread][TH_MTX],@self:aThreads)
+            hb_idleSleep(0.01)
         end while
     next nThread
     return(self)
@@ -103,6 +104,7 @@ method Wait() class tBigNThread
             exit
         endif
         nThCount:=0
+        hb_idleSleep(0.01)
     end while
     return(self)
 
@@ -122,6 +124,7 @@ method addEvent(uthEvent) class tBigNThread
         while (nThEvent==0)
             self:Start(self:nThreads+1,self:nMemMode)
             nThEvent:=aScan(self:aThreads,bEvent)
+            hb_idleSleep(0.01)
         end while
         self:setEvent(nThEvent,uthEvent)
     else
@@ -204,6 +207,7 @@ static procedure tbigNthRun(mtxJob as numeric,aThreads as array)
                     exit
                 endswitch
             endif
+            hb_idleSleep(0.01)
         end while
     end sequence
     return

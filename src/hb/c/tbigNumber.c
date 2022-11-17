@@ -23,11 +23,14 @@
         #include <string.h>
         #include <stdbool.h>
 
+        #include <tchar.h>
+
         #include <ctype.h>
 
         #include <hbapi.h>
         #include <hbdefs.h>
         #include <hbstack.h>
+        #include <hbapistr.h>
         #include <hbapiitm.h>
 
         #include <hbmather.h>
@@ -83,7 +86,6 @@
         static HB_MAXINT tBIGNGCD(HB_MAXINT u,HB_MAXINT v);
         static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y);
         static HB_MAXINT tBIGNFI(HB_MAXINT n);
-
 
         static char cNumber(const HB_SIZE iNumber){
             char cNumber;
@@ -261,7 +263,11 @@
             HB_TRACE(HB_TR_DEBUG,("tBIGNReverse(%s,%" HB_PFS "u)",szF,s));
             char * szT=(char*)hb_xgrab(( HB_SIZE )s+1);
             hb_xmemcpy(szT,szF,s+1);
-            #if 0
+            #if defined(_tcsrev) || defined(_strrev)
+                szT=_strrev(szT);
+            #elif defined(strrev)
+                szT=strrev(szT);
+            #else
                 char *p1 = szT;
                 char *p2 = szT + s - 1;
                 while (p1 < p2) {
@@ -269,8 +275,6 @@
                     *p1++ = *p2;
                     *p2-- = tmp;
                 }
-            #else    
-                szT=_strrev(szT);
             #endif
             return szT;
         }
@@ -1264,6 +1268,40 @@
             }
 
         }
+        
+        HB_FUNC_STATIC( TBIGNSPLITNUMBER )
+        {
+            if (HB_ISCHAR(1))
+            {
+            
+                const char * szItem = hb_parc(1);
+
+                HB_SIZE iCount = ( HB_SIZE ) strlen(szItem);
+                szItem+=iCount;
+
+                HB_TRACE(HB_TR_DEBUG,("TBIGNSPLITNUMBER(%s,%" HB_PFS "u)",szItem,iCount));
+
+                PHB_ITEM pItem = hb_itemArrayNew( iCount );
+                HB_MAXINT i;
+                HB_SIZE iZero = 0;
+
+                for( i = iCount; i >= 0 ; i-- )
+                {
+                    char *tmpN = ( char * ) hb_xgrab( ( HB_SIZE ) sizeof(char) );
+                    *(tmpN) = *(szItem);
+                    char * tmpPad = tBIGNPadR((const char *)tmpN,iZero++,"0");
+                    szItem--;
+                    hb_xfree(tmpN);
+                    hb_arraySetStr( pItem, ( HB_SIZE ) i + 1, NULL, tmpPad );
+                    hb_xfree(tmpPad);
+                }    
+                hb_itemReturnRelease( pItem );
+            }
+            else
+            {
+                hb_errRT_BASE( EG_ARG, 6004, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS );
+            }
+        }        
 
         HB_FUNC_STATIC( TBIGNSQRT )
         {
@@ -1356,6 +1394,7 @@
                 hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
             }
         }
+
 
     #pragma ENDDUMP
 

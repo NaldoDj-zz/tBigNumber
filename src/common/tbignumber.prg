@@ -3297,6 +3297,7 @@ endclass
         ptfiPow:=@tBigNiPowThread()
         pttiPow:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,ptfiPow,@lFinalize,self,uBigN,lIPower,@cR)
         while (!lFinalize)
+            hb_idleSleep(0.01)
         end while
         hb_threadQuitRequest(pttiPow)
         hb_ThreadWait(pttiPow)
@@ -5555,33 +5556,41 @@ static function recFact(oS as object,oN as object)
         local aInt  as array
         local aDec  as array
         local aRDiv as array
-        local cZero as character
-        local nSize as numeric
-        nSize:=self:nInt
-        aInt:=array(nSize)
-        cZero:=""
-        for nSize:=nSize to 1 step (-1)
-            aInt[nSize]:=self:cInt[nSize]
-            aInt[nSize]+=cZero
-            cZero+="0"
-        next nSize
-        nSize:=self:nDec
-        aDec:=array(nSize)
-        cZero:=""
-        for nSize:=nSize to 1 step (-1)
-            aDec[nSize]:=self:cDec[nSize]
-            aDec[nSize]+=cZero
-            cZero+="0"
-        next nSize
-        nSize:=len(self:cRDiv)
-        aRDiv:=array(nSize)
-        cZero:=""
-        for nSize:=nSize to 1 step (-1)
-            aRDiv[nSize]:=self:cRDiv[nSize]
-            aRDiv[nSize]+=cZero
-            cZero+="0"
-        next nSize
-        return({aInt,aDec,aRDiv})
+        #ifdef __PTCOMPAT__
+            local cZero as character
+            local nSize as numeric
+        #endif
+        #ifndef __PTCOMPAT__
+            aInt:=if(self:nInt>0,tBigNSplitNumber(self:cInt),array(0))
+            aDec:=if(self:nDec>0,tBigNSplitNumber(self:cDec),array(0))
+            aRDiv:=if(len(self:cRDiv)>0,tBigNSplitNumber(self:cRDiv),array(0))
+        #else
+            nSize:=self:nInt
+            aInt:=array(nSize)
+            cZero:=""
+            for nSize:=nSize to 1 step (-1)
+                aInt[nSize]:=self:cInt[nSize]
+                aInt[nSize]+=cZero
+                cZero+="0"
+            next nSize
+            cZero:=""
+            nSize:=self:nDec
+            aDec:=array(nSize)
+            for nSize:=nSize to 1 step (-1)
+                aDec[nSize]:=self:cDec[nSize]
+                aDec[nSize]+=cZero
+                cZero+="0"
+            next nSize
+            cZero:=""
+            nSize:=len(self:cRDiv)
+            aRDiv:=array(nSize)
+            for nSize:=nSize to 1 step (-1)
+                aRDiv[nSize]:=self:cRDiv[nSize]
+                aRDiv[nSize]+=cZero
+                cZero+="0"
+            next nSize
+        #endif
+    return({aInt,aDec,aRDiv})
 #endif __HARBOUR__
 
 //--------------------------------------------------------------------------------------------------------
