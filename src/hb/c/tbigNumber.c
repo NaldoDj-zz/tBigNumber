@@ -19,6 +19,11 @@
 
     #pragma BEGINDUMP
 
+        #include <string>
+        #include <limits>
+        #include <cstring>
+        #include <sstream>
+
         #include <stdio.h>
         #include <string.h>
         #include <stdbool.h>
@@ -61,6 +66,14 @@
             char * cDivQ;
             char * cDivR;
         } stBIGNeDiv,* ptBIGNeDiv;
+
+        template <typename tTO_STRING>
+        static std::string to_string(tTO_STRING const &value){
+            std::stringstream sstr;
+            sstr.precision(std::numeric_limits<long double>::digits10+100);
+            sstr<<std::fixed<<value;
+            return sstr.str();
+        }
 
         static char cNumber(const HB_SIZE iNumber);
         static HB_SIZE iNumber(const char * cNumber);
@@ -288,11 +301,10 @@
 
         static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
+            char * c=tBIGNPadL("0",y,"0");
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
-            c[y]=HB_CHAR_EOS;
             while (--n>=0){
                 v+=(iNumber(&a[n])+iNumber(&b[n]));
                 if (v>=nB){
@@ -303,7 +315,9 @@
                     v1=0;
                 }
                 c[k]=cNumber(v);
-                c[k-1]=cNumber(v1);
+                if (v1>0 && n==0) {
+                    c[k-1]=cNumber(v1);
+                }
                 v=v1;
                 --k;
             }
@@ -363,11 +377,10 @@
 
         static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-            char * c=(char*)hb_xgrab(( HB_SIZE )y+1);
+            char * c=tBIGNPadL("0",y,"0");
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
             HB_MAXINT v1;
-            c[y]=HB_CHAR_EOS;
             while (--n>=0){
                 v+=(iNumber(&a[n])-iNumber(&b[n]));
                 if (v<0){
@@ -378,7 +391,6 @@
                     v1=0;
                 }
                 c[k]=cNumber(v);
-                c[k-1]=cNumber(v1);
                 v=v1;
                 --k;
             }
@@ -468,7 +480,9 @@
                     v1=0;
                 };
                 c[k]=cNumber(v);
-                c[k+1]=cNumber(v1);
+                if (v1>0) {
+                    c[k+1]=cNumber(v1);
+                }
                 v=v1;
                 k++;
                 i++;
@@ -487,11 +501,13 @@
                     v1=0;
                 }
                 c[k]=cNumber(v);
-                c[k+1]=cNumber(v1);
-                v=v1;
+                if (v1>0) {
+                    c[k+1]=cNumber(v1);
+                }
                 if (++k>=y){
                     break;
                 }
+                v=v1;
                 l++;
             }
 
@@ -1268,12 +1284,12 @@
             }
 
         }
-        
+
         HB_FUNC_STATIC( TBIGNSPLITNUMBER )
         {
             if (HB_ISCHAR(1))
             {
-            
+
                 const char * szItem = hb_parc(1);
 
                 HB_SIZE iCount = ( HB_SIZE ) strlen(szItem);
@@ -1294,14 +1310,14 @@
                     hb_xfree(tmpN);
                     hb_arraySetStr( pItem, ( HB_SIZE ) i + 1, NULL, tmpPad );
                     hb_xfree(tmpPad);
-                }    
+                }
                 hb_itemReturnRelease( pItem );
             }
             else
             {
                 hb_errRT_BASE( EG_ARG, 6004, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS );
             }
-        }        
+        }
 
         HB_FUNC_STATIC( TBIGNSQRT )
         {
@@ -1312,11 +1328,15 @@
               long double ldArg=strtold(hb_parc(1),NULL);
               if (ldArg<=0)
               {
-                char str[100];
-                strncpy(str,"",sizeof(str));
-                char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                hb_xmemcpy(szstr,str,strlen(str));
-                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                std::string str=to_string(0.0);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                std::strcpy(cstr,str.c_str());
+                #if 0
+                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                #endif
               }
               else
               {
@@ -1324,28 +1344,41 @@
                     ldResult=sqrtl(ldArg);
                     if( hb_mathGetError(&hb_exc,"SQRTL",(double)ldArg,0.0,(double)ldResult))
                     {
-                        char str[]={'0'};
-                        char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                        hb_xmemcpy(szstr,str,strlen(str));
-                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                        std::string str=to_string(0.0);
+                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                        std::strcpy(cstr,str.c_str());
+                        #if 0
+                            hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                            hb_xfree(cstr);
+                        #else
+                            hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                        #endif
                     }
                     else
                     {
-                        char str[100];
-                        char tformat[100];
-                        char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                        sprintf(str,tformat,ldResult);
-                        hb_xmemcpy(szstr,str,strlen(str));
-                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                        std::string str=to_string(ldResult);
+                        char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                        std::strcpy(cstr,str.c_str());
+                        #if 0
+                            hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                            hb_xfree(cstr);
+                        #else
+                            hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                        #endif
                     }
               }
            }
            else
            {
-                char str[]={'0'};
-                char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                hb_xmemcpy(szstr,str,strlen(str));
-                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                std::string str=to_string(0.0);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                std::strcpy(cstr,str.c_str());
+                #if 0
+                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                #endif
             }
         }
 
@@ -1361,40 +1394,46 @@
                 ldResult=(log10l(ldArgN)/log10l(ldArgB));
                 if( hb_mathGetError(&hb_exc,"LOG10L",(double)ldArgN,(double)ldArgB,(double)ldResult))
                 {
-                    char str[100];
-                    strncpy(str,"",sizeof(str));
-                    char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                    hb_xmemcpy(szstr,str,strlen(str));
-                    hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                    std::string str=to_string(0.0);
+                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                    std::strcpy(cstr,str.c_str());
+                    #if 0
+                        hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                        hb_xfree(cstr);
+                    #else
+                        hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                    #endif
                 }
                 else
                 {
-                    char str[100];
-                    char tformat[100];
-                    sprintf(str,tformat,ldResult);
-                    if (strstr(str,"inf")||strstr(str,"nan"))
+                    std::string str=to_string(ldResult);
+                    if (str.find("inf")!=std::string::npos||str.find("nan")!=std::string::npos)
                     {
-                        char str[]={'0'};
-                        char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                        hb_xmemcpy(szstr,str,strlen(str));
-                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                        str=to_string(0.0);
                     }
-                    else {
-                        char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                        hb_xmemcpy(szstr,str,strlen(str));
-                        hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
-                    }
+                    char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                    std::strcpy(cstr,str.c_str());
+                    #if 0
+                        hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                        hb_xfree(cstr);
+                    #else
+                        hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                    #endif
                 }
            }
            else
            {
-                char str[]={'0'};
-                char * szstr=(char*)hb_xgrab(( HB_SIZE )strlen(str)+1);
-                hb_xmemcpy(szstr,str,strlen(str));
-                hb_retclen_buffer(szstr,( HB_SIZE )strlen(szstr));
+                std::string str=to_string(0.0);
+                char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
+                std::strcpy(cstr,str.c_str());
+                #if 0
+                    hb_retclen(cstr,( HB_SIZE )strlen(cstr));
+                    hb_xfree(cstr);
+                #else
+                    hb_retclen_buffer(cstr,( HB_SIZE )strlen(cstr));
+                #endif
             }
         }
-
 
     #pragma ENDDUMP
 
