@@ -344,7 +344,122 @@
             hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
 
-        #if defined(HB_WITH_OPENCL)
+        static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigNiADD(%s%" PFHL "d,%" PFHL "d,%" PFHL "d)",sN,a,isN,nB));
+            HB_BOOL bAdd=HB_TRUE;
+            HB_MAXINT v;
+            HB_MAXINT v1=0;
+            HB_MAXINT i=isN;
+            while(--i>=0){
+                v=iNumber(&sN[i]);
+                if (bAdd){
+                    v+=a;
+                    bAdd=HB_FALSE;
+                }
+                v+=v1;
+                if (v>=nB){
+                    v-=nB;
+                    v1=1;
+                }
+                else{
+                    v1=0;
+                }
+                sN[i]=cNumber(v);
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+
+        HB_FUNC_STATIC( TBIGNIADD ){
+            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
+            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
+            HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
+            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
+            hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
+        }
+
+        HB_FUNC_STATIC( TBIGNLADD ){
+            hb_retnint((HB_MAXINT)hb_parnint(1)+(HB_MAXINT)hb_parnint(2));
+        }
+
+        static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
+
+            HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
+
+            char * c=tBIGNPadL("0",y,"0");
+            HB_SIZE k=y-1;
+            HB_MAXINT v=0;
+            HB_MAXINT v1;
+            while (--n>=0){
+                v+=(iNumber(&a[n])-iNumber(&b[n]));
+                if (v<0){
+                    v+=nB;
+                    v1=-1;
+                }
+                else{
+                    v1=0;
+                }
+                c[k]=cNumber(v);
+                v=v1;
+                --k;
+            }
+            return c;
+        }
+
+        HB_FUNC_STATIC( TBIGNSUB ){
+            const char * a=hb_parc(1);
+            const char * b=hb_parc(2);
+            HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
+            const HB_SIZE y=(HB_SIZE)n;
+            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
+            char * szRet=tBIGNSub(a,b,n,y,nB);
+            hb_retclen_buffer(szRet,( HB_SIZE )y);
+        }
+
+        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB){
+            HB_TRACE(HB_TR_DEBUG,("tBigNiSUB(%s,%" PFHL "d,%" PFHL "d,%" PFHL "d)",sN,s,isN,nB));
+            HB_BOOL bSub=HB_TRUE;
+            HB_MAXINT v;
+            HB_MAXINT v1=0;
+            HB_MAXINT i=isN;
+            while(--i>=0){
+                v=iNumber(&sN[i]);
+                if (bSub){
+                    v-=s;
+                    bSub=HB_FALSE;
+                }
+                v+=v1;
+                if (v<0){
+                    v+=nB;
+                    v1=-1;
+                }
+                else{
+                    v1=0;
+                }
+                sN[i]=cNumber(v);
+                if (v1==0){
+                    break;
+                }
+            }
+            return sN;
+        }
+
+        HB_FUNC_STATIC( TBIGNISUB ){
+            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1));
+            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
+            HB_MAXINT s=(HB_MAXINT)hb_parnint(2);
+            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
+            hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
+        }
+
+        HB_FUNC_STATIC( TBIGNLSUB ){
+            HB_TRACE(HB_TR_DEBUG,("TBIGNLSUB(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
+            hb_retnint((HB_MAXINT)hb_parnint(1)-(HB_MAXINT)hb_parnint(2));
+        }
+
+       #if defined(HB_WITH_OPENCL)
 
             static bool KeepCalc(char * HostOutV1,HB_SIZE nSize)
             {
@@ -657,122 +772,296 @@
 
             }
 
+            static char * tBIGNCLSub(char * HostINV1,char * HostINV2,HB_MAXINT HostBase,const HB_SIZE nSize,cl_context CLSUB_GPUContext,cl_kernel CLSUB_kerneltBIGNCLSub,cl_command_queue CLSUB_cqCommandQueue,cl_int *CLSUB_clErr)
+            {
+
+                char * HostOutV1=tBIGNPadL("0",nSize,"0");
+                char * HostOutRes=tBIGNPadL("0",nSize,"0");
+
+                HB_BOOL bKeepCalc = HB_FALSE;
+                do
+                {
+
+                    cl_mem GPUINV1 = clCreateBuffer(CLSUB_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostINV1,CLSUB_clErr);
+                    if (*CLSUB_clErr != CL_SUCCESS || !GPUINV1) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUINV2 = clCreateBuffer(CLSUB_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostINV2,CLSUB_clErr);
+                    if (*CLSUB_clErr != CL_SUCCESS || !GPUINV2) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUBase = clCreateBuffer(CLSUB_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(HB_MAXINT*),&HostBase,CLSUB_clErr);
+                    if (*CLSUB_clErr != CL_SUCCESS || !GPUBase) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUOutRes = clCreateBuffer(CLSUB_GPUContext,CL_MEM_WRITE_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostOutRes,CLSUB_clErr);
+                    if (*CLSUB_clErr != CL_SUCCESS || !GPUOutRes) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUOutV1 = clCreateBuffer(CLSUB_GPUContext,CL_MEM_WRITE_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostOutV1,CLSUB_clErr);
+                    if (*CLSUB_clErr != CL_SUCCESS || !GPUOutV1) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    *CLSUB_clErr  = clSetKernelArg(CLSUB_kerneltBIGNCLSub,0,sizeof(cl_mem),(void*)&GPUOutRes);
+                    *CLSUB_clErr |= clSetKernelArg(CLSUB_kerneltBIGNCLSub,1,sizeof(cl_mem),(void*)&GPUOutV1);
+                    *CLSUB_clErr |= clSetKernelArg(CLSUB_kerneltBIGNCLSub,2,sizeof(cl_mem),(void*)&GPUBase);
+                    *CLSUB_clErr |= clSetKernelArg(CLSUB_kerneltBIGNCLSub,3,sizeof(cl_mem),(void*)&GPUINV1);
+                    *CLSUB_clErr |= clSetKernelArg(CLSUB_kerneltBIGNCLSub,4,sizeof(cl_mem),(void*)&GPUINV2);
+                    if (*CLSUB_clErr != CL_SUCCESS) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    HB_SIZE WorkSize[1] = {nSize};
+                    *CLSUB_clErr = clEnqueueNDRangeKernel(CLSUB_cqCommandQueue,CLSUB_kerneltBIGNCLSub,1,NULL,WorkSize,NULL,0,NULL,NULL);
+                    if (*CLSUB_clErr != CL_SUCCESS) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    *CLSUB_clErr = clEnqueueReadBuffer(CLSUB_cqCommandQueue,GPUOutRes,CL_TRUE,0,(sizeof(char *) * nSize),HostOutRes,0,NULL,NULL);
+                    *CLSUB_clErr |= clEnqueueReadBuffer(CLSUB_cqCommandQueue,GPUOutV1,CL_TRUE,0,(sizeof(char *) * nSize),HostOutV1,0,NULL,NULL);
+                    if (*CLSUB_clErr != CL_SUCCESS) {
+                        *CLSUB_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    bKeepCalc = KeepCalc(HostOutV1,nSize);
+
+                    if (bKeepCalc)
+                    {
+                        hb_xmemcpy(HostINV1,HostOutRes,nSize);
+                        hb_xmemcpy(HostINV2,HostOutV1,nSize);
+                    }
+
+                    clReleaseMemObject(GPUINV1);
+                    clReleaseMemObject(GPUINV2);
+                    clReleaseMemObject(GPUBase);
+                    clReleaseMemObject(GPUOutRes);
+                    clReleaseMemObject(GPUOutV1);
+
+                } while (bKeepCalc);
+
+                hb_xfree(HostOutV1);
+
+                return(HostOutRes);
+
+            }
+
+            HB_FUNC_STATIC( TBIGNCLSUB ){
+
+                static __thread cl_int CLSUB_clErr = -9999;
+                static __thread cl_device_id CLSUB_cdDevice = NULL;
+                static __thread cl_platform_id CLSUB_cpPlatform = NULL;
+                static __thread cl_context CLSUB_GPUContext = NULL;
+                static __thread cl_command_queue CLSUB_cqCommandQueue = NULL;
+                static __thread cl_program CLSUB_OpenCLProgram = NULL;
+                static __thread cl_kernel CLSUB_kerneltBIGNCLSub = NULL;
+
+                const HB_SIZE nSize=(HB_SIZE)(hb_parnint(3));
+
+                HB_MAXINT HostBase=(HB_MAXINT)hb_parnint(4);
+
+                char * HostINV1=tBIGNPadL(hb_parc(1),nSize,"0");
+                char * HostINV2=tBIGNPadL(hb_parc(2),nSize,"0");
+
+                char * szRet=NULL;
+
+                if (CLSUB_clErr == -9999)
+                {
+                    CLSUB_clErr = clGetPlatformIDs(1,&CLSUB_cpPlatform,NULL);
+                }
+
+                if (CLSUB_clErr == CL_SUCCESS && CLSUB_cpPlatform != NULL)
+                {
+
+                    if (!CLSUB_cdDevice)
+                    {
+                        CLSUB_clErr = clGetDeviceIDs(CLSUB_cpPlatform,CL_DEVICE_TYPE_GPU,1,&CLSUB_cdDevice,NULL);
+                        if (CLSUB_clErr == CL_DEVICE_NOT_FOUND) {
+                            CLSUB_clErr = clGetDeviceIDs(CLSUB_cpPlatform,CL_DEVICE_TYPE_CPU,1,&CLSUB_cdDevice,NULL);
+                        }
+
+                        if (CLSUB_clErr == CL_SUCCESS && CLSUB_cdDevice != NULL) {
+                            CLSUB_clErr = clRetainDevice(CLSUB_cdDevice);
+                        }
+
+                    }
+
+                    if (CLSUB_clErr == CL_SUCCESS && CLSUB_cdDevice != NULL)
+                    {
+
+                        if (CLSUB_GPUContext == NULL){
+                            CLSUB_GPUContext = clCreateContextFromType(0,CL_DEVICE_TYPE_GPU,NULL,NULL,&CLSUB_clErr);
+                        }
+
+                        if (CLSUB_clErr == CL_SUCCESS && CLSUB_GPUContext != NULL)
+                        {
+
+                            CLSUB_clErr = clRetainContext(CLSUB_GPUContext);
+
+                            if (CLSUB_clErr == CL_SUCCESS && CLSUB_cqCommandQueue == NULL){
+                                CLSUB_cqCommandQueue = clCreateCommandQueue(CLSUB_GPUContext,CLSUB_cdDevice,0,&CLSUB_clErr);
+                                if (CLSUB_clErr == CL_SUCCESS && CLSUB_cqCommandQueue != NULL) {
+                                    CLSUB_clErr = clRetainCommandQueue(CLSUB_cqCommandQueue);
+                                }
+                            }
+
+                            if (CLSUB_clErr == CL_SUCCESS && CLSUB_cqCommandQueue != NULL)
+                            {
+
+                                CLSUB_clErr= clRetainCommandQueue(CLSUB_cqCommandQueue);
+
+                                if (CLSUB_clErr == CL_SUCCESS && CLSUB_OpenCLProgram == NULL){
+                                    const char* OpenCLSource=hb_parc(5);
+                                    CLSUB_OpenCLProgram = clCreateProgramWithSource(CLSUB_GPUContext,1,(const char **) &OpenCLSource,NULL,&CLSUB_clErr);
+                                    if (CLSUB_clErr == CL_SUCCESS && CLSUB_OpenCLProgram != NULL){
+                                        CLSUB_clErr = clRetainProgram(CLSUB_OpenCLProgram);
+                                    }
+                                }
+
+                                if (CLSUB_clErr == CL_SUCCESS && CLSUB_OpenCLProgram != NULL)
+                                {
+
+                                    if (CLSUB_kerneltBIGNCLSub == NULL || clGetProgramBuildInfo(CLSUB_OpenCLProgram,NULL,CL_PROGRAM_BUILD_LOG,0,NULL,NULL) != CL_BUILD_SUCCESS)
+                                    {
+                                        CLSUB_kerneltBIGNCLSub = NULL;
+                                        CLSUB_clErr = clBuildProgram(CLSUB_OpenCLProgram,0,NULL,NULL,NULL,NULL);
+                                    }
+
+                                    if (CLSUB_clErr == CL_SUCCESS)
+                                    {
+                                        if (CLSUB_kerneltBIGNCLSub == NULL){
+                                            CLSUB_kerneltBIGNCLSub = clCreateKernel(CLSUB_OpenCLProgram, "tBIGNCLSub", &CLSUB_clErr);
+                                            if (CLSUB_clErr == CL_SUCCESS && CLSUB_kerneltBIGNCLSub != NULL){
+                                                CLSUB_clErr = clRetainKernel(CLSUB_kerneltBIGNCLSub);
+                                            }
+                                        }
+
+                                        if (CLSUB_clErr == CL_SUCCESS && CLSUB_kerneltBIGNCLSub != NULL)
+                                        {
+
+                                            szRet=tBIGNCLSub(HostINV1,HostINV2,HostBase,nSize,CLSUB_GPUContext,CLSUB_kerneltBIGNCLSub,CLSUB_cqCommandQueue,&CLSUB_clErr);
+
+                                            if ( CLSUB_clErr != CL_SUCCESS ){
+                                                CLSUB_clErr = -9999;
+                                                CLSUB_cdDevice=NULL;
+                                                CLSUB_cpPlatform=NULL;
+                                                clReleaseKernel(CLSUB_kerneltBIGNCLSub);
+                                                CLSUB_kerneltBIGNCLSub=NULL;
+                                                clReleaseProgram(CLSUB_OpenCLProgram);
+                                                CLSUB_OpenCLProgram=NULL;
+                                                clReleaseCommandQueue(CLSUB_cqCommandQueue);
+                                                CLSUB_cqCommandQueue=NULL;
+                                                clReleaseContext(CLSUB_GPUContext);
+                                                CLSUB_GPUContext=NULL;
+                                            }
+
+                                        } else {
+                                            CLSUB_clErr = -9999;
+                                            CLSUB_cdDevice=NULL;
+                                            CLSUB_cpPlatform=NULL;
+                                            clReleaseKernel(CLSUB_kerneltBIGNCLSub);
+                                            CLSUB_kerneltBIGNCLSub=NULL;
+                                            clReleaseProgram(CLSUB_OpenCLProgram);
+                                            CLSUB_OpenCLProgram=NULL;
+                                            clReleaseCommandQueue(CLSUB_cqCommandQueue);
+                                            CLSUB_cqCommandQueue=NULL;
+                                            clReleaseContext(CLSUB_GPUContext);
+                                            CLSUB_GPUContext=NULL;
+                                        }
+
+                                    } else {
+
+                                        CLSUB_clErr = -9999;
+                                        CLSUB_cdDevice=NULL;
+                                        CLSUB_cpPlatform=NULL;
+                                        clReleaseProgram(CLSUB_OpenCLProgram);
+                                        CLSUB_OpenCLProgram=NULL;
+                                        clReleaseCommandQueue(CLSUB_cqCommandQueue);
+                                        CLSUB_cqCommandQueue=NULL;
+                                        clReleaseContext(CLSUB_GPUContext);
+                                        CLSUB_GPUContext=NULL;
+
+                                    }
+
+                                } else {
+
+                                    CLSUB_clErr = -9999;
+                                    CLSUB_cdDevice=NULL;
+                                    CLSUB_cpPlatform=NULL;
+                                    clReleaseProgram(CLSUB_OpenCLProgram);
+                                    CLSUB_OpenCLProgram=NULL;
+                                    clReleaseCommandQueue(CLSUB_cqCommandQueue);
+                                    CLSUB_cqCommandQueue=NULL;
+                                    clReleaseContext(CLSUB_GPUContext);
+                                    CLSUB_GPUContext=NULL;
+
+                                }
+
+                            } else {
+
+                                CLSUB_clErr = -9999;
+                                CLSUB_cdDevice=NULL;
+                                CLSUB_cpPlatform=NULL;
+                                clReleaseCommandQueue(CLSUB_cqCommandQueue);
+                                CLSUB_cqCommandQueue=NULL;
+                                clReleaseContext(CLSUB_GPUContext);
+                                CLSUB_GPUContext=NULL;
+
+                            }
+
+                        } else {
+
+                            CLSUB_clErr = -9999;
+                            CLSUB_cdDevice=NULL;
+                            CLSUB_cpPlatform=NULL;
+                            clReleaseContext(CLSUB_GPUContext);
+                            CLSUB_GPUContext=NULL;
+
+                        }
+                    } else {
+
+                            CLSUB_clErr = -9999;
+                            CLSUB_cdDevice=NULL;
+                            CLSUB_cpPlatform=NULL;
+
+                    }
+                } else {
+
+                  CLSUB_clErr = -9999;
+                  CLSUB_cpPlatform=NULL;
+
+                }
+
+                if ( CLSUB_clErr != CL_SUCCESS )
+                {
+                    hb_xfree(HostINV1);
+                    hb_xfree(HostINV2);
+                    HostINV1=tBIGNPadL(hb_parc(1),nSize,"0");
+                    HostINV2=tBIGNPadL(hb_parc(2),nSize,"0");
+                    HostBase=(HB_MAXINT)hb_parnint(4);
+                    szRet=tBIGNSub(HostINV1,HostINV2,nSize,nSize,HostBase);
+                }
+
+                hb_xfree(HostINV1);
+                hb_xfree(HostINV2);
+
+                hb_retclen_buffer(szRet,nSize);
+
+            }
+
         #endif
-
-        static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB){
-            HB_TRACE(HB_TR_DEBUG,("tBigNiADD(%s%" PFHL "d,%" PFHL "d,%" PFHL "d)",sN,a,isN,nB));
-            HB_BOOL bAdd=HB_TRUE;
-            HB_MAXINT v;
-            HB_MAXINT v1=0;
-            HB_MAXINT i=isN;
-            while(--i>=0){
-                v=iNumber(&sN[i]);
-                if (bAdd){
-                    v+=a;
-                    bAdd=HB_FALSE;
-                }
-                v+=v1;
-                if (v>=nB){
-                    v-=nB;
-                    v1=1;
-                }
-                else{
-                    v1=0;
-                }
-                sN[i]=cNumber(v);
-                if (v1==0){
-                    break;
-                }
-            }
-            return sN;
-        }
-
-        HB_FUNC_STATIC( TBIGNIADD ){
-            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
-            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
-            HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
-            hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
-        }
-
-        HB_FUNC_STATIC( TBIGNLADD ){
-            hb_retnint((HB_MAXINT)hb_parnint(1)+(HB_MAXINT)hb_parnint(2));
-        }
-
-        static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
-
-            HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
-
-            char * c=tBIGNPadL("0",y,"0");
-            HB_SIZE k=y-1;
-            HB_MAXINT v=0;
-            HB_MAXINT v1;
-            while (--n>=0){
-                v+=(iNumber(&a[n])-iNumber(&b[n]));
-                if (v<0){
-                    v+=nB;
-                    v1=-1;
-                }
-                else{
-                    v1=0;
-                }
-                c[k]=cNumber(v);
-                v=v1;
-                --k;
-            }
-            return c;
-        }
-
-        HB_FUNC_STATIC( TBIGNSUB ){
-            const char * a=hb_parc(1);
-            const char * b=hb_parc(2);
-            HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
-            const HB_SIZE y=(HB_SIZE)n;
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
-            char * szRet=tBIGNSub(a,b,n,y,nB);
-            hb_retclen_buffer(szRet,( HB_SIZE )y);
-        }
-
-        static char * tBigNiSUB(char * sN,const HB_MAXINT s,const HB_MAXINT isN,const HB_MAXINT nB){
-            HB_TRACE(HB_TR_DEBUG,("tBigNiSUB(%s,%" PFHL "d,%" PFHL "d,%" PFHL "d)",sN,s,isN,nB));
-            HB_BOOL bSub=HB_TRUE;
-            HB_MAXINT v;
-            HB_MAXINT v1=0;
-            HB_MAXINT i=isN;
-            while(--i>=0){
-                v=iNumber(&sN[i]);
-                if (bSub){
-                    v-=s;
-                    bSub=HB_FALSE;
-                }
-                v+=v1;
-                if (v<0){
-                    v+=nB;
-                    v1=-1;
-                }
-                else{
-                    v1=0;
-                }
-                sN[i]=cNumber(v);
-                if (v1==0){
-                    break;
-                }
-            }
-            return sN;
-        }
-
-        HB_FUNC_STATIC( TBIGNISUB ){
-            HB_MAXINT n=(HB_MAXINT)(hb_parclen(1));
-            char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
-            HB_MAXINT s=(HB_MAXINT)hb_parnint(2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
-            hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
-        }
-
-        HB_FUNC_STATIC( TBIGNLSUB ){
-            HB_TRACE(HB_TR_DEBUG,("TBIGNLSUB(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
-            hb_retnint((HB_MAXINT)hb_parnint(1)-(HB_MAXINT)hb_parnint(2));
-        }
 
         static char * tBIGNMult(const char * pValue1,const char * pValue2,HB_SIZE n,const HB_SIZE y,const HB_MAXINT nB){
 

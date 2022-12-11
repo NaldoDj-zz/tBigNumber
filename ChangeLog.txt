@@ -2,11 +2,7 @@
  * $Id$
  */
 
-2022-12-11 13:55 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
-  + include/cl/cl_platform.h
-  + include/cl/cl.h
-  * hbp/tBigNtst.hbp
-  * prj/mg/win/64/tBigNumber64.mip
+2022-12-11 19:44 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
 
