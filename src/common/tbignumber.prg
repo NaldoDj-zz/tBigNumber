@@ -6791,7 +6791,37 @@ static function __SQRT(p)
 
         #else /*__HARBOUR__*/
             static function Add(a as character,b as character,n as numeric,nB as numeric)
-                return(tBIGNADD(a,b,n,n,nB))
+                #ifdef HB_WITH_OPENCL
+                    thread static cCLFunction as character
+                    if (empty(cCLFunction))
+                        #pragma __cstream | cCLFunction:=%s
+                            __kernel void tBIGNCLAdd(__global char* restrict iVRet1
+                                                    ,__global char* restrict iVRet2
+                                                    ,constant unsigned int* restrict iBase
+                                                    ,constant char* restrict iVGet1
+                                                    ,constant char* restrict iVGet2)
+                            {
+                               unsigned long long int n = get_global_id(0);
+                               unsigned int ivG1 = iVGet1[n]-'0';
+                               unsigned int ivG2 = iVGet2[n]-'0';
+                               unsigned int s = (ivG1+ivG2);
+                               unsigned int b = iBase[0];
+                               bool bChange = (s>=b);
+                               unsigned int v=s;
+                               unsigned int v1=0;
+                               if (bChange) {
+                                   v-=b;
+                                   v1=1;
+                               }
+                               iVRet2[n-1] = v1+'0';
+                               iVRet1[n] = v+'0';
+                            }
+                        #pragma __endtext
+                    endif
+                    return(tBIGNCLAdd(a,b,n,nB,cCLFunction))                    
+                #else
+                    return(tBIGNADD(a,b,n,n,nB))
+                #endif
             /*static function Add*/
         #endif //__PTCOMPAT__
 

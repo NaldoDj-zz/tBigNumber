@@ -41,6 +41,10 @@
         #include <hbmather.h>
         #include <hbapierr.h>
 
+        #if defined(HB_WITH_OPENCL)
+            #include "../include/cl/cl.h"
+        #endif
+
         #define __STDC_FORMAT_MACROS
         #define __USE_MINGW_ANSI_STDIO 1
         #include <inttypes.h>
@@ -186,7 +190,9 @@
                        *pc = cFill;
                  }
               }
-              pcRet[( sRetLen > sStrLen ? sRetLen : sStrLen )]=HB_CHAR_EOS;
+              sRetLen=( sRetLen > sStrLen ? sRetLen : sStrLen );
+              sRetLen=hb_strnlen( ( const char * ) pcRet, sRetLen );
+              pcRet[sRetLen]=HB_CHAR_EOS;
               return pcRet;
         }
 
@@ -251,6 +257,7 @@
               {
                   char * pcRet=(char*)hb_xgrab(( HB_SIZE )sRetLen+1);
                   hb_xmemcpy(pcRet,pcTmp,sRetLen);
+                  sRetLen=hb_strnlen( ( const char * ) pcRet, sRetLen );
                   pcRet[sRetLen]=HB_CHAR_EOS;
                   return pcRet;
               }
@@ -300,7 +307,9 @@
         }
 
         static char * tBIGNAdd(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
+
             HB_TRACE(HB_TR_DEBUG,("tBIGNAdd(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
+
             char * c=tBIGNPadL("0",y,"0");
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
@@ -322,17 +331,333 @@
                 --k;
             }
             return c;
+
         }
 
         HB_FUNC_STATIC( TBIGNADD ){
             const char * a=hb_parc(1);
             const char * b=hb_parc(2);
-            HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
+            const HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)+1);
             const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
             char * szRet=tBIGNAdd(a,b,n,y,nB);
             hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
+
+        #if defined(HB_WITH_OPENCL)
+
+            static bool KeepCalc(char * HostOutV1,HB_SIZE nSize)
+            {
+
+                if (strstr(HostOutV1,"1")!=NULL)
+                {
+                    return(HB_TRUE);
+                }
+
+                HB_SIZE p1 = 0;
+                HB_SIZE p2 = nSize;
+
+                while (p1 <= p2) {
+                    if ( iNumber(&HostOutV1[p1++])==1 || iNumber(&HostOutV1[p2--])==1 )
+                    {
+                        return(HB_TRUE);
+                    }
+                }
+
+                return(HB_FALSE);
+
+            }
+
+            static char * tBIGNCLAdd(char * HostINV1,char * HostINV2,HB_MAXINT HostBase,const HB_SIZE nSize,cl_context CLADD_GPUContext,cl_kernel CLADD_kerneltBIGNCLAdd,cl_command_queue CLADD_cqCommandQueue,cl_int *CLADD_clErr)
+            {
+
+                char * HostOutV1=tBIGNPadL("0",nSize,"0");
+                char * HostOutRes=tBIGNPadL("0",nSize,"0");
+
+                HB_BOOL bKeepCalc = HB_FALSE;
+                do
+                {
+
+                    cl_mem GPUINV1 = clCreateBuffer(CLADD_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostINV1,CLADD_clErr);
+                    if (*CLADD_clErr != CL_SUCCESS || !GPUINV1) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUINV2 = clCreateBuffer(CLADD_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostINV2,CLADD_clErr);
+                    if (*CLADD_clErr != CL_SUCCESS || !GPUINV2) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUBase = clCreateBuffer(CLADD_GPUContext,CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(HB_MAXINT*),&HostBase,CLADD_clErr);
+                    if (*CLADD_clErr != CL_SUCCESS || !GPUBase) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUOutRes = clCreateBuffer(CLADD_GPUContext,CL_MEM_WRITE_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostOutRes,CLADD_clErr);
+                    if (*CLADD_clErr != CL_SUCCESS || !GPUOutRes) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    cl_mem GPUOutV1 = clCreateBuffer(CLADD_GPUContext,CL_MEM_WRITE_ONLY|CL_MEM_COPY_HOST_PTR,sizeof(char *) * nSize,HostOutV1,CLADD_clErr);
+                    if (*CLADD_clErr != CL_SUCCESS || !GPUOutV1) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    *CLADD_clErr  = clSetKernelArg(CLADD_kerneltBIGNCLAdd,0,sizeof(cl_mem),(void*)&GPUOutRes);
+                    *CLADD_clErr |= clSetKernelArg(CLADD_kerneltBIGNCLAdd,1,sizeof(cl_mem),(void*)&GPUOutV1);
+                    *CLADD_clErr |= clSetKernelArg(CLADD_kerneltBIGNCLAdd,2,sizeof(cl_mem),(void*)&GPUBase);
+                    *CLADD_clErr |= clSetKernelArg(CLADD_kerneltBIGNCLAdd,3,sizeof(cl_mem),(void*)&GPUINV1);
+                    *CLADD_clErr |= clSetKernelArg(CLADD_kerneltBIGNCLAdd,4,sizeof(cl_mem),(void*)&GPUINV2);
+                    if (*CLADD_clErr != CL_SUCCESS) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    HB_SIZE WorkSize[1] = {nSize};
+                    *CLADD_clErr = clEnqueueNDRangeKernel(CLADD_cqCommandQueue,CLADD_kerneltBIGNCLAdd,1,NULL,WorkSize,NULL,0,NULL,NULL);
+                    if (*CLADD_clErr != CL_SUCCESS) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    *CLADD_clErr = clEnqueueReadBuffer(CLADD_cqCommandQueue,GPUOutRes,CL_TRUE,0,(sizeof(char *) * nSize),HostOutRes,0,NULL,NULL);
+                    *CLADD_clErr |= clEnqueueReadBuffer(CLADD_cqCommandQueue,GPUOutV1,CL_TRUE,0,(sizeof(char *) * nSize),HostOutV1,0,NULL,NULL);
+                    if (*CLADD_clErr != CL_SUCCESS) {
+                        *CLADD_clErr = -9999;
+                        return(HostOutRes);
+                    }
+
+                    bKeepCalc = KeepCalc(HostOutV1,nSize);
+
+                    if (bKeepCalc)
+                    {
+                        hb_xmemcpy(HostINV1,HostOutRes,nSize);
+                        hb_xmemcpy(HostINV2,HostOutV1,nSize);
+                    }
+
+                    clReleaseMemObject(GPUINV1);
+                    clReleaseMemObject(GPUINV2);
+                    clReleaseMemObject(GPUBase);
+                    clReleaseMemObject(GPUOutRes);
+                    clReleaseMemObject(GPUOutV1);
+
+                } while (bKeepCalc);
+
+                hb_xfree(HostOutV1);
+
+                return(HostOutRes);
+
+            }
+
+            HB_FUNC_STATIC( TBIGNCLADD ){
+
+                static __thread cl_int CLADD_clErr = -9999;
+                static __thread cl_device_id CLADD_cdDevice = NULL;
+                static __thread cl_platform_id CLADD_cpPlatform = NULL;
+                static __thread cl_context CLADD_GPUContext = NULL;
+                static __thread cl_command_queue CLADD_cqCommandQueue = NULL;
+                static __thread cl_program CLADD_OpenCLProgram = NULL;
+                static __thread cl_kernel CLADD_kerneltBIGNCLAdd = NULL;
+
+                const HB_SIZE nSize=(HB_SIZE)(hb_parnint(3)+1);
+
+                HB_MAXINT HostBase=(HB_MAXINT)hb_parnint(4);
+
+                char * HostINV1=tBIGNPadL(hb_parc(1),nSize,"0");
+                char * HostINV2=tBIGNPadL(hb_parc(2),nSize,"0");
+
+                char * szRet=NULL;
+
+                if (CLADD_clErr == -9999)
+                {
+                    CLADD_clErr = clGetPlatformIDs(1,&CLADD_cpPlatform,NULL);
+                }
+
+                if (CLADD_clErr == CL_SUCCESS && CLADD_cpPlatform != NULL)
+                {
+
+                    if (!CLADD_cdDevice)
+                    {
+                        CLADD_clErr = clGetDeviceIDs(CLADD_cpPlatform,CL_DEVICE_TYPE_GPU,1,&CLADD_cdDevice,NULL);
+                        if (CLADD_clErr == CL_DEVICE_NOT_FOUND) {
+                            CLADD_clErr = clGetDeviceIDs(CLADD_cpPlatform,CL_DEVICE_TYPE_CPU,1,&CLADD_cdDevice,NULL);
+                        }
+
+                        if (CLADD_clErr == CL_SUCCESS && CLADD_cdDevice != NULL) {
+                            CLADD_clErr = clRetainDevice(CLADD_cdDevice);
+                        }
+
+                    }
+
+                    if (CLADD_clErr == CL_SUCCESS && CLADD_cdDevice != NULL)
+                    {
+
+                        if (CLADD_GPUContext == NULL){
+                            CLADD_GPUContext = clCreateContextFromType(0,CL_DEVICE_TYPE_GPU,NULL,NULL,&CLADD_clErr);
+                        }
+
+                        if (CLADD_clErr == CL_SUCCESS && CLADD_GPUContext != NULL)
+                        {
+
+                            CLADD_clErr = clRetainContext(CLADD_GPUContext);
+
+                            if (CLADD_clErr == CL_SUCCESS && CLADD_cqCommandQueue == NULL){
+                                CLADD_cqCommandQueue = clCreateCommandQueue(CLADD_GPUContext,CLADD_cdDevice,0,&CLADD_clErr);
+                                if (CLADD_clErr == CL_SUCCESS && CLADD_cqCommandQueue != NULL) {
+                                    CLADD_clErr = clRetainCommandQueue(CLADD_cqCommandQueue);
+                                }
+                            }
+
+                            if (CLADD_clErr == CL_SUCCESS && CLADD_cqCommandQueue != NULL)
+                            {
+
+                                CLADD_clErr= clRetainCommandQueue(CLADD_cqCommandQueue);
+
+                                if (CLADD_clErr == CL_SUCCESS && CLADD_OpenCLProgram == NULL){
+                                    const char* OpenCLSource=hb_parc(5);
+                                    CLADD_OpenCLProgram = clCreateProgramWithSource(CLADD_GPUContext,1,(const char **) &OpenCLSource,NULL,&CLADD_clErr);
+                                    if (CLADD_clErr == CL_SUCCESS && CLADD_OpenCLProgram != NULL){
+                                        CLADD_clErr = clRetainProgram(CLADD_OpenCLProgram);
+                                    }
+                                }
+
+                                if (CLADD_clErr == CL_SUCCESS && CLADD_OpenCLProgram != NULL)
+                                {
+
+                                    if (CLADD_kerneltBIGNCLAdd == NULL || clGetProgramBuildInfo(CLADD_OpenCLProgram,NULL,CL_PROGRAM_BUILD_LOG,0,NULL,NULL) != CL_BUILD_SUCCESS)
+                                    {
+                                        CLADD_kerneltBIGNCLAdd = NULL;
+                                        CLADD_clErr = clBuildProgram(CLADD_OpenCLProgram,0,NULL,NULL,NULL,NULL);
+                                    }
+
+                                    if (CLADD_clErr == CL_SUCCESS)
+                                    {
+                                        if (CLADD_kerneltBIGNCLAdd == NULL){
+                                            CLADD_kerneltBIGNCLAdd = clCreateKernel(CLADD_OpenCLProgram, "tBIGNCLAdd", &CLADD_clErr);
+                                            if (CLADD_clErr == CL_SUCCESS && CLADD_kerneltBIGNCLAdd != NULL){
+                                                CLADD_clErr = clRetainKernel(CLADD_kerneltBIGNCLAdd);
+                                            }
+                                        }
+
+                                        if (CLADD_clErr == CL_SUCCESS && CLADD_kerneltBIGNCLAdd != NULL)
+                                        {
+
+                                            szRet=tBIGNCLAdd(HostINV1,HostINV2,HostBase,nSize,CLADD_GPUContext,CLADD_kerneltBIGNCLAdd,CLADD_cqCommandQueue,&CLADD_clErr);
+
+                                            if ( CLADD_clErr != CL_SUCCESS ){
+                                                CLADD_clErr = -9999;
+                                                CLADD_cdDevice=NULL;
+                                                CLADD_cpPlatform=NULL;
+                                                clReleaseKernel(CLADD_kerneltBIGNCLAdd);
+                                                CLADD_kerneltBIGNCLAdd=NULL;
+                                                clReleaseProgram(CLADD_OpenCLProgram);
+                                                CLADD_OpenCLProgram=NULL;
+                                                clReleaseCommandQueue(CLADD_cqCommandQueue);
+                                                CLADD_cqCommandQueue=NULL;
+                                                clReleaseContext(CLADD_GPUContext);
+                                                CLADD_GPUContext=NULL;
+                                            }
+
+                                        } else {
+                                            CLADD_clErr = -9999;
+                                            CLADD_cdDevice=NULL;
+                                            CLADD_cpPlatform=NULL;
+                                            clReleaseKernel(CLADD_kerneltBIGNCLAdd);
+                                            CLADD_kerneltBIGNCLAdd=NULL;
+                                            clReleaseProgram(CLADD_OpenCLProgram);
+                                            CLADD_OpenCLProgram=NULL;
+                                            clReleaseCommandQueue(CLADD_cqCommandQueue);
+                                            CLADD_cqCommandQueue=NULL;
+                                            clReleaseContext(CLADD_GPUContext);
+                                            CLADD_GPUContext=NULL;
+                                        }
+
+                                    } else {
+
+                                        CLADD_clErr = -9999;
+                                        CLADD_cdDevice=NULL;
+                                        CLADD_cpPlatform=NULL;
+                                        clReleaseProgram(CLADD_OpenCLProgram);
+                                        CLADD_OpenCLProgram=NULL;
+                                        clReleaseCommandQueue(CLADD_cqCommandQueue);
+                                        CLADD_cqCommandQueue=NULL;
+                                        clReleaseContext(CLADD_GPUContext);
+                                        CLADD_GPUContext=NULL;
+
+                                    }
+
+                                } else {
+
+                                    CLADD_clErr = -9999;
+                                    CLADD_cdDevice=NULL;
+                                    CLADD_cpPlatform=NULL;
+                                    clReleaseProgram(CLADD_OpenCLProgram);
+                                    CLADD_OpenCLProgram=NULL;
+                                    clReleaseCommandQueue(CLADD_cqCommandQueue);
+                                    CLADD_cqCommandQueue=NULL;
+                                    clReleaseContext(CLADD_GPUContext);
+                                    CLADD_GPUContext=NULL;
+
+                                }
+
+                            } else {
+
+                                CLADD_clErr = -9999;
+                                CLADD_cdDevice=NULL;
+                                CLADD_cpPlatform=NULL;
+                                clReleaseCommandQueue(CLADD_cqCommandQueue);
+                                CLADD_cqCommandQueue=NULL;
+                                clReleaseContext(CLADD_GPUContext);
+                                CLADD_GPUContext=NULL;
+
+                            }
+
+                        } else {
+
+                            CLADD_clErr = -9999;
+                            CLADD_cdDevice=NULL;
+                            CLADD_cpPlatform=NULL;
+                            clReleaseContext(CLADD_GPUContext);
+                            CLADD_GPUContext=NULL;
+
+                        }
+                    } else {
+
+                            CLADD_clErr = -9999;
+                            CLADD_cdDevice=NULL;
+                            CLADD_cpPlatform=NULL;
+
+                    }
+                } else {
+
+                  CLADD_clErr = -9999;
+                  CLADD_cpPlatform=NULL;
+
+                }
+
+                if ( CLADD_clErr != CL_SUCCESS )
+                {
+                    hb_xfree(HostINV1);
+                    hb_xfree(HostINV2);
+                    HostINV1=tBIGNPadL(hb_parc(1),nSize,"0");
+                    HostINV2=tBIGNPadL(hb_parc(2),nSize,"0");
+                    HostBase=(HB_MAXINT)hb_parnint(4);
+                    szRet=tBIGNAdd(HostINV1,HostINV2,nSize,nSize,HostBase);
+                }
+
+                hb_xfree(HostINV1);
+                hb_xfree(HostINV2);
+
+                hb_retclen_buffer(szRet,nSize);
+
+            }
+
+        #endif
 
         static char * tBigNiADD(char * sN, HB_MAXINT a,const HB_MAXINT isN,const HB_MAXINT nB){
             HB_TRACE(HB_TR_DEBUG,("tBigNiADD(%s%" PFHL "d,%" PFHL "d,%" PFHL "d)",sN,a,isN,nB));
@@ -340,7 +665,6 @@
             HB_MAXINT v;
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
-            sN[i]=HB_CHAR_EOS;
             while(--i>=0){
                 v=iNumber(&sN[i]);
                 if (bAdd){
@@ -376,7 +700,9 @@
         }
 
         static char * tBIGNSub(const char * a,const char * b,HB_MAXINT n,const HB_SIZE y,const HB_MAXINT nB){
+
             HB_TRACE(HB_TR_DEBUG,("tBIGNSub(%s,%s,%" PFHL "d,%" HB_PFS "u,%" PFHL "d)",a,b,n,y,nB));
+
             char * c=tBIGNPadL("0",y,"0");
             HB_SIZE k=y-1;
             HB_MAXINT v=0;
@@ -480,12 +806,13 @@
                     v1=0;
                 };
                 c[k]=cNumber(v);
-                if (v1>0) {
-                    c[k+1]=cNumber(v1);
-                }
                 v=v1;
                 k++;
                 i++;
+            }
+
+            if (v>0) {
+                c[k]=cNumber(v);
             }
 
             while (l<=n){
@@ -501,14 +828,15 @@
                     v1=0;
                 }
                 c[k]=cNumber(v);
-                if (v1>0) {
-                    c[k+1]=cNumber(v1);
-                }
+                v=v1;
                 if (++k>=y){
                     break;
                 }
-                v=v1;
                 l++;
+            }
+
+            if (v>0) {
+                c[k]=cNumber(v);
             }
 
             hb_xfree(a);
@@ -742,7 +1070,6 @@
             HB_MAXINT v;
             HB_MAXINT v1=0;
             HB_MAXINT i=isN;
-            sN[i]=HB_CHAR_EOS;
             while(--i>=0){
                 v=iNumber(&sN[i]);
                 v*=m;

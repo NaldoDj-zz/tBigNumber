@@ -1,8 +1,8 @@
-VERSION 05 06 03                                                                                                                                                                                                                                              
-PRJ_VERSION 00 00 0413
+VERSION 05 06 01                                                                                                                                                                                                                                              
+PRJ_VERSION 00 00 0486
 PROJECTFOLDER <ThisFolder>                                                                                                                                                                                                                                    
 LASTLIBFOLDERm3gh                                                                                                                                                                                                                                             
-LASTLIBFOLDERm3wh D:\marinas-ide(64bits)\harbour\lib\win\mingw64                                                                                                                                                                                              
+LASTLIBFOLDERm3wh F:\GitHub\tBigNumber\lib\win\mingw64                                                                                                                                                                                                        
 LASTLIBFOLDERm3vh                                                                                                                                                                                                                                             
 RUNFOLDER D:\GitHub\tbigNumber\                                                                                                                                                                                                                               
 RUNPARAM                                                                                                                                                                                                                                                      

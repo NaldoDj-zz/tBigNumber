@@ -17,6 +17,12 @@
 #xterm -maximized -mk_width +cm -fbx +fullscreen -j +t -cjk_width -e /bin/bash -l -c ./exe/linux/gcc/tBigNtst
 #./exe/linux/gcc/tBigNtst
 
+#begin compile with OPENCL
+    -DHB_WITH_OPENCL
+    -cflag=-DHB_WITH_OPENCL
+    -lOpenCL
+#end compile with OPENCL
+
 -mt
 
 -w3 -es2
