@@ -10,7 +10,7 @@
 #-D__HB_Q_SQRT__
 #-D__PTCOMPAT__
 #-D__LMETHOD__
-#/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp 
+#/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp
 # export DISPLAY=:0 # in WSL 1
 # export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0 # in WSL 2
 # export LIBGL_ALWAYS_INDIRECT=1
@@ -18,16 +18,16 @@
 #./exe/linux/gcc/tBigNtst
 
 #begin compile with OPENCL
-    -DHB_WITH_OPENCL
-    -cflag=-DHB_WITH_OPENCL
-    -lOpenCL
+#    -DHB_WITH_OPENCL
+#    -cflag=-DHB_WITH_OPENCL
+#    -lOpenCL
 #end compile with OPENCL
 
 -mt
 
 -w3 -es2
 
--cpp 
+-cpp
 -gui
 -compr=max
 

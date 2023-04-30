@@ -1,10 +1,14 @@
-/*
- * $Id$
- */
+/* Encoding: UTF-8 (No BOM)  Notation (in 5th column):
+     * Change  ! Fix  % Optimize  + Add  - Remove  ; Comment
+   Entries may not always be in chronological/commit order.
+   See license at the end of file. */
 
-2022-12-11 19:44 UTC-0300 Naldo DJ (marinaldo.jesus gmail.com)
-  * src/common/tbignumber.prg
-  * src/hb/c/tbigNumber.c
+2023-04-30 13:14 UTC Naldo DJ
+  + bin/findnoasciicharacters.ps1
+  + bin/tolower.ps1
+  * bin/3rdpatch.hb
+  * bin/commit.hb
+  * hbp/tBigNtst.hbp
 
 2019-09-01 20:49 UTC-0300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   - mkvz/env_mk.txt
@@ -33,26 +37,26 @@
 2018-08-08 20:06 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * mk/mkHB.bat
   * mk/mkHB64.bat
- 
+
 2018-05-21 20:53 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   + ChangeLog.txt -> ChangeLog-00.txt
   * mk/mkHB.bat
   * mk/mkHB64.bat
   * ChangeLog.txt
- 
+
 2018-04-11 19:58 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2018-03-14 08:00 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * bin/3rdpatch.hb
   * bin/check.hb
   * bin/commit.hb
   * src/tests/tBigNtst.prg
- 
+
 2018-03-03 12:58 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2018-02-27 07:10 UTC--300 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
@@ -73,7 +77,7 @@
   + hbpvz/_tbigNumber_dbfile_memio.hbp
   + hbpvz/_tbigNumber_dbfile.hbp
   + hbpvz/_tbigNumber_dyn_obj.hbp
- 
+
 2018-01-16 07:04 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbpvz/_tbigNumber.hbp
   * mk/mk-msvc.bat
@@ -92,7 +96,7 @@
   - mk/__mkHB-msvc64.bat
   - mkvz/__mkHB-msvc.bat
   - mkvz/__mkHB-msvc64.bat
- 
+
 2018-01-05 07:26 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * mk/mk-msvc.bat
   * mk/mk-msvc64.bat
@@ -133,10 +137,10 @@
   * hbp/tbigNumber_dbfile.hbp -> hbp/_tbigNumber_dbfile.hbp
   * hbp/tbigNumber_dyn_obj.hbp -> hbp/_tbigNumber_dyn_obj.hbp
   * hbp/tbigNumber.hbp -> hbp/_tbigNumber.hbp
-  
+
 2018-01-05 00:54 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2018-01-05 00:43 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   + hbc/tbigNumber_array_assignv_dyn_obj.hbc
   + hbc/tbigNumber_array_assignv.hbc
@@ -166,7 +170,7 @@
   + hbp/tbigNumber_dbfile_memio.hbp
   + hbp/tbigNumber_dbfile.hbp
   + hbp/tbigNumber_dyn_obj.hbp
- 
+
 2018-01-05 00:39 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst_dbfile_memio_dyn_obj.hbp
   * mk/hbmk.hbm
@@ -182,7 +186,7 @@
   * mk/mkLibARM.bat
   * hbc/_tbigNumber.hbc -> hbc/tbigNumber.hbc
   * hbp/_tbigNumber.hbp -> hbp/tbigNumber.hbp
- 
+
 2018-01-04 00:52 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * hbp/_tbigNumber.hbp
   * hbp/tBigNtst_array_assignv_dyn_obj.hbp
@@ -216,39 +220,39 @@
   * hbpvz/tBigNtst_dbfile.hbp
   * hbpvz/tBigNtst_dyn_obj.hbp
   * hbpvz/tBigNtst.hbp
- 
+
 2017-11-16 13:31 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/tBigNError.prg
- 
+
 2017-11-10 09:11 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2017-11-01 16:34 UTC--200 NaldoDj (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tbignumber.prg
- 
+
 2017-10-20 20:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2017-10-15 15:42 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/mkAll-Trace.bat
   * mk/mkHBAll-Trace.bat
   * mkvz/mkAll-Trace.bat
   * mkvz/mkHBAll-Trace.bat
- 
+
 2017-10-10 22:37 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   - mkvz/env_mk.txt
   * mk/hbmk.hbm
   * mkvz/hbmk.hbm
   * src/tests/tBigNtst.prg
- 
+
 2017-08-25 16:43 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mkvz/env_mk.txt
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
- 
+
 2017-08-10 14:15 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * .gitattributes
   + hbpvz/_tbigNumber.hbp
@@ -295,10 +299,10 @@
   + mkvz/hbmk.hbm
   * src/tests/tBigNtst.prg
   * ChangeLog.txt
- 
+
 2017-08-10 14:10 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 /* Read doc/howtorep.txt and use this format for entry headers:
    YYYY*MM*DD HH:MM UTC[*|+]hhmm Your Full Name (your_email address)
    2013*12*31 13:59 UTC+0100 Foo Bar (foo.bar foobar.org)
@@ -309,47 +313,47 @@
 
 2017-06-29 15:12 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * mk/mkHB64.bat
- 
+
 2017-06-08 20:40 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
-  
+
 2017-05-06 15:22 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2017-04-18 20:42 UTC--300 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tbignumber.prg
- 
+
 2017-02-13 20:04 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/64/tBigNumber64.mip
   * src/common/tbignumber.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-29 00:17 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNDef.ch
- 
+
 2016-12-27 21:47 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
- 
+
 2016-12-22 00:22 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
- 
+
 2016-12-21 22:12 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
- 
+
 2016-12-21 21:59 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
   * src/common/tTimeCalc.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-21 20:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNDef.ch
   * src/common/tbignumber.prg
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-12-19 20:25 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * hbp/tBigNtst.hbp
   * include/tBigNDef.ch
@@ -358,11 +362,11 @@
   * src/hb/c/tbigNumber.c
   * src/pt/tbigNExecFromArray.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-13 08:46 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/hb/c/tbigNumber.c
   * src/tests/tBigNtst.prg
- 
+
 2016-12-12 22:19 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNDef.ch
   * include/tBigNumber.ch
@@ -372,27 +376,27 @@
   * src/common/tRemaining.prg
   * src/common/tSProgress.prg
   * src/common/tTimeCalc.prg
- 
+
 2016-12-11 23:24 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2016-12-11 17:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * prj/mg/win/32/tBigNumber32.mip
   * prj/mg/win/64/tBigNumber64.mip
   * src/tests/tBigNtst.prg
- 
+
 2016-12-11 15:37 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
   * src/common/tTimeCalc.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-11 14:57 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tRemaining.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-11 13:13 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
- 
+
 2016-12-10 23:58 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/tBigNumber.ch
   * src/common/tbignumber.prg
@@ -402,16 +406,16 @@
   * src/pt/__pteTthD.prg
   * src/pt/__ptPITthD.prg
   * src/tests/tBigNtst.prg
- 
+
 2016-12-02 09:18 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * ChangeLog.txt
- 
+
 2016-12-02 09:09 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
- 
+
 2016-11-30 22:50 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/common/tbignumber.prg
- 
+
 2016-11-27 22:40 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * include/pt_tBigNtst.ch
   * include/pt_tBigNumber.ch
@@ -426,7 +430,7 @@
   * src/common/tSProgress.prg
   * src/common/tTimeCalc.prg
   * src/tests/tBigNtst.prg
-  
+
 2016-11-24 00:00 UTC--200 Naldo DJ (marinaldo.jesus blacktdn.com.br)
   * src/tests/tBigNtst.prg
 
