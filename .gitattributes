@@ -16,6 +16,7 @@ ChangeLog.txt ident
 *.ASCII.art text
 *.art       text
 *.bas       text
+*.bat     text
 *.c         text
 *.cfg       text
 *.ch        text
@@ -36,6 +37,7 @@ ChangeLog.txt ident
 *.ini       text
 *.js        text
 *.log       text
+*.lst     text
 *.m         text
 *.md        text
 *.mft       text
@@ -52,14 +54,19 @@ ChangeLog.txt ident
 *.PRX       text
 *.prj       text
 *.PRJ       text
+*.ps1     text
+*.py      text
 *.rb        text
 *.rc        text
 *.sav       text
 *.sfc       text
 *.spec      text
+*.sql     text
 *.sx        text
 *.tpl       text
 *.txt       text
+*.th      text
+*.tlpp    text
 *.ucf       text
 *.vbs       text
 *.xdt       text
@@ -78,14 +85,18 @@ ChangeLog.txt ident
 *.Lbc     text eol=crlf
 
 # Binary files
+*.7z      binary
 *.a       binary
 *.afm     binary
+*.aut     binary
 *.bmp     binary
 *.dat     binary
 *.dbf     binary
+*.dtc     binary
 *.doc     binary
 *.docx    binary
 *.exe     binary
+*.fpt     binary
 *.frm     binary
 *.gif     binary
 *.icns    binary
@@ -101,7 +112,10 @@ ChangeLog.txt ident
 *.png     binary
 *.sq3     binary
 *.tif     binary
+*.ttf     binary
 *.wav     binary
+*.xlsx    binary
+*.nppcrypt binary
 
 # TOTEST:
 #*.c       text diff=cpp
@@ -112,6 +126,7 @@ ChangeLog.txt ident
 #*.rb      text diff=ruby
 #*.php     text diff=php
 #*.ps1     text diff=powershell
+#*.sql     text diff=sql
 
 # Custom for Visual Studio
 *.cs     diff=csharp
