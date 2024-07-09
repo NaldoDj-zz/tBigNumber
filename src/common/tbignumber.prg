@@ -3666,7 +3666,7 @@ static function cGCD(nX as numeric,nY as numeric)
             end while
         endif
     #endif //__PTCOMPAT__
-    return(hb_ntos(nGCD))
+    return(hb_NToC(nGCD))
 
 /*static function cGCD*/
 
@@ -3766,7 +3766,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
     #endif //__PTCOMPAT__
 
-    return(hb_ntos(nLCM))
+    return(hb_NToC(nLCM))
 
 /*static function cLCM*/
 
@@ -4007,7 +4007,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             oSQRT:=self:Clone()
             if (oSQRT:lte(oSQRT:SysSQRT()))
-                oSQRT:SetValue(__SQRT(hb_ntos(Val(oSQRT:GetValue()))))
+                oSQRT:SetValue(__SQRT(hb_NToC(Val(oSQRT:GetValue()))))
                 break
             endif
 
@@ -4043,7 +4043,7 @@ static function cLCM(nX as numeric,nY as numeric)
         cType:=ValType(uSet)
         if (cType$"C|N|O")
             if (hb_mutexLock(s__MTXSQR))
-                s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_ntos(uSet),"0")))
+                s__SysSQRT:SetValue(if(cType$"C|O",uSet,if(cType=="N",hb_NToC(uSet),"0")))
                 if (s__SysSQRT:gt(MAX_SYS_SQRT))
                     s__SysSQRT:SetValue(MAX_SYS_SQRT)
                 endif
@@ -4693,12 +4693,12 @@ static function cLCM(nX as numeric,nY as numeric)
         local nI    as numeric
 
         otH:=s__o0:Clone()
-        cHexB:=hb_ntos(self:nBase)
+        cHexB:=hb_NToC(self:nBase)
         otH:SetValue(cHexB)
         cHexN:=self:cInt
         nLn:=hb_bLen(cHexN)
         otLN:=s__o0:Clone()
-        otLN:SetValue(hb_ntos(nLn))
+        otLN:SetValue(hb_NToC(nLn))
 
         otNR:=s__o0:Clone()
 
@@ -4709,8 +4709,8 @@ static function cLCM(nX as numeric,nY as numeric)
         cHexC:="0123456789ABCDEFGHIJKLMNOPQRSTUV"
         nI:=nLn
         while (nI>0)
-            otNI:SetValue(hb_ntos(--nI))
-            otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
+            otNI:SetValue(hb_NToC(--nI))
+            otAT:SetValue(hb_NToC((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
             otPw:SetValue(otLN:Sub(otNI))
             otPw:OpDec()
             otPw:SetValue(otH:Pow(otPw))
@@ -4724,11 +4724,11 @@ static function cLCM(nX as numeric,nY as numeric)
         nLn:=self:nDec
         nI:=nLn
 
-        otLN:SetValue(hb_ntos(nLn))
+        otLN:SetValue(hb_NToC(nLn))
 
         while (nI>0)
-            otNI:SetValue(hb_ntos(--nI))
-            otAT:SetValue(hb_ntos((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
+            otNI:SetValue(hb_NToC(--nI))
+            otAT:SetValue(hb_NToC((AT(SubStr(cHexN,nI+1,1),cHexC)-1)))
             otPw:SetValue(otLN:Sub(otNI))
             otPw:OpDec()
             otPw:SetValue(otH:Pow(otPw))
@@ -4783,7 +4783,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             cBin:=""
 
-            cHexB:=hb_ntos(self:nBase)
+            cHexB:=hb_NToC(self:nBase)
             if (Empty(cHexB))
                  break
             endif
@@ -5022,11 +5022,11 @@ static function cLCM(nX as numeric,nY as numeric)
         cT:=oT:__cInt()
         #ifdef __HARBOUR__
             for each cN in cT
-                cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+                cR+=hb_NToC(__Random(0,Val(cN:__enumValue())))
             next
         #else
             while (Len(cT)>0)
-                cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
+                cR+=hb_NToC(__Random(0,Val(SubStr(cT,1,1))))
                 cT:=SubStr(cT,2)
             end while
         #endif
@@ -5040,11 +5040,11 @@ static function cLCM(nX as numeric,nY as numeric)
         cT:=oT:__cInt()
         #ifdef __HARBOUR__
             for each cN in cT
-                cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+                cR+=hb_NToC(__Random(0,Val(cN:__enumValue())))
             next
         #else
             while (Len(cT)>0)
-                cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
+                cR+=hb_NToC(__Random(0,Val(SubStr(cT,1,1))))
                 cT:=SubStr(cT,2)
             end while
         #endif
@@ -5057,11 +5057,11 @@ static function cLCM(nX as numeric,nY as numeric)
         cT:=oT:__cInt()
         #ifdef __HARBOUR__
             for each cN in cT
-                cR+=hb_NToS(__Random(0,Val(cN:__enumValue())))
+                cR+=hb_NToC(__Random(0,Val(cN:__enumValue())))
             next
         #else
             while (Len(cT)>0)
-                cR+=hb_NToS(__Random(0,Val(SubStr(cT,1,1))))
+                cR+=hb_NToC(__Random(0,Val(SubStr(cT,1,1))))
                 cT:=SubStr(cT,2)
             end while
         #endif
@@ -5277,7 +5277,7 @@ static function mrPass(uA,uS,uD,uN)
         oC:=self:Clone()
         oT:=tBigNumber():New(oC:Int(.T.))
         if (oT:lte(s__oMinFI))
-            oT:SetValue(hb_ntos(TBIGNFI(Val(oT:Int(.F.,.F.)))))
+            oT:SetValue(hb_NToC(TBIGNFI(Val(oT:Int(.F.,.F.)))))
         else
             oI:=s__o2:Clone()
             oN:=oT:Clone()
@@ -5867,7 +5867,7 @@ static function ecDiv(pA as character,pB as character,nSize as numeric,nBase as 
    SYMBOL_UNUSED(nSize)
 
    tmp:=s__o0:Clone()
-   base:=tBigNumber():New(hb_ntos(nBase),nBase)
+   base:=tBigNumber():New(hb_NToC(nBase),nBase)
 
    q:=s__o0:Clone()
 
@@ -6044,10 +6044,10 @@ static function __SQRT(p)
     q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
         #ifdef __PROTEUS__
-            r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+            r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
         #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
-                r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+                r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
@@ -6059,10 +6059,10 @@ static function __SQRT(p)
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
         #ifdef __PROTEUS__
-            r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+            r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
         #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
-                r:=tBigNumber():New(hb_ntos(SQRT(Val(q:GetValue()))))
+                r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
             #else
                 r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
@@ -6153,7 +6153,7 @@ static function __SQRT(p)
 
         (c)->(dbGoTop())
         s:=""
-        (c)->(dbEval({||s+=hb_ntos(FN)}))
+        (c)->(dbEval({||s+=hb_NToC(FN)}))
 
         return(s)
 
@@ -6213,7 +6213,7 @@ static function __SQRT(p)
 
         (c)->(dbGoTop())
         s:=""
-        (c)->(dbEval({||s+=hb_ntos(FN)}))
+        (c)->(dbEval({||s+=hb_NToC(FN)}))
 
         return(s)
 
@@ -6396,7 +6396,7 @@ static function __SQRT(p)
             end while
             while (y>=1)
                 (a)->(dbGoTo(y--))
-                s+=hb_ntos((a)->FN)
+                s+=hb_NToC((a)->FN)
             end while
         end while
 
@@ -6474,7 +6474,7 @@ static function __SQRT(p)
                 local cFile     as character
                 local lSuccess  as logical
                 cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
-                cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
                 while (.not.(lSuccess))
                     Try
@@ -6483,7 +6483,7 @@ static function __SQRT(p)
                       lSuccess:=.T.
                     Catch
                       lSuccess:=.F.
-                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
                 return(cFile)
@@ -6492,14 +6492,14 @@ static function __SQRT(p)
             static function CriaTrab(aStru as array,cAlias as character)
                 local cFile     as character
                 local lSuccess  as logical
-                cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
                 while (.not.(lSuccess))
                     Try
                       dbCreate(cFile,aStru,NIL,.T.,cAlias)
                       lSuccess:=.T.
                     Catch
-                      lSuccess:=.F.                      cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_ntos(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
+                      lSuccess:=.F.                      cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                     end
                 end while
                 return(cFile)
@@ -6550,9 +6550,9 @@ static function __SQRT(p)
             s:=""
 
             #ifdef __ADVPL__
-                aEval(c,{|v|s+=hb_ntos(v)})
+                aEval(c,{|v|s+=hb_NToC(v)})
             #else /*__HARBOUR__*/
-                aEval(c,{|v as numeric|s+=hb_ntos(v)})
+                aEval(c,{|v as numeric|s+=hb_NToC(v)})
             #endif
 
             return(s)
@@ -6598,9 +6598,9 @@ static function __SQRT(p)
             s:=""
 
             #ifdef __ADVPL__
-                aEval(c,{|v|s+=hb_ntos(v)})
+                aEval(c,{|v|s+=hb_NToC(v)})
             #else /*__HARBOUR__*/
-                aEval(c,{|v as numeric|s+=hb_ntos(v)})
+                aEval(c,{|v as numeric|s+=hb_NToC(v)})
             #endif
 
             return(s)
@@ -6712,7 +6712,7 @@ static function __SQRT(p)
                     y--
                 end while
                 while (y>=1)
-                    s+=hb_ntos(a[y])
+                    s+=hb_NToC(a[y])
                     y--
                 end while
             end while
@@ -6774,11 +6774,11 @@ static function __SQRT(p)
                         v1:=0
                     endif
                     #ifdef __ADVPL__
-                        c:=Stuff(c,k,1,hb_ntos(v))
-                        c:=Stuff(c,k-1,1,hb_ntos(v1))
+                        c:=Stuff(c,k,1,hb_NToC(v))
+                        c:=Stuff(c,k-1,1,hb_NToC(v1))
                     #else
-                        c[k]:=hb_ntos(v)
-                        c[k-1]:=hb_ntos(v1)
+                        c[k]:=hb_NToC(v)
+                        c[k-1]:=hb_NToC(v1)
                     #endif
                     v:=v1
                     --k
@@ -6818,7 +6818,7 @@ static function __SQRT(p)
                             }
                         #pragma __endtext
                     endif
-                    return(tBIGNCLAdd(a,b,n,nB,cCLAddFunction))                    
+                    return(tBIGNCLAdd(a,b,n,nB,cCLAddFunction))
                 #else
                     return(tBIGNADD(a,b,n,n,nB))
                 #endif
@@ -6868,9 +6868,9 @@ static function __SQRT(p)
                         v1:=0
                     endif
                     #ifdef __ADVPL__
-                        c:=Stuff(c,k,1,hb_ntos(v))
+                        c:=Stuff(c,k,1,hb_NToC(v))
                     #else
-                        c[k]:=hb_ntos(v)
+                        c[k]:=hb_NToC(v)
                     #endif
                     v:=v1
                     --k
@@ -6910,7 +6910,7 @@ static function __SQRT(p)
                             }
                         #pragma __endtext
                     endif
-                    return(tBIGNCLSub(a,b,n,nB,cCLSubFunction))                    
+                    return(tBIGNCLSub(a,b,n,nB,cCLSubFunction))
                 #else
                     return(tBIGNSUB(a,b,n,nB))
                 #endif
@@ -6979,11 +6979,11 @@ static function __SQRT(p)
                         v1:=0
                     endif
                     #ifdef __ADVPL__
-                        c:=Stuff(c,k,1,hb_ntos(v))
-                        c:=Stuff(c,k+1,1,hb_ntos(v1))
+                        c:=Stuff(c,k,1,hb_NToC(v))
+                        c:=Stuff(c,k+1,1,hb_NToC(v1))
                     #else
-                        c[k]:=hb_ntos(v)
-                        c[k+1]:=hb_ntos(v1)
+                        c[k]:=hb_NToC(v)
+                        c[k+1]:=hb_NToC(v1)
                     #endif
                     v:=v1
                     k++
@@ -7007,11 +7007,11 @@ static function __SQRT(p)
                         v1:=0
                     endif
                     #ifdef __ADVPL__
-                        c:=Stuff(c,k,1,hb_ntos(v))
-                        c:=Stuff(c,k+1,1,hb_ntos(v1))
+                        c:=Stuff(c,k,1,hb_NToC(v))
+                        c:=Stuff(c,k+1,1,hb_NToC(v1))
                     #else
-                        c[k]:=hb_ntos(v)
-                        c[k+1]:=hb_ntos(v1)
+                        c[k]:=hb_NToC(v)
+                        c[k+1]:=hb_NToC(v1)
                     #endif
                     v:=v1
                     if (++k>=y)

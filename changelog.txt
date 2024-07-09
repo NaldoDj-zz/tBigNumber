@@ -3,6 +3,14 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-05-09 10:11 UTC Naldo DJ
+  * include/pt_tbignumber.ch
+  * include/tbigndef.ch
+  * src/common/tfread.prg
+  * src/common/ttimecalc.prg
+  * src/tests/tbigntst.prg
+  * src/common/tbignumber.prg
+
 2023-04-30 13:14 UTC Naldo DJ
   + bin/findnoasciicharacters.ps1
   + bin/tolower.ps1
