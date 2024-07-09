@@ -28,6 +28,7 @@
 
         #xtranslate thread static        => static
         #xtranslate hb_ntos([<n,...>])   => LTrim(Str([<n>]))
+        #xtranslate hb_ntoc( <n> )       => LTrim( Str( <n> ) )
         #xtranslate NToS([<n,...>])      => LTrim(Str([<n>]))
         #xtranslate user procedure       => user function
         #xcommand user procedure <p>     => procedure u_<p>

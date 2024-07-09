@@ -175,19 +175,19 @@ EndClass
         #endif /*__ADVPL__*/
 
         DEFAULT nHours:=0
-        cTime:=hb_ntos(nHours)
+        cTime:=hb_NToC(nHours)
 
         cTime:=StrZero(Val(cTime),Max(Len(cTime),2))
 
         cTime+=":"
 
         DEFAULT nMinuts:=0
-        cTime+=StrZero(Val(hb_ntos(nMinuts)),2)
+        cTime+=StrZero(Val(hb_NToC(nMinuts)),2)
 
         cTime+=":"
 
         DEFAULT nSeconds:=0
-        cTime+=StrZero(Val(hb_ntos(nSeconds)),2)
+        cTime+=StrZero(Val(hb_NToC(nSeconds)),2)
 
         Return(cTime)
 /*Method HMSToTime*/

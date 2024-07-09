@@ -308,7 +308,7 @@ METHOD ErrorMsg( cText ) CLASS tfRead
       ELSE
          nTemp := self:nLastOp + 1
       ENDIF
-      cMessage := IF( EMPTY( cText ), "", cText ) + "Error " + hb_ntos( self:nError ) + " " + s_cAction[ nTemp ] + " " + self:cFile
+      cMessage := IF( EMPTY( cText ), "", cText ) + "Error " + hb_NToC( self:nError ) + " " + s_cAction[ nTemp ] + " " + self:cFile
    ENDIF
 
 RETURN cMessage

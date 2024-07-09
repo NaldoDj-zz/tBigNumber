@@ -53,6 +53,7 @@
             #define __PTCOMPAT__
         #endif
         #xtranslate hb_ntos( <n> ) => LTrim( Str( <n> ) )
+        #xtranslate hb_ntoc( <n> ) => LTrim( Str( <n> ) )
         #xtranslate hb_bLen([<prm,...>])        => Len([<prm>])
         #xtranslate tBIGNaLen([<prm,...>])      => Len([<prm>])
         #xtranslate hb_mutexCreate()            => ThreadID()

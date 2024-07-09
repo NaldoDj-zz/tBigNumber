@@ -298,7 +298,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
@@ -434,7 +434,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
         myGTIEvent()
@@ -848,7 +848,7 @@ static function ChkIntTstExec(aAC_TSTEXEC as array,nPad as numeric)
                     aAC_TSTEXEC[nD]:=aTmp[1]
                 else
                     for nTmp:=Val(aTmp[1]) to Val(aTmp[2])
-                        aAdd(aAC_TSTEXEC,hb_NtoS(nTmp))
+                        aAdd(aAC_TSTEXEC,hb_NToC(nTmp))
                     next nTmp
                 endif
             endif
@@ -965,7 +965,7 @@ static function GettBigNtst(cC_GT_MODE as character,aAC_TSTEXEC as array)
                 *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
                 hb_gtSelect(pGT)
                 atBigNtst[nD][4]:=nD
-                atBigNtst[nD][5]:=hb_NtoS(nD)
+                atBigNtst[nD][5]:=hb_NToC(nD)
             #endif
         endif
     next nD
@@ -1070,7 +1070,7 @@ static procedure __ConOut(fhLog as numeric,e,d)
     lTBeg:=("BEGIN ------------"$p)
 
     if (lTBeg)
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     endif
 
@@ -1445,12 +1445,12 @@ static function IsHb()
                        __oRTimeProc:Calcule(.F.)
                     endif
                     ShowFinalProc()
-                    cRTime:="["+hb_NtoS(__oRTimeProc:GetnProgress())
-                    cRTime+="/"+hb_NtoS(__oRTimeProc:GetnTotal())+"]"
+                    cRTime:="["+hb_NToC(__oRTimeProc:GetnProgress())
+                    cRTime+="/"+hb_NToC(__oRTimeProc:GetnTotal())+"]"
                     cRTime+="["+DtoC(__oRTimeProc:GetdendTime())+"]"
                     cRTime+="["+__oRTimeProc:GetcEndTime()+"]"
                     cRTime+="["+__oRTimeProc:GetcAverageTime()+"]"
-                    cRTime+="["+hb_NtoS((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
+                    cRTime+="["+hb_NToC((__oRTimeProc:GetnProgress()/__oRTimeProc:GetnTotal())*100)+" %]"
                     cLRTime:=cRTime
                     hb_mutexUnLock(__phMutex)
                 endif
@@ -1485,7 +1485,7 @@ static function IsHb()
             cDOAt+="]|["
             cDOAt+=__oRTime1:GetcAverageTime()
             cDOAt+="]["
-            cDOAt+=hb_NtoS((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
+            cDOAt+=hb_NToC((__oRTime1:GetnProgress()/__oRTime1:GetnTotal())*100)
             cDOAt+=" %]"
             DispOutAT(09,15,cDOAt,"w+/n")
 
@@ -1500,7 +1500,7 @@ static function IsHb()
             cDOAt+="]|["
             cDOAt+=__oRTime2:GetcAverageTime()
             cDOAt+="]["
-            cDOAt+=hb_NtoS((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
+            cDOAt+=hb_NToC((__oRTime2:GetnProgress()/__oRTime2:GetnTotal())*100)
             cDOAt+=" %]"
             DispOutAT(10,15,cDOAt,"w+/n")
 
@@ -1573,7 +1573,7 @@ static function IsHb()
     //--------------------------------------------------------------------------------------------------------
     static procedure BuildScreen(fhLog as numeric,nMaxCol as numeric)
         CLEAR SCREEN
-        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NtoS(GETCURRENTPROCESSID())+"]",nMaxCol)) //1
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
         ShowTime(2,nMaxCol-8,.F.,"r+/n",.F.,.F.)
         return
@@ -1636,7 +1636,7 @@ static procedure tBigNtst01(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for x:=1 to nN_TEST step nISQRT
-        cX:=hb_NtoS(x)
+        cX:=hb_NToC(x)
         otBigN:SetValue(cX)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
@@ -1644,7 +1644,7 @@ static procedure tBigNtst01(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         for n:=nN_TEST to 1 step -nISQRT
-            cN:=hb_NtoS(n)
+            cN:=hb_NToC(n)
             otBigM:=otBigN:MOD(cN)
             cM:=otBigM:ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():MOD('+cN+')',"RESULT: "+cM)
@@ -1717,7 +1717,7 @@ static procedure tBigNtst02(fhLog as numeric)
         nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
         for w:=0 to 5
-            cW:=hb_NtoS(w)
+            cW:=hb_NToC(w)
             otBigW:=cW
             __ConOut(fhLog,"otBigW:="+cW,"RESULT: "+otBigW:ExactValue())
             __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
@@ -1727,7 +1727,7 @@ static procedure tBigNtst02(fhLog as numeric)
                 hb_mutexUnLock(__phMutex)
             endif
             for n:=1 to nISQRT step Int(nISQRT/2)
-                cN:=hb_NtoS(n)
+                cN:=hb_NToC(n)
                 __ConOut(fhLog,"otBigW=="+cN,"RESULT: "+cValToChar(otBigW==cN))
                 __ConOut(fhLog,"otBigW%="+cW,"RESULT: "+(otBigX:=(otBigW%=cW),otBigX:ExactValue()))
                 __ConOut(fhLog,"otBigW^="+cN,"RESULT: "+(otBigX:=(otBigW^=cN),otBigX:ExactValue()))
@@ -1859,7 +1859,7 @@ static procedure tBigNtst03(fhLog as numeric)
 
     for n:=1 to nN_TEST step nISQRT
         y:=0
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         aPFact:=otBigN:SetValue(cN):PFactors()
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(Len(aPFact))
@@ -1874,7 +1874,7 @@ static procedure tBigNtst03(fhLog as numeric)
             otBigW:SetValue(cW)
             while (otBigW:gt(o0))
 #endif
-                __ConOut(fhLog,cN+':tBigNumber():PFactors():'+hb_NtoS(x)+':'+otBigW:ExactValue()+':'+hb_NtoS(++y),"RESULT: "+aPFact[x][1])
+                __ConOut(fhLog,cN+':tBigNumber():PFactors():'+hb_NToC(x)+':'+otBigW:ExactValue()+':'+hb_NToC(++y),"RESULT: "+aPFact[x][1])
                 otBigW:OpDec()
             end while
             if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
@@ -2036,12 +2036,12 @@ static procedure tBigNtst05(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         n:=x
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         cHex:=otBigN:SetValue(cN):D2H("16"):Int()
         __ConOut(fhLog,cN+':tBigNumber():D2H(16)',"RESULT: "+cHex)
         cN:=otBH16:SetValue(cHex):H2D():Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-        __ConOut(fhLog,cN+"=="+hb_NtoS(n),"RESULT: "+cValToChar(cN==hb_NtoS(n)))
+        __ConOut(fhLog,cN+"=="+hb_NToC(n),"RESULT: "+cValToChar(cN==hb_NToC(n)))
         cN:=otBH16:H2B():Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         cHex:=otBBin:SetValue(cN):B2H('16'):Int()
@@ -2114,12 +2114,12 @@ static procedure tBigNtst06(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         n:=x
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         cHex:=otBigN:SetValue(cN):D2H("32"):Int()
         __ConOut(fhLog,cN+':tBigNumber():D2H(32)',"RESULT: "+cHex)
         cN:=otBH32:SetValue(cHex):H2D("32"):Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2D()',"RESULT: "+cN)
-        __ConOut(fhLog,cN+"=="+hb_NtoS(n),"RESULT: "+cValToChar(cN==hb_NtoS(n)))
+        __ConOut(fhLog,cN+"=="+hb_NToC(n),"RESULT: "+cValToChar(cN==hb_NToC(n)))
         cN:=otBH32:H2B('32'):Int()
         __ConOut(fhLog,cHex+':tBigNumber():H2B()',"RESULT: "+cN)
         cHex:=otBBin:SetValue(cN):B2H('32'):Int()
@@ -2200,9 +2200,9 @@ static procedure tBigNtst07(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n+=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN+="9999.9999999999"
@@ -2276,9 +2276,9 @@ static procedure tBigNtst08(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n+=9999.9999999999
-        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'+=9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN+="9999.9999999999"
@@ -2350,9 +2350,9 @@ static procedure tBigNtst09(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n+=-9999.9999999999
-        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'+=-9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN+="-9999.9999999999"
@@ -2424,9 +2424,9 @@ static procedure tBigNtst10(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n-=9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN-="9999.9999999999"
@@ -2498,9 +2498,9 @@ static procedure tBigNtst11(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n-=9999.9999999999
-        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'-=9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN-="9999.9999999999"
@@ -2572,9 +2572,9 @@ static procedure tBigNtst12(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         n-=-9999.9999999999
-        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'-=-9999.9999999999',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN-="-9999.9999999999"
@@ -2656,7 +2656,7 @@ static procedure tBigNtst13(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
             cN:=SubStr(cN,1,--z)
@@ -2666,7 +2666,7 @@ static procedure tBigNtst13(fhLog as numeric)
             cN:=SubStr(cN,1,--z)
         end while
         n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN*="1.5"
@@ -2745,7 +2745,7 @@ static procedure tBigNtst14(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
             cN:=SubStr(cN,1,--z)
@@ -2755,7 +2755,7 @@ static procedure tBigNtst14(fhLog as numeric)
             cN:=SubStr(cN,1,--z)
         end while
         n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN*="1.5"
@@ -2829,7 +2829,7 @@ static procedure tBigNtst15(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
             cN:=SubStr(cN,1,--z)
@@ -2839,7 +2839,7 @@ static procedure tBigNtst15(fhLog as numeric)
             cN:=SubStr(cN,1,--z)
         end while
         n*=1.5
-        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cN+'*=1.5',"RESULT: "+hb_NToC(n))
         cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("1.5"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(1.5)',"RESULT: "+otBigW:ExactValue())
@@ -2908,7 +2908,7 @@ static procedure tBigNtst16(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(w)
+        cN:=hb_NToC(w)
         w*=3.555
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -2918,7 +2918,7 @@ static procedure tBigNtst16(fhLog as numeric)
         while ((SubStr(cN,-1)=="*") .and. (z>1))
             cN:=SubStr(cN,1,--z)
         end while
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NToC(w))
         cN:=otBigW:ExactValue()
 #ifndef __ADVPL__
         otBigW*="3.555"
@@ -2997,7 +2997,7 @@ static procedure tBigNtst17(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(w)
+        cN:=hb_NToC(w)
         w*=3.555
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -3007,7 +3007,7 @@ static procedure tBigNtst17(fhLog as numeric)
         while ((SubStr(cN,-1)=="*") .and. (z>1))
             cN:=SubStr(cN,1,--z)
         end while
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NToC(w))
         cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:egMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():egMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -3083,7 +3083,7 @@ static procedure tBigNtst18(fhLog as numeric)
             __oRTime2:Setstep()
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(w)
+        cN:=hb_NToC(w)
         w*=3.555
         z:=Len(cN)
         while ((SubStr(cN,-1)=="0") .and. (z>1))
@@ -3093,7 +3093,7 @@ static procedure tBigNtst18(fhLog as numeric)
         while ((SubStr(cN,-1)=="*") .and. (z>1))
             cN:=SubStr(cN,1,--z)
         end while
-        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NtoS(w))
+        __ConOut(fhLog,cN+'*=3.555',"RESULT: "+hb_NToC(w))
         cN:=otBigW:ExactValue()
         otBigW:SetValue(otBigW:rMult("3.555"))
         __ConOut(fhLog,cN+':tBigNumber():rMult(3.555)',"RESULT: "+otBigW:ExactValue())
@@ -3161,7 +3161,7 @@ static procedure tBigNtst19(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         #ifdef __ADVPL__
             otBigN:SetValue(cN)
         #else
@@ -3223,14 +3223,14 @@ static procedure tBigNtst20(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for x:=1 to nN_TEST step nISQRT
-        cX:=hb_NtoS(x)
+        cX:=hb_NToC(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
             __oRTime2:Setstep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for n:=nN_TEST to 1 step -nISQRT
-            cN:=hb_NtoS(n)
+            cN:=hb_NToC(n)
             cW:=otBigN:SetValue(cX):GCD(cN):ExactValue()
             __ConOut(fhLog,cX+':tBigNumber():GCD('+cN+')',"RESULT: "+cW)
             cW:=otBigN:LCM(cN):ExactValue()
@@ -3298,15 +3298,15 @@ static procedure tBigNtst21(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for n:=0 to nN_TEST step nISQRT
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
             __oRTime2:Setstep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for x:=0 to nISQRT step nISQRT
-            cX:=hb_NtoS(x)
-            __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_NtoS(n/x))
+            cX:=hb_NToC(x)
+            __ConOut(fhLog,cN+'/'+cX,"RESULT: "+hb_NToC(n/x))
 #ifndef __ADVPL__
             otBigN:=cN
             otBigW:=(otBigN/cX)
@@ -3380,7 +3380,7 @@ static procedure tBigNtst22(fhLog as numeric)
     endif
 
     n:=19701215
-    cN:=hb_NtoS(n)
+    cN:=hb_NToC(n)
 
     otBigN:=tBigNumber():New()
     otBigN:SetDecimals(nACC_SET)
@@ -3394,9 +3394,9 @@ static procedure tBigNtst22(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cW:=hb_NtoS(n)
+        cW:=hb_NToC(n)
         n/=1.5
-        __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_NtoS(n))
+        __ConOut(fhLog,cW+'/=1.5',"RESULT: "+hb_NToC(n))
         cN:=otBigN:ExactValue()
 #ifndef __ADVPL__
         otBigN/="1.5"
@@ -3470,9 +3470,9 @@ static procedure tBigNtst23(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(x)
+        cN:=hb_NToC(x)
         otBigN:SetValue(cN)
-        __ConOut(fhLog,cN+"/3","RESULT: "+hb_NtoS(x/3))
+        __ConOut(fhLog,cN+"/3","RESULT: "+hb_NToC(x/3))
 #ifndef __ADVPL__
         otBigN/=o3
 #else
@@ -3542,7 +3542,7 @@ static procedure tBigNtst24(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         __ConOut(fhLog,cN+':tBigNumber():FI()',"RESULT: "+otBigN:SetValue(cN):FI():ExactValue())
         __ConOut(fhLog,__cSep)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
@@ -3608,8 +3608,8 @@ static procedure tBigNtst25(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         n:=x
-        cN:=hb_NtoS(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NtoS(SQRT(n)))
+        cN:=hb_NToC(n)
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NToC(SQRT(n)))
         otBigN:SetValue(cN)
         otBigW:SetValue(otBigN:SQRT())
         __ConOut(fhLog,cN+':tBigNumber():SQRT()',"RESULT: "+otBigW:ExactValue())
@@ -3680,8 +3680,8 @@ static procedure tBigNtst26(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         n:=x
-        cN:=hb_NtoS(n)
-        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NtoS(SQRT(n)))
+        cN:=hb_NToC(n)
+        __ConOut(fhLog,'SQRT('+cN+')',"RESULT: "+hb_NToC(SQRT(n)))
 #ifndef __ADVPL__
         otBigN:=cN
         otBigN:=otBigN:SQRT()
@@ -3759,8 +3759,8 @@ static procedure tBigNtst27(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         n:=x
-        cN:=hb_NtoS(n)
-        __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_NtoS(Exp(n)))
+        cN:=hb_NToC(n)
+        __ConOut(fhLog,'Exp('+cN+')',"RESULT: "+hb_NToC(Exp(n)))
 #ifndef __ADVPL__
     otBigN:=cN
 #else
@@ -3837,16 +3837,16 @@ static procedure tBigNtst28(fhLog as numeric)
 
     //Tem (ou TINHA) um BUG aqui. Servidor __ADVPL__ Fica Maluco se (0^-n) e Senta..........
     for x:=if(.NOT.(IsHb()),1,0) to nN_TEST step nISQRT
-        cN:=hb_NtoS(x)
+        cN:=hb_NToC(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for w:=-nISQRT To 0
-            cW:=hb_NtoS(w)
+            cW:=hb_NToC(w)
             n:=x
             n:=(n^w)
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NToC(n))
 #ifndef __ADVPL__
             otBigN:=cN
 #else
@@ -3932,17 +3932,17 @@ static procedure tBigNtst29(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for x:=0 to nISQRT step 5
-        cN:=hb_NtoS(x)
+        cN:=hb_NToC(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
             __oRTime2:Setstep(5)
             hb_mutexUnLock(__phMutex)
         endif
         for w:=0 to nISQRT step 5
-            cW:=hb_NtoS(w+.5)
+            cW:=hb_NToC(w+.5)
             n:=x
             n:=(n^(w+.5))
-            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NtoS(n))
+            __ConOut(fhLog,cN+'^'+cW,"RESULT: "+hb_NToC(n))
             #ifndef __ADVPL__
                 otBigN:=cN
             #else
@@ -4443,9 +4443,9 @@ static procedure tBigNtst32(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for w:=0 to nN_TEST step nISQRT
-        cW:=hb_NtoS(w)
+        cW:=hb_NToC(w)
         otBigW:SetValue(cW)
-        __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_NtoS(Log(w)))
+        __ConOut(fhLog,'Log('+cW+')',"RESULT: "+hb_NToC(Log(w)))
         cX:=otBigW:SetValue(cW):Log():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Log()',"RESULT: "+cX)
          otBigN:SetValue(cX)
@@ -4461,7 +4461,7 @@ static procedure tBigNtst32(fhLog as numeric)
             hb_mutexUnLock(__phMutex)
         endif
         for n:=0 TO INT(MAX(nISQRT,5)/5)
-            cN:=hb_NtoS(n)
+            cN:=hb_NToC(n)
             cX:=otBigW:SetValue(cW):Log(cN):ExactValue()
             __ConOut(fhLog,cW+':tBigNumber():Log("'+cN+'")',"RESULT: "+cX)
             otBigN:SetValue(cX)
@@ -4538,7 +4538,7 @@ static procedure tBigNtst33(fhLog as numeric)
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
         endif
-        cW:=hb_NtoS(w)
+        cW:=hb_NToC(w)
         cX:=otBigW:SetValue(cW):Ln():ExactValue()
         __ConOut(fhLog,cW+':tBigNumber():Ln()',"RESULT: "+cX)
         __ConOut(fhLog,__cSep)
@@ -4609,7 +4609,7 @@ static procedure tBigNtst34(fhLog as numeric)
             __oRTime1:Setstep(2)
             n+=2
         endif
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         lPn:=oPrime:IsPrime(cN,.T.)
         lMR:=if(lPn,lPn,otBigN:SetValue(cN):millerRabin(o2))
         __ConOut(fhLog,cN+':tBigNumber():millerRabin()',"RESULT: "+cValToChar(lMR)+if(lMR,"","   "))
@@ -4730,7 +4730,7 @@ static procedure tBigNtst36(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     for n:=1 to nN_TEST step nISQRT
-        cN:=hb_NtoS(n)
+        cN:=hb_NToC(n)
         aFibonacci:=Fibonacci(cN)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(Len(aFibonacci))
@@ -4738,7 +4738,7 @@ static procedure tBigNtst36(fhLog as numeric)
         endif
         for x:=1 To Len(aFibonacci)
             cW:=aFibonacci[x]
-            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(x),"RESULT: "+cW)
+            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NToC(x),"RESULT: "+cW)
             if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
@@ -4809,7 +4809,7 @@ static procedure tBigNtst37(fhLog as numeric)
         endif
         for f:=1 To Len(aFibonacci)
             cF:=aFibonacci[f]
-            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NtoS(f),"RESULT: "+cF)
+            __ConOut(fhLog,'Fibonacci('+cN+'):'+hb_NToC(f),"RESULT: "+cF)
             if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
                 __oRTime1:Calcule(.F.)
