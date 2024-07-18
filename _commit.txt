@@ -1,8 +1,0 @@
-module: edit my changes
-
-  * include/pt_tbignumber.ch
-  * include/tbigndef.ch
-  * src/common/tfread.prg
-  * src/common/ttimecalc.prg
-  * src/tests/tbigntst.prg
-  * src/common/tbignumber.prg
