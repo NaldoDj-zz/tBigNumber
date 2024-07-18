@@ -5,10 +5,11 @@
 #-DHB_TR_OUTPUT=/c/tmp/hb_trace.log
 #-DHB_TR_SYSOUT=yes
 #-DHB_USER_CFLAGS=-DHB_FM_STATISTICS
--DTBIGN_RECPOWER
+#-DTBIGN_RECPOWER
 #-cflag=-DHB_TR_LEVEL_DEBUG
 #-D__HB_Q_SQRT__
 #-D__PTCOMPAT__
+#-D__HB_TBIGNPOWER__
 #-D__LMETHOD__
 #/home/naldodj/git/hb/bin/linux/gcc/hbmk2 -D__PTCOMPAT__ -plat=linux -cpu=x86_64 -comp=gcc ./hbp/tBigNtst.hbp
 # export DISPLAY=:0 # in WSL 1

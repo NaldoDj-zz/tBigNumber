@@ -1,5 +1,5 @@
 VERSION 05 06 01
-PRJ_VERSION 00 00 0487
+PRJ_VERSION 00 00 0522
 PROJECTFOLDER <ThisFolder>
 LASTLIBFOLDERm3gh
 LASTLIBFOLDERm3wh F:\GitHub\tBigNumber\lib\win\mingw64
@@ -93,8 +93,8 @@ SHGLASTFOLDERIMG
 SHGOUTPUTTYPE NO
 SHGHTMLFOLDER
 HOTLASTEXTERNALFILE
-SOURCE <FR> D:\GitHub\tBigNumber\src\tests\tBigNtst.prg
-SOURCE <FR> D:\GitHub\tBigNumber\src\common\tbignumber.prg
+SOURCE D:\GitHub\tBigNumber\src\tests\tBigNtst.prg
+SOURCE D:\GitHub\tBigNumber\src\common\tbignumber.prg
 SOURCE D:\GitHub\tBigNumber\src\common\tfRead.prg
 SOURCE D:\GitHub\tBigNumber\src\common\tPrime.prg
 SOURCE D:\GitHub\tBigNumber\src\common\tRemaining.prg
@@ -105,7 +105,7 @@ SOURCE D:\GitHub\tBigNumber\src\hb\__hbPITthD.prg
 SOURCE D:\GitHub\tBigNumber\src\hb\tBigNError.prg
 SOURCE D:\GitHub\tBigNumber\src\hb\tBigNErrorSys.prg
 SOURCE D:\GitHub\tBigNumber\src\hb\tBigNSleep.prg
-SOURCE <FR> D:\GitHub\tBigNumber\src\hb\tbigNThread.prg
+SOURCE D:\GitHub\tBigNumber\src\hb\tbigNThread.prg
 HEAD D:\GitHub\tBigNumber\include\hb_tBigNtst.ch
 HEAD D:\GitHub\tBigNumber\include\hb_tBigNumber.ch
 HEAD D:\GitHub\tBigNumber\include\paramtypex.ch

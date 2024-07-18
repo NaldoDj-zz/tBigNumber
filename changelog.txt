@@ -3,6 +3,17 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-07-18 11:29 UTC Naldo DJ
+  - _commit.txt
+  * .gitignore
+  * changelog.txt
+  * hbp/tbigntst.hbp
+  * include/hb_tbignumber.ch
+  * mk/mk.bat
+  * prj/mg/win/64/tbignumber64.mip
+  * src/common/tbignumber.prg
+  * src/hb/c/tbignumber.c
+
 2024-05-09 10:11 UTC Naldo DJ
   * include/pt_tbignumber.ch
   * include/tbigndef.ch

@@ -59,11 +59,11 @@
 
  #ifdef __HARBOUR__
     //--------------------------------------------------------------------------------------------------------
-        #xtranslate PadL([<prm,...>])    => tBIGNPadL([<prm>])
-        #xtranslate PadR([<prm,...>])    => tBIGNPadR([<prm>])
-        #xtranslate Max([<prm,...>])     => tBIGNMax([<prm>])
-        #xtranslate Min([<prm,...>])     => tBIGNMin([<prm>])
-        #xtranslate Val([<prm,...>])     => hb_Val([<prm>])
+        #xtranslate PadL([<prm,...>])   => HB_TBIGNPADL([<prm>])
+        #xtranslate PadR([<prm,...>])   => HB_TBIGNPADR([<prm>])
+        #xtranslate Max([<prm,...>])    => HB_TBIGNMAX([<prm>])
+        #xtranslate Min([<prm,...>])    => HB_TBIGNMIN([<prm>])
+        #xtranslate Val([<prm,...>])    => hb_Val([<prm>])
     //--------------------------------------------------------------------------------------------------------
 #endif /*__HARBOUR__*/
 
@@ -71,39 +71,40 @@
     #define __DIVMETHOD__ 1
 #endif
 
-static s_aH2B   as array
+static s_hH2B16 as hash
+static s_hH2B32 as hash
 
-static s__cN0   as character
-static s__nN0   as numeric
-static s__cN9   as character
-static s__nN9   as numeric
+static s__cN0 as character
+static s__nN0 as numeric
+static s__cN9 as character
+static s__nN9 as numeric
 
-static s__o0    as object
-static s__o1    as object
-static s__o2    as object
-static s__o10   as object
-static s__o20   as object
-static s__od2   as object
+static s__o0 as object
+static s__o1 as object
+static s__o2 as object
+static s__o10 as object
+static s__o20 as object
+static s__od2 as object
 static s__o1000 as object
 
-static s__oMinFI    as object
-static s__oMinGCD   as object
-static s__nMinLCM   as object
+static s__oMinFI as object
+static s__oMinGCD as object
+static s__nMinLCM as object
 
-static s__lstbNSet  as logical
+static s__lstbNSet as logical
 
-static s__nDivMTD   as numeric
+static s__nDivMTD as numeric
 
-static s__nthRAcc   as numeric
-static s__nDecSet   as numeric
+static s__nthRAcc as numeric
+static s__nDecSet as numeric
 
-static s__SysSQRT   as numeric
+static s__SysSQRT as numeric
 
-static s__MTXcN0    as pointer
-static s__MTXcN9    as pointer
-static s__MTXACC    as pointer
-static s__MTXDEC    as pointer
-static s__MTXSQR    as pointer
+static s__MTXcN0 as pointer
+static s__MTXcN9 as pointer
+static s__MTXACC as pointer
+static s__MTXDEC as pointer
+static s__MTXSQR as pointer
 
 #ifdef TBN_array
     #define __THREAD_STATIC__ 1
@@ -114,14 +115,14 @@ static s__MTXSQR    as pointer
 #endif
 
 #ifdef __THREAD_STATIC__
-    thread static ths_lsdSet            as logical
+    thread static ths_lsdSet as logical
     #ifdef TBN_array
-        thread static ths_aZAdd         as array
-        thread static ths_aZSub         as array
-        thread static ths_aZMult        as array
+        thread static ths_aZAdd as array
+        thread static ths_aZSub as array
+        thread static ths_aZMult as array
     #else
         #ifdef TBN_DBFILE
-            thread static ths_aFiles    as array
+            thread static ths_aFiles as array
         #endif
     #endif
 #endif
@@ -183,15 +184,15 @@ static s__MTXSQR    as pointer
         //--------------------------------------------------------------------------------------------------------
         /* Keep in alphabetical order */
         #ifdef __HARBOUR__
-            DATA cDec  as character INIT "0"
+            DATA cDec as character INIT "0"
         #else /*__ADVPL__*/
-            DATA cDec  as character
+            DATA cDec as character
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA cInt  as character INIT "0"
+            DATA cInt as character INIT "0"
         #else /*__ADVPL__*/
-            DATA cInt  as character
+            DATA cInt as character
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -201,15 +202,15 @@ static s__MTXSQR    as pointer
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA cSig  as character INIT ""
+            DATA cSig as character INIT ""
         #else /*__ADVPL__*/
-            DATA cSig  as character
+            DATA cSig as character
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA lNeg  as logical   INIT .F.
+            DATA lNeg as logical   INIT .F.
         #else /*__ADVPL__*/
-            DATA lNeg  as logical
+            DATA lNeg as logical
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -219,15 +220,15 @@ static s__MTXSQR    as pointer
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA nDec  as numeric   INIT 1
+            DATA nDec as numeric   INIT 1
         #else /*__ADVPL__*/
-            DATA nDec  as numeric
+            DATA nDec as numeric
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
-            DATA nInt  as numeric   INIT 1
+            DATA nInt as numeric   INIT 1
         #else /*__ADVPL__*/
-            DATA nInt  as numeric
+            DATA nInt as numeric
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -311,7 +312,6 @@ static s__MTXSQR    as pointer
         #else /*__ADVPL__*/
             method __nSize(nSize)
         #endif /*__HARBOUR__*/
-
 
         #ifdef __HARBOUR__
             method Clone()
@@ -890,7 +890,7 @@ endclass
 
     //--------------------------------------------------------------------------------------------------------
     static function __OpPlus(cOp as character,oSelf as object,uBigN)
-        local oOpPlus   as object
+        local oOpPlus as object
         if cOp=="+="
             oOpPlus:=oSelf:SetValue(oSelf:Add(uBigN))
         else
@@ -901,7 +901,7 @@ endclass
 
     //--------------------------------------------------------------------------------------------------------
     static function __OpMinus(cOp as character,oSelf as object,uBigN)
-        local oOpMinus  as object
+        local oOpMinus as object
         if cOp=="-="
             oOpMinus:=oSelf:SetValue(oSelf:Sub(uBigN))
         else
@@ -912,7 +912,7 @@ endclass
 
     //--------------------------------------------------------------------------------------------------------
     static function __OpMult(cOp as character,oSelf as object,uBigN)
-        local oOpMult   as object
+        local oOpMult as object
         if cOp=="*="
             oOpMult:=oSelf:SetValue(oSelf:Mult(uBigN))
         else
@@ -934,7 +934,7 @@ endclass
 
     //--------------------------------------------------------------------------------------------------------
     static function __OpMod(cOp as character,oSelf as object,uBigN)
-        local oOpMod    as object
+        local oOpMod as object
         if cOp=="%="
             oOpMod:=oSelf:SetValue(oSelf:Mod(uBigN))
         else
@@ -945,7 +945,7 @@ endclass
 
     //--------------------------------------------------------------------------------------------------------
     static function __OpPower(cOp as character,oSelf as object,uBigN)
-        local oOpPower  as object
+        local oOpPower as object
         switch cOp
             case "^="
             case "**="
@@ -1110,10 +1110,10 @@ endclass
     #else
         static function tBigNGC() as logical
     #endif
-            local nFile     as numeric
-            local nFiles    as numeric
+            local nFile as numeric
+            local nFiles as numeric
             DEFAULT ths_aFiles:=array(0)
-            nFiles:=tBIGNaLen(ths_aFiles)
+            nFiles:=HB_TBIGNALEN(ths_aFiles)
             for nFile:=1 to nFiles
                 if Select(ths_aFiles[nFile][1])>0
                     (ths_aFiles[nFile][1])->(dbCloseArea())
@@ -1128,7 +1128,7 @@ endclass
                     #endif
                 #endif
             next nFile
-            aSize(ths_aFiles,0)
+         asize(ths_aFiles,0)
     #ifdef __HARBOUR__
             return
     #else
@@ -1398,7 +1398,7 @@ endclass
 #else /*__ADVPL__*/
     method Clone() class tBigNumber
 #endif /*__HARBOUR__*/
-        local oClone    as object
+        local oClone as object
         #ifdef __THREAD_STATIC__
             try
                 if ths_lsdSet==NIL
@@ -1456,7 +1456,7 @@ endclass
     method SetDecimals(nSet) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local nLastSet  as numeric
+        local nLastSet as numeric
 
         #ifdef __ADVPL__
             PARAMETER nSet as numeric
@@ -1503,7 +1503,7 @@ endclass
     method nthRootAcc(nSet) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local nLastSet  as numeric
+        local nLastSet as numeric
 
         #ifdef __ADVPL__
             PARAMETER nSet as numeric
@@ -1550,21 +1550,21 @@ endclass
 
         local cType as character
 
-        local nFP   as numeric
+        local nFP as numeric
 
         #ifdef __ADVPL__
-            PARAMETER nBase     as numeric
-            PARAMETER cRDiv     as character
-            PARAMETER lLZRmv    as logical
-            PARAMETER nAcc      as numeric
+            PARAMETER nBase as numeric
+            PARAMETER cRDiv as character
+            PARAMETER lLZRmv as logical
+            PARAMETER nAcc as numeric
         #endif /*__ADVPL__*/
 
         #ifdef __TBN_DYN_OBJ_SET__
-            local nP    as numeric
+            local nP as numeric
             #ifdef __HARBOUR__
                 MEMVAR oThis
             #endif
-            private oThis   as object
+            private oThis as object
         #endif
 
         cType:=ValType(uBigN)
@@ -1786,7 +1786,7 @@ endclass
     method ExactValue(lAbs,lObj) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cDec  as character
+        local cDec as character
 
         local uNR
 
@@ -1877,16 +1877,16 @@ endclass
     method Dec(lObj,lSig,lNotZ) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cDec  as character
+        local cDec as character
 
         local nDec
 
         local uNR
 
         #ifdef __ADVPL__
-            PARAMETER lObj    as logical
-            PARAMETER lSig    as logical
-            PARAMETER lNotZ   as logical
+            PARAMETER lObj as logical
+            PARAMETER lSig as logical
+            PARAMETER lNotZ as logical
         #endif /*__ADVPL__*/
 
         cDec:=self:cDec
@@ -1926,7 +1926,7 @@ endclass
     method eq(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local leq   as logical
+        local leq as logical
 
         local oeqN1 as object
         local oeqN2 as object
@@ -1983,7 +1983,7 @@ endclass
     method gt(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local lgt   as logical
+        local lgt as logical
 
         local ogtN1 as object
         local ogtN2 as object
@@ -2035,7 +2035,7 @@ endclass
     method lt(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local llt   as logical
+        local llt as logical
 
         local oltN1 as object
         local oltN2 as object
@@ -2124,14 +2124,14 @@ endclass
     method cmp(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local nCmp  as numeric
-        local iCmp  as numeric
+        local nCmp as numeric
+        local iCmp as numeric
 
-        local llt   as logical
-        local leq   as logical
+        local llt as logical
+        local leq as logical
 
-        local ocmpN1    as object
-        local ocmpN2    as object
+        local ocmpN1 as object
+        local ocmpN2 as object
 
         ocmpN1:=s__o0:Clone()
         ocmpN1:SetValue(self)
@@ -2225,9 +2225,9 @@ endclass
 #else /*__ADVPL__*/
     method ibtw(uiBigS,uiBigE) class tBigNumber
 #endif /*__HARBOUR__*/
-        local lbtw      as logical
-        local oibtwS    as object
-        local oibtwE    as object
+        local lbtw as logical
+        local oibtwS as object
+        local oibtwE as object
         lbtw:=.F.
         if (self:Dec(.T.,.F.,.T.):eq(s__o0))
             oibtwS:=s__o0:Clone()
@@ -2255,7 +2255,7 @@ endclass
 #else /*__ADVPL__*/
     method Max(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oMax  as object
+        local oMax as object
         oMax:=tBigNumber():New(uBigN)
         if (self:gt(oMax))
             oMax:SetValue(self)
@@ -2277,7 +2277,7 @@ endclass
 #else /*__ADVPL__*/
     method Min(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oMin  as object
+        local oMin as object
         oMin:=tBigNumber():New(uBigN)
         if (self:lt(oMin))
             oMin:SetValue(self)
@@ -2300,18 +2300,18 @@ endclass
     method Add(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cInt  as character
-        local cDec  as character
+        local cInt as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
-        local lInv  as logical
-        local lAdd  as logical
+        local lNeg as logical
+        local lInv as logical
+        local lAdd as logical
 
-        local nDec  as numeric
+        local nDec as numeric
         local nSize as numeric
 
         local oadNR as object
@@ -2396,13 +2396,13 @@ endclass
     method iAdd(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
-        local lInv  as logical
-        local lAdd  as logical
+        local lNeg as logical
+        local lInv as logical
+        local lAdd as logical
 
         local nSize as numeric
 
@@ -2477,18 +2477,18 @@ endclass
     method Sub(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cInt  as character
-        local cDec  as character
+        local cInt as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
-        local lInv  as logical
-        local lSub  as logical
+        local lNeg as logical
+        local lInv as logical
+        local lSub as logical
 
-        local nDec  as numeric
+        local nDec as numeric
         local nSize as numeric
 
         local osbNR as numeric
@@ -2573,13 +2573,13 @@ endclass
     method iSub(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
-        local lInv  as logical
-        local lSub  as logical
+        local lNeg as logical
+        local lInv as logical
+        local lSub as logical
 
         local nSize as numeric
 
@@ -2654,18 +2654,18 @@ endclass
     method Mult(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cInt  as character
-        local cDec  as character
+        local cInt as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
+        local lNeg as logical
         local lNeg1 as logical
         local lNeg2 as logical
 
-        local nDec  as numeric
+        local nDec as numeric
         local nSize as numeric
 
         local omtNR as object
@@ -2734,11 +2734,11 @@ endclass
     method iMult(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
+        local lNeg as logical
         local lNeg1 as logical
         local lNeg2 as logical
 
@@ -2794,18 +2794,18 @@ endclass
     method egMult(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cInt  as character
-        local cDec  as character
+        local cInt as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
+        local lNeg as logical
         local lNeg1 as logical
         local lNeg2 as logical
 
-        local nDec  as numeric
+        local nDec as numeric
 
         local omtNR as object
 
@@ -2871,18 +2871,18 @@ endclass
     method rMult(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cInt  as character
-        local cDec  as character
+        local cInt as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNT   as character
+        local cN1 as character
+        local cN2 as character
+        local cNT as character
 
-        local lNeg  as logical
+        local lNeg as logical
         local lNeg1 as logical
         local lNeg2 as logical
 
-        local nDec  as numeric
+        local nDec as numeric
 
         local omtNR as object
 
@@ -2948,18 +2948,18 @@ endclass
     method Div(uBigN,lFloat) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cDec  as character
+        local cDec as character
 
-        local cN1   as character
-        local cN2   as character
-        local cNR   as character
+        local cN1 as character
+        local cN2 as character
+        local cNR as character
 
-        local lNeg  as logical
+        local lNeg as logical
         local lNeg1 as logical
         local lNeg2 as logical
 
-        local nAcc  as numeric
-        local nDec  as numeric
+        local nAcc as numeric
+        local nDec as numeric
 
         local odvN1 as object
         local odvN2 as object
@@ -3112,7 +3112,7 @@ endclass
 #else /*__ADVPL__*/
     method Divmethod(nMethod) class tBigNumber
 #endif /*__HARBOUR__*/
-        local nLstmethod    as numeric
+        local nLstmethod as numeric
         #ifdef __ADVPL__
             PARAMETER nMethod as numeric
         #endif /*__ADVPL__*/
@@ -3137,8 +3137,8 @@ endclass
 #else /*__ADVPL__*/
     method Mod(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oMod  as object
-        local nCmp  as numeric
+        local oMod as object
+        local nCmp as numeric
         oMod:=tBigNumber():New(uBigN)
         nCmp:=self:cmp(oMod)
         if (nCmp==-1)
@@ -3169,7 +3169,7 @@ endclass
 
         local oSelf as object
 
-        local cM10  as character
+        local cM10 as character
 
         local cPowB as character
         local cPowA as character
@@ -3177,10 +3177,10 @@ endclass
         local lPoWN as logical
         local lPowF as logical
 
-        local nZS   as numeric
+        local nZS as numeric
 
-        local opwA  as object
-        local opwB  as object
+        local opwA as object
+        local opwB as object
 
         local opwNP as object
         local opwNR as object
@@ -3282,14 +3282,14 @@ endclass
 //--------------------------------------------------------------------------------------------------------
 #ifdef __HARBOUR__
     method iPow(uBigN) class tBigNumber
-        local cR        as character
-        local ptfiPow   as pointer
-        local pttiPow   as pointer
+        local cR as character
+        local ptfiPow as pointer
+        local pttiPow as pointer
         local lFinalize as logical
 #else /*__ADVPL__*/
     method iPow(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oR      as object
+        local oR as object
         local lIPower as logical
         lIPower:=.T.
 #ifdef __HARBOUR__
@@ -3312,21 +3312,21 @@ endclass
 
     static procedure tBigNiPowThread(lFinalize as logical,oB as object,uBigN,lIPower as logical,cR as character)
 
-        local aEv   as array
-        local aThs  as array
+        local aEv as array
+        local aThs as array
 
-        local cM    as character
-        local cP    as character
+        local cM as character
+        local cP as character
 
-        local nTh   as numeric
-        local nThs  as numeric
-        local nThM  as numeric
+        local nTh as numeric
+        local nThs as numeric
+        local nThM as numeric
 
-        local oM    as object
-        local oT    as object
-        local oR    as object
+        local oM as object
+        local oT as object
+        local oR as object
 
-        local oTh   as object
+        local oTh as object
 
         oM:=tBigNumber():New(uBigN,nil,nil,.T.)
 
@@ -3354,7 +3354,7 @@ endclass
             next nTh
 
             aDel(aThs,nThs)
-            aSize(aThs,nThM)
+         asize(aThs,nThM)
 
             oTh:Notify()
             oTh:Wait()
@@ -3377,14 +3377,14 @@ endclass
 
     static function tBigNiPowEval(oM as object,cM as character,cP as character,lIPower)
 
-        local oCM   as object
-        local oCP   as object
-        local oCR   as object
+        local oCM as object
+        local oCP as object
+        local oCR as object
 
-        local oM10  as object
-        local oD10  as object
+        local oM10 as object
+        local oD10 as object
 
-        local oDiv  as object
+        local oDiv as object
 
         oCM:=tBigNumber():New(cM)
         oCP:=tBigNumber():New(cP)
@@ -3428,7 +3428,7 @@ endclass
     #ifdef __PTCOMPAT__
         return(self:SetValue(self:iAdd(s__o1)))
     #else
-        return(self:SetValue(tBIGNiADD(self:cInt,1,self:nBase)))
+        return(self:SetValue(HB_TBIGNIADD(self:cInt,1,self:nBase)))
     #endif
 /*method OpInc()*/
 
@@ -3449,7 +3449,7 @@ endclass
     #ifdef __PTCOMPAT__
         return(self:SetValue(self:iSub(s__o1)))
     #else
-        return(self:SetValue(tBIGNiSUB(self:cInt,1,self:nBase)))
+        return(self:SetValue(HB_TBIGNISUB(self:cInt,1,self:nBase)))
     #endif
 /*method OpDec*/
 
@@ -3469,16 +3469,16 @@ endclass
     method e(lforce) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oeTthD    as object
+        local oeTthD as object
 
-        local oPowN     as object
-        local oDiv1P    as object
-        local oDiv1S    as object
-        local oBigNC    as object
-        local oAdd1N    as object
-        local oSub1N    as object
-        local oPoWNAd   as object
-        local oPoWNS1   as object
+        local oPowN as object
+        local oDiv1P as object
+        local oDiv1S as object
+        local oBigNC as object
+        local oAdd1N as object
+        local oSub1N as object
+        local oPoWNAd as object
+        local oPoWNS1 as object
 
         #ifdef __ADVPL__
             PARAMETER lforce as logical
@@ -3540,8 +3540,8 @@ endclass
     method Exp(lforce) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oBigNe    as object
-        local oBigNR    as object
+        local oBigNe as object
+        local oBigNR as object
 
         #ifdef __ADVPL__
             PARAMETER lforce as logical
@@ -3568,7 +3568,7 @@ endclass
     method PI(lforce) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oPITthD   as object
+        local oPITthD as object
 
         #ifdef __ADVPL__
             PARAMETER lforce as logical
@@ -3611,8 +3611,8 @@ endclass
     method GCD(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oX    as object
-        local oY    as object
+        local oX as object
+        local oY as object
 
         local oGCD
 
@@ -3646,10 +3646,10 @@ endclass
 
 static function cGCD(nX as numeric,nY as numeric)
     #ifndef __PTCOMPAT__
-        local nGCD  as numeric
-        nGCD:=TBIGNGCD(nX,nY)
+        local nGCD as numeric
+        nGCD:=HB_TBIGNGCD(nX,nY)
     #else /*__ADVPL__*/
-        local nGCD  as numeric
+        local nGCD as numeric
         nGCD:=nX
         nX:=Max(nY,nGCD)
         nY:=Min(nGCD,nY)
@@ -3685,12 +3685,12 @@ static function cGCD(nX as numeric,nY as numeric)
     method LCM(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oX    as object
-        local oY    as object
+        local oX as object
+        local oY as object
 
-        local oI    as object
+        local oI as object
 
-        local oLCM  as object
+        local oLCM as object
 
         local lMX
         local lMY
@@ -3730,16 +3730,16 @@ static function cGCD(nX as numeric,nY as numeric)
 static function cLCM(nX as numeric,nY as numeric)
     #ifndef __PTCOMPAT__
 
-        local nLCM  as numeric
-        nLCM:=TBIGNLCM(nX,nY)
+        local nLCM as numeric
+        nLCM:=HB_TBIGNLCM(nX,nY)
 
     #else /*__ADVPL__*/
 
-        local nLCM  as numeric
-        local nI    as numeric
+        local nLCM as numeric
+        local nI as numeric
 
-        local lMX   as logical
-        local lMY   as logical
+        local lMX as logical
+        local lMY as logical
 
         nLCM:=1
         nI:=2
@@ -3786,16 +3786,16 @@ static function cLCM(nX as numeric,nY as numeric)
     method nthRoot(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local cFExit    as character
+        local cFExit as character
 
-        local nZS       as numeric
+        local nZS as numeric
 
-        local oRootB    as object
+        local oRootB as object
         local oRootE
 
-        local othRoot   as object
+        local othRoot as object
 
-        local oFExit    as object
+        local oFExit as object
 
         begin sequence
 
@@ -3858,28 +3858,28 @@ static function cLCM(nX as numeric,nY as numeric)
     method nthRootPF(uBigN) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aIPF      as array
-        local aDPF      as array
+        local aIPF as array
+        local aDPF as array
 
-        local cFExit    as character
+        local cFExit as character
 
-        local lDec      as logical
+        local lDec as logical
 
-        local nZS       as numeric
+        local nZS as numeric
 
-        local nPF       as numeric
-        local nPFs      as numeric
+        local nPF as numeric
+        local nPFs as numeric
 
-        local oRootB    as object
-        local oRootD    as object
-        local oRootE    as object
+        local oRootB as object
+        local oRootD as object
+        local oRootE as object
 
-        local oRootT    as object
+        local oRootT as object
 
-        local othRoot   as object
-        local othRootD  as object
+        local othRoot as object
+        local othRootD as object
 
-        local oFExit    as object
+        local oFExit as object
 
         begin sequence
 
@@ -3940,7 +3940,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             endif
 
-            nPFs:=tBIGNaLen(aIPF)
+            nPFs:=HB_TBIGNALEN(aIPF)
 
             if (nPFs>0)
                 othRoot:SetValue(s__o1)
@@ -3957,7 +3957,7 @@ static function cLCM(nX as numeric,nY as numeric)
                     endif
                 next nPF
                 if (.not.(Empty(aDPF)))
-                    nPFs:=tBIGNaLen(aDPF)
+                    nPFs:=HB_TBIGNALEN(aDPF)
                     if (nPFs>0)
                         othRootD:SetValue(s__o1)
                         for nPF:=1 to nPFs
@@ -4086,15 +4086,15 @@ static function cLCM(nX as numeric,nY as numeric)
 #else /*__ADVPL__*/
     method LogN(uBigNB) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oB    as object
-        local oR    as object
+        local oB as object
+        local oR as object
         DEFAULT uBigNB:=self:e()
         oB:=s__o0:Clone()
         oB:SetValue(uBigNB)
         oR:=s__o0:Clone()
         #ifndef __PTCOMPAT__
             #ifndef __LMETHOD__
-                oR:SetValue(TBIGNLOG(self:GetValue(),oB:GetValue()))
+                oR:SetValue(HB_TBIGNLOG(self:GetValue(),oB:GetValue()))
             #else
                 oR:SetValue(self:__Log(oB))
             #endif //__LMETHOD__
@@ -4137,16 +4137,16 @@ static function cLCM(nX as numeric,nY as numeric)
     method __LogN(uBigNB) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oS        as object
-        local oT        as object
-        local oI        as object
-        local oX        as object
-        local oY        as object
-        local oLT       as object
+        local oS as object
+        local oT as object
+        local oI as object
+        local oX as object
+        local oY as object
+        local oLT as object
 
-        local noTcmp1   as numeric
+        local noTcmp1 as numeric
 
-        local lflag     as logical
+        local lflag as logical
 
         oX:=self:Clone()
         if oX:eq(s__o0)
@@ -4238,7 +4238,7 @@ static function cLCM(nX as numeric,nY as numeric)
 #else /*__ADVPL__*/
     method Log2() class tBigNumber
 #endif /*__HARBOUR__*/
-        local ob2   as object
+        local ob2 as object
         ob2:=s__o2:Clone()
         return(self:LogN(ob2))
 /*method Log2*/
@@ -4257,7 +4257,7 @@ static function cLCM(nX as numeric,nY as numeric)
 #else /*__ADVPL__*/
     method Log10() class tBigNumber
 #endif /*__HARBOUR__*/
-        local ob10  as object
+        local ob10 as object
         ob10:=s__o10:Clone()
         return(self:LogN(ob10))
 /*method Log10*/
@@ -4330,10 +4330,10 @@ static function cLCM(nX as numeric,nY as numeric)
     method Rnd(nAcc) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oRnd  as object
+        local oRnd as object
 
-        local cAdd  as character
-        local cAcc  as character
+        local cAdd as character
+        local cAcc as character
 
         #ifdef __ADVPL__
             PARAMETER nAcc as numeric
@@ -4392,8 +4392,8 @@ static function cLCM(nX as numeric,nY as numeric)
     method Floor(nAcc) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oInt      as object
-        local oFloor    as object
+        local oInt as object
+        local oFloor as object
 
         #ifdef __ADVPL__
             PARAMETER nAcc as numeric
@@ -4424,8 +4424,8 @@ static function cLCM(nX as numeric,nY as numeric)
     method Ceiling(nAcc) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oInt      as object
-        local oCeiling  as object
+        local oInt as object
+        local oCeiling as object
 
         #ifdef __ADVPL__
             PARAMETER nAcc as numeric
@@ -4456,8 +4456,8 @@ static function cLCM(nX as numeric,nY as numeric)
     method Truncate(nAcc) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oTrc  as object
-        local cDec  as character
+        local oTrc as object
+        local cDec as character
 
         #ifdef __ADVPL__
             PARAMETER nAcc as numeric
@@ -4576,7 +4576,8 @@ static function cLCM(nX as numeric,nY as numeric)
                     oBigN:nInt:=1
                 endif
             endif
-            tBIGNNormalize(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
+
+            HB_TBIGNNORMALIZE(@self:cInt,@self:nInt,@self:cDec,@self:nDec,@self:nSize,@oBigN:cInt,@oBigN:nInt,@oBigN:cDec,@oBigN:nDec,@oBigN:nSize)
 
         #endif /*__PTCOMPAT__*/
 
@@ -4598,19 +4599,19 @@ static function cLCM(nX as numeric,nY as numeric)
     method D2H(cHexB) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local otH   as object
-        local otN   as object
+        local otH as object
+        local otN as object
 
         local cHexN as character
         local cHexC as character
 
-        local cInt  as character
-        local cDec  as character
-        local cSig  as character
+        local cInt as character
+        local cDec as character
+        local cSig as character
 
         local oHexN as object
 
-        local nAT   as numeric
+        local nAT as numeric
 
         #ifdef __ADVPL__
             PARAMETER cHexB as character
@@ -4674,12 +4675,12 @@ static function cLCM(nX as numeric,nY as numeric)
     method H2D() class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local otH   as object
-        local otNR  as object
-        local otLN  as object
-        local otPw  as object
-        local otNI  as object
-        local otAT  as object
+        local otH as object
+        local otNR as object
+        local otLN as object
+        local otPw as object
+        local otNI as object
+        local otAT as object
 
         local cHexB as character
         local cHexC as character
@@ -4687,10 +4688,10 @@ static function cLCM(nX as numeric,nY as numeric)
 
         local cInt
         local cDec
-        local cSig  as character
+        local cSig as character
 
-        local nLn   as numeric
-        local nI    as numeric
+        local nLn as numeric
+        local nI as numeric
 
         otH:=s__o0:Clone()
         cHexB:=hb_NToC(self:nBase)
@@ -4759,25 +4760,23 @@ static function cLCM(nX as numeric,nY as numeric)
     method H2B() class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aH2B  as array
+        local cChr as character
+        local cBin as character
 
-        local cChr  as character
-        local cBin  as character
+        local cInt as character
+        local cDec as character
 
-        local cInt  as character
-        local cDec  as character
-
-        local cSig  as character
+        local cSig as character
         local cHexB as character
         local cHexN as character
 
-        local oBin  as object
+        local oBin as object
 
-        local nI    as numeric
-        local nLn   as numeric
-        local nAT   as numeric
+        local nI as numeric
+        local nLn as numeric
+        local nAT as numeric
 
-        local l16   as logical
+        local l16 as logical
 
         begin sequence
 
@@ -4794,16 +4793,21 @@ static function cLCM(nX as numeric,nY as numeric)
 
             l16:=cHexB=="16"
 
-            aH2B:=s_aH2B
-
             cHexN:=self:cInt
             nLn:=hb_bLen(cHexN)
             nI:=0
             while (++nI<=nLn)
                 cChr:=SubStr(cHexN,nI,1)
-                nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
-                if (nAT>0)
-                    cBin+=if(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
+                if (l16)
+                    hb_HHasKey(s_hH2B16,cChr,@nAT)
+                    if (nAT>0)
+                        cBin+=hb_HValueAT(s_hH2B16,nAT)
+                    endif
+                else
+                    hb_HHasKey(s_hH2B32,cChr,@nAT)
+                    if (nAT>0)
+                        cBin+=hb_HValueAT(s_hH2B32,nAT)
+                    endif
                 endif
             end while
 
@@ -4816,9 +4820,16 @@ static function cLCM(nX as numeric,nY as numeric)
 
             while (++nI<=nLn)
                 cChr:=SubStr(cHexN,nI,1)
-                nAT:=aScan(aH2B,{|aE|(aE[1]==cChr)})
-                if (nAT>0)
-                    cBin+=if(l16,SubStr(aH2B[nAT][2],2),aH2B[nAT][2])
+                if (l16)
+                    hb_HHasKey(s_hH2B16,cChr,@nAT)
+                    if (nAT>0)
+                        cBin+=hb_HValueAT(s_hH2B16,nAT)
+                    endif
+                else
+                    hb_HHasKey(s_hH2B32,cChr,@nAT)
+                    if (nAT>0)
+                        cBin+=hb_HValueAT(s_hH2B32,nAT)
+                    endif
                 endif
             end while
 
@@ -4850,22 +4861,21 @@ static function cLCM(nX as numeric,nY as numeric)
     method B2H(cHexB) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local aH2B  as array
-
-        local cChr  as character
-        local cInt  as character
-        local cDec  as character
-        local cSig  as character
-        local cBin  as character
+        local cChr as character
+        local cInt as character
+        local cDec as character
+        local cSig as character
+        local cBin as character
         local cHexN as character
+        local cHexV as character
 
         local oHexN as object
 
-        local nI    as numeric
-        local nLn   as numeric
-        local nAT   as numeric
+        local nI as numeric
+        local nLn as numeric
+        local nAT as numeric
 
-        local l16   as logical
+        local l16 as logical
 
         #ifdef __ADVPL__
             PARAMETER cHexB as character
@@ -4884,7 +4894,6 @@ static function cLCM(nX as numeric,nY as numeric)
 
             l16:=cHexB=="16"
 
-            aH2B:=s_aH2B
             cBin:=self:cInt
             cHexN:=""
 
@@ -4892,12 +4901,16 @@ static function cLCM(nX as numeric,nY as numeric)
             nLn:=hb_bLen(cBin)
 
             while (nI<=nLn)
-                cChr:=SubStr(cBin,nI,if(l16,4,5))
-                nAT:=aScan(aH2B,{|aE|(if(l16,SubStr(aE[2],2),aE[2])==cChr)})
-                if (nAT>0)
-                    cHexN+=aH2B[nAT][1]
+                cChr:=SubStr(cBin,nI,if(l16,6,7))
+                if (l16)
+                    nAT:=hb_HScan(s_hH2B16,{|xKey,cValue|HB_SYMBOL_UNUSED(xKey),cChr==cValue})
+                    cHexV:=if(nAT>0,hb_HKeyAT(s_hH2B16,nAT),"")
+                else
+                    nAT:=hb_HScan(s_hH2B32,{|xKey,cValue|HB_SYMBOL_UNUSED(xKey),cChr==cValue})
+                    cHexV:=if(nAT>0,hb_HKeyAT(s_hH2B32,nAT),"")
                 endif
-                nI+=if(l16,4,5)
+                cHexN+=cHexV
+                nI+=if(l16,6,7)
             end while
 
             cInt:=cHexN
@@ -4908,12 +4921,16 @@ static function cLCM(nX as numeric,nY as numeric)
             cHexN:=""
 
             while (nI<=nLn)
-                cChr:=SubStr(cBin,nI,if(l16,4,5))
-                nAT:=aScan(aH2B,{|aE|(if(l16,SubStr(aE[2],2),aE[2])==cChr)})
-                if (nAT>0)
-                    cHexN+=aH2B[nAT][1]
+                cChr:=SubStr(cBin,nI,if(l16,6,7))
+                if (l16)
+                    nAT:=hb_HScan(s_hH2B16,{|xKey,cValue|HB_SYMBOL_UNUSED(xKey),cChr==cValue})
+                    cHexV:=if(nAT>0,hb_HKeyAT(s_hH2B16,nAT),"")
+                else
+                    nAT:=hb_HScan(s_hH2B32,{|xKey,cValue|HB_SYMBOL_UNUSED(xKey),cChr==cValue})
+                    cHexV:=if(nAT>0,hb_HKeyAT(s_hH2B32,nAT),"")
                 endif
-                nI+=if(l16,4,5)
+                cHexN+=cHexV
+                nI+=if(l16,6,7)
             end while
 
             cDec:=cHexN
@@ -4940,8 +4957,8 @@ static function cLCM(nX as numeric,nY as numeric)
 #else /*__ADVPL__*/
     method D2B(cHexB) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oHex  as object
-        local oBin  as object
+        local oHex as object
+        local oBin as object
         #ifdef __ADVPL__
             PARAMETER cHexB as character
         #endif /*__ADVPL__*/
@@ -4964,8 +4981,8 @@ static function cLCM(nX as numeric,nY as numeric)
 #else /*__ADVPL__*/
     method B2D(cHexB) class tBigNumber
 #endif /*__HARBOUR__*/
-        local oHex  as object
-        local oDec  as object
+        local oHex as object
+        local oDec as object
         #ifdef __ADVPL__
             PARAMETER cHexB as character
         #endif /*__ADVPL__*/
@@ -4989,14 +5006,14 @@ static function cLCM(nX as numeric,nY as numeric)
     method Randomize(uB,uE) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oB    as object
-        local oE    as object
-        local oT    as object
-        local oR    as object
+        local oB as object
+        local oE as object
+        local oT as object
+        local oR as object
 
-        local cN    as character
-        local cR    as character
-        local cT    as character
+        local cN as character
+        local cR as character
+        local cT as character
 
         DEFAULT uB:="1"
         DEFAULT uE:="99999999999999999999999999999999"
@@ -5136,13 +5153,13 @@ static function cLCM(nX as numeric,nY as numeric)
     method millerRabin(uI) class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oN    as object
-        local oD    as object
-        local oS    as object
-        local oA    as object
-        local oI    as object
+        local oN as object
+        local oD as object
+        local oS as object
+        local oA as object
+        local oI as object
 
-        local lPrime    as logical
+        local lPrime as logical
 
         begin sequence
 
@@ -5194,16 +5211,16 @@ static function cLCM(nX as numeric,nY as numeric)
 //--------------------------------------------------------------------------------------------------------
 static function mrPass(uA,uS,uD,uN)
 
-    local oA    as object
-    local oS    as object
-    local oD    as object
-    local oN    as object
-    local oM    as object
+    local oA as object
+    local oS as object
+    local oD as object
+    local oN as object
+    local oM as object
 
-    local oP    as object
-    local oW    as object
+    local oP as object
+    local oW as object
 
-    local lmrP  as logical
+    local lmrP as logical
 
     begin sequence
 
@@ -5269,15 +5286,15 @@ static function mrPass(uA,uS,uD,uN)
     method FI() class tBigNumber
 #endif /*__HARBOUR__*/
 
-        local oC    as object
-        local oT    as object
-        local oI    as object
-        local oN    as object
+        local oC as object
+        local oT as object
+        local oI as object
+        local oN as object
 
         oC:=self:Clone()
         oT:=tBigNumber():New(oC:Int(.T.))
         if (oT:lte(s__oMinFI))
-            oT:SetValue(hb_NToC(TBIGNFI(Val(oT:Int(.F.,.F.)))))
+            oT:SetValue(hb_NToC(HB_TBIGNFI(Val(oT:Int(.F.,.F.)))))
         else
             oI:=s__o2:Clone()
             oN:=oT:Clone()
@@ -5299,9 +5316,9 @@ static function mrPass(uA,uS,uD,uN)
 /*method FI*/
 
 #ifdef __ADVPL__
-    static function TBIGNFI(n as numeric)
-        local i     as numeric
-        local fi    as numeric
+    static function HB_TBIGNFI(n as numeric)
+        local i as numeric
+        local fi as numeric
         fi:=n
         i:=2
         while ((i*i)<=n)
@@ -5317,7 +5334,7 @@ static function mrPass(uA,uS,uD,uN)
             fi-=Int(fi/n)
         endif
         return(fi)
-    /*static function TBIGNFI*/
+    /*static function HB_TBIGNFI*/
 #endif /*__ADVPL__*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -5337,18 +5354,18 @@ static function mrPass(uA,uS,uD,uN)
 
         local aPFactors as array
 
-        local cP        as character
+        local cP as character
 
-        local oN        as object
-        local oP        as object
-        local oT        as object
+        local oN as object
+        local oP as object
+        local oT as object
 
-        local otP       as object
+        local otP as object
 
-        local nP        as numeric
-        local nC        as numeric
+        local nP as numeric
+        local nC as numeric
 
-        local lPrime    as logical
+        local lPrime as logical
 
         aPFactors:=array(0)
 
@@ -5411,7 +5428,7 @@ static function mrPass(uA,uS,uD,uN)
 #else /*__ADVPL__*/
     method Factorial() class tBigNumber
 #endif /*__HARBOUR__*/
-        local oN    as object
+        local oN as object
         oN:=self:Clone():Int(.T.,.F.)
         if (oN:eq(s__o0))
             return(s__o1:Clone())
@@ -5432,19 +5449,19 @@ static function mrPass(uA,uS,uD,uN)
 static function recFact(oS as object,oN as object)
 
 #ifdef __PTCOMPAT__
-    local oSN   as object
+    local oSN as object
 #endif //__PTCOMPAT__
 
-    local oI    as object
+    local oI as object
 
-    local oR    as object
-    local oSI   as object
-    local oNI   as object
+    local oR as object
+    local oSI as object
+    local oNI as object
 
 #ifndef __PTCOMPAT__
-    local nB    as numeric
-    local nI    as numeric
-    local nSN   as numeric
+    local nB as numeric
+    local nI as numeric
+    local nSN as numeric
 #endif //__PTCOMPAT__
 
     oR:=s__o0:Clone()
@@ -5472,7 +5489,7 @@ static function recFact(oS as object,oN as object)
             nSN:=nI
             nSN+=Val(oN:__cInt())
             while ++nI<nSN
-                oR:SetValue(tBigNiMult(oR:__cInt(),nI,nB))
+                oR:SetValue(HB_TBIGNIMULT(oR:__cInt(),nI,nB))
             end while
         #endif //__PTCOMPAT__
         return(oR)
@@ -5523,11 +5540,11 @@ static function recFact(oS as object,oN as object)
 #else /*__ADVPL__*/
     method Fibonacci() class tBigNumber
 #endif /*__HARBOUR__*/
-        local aFibonacci    as array
-        local oN            as object
-        local oA            as object
-        local oB            as object
-        local oT            as object
+        local aFibonacci as array
+        local oN as object
+        local oA as object
+        local oB as object
+        local oT as object
         aFibonacci:=array(0)
         oB:=tBigNumber():New("1")
         oN:=self:Clone()
@@ -5553,17 +5570,17 @@ static function recFact(oS as object,oN as object)
 
 #ifdef __HARBOUR__
     method splitNumber()
-        local aInt  as array
-        local aDec  as array
+        local aInt as array
+        local aDec as array
         local aRDiv as array
         #ifdef __PTCOMPAT__
             local cZero as character
             local nSize as numeric
         #endif
         #ifndef __PTCOMPAT__
-            aInt:=if(self:nInt>0,tBigNSplitNumber(self:cInt),array(0))
-            aDec:=if(self:nDec>0,tBigNSplitNumber(self:cDec),array(0))
-            aRDiv:=if(len(self:cRDiv)>0,tBigNSplitNumber(self:cRDiv),array(0))
+            aInt:=if(self:nInt>0,HB_TBIGNSPLITNUMBER(self:cInt),array(0))
+            aDec:=if(self:nDec>0,HB_TBIGNSPLITNUMBER(self:cDec),array(0))
+            aRDiv:=if(len(self:cRDiv)>0,HB_TBIGNSPLITNUMBER(self:cRDiv),array(0))
         #else
             nSize:=self:nInt
             aInt:=array(nSize)
@@ -5607,14 +5624,14 @@ static function egMult(cN1 as character,cN2 as character,nBase as numeric)
 
 #ifdef __PTCOMPAT__
 
-    local aeMT  as array
+    local aeMT as array
 
-    local nI    as numeric
-    local nCmp  as numeric
+    local nI as numeric
+    local nCmp as numeric
 
-    local oN1   as object
-    local oMTM  as object
-    local oMTP  as object
+    local oN1 as object
+    local oMTM as object
+    local oMTP as object
 
     aeMT:=array(0)
 
@@ -5649,9 +5666,9 @@ static function egMult(cN1 as character,cN2 as character,nBase as numeric)
 
 #else
 
-    local oMTP  as object
+    local oMTP as object
     oMTP:=s__o0:Clone()
-    oMTP:__cInt(TBIGNegMult(cN1,cN2,hb_bLen(cN1),nBase))
+    oMTP:__cInt(HB_TBIGNEGMULT(cN1,cN2,hb_bLen(cN1),nBase))
 
 #endif //__PTCOMPAT__
 
@@ -5704,9 +5721,9 @@ static function egMult(cN1 as character,cN2 as character,nBase as numeric)
 //--------------------------------------------------------------------------------------------------------
 static function rMult(cA as character,cB as character,nBase as numeric)
 
-    local oa    as object
-    local ob    as object
-    local oR    as object
+    local oa as object
+    local ob as object
+    local oR as object
 
     oR:=s__o0:Clone()
     ob:=tBigNumber():New(cB,nBase)
@@ -5737,15 +5754,15 @@ static function rMult(cA as character,cB as character,nBase as numeric)
 static function egDiv(cN as character,cD as character,nSize as numeric,nBase as numeric,nAcc as numeric,lFloat as logical)
 
 #ifdef __PTCOMPAT__
-    local aeDV      as array
-    local nI        as numeric
-    local nCmp      as numeric
-    local oeDivN    as object
+    local aeDV as array
+    local nI as numeric
+    local nCmp as numeric
+    local oeDivN as object
 #endif //__PTCOMPAT__
 
-    local cRDiv     as object
-    local oeDivR    as object
-    local oeDivQ    as object
+    local cRDiv as object
+    local oeDivR as object
+    local oeDivQ as object
 
 #ifndef __PTCOMPAT__
     local cQDiv
@@ -5795,13 +5812,13 @@ static function egDiv(cN as character,cD as character,nSize as numeric,nBase as 
         --nI
     end while
 
-    aSize(aeDV,0)
+ asize(aeDV,0)
 
     oeDivR:SetValue(oeDivN:Sub(oeDivR),nBase,"0",NIL,nAcc)
 
 #else /*__HARBOUR__*/
 
-    cQDiv:=tBIGNegDiv(cN,cD,@cRDiv,nSize,nBase)
+    cQDiv:=HB_TBIGNEGDIV(cN,cD,@cRDiv,nSize,nBase)
 
     oeDivQ:=s__o0:Clone()
     oeDivQ:__cInt(cQDiv)
@@ -5839,20 +5856,20 @@ static function ecDiv(pA as character,pB as character,nSize as numeric,nBase as 
 
 #ifdef __PTCOMPAT__
 
-   local a  as object
-   local b  as object
+   local a as object
+   local b as object
 
 #endif
 
    local r as object
-   local q  as object
+   local q as object
 
 #ifdef __PTCOMPAT__
 
-   local n      as object
-   local aux    as object
-   local tmp    as object
-   local base   as object
+   local n as object
+   local aux as object
+   local tmp as object
+   local base as object
 
 #endif
 
@@ -5903,7 +5920,7 @@ static function ecDiv(pA as character,pB as character,nSize as numeric,nBase as 
 
 #else
 
-    cQDiv:=tBIGNecDiv(pA,pB,@cRDiv,nSize,nBase)
+    cQDiv:=HB_TBIGNECDIV(pA,pB,@cRDiv,nSize,nBase)
 
     q:=s__o0:Clone()
     q:__cInt(cQDiv)
@@ -5954,18 +5971,18 @@ static function nthRoot(oRootB as object,oRootE as object,oAcc as object)
 //--------------------------------------------------------------------------------------------------------
 static function __Pow(base as object,expR as object,EPS as object)
 
-    local acc   as object
-    local sqr   as object
-    local tmp   as object
+    local acc as object
+    local sqr as object
+    local tmp as object
 
-    local low   as object
-    local mid   as object
-    local lst   as object
-    local high  as object
+    local low as object
+    local mid as object
+    local lst as object
+    local high as object
 
-    local lDo   as logical
+    local lDo as logical
 
-    local exp   as object
+    local exp as object
 
     exp:=expR:Clone()
     if (base:eq(s__o1).or.exp:eq(s__o0))
@@ -6032,15 +6049,15 @@ static function __Pow(base as object,expR as object,EPS as object)
     */
 //--------------------------------------------------------------------------------------------------------
 static function __SQRT(p)
-    local l     as object
-    local r     as object
-    local t     as object
-    local s     as object
-    local n     as object
-    local x     as object
-    local y     as object
-    local EPS   as object
-    local q     as object
+    local l as object
+    local r as object
+    local t as object
+    local s as object
+    local n as object
+    local x as object
+    local y as object
+    local EPS as object
+    local q as object
     q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
         #ifdef __PROTEUS__
@@ -6049,7 +6066,7 @@ static function __SQRT(p)
             #ifdef __PTCOMPAT__
                 r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
             #else
-                r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
+                r:=tBigNumber():New(HB_TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
         #endif //__PROTEUS__
     else
@@ -6064,7 +6081,7 @@ static function __SQRT(p)
             #ifdef __PTCOMPAT__
                 r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
             #else
-                r:=tBigNumber():New(TBIGNSQRT(q:GetValue()))
+                r:=tBigNumber():New(HB_TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
         #endif //__PROTEUS__
 #ifdef __PROTEUS__
@@ -6413,14 +6430,14 @@ static function __SQRT(p)
     /*static function dbGetcN*/
 
     static function dbNumber(cAlias as character)
-        local aStru     as array
-        local cFile     as character
+        local aStru as array
+        local cFile as character
     #ifndef __HARBOUR__
-        local cRDD      as character
-        local cLDriver  as character
+        local cRDD as character
+        local cLDriver as character
     #else
         #ifndef TBN_MEMIO
-            local cRDD  as character
+            local cRDD as character
         #endif
     #endif
     #ifndef __HARBOUR__
@@ -6432,7 +6449,7 @@ static function __SQRT(p)
         __localDriver:=cRDD
     #endif
         if (Select(cAlias)==0)
-            aStru:={{"FN","N",18,0}}
+         astru:={{"FN","N",18,0}}
     #ifndef __HARBOUR__
             cFile:=CriaTrab(aStru,.T.,GetdbExtension())
             if (.not.(GetdbExtension()$cFile))
@@ -6470,9 +6487,9 @@ static function __SQRT(p)
     #ifdef __HARBOUR__
         #ifndef TBN_MEMIO
             static function CriaTrab(aStru as array,cRDD as character)
-                local cFolder   as character
-                local cFile     as character
-                local lSuccess  as logical
+                local cFolder as character
+                local cFile as character
+                local lSuccess as logical
                 cFolder:=tbNCurrentFolder()+hb_ps()+"tbigN_tmp"+hb_ps()
                 cFile:=cFolder+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
@@ -6490,8 +6507,8 @@ static function __SQRT(p)
             /*static function CriaTrab*/
         #else
             static function CriaTrab(aStru as array,cAlias as character)
-                local cFile     as character
-                local lSuccess  as logical
+                local cFile as character
+                local lSuccess as logical
                 cFile:="mem:"+"tBN_"+Dtos(Date())+"_"+hb_NToC(hb_threadID())+"_"+StrTran(Time(),":","_")+"_"+StrZero(hb_RandomInt(1,9999),4)+".dbf"
                 lSuccess:=.F.
                 while (.not.(lSuccess))
@@ -6743,13 +6760,13 @@ static function __SQRT(p)
         #ifdef __PTCOMPAT__
             static function Add(a as character,b as character,n as numeric,nBase as numeric)
 
-                local c     as character
+                local c as character
 
-                local y     as numeric
-                local k     as numeric
+                local y as numeric
+                local k as numeric
 
-                local v     as numeric
-                local v1    as numeric
+                local v as numeric
+                local v1 as numeric
 
                 y:=n+1
 
@@ -6818,9 +6835,9 @@ static function __SQRT(p)
                             }
                         #pragma __endtext
                     endif
-                    return(tBIGNCLAdd(a,b,n,nB,cCLAddFunction))
+                    return(HB_TBIGNCLADD(a,b,n,nB,cCLAddFunction))
                 #else
-                    return(tBIGNADD(a,b,n,n,nB))
+                    return(HB_TBIGNADD(a,b,n,n,nB))
                 #endif
             /*static function Add*/
         #endif //__PTCOMPAT__
@@ -6837,13 +6854,13 @@ static function __SQRT(p)
         #ifdef __PTCOMPAT__
             static function Sub(a as character,b as character,n as numeric,nBase as numeric)
 
-                local c     as character
+                local c as character
 
-                local y     as numeric
-                local k     as numeric
+                local y as numeric
+                local k as numeric
 
-                local v     as numeric
-                local v1    as numeric
+                local v as numeric
+                local v1 as numeric
 
                 y:=n
 
@@ -6910,9 +6927,9 @@ static function __SQRT(p)
                             }
                         #pragma __endtext
                     endif
-                    return(tBIGNCLSub(a,b,n,nB,cCLSubFunction))
+                    return(HB_TBIGNCLSUB(a,b,n,nB,cCLSubFunction))
                 #else
-                    return(tBIGNSUB(a,b,n,nB))
+                    return(HB_TBIGNSUB(a,b,n,nB))
                 #endif
             /*static function Sub*/
         #endif //__PTCOMPAT__
@@ -6929,22 +6946,22 @@ static function __SQRT(p)
         #ifdef __PTCOMPAT__
             static function Mult(cN1 as character,cN2 as character,n as numeric,nBase as numeric)
 
-                local c     as character
+                local c as character
 
-                local a     as character
-                local b     as character
+                local a as character
+                local b as character
 
-                local y     as numeric
+                local y as numeric
 
-                local i     as numeric
-                local k     as numeric
-                local l     as numeric
+                local i as numeric
+                local k as numeric
+                local l as numeric
 
-                local s     as numeric
-                local j     as numeric
+                local s as numeric
+                local j as numeric
 
-                local v     as numeric
-                local v1    as numeric
+                local v as numeric
+                local v1 as numeric
 
                 a:=tBigNInvert(cN1,n)
                 b:=tBigNInvert(cN2,n)
@@ -7026,10 +7043,10 @@ static function __SQRT(p)
 
         #else /*__HARBOUR__*/
             static function Mult(a as character,b as character,n as numeric,nB as numeric)
-                local cN    as character
-                local y     as numeric
+                local cN as character
+                local y as numeric
                 y:=n
-                cN:=tBIGNMULT(a,b,n,y,nB)
+                cN:=HB_TBIGNMULT(a,b,n,y,nB)
                 return(cN)
             /*static function Mult*/
         #endif //__PTCOMPAT__
@@ -7130,18 +7147,23 @@ static function Power(oB as object,oE as object,lIPower as logical)
     static function recPower(oB as object,oE as object,lIPower as logical)
 
         #ifdef __HARBOUR__
-            #ifndef __PTCOMPAT__
-                local cR    as character
+            #if !defined( __PTCOMPAT__ ) .AND. defined( __HB_TBIGNPOWER__ )
+                local cR as character
+                local cBInt as character
+                local cEInt as character
+                local nBInt as character
+                local nEInt as character
+                local nBBase as numeric
             #endif /*__PTCOMPAT__*/
         #endif /*__HARBOUR__*/
 
-        local oR    as object
-        local oR1   as object
-        local oR2   as object
+        local oR as object
+        local oR1 as object
+        local oR2 as object
 
-        local oI    as object
-        local oE1   as object
-        local oE2   as object
+        local oI as object
+        local oE1 as object
+        local oE2 as object
 
         #ifndef __PTCOMPAT__
             local oTh as object
@@ -7150,7 +7172,7 @@ static function Power(oB as object,oE as object,lIPower as logical)
         oR:=oB:Clone()
 
         if (oE:lte(s__o2))
-            #ifdef __PTCOMPAT__
+            #if defined( __PTCOMPAT__ ) .OR. !defined( __HB_TBIGNPOWER__ )
                 SYMBOL_UNUSED(lIPower)
                 oI:=oE:Clone()
                 while (oI:gt(s__o1))
@@ -7175,7 +7197,12 @@ static function Power(oB as object,oE as object,lIPower as logical)
                     end while
                 else
                     oB:Normalize(@oE)
-                    cR:=TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase())
+                    cBInt:=oB:__cInt()
+                    nBInt:=oB:__nInt()
+                    nBBase:=oB:__nBase()
+                    cEInt:=oE:__cInt()
+                    nEInt:=oE:__nInt()
+                    cR:=HB_TBIGNPOWER(cBInt,cEInt,nBInt,nEInt,nBBase)
                     oR:SetValue(cR)
                 endif
             #endif //__PTCOMPAT__
@@ -7219,18 +7246,23 @@ static function Power(oB as object,oE as object,lIPower as logical)
 #else
 
     #ifdef __HARBOUR__
-        #ifndef __PTCOMPAT__
-            local cR    as character
+        #if !defined( __PTCOMPAT__ ) .AND. defined( HB_TBIGNPOWER )
+            local cR as character
+            local cBInt as character
+            local cEInt as character
+            local nBInt as character
+            local nEInt as character
+            local nBBase as numeric
         #endif /*__PTCOMPAT__*/
     #endif /*__HARBOUR__*/
 
-    local oR    as object
-    local oI    as object
+    local oR as object
+    local oI as object
 
     oR:=oB:Clone()
     oI:=oE:Clone()
 
-    #ifdef __PTCOMPAT__
+    #if defined( __PTCOMPAT__ ) .OR. !defined( HB_TBIGNPOWER )
         SYMBOL_UNUSED(lIPower)
         while (oI:gt(s__o1))
             oR:SetValue(oR:Mult(oB))
@@ -7253,7 +7285,12 @@ static function Power(oB as object,oE as object,lIPower as logical)
             end while
         else
             oB:Normalize(@oE)
-            cR:=TBIGNPOWER(oB:__cInt(),oE:__cInt(),oB:__nInt(),oE:__nInt(),oB:__nBase())
+            cBInt:=oB:__cInt()
+            nBInt:=oB:__nInt()
+            nBBase:=oB:__nBase()
+            cEInt:=oE:__cInt()
+            nEInt:=oE:__nInt()
+            cR:=HB_TBIGNPOWER(cBInt,cEInt,nBInt,nEInt,nBBase)
             oR:SetValue(cR)
         endif
     #endif //__PTCOMPAT__
@@ -7295,7 +7332,7 @@ static function Power(oB as object,oE as object,lIPower as logical)
 
 #else /*__HARBOUR__*/
     static function tBigNInvert(c as character,n as numeric)
-        return(tBigNReverse(c,n))
+        return(HB_TBIGNREVERSE(c,n))
     /*static function tBigNInvert*/
 #endif //__PTCOMPAT__
 
@@ -7305,8 +7342,8 @@ static function Power(oB as object,oE as object,lIPower as logical)
         local nN2 as numeric
         nN1:=len(cN1)
         nN2:=len(cN2)
-        tBIGNNormalize(@cN1,@nN1,"",0,@nN1,@cN2,@nN2,"",0,@nN2)
-    return(tBIGNmemcmp(cN1,cN2))
+        HB_TBIGNNORMALIZE(@cN1,@nN1,"",0,@nN1,@cN2,@nN2,"",0,@nN2)
+    return(HB_TBIGNMEMCMP(cN1,cN2))
 #endif /*__HARBOUR__*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -7320,12 +7357,12 @@ static function Power(oB as object,oE as object,lIPower as logical)
 //--------------------------------------------------------------------------------------------------------
 static function MathO(uBigN1,cOperator as character,uBigN2,lRetObject as logical)
 
-    local bAsc      as block
+    local bAsc as block
 
-    local oBigNR    as object
+    local oBigNR as object
 
-    local oBigN1    as object
-    local oBigN2    as object
+    local oBigN1 as object
+    local oBigN2 as object
 
     oBigNR:=s__o0:Clone()
 
@@ -7405,71 +7442,128 @@ static procedure __InitstbN(nBase as numeric)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
-    s__lstbNSet:=.T.
-    s_aH2B:={;
-                {"0","0000000"},;
-                {"1","0000001"},;
-                {"2","0000010"},;
-                {"3","0000011"},;
-                {"4","0000100"},;
-                {"5","0000101"},;
-                {"6","0000110"},;
-                {"7","0000111"},;
-                {"8","0001000"},;
-                {"9","0001001"},;
-                {"A","0001010"},;
-                {"B","0001011"},;
-                {"C","0001100"},;
-                {"D","0001101"},;
-                {"E","0001110"},;
-                {"F","0001111"},;
-                {"G","0010000"},;
-                {"H","0010001"},;
-                {"I","0010010"},;
-                {"J","0010011"},;
-                {"K","0010100"},;
-                {"L","0010101"},;
-                {"M","0010110"},;
-                {"N","0010111"},;
-                {"O","0011000"},;
-                {"P","0011001"},;
-                {"Q","0011010"},;
-                {"R","0011011"},;
-                {"S","0011100"},;
-                {"T","0011101"},;
-                {"U","0011110"},;
-                {"V","0011111"},;
-                {"W","0100000"},;
-                {"X","0100001"},;
-                {"Y","0100010"},;
-                {"Z","0100011"},;
-                {"a","0100100"},;
-                {"b","0100101"},;
-                {"b","0101110"},;
-                {"d","0101111"},;
-                {"e","0110000"},;
-                {"f","0110001"},;
-                {"g","0110010"},;
-                {"h","0110011"},;
-                {"i","0110100"},;
-                {"j","0110101"},;
-                {"k","0110110"},;
-                {"l","0110111"},;
-                {"m","0111000"},;
-                {"n","0111001"},;
-                {"o","0111010"},;
-                {"p","0111100"},;
-                {"q","0111101"},;
-                {"r","0111110"},;
-                {"s","0111111"},;
-                {"t","1000000"},;
-                {"u","1000001"},;
-                {"v","1000010"},;
-                {"w","1000011"},;
-                {"x","1000100"},;
-                {"y","1000101"},;
-                {"z","1000110"};
+    s_hH2B16:={;
+                "0"=>"000000",;
+                "1"=>"000001",;
+                "2"=>"000010",;
+                "3"=>"000011",;
+                "4"=>"000100",;
+                "5"=>"000101",;
+                "6"=>"000110",;
+                "7"=>"000111",;
+                "8"=>"001000",;
+                "9"=>"001001",;
+                "A"=>"001010",;
+                "B"=>"001011",;
+                "C"=>"001100",;
+                "D"=>"001101",;
+                "E"=>"001110",;
+                "F"=>"001111",;
+                "G"=>"010000",;
+                "H"=>"010001",;
+                "I"=>"010010",;
+                "J"=>"010011",;
+                "K"=>"010100",;
+                "L"=>"010101",;
+                "M"=>"010110",;
+                "N"=>"010111",;
+                "O"=>"011000",;
+                "P"=>"011001",;
+                "Q"=>"011010",;
+                "R"=>"011011",;
+                "S"=>"011100",;
+                "T"=>"011101",;
+                "U"=>"011110",;
+                "V"=>"011111",;
+                "W"=>"100000",;
+                "X"=>"100001",;
+                "Y"=>"100010",;
+                "Z"=>"100011",;
+                "a"=>"100100",;
+                "b"=>"100101",;
+                "c"=>"101110",;
+                "d"=>"101111",;
+                "e"=>"110000",;
+                "f"=>"110001",;
+                "g"=>"110010",;
+                "h"=>"110011",;
+                "i"=>"110100",;
+                "j"=>"110101",;
+                "k"=>"110110",;
+                "l"=>"110111",;
+                "m"=>"111000",;
+                "n"=>"111001",;
+                "o"=>"111010",;
+                "p"=>"111100",;
+                "q"=>"111101",;
+                "r"=>"111110",;
+                "s"=>"111111";
     }
+    s_hH2B32:={;
+                "0"=>"0000000",;
+                "1"=>"0000001",;
+                "2"=>"0000010",;
+                "3"=>"0000011",;
+                "4"=>"0000100",;
+                "5"=>"0000101",;
+                "6"=>"0000110",;
+                "7"=>"0000111",;
+                "8"=>"0001000",;
+                "9"=>"0001001",;
+                "A"=>"0001010",;
+                "B"=>"0001011",;
+                "C"=>"0001100",;
+                "D"=>"0001101",;
+                "E"=>"0001110",;
+                "F"=>"0001111",;
+                "G"=>"0010000",;
+                "H"=>"0010001",;
+                "I"=>"0010010",;
+                "J"=>"0010011",;
+                "K"=>"0010100",;
+                "L"=>"0010101",;
+                "M"=>"0010110",;
+                "N"=>"0010111",;
+                "O"=>"0011000",;
+                "P"=>"0011001",;
+                "Q"=>"0011010",;
+                "R"=>"0011011",;
+                "S"=>"0011100",;
+                "T"=>"0011101",;
+                "U"=>"0011110",;
+                "V"=>"0011111",;
+                "W"=>"0100000",;
+                "X"=>"0100001",;
+                "Y"=>"0100010",;
+                "Z"=>"0100011",;
+                "a"=>"0100100",;
+                "b"=>"0100101",;
+                "c"=>"0101110",;
+                "d"=>"0101111",;
+                "e"=>"0110000",;
+                "f"=>"0110001",;
+                "g"=>"0110010",;
+                "h"=>"0110011",;
+                "i"=>"0110100",;
+                "j"=>"0110101",;
+                "k"=>"0110110",;
+                "l"=>"0110111",;
+                "m"=>"0111000",;
+                "n"=>"0111001",;
+                "o"=>"0111010",;
+                "p"=>"0111100",;
+                "q"=>"0111101",;
+                "r"=>"0111110",;
+                "s"=>"0111111",;
+                "t"=>"1000000",;
+                "u"=>"1000001",;
+                "v"=>"1000010",;
+                "w"=>"1000011",;
+                "x"=>"1000100",;
+                "y"=>"1000101",;
+                "z"=>"1000110";
+    }
+    s__lstbNSet:=.T.
     return
 /*static procedure __InitstbN*/
 
@@ -7523,7 +7617,7 @@ static procedure s__IncS9(n as numeric)
         lDummy:=if(lDummy,(.not.(lDummy)),.F.)
         if (lDummy)
             __Dummy(@lDummy)
-            s__IncS9()
+            S__INCS9()
         endif
         return(lDummy)
 
@@ -7541,36 +7635,41 @@ static procedure s__IncS9(n as numeric)
     static function __Dummy(lDummy as logical)
         lDummy:=.F.
         if (lDummy)
-            __Dummy()
+            __Dummy(.F.)
             EGDIV()
             ECDIV()
-            TBIGNPADL()
-            TBIGNPADR()
-            TBIGNINVERT()
-            TBIGNREVERSE()
-            TBIGNADD()
-            TBIGNSUB()
-            TBIGNMULT()
-            TBIGNEGMULT()
-            TBIGNEGDIV()
-            TBIGNECDIV()
-            TBIGNGCD()
-            TBIGNLCM()
-            TBIGNFI()
-            TBIGNALEN()
-            TBIGNMEMCMP()
-            TBIGN2MULT()
-            TBIGNIMULT()
-            TBIGNIADD()
-            TBIGNISUB()
-            TBIGNLMULT()
-            TBIGNLADD()
-            TBIGNLSUB()
-            TBIGNNORMALIZE()
-            TBIGNSQRT()
-            TBIGNLOG()
             S__INCS9()
-            TBIGNPOWER()
+            TBIGNINVERT()
+            HB_TBIGNPADL()
+            HB_TBIGNPADR()
+            HB_TBIGNREVERSE()
+            HB_TBIGNADD()
+            HB_TBIGNSUB()
+            HB_TBIGNMULT()
+            HB_TBIGNEGMULT()
+            HB_TBIGNEGDIV()
+            HB_TBIGNECDIV()
+            HB_TBIGNGCD()
+            HB_TBIGNLCM()
+            HB_TBIGNFI()
+            HB_TBIGNALEN()
+            HB_TBIGNMEMCMP()
+            HB_TBIGN2MULT()
+            HB_TBIGNIMULT()
+            HB_TBIGNIADD()
+            HB_TBIGNISUB()
+            HB_TBIGNLMULT()
+            HB_TBIGNLADD()
+            HB_TBIGNLSUB()
+            HB_TBIGNNORMALIZE()
+            HB_TBIGNSQRT()
+            HB_TBIGNLOG()
+            HB_TBIGNPOWER()
+            HB_TBIGNSPLITNUMBER()
+            #ifdef HB_WITH_OPENCL
+                HB_TBIGNCLADD()
+                HB_TBIGNCLSUB()
+            #endif
         endif
         return(lDummy)
     /*static function __Dummy*/
