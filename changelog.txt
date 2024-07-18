@@ -3,6 +3,10 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-07-18 19:20 UTC Naldo DJ
+  * hbp/tbigntst.hbp
+  * src/hb/c/tbignumber.c
+
 2024-07-18 12:32 UTC Naldo DJ
   * include/hb_tbignumber.ch
 

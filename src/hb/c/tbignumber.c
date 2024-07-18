@@ -1238,9 +1238,18 @@
             hb_xfree(szOne);
             szOne = NULL;
 
+            char * pow=NULL;
+            char * tmp=NULL;
+            char * szTmpRet=NULL;
+            char * szTmpPow=NULL;
+            char * szTmpInd=NULL;
+
             while (iCmp && iCmp > 0)
             {
-                const char * pow = tBIGNMult(szRet, szPow, n, y, nB);
+
+                if (pow){hb_xfree(pow);}
+
+                pow = tBIGNMult(szRet, szPow, n, y, nB);
                 if (!pow) {
                     hb_xfree(szInd);
                     hb_xfree(szRet);
@@ -1248,9 +1257,11 @@
                     return NULL;
                 }
 
+
+                if (szTmpRet){hb_xfree(szTmpRet);}
+
                 n = (HB_SIZE)strlen(pow);
-                char * szTmpRet = tBIGNPadL(pow, n, "0");
-                hb_xfree((char*)pow);
+                szTmpRet = tBIGNPadL((const char *)pow, n, "0");
                 if (!szTmpRet) {
                     hb_xfree(szInd);
                     hb_xfree(szRet);
@@ -1261,7 +1272,9 @@
                 hb_xfree(szRet);
                 szRet = szTmpRet;
 
-                char * szTmpPow = tBIGNPadL(szBas, n, "0");
+                if (szTmpPow){hb_xfree(szTmpPow);}
+
+                szTmpPow = tBIGNPadL(szBas, n, "0");
                 if (!szTmpPow) {
                     hb_xfree(szInd);
                     hb_xfree(szRet);
@@ -1269,10 +1282,13 @@
                     return NULL;
                 }
 
-                hb_xfree(szPow);
+                if (szPow){ hb_xfree(szPow);}
+
                 szPow = szTmpPow;
 
-                const char * tmp = tBigNiSUB(szInd, 1, k, nB);
+                if (tmp){hb_xfree(tmp);}
+
+                tmp = tBigNiSUB(szInd, 1, k, nB);
                 if (!tmp) {
                     hb_xfree(szInd);
                     hb_xfree(szRet);
@@ -1280,8 +1296,9 @@
                     return NULL;
                 }
 
-                char * szTmpInd = remLeft(tmp, k, "0");
-                hb_xfree((char*)tmp);
+                if (szTmpInd){hb_xfree(szTmpInd);}
+
+                szTmpInd = remLeft((const char *)tmp, k, "0");
                 if (!szTmpInd) {
                     hb_xfree(szInd);
                     hb_xfree(szRet);
@@ -1312,8 +1329,8 @@
                 y = (n * 2);
             }
 
-            hb_xfree(szPow);
-            hb_xfree(szInd);
+            if (szPow){hb_xfree(szPow);}
+            if (szInd){hb_xfree(szInd);}
 
             *p = n;
 
