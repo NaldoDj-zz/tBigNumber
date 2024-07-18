@@ -3,6 +3,9 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-07-18 12:32 UTC Naldo DJ
+  * include/hb_tbignumber.ch
+
 2024-07-18 11:29 UTC Naldo DJ
   - _commit.txt
   * .gitignore
