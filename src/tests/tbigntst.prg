@@ -101,7 +101,7 @@
 #define L_ROPROGRESS     "0"
 #define L_LOGPROCESS     "1"
 #define C_GT_MODE        "ST"
-#define AC_TSTEXEC       "1:17,-18,19:39"
+#define AC_TSTEXEC       "1:17,18:18,19:39" //"1:17,-18,19:39"
 //--------------------------------------------------------------------------------------------------------
 //Mersenne:
 //http://mathworld.wolfram.com/MersennePrime.html
@@ -692,19 +692,19 @@
                 __ConOut(fhLog,"TIMESTAMP   : ",HB_TTOC(tsBegin))               //7
             #endif /*__HARBOUR__*/
 
-            #ifdef TBN_DBFILE
-                #ifndef TBN_MEMIO
+            #ifdef __TBN_DBFILE__
+                #ifndef __TBN_MEMIO__
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: DBFILE")     //8
                 #else
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: DBMEMIO")    //8
-                #endif /*TBN_MEMIO*/
+                #endif /*__TBN_MEMIO__*/
             #else
-                #ifdef TBN_ARRAY
+                #ifdef __TBN_ARRAY__
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: ARRAY")      //8
                 #else
                     __ConOut(fhLog,"USING       : ",ExeName()+" :: STRING")     //8
-                #endif /*TBN_ARRAY*/
-            #endif /*TBN_DBFILE*/
+                #endif /*__TBN_ARRAY__*/
+            #endif /*__TBN_DBFILE__*/
 
             #ifdef __HARBOUR__
                 __ConOut(fhLog,"FINAL1      : ","["+StrZero(__oRTime1:GetnProgress(),16)+"/"+StrZero(__oRTime1:GetnTotal(),16)+"]|["+DtoC(__oRTime1:GetdendTime())+"]["+__oRTime1:GetcEndTime()+"]|["+__oRTime1:GetcAverageTime()+"]") //9
@@ -804,7 +804,7 @@
             endif
 
         #ifdef __ADVPL__
-            #ifdef TBN_DBFILE
+            #ifdef __TBN_DBFILE__
                 tBigNGC()
             #endif
         #else /*__HARBOUR__*/
@@ -1592,7 +1592,7 @@ static function IsHb()
 
     #include "../src/tests/hb/tBigNAnim.prg"
 #else
-    #ifdef TBN_DBFILE
+    #ifdef __TBN_DBFILE__
         static function tBigNGC()
             return(StaticCall(TBIGNUMBER,tBigNGC))
         /*static function tBigNGC*/
@@ -1626,7 +1626,7 @@ static procedure tBigNtst01(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -1640,7 +1640,7 @@ static procedure tBigNtst01(fhLog as numeric)
         otBigN:SetValue(cX)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
-            __oRTime2:Setstep(nISQRT)
+            __oRTime2:SetStep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for n:=nN_TEST to 1 step -nISQRT
@@ -1723,7 +1723,7 @@ static procedure tBigNtst02(fhLog as numeric)
             __ConOut(fhLog,"otBigW=="+cW,"RESULT: "+cValToChar(otBigW==cW))
             if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:SetRemaining(nISQRT)
-                __oRTime2:Setstep(Int(nISQRT/2))
+                __oRTime2:SetStep(Int(nISQRT/2))
                 hb_mutexUnLock(__phMutex)
             endif
             for n:=1 to nISQRT step Int(nISQRT/2)
@@ -1843,7 +1843,7 @@ static procedure tBigNtst03(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2018,7 +2018,7 @@ static procedure tBigNtst05(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT*99)
-        __oRTime1:Setstep(99)
+        __oRTime1:SetStep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2096,7 +2096,7 @@ static procedure tBigNtst06(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT*99)
-        __oRTime1:Setstep(99)
+        __oRTime1:SetStep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2191,7 +2191,7 @@ static procedure tBigNtst07(fhLog as numeric)
 #endif
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
     for x:=1 to nN_TEST step nISQRT
@@ -2257,7 +2257,7 @@ static procedure tBigNtst08(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2333,7 +2333,7 @@ static procedure tBigNtst09(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2407,7 +2407,7 @@ static procedure tBigNtst10(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2481,7 +2481,7 @@ static procedure tBigNtst11(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2555,7 +2555,7 @@ static procedure tBigNtst12(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2632,7 +2632,7 @@ static procedure tBigNtst13(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2725,7 +2725,7 @@ static procedure tBigNtst14(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2809,7 +2809,7 @@ static procedure tBigNtst15(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2888,7 +2888,7 @@ static procedure tBigNtst16(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -2977,7 +2977,7 @@ static procedure tBigNtst17(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3056,13 +3056,13 @@ static procedure tBigNtst18(fhLog as numeric)
     local o1 as object
     local otBigW as object
 
-    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ MULT Teste 6 -------------- ")
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ RMULT Teste 6 -------------- ")
 
     __ConOut(fhLog,"")
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3080,7 +3080,7 @@ static procedure tBigNtst18(fhLog as numeric)
         SYMBOL_UNUSED(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
-            __oRTime2:Setstep()
+            __oRTime2:SetStep()
             hb_mutexUnLock(__phMutex)
         endif
         cN:=hb_NToC(w)
@@ -3146,7 +3146,7 @@ static procedure tBigNtst19(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3213,7 +3213,7 @@ static procedure tBigNtst20(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3226,7 +3226,7 @@ static procedure tBigNtst20(fhLog as numeric)
         cX:=hb_NToC(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nN_TEST)
-            __oRTime2:Setstep(nISQRT)
+            __oRTime2:SetStep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for n:=nN_TEST to 1 step -nISQRT
@@ -3285,7 +3285,7 @@ static procedure tBigNtst21(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
        hb_mutexUnLock(__phMutex)
     endif
 
@@ -3301,7 +3301,7 @@ static procedure tBigNtst21(fhLog as numeric)
         cN:=hb_NToC(n)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
-            __oRTime2:Setstep(nISQRT)
+            __oRTime2:SetStep(nISQRT)
             hb_mutexUnLock(__phMutex)
         endif
         for x:=0 to nISQRT step nISQRT
@@ -3375,7 +3375,7 @@ static procedure tBigNtst22(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3452,7 +3452,7 @@ static procedure tBigNtst23(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3525,7 +3525,7 @@ static procedure tBigNtst24(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3586,7 +3586,7 @@ static procedure tBigNtst25(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(((nISQRT*999)+999)-((nISQRT*999)-999))
-        __oRTime1:Setstep(99)
+        __oRTime1:SetStep(99)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3663,7 +3663,7 @@ static procedure tBigNtst26(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3824,7 +3824,7 @@ static procedure tBigNtst28(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3920,7 +3920,7 @@ static procedure tBigNtst29(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nISQRT)
-        __oRTime1:Setstep(5)
+        __oRTime1:SetStep(5)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -3935,7 +3935,7 @@ static procedure tBigNtst29(fhLog as numeric)
         cN:=hb_NToC(x)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(nISQRT)
-            __oRTime2:Setstep(5)
+            __oRTime2:SetStep(5)
             hb_mutexUnLock(__phMutex)
         endif
         for w:=0 to nISQRT step 5
@@ -4426,7 +4426,7 @@ static procedure tBigNtst32(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -4522,7 +4522,7 @@ static procedure tBigNtst33(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 
@@ -4606,7 +4606,7 @@ static procedure tBigNtst34(fhLog as numeric)
         if (n<3)
             n+=1
         else
-            __oRTime1:Setstep(2)
+            __oRTime1:SetStep(2)
             n+=2
         endif
         cN:=hb_NToC(n)
@@ -4723,7 +4723,7 @@ static procedure tBigNtst36(fhLog as numeric)
 
     if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
         __oRTime1:SetRemaining(nN_TEST)
-        __oRTime1:Setstep(nISQRT)
+        __oRTime1:SetStep(nISQRT)
         hb_mutexUnLock(__phMutex)
     endif
 

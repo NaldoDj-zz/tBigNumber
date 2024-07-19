@@ -6,7 +6,7 @@
      *  t t  b   b    i    g   g  n  nn  u   u  m m m  b   b  e      r   r
      *  ttt  bbbbb  iiiii  ggggg  n   n  uuuuu  m   m  bbbbb  eeeee  r   r
      *
-     * Copyright 2013-2021 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
+     * Copyright 2013-2024 Marinaldo de Jesus <marinaldo\/.\/jesus\/@\/blacktdn\/.\/com\/.\/br>
      * www - http://www.blacktdn.com.br
      *
      * Harbour Project license:
@@ -67,8 +67,11 @@
     //--------------------------------------------------------------------------------------------------------
 #endif /*__HARBOUR__*/
 
-#ifndef __DIVMETHOD__
-    #define __DIVMETHOD__ 1
+#define __EgyptianDivisionMethod__  1 //egDiv
+#define __EuclideanDivisionMethod__ 2 //ecDiv
+
+#if !defined(__TBN_DIVMETHOD__).OR.((__TBN_DIVMETHOD__<1).OR.(__TBN_DIVMETHOD__>2))
+    #define __TBN_DIVMETHOD__ (__EgyptianDivisionMethod__)
 #endif
 
 static s_hH2B16 as hash
@@ -106,22 +109,22 @@ static s__MTXACC as pointer
 static s__MTXDEC as pointer
 static s__MTXSQR as pointer
 
-#ifdef TBN_array
+#ifdef __TBN_ARRAY__
     #define __THREAD_STATIC__ 1
 #else
-    #ifdef TBN_DBFILE
+    #ifdef __TBN_DBFILE__
         #define __THREAD_STATIC__ 1
     #endif
 #endif
 
 #ifdef __THREAD_STATIC__
     thread static ths_lsdSet as logical
-    #ifdef TBN_array
+    #ifdef __TBN_ARRAY__
         thread static ths_aZAdd as array
         thread static ths_aZSub as array
         thread static ths_aZMult as array
     #else
-        #ifdef TBN_DBFILE
+        #ifdef __TBN_DBFILE__
             thread static ths_aFiles as array
         #endif
     #endif
@@ -146,21 +149,33 @@ static s__MTXSQR as pointer
     *    Alternative Compile Options: -d
     *
     *    #ifdef __ADVPL__
-    *        -dTBN_array
-    *        -dTBN_DBFILE
+    *        -d__TBN_ARRAY__
+    *        -d__TBN_DBFILE__
     *        -d__TBN_DYN_OBJ_SET__
     *    #else /*__HARBOUR__*/
-    *        -dTBN_array
-    *        -dTBN_DBFILE
-    *        -dTBN_MEMIO
-    *        -d__TBN_DYN_OBJ_SET__
     *        -d__PTCOMPAT__
+    ************************************
+    *        -d__TBN_ARRAY__
+    *        -d__TBN_DBFILE__
+    *        -d__TBN_MEMIO__
+    *        -d__TBN_DYN_OBJ_SET__
+    *        -d__TBN_RECPOWER__
+    *        -d__TBN_DIVMETHOD__
+    ************************************
+    *        -d__HB_TBIGNPOWER__
     *    #endif
     */
 //--------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------
     /*
+
+         _    _      _                                  _
+        | |_ | |__  (_)  __ _  _ __   _   _  _ __ ___  | |__    ___  _ __
+        | __|| '_ \ | | / _` || '_ \ | | | || '_ ` _ \ | '_ \  / _ \| '__|
+        | |_ | |_) || || (_| || | | || |_| || | | | | || |_) ||  __/| |
+         \__||_.__/ |_| \__, ||_| |_| \__,_||_| |_| |_||_.__/  \___||_|
+                        |___/
         class:tBigNumber
         Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data:04/02/2013
@@ -248,7 +263,7 @@ static s__MTXSQR as pointer
         #endif /*__HARBOUR__*/
 
         #ifndef __ADVPL__
-            #ifdef TBN_DBFILE
+            #ifdef __TBN_DBFILE__
                 DESTRUCTOR tBigNGC
             #endif
         #endif
@@ -1089,7 +1104,7 @@ endclass
          // -------------------- assign static values --------------------------------
         if (s__lstbNSet==NIL)
             __InitstbN(nBase)
-            self:Divmethod(__DIVMETHOD__)
+            self:Divmethod(__TBN_DIVMETHOD__)
         endif
 
         return(self)
@@ -1104,7 +1119,7 @@ endclass
         Descricao:DESTRUCTOR
     */
 //--------------------------------------------------------------------------------------------------------
-#ifdef TBN_DBFILE
+#ifdef __TBN_DBFILE__
     #ifdef __HARBOUR__
         procedure tBigNGC() class tBigNumber
     #else
@@ -1118,10 +1133,10 @@ endclass
                 if Select(ths_aFiles[nFile][1])>0
                     (ths_aFiles[nFile][1])->(dbCloseArea())
                 endif
-                #ifdef __PROTEUS__
+                #ifdef __PROTHEUS__
                     MsErase(ths_aFiles[nFile][2],NIL,if((Type("__localDriver")=="C"),__localDriver,"DBFCDXADS"))
                 #else
-                    #ifdef TBN_MEMIO
+                    #ifdef __TBN_MEMIO__
                         dbDrop(ths_aFiles[nFile][2])
                     #else
                         fErase(ths_aFiles[nFile][2])
@@ -2342,7 +2357,7 @@ endclass
             lAdd:=.F.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
-            #else //__PROTEUS__
+            #else //__PROTHEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
@@ -2430,7 +2445,7 @@ endclass
             lAdd:=.F.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
-            #else //__PROTEUS__
+            #else //__PROTHEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=(oadN1:lNeg.and.(.not.(lInv))).or.(oadN2:lNeg.and.lInv)
@@ -2522,7 +2537,7 @@ endclass
             lSub:=.T.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
-            #else //__PROTEUS__
+            #else //__PROTHEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=osbN1:lNeg.or.lInv
@@ -2610,7 +2625,7 @@ endclass
             lSub:=.T.
             #ifdef __HARBOUR__
                 lInv:=(__tBIGNmemcmp(cN1,cN2)==(-1))
-            #else //__PROTEUS__
+            #else //__PROTHEUS__
                 lInv:=cN1<cN2
             #endif /*__HARBOUR__*/
             lNeg:=osbN1:lNeg.or.lInv
@@ -3014,9 +3029,9 @@ endclass
 
             nAcc:=s__nDecSet
 
-            if (s__nDivMTD==2)
+            if (s__nDivMTD==__EuclideanDivisionMethod__)
                 odvNR:SetValue(ecDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
-            else
+            else //__EgyptianDivisionMethod__
                 odvNR:SetValue(egDiv(cN1,cN2,odvN1:nSize,odvN1:nBase,nAcc,lFloat))
             endif
 
@@ -3116,7 +3131,7 @@ endclass
         #ifdef __ADVPL__
             PARAMETER nMethod as numeric
         #endif /*__ADVPL__*/
-        DEFAULT s__nDivMTD:=__DIVMETHOD__
+        DEFAULT s__nDivMTD:=__TBN_DIVMETHOD__
         DEFAULT nMethod:=s__nDivMTD
         nLstmethod:=s__nDivMTD
         s__nDivMTD:=nMethod
@@ -5556,7 +5571,7 @@ static function recFact(oS as object,oN as object)
                 oB:=(oA+oB)
                 oA:=oT
            end while
-        #else //__PROTEUS__
+        #else //__PROTHEUS__
             oT:=tBigNumber():New("0")
             while (oA:lt(oN))
                 aAdd(aFibonacci,oA:ExactValue())
@@ -6060,7 +6075,7 @@ static function __SQRT(p)
     local q as object
     q:=tBigNumber():New(p)
     if q:lte(q:SysSQRT())
-        #ifdef __PROTEUS__
+        #ifdef __PROTHEUS__
             r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
         #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
@@ -6068,14 +6083,14 @@ static function __SQRT(p)
             #else
                 r:=tBigNumber():New(HB_TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
-        #endif //__PROTEUS__
+        #endif //__PROTHEUS__
     else
         n:=s__nthRAcc-1
         s__IncS0(n)
         s:="0."+Left(s__cN0,n)+"1"
         EPS:=s__o0:Clone()
         EPS:SetValue(s,NIL,NIL,NIL,s__nthRAcc)
-        #ifdef __PROTEUS__
+        #ifdef __PROTHEUS__
             r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
         #else /*__HARBOUR__*/
             #ifdef __PTCOMPAT__
@@ -6083,8 +6098,8 @@ static function __SQRT(p)
             #else
                 r:=tBigNumber():New(HB_TBIGNSQRT(q:GetValue()))
             #endif //__PTCOMPAT__
-        #endif //__PROTEUS__
-#ifdef __PROTEUS__
+        #endif //__PROTHEUS__
+#ifdef __PROTHEUS__
         if r:eq(s__o0).or."*"$r:GetValue()
 #else /*__HARBOUR__*/
     #ifdef __PTCOMPAT__
@@ -6114,7 +6129,7 @@ static function __SQRT(p)
 
 /*static function __SQRT*/
 
-#ifdef TBN_DBFILE
+#ifdef __TBN_DBFILE__
 
     //--------------------------------------------------------------------------------------------------------
         /*
@@ -6436,7 +6451,7 @@ static function __SQRT(p)
         local cRDD as character
         local cLDriver as character
     #else
-        #ifndef TBN_MEMIO
+        #ifndef __TBN_MEMIO__
             local cRDD as character
         #endif
     #endif
@@ -6457,7 +6472,7 @@ static function __SQRT(p)
             endif
             dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
     #else
-            #ifndef TBN_MEMIO
+            #ifndef __TBN_MEMIO__
                 cRDD:="DBFCDX"
                 cFile:=CriaTrab(aStru,cRDD)
                 dbUseArea(.T.,cRDD,cFile,cAlias,.F.,.F.)
@@ -6485,7 +6500,7 @@ static function __SQRT(p)
     /*static function dbNumber*/
 
     #ifdef __HARBOUR__
-        #ifndef TBN_MEMIO
+        #ifndef __TBN_MEMIO__
             static function CriaTrab(aStru as array,cRDD as character)
                 local cFolder as character
                 local cFile as character
@@ -6526,7 +6541,7 @@ static function __SQRT(p)
 
 #else
 
-    #ifdef TBN_array
+    #ifdef __TBN_ARRAY__
 
         //--------------------------------------------------------------------------------------------------------
             /*
@@ -7114,7 +7129,7 @@ static function __SQRT(p)
     */
 //--------------------------------------------------------------------------------------------------------
 static function Power(oB as object,oE as object,lIPower as logical)
-#ifdef TBIGN_RECPOWER
+#ifdef __TBN_RECPOWER__
     /*
         TODO:   This application has requested the Runtime to terminate it in an unusual way
                 Please contact the application's support team for more information.
@@ -7181,10 +7196,10 @@ static function Power(oB as object,oE as object,lIPower as logical)
                 end while
             #else /*__HARBOUR__*/
                 if (lIPower)
-                    #ifdef TBN_DBFILE
+                    #ifdef __TBN_DBFILE__
                         lIPower:=.F.
                     #else
-                        #ifdef TBN_array
+                        #ifdef __TBN_ARRAY__
                             lIPower:=.F.
                         #endif
                     #endif
@@ -7270,10 +7285,10 @@ static function Power(oB as object,oE as object,lIPower as logical)
         end while
     #else /*__HARBOUR__*/
         if (lIPower)
-            #ifdef TBN_DBFILE
+            #ifdef __TBN_DBFILE__
                 lIPower:=.F.
             #else
-                #ifdef TBN_array
+                #ifdef __TBN_ARRAY__
                     lIPower:=.F.
                 #endif
             #endif
@@ -7369,11 +7384,11 @@ static function MathO(uBigN1,cOperator as character,uBigN2,lRetObject as logical
     oBigN1:=tBigNumber():New(uBigN1)
     oBigN2:=tBigNumber():New(uBigN2)
 
-    #ifdef __PROTEUS__
+    #ifdef __PROTHEUS__
         bAsc:={|cOp|cOperator==cOp}
     #else /*__HARBOUR__*/
         bAsc:={|cOp as character|cOperator==cOp}
-    #endif /*__PROTEUS__*/
+    #endif /*__PROTHEUS__*/
 
     do case
         case (aScan(OPERATOR_ADD,bAsc)>0)
@@ -7404,12 +7419,12 @@ static function MathO(uBigN1,cOperator as character,uBigN2,lRetObject as logical
 #ifdef __THREAD_STATIC__
     static procedure __Initsthd()
         ths_lsdSet:=.F.
-        #ifdef TBN_array
+        #ifdef __TBN_ARRAY__
             ths_aZAdd:=array(0)
             ths_aZSub:=array(0)
             ths_aZMult:=array(0)
         #else
-            #ifdef TBN_DBFILE
+            #ifdef __TBN_DBFILE__
                 if (ths_aFiles==NIL)
                     ths_aFiles:=array(0)
                 endif

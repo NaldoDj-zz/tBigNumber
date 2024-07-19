@@ -5,7 +5,7 @@
 
 -mt
 
--dTBN_ARRAY
+-d__TBN_ARRAY__
 
 -i../include
 -i../../core/contrib/xhb

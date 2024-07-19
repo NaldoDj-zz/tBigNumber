@@ -5,7 +5,7 @@
 
 -mt
 
--dTBN_DBFILE
+-d__TBN_DBFILE__
 -d__TBN_DYN_OBJ_SET__
 
 -i../../harbour-core/include

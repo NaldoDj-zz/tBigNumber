@@ -27,8 +27,8 @@
         #include "hbclass.ch"
         #include "hbthread.ch"
 *       #include "hbcompat.ch"
-        #ifdef TBN_DBFILE
-            #ifndef TBN_MEMIO
+        #ifdef __TBN_DBFILE__
+            #ifndef __TBN_MEMIO__
                 request DBFCDX , DBFFPT
             #else
                 #require "hbmemio"

@@ -5,8 +5,8 @@
 
 -mt
 
--dTBN_DBFILE
--dTBN_MEMIO
+-d__TBN_DBFILE__
+-d__TBN_MEMIO__
 -d__TBN_DYN_OBJ_SET__
 
 -i../../harbour-core/include
