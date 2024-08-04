@@ -4951,10 +4951,24 @@ static procedure tBigNtst39(fhLog as numeric)
 
     __ConOut(fhLog,"")
 
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+       __oRTime1:SetRemaining(1)
+       __oRTime2:SetRemaining(1)
+       hb_mutexUnLock(__phMutex)
+    endif
+
     oGoogol:=tBigNumber():New("10")
     oGoogol:=oGoogol:iPow("100")
     cGoogol:=oGoogol:ExactValue()
     __ConOut(fhLog,'10:tBigNumber():iPow(100)',"RESULT: "+cGoogol)
+
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+        __oRTime2:Calcule()
+        __oRTime1:Calcule()
+        __ConOut(fhLog,__cSep)
+        __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+        hb_mutexUnLock(__phMutex)
+    endif
 
     __ConOut(fhLog,"")
     __ConOut(fhLog,"["+ProcName()+"]: ------------ Teste BIG Googol Number -------------- end")
@@ -4965,6 +4979,12 @@ static procedure tBigNtst39(fhLog as numeric)
 
     __ConOut(fhLog,"")
 
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+       __oRTime1:SetRemaining(10)
+       __oRTime2:SetRemaining(10)
+       hb_mutexUnLock(__phMutex)
+    endif
+
     oGoogolplex:=tBigNumber():New("10")
     o0:=tBigNumber():New("0")
     while (oGoogol:gt(o0))
@@ -4974,6 +4994,13 @@ static procedure tBigNtst39(fhLog as numeric)
         oGoogol:OpDec()
         __ConOut(fhLog,cNumber+':tBigNumber():iPow(10)',"RESULT: "+cGoogolPlex)
         __ConOut(fhLog,__cSep)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+            __oRTime2:Calcule()
+            __oRTime1:Calcule()
+            __ConOut(fhLog,__cSep)
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+            hb_mutexUnLock(__phMutex)
+        endif
     end while
 
     __ConOut(fhLog,"")

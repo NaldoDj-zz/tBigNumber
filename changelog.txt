@@ -3,6 +3,10 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-08-04 05:39 UTC Naldo DJ
+  * src/common/tbignumber.prg
+  * src/tests/tbigntst.prg
+
 2024-07-19 15:11 UTC Naldo DJ
   * hbp/_tbignumber_array_assignv_dyn_obj.hbp
   * hbp/_tbignumber_array_assignv.hbp

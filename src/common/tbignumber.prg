@@ -3369,7 +3369,7 @@ endclass
             next nTh
 
             aDel(aThs,nThs)
-         asize(aThs,nThM)
+            asize(aThs,nThM)
 
             oTh:Notify()
             oTh:Wait()
