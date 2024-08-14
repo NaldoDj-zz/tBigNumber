@@ -37,6 +37,7 @@
         #require "xhb"
         #require "hbct"
         #require "hbwin"
+        #require "gtxwc"
         #require "hbvmmt"
         #require "hbgtqtc"
 
@@ -4908,6 +4909,8 @@ static procedure tBigNtst38(fhLog as numeric)
             otBigM:SetValue("0")
         #endif
         __ConOut(fhLog,'2:tBigNumber():iPow('+cM+'):OpDec()',"RESULT: "+cR)
+        cR:=""
+        HB_SYMBOL_UNUSED(cR)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
             __oRTime1:Calcule()
@@ -4944,8 +4947,15 @@ static procedure tBigNtst39(fhLog as numeric)
     local cGoogolPlex as character
 
     local o0 as object
+    local o10:=tBigNumber():New("10")
     local oGoogol as object
     local oGoogolplex as object
+
+    #ifdef __HARBOUR__
+        local ptftBigNtst39 as pointer
+        local ptttBigNtst39 as pointer
+        local lFinalize as logical
+    #endif
 
     __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste BIG Googol Number -------------- ")
 
@@ -4957,7 +4967,7 @@ static procedure tBigNtst39(fhLog as numeric)
        hb_mutexUnLock(__phMutex)
     endif
 
-    oGoogol:=tBigNumber():New("10")
+    oGoogol:=o10:Clone()
     oGoogol:=oGoogol:iPow("100")
     cGoogol:=oGoogol:ExactValue()
     __ConOut(fhLog,'10:tBigNumber():iPow(100)',"RESULT: "+cGoogol)
@@ -4985,14 +4995,34 @@ static procedure tBigNtst39(fhLog as numeric)
        hb_mutexUnLock(__phMutex)
     endif
 
-    oGoogolplex:=tBigNumber():New("10")
+    ptftBigNtst39:=@tBigNtst39Thread()
+
+    oGoogolplex:=o10:Clone()
     o0:=tBigNumber():New("0")
     while (oGoogol:gt(o0))
         cNumber:=oGoogolplex:ExactValue()
-        oGoogolplex:=oGoogolplex:iPow("10")
-        cGoogolPlex:=oGoogolplex:ExactValue()
+        __ConOut(fhLog,cNumber+':tBigNumber():iPow(10)',":...")
+        #ifdef __HARBOUR__
+            lFinalize:=.F.
+            ptttBigNtst39:=hb_threadStart(HB_THREAD_INHERIT_MEMVARS,ptftBigNtst39,@lFinalize,cNumber,@cGoogolPlex)
+            while (!lFinalize)
+                if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+                    __oRTime2:Calcule(.F.)
+                    __oRTime1:Calcule(.F.)
+                    hb_mutexUnLock(__phMutex)
+                endif
+            end while
+            hb_threadQuitRequest(ptttBigNtst39)
+            hb_ThreadWait(ptttBigNtst39)
+            oGoogolplex:SetValue(cGoogolPlex)
+        #else
+            oGoogolplex:=oGoogolplex:iPow(@o10)
+            cGoogolPlex:=oGoogolplex:ExactValue()
+        #endif
         oGoogol:OpDec()
         __ConOut(fhLog,cNumber+':tBigNumber():iPow(10)',"RESULT: "+cGoogolPlex)
+        cGoogolPlex:=""
+        HB_SYMBOL_UNUSED(cGoogolPlex)
         __ConOut(fhLog,__cSep)
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:Calcule()
@@ -5023,6 +5053,21 @@ static procedure tBigNtst39(fhLog as numeric)
         oR:=o2:iPow(cM)
 
         cR:=oR:OpDec():ExactValue()
+
+        lFinalize:=.T.
+
+        return
+
+    static procedure tBigNtst39Thread(lFinalize as logical,cM as character,cR as character)
+
+        local oM:=tBigNumber():New(cM) as object
+        local oR as object
+        local o10 as object
+
+        o10:=tBigNumber():New("10")
+        oR:=oM:iPow(o10)
+
+        cR:=oR:ExactValue()
 
         lFinalize:=.T.
 
