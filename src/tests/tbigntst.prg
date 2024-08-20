@@ -299,7 +299,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: ThreadID["+hb_NToC(hb_ThreadID())+"]")
         hb_gtInfo(HB_GTI_ICONRES,"Main")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
@@ -435,7 +435,7 @@
         /* resize console window to the screen size*/
         SetMode(nMaxScrRow,nMaxScrCol)
         /* set window title*/
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: ThreadID["+hb_NToC(hb_ThreadID())+"]")
         hb_gtInfo(HB_GTI_MOUSESTATUS,1)
         *hb_gtInfo(HB_GTI_NOTIFIERBLOCK,{|nEvent,...|myGTIEvent(nEvent,...)})
         myGTIEvent()
@@ -1071,7 +1071,7 @@ static procedure __ConOut(fhLog as numeric,e,d)
     lTBeg:=("BEGIN ------------"$p)
 
     if (lTBeg)
-        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
+        hb_gtInfo(HB_GTI_WINTITLE,"BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: ThreadID["+hb_NToC(hb_ThreadID())+"] :: {"+AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+"}")
         DispOutAT(4,7,PadC(AllTrim(StrTran(StrTran(p,"BEGIN",""),"-",""))+Space(6),__nMaxCol-6),"r+/n")
     endif
 
@@ -1574,7 +1574,7 @@ static function IsHb()
     //--------------------------------------------------------------------------------------------------------
     static procedure BuildScreen(fhLog as numeric,nMaxCol as numeric)
         CLEAR SCREEN
-        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"]",nMaxCol)) //1
+        __ConOut(fhLog,PadC("BlackTDN :: tBigNtst [http://www.blacktdn.com.br] :: PID["+hb_NToC(GETCURRENTPROCESSID())+"] :: ThreadID["+hb_NToC(hb_ThreadID())+"]",nMaxCol)) //1
         __ConOut(fhLog,PadC("("+Version()+Build_Mode()+","+OS()+")",nMaxCol))            //2
         ShowTime(2,nMaxCol-8,.F.,"r+/n",.F.,.F.)
         return
