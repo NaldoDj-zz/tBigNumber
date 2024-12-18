@@ -579,6 +579,18 @@ static s__MTXSQR as pointer
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
+            method PHI(lforce as logical)
+        #else /*__ADVPL__*/
+            method PHI()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method PSI(lforce as logical)
+        #else /*__ADVPL__*/
+            method PSI()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
             method GCD(uBigN)
         #else /*__ADVPL__*/
             method GCD(uBigN)
@@ -774,6 +786,12 @@ static s__MTXSQR as pointer
             method Fibonacci()
         #else /*__ADVPL__*/
             method Fibonacci()
+        #endif /*__HARBOUR__*/
+
+        #ifdef __HARBOUR__
+            method FibonacciBinet(lforce as logical)
+        #else /*__ADVPL__*/
+            method FibonacciBinet(lforce)
         #endif /*__HARBOUR__*/
 
         #ifdef __HARBOUR__
@@ -4040,6 +4058,98 @@ static function cLCM(nX as numeric,nY as numeric)
 
 //--------------------------------------------------------------------------------------------------------
     /*
+        method:PHI
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/12/20024
+        Descricao:Retorna o Numero Irracional PHI (1.6180339887...)
+        Sintaxe:tBigNumber():PHI(lForce) -> oPHITthD
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method PHI(lforce as logical) class tBigNumber
+#else /*__ADVPL__*/
+    method PHI(lforce) class tBigNumber
+#endif /*__HARBOUR__*/
+
+        local oSQRT5 as object
+        local oPHITthD as object
+
+        #ifdef __ADVPL__
+            PARAMETER lforce as logical
+        #endif /*__ADVPL__*/
+
+        DEFAULT lforce:=.F.
+
+        begin sequence
+
+            if (.not.(lforce))
+
+                oPHITthD:=s__o0:Clone()
+                oPHITthD:SetValue(__hbPHITthD())
+
+                break
+
+            endif
+
+            oSQRT5:=tBigNumber():New("5")
+            oSQRT5:SetValue(oSQRT5:SQRT())
+            oPHITthD:=s__o1:Clone()
+            oPHITthD:SetValue(oPHITthD:Add(oSQRT5))
+            oPHITthD:SetValue(oPHITthD:Mult("0.5"))
+
+        end sequence
+
+        return(oPHITthD)
+/*method PHI*/
+
+//--------------------------------------------------------------------------------------------------------
+    /*
+        method:PSI
+        Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
+        Data:18/12/20024
+        Descricao:Retorna o Numero Irracional PSI (1.6180339887...)
+        Sintaxe:tBigNumber():PSI(lForce) -> oPSITthD
+    */
+//--------------------------------------------------------------------------------------------------------
+#ifdef __HARBOUR__
+    method PSI(lforce as logical) class tBigNumber
+#else /*__ADVPL__*/
+    method PSI(lforce) class tBigNumber
+#endif /*__HARBOUR__*/
+
+        local oSQRT5 as object
+        local oPSITthD as object
+
+        #ifdef __ADVPL__
+            PARAMETER lforce as logical
+        #endif /*__ADVPL__*/
+
+        DEFAULT lforce:=.F.
+
+        begin sequence
+
+            if (.not.(lforce))
+
+                oPSITthD:=s__o0:Clone()
+                oPSITthD:SetValue(__hbPSITthD())
+
+                break
+
+            endif
+
+            oSQRT5:=tBigNumber():New("5")
+            oSQRT5:SetValue(oSQRT5:SQRT())
+            oPSITthD:=s__o1:Clone()
+            oPSITthD:SetValue(oPSITthD:Sub(oSQRT5))
+            oPSITthD:SetValue(oPSITthD:Mult("0.5"))
+
+        end sequence
+
+        return(oPSITthD)
+/*method PSI*/
+
+//--------------------------------------------------------------------------------------------------------
+    /*
         method:SysSQRT
         Autor:Marinaldo de Jesus [http://www.blacktdn.com.br]
         Data:06/03/2013
@@ -5624,6 +5734,30 @@ static function recFact(oS as object,oN as object)
         #endif
     return({aInt,aDec,aRDiv})
 #endif __HARBOUR__
+
+#ifdef __HARBOUR__
+    method FibonacciBinet(lforce as logical) class tBigNumber
+#else /*__ADVPL__*/
+    method FibonacciBinet(lforce) class tBigNumber
+#endif /*__HARBOUR__*/
+
+   local oPhi:=s__o1:PHI(lforce)
+   local oPsi:=s__o1:PSI(lforce)
+
+   local oSQRT5
+   local oPhiPowSelf
+   local oPsiPowSelf
+
+   local oFibonacciBinet:=s__o1:Clone()
+
+   oPhiPowSelf:=oPhi:Pow(self)
+   oPsiPowSelf:=oPsi:Pow(self)
+   oSQRT5:=tBigNumber():New("5")
+   oSQRT5:SetValue(oSQRT5:SQRT())
+
+   oFibonacciBinet:SetValue(oPhiPowSelf:Minus(oPsiPowSelf):Div(oSQRT5):Int())
+
+   return(oFibonacciBinet)
 
 //--------------------------------------------------------------------------------------------------------
     /*

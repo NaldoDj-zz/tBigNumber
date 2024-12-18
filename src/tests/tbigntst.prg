@@ -88,7 +88,7 @@
 #include "tBigNumber.ch"
 //--------------------------------------------------------------------------------------------------------
 #define __SETDEC__         16
-#define __NRTTST__         39
+#define __NRTTST__         40
 #define __PADL_T__          2
 #define N_MTX_TIMEOUT     NIL
 //--------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@
 #define L_ROPROGRESS     "0"
 #define L_LOGPROCESS     "1"
 #define C_GT_MODE        "ST"
-#define AC_TSTEXEC       "1:17,18:18,19:39" //"1:17,-18,19:39"
+#define AC_TSTEXEC       "1:17,18:18,19:40" //"1:17,-18,19:40"
 //--------------------------------------------------------------------------------------------------------
 //Mersenne:
 //http://mathworld.wolfram.com/MersennePrime.html
@@ -949,6 +949,7 @@ static function GettBigNtst(cC_GT_MODE as character,aAC_TSTEXEC as array)
     atBigNtst[37][1]:={|p|tBigNtst37(p)}
     atBigNtst[38][1]:={|p|tBigNtst38(p)}
     atBigNtst[39][1]:={|p|tBigNtst39(p)}
+    atBigNtst[40][1]:={|p|tBigNtst40(p)}
 
     #ifdef __HARBOUR__
         bAsc:={|c as character|(nD==Val(c))}
@@ -5041,6 +5042,69 @@ static procedure tBigNtst39(fhLog as numeric)
     return
 /*static procedure tBigNtst39*/
 
+//--------------------------------------------------------------------------------------------------------
+static procedure tBigNtst40(fhLog as numeric)
+
+    local cN as character
+
+    local n as numeric
+    local nSetDec as numeric
+
+    local otBigN as object
+
+    __ConOut(fhLog,"["+ProcName()+"]: BEGIN ------------ Teste FibonacciBinet -------------- ")
+
+    __ConOut(fhLog,"")
+
+    if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+        __oRTime1:SetRemaining(nN_TEST)
+        __oRTime1:SetStep(nISQRT)
+        hb_mutexUnLock(__phMutex)
+    endif
+
+    otBigN:=tBigNumber():New()
+    otBigN:SetDecimals(nACC_SET)
+
+    nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
+
+    n:=0
+    while (n<=nN_TEST)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+            __oRTime2:SetRemaining(1)
+            hb_mutexUnLock(__phMutex)
+        endif
+        cN:=hb_NToC(n)
+        #ifdef __ADVPL__
+            otBigN:SetValue(cN)
+        #else
+            otBigN:=cN
+        #endif
+        __ConOut(fhLog,cN+':tBigNumber():FibonacciBinet()',"RESULT: "+otBigN:FibonacciBinet(.F.):ExactValue())
+        __ConOut(fhLog,__cSep)
+        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+            __oRTime2:Calcule()
+            __oRTime1:Calcule()
+            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+            hb_mutexUnLock(__phMutex)
+        endif
+        *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+        __ConOut(fhLog,__cSep)
+        n+=nISQRT
+    end while
+    __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
+    *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+    __ConOut(fhLog,__cSep)
+
+    __ConOut(fhLog,"")
+
+    __ConOut(fhLog,"------------ Teste FibonacciBinet 0 -------------- end")
+
+    __ConOut(fhLog,"")
+
+    Set(_SET_DECIMALS,nSetDec)
+
+    return
+/*static procedure tBigNtst40*/
 
 #ifdef __HARBOUR__
 

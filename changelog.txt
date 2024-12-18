@@ -3,6 +3,59 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-12-18 13:33 UTC Naldo DJ (FibonacciBinet)
+  * hbp/_tbignumber_array_assignv_dyn_obj.hbp
+  * hbp/_tbignumber_array_assignv.hbp
+  * hbp/_tbignumber_array_dyn_obj.hbp
+  * hbp/_tbignumber_array.hbp
+  * hbp/_tbignumber_assignv_dyn_obj.hbp
+  * hbp/_tbignumber_assignv.hbp
+  * hbp/_tbignumber_dbfile_assignv.hbp
+  * hbp/_tbignumber_dbfile_dyn_obj.hbp
+  * hbp/_tbignumber_dbfile_memio_assignv.hbp
+  * hbp/_tbignumber_dbfile_memio_dyn_obj_assignv.hbp
+  * hbp/_tbignumber_dbfile_memio_dyn_obj.hbp
+  * hbp/_tbignumber_dbfile_memio.hbp
+  * hbp/_tbignumber_dbfile.hbp
+  * hbp/_tbignumber_dyn_obj.hbp
+  * hbp/_tbignumber.hbp
+  * hbp/tbigntst.hbp
+  * hbpvz/_tbignumber_array_assignv_dyn_obj.hbp
+  * hbpvz/_tbignumber_array_assignv.hbp
+  * hbpvz/_tbignumber_array_dyn_obj.hbp
+  * hbpvz/_tbignumber_array.hbp
+  * hbpvz/_tbignumber_assignv_dyn_obj.hbp
+  * hbpvz/_tbignumber_assignv.hbp
+  * hbpvz/_tbignumber_dbfile_assignv.hbp
+  * hbpvz/_tbignumber_dbfile_dyn_obj.hbp
+  * hbpvz/_tbignumber_dbfile_memio_assignv.hbp
+  * hbpvz/_tbignumber_dbfile_memio.hbp
+  * hbpvz/_tbignumber_dbfile.hbp
+  * hbpvz/_tbignumber_dyn_obj.hbp
+  * hbpvz/_tbignumber.hbp
+  * prj/mg/win/64/tbignumber64.mip
+  * src/common/tbignumber.prg
+  * src/tests/tbigntst.prg
+  + bin/harbour/advapi32.dll
+  + bin/harbour/gdi32.dll
+  + bin/harbour/gdi32full.dll
+  + bin/harbour/harbour-32-x64.dll
+  + bin/harbour/iphlpapi.dll
+  + bin/harbour/kernel32.dll
+  + bin/harbour/kernelbase.dll
+  + bin/harbour/msvcp_win.dll
+  + bin/harbour/msvcrt.dll
+  + bin/harbour/ntdll.dll
+  + bin/harbour/rpcrt4.dll
+  + bin/harbour/sechost.dll
+  + bin/harbour/ucrtbase.dll
+  + bin/harbour/usrr32.dll
+  + bin/harbour/win32u.dll
+  + bin/harbour/winmm.dll
+  + bin/harbour/ws2_32.dll
+  + src/hb/__hbphitthd.prg
+  + src/hb/__hbpsitthd.prg
+
 2024-08-20 12:31 UTC Naldo DJ
   * src/tests/tbigntst.prg
 
