@@ -61,21 +61,23 @@
 -i../include
 -i../../core/contrib/xhb
 
-../src/hb/__hbeTthD.prg
-../src/hb/__hbPITthD.prg
-../src/hb/tBigNError.prg
-../src/hb/tBigNSleep.prg
-../src/hb/tbigNThread.prg
-../src/hb/tBigNErrorSys.prg
+../src/hb/__hbetthd.prg
+../src/hb/__hbpitthd.prg
+../src/hb/__hbphitthd.prg
+../src/hb/__hbpsitthd.prg
+../src/hb/tbignerror.prg
+../src/hb/tbignsleep.prg
+../src/hb/tbignthread.prg
+../src/hb/tbignerrorsys.prg
 
 ../src/common/tfread.prg
 ../src/common/tprime.prg
-../src/common/tTimeCalc.prg
-../src/common/tSProgress.prg
-../src/common/tRemaining.prg
-../src/common/tBigNumber.prg
+../src/common/ttimecalc.prg
+../src/common/tsprogress.prg
+../src/common/tremaining.prg
+../src/common/tbignumber.prg
 
-../rc/tBigNtst.rc
-../src/tests/tBigNtst.prg hbct.hbc xhb.hbc hbwin.hbc hbfship.hbc
+../rc/tbigntst.rc
+../src/tests/tbigntst.prg hbct.hbc xhb.hbc hbwin.hbc hbfship.hbc
 
 -o../exe/${hb_plat}/${hb_comp}/${hb_name}
