@@ -36,6 +36,25 @@
   * prj/mg/win/64/tbignumber64.mip
   * src/common/tbignumber.prg
   * src/tests/tbigntst.prg
+  + bin/harbour/advapi32.dll
+  + bin/harbour/gdi32.dll
+  + bin/harbour/gdi32full.dll
+  + bin/harbour/harbour-32-x64.dll
+  + bin/harbour/iphlpapi.dll
+  + bin/harbour/kernel32.dll
+  + bin/harbour/kernelbase.dll
+  + bin/harbour/msvcp_win.dll
+  + bin/harbour/msvcrt.dll
+  + bin/harbour/ntdll.dll
+  + bin/harbour/rpcrt4.dll
+  + bin/harbour/sechost.dll
+  + bin/harbour/ucrtbase.dll
+  + bin/harbour/usrr32.dll
+  + bin/harbour/win32u.dll
+  + bin/harbour/winmm.dll
+  + bin/harbour/ws2_32.dll
+  + src/hb/__hbphitthd.prg
+  + src/hb/__hbpsitthd.prg
 
 2024-08-20 12:31 UTC Naldo DJ
   * src/tests/tbigntst.prg
