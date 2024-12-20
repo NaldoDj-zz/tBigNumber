@@ -4093,6 +4093,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             oSQRT5:=tBigNumber():New("5")
             oSQRT5:SetValue(oSQRT5:SQRT())
+
             oPHITthD:=s__o1:Clone()
             oPHITthD:SetValue(oPHITthD:Add(oSQRT5))
             oPHITthD:SetValue(oPHITthD:Mult("0.5"))
@@ -4139,6 +4140,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             oSQRT5:=tBigNumber():New("5")
             oSQRT5:SetValue(oSQRT5:SQRT())
+
             oPSITthD:=s__o1:Clone()
             oPSITthD:SetValue(oPSITthD:Sub(oSQRT5))
             oPSITthD:SetValue(oPSITthD:Mult("0.5"))
@@ -5741,21 +5743,29 @@ static function recFact(oS as object,oN as object)
     method FibonacciBinet(lforce) class tBigNumber
 #endif /*__HARBOUR__*/
 
-   local oPhi:=s__o1:PHI(lforce)
-   local oPsi:=s__o1:PSI(lforce)
+   local oPhi as object
+   local oPsi as object
 
-   local oSQRT5
-   local oPhiPowSelf
-   local oPsiPowSelf
+   local oSQRT5 as object
+   local oPhiPowSelf as object
+   local oPsiPowSelf as object
 
-   local oFibonacciBinet:=s__o1:Clone()
+   local oFibonacciBinet as object
 
+   oPhi:=s__o1:PHI(lforce)
    oPhiPowSelf:=oPhi:Pow(self)
+
+   oPsi:=s__o1:PSI(lforce)
    oPsiPowSelf:=oPsi:Pow(self)
+
+   oFibonacciBinet:=tBigNumber():New()
+   oFibonacciBinet:SetValue(oPhiPowSelf:Minus(oPsiPowSelf))
+
    oSQRT5:=tBigNumber():New("5")
    oSQRT5:SetValue(oSQRT5:SQRT())
 
-   oFibonacciBinet:SetValue(oPhiPowSelf:Minus(oPsiPowSelf):Div(oSQRT5):Int())
+   oFibonacciBinet:SetValue(oFibonacciBinet:Div(oSQRT5))
+   oFibonacciBinet:SetValue(oFibonacciBinet:Rnd():Int())
 
    return(oFibonacciBinet)
 
