@@ -5069,6 +5069,10 @@ static procedure tBigNtst40(fhLog as numeric)
 
     n:=0
     while (n<=nN_TEST)
+
+        nACC_SET:=CalculatePrecision(n)
+        otBigN:SetDecimals(nACC_SET)
+
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
             __oRTime2:SetRemaining(1)
             hb_mutexUnLock(__phMutex)
@@ -5105,6 +5109,17 @@ static procedure tBigNtst40(fhLog as numeric)
 
     return
 /*static procedure tBigNtst40*/
+
+// Estimar o número de casas decimais necessário
+static function CalculatePrecision(n)
+
+    local nPhiLog as numeric
+    local nMargin as numeric
+
+    nPhiLog:=0.20899 //log10(phi)
+    nMargin:=10 // Margem de segurança
+
+return(Int(n*nPhiLog)+nMargin)
 
 #ifdef __HARBOUR__
 
