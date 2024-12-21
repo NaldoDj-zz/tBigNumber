@@ -5047,7 +5047,9 @@ static procedure tBigNtst40(fhLog as numeric)
 
     local cN as character
 
-    local n as numeric
+    local lForce as logical
+
+    local n,i as numeric
     local nSetDec as numeric
 
     local otBigN as object
@@ -5068,6 +5070,7 @@ static procedure tBigNtst40(fhLog as numeric)
     nSetDec:=Set(_SET_DECIMALS,Min(__SETDEC__,nACC_SET))
 
     n:=0
+    lForce:=.T.
     while (n<=nN_TEST)
 
         nACC_SET:=CalculatePrecision(n)
@@ -5083,18 +5086,25 @@ static procedure tBigNtst40(fhLog as numeric)
         #else
             otBigN:=cN
         #endif
-        __ConOut(fhLog,cN+':tBigNumber():FibonacciBinet()',"RESULT: "+otBigN:FibonacciBinet(.F.):ExactValue())
-        __ConOut(fhLog,__cSep)
-        if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-            __oRTime2:Calcule()
-            __oRTime1:Calcule()
-            __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
-            hb_mutexUnLock(__phMutex)
-        endif
-        *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
-        __ConOut(fhLog,__cSep)
+
+        for i:=1 to 2
+            lForce:=!lForce
+            __ConOut(fhLog,cN+':tBigNumber():FibonacciBinet()',"RESULT: "+otBigN:FibonacciBinet(lForce):ExactValue())
+            __ConOut(fhLog,__cSep)
+            if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
+                __oRTime2:Calcule()
+                __oRTime1:Calcule()
+                __ConOut(fhLog,"AVG TIME: "+__oRTime2:GetcAverageTime())
+                hb_mutexUnLock(__phMutex)
+            endif
+            *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
+            __ConOut(fhLog,__cSep)
+        next i
+
         n+=nISQRT
+
     end while
+
     __ConOut(fhLog,"AVG TIME: "+__oRTime1:GetcAverageTime())
     *__ConOut(fhLog,"DATE/TIME: "+DToC(Date())+"/"+Time())
     __ConOut(fhLog,__cSep)
@@ -5116,8 +5126,8 @@ static function CalculatePrecision(n)
     local nPhiLog as numeric
     local nMargin as numeric
 
-    nPhiLog:=0.20899 //log10(phi)
-    nMargin:=10 // Margem de segurança
+    nPhiLog:=0.20898764024997873376 //Log10(phi)
+    nMargin:=50 // Margem de segurança
 
 return(Int(n*nPhiLog)+nMargin)
 

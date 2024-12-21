@@ -89,6 +89,7 @@ static s__o10 as object
 static s__o20 as object
 static s__od2 as object
 static s__o1000 as object
+static s__oBaseRnd as object
 
 static s__oMinFI as object
 static s__oMinGCD as object
@@ -4096,7 +4097,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             oPHITthD:=s__o1:Clone()
             oPHITthD:SetValue(oPHITthD:Add(oSQRT5))
-            oPHITthD:SetValue(oPHITthD:Mult("0.5"))
+            oPHITthD:SetValue(oPHITthD:Mult(s__od2))
 
         end sequence
 
@@ -4143,7 +4144,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
             oPSITthD:=s__o1:Clone()
             oPSITthD:SetValue(oPSITthD:Sub(oSQRT5))
-            oPSITthD:SetValue(oPSITthD:Mult("0.5"))
+            oPSITthD:SetValue(oPSITthD:Mult(s__od2))
 
         end sequence
 
@@ -4474,10 +4475,10 @@ static function cLCM(nX as numeric,nY as numeric)
             if (cAcc=="")
                 cAcc:=SubStr(oRnd:cDec,--nAcc+1,1)
             endif
-            if (cAcc>="5")
+            if (cAcc>=s__oBaseRnd:ExactValue())
                 cAdd:="0."
                 s__IncS0(nAcc)
-                cAdd+=Left(s__cN0,nAcc)+"5"
+                cAdd+=Left(s__cN0,nAcc)+s__oBaseRnd:ExactValue()
                 oRnd:SetValue(oRnd:Add(cAdd))
             endif
             oRnd:SetValue(oRnd:cInt+"."+Left(oRnd:cDec,nAcc),NIL,oRnd:cRDiv)
@@ -7595,12 +7596,13 @@ static procedure __InitstbN(nBase as numeric)
     s__o2:=tBigNumber():New("2",nBase)
     s__o10:=tBigNumber():New("10",nBase)
     s__o20:=tBigNumber():New("20",nBase)
-    s__od2:=tBigNumber():New("0.5",nBase)
+    s__od2:=tBigNumber():New(hb_NToC(((nBase/2)/nBase)),nBase)
     s__o1000:=tBigNumber():New("1000",nBase)
     s__oMinFI:=tBigNumber():New(MAX_SYS_FI,nBase)
     s__oMinGCD:=tBigNumber():New(MAX_SYS_GCD,nBase)
     s__nMinLCM:=Int(hb_bLen(MAX_SYS_LCM)/2)
     s__SysSQRT:=tBigNumber():New("0",nBase)
+    s__oBaseRnd:=tBigNumber():New(hb_NToC(nBase/2),nBase)
     s_hH2B16:={;
                 "0"=>"000000",;
                 "1"=>"000001",;

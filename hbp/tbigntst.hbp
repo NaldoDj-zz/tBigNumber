@@ -1,8 +1,9 @@
 -D__TBN_RECPOWER__
--D__TBN_DIVMETHOD__=1
+-D__TBIGN_RECPOWER__
 -D__HB_TBIGNPOWER__
-#-b
-#-D__ALT_D__
+-D__TBN_DIVMETHOD__=2
+-D__HB_TBIGNPOWER__
+-b -D__ALT_D__ -D__HB_DEBUG
 #-DHB_BUILD_DEBUG=yes
 #-DHB_TR_LEVEL=debug
 #-DHB_TR_OUTPUT=/c/tmp/hb_trace.log
