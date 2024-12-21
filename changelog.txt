@@ -3,6 +3,12 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2024-12-21 20:23 UTC Naldo DJ
+  * hbp/tbigntst.hbp
+  * src/common/tbignumber.prg
+  * src/tests/tbigntst.prg
+  * prj/mg/win/64/tbignumber64.mip
+
 2024-12-19 22:40 UTC Naldo DJ (FibonacciBinet)
   * prj/mg/win/64/tbignumber64.mip
   * src/common/tbignumber.prg
