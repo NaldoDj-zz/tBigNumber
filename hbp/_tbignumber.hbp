@@ -2,9 +2,13 @@
 #-D__HB_Q_SQRT__
 #-D__PTCOMPAT__
 #-D__ALT_D__
--D__TBN_RECPOWER__
+
+-D__TBN_DIVMETHOD__=2
+-D__TBIGN_RECPOWER__ -D__HB_TBIGNPOWER__ -D__TBN_DIVMETHOD__=2
+
 #-D__LMETHOD__
 #-cflag=-DHB_TR_LEVEL_DEBUG
+-cflag=-Wno-stringop-overread
 
 -hblib
 -inc
