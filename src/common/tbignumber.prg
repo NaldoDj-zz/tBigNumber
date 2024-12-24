@@ -4086,7 +4086,7 @@ static function cLCM(nX as numeric,nY as numeric)
             if (.not.(lforce))
 
                 oPHITthD:=s__o0:Clone()
-                oPHITthD:SetValue(__hbPHITthD())
+                oPHITthD:SetValue(__PHITthD())
 
                 break
 
@@ -4101,7 +4101,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
         end sequence
 
-        return(oPHITthD)
+        return(oPHITthD:Rnd())
 /*method PHI*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -4133,7 +4133,7 @@ static function cLCM(nX as numeric,nY as numeric)
             if (.not.(lforce))
 
                 oPSITthD:=s__o0:Clone()
-                oPSITthD:SetValue(__hbPSITthD())
+                oPSITthD:SetValue(__PSITthD())
 
                 break
 
@@ -4148,7 +4148,7 @@ static function cLCM(nX as numeric,nY as numeric)
 
         end sequence
 
-        return(oPSITthD)
+        return(oPSITthD:Rnd())
 /*method PSI*/
 
 //--------------------------------------------------------------------------------------------------------
@@ -5754,10 +5754,10 @@ static function recFact(oS as object,oN as object)
    local oFibonacciBinet as object
 
    oPhi:=s__o1:PHI(lforce)
-   oPhiPowSelf:=oPhi:Pow(self)
+   oPhiPowSelf:=oPhi:Pow(self,.F.)
 
    oPsi:=s__o1:PSI(lforce)
-   oPsiPowSelf:=oPsi:Pow(self)
+   oPsiPowSelf:=oPsi:Pow(self,.F.)
 
    oFibonacciBinet:=tBigNumber():New()
    oFibonacciBinet:SetValue(oPhiPowSelf:Minus(oPsiPowSelf))
@@ -7767,10 +7767,15 @@ static procedure s__IncS9(n as numeric)
 
     static function __eTthD() as character
         return(staticCall(__pteTthD,__eTthD))
-    /*static function __eTthD*/
+
     static function __PITthD() as character
         return(staticCall(__ptPITthD,__PITthD))
-    /*static function __PITthD*/
+
+    static function __PHITthD()
+        return("1.618033988749894848")
+
+    static function __PSITthD()
+        return("-0.61803398874989484")
 
     /*warning W0010 Static Function ...() never called*/
     static function __Dummy(lDummy as logical) as logical
@@ -7787,10 +7792,15 @@ static procedure s__IncS9(n as numeric)
 
     static function __eTthD()
         return(__hbeTthD())
-    /*return(__hbeTthD())*/
+
     static function __PITthD()
         return(__hbPITthD())
-    /*static function __PITthD*/
+
+    static function __PHITthD()
+        return(__hbPHITthD())
+
+    static function __PSITthD()
+        return(__hbPSITthD())
 
     /* warning: 'void hb_FUN_...()'  defined but not used [-Wunused-function]...*/
     static function __Dummy(lDummy as logical)

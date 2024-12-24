@@ -5045,7 +5045,7 @@ static procedure tBigNtst39(fhLog as numeric)
 //--------------------------------------------------------------------------------------------------------
 static procedure tBigNtst40(fhLog as numeric)
 
-    local cN as character
+    local cN,cR as character
 
     local lForce as logical
 
@@ -5077,9 +5077,10 @@ static procedure tBigNtst40(fhLog as numeric)
         otBigN:SetDecimals(nACC_SET)
 
         if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
-            __oRTime2:SetRemaining(1)
+            __oRTime2:SetRemaining(2)
             hb_mutexUnLock(__phMutex)
         endif
+
         cN:=hb_NToC(n)
         #ifdef __ADVPL__
             otBigN:SetValue(cN)
@@ -5089,7 +5090,8 @@ static procedure tBigNtst40(fhLog as numeric)
 
         for i:=1 to 2
             lForce:=!lForce
-            __ConOut(fhLog,cN+':tBigNumber():FibonacciBinet()',"RESULT: "+otBigN:FibonacciBinet(lForce):ExactValue())
+            cR:=otBigN:FibonacciBinet(lForce):ExactValue()
+            __ConOut(fhLog,cN+':tBigNumber():FibonacciBinet()',"RESULT: "+cR)
             __ConOut(fhLog,__cSep)
             if (hb_mutexLock(__phMutex,N_MTX_TIMEOUT))
                 __oRTime2:Calcule()
@@ -5121,7 +5123,7 @@ static procedure tBigNtst40(fhLog as numeric)
 /*static procedure tBigNtst40*/
 
 // Estimar o número de casas decimais necessário
-static function CalculatePrecision(n)
+static function CalculatePrecision(n as numeric)
 
     local nPhiLog as numeric
     local nMargin as numeric
@@ -5129,7 +5131,9 @@ static function CalculatePrecision(n)
     nPhiLog:=0.20898764024997873376 //Log10(phi)
     nMargin:=50 // Margem de segurança
 
-return(Int(n*nPhiLog)+nMargin)
+    nACC_SET:=Max(nACC_SET,(Int(n*nPhiLog)+nMargin))
+
+return(nACC_SET)
 
 #ifdef __HARBOUR__
 
