@@ -43,10 +43,13 @@
         #include <limits>
         #include <cstring>
         #include <sstream>
+        #include <float.h>
 
         #include <stdio.h>
         #include <string.h>
+        #include <stdlib.h>
         #include <stdbool.h>
+        #include <math.h>
 
         #include <tchar.h>
 
@@ -90,9 +93,9 @@
             char * cDivQ;
             char * cDivR;
         } stBIGNeDiv,* ptBIGNeDiv;
-
         static char cNumber(const HB_SIZE iNumber);
         static char * tbig_to_string_long_double(long double value);
+        static bool tbig_log10_from_decimal(const char * value, long double * log10Value);
         static HB_SIZE iNumber(const char * cNumber);
         static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill);
         static char * tBIGNPadL(const char * szItem,HB_SIZE nLen,const char * szPad);
@@ -117,12 +120,19 @@
         static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y);
         static HB_MAXINT tBIGNFI(HB_MAXINT n);
 
+        static int tBIGNCmp3(const void * pA,const void * pB,const HB_SIZE n){
+            int iCmp=memcmp(pA,pB,n);
+            return (iCmp>0)-(iCmp<0);
+        }
+
+        static HB_MAXINT tBIGNNormalizeBase(HB_MAXINT nB){
+            return ( nB >= 2 && nB <= 62 ) ? nB : 10;
+        }
+
         static char cNumber(const HB_SIZE iNumber){
-            char cNumber;
             static const char * st__sNumber="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             static const HB_SIZE st_iNumber=strlen(st__sNumber);
-            cNumber=st__sNumber[(iNumber<=st_iNumber?iNumber:0)];
-            return(cNumber);
+            return st__sNumber[( iNumber < st_iNumber ) ? iNumber : 0];
         }
 
         static char * tbig_to_string_long_double(long double value)
@@ -139,52 +149,165 @@
             return buf;
         }
 
-        static HB_SIZE iNumber(const char * cNumber){
+        static bool tbig_log10_from_decimal(const char * value, long double * log10Value)
+        {
+            const char * p;
+            char * endPtr = NULL;
+            long double directArg;
+            long double directLog;
+            bool dotSeen = false;
+            bool anyDigit = false;
+            bool anyNonZero = false;
+            bool intNonZeroSeen = false;
+            HB_SIZE intSigDigits = 0;
+            HB_SIZE leadingDecimalZeros = 0;
+            bool firstSigBeforeDot = false;
+            bool sigSeen = false;
+            long double sig = 0.0L;
+            int sigCount = 0;
+            const int maxSig = 24;
+            long double exp10;
 
-            const char cN=*(cNumber);
-
-            HB_SIZE iNumber;
-
-            if (isdigit(cN))
+            if (value == NULL || log10Value == NULL)
             {
-                iNumber=(cN-'0');
+                return false;
             }
-            else
+
+            directArg = strtold(value, &endPtr);
+            if (endPtr != value && directArg > 0.0L)
             {
-
-                HB_SIZE j = (HB_SIZE) -1;
-
-                if (isalpha(cN))
+                directLog = log10l(directArg);
+                if (directLog == directLog && directLog != HUGE_VALL && directLog != -HUGE_VALL)
                 {
+                    *log10Value = directLog;
+                    return true;
+                }
+            }
 
-                    HB_SIZE i;
+            p = value;
+            while (*p != '\0' && isspace((unsigned char)*p))
+            {
+                ++p;
+            }
 
-                    static const char * st__cNumber[62]={"0","1","2","3","4","5","6","7","8","9"
-                                                    ,"A","B","C","D","E","F","G","H","I","J"
-                                                    ,"K","L","M","N","O","P","Q","R","S","T"
-                                                    ,"U","V","W","X","Y","Z","a","b","c","d"
-                                                    ,"e","f","g","h","i","j","k","l","m","n"
-                                                    ,"o","p","q","r","s","t","u","v","w","x"
-                                                    ,"y","z"
-                                        };
+            if (*p == '+')
+            {
+                ++p;
+            }
+            else if (*p == '-')
+            {
+                return false;
+            }
 
-                    for (i=0;(i<sizeof(st__cNumber));i++)
+            for (const char * q = p; *q != '\0'; ++q)
+            {
+                if (*q == '.')
+                {
+                    if (dotSeen)
                     {
-                        if (strncmp(cNumber,st__cNumber[i],1)==0)
-                        {
-                            j=i;
-                            break;
-                        }
+                        break;
                     }
-
+                    dotSeen = true;
+                    continue;
                 }
 
-                iNumber=( j >= 0 ? j : 0 );
+                if (!isdigit((unsigned char)*q))
+                {
+                    break;
+                }
 
+                anyDigit = true;
+                if (*q != '0')
+                {
+                    anyNonZero = true;
+                }
+
+                if (!dotSeen && (*q != '0' || intNonZeroSeen))
+                {
+                    intNonZeroSeen = true;
+                    ++intSigDigits;
+                }
             }
-            return(iNumber);
+
+            if (!anyDigit || !anyNonZero)
+            {
+                return false;
+            }
+
+            dotSeen = false;
+
+            for (const char * q = p; *q != '\0'; ++q)
+            {
+                if (*q == '.')
+                {
+                    if (dotSeen)
+                    {
+                        break;
+                    }
+                    dotSeen = true;
+                    continue;
+                }
+
+                if (!isdigit((unsigned char)*q))
+                {
+                    break;
+                }
+
+                if (!sigSeen)
+                {
+                    if (*q == '0')
+                    {
+                        if (dotSeen)
+                        {
+                            ++leadingDecimalZeros;
+                        }
+                        continue;
+                    }
+
+                    sigSeen = true;
+                    firstSigBeforeDot = !dotSeen;
+                }
+
+                if (sigCount < maxSig)
+                {
+                    sig = (sig * 10.0L) + (long double)(*q - '0');
+                    ++sigCount;
+                }
+            }
+
+            if (!sigSeen || sigCount == 0)
+            {
+                return false;
+            }
+
+            exp10 = firstSigBeforeDot ? (long double)intSigDigits - (long double)sigCount :
+                    -((long double)leadingDecimalZeros + (long double)sigCount);
+            *log10Value = log10l(sig) + exp10;
+
+            return true;
         }
 
+        static HB_SIZE iNumber(const char * cNumber){
+
+            const unsigned char cN=(unsigned char)*(cNumber);
+
+            if (cN >= '0' && cN <= '9')
+            {
+                return (HB_SIZE)(cN-'0');
+            }
+
+            if (cN >= 'A' && cN <= 'Z')
+            {
+                return (HB_SIZE)(cN-'A'+10);
+            }
+
+            if (cN >= 'a' && cN <= 'z')
+            {
+                return (HB_SIZE)(cN-'a'+36);
+            }
+
+            return 0;
+        }
         static char * do_pad( int iSwitch, const char * pcString, HB_SIZE nRetLen , const char cFill )
         {
 
@@ -249,6 +372,7 @@
             hb_retclen_buffer(szRet,( HB_SIZE )nLen);
         }
 
+
         static char * do_remove( int iSwitch, const char * pcString, const HB_SIZE sStrLen, const char * cSearch )
         {
 
@@ -261,17 +385,17 @@
 
               if( iSwitch != DO_REMOVE_REMRIGHT )
               {
-                 while( ( *pcTmp == *cSearch ) && ( pcTmp < pcString + sStrLen ) )
+                 while( pcTmp < pcString + sStrLen && *pcTmp == *cSearch )
                  {
                     pcTmp++;
                     sRetLen--;
                  }
               }
 
-              if( iSwitch != DO_REMOVE_REMLEFT )
+              if( iSwitch != DO_REMOVE_REMLEFT && sRetLen > 0 )
               {
-                 pc = pcString + sStrLen - 1;
-                 while( ( *pc == *cSearch ) && ( pc >= pcTmp ) )
+                 pc = pcTmp + sRetLen - 1;
+                 while( pc >= pcTmp && *pc == *cSearch )
                  {
                     pc--;
                     sRetLen--;
@@ -366,7 +490,7 @@
             const char * b=hb_parc(2);
             const HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
             const HB_SIZE y=(HB_SIZE)(hb_parnint(4)+1);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(5));
             char * szRet=tBIGNAdd(a,b,n,y,nB);
             hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
@@ -403,7 +527,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)+1);
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT a=(HB_MAXINT)hb_parnint(2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(3));
             hb_retclen_buffer(tBigNiADD(szRet,a,n,nB),( HB_SIZE )n);
         }
 
@@ -440,7 +564,7 @@
             const char * b=hb_parc(2);
             HB_MAXINT n=(HB_MAXINT)hb_parnint(3);
             const HB_SIZE y=(HB_SIZE)n;
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(4));
             char * szRet=tBIGNSub(a,b,n,y,nB);
             hb_retclen_buffer(szRet,( HB_SIZE )y);
         }
@@ -477,7 +601,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1));
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             HB_MAXINT s=(HB_MAXINT)hb_parnint(2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(3));
             hb_retclen_buffer(tBigNiSUB(szRet,s,n,nB),( HB_SIZE )n);
         }
 
@@ -1195,7 +1319,7 @@
             const char * pValue2 = hb_parc(2);
             HB_SIZE n = (HB_SIZE) hb_parnint(3);
             HB_SIZE y = (HB_SIZE) (hb_parnint(4) * 2);
-            const HB_MAXINT nB = (HB_MAXINT) hb_parnint(5);
+            const HB_MAXINT nB = tBIGNNormalizeBase((HB_MAXINT)hb_parnint(5));
 
             HB_TRACE(HB_TR_DEBUG, ("TBIGNMULT(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)", pValue1, pValue2, n, y, nB));
 
@@ -1350,7 +1474,7 @@
             const char * szExp = hb_parc(2);
             HB_SIZE n = (HB_SIZE) hb_parnint(3);
             HB_SIZE y = (HB_SIZE) (hb_parnint(4) * 2);
-            const HB_MAXINT nB = (HB_MAXINT) hb_parnint(5);
+            const HB_MAXINT nB = tBIGNNormalizeBase((HB_MAXINT)hb_parnint(5));
 
             HB_TRACE(HB_TR_DEBUG, ("HB_TBIGNPOWER(%s,%s,%" HB_PFS "u,%" HB_PFS "u,%" PFHL "d)", szBas, szExp, n, y, nB));
 
@@ -1402,7 +1526,7 @@
                 hb_xmemcpy(pegMultTmp->cMultP,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
 
-                if (memcmp(pegMultTmp->cMultM,pN,( HB_SIZE )n)==1){
+                if (tBIGNCmp3(pegMultTmp->cMultM,pN,( HB_SIZE )n)>0){
                     break;
                 }
 
@@ -1425,12 +1549,12 @@
                 hb_xmemcpy(pegMult->cMultP,pegMultTmp->cMultP,( HB_SIZE )n);
                 hb_xfree(pegMultTmp->cMultP);
 
-                int iCmp=memcmp(pegMult->cMultM,pN,( HB_SIZE )n);
+                int iCmp=tBIGNCmp3(pegMult->cMultM,pN,( HB_SIZE )n);
 
                 if (iCmp==0){
                     break;
                 } else{
-                        if (iCmp==1){
+                        if (iCmp>0){
 
                             pegMultTmp->cMultM=tBIGNSub(pegMult->cMultM,peMTArr[nI]->cMultM,n,( HB_SIZE )n,nB);
                             hb_xmemcpy(pegMult->cMultM,pegMultTmp->cMultM,( HB_SIZE )n);
@@ -1462,7 +1586,7 @@
             HB_MAXINT n=(HB_MAXINT)(hb_parnint(3)*2);
             char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(4);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(4));
 
             ptBIGNeMult pegMult=(ptBIGNeMult)hb_xgrab(( HB_SIZE )sizeof(stBIGNeMult));
 
@@ -1500,7 +1624,7 @@
         HB_FUNC_STATIC( HB_TBIGN2MULT ){
             HB_MAXINT n=(HB_MAXINT)(hb_parclen(1)*2);
             char * szRet=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(2);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(2));
             hb_retclen_buffer(tBigN2Mult(szRet,n,nB),( HB_SIZE )n);
         }
 
@@ -1528,7 +1652,7 @@
             HB_SIZE n=(HB_SIZE)(hb_parclen(1)*2);
             char * szRet=tBIGNPadL(hb_parc(1),n,"0");
             HB_MAXINT m=(HB_MAXINT)hb_parnint(2);
-            const HB_MAXINT nB=(HB_MAXINT)hb_parnint(3);
+            const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(3));
             hb_retclen_buffer(tBigNiMult(szRet,m,n,nB),( HB_SIZE )n);
         }
 
@@ -1571,7 +1695,7 @@
                 hb_xmemcpy(pegDivTmp->cDivR,tmp,( HB_SIZE )n);
                 hb_xfree(tmp);
 
-                if (memcmp(pegDivTmp->cDivR,pN,( HB_SIZE )n)==1){
+                if (tBIGNCmp3(pegDivTmp->cDivR,pN,( HB_SIZE )n)>0){
                     break;
                 }
 
@@ -1599,12 +1723,12 @@
                 hb_xmemcpy(pegDiv->cDivR,pegDivTmp->cDivR,( HB_SIZE )n);
                 hb_xfree(pegDivTmp->cDivR);
 
-                int iCmp=memcmp(pegDiv->cDivR,pN,( HB_SIZE )n);
+                int iCmp=tBIGNCmp3(pegDiv->cDivR,pN,( HB_SIZE )n);
 
                 if (iCmp==0){
                     break;
                 } else{
-                        if (iCmp==1){
+                        if (iCmp>0){
 
                             pegDivTmp->cDivQ=tBIGNSub(pegDiv->cDivQ,peDVArr[nI]->cDivQ,n,( HB_SIZE )n,nB);
                             hb_xmemcpy(pegDiv->cDivQ,pegDivTmp->cDivQ,( HB_SIZE )n);
@@ -1640,7 +1764,7 @@
             char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
             ptBIGNeDiv pegDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
-            int iCmp=memcmp(pN,pD,( HB_SIZE )n);
+            int iCmp=tBIGNCmp3(pN,pD,( HB_SIZE )n);
 
             switch(iCmp){
                 case -1:{
@@ -1654,7 +1778,7 @@
                     break;
                 }
                 default:{
-                    const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+                    const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(5));
                     tBIGNegDiv(pN,pD,n,nB,pegDiv);
                 }
             }
@@ -1694,7 +1818,7 @@
                 iaux[i]=iNumber(&aux[i]);
             }
 
-            while (memcmp(iaux,ipA,( HB_SIZE )ipN)<=0){
+            while (tBIGNCmp3(iaux,ipA,( HB_SIZE )snHB_MAXINT)<=0){
                 n++;
                 v1=0;
                 i=ipN;
@@ -1741,7 +1865,7 @@
                         v1=0;
                     }
                 }
-                if (memcmp(pecDiv->cDivR,aux,( HB_SIZE )ipN)>=0){
+                if (tBIGNCmp3(pecDiv->cDivR,aux,( HB_SIZE )ipN)>=0){
                     char * tmp=tBIGNSub(pecDiv->cDivR,aux,ipN,( HB_SIZE )ipN,nB);
                     hb_xmemcpy(pecDiv->cDivR,tmp,( HB_SIZE )ipN);
                     hb_xfree(tmp);
@@ -1774,6 +1898,7 @@
             while(--i>=0){
                 pecDiv->cDivQ[i]=cNumber(idivQ[i]);
             }
+            pecDiv->cDivQ[( HB_SIZE ) ipN]=HB_CHAR_EOS;
 
             free(idivQ);
             idivQ=NULL;
@@ -1786,7 +1911,7 @@
             char * pN=tBIGNPadL(hb_parc(1),( HB_SIZE )n,"0");
             char * pD=tBIGNPadL(hb_parc(2),( HB_SIZE )n,"0");
             ptBIGNeDiv pecDiv=(ptBIGNeDiv)hb_xgrab(( HB_SIZE )sizeof(stBIGNeDiv));
-            int iCmp=memcmp(pN,pD,( HB_SIZE )n);
+            int iCmp=tBIGNCmp3(pN,pD,( HB_SIZE )n);
 
             switch(iCmp){
                 case -1:{
@@ -1800,7 +1925,7 @@
                     break;
                 }
                 default:{
-                    const HB_MAXINT nB=(HB_MAXINT)hb_parnint(5);
+                    const HB_MAXINT nB=tBIGNNormalizeBase((HB_MAXINT)hb_parnint(5));
                     tBIGNecDiv(pN,pD,n,nB,pecDiv);
                 }
             }
@@ -1843,6 +1968,8 @@
 
           int shift;
 
+          if (u < 0) u = -u;
+          if (v < 0) v = -v;
 
           /* GCD(0,v)==v; GCD(u,0)==u,GCD(0,0)==0 */
           if (u==0) return v;
@@ -1883,44 +2010,11 @@
             hb_retnint(tBIGNGCD((HB_MAXINT)hb_parnint(1),(HB_MAXINT)hb_parnint(2)));
         }
 
-        /*
-        static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y){
-
-            HB_TRACE(HB_TR_DEBUG,("tBIGNLCM(%" PFHL "d,%" PFHL "d)",x,y));
-
-            HB_MAXINT nLCM=1;
-            HB_MAXINT i=2;
-
-            HB_BOOL lMx;
-            HB_BOOL lMy;
-
-            while (HB_TRUE){
-                lMx=((x%i)==0);
-                lMy=((y%i)==0);
-                while (lMx||lMy){
-                    nLCM*=i;
-                    if (lMx){
-                        x/=i;
-                        lMx=((x%i)==0);
-                    }
-                    if (lMy){
-                        y/=i;
-                        lMy=((y%i)==0);
-                    }
-                }
-                if ((x==1)&&(y==1)){
-                    break;
-                }
-                ++i;
-            }
-
-            return nLCM;
-
-        }
-        */
-
         static HB_MAXINT tBIGNLCM(HB_MAXINT x,HB_MAXINT y){
             HB_TRACE(HB_TR_DEBUG,("tBIGNLCM(%" PFHL "d,%" PFHL "d)",x,y));
+            if (x < 0) x = -x;
+            if (y < 0) y = -y;
+            if (x == 0 || y == 0) return 0;
             return ((y/tBIGNGCD(x,y))*x);
         }
 
@@ -1928,7 +2022,6 @@
             HB_TRACE(HB_TR_DEBUG,("HB_TBIGNLCM(%" PFHL "u,%" PFHL "u)",hb_parnint(1),hb_parnint(2)));
             hb_retnint(tBIGNLCM((HB_MAXINT)hb_parnint(1),(HB_MAXINT)hb_parnint(2)));
         }
-
         static HB_MAXINT tBIGNFI(HB_MAXINT n){
             HB_TRACE(HB_TR_DEBUG,("tBIGNFI(%" PFHL "d)",n));
             HB_MAXINT i;
@@ -1957,8 +2050,8 @@
         }
 
         HB_FUNC_STATIC( HB_TBIGNMEMCMP ){
-           int iCmp=memcmp(hb_parc(1),hb_parc(2),hb_parclen(1));
-           hb_retnint(iCmp);
+           hb_retnint(tBIGNCmp3(hb_parc(1),hb_parc(2),hb_parclen(1)));
+
         }
 
         HB_FUNC_STATIC( HB_TBIGNMAX ){
@@ -2059,23 +2152,23 @@
                 const char * szItem = hb_parc(1);
 
                 HB_SIZE iCount = ( HB_SIZE ) strlen(szItem);
-                szItem+=iCount;
+                const char * szCursor = szItem + iCount;
 
                 HB_TRACE(HB_TR_DEBUG,("HB_TBIGNSPLITNUMBER(%s,%" HB_PFS "u)",szItem,iCount));
 
                 PHB_ITEM pItem = hb_itemArrayNew( iCount );
-                HB_MAXINT i;
+                HB_SIZE i;
                 HB_SIZE iZero = 0;
 
-                for( i = iCount; i >= 0 ; i-- )
+                for( i = iCount; i > 0; --i )
                 {
-                    char *tmpN = ( char * ) hb_xgrab( ( HB_SIZE ) sizeof(char) );
-                    *(tmpN) = *(szItem);
-                    char * tmpPad = tBIGNPadR((const char *)tmpN,iZero++,"0");
-                    szItem--;
-                    hb_xfree(tmpN);
-                    hb_arraySetStr( pItem, ( HB_SIZE ) i + 1, NULL, tmpPad );
+                    char tmpN[ 2 ] = { HB_CHAR_EOS, HB_CHAR_EOS };
+                    char * tmpPad;
+                    tmpN[ 0 ] = *( --szCursor );
+                    tmpPad = tBIGNPadR( tmpN, iZero + 1, "0" );
+                    hb_arraySetStr( pItem, i, NULL, tmpPad );
                     hb_xfree(tmpPad);
+                    iZero++;
                 }
                 hb_itemReturnRelease( pItem );
             }
@@ -2152,13 +2245,12 @@
         {
            if (HB_ISCHAR(1)&HB_ISCHAR(2))
            {
-                HB_MATH_EXCEPTION hb_exc;
                 long double ldResult;
-                long double ldArgN=strtold(hb_parc(1),NULL);
-                long double ldArgB=strtold(hb_parc(2),NULL);
-                hb_mathResetError(&hb_exc);
-                ldResult=(log10l(ldArgN)/log10l(ldArgB));
-                if( hb_mathGetError(&hb_exc,"LOG10L",(double)ldArgN,(double)ldArgB,(double)ldResult))
+                long double ldLogArgN;
+                long double ldLogArgB;
+                if( !tbig_log10_from_decimal(hb_parc(1),&ldLogArgN) ||
+                    !tbig_log10_from_decimal(hb_parc(2),&ldLogArgB) ||
+                    ldLogArgB == 0.0L )
                 {
                     std::string str=tbig_to_string_long_double(0.0);
                     char * cstr=(char*)hb_xgrabz(( HB_SIZE )str.length()+1);
@@ -2172,6 +2264,12 @@
                 }
                 else
                 {
+                    ldResult=(ldLogArgN/ldLogArgB);
+                    long double ldNearest = ( ldResult >= 0.0L ) ? floorl( ldResult + 0.5L ) : ceill( ldResult - 0.5L );
+                    if ( fabsl( ldResult - ldNearest ) <= 1.0e-10L )
+                    {
+                        ldResult = ldNearest;
+                    }
                     std::string str=tbig_to_string_long_double(ldResult);
                     if (str.find("inf")!=std::string::npos||str.find("nan")!=std::string::npos)
                     {

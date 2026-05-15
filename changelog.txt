@@ -2,8 +2,18 @@
      * Change  ! Fix  % Optimize  + Add  - Remove  ; Comment
    Entries may not always be in chronological/commit order.
    See license at the end of file.
-   (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm")+" UTC naldodj"
+   (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm")+" UTC naldodj (Normalize base and improve math routines)"
 */
+
+2026-05-15 10:53 UTC naldodj (Normalize base and improve math routines)
+  Normalize base and improve math routines
+    Add base validation/normalization (max base 62) in both Harbour (.prg) and C layers and apply it across TBign APIs to ensure valid bases.
+    Introduce tBIGNCmp3 (memcmp -> sign) and tBIGNNormalizeBase helpers and replace raw memcmp/base parsing usage.
+    Simplify and harden numeric algorithms: streamline GCD/LCM with proper abs/zero handling, add fast-path __SQRTPow10 for sqrt of powers of ten, and remove/replace older GCD helper.
+    Improve numeric parsing and stability by adding tbig_log10_from_decimal and enhanced log10/division rounding logic, plus related safety and performance fixes (additional includes, loop/pad/remove corrections and minor memory/loop cleanups).
+    Overall changes improve correctness, robustness and performance of big-number operations.
+      * src/common/tbignumber.prg
+      * src/hb/c/tbignumber.c
 
 2026-03-22 11:15 UTC naldodj
   + hbp/_tbignumber_msvc.hbp
