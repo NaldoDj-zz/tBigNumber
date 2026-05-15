@@ -56,6 +56,7 @@
 #include "tBigNumber.ch"
 
 #define __NBASE__ (10)
+#define __MAX_NBASE__ (62)
 
  #ifdef __HARBOUR__
     //--------------------------------------------------------------------------------------------------------
@@ -996,6 +997,16 @@ endclass
         return(oSelf:SetValue(uBigN,nBase,cRDiv,lLZRmv,nAcc))
     /*static function __OpAssign*/
 
+    static function __tBIGNNormalizeBase(nBase as numeric)
+        if (ValType(nBase)=="N")
+            nBase:=Int(nBase)
+            if ((nBase>=2).and.(nBase<=__MAX_NBASE__))
+                return(nBase)
+            endif
+        endif
+        return(__NBASE__)
+    /*static function __tBIGNNormalizeBase*/
+
 #else /*__ADVPL__*//*INLINE HARBOUR/ADVPL METHODS*/
 
     //--------------------------------------------------------------------------------------------------------
@@ -1100,6 +1111,7 @@ endclass
         #endif /*__ADVPL__*/
 
         DEFAULT nBase:=__NBASE__
+        nBase:=__tBIGNNormalizeBase(nBase)
         self:nBase:=nBase
 
         if (s__nDecSet==NIL)
@@ -1331,7 +1343,7 @@ endclass
         PARAMETER nBase as numeric
 #endif /*__HARBOUR__*/
         if .not.(nBase==NIL)
-            self:nBase:=nBase
+            self:nBase:=__tBIGNNormalizeBase(nBase)
         endif
         return(self:nBase)
 /*method __nBase*/
@@ -1684,6 +1696,8 @@ endclass
             nFP:=AT(".",uBigN)
 
             DEFAULT nBase:=self:nBase
+            nBase:=__tBIGNNormalizeBase(nBase)
+            self:nBase:=nBase
 
             self:cInt:="0"
             self:cDec:="0"
@@ -3650,59 +3664,20 @@ endclass
 
         local oGCD
 
-        oY:=tBigNumber():New(uBigN)
-        oY:SetValue(oY:Min(self))
+        oX:=self:Abs(.T.)
+        oY:=tBigNumber():New(uBigN):Abs(.T.)
 
-        oX:=self:Clone()
-        oX:SetValue(oY:Max(self))
-
-        if (oY:eq(s__o0))
-            oGCD:=oX
-        else
+        while (.not.(oY:eq(s__o0)))
             oGCD:=oY:Clone()
-            if (oX:lte(s__oMinGCD).and.oY:lte(s__oMinGCD))
-                oGCD:SetValue(cGCD(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
-            else
-                while (.T.)
-                    oY:SetValue(oX:Mod(oY))
-                    if (oY:eq(s__o0))
-                        exit
-                    endif
-                    oX:SetValue(oGCD)
-                    oGCD:SetValue(oY)
-                end while
-            endif
-        endif
+            oY:SetValue(oX:Mod(oY))
+            oX:SetValue(oGCD)
+        end while
+
+        oGCD:=oX
 
         return(oGCD)
 
 /*method GCD*/
-
-static function cGCD(nX as numeric,nY as numeric)
-    #ifndef __PTCOMPAT__
-        local nGCD as numeric
-        nGCD:=HB_TBIGNGCD(nX,nY)
-    #else /*__ADVPL__*/
-        local nGCD as numeric
-        nGCD:=nX
-        nX:=Max(nY,nGCD)
-        nY:=Min(nGCD,nY)
-        if (nY==0)
-            nGCD:=nX
-        else
-            nGCD:=nY
-            while (.T.)
-                if ((nY:=(nX%nY))==0)
-                    exit
-                endif
-                nX:=nGCD
-                nGCD:=nY
-            end while
-        endif
-    #endif //__PTCOMPAT__
-    return(hb_NToC(nGCD))
-
-/*static function cGCD*/
 
 //--------------------------------------------------------------------------------------------------------
     /*
@@ -3729,8 +3704,12 @@ static function cGCD(nX as numeric,nY as numeric)
         local lMX
         local lMY
 
-        oX:=self:Clone()
-        oY:=tBigNumber():New(uBigN)
+        oX:=self:Abs(.T.)
+        oY:=tBigNumber():New(uBigN):Abs(.T.)
+        oLCM:=s__o0:Clone()
+        if (oX:eq(s__o0).or.oY:eq(s__o0))
+            return(oLCM)
+        endif
         oLCM:=s__o1:Clone()
         if (oX:nInt<=s__nMinLCM.and.oY:nInt<=s__nMinLCM)
             oLCM:SetValue(cLCM(Val(oX:Int(.F.,.F.)),Val(oY:Int(.F.,.F.))))
@@ -3762,18 +3741,24 @@ static function cGCD(nX as numeric,nY as numeric)
 /*method LCM*/
 
 static function cLCM(nX as numeric,nY as numeric)
+    local nLCM as numeric
+    #ifdef __PTCOMPAT__
+        local nI as numeric
+        local lMX as logical
+        local lMY as logical
+    #endif
+
+    nX:=Abs(nX)
+    nY:=Abs(nY)
+    if (nX==0.or.nY==0)
+        return(hb_NToC(0))
+    endif
+
     #ifndef __PTCOMPAT__
 
-        local nLCM as numeric
         nLCM:=HB_TBIGNLCM(nX,nY)
 
     #else /*__ADVPL__*/
-
-        local nLCM as numeric
-        local nI as numeric
-
-        local lMX as logical
-        local lMY as logical
 
         nLCM:=1
         nI:=2
@@ -6209,6 +6194,7 @@ static function __Pow(base as object,expR as object,EPS as object)
     */
 //--------------------------------------------------------------------------------------------------------
 static function __SQRT(p)
+    local oPow10 as object
     local l as object
     local r as object
     local t as object
@@ -6219,6 +6205,10 @@ static function __SQRT(p)
     local EPS as object
     local q as object
     q:=tBigNumber():New(p)
+    oPow10:=__SQRTPow10(q)
+    if oPow10!=NIL
+        return(oPow10)
+    endif
     if q:lte(q:SysSQRT())
         #ifdef __PROTHEUS__
             r:=tBigNumber():New(hb_NToC(SQRT(Val(q:GetValue()))))
@@ -6273,6 +6263,44 @@ static function __SQRT(p)
     return(r)
 
 /*static function __SQRT*/
+
+static function __SQRTPow10(q)
+    local cInt as character
+    local cDec as character
+    local nLen as numeric
+    local nZeros as numeric
+    local nI as numeric
+
+    if q:lt(s__o0)
+        return(NIL)
+    endif
+
+    cInt:=q:__cInt()
+    cDec:=q:__cDec()
+    nLen:=Len(cInt)
+
+    if nLen<1.or.Left(cInt,1)!="1"
+        return(NIL)
+    endif
+
+    if cDec!="0".and.cDec!=""
+        return(NIL)
+    endif
+
+    for nI:=2 to nLen
+        if SubStr(cInt,nI,1)!="0"
+            return(NIL)
+        endif
+    next
+
+    nZeros:=nLen-1
+    if (nZeros%2)!=0
+        return(NIL)
+    endif
+
+    return(tBigNumber():New("1"+Replicate("0",Int(nZeros/2))))
+
+/*static function __SQRTPow10*/
 
 #ifdef __TBN_DBFILE__
 
@@ -7582,6 +7610,7 @@ static function MathO(uBigN1,cOperator as character,uBigN2,lRetObject as logical
 
 // -------------------- assign static values --------------------------------
 static procedure __InitstbN(nBase as numeric)
+    nBase:=__tBIGNNormalizeBase(nBase)
     s__lstbNSet:=.F.
     *                10        20        30        40        50        60        70        80        90       100       110       120       130       140       150
     *        123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
